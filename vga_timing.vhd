@@ -11,7 +11,10 @@ entity VGA_timing_synch is
     Port ( clk25 : in  STD_LOGIC;
            Hsync : out  STD_LOGIC;
            Vsync : out  STD_LOGIC;
-           activeArea : out  STD_LOGIC);
+           activeArea1 : out  STD_LOGIC;
+           activeArea2 : out  STD_LOGIC;
+           activeArea3 : out  STD_LOGIC;
+           activeArea4 : out  STD_LOGIC);
 end VGA_timing_synch;
 
 architecture Behavioral of VGA_timing_synch is
@@ -26,7 +29,7 @@ constant VFP : INTEGER := 10;
 constant VSP : INTEGER := 2;
 constant VBP : INTEGER := 33;
 
-signal clk_vga,video : STD_LOGIC;
+signal clk_vga : STD_LOGIC;
 signal hcnt,vcnt : INTEGER := 0;
 
 signal h,v : std_logic;
@@ -68,8 +71,10 @@ vsync_gen : process(clk_vga) begin
 	end if;
 end process vsync_gen;
 
-video <= '1' when (hcnt < 160) and (vcnt < 120) else '0';
-activeArea <= video;
+activeArea1 <= '1' when (hcnt >= 0 and hcnt < 160) and (vcnt < 120) else '0';
+activeArea2 <= '1' when (hcnt >= 160 and hcnt < 320) and (vcnt < 120) else '0';
+activeArea3 <= '1' when (hcnt >= 320 and hcnt < 480) and (vcnt < 120) else '0';
+activeArea4 <= '1' when (hcnt >= 480 and hcnt < 640) and (vcnt < 120) else '0';
 
 Hsync <= h;
 Vsync <= v;
