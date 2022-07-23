@@ -22,7 +22,7 @@
 --    devices, or systems.  Use in such applications are expressly            --
 --    prohibited.                                                             --
 --                                                                            --
---    (c) Copyright 1995-2019 Xilinx, Inc.                                    --
+--    (c) Copyright 1995-2022 Xilinx, Inc.                                    --
 --    All rights reserved.                                                    --
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -118,7 +118,7 @@ END COMPONENT;
       c_use_bram_block => 0,
       c_use_byte_wea => 0,
       c_use_byte_web => 0,
-      c_use_default_data => 0,
+      c_use_default_data => 1,
       c_use_ecc => 0,
       c_use_softecc => 0,
       c_wea_width => 1,
@@ -126,7 +126,7 @@ END COMPONENT;
       c_write_depth_a => 19200,
       c_write_depth_b => 19200,
       c_write_mode_a => "WRITE_FIRST",
-      c_write_mode_b => "WRITE_FIRST",
+      c_write_mode_b => "READ_FIRST",
       c_write_width_a => 12,
       c_write_width_b => 12,
       c_xdevicefamily => "spartan3e"

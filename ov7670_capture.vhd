@@ -33,13 +33,17 @@ architecture Behavioral of ov7670_capture is
 begin
    addr <= address;
    we(0) <= we_reg;
-   dout<= d_latch(15 downto 12) & d_latch(10 downto 7) & d_latch(4 downto 1); 
+   dout<= d_latch(11 downto 8) & d_latch(7 downto 4) & d_latch(3 downto 0); 
    
 capture_process: process(pclk)
    begin
       if rising_edge(pclk) then
          if we_reg = '1' then
+					if (to_integer(unsigned(address)) = 19200-1) then
+						address <= (others => '0');
+					else
             address <= std_logic_vector(unsigned(address)+1);
+					end if;
          end if;
 
          -- detect the rising edge on href - the start of the scan row

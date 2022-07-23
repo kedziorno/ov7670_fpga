@@ -15,7 +15,7 @@ end debounce_circuit;
 
 architecture Behavioral of debounce_circuit is
 
-signal counter : unsigned(23 downto 0);
+signal counter : unsigned(23 downto 0) := (others => '0');
 
 begin
 counting_proc : process (clk) begin
@@ -25,13 +25,16 @@ counting_proc : process (clk) begin
 			-- Counter will count 2^24 * 20ns
 			-- ~300ms
 				output <= '1';
+				counter <= (others => '0');
 			else
 			-- Bouncing with high logic below 300ms will not trigger the output
 			-- output, this case, pb that reset the camera
 				output <= '0';
+				counter <= counter + 1;
 			end if;
 		else
 			output <= '0';
+			counter <= (others => '0');
 		end if;
 	end if;
 end process counting_proc;

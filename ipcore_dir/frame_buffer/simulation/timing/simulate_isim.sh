@@ -1,3 +1,4 @@
+#!/bin/sh
 # (c) Copyright 2009 - 2010 Xilinx, Inc. All rights reserved.
 # 
 # This file contains confidential and proprietary information
@@ -43,33 +44,25 @@
 # 
 # THIS COPYRIGHT NOTICE AND DISCLAIMER MUST BE RETAINED AS
 # PART OF THIS FILE AT ALL TIMES.
-set work work
 #--------------------------------------------------------------------------------
 
-vlib work
-vmap work work
+
 
 echo "Compiling Core VHDL UNISIM/Behavioral model"
-vcom  -work work ../../implement/results/routed.vhd
+vhpcomp  -work work ../../implement/results/routed.vhd
 
 echo "Compiling Test Bench Files"
 
-vcom -work work    ../bmg_tb_pkg.vhd
-vcom -work work    ../random.vhd
-vcom -work work    ../data_gen.vhd
-vcom -work work    ../addr_gen.vhd
-vcom -work work    ../checker.vhd
-vcom -work work    ../bmg_stim_gen.vhd
-vcom -work work    ../frame_buffer_synth.vhd 
-vcom -work work    ../frame_buffer_tb.vhd
+vhpcomp -work work    ../bmg_tb_pkg.vhd
+vhpcomp -work work    ../random.vhd
+vhpcomp -work work    ../data_gen.vhd
+vhpcomp -work work    ../addr_gen.vhd
+vhpcomp -work work    ../checker.vhd
+vhpcomp -work work    ../bmg_stim_gen.vhd
+vhpcomp -work work    ../frame_buffer_synth.vhd 
+vhpcomp -work work    ../frame_buffer_tb.vhd
 
-    vsim -novopt -t ps -L simprim   +transport_int_delays -sdftyp /frame_buffer_tb/frame_buffer_synth_inst/bmg_port=../../implement/results/routed.sdf $work.frame_buffer_tb -novopt
 
-#Disabled waveform to save the disk space
-add log -r /*
-#Ignore integer warnings at time 0
-set StdArithNoWarnings 1
-run 0
-set StdArithNoWarnings 0
+    fuse -L simprim work.frame_buffer_tb -o frame_buffer_tb.exe
 
-run -all
+./frame_buffer_tb.exe -sdftyp /frame_buffer_tb/frame_buffer_synth_inst/bmg_port=../../implement/results/routed.sdf -gui -tclbatch simcmds.tcl

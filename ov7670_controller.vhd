@@ -40,7 +40,7 @@ component ov7670_SCCB
           taken : out  STD_LOGIC);
 end component;	
 
-signal clk25 : std_logic := '0';
+--signal clk25 : std_logic := '0';
 signal command : std_logic_vector(15 downto 0);
 signal done : std_logic := '0';
 signal taken : std_logic := '0';

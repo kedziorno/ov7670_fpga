@@ -45,7 +45,7 @@
 # PART OF THIS FILE AT ALL TIMES.
 
 
-set device xc3s500efg320-5
+set device xc3s1200efg320-4
 set projName frame_buffer
 set design frame_buffer
 set projDir [file dirname [info script]]

@@ -16,27 +16,28 @@ end VGA_timing_synch;
 
 architecture Behavioral of VGA_timing_synch is
 
-constant HD : INTEGER := 640;
-constant HF : INTEGER := 16; 
-constant HB : INTEGER := 48;
-constant HR : INTEGER := 96;
-constant HP : INTEGER := HD + HF + HB + HR - 1;
-constant VD : INTEGER := 480;
-constant VF : INTEGER := 10;
-constant VB : INTEGER := 33;
-constant VR : INTEGER := 2;
-constant VP : INTEGER := VD + VF + VB + VR - 1;
+constant HD : INTEGER := 639;
+constant HFP : INTEGER := 16;
+constant HSP : INTEGER := 96;
+constant HBP : INTEGER := 48;
+
+constant VD : INTEGER := 479;
+constant VFP : INTEGER := 10;
+constant VSP : INTEGER := 2;
+constant VBP : INTEGER := 33;
 
 signal clk_vga,video : STD_LOGIC;
 signal hcnt,vcnt : INTEGER := 0;
+
+signal h,v : std_logic;
 
 begin
 clk_vga <= clk25;
 count_proc : process(clk_vga,vcnt,hcnt) begin
 		if rising_edge(clk_vga) then
-			if (hcnt = HP) then
+			if (hcnt = (HD+HFP+HSP+HBP)) then
 				hcnt <= 0;
-				if (vcnt = VP) then
+				if (vcnt = (VD+VFP+VSP+VBP)) then
 					vcnt <= 0;
 				else
 					vcnt <= vcnt + 1;
@@ -49,25 +50,28 @@ end process count_proc;
 
 hsync_gen : process(clk_vga) begin
 	if rising_edge(clk_vga) then
-		if (hcnt >= (HD+HF) and hcnt <= (HD+HF+HR-1)) then 
-			Hsync <= '0';
+		if (hcnt <= (HD+HFP) or hcnt >= (HD+HFP+HSP)) then 
+			h <= '1';
 		else
-			Hsync <= '1';
+			h <= '0';
 		end if;
 	end if;
 end process hsync_gen;
 
 vsync_gen : process(clk_vga) begin
 	if rising_edge(clk_vga) then
-		if (vcnt >= (VD + VF) and vcnt <= (VD + VF + VR - 1)) then
-			Vsync <= '0';
+		if (vcnt <= (VD+VFP) or vcnt >= (VD+VFP+VSP)) then
+			v <= '1';
 		else
-			Vsync <= '1';
+			v <= '0';
 		end if;
 	end if;
 end process vsync_gen;
-		
+
 video <= '1' when (hcnt < 160) and (vcnt < 120) else '0';
 activeArea <= video;
+
+Hsync <= h;
+Vsync <= v;
 
 end Behavioral;

@@ -30,7 +30,7 @@ copy ..\example_design\frame_buffer_exdes.ucf results\
 cd results
 
 echo 'Running ngdbuild'
-ngdbuild -p xc3s500e-fg320-5 frame_buffer_exdes
+ngdbuild -p xc3s1200e-fg320-4 frame_buffer_exdes
 
 echo 'Running map'
 map frame_buffer_exdes -o mapped.ncd  -pr i

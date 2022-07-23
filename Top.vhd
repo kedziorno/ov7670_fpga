@@ -14,7 +14,9 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity Top is
 	Port	(	clk50	: in STD_LOGIC; -- Crystal Oscilator 50MHz  --B8
+	clkcam	: in STD_LOGIC; -- Crystal Oscilator 23.9616 MHz  --U9
 				pb		: in STD_LOGIC; -- Push Button --B18
+				sw		: in STD_LOGIC; -- Push Button --G18
 				led : out STD_LOGIC; -- Indicates configuration has been done --J14
 			  
 				-- OV7670
@@ -121,6 +123,8 @@ signal rd_a: STD_LOGIC_VECTOR(14 downto 0);
 signal active : STD_LOGIC;
 signal vga_vsync_sig : STD_LOGIC;
 
+signal cc : std_logic;
+
 begin
 	inst_clk25: clk25gen port map(
 		clk50 => clk50,
@@ -139,7 +143,7 @@ begin
 		conf_done => led,
 		pwdn => ov7670_pwdn,
 		reset => ov7670_reset,
-		xclk_in => clk25,
+		xclk_in => cc,
 		xclk_out => ov7670_xclk);
 	
 	inst_ov7670capt: ov7670_capture port map(
@@ -179,5 +183,6 @@ begin
 
 vga_vsync <= vga_vsync_sig;
 
+cc <= clkcam when sw = '1' else clk25;
 end Structural;
 
