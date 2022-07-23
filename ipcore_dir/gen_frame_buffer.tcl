@@ -1,5 +1,5 @@
 ##
-## Core Generator Run Script, generator for Project Navigator edit command
+## Core Generator Run Script, generator for Project Navigator regen command
 ##
 
 proc findRtfPath { relativePath } {
@@ -22,16 +22,16 @@ proc findRtfPath { relativePath } {
 
 source [ findRtfPath "data/projnav/scripts/dpm_cgUtils.tcl" ]
 
-set result [ run_cg_edit "frame_buffer" xc3s1200e-4fg320 VHDL ]
+set result [ run_cg_regen "frame_buffer" xc3s1200e-4fg320 VHDL CURRENT ]
 
 if { $result == 0 } {
-   puts "Core Generator edit command completed successfully."
+   puts "Core Generator regen command completed successfully."
 } elseif { $result == 1 } {
-   puts "Core Generator edit command failed."
+   puts "Core Generator regen command failed."
 } elseif { $result == 3 || $result == 4 } {
    # convert 'version check' result to real return range, bypassing any messages.
    set result [ expr $result - 3 ]
 } else {
-   puts "Core Generator edit cancelled."
+   puts "Core Generator regen cancelled."
 }
 exit $result
