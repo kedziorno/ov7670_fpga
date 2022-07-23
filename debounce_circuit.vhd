@@ -16,6 +16,7 @@ end debounce_circuit;
 architecture Behavioral of debounce_circuit is
 
 signal counter : unsigned(23 downto 0) := (others => '0');
+--signal counter : unsigned(1 downto 0) := (others => '0');
 
 begin
 counting_proc : process (clk) begin

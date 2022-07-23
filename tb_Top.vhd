@@ -27,68 +27,68 @@
 --------------------------------------------------------------------------------
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
- 
+
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
 --USE ieee.numeric_std.ALL;
- 
+
 ENTITY tb_Top IS
 END tb_Top;
- 
+
 ARCHITECTURE behavior OF tb_Top IS 
- 
-    -- Component Declaration for the Unit Under Test (UUT)
- 
-    COMPONENT Top
-    PORT(
-         clk50 : IN  std_logic;
-				 	clkcam	: in STD_LOGIC; -- Crystal Oscilator 23.9616 MHz  --U9
 
-         pb : IN  std_logic;
-         sw : IN  std_logic;
-         led : OUT  std_logic;
-         ov7670_pclk : IN  std_logic;
-         ov7670_xclk : OUT  std_logic;
-         ov7670_vsync : IN  std_logic;
-         ov7670_href : IN  std_logic;
-         ov7670_data : IN  std_logic_vector(7 downto 0);
-         ov7670_sioc : OUT  std_logic;
-         ov7670_siod : INOUT  std_logic;
-         ov7670_pwdn : OUT  std_logic;
-         ov7670_reset : OUT  std_logic;
-         vga_hsync : OUT  std_logic;
-         vga_vsync : OUT  std_logic;
-         vga_rgb : OUT  std_logic_vector(7 downto 0)
-        );
-    END COMPONENT;
-    
+component Top is
+Port (
+clk50	: in STD_LOGIC; -- Crystal Oscilator 50MHz  --B8
+clkcam	: in STD_LOGIC; -- Crystal Oscilator 23.9616 MHz  --U9
+pb		: in STD_LOGIC; -- Push Button --B18
+sw		: in STD_LOGIC; -- Push Button --G18
+led1 : out STD_LOGIC; -- Indicates configuration has been done --J14
+led2 : out STD_LOGIC; -- Indicates configuration has been done --J14
+led3 : out STD_LOGIC; -- Indicates configuration has been done --J14
+led4 : out STD_LOGIC; -- Indicates configuration has been done --J14
+anode : out std_logic_vector(3 downto 0);
+ov7670_pclk1,ov7670_pclk2,ov7670_pclk3,ov7670_pclk4  : in  STD_LOGIC; -- Pmod JB8 --R16
+ov7670_xclk1,ov7670_xclk2,ov7670_xclk3,ov7670_xclk4  : out STD_LOGIC; -- Pmod JB2 --R18
+ov7670_vsync1,ov7670_vsync2,ov7670_vsync3,ov7670_vsync4 : in  STD_LOGIC; -- Pmod JB9 --T18
+ov7670_href1,ov7670_href2,ov7670_href3,ov7670_href4  : in  STD_LOGIC; -- Pmod JB3 --R15
+ov7670_data1,ov7670_data2,ov7670_data3,ov7670_data4  : in  STD_LOGIC_vector(7 downto 0);
+ov7670_sioc1,ov7670_sioc2,ov7670_sioc3,ov7670_sioc4  : out STD_LOGIC; -- Pmod JB10 --J12
+ov7670_siod1,ov7670_siod2,ov7670_siod3,ov7670_siod4  : inout STD_LOGIC; -- Pmod JB4 --H16
+ov7670_pwdn1,ov7670_pwdn2,ov7670_pwdn3,ov7670_pwdn4  : out STD_LOGIC; -- Pmod JA1 --L15
+ov7670_reset1,ov7670_reset2,ov7670_reset3,ov7670_reset4 : out STD_LOGIC; -- Pmod JA7 --K13
+vga_hsync : out STD_LOGIC; --T4
+vga_vsync : out STD_LOGIC; --U3
+vga_rgb	: out STD_LOGIC_VECTOR(7 downto 0)
+);
+end component Top;
 
-   --Inputs
-   signal clk50 : std_logic := '0';
-   signal clkcam : std_logic := '0';
-   signal pb : std_logic := '0';
-   signal ov7670_pclk : std_logic := '0';
-   signal ov7670_vsync : std_logic := '0';
-   signal ov7670_href : std_logic := '0';
-   signal ov7670_data : std_logic_vector(7 downto 0) := (others => '0');
+--Inputs
+signal clk50 : std_logic := '0';
+signal clkcam : std_logic := '0';
+signal pb : std_logic := '0';
+signal ov7670_pclk1,ov7670_pclk2,ov7670_pclk3,ov7670_pclk4 : std_logic := '0';
+signal ov7670_vsync1,ov7670_vsync2,ov7670_vsync3,ov7670_vsync4 : std_logic := '0';
+signal ov7670_href1,ov7670_href2,ov7670_href3,ov7670_href4 : std_logic := '0';
+signal ov7670_data1,ov7670_data2,ov7670_data3,ov7670_data4 : std_logic_vector(7 downto 0) := (others => '0');
 
-	--BiDirs
-   signal ov7670_siod : std_logic;
+--BiDirs
+signal ov7670_siod1,ov7670_siod2,ov7670_siod3,ov7670_siod4 : std_logic;
 
- 	--Outputs
-   signal led : std_logic;
-   signal ov7670_xclk : std_logic;
-   signal ov7670_sioc : std_logic;
-   signal ov7670_pwdn : std_logic;
-   signal ov7670_reset : std_logic;
-   signal vga_hsync : std_logic;
-   signal vga_vsync : std_logic;
-   signal vga_rgb : std_logic_vector(7 downto 0);
+--Outputs
+signal led1,led2,led3,led4 : std_logic;
+signal ov7670_xclk1,ov7670_xclk2,ov7670_xclk3,ov7670_xclk4 : std_logic;
+signal ov7670_sioc1,ov7670_sioc2,ov7670_sioc3,ov7670_sioc4 : std_logic;
+signal ov7670_pwdn1,ov7670_pwdn2,ov7670_pwdn3,ov7670_pwdn4 : std_logic;
+signal ov7670_reset1,ov7670_reset2,ov7670_reset3,ov7670_reset4 : std_logic;
+signal vga_hsync : std_logic;
+signal vga_vsync : std_logic;
+signal vga_rgb : std_logic_vector(7 downto 0);
 
-   -- Clock period definitions
-   constant clk50_period : time := 20 ns;
- 
- COMPONENT camera
+-- Clock period definitions
+constant clk50_period : time := 20 ns;
+
+COMPONENT camera
 GENERIC(
 constant CLOCK_PERIOD : integer := 42; -- 21/42/100 ns - 10/24/48 MHZ - Min/Typ/Max Unit
 constant RAW_RGB : integer := 0; -- 0 - RAW / 1 - RGB
@@ -108,93 +108,187 @@ camera_i_pwdn : in std_logic
 END COMPONENT;
 
 --Inputs
-signal camera_i_xclk : std_logic := '0';
-signal camera_i_rst : std_logic := '0';
-signal camera_i_pwdn : std_logic := '0';
+signal camera_i_xclk1,camera_i_xclk2,camera_i_xclk3,camera_i_xclk4 : std_logic := '0';
+signal camera_i_rst1,camera_i_rst2,camera_i_rst3,camera_i_rst4 : std_logic := '0';
+signal camera_i_pwdn1,camera_i_pwdn2,camera_i_pwdn3,camera_i_pwdn4 : std_logic := '0';
 --BiDirs
-signal camera_io_scl : std_logic := 'Z';
-signal camera_io_sda : std_logic := 'Z';
+signal camera_io_scl1,camera_io_scl2,camera_io_scl3,camera_io_scl4 : std_logic := 'Z';
+signal camera_io_sda1,camera_io_sda2,camera_io_sda3,camera_io_sda4 : std_logic := 'Z';
 --Outputs
-signal camera_o_vs : std_logic;
-signal camera_o_hs : std_logic;
-signal camera_o_pclk : std_logic;
-signal camera_o_d : std_logic_vector(7 downto 0);
+signal camera_o_vs1,camera_o_vs2,camera_o_vs3,camera_o_vs4 : std_logic;
+signal camera_o_hs1,camera_o_hs2,camera_o_hs3,camera_o_hs4 : std_logic;
+signal camera_o_pclk1,camera_o_pclk2,camera_o_pclk3,camera_o_pclk4 : std_logic;
+signal camera_o_d1,camera_o_d2,camera_o_d3,camera_o_d4 : std_logic_vector(7 downto 0);
 constant camera_i_xclk_period : time := 41.733 ns;
 
 signal xclk : std_logic;
 signal sw : std_logic;
 
+signal anode : std_logic_vector (3 downto 0);
+
 BEGIN
 
 sw <= '1';
 
-cam : camera PORT MAP (
-camera_io_scl => camera_io_scl,
-camera_io_sda => camera_io_sda,
-camera_o_vs => camera_o_vs,
-camera_o_hs => camera_o_hs,
-camera_o_pclk => camera_o_pclk,
-camera_i_xclk => camera_i_xclk,
-camera_o_d => camera_o_d,
-camera_i_rst => camera_i_rst,
-camera_i_pwdn => camera_i_pwdn
+cam1 : camera PORT MAP (
+camera_io_scl => camera_io_scl1,
+camera_io_sda => camera_io_sda1,
+camera_o_vs => camera_o_vs1,
+camera_o_hs => camera_o_hs1,
+camera_o_pclk => camera_o_pclk1,
+camera_i_xclk => camera_i_xclk1,
+camera_o_d => camera_o_d1,
+camera_i_rst => camera_i_rst1,
+camera_i_pwdn => camera_i_pwdn1
 );
 
+cam2 : camera PORT MAP (
+camera_io_scl => camera_io_scl2,
+camera_io_sda => camera_io_sda2,
+camera_o_vs => camera_o_vs2,
+camera_o_hs => camera_o_hs2,
+camera_o_pclk => camera_o_pclk2,
+camera_i_xclk => camera_i_xclk2,
+camera_o_d => camera_o_d2,
+camera_i_rst => camera_i_rst2,
+camera_i_pwdn => camera_i_pwdn2
+);
+
+cam3 : camera PORT MAP (
+camera_io_scl => camera_io_scl3,
+camera_io_sda => camera_io_sda3,
+camera_o_vs => camera_o_vs3,
+camera_o_hs => camera_o_hs3,
+camera_o_pclk => camera_o_pclk3,
+camera_i_xclk => camera_i_xclk3,
+camera_o_d => camera_o_d3,
+camera_i_rst => camera_i_rst3,
+camera_i_pwdn => camera_i_pwdn3
+);
+
+cam4 : camera PORT MAP (
+camera_io_scl => camera_io_scl4,
+camera_io_sda => camera_io_sda4,
+camera_o_vs => camera_o_vs4,
+camera_o_hs => camera_o_hs4,
+camera_o_pclk => camera_o_pclk4,
+camera_i_xclk => camera_i_xclk4,
+camera_o_d => camera_o_d4,
+camera_i_rst => camera_i_rst4,
+camera_i_pwdn => camera_i_pwdn4
+);
+
+camera_i_xclk1 <= ov7670_xclk1; -- cam <- dev
+ov7670_pclk1 <= camera_o_pclk1; -- dev <- cam
+ov7670_data1 <= camera_o_d1;
+ov7670_vsync1 <= camera_o_vs1;
+ov7670_href1 <= camera_o_hs1;
+
+camera_i_xclk2 <= ov7670_xclk2; -- cam <- dev
+ov7670_pclk2 <= camera_o_pclk2; -- dev <- cam
+ov7670_data2 <= camera_o_d2;
+ov7670_vsync2 <= camera_o_vs2;
+ov7670_href2 <= camera_o_hs2;
+
+camera_i_xclk3 <= ov7670_xclk3; -- cam <- dev
+ov7670_pclk3 <= camera_o_pclk3; -- dev <- cam
+ov7670_data3 <= camera_o_d3;
+ov7670_vsync3 <= camera_o_vs3;
+ov7670_href3 <= camera_o_hs3;
+
+camera_i_xclk4 <= ov7670_xclk4; -- cam <- dev
+ov7670_pclk4 <= camera_o_pclk4; -- dev <- cam
+ov7670_data4 <= camera_o_d4;
+ov7670_vsync4 <= camera_o_vs4;
+ov7670_href4 <= camera_o_hs4;
+
+-- Instantiate the Unit Under Test (UUT)
+uut: Top PORT MAP (
+clk50 => clk50,
+clkcam => clkcam,
+pb => pb,
+sw => sw,
+led1 => led1,
+led2 => led2,
+led3 => led3,
+led4 => led4,
+anode => anode,
+ov7670_pclk1 => ov7670_pclk1,
+ov7670_pclk2 => ov7670_pclk2,
+ov7670_pclk3 => ov7670_pclk3,
+ov7670_pclk4 => ov7670_pclk4,
+ov7670_xclk1 => ov7670_xclk1,
+ov7670_xclk2 => ov7670_xclk2,
+ov7670_xclk3 => ov7670_xclk3,
+ov7670_xclk4 => ov7670_xclk4,
+ov7670_vsync1 => ov7670_vsync1,
+ov7670_vsync2 => ov7670_vsync2,
+ov7670_vsync3 => ov7670_vsync3,
+ov7670_vsync4 => ov7670_vsync4,
+ov7670_href1 => ov7670_href1,
+ov7670_href2 => ov7670_href2,
+ov7670_href3 => ov7670_href3,
+ov7670_href4 => ov7670_href4,
+ov7670_data1 => ov7670_data1,
+ov7670_data2 => ov7670_data2,
+ov7670_data3 => ov7670_data3,
+ov7670_data4 => ov7670_data4,
+ov7670_sioc1 => ov7670_sioc1,
+ov7670_sioc2 => ov7670_sioc2,
+ov7670_sioc3 => ov7670_sioc3,
+ov7670_sioc4 => ov7670_sioc4,
+ov7670_siod1 => ov7670_siod1,
+ov7670_siod2 => ov7670_siod2,
+ov7670_siod3 => ov7670_siod3,
+ov7670_siod4 => ov7670_siod4,
+ov7670_pwdn1 => ov7670_pwdn1,
+ov7670_pwdn2 => ov7670_pwdn2,
+ov7670_pwdn3 => ov7670_pwdn3,
+ov7670_pwdn4 => ov7670_pwdn4,
+ov7670_reset1 => ov7670_reset1,
+ov7670_reset2 => ov7670_reset2,
+ov7670_reset3 => ov7670_reset3,
+ov7670_reset4 => ov7670_reset4,
+vga_hsync => vga_hsync,
+vga_vsync => vga_vsync,
+vga_rgb => vga_rgb
+);
 clkcam <= xclk;
-camera_i_xclk <= ov7670_xclk; -- cam <- dev
-ov7670_pclk <= camera_o_pclk; -- dev <- cam
-ov7670_data <= camera_o_d;
-ov7670_vsync <= camera_o_vs;
-ov7670_href <= camera_o_hs;
- 
-	-- Instantiate the Unit Under Test (UUT)
-   uut: Top PORT MAP (
-          clk50 => clk50,
-					clkcam => clkcam,
-          pb => pb,
-          sw => sw,
-          led => led,
-          ov7670_pclk => ov7670_pclk,
-          ov7670_xclk => ov7670_xclk,
-          ov7670_vsync => ov7670_vsync,
-          ov7670_href => ov7670_href,
-          ov7670_data => ov7670_data,
-          ov7670_sioc => ov7670_sioc,
-          ov7670_siod => ov7670_siod,
-          ov7670_pwdn => ov7670_pwdn,
-          ov7670_reset => ov7670_reset,
-          vga_hsync => vga_hsync,
-          vga_vsync => vga_vsync,
-          vga_rgb => vga_rgb
-        );
 
-   -- Clock process definitions
-   clk50_process :process
-   begin
-		clk50 <= '0';
-		wait for clk50_period/2;
-		clk50 <= '1';
-		wait for clk50_period/2;
-   end process;
+-- Clock process definitions
+clk50_process :process
+begin
+clk50 <= '0';
+wait for clk50_period/2;
+clk50 <= '1';
+wait for clk50_period/2;
+end process;
 
-   camera_i_xclkp :process
-   begin
-		xclk <= '0';
-		wait for camera_i_xclk_period/2;
-		xclk <= '1';
-		wait for camera_i_xclk_period/2;
-   end process;
- 
- 
+camera_i_xclkp :process
+begin
+xclk <= '0';
+wait for camera_i_xclk_period/2;
+xclk <= '1';
+wait for camera_i_xclk_period/2;
+end process;
+
 -- Stimulus process
 stim_proc : process
 begin
 -- hold reset state for 100 ns.
 --i_reset <= '1';
-camera_i_rst <= '0';
-wait for clk50_period*10;
+camera_i_rst1 <= '0';
+camera_i_rst2 <= '0';
+camera_i_rst3 <= '0';
+camera_i_rst4 <= '0';
+pb <= '1';
+wait for 100 ns;
 --i_reset <= '0';
-camera_i_rst <= '1';
+camera_i_rst1 <= '1';
+camera_i_rst2 <= '1';
+camera_i_rst3 <= '1';
+camera_i_rst4 <= '1';
+pb <= '0';
 wait for clk50_period*10;
 -- insert stimulus here
 wait;
