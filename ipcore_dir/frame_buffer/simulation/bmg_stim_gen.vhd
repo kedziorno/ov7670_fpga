@@ -124,7 +124,7 @@ ENTITY BMG_STIM_GEN IS
             CLKB : IN STD_LOGIC;
             TB_RST : IN STD_LOGIC;
             ADDRA: OUT  STD_LOGIC_VECTOR(14 DOWNTO 0) := (OTHERS => '0'); 
-            DINA : OUT  STD_LOGIC_VECTOR(11 DOWNTO 0) := (OTHERS => '0'); 
+            DINA : OUT  STD_LOGIC_VECTOR(2 DOWNTO 0) := (OTHERS => '0'); 
             WEA : OUT STD_LOGIC_VECTOR (0 DOWNTO 0) := (OTHERS => '0');
             ADDRB: OUT  STD_LOGIC_VECTOR(14 DOWNTO 0) := (OTHERS => '0');
 	        CHECK_DATA: OUT STD_LOGIC:='0'
@@ -137,7 +137,7 @@ ARCHITECTURE BEHAVIORAL OF BMG_STIM_GEN IS
 CONSTANT ZERO                    : STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
 SIGNAL   WRITE_ADDR              : STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
 SIGNAL   READ_ADDR               : STD_LOGIC_VECTOR(31 DOWNTO 0) := (OTHERS => '0');
-SIGNAL   DINA_INT                : STD_LOGIC_VECTOR(11 DOWNTO 0) := (OTHERS => '0');
+SIGNAL   DINA_INT                : STD_LOGIC_VECTOR(2 DOWNTO 0) := (OTHERS => '0');
 SIGNAL   DO_WRITE                : STD_LOGIC := '0';
 SIGNAL   DO_READ                 : STD_LOGIC := '0';
 SIGNAL   DO_READ_R               : STD_LOGIC := '0';
@@ -165,9 +165,9 @@ SIGNAL   PORTA_WR_R1             : STD_LOGIC  := '0';
 
 CONSTANT WR_RD_DEEP_COUNT :INTEGER :=8;
 CONSTANT WR_DEEP_COUNT    : INTEGER := if_then_else((15 <= 15),WR_RD_DEEP_COUNT,
-                                              ((12/12)*WR_RD_DEEP_COUNT));
+                                              ((3/3)*WR_RD_DEEP_COUNT));
 CONSTANT RD_DEEP_COUNT    : INTEGER := if_then_else((15 <= 15),WR_RD_DEEP_COUNT,
-                                              ((12/12)*WR_RD_DEEP_COUNT));
+                                              ((3/3)*WR_RD_DEEP_COUNT));
 
 BEGIN
 
@@ -204,8 +204,8 @@ BEGIN
 
   WR_DATA_GEN_INST:ENTITY work.DATA_GEN 
     GENERIC MAP ( 
-       DATA_GEN_WIDTH => 12,
-       DOUT_WIDTH     => 12 ,
+       DATA_GEN_WIDTH => 3,
+       DOUT_WIDTH     => 3 ,
        DATA_PART_CNT  => 1,
        SEED           => 2)
     PORT MAP (

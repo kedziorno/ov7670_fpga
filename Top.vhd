@@ -63,7 +63,7 @@ COMPONENT ov7670_capture
           href : in  STD_LOGIC;
           d : in  STD_LOGIC_VECTOR (7 downto 0);
           addr : out  STD_LOGIC_VECTOR (14 downto 0);
-          dout : out  STD_LOGIC_VECTOR (11 downto 0);
+          dout : out  STD_LOGIC_VECTOR (2 downto 0);
           we : out  STD_LOGIC_VECTOR (0 downto 0));
 END COMPONENT;
 
@@ -83,14 +83,14 @@ COMPONENT frame_buffer
 	Port ( clkA : in STD_LOGIC;
 			 weA	: in STD_LOGIC_VECTOR(0 downto 0);
 			 addrA: in STD_LOGIC_VECTOR(14 downto 0);
-			 dinA	: in STD_LOGIC_VECTOR(11 downto 0);
+			 dinA	: in STD_LOGIC_VECTOR(2 downto 0);
 			 clkB : in STD_LOGIC;
 			 addrB: in STD_LOGIC_VECTOR(14 downto 0);
-			 doutB: out STD_LOGIC_VECTOR(11 downto 0));
+			 doutB: out STD_LOGIC_VECTOR(2 downto 0));
 END COMPONENT;
 
 COMPONENT vga_imagegenerator
-	Port ( Data_in : in  STD_LOGIC_VECTOR (11 downto 0);
+	Port ( Data_in : in  STD_LOGIC_VECTOR (2 downto 0);
           active_area : in  STD_LOGIC;
           RGB_out : out  STD_LOGIC_VECTOR (7 downto 0));
 END COMPONENT;
@@ -114,9 +114,9 @@ signal resend : STD_LOGIC;
 
 -- RAM
 signal wren : STD_LOGIC_VECTOR(0 downto 0);
-signal wr_d: STD_LOGIC_VECTOR(11 downto 0);
+signal wr_d: STD_LOGIC_VECTOR(2 downto 0);
 signal wr_a: STD_LOGIC_VECTOR(14 downto 0);
-signal rd_d: STD_LOGIC_VECTOR(11 downto 0);
+signal rd_d: STD_LOGIC_VECTOR(2 downto 0);
 signal rd_a: STD_LOGIC_VECTOR(14 downto 0);
 
 --VGA
