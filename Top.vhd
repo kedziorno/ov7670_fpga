@@ -93,7 +93,8 @@ COMPONENT frame_buffer
 END COMPONENT;
 
 COMPONENT vga_imagegenerator
-	Port ( Data_in1 : in  STD_LOGIC_VECTOR (2 downto 0);
+	Port ( 		clk_vga : in  STD_LOGIC;
+						Data_in1 : in  STD_LOGIC_VECTOR (2 downto 0);
 						Data_in2 : in  STD_LOGIC_VECTOR (2 downto 0);
 						Data_in3 : in  STD_LOGIC_VECTOR (2 downto 0);
 						Data_in4 : in  STD_LOGIC_VECTOR (2 downto 0);
@@ -278,6 +279,7 @@ begin
 		address => rd_a4);
 
 	inst_imagegen : vga_imagegenerator port map(
+		clk_vga => clk25,
 		Data_in1 => rd_d1,
 		Data_in2 => rd_d2,
 		Data_in3 => rd_d3,

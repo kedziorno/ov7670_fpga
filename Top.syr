@@ -5,14 +5,14 @@ Parameter TMPDIR set to xst/projnav.tmp
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.05 secs
+Total CPU time to Xst completion: 0.07 secs
  
 --> 
 Parameter xsthdpdir set to xst
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.05 secs
+Total CPU time to Xst completion: 0.07 secs
  
 --> 
 Reading design: Top.prj
@@ -127,10 +127,10 @@ Architecture frame_buffer_a of Entity frame_buffer is up to date.
 Compiling vhdl file "/home/user/workspace/vhdl_projects/camera2/ov7670_vga_Nexys2/address_generator.vhd" in Library work.
 Architecture behavioral of Entity address_generator is up to date.
 Compiling vhdl file "/home/user/workspace/vhdl_projects/camera2/ov7670_vga_Nexys2/vga_imagegenerator.vhd" in Library work.
-Architecture behavioral of Entity vga_imagegenerator is up to date.
+Entity <vga_imagegenerator> compiled.
+Entity <vga_imagegenerator> (Architecture <behavioral>) compiled.
 Compiling vhdl file "/home/user/workspace/vhdl_projects/camera2/ov7670_vga_Nexys2/vga_timing.vhd" in Library work.
-Entity <vga_timing_synch> compiled.
-Entity <vga_timing_synch> (Architecture <behavioral>) compiled.
+Architecture behavioral of Entity vga_timing_synch is up to date.
 Compiling vhdl file "/home/user/workspace/vhdl_projects/camera2/ov7670_vga_Nexys2/Top.vhd" in Library work.
 Architecture structural of Entity top is up to date.
 
@@ -162,10 +162,10 @@ Analyzing hierarchy for entity <ov7670_SCCB> in library <work> (architecture <be
 *                            HDL Analysis                               *
 =========================================================================
 Analyzing Entity <Top> in library <work> (Architecture <structural>).
-WARNING:Xst:2211 - "/home/user/workspace/vhdl_projects/camera2/ov7670_vga_Nexys2/Top.vhd" line 226: Instantiating black box module <frame_buffer>.
-WARNING:Xst:2211 - "/home/user/workspace/vhdl_projects/camera2/ov7670_vga_Nexys2/Top.vhd" line 234: Instantiating black box module <frame_buffer>.
-WARNING:Xst:2211 - "/home/user/workspace/vhdl_projects/camera2/ov7670_vga_Nexys2/Top.vhd" line 242: Instantiating black box module <frame_buffer>.
-WARNING:Xst:2211 - "/home/user/workspace/vhdl_projects/camera2/ov7670_vga_Nexys2/Top.vhd" line 250: Instantiating black box module <frame_buffer>.
+WARNING:Xst:2211 - "/home/user/workspace/vhdl_projects/camera2/ov7670_vga_Nexys2/Top.vhd" line 227: Instantiating black box module <frame_buffer>.
+WARNING:Xst:2211 - "/home/user/workspace/vhdl_projects/camera2/ov7670_vga_Nexys2/Top.vhd" line 235: Instantiating black box module <frame_buffer>.
+WARNING:Xst:2211 - "/home/user/workspace/vhdl_projects/camera2/ov7670_vga_Nexys2/Top.vhd" line 243: Instantiating black box module <frame_buffer>.
+WARNING:Xst:2211 - "/home/user/workspace/vhdl_projects/camera2/ov7670_vga_Nexys2/Top.vhd" line 251: Instantiating black box module <frame_buffer>.
 Entity <Top> analyzed. Unit <Top> generated.
 
 Analyzing Entity <clk25gen> in library <work> (Architecture <behavioral>).
@@ -265,8 +265,13 @@ Unit <address_generator> synthesized.
 
 Synthesizing Unit <vga_imagegenerator>.
     Related source file is "/home/user/workspace/vhdl_projects/camera2/ov7670_vga_Nexys2/vga_imagegenerator.vhd".
-WARNING:Xst:737 - Found 8-bit latch for signal <o>. Latches may be generated from incomplete case or if statements. We do not recommend the use of latches in FPGA/CPLD designs, as they may lead to timing problems.
-INFO:Xst:2371 - HDL ADVISOR - Logic functions respectively driving the data and gate enable inputs of this latch share common terms. This situation will potentially lead to setup/hold violations and, as a result, to simulation problems. This situation may come from an incomplete case statement (all selector values are not covered). You should carefully review if it was in your intentions to describe such a latch.
+WARNING:Xst:1780 - Signal <d4> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:1780 - Signal <d3> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:1780 - Signal <d2> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:1780 - Signal <d1> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+    Found 8-bit register for signal <o>.
+    Summary:
+	inferred   8 D-type flip-flop(s).
 Unit <vga_imagegenerator> synthesized.
 
 
@@ -363,14 +368,12 @@ Macro Statistics
  24-bit up counter                                     : 1
  6-bit up counter                                      : 4
  8-bit up counter                                      : 4
-# Registers                                            : 59
+# Registers                                            : 60
  1-bit register                                        : 35
  16-bit register                                       : 8
  32-bit register                                       : 8
  7-bit register                                        : 4
- 8-bit register                                        : 4
-# Latches                                              : 1
- 8-bit latch                                           : 1
+ 8-bit register                                        : 5
 # Comparators                                          : 4
  10-bit comparator greatequal                          : 2
  10-bit comparator lessequal                           : 2
@@ -417,8 +420,6 @@ WARNING:Xst:1293 - FF/Latch <data_sr_0> has a constant value of 1 in block <SCCB
 WARNING:Xst:1293 - FF/Latch <data_sr_0> has a constant value of 1 in block <SCCB>. This FF/Latch will be trimmed during the optimization process.
 WARNING:Xst:1293 - FF/Latch <data_sr_0> has a constant value of 1 in block <SCCB>. This FF/Latch will be trimmed during the optimization process.
 WARNING:Xst:1293 - FF/Latch <data_sr_0> has a constant value of 1 in block <SCCB>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1710 - FF/Latch <0> (without init value) has a constant value of 0 in block <3>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1710 - FF/Latch <0> (without init value) has a constant value of 0 in block <6>. This FF/Latch will be trimmed during the optimization process.
 WARNING:Xst:2677 - Node <latched_d_0> of sequential type is unconnected in block <inst_ov7670capt1>.
 WARNING:Xst:2677 - Node <latched_d_1> of sequential type is unconnected in block <inst_ov7670capt1>.
 WARNING:Xst:2677 - Node <latched_d_3> of sequential type is unconnected in block <inst_ov7670capt1>.
@@ -551,10 +552,8 @@ Macro Statistics
  24-bit up counter                                     : 1
  6-bit up counter                                      : 4
  8-bit up counter                                      : 4
-# Registers                                            : 339
- Flip-Flops                                            : 339
-# Latches                                              : 1
- 8-bit latch                                           : 1
+# Registers                                            : 347
+ Flip-Flops                                            : 347
 # Comparators                                          : 4
  10-bit comparator greatequal                          : 2
  10-bit comparator lessequal                           : 2
@@ -565,9 +564,6 @@ Macro Statistics
 *                         Low Level Synthesis                           *
 =========================================================================
 WARNING:Xst:1293 - FF/Latch <data_sr_0> has a constant value of 1 in block <ov7670_SCCB>. This FF/Latch will be trimmed during the optimization process.
-INFO:Xst:2261 - The FF/Latch <6> in Unit <LPM_LATCH_1> is equivalent to the following FF/Latch, which will be removed : <3> 
-INFO:Xst:2261 - The FF/Latch <5> in Unit <LPM_LATCH_1> is equivalent to the following 2 FFs/Latches, which will be removed : <2> <0> 
-WARNING:Xst:1710 - FF/Latch <6> (without init value) has a constant value of 0 in block <LPM_LATCH_1>. This FF/Latch will be trimmed during the optimization process.
 INFO:Xst:2697 - Unit <Top> : the RAMs <inst_ov7670contr4/Registers/Mrom_cmd_reg_rom0000>, <inst_ov7670contr3/Registers/Mrom_cmd_reg_rom0000> are packed into the single block RAM <inst_ov7670contr4/Registers/Mrom_cmd_reg_rom00001>
 INFO:Xst:2697 - Unit <Top> : the RAMs <inst_ov7670contr2/Registers/Mrom_cmd_reg_rom0000>, <inst_ov7670contr1/Registers/Mrom_cmd_reg_rom0000> are packed into the single block RAM <inst_ov7670contr2/Registers/Mrom_cmd_reg_rom00001>
 
@@ -575,15 +571,26 @@ Optimizing unit <Top> ...
 
 Optimizing unit <ov7670_capture> ...
 
-Optimizing unit <VGA_timing_synch> ...
-
 Optimizing unit <vga_imagegenerator> ...
+WARNING:Xst:1710 - FF/Latch <o_0> (without init value) has a constant value of 1 in block <vga_imagegenerator>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <o_2> (without init value) has a constant value of 1 in block <vga_imagegenerator>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <o_5> (without init value) has a constant value of 1 in block <vga_imagegenerator>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <o_0> (without init value) has a constant value of 1 in block <vga_imagegenerator>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <o_2> (without init value) has a constant value of 1 in block <vga_imagegenerator>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <o_5> (without init value) has a constant value of 1 in block <vga_imagegenerator>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <o_0> (without init value) has a constant value of 1 in block <vga_imagegenerator>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <o_2> (without init value) has a constant value of 1 in block <vga_imagegenerator>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <o_5> (without init value) has a constant value of 1 in block <vga_imagegenerator>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <o_0> (without init value) has a constant value of 1 in block <vga_imagegenerator>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <o_2> (without init value) has a constant value of 1 in block <vga_imagegenerator>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <o_5> (without init value) has a constant value of 1 in block <vga_imagegenerator>. This FF/Latch will be trimmed during the optimization process.
+
+Optimizing unit <VGA_timing_synch> ...
 
 Mapping all equations...
 Building and optimizing final netlist ...
 INFO:Xst:2261 - The FF/Latch <inst_clk25/clkbuf> in Unit <Top> is equivalent to the following FF/Latch, which will be removed : <inst_clk25/clk25> 
 Found area constraint ratio of 100 (+ 5) on block Top, actual ratio is 4.
-Latch inst_imagegen/o_5 has been replicated 2 time(s) to handle iob=true attribute.
 
 Final Macro Processing ...
 
@@ -598,8 +605,8 @@ Unit <Top> processed.
 Final Register Report
 
 Macro Statistics
-# Registers                                            : 573
- Flip-Flops                                            : 573
+# Registers                                            : 578
+ Flip-Flops                                            : 578
 
 =========================================================================
 
@@ -628,30 +635,29 @@ Design Statistics
 # IOs                              : 86
 
 Cell Usage :
-# BELS                             : 1137
+# BELS                             : 1138
 #      GND                         : 5
 #      INV                         : 31
 #      LUT1                        : 181
-#      LUT2                        : 233
-#      LUT2_L                      : 1
-#      LUT3                        : 116
+#      LUT2                        : 236
+#      LUT2_L                      : 3
+#      LUT3                        : 114
 #      LUT3_L                      : 1
-#      LUT4                        : 145
+#      LUT4                        : 140
 #      LUT4_D                      : 17
-#      LUT4_L                      : 15
+#      LUT4_L                      : 20
 #      MUXCY                       : 187
-#      MUXF5                       : 4
+#      MUXF5                       : 2
 #      VCC                         : 5
 #      XORCY                       : 196
-# FlipFlops/Latches                : 591
-#      FD                          : 5
+# FlipFlops/Latches                : 590
+#      FD                          : 7
 #      FD_1                        : 16
 #      FDE                         : 276
 #      FDR                         : 79
 #      FDRE                        : 198
-#      FDS                         : 7
+#      FDS                         : 10
 #      FDSE                        : 4
-#      LD                          : 6
 # RAMS                             : 18
 #      RAMB16_S18_S18              : 2
 #      RAMB16_S1_S1                : 12
@@ -670,12 +676,11 @@ Device utilization summary:
 
 Selected Device : 3s1200efg320-4 
 
- Number of Slices:                      396  out of   8672     4%  
- Number of Slice Flip Flops:            585  out of  17344     3%  
- Number of 4 input LUTs:                740  out of  17344     4%  
+ Number of Slices:                      405  out of   8672     4%  
+ Number of Slice Flip Flops:            590  out of  17344     3%  
+ Number of 4 input LUTs:                743  out of  17344     4%  
  Number of IOs:                          86
  Number of bonded IOBs:                  62  out of    250    24%  
-    IOB Flip Flops:                       6
  Number of BRAMs:                        18  out of     28    64%  
  Number of GCLKs:                         6  out of     24    25%  
 
@@ -697,21 +702,16 @@ NOTE: THESE TIMING NUMBERS ARE ONLY A SYNTHESIS ESTIMATE.
 
 Clock Information:
 ------------------
--------------------------------------------------+---------------------------+-------+
-Clock Signal                                     | Clock buffer(FF name)     | Load  |
--------------------------------------------------+---------------------------+-------+
-inst_clk25/clkbuf                                | BUFG                      | 119   |
-ov7670_pclk1                                     | BUFGP                     | 39    |
-ov7670_pclk2                                     | BUFGP                     | 39    |
-ov7670_pclk3                                     | BUFGP                     | 39    |
-ov7670_pclk4                                     | BUFGP                     | 39    |
-clk50                                            | BUFGP                     | 344   |
-inst_imagegen/o_or0000(inst_imagegen/o_or00001:O)| NONE(*)(inst_imagegen/o_7)| 6     |
--------------------------------------------------+---------------------------+-------+
-(*) This 1 clock signal(s) are generated by combinatorial logic,
-and XST is not able to identify which are the primary clock signals.
-Please use the CLOCK_SIGNAL constraint to specify the clock signal(s) generated by combinatorial logic.
-INFO:Xst:2169 - HDL ADVISOR - Some clock signals were not automatically buffered by XST with BUFG/BUFR resources. Please use the buffer_type constraint in order to insert these buffers to the clock signals to help prevent skew problems.
+-----------------------------------+------------------------+-------+
+Clock Signal                       | Clock buffer(FF name)  | Load  |
+-----------------------------------+------------------------+-------+
+inst_clk25/clkbuf                  | BUFG                   | 124   |
+ov7670_pclk1                       | BUFGP                  | 39    |
+ov7670_pclk2                       | BUFGP                  | 39    |
+ov7670_pclk3                       | BUFGP                  | 39    |
+ov7670_pclk4                       | BUFGP                  | 39    |
+clk50                              | BUFGP                  | 344   |
+-----------------------------------+------------------------+-------+
 
 Asynchronous Control Signals Information:
 ----------------------------------------
@@ -721,9 +721,9 @@ Timing Summary:
 ---------------
 Speed Grade: -4
 
-   Minimum period: 8.583ns (Maximum Frequency: 116.507MHz)
+   Minimum period: 8.892ns (Maximum Frequency: 112.461MHz)
    Minimum input arrival time before clock: 4.611ns
-   Maximum output required time after clock: 9.330ns
+   Maximum output required time after clock: 9.284ns
    Maximum combinational path delay: 6.376ns
 
 Timing Detail:
@@ -732,10 +732,10 @@ All values displayed in nanoseconds (ns)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'inst_clk25/clkbuf'
-  Clock period: 7.835ns (frequency: 127.632MHz)
-  Total number of paths / destination ports: 2458 / 492
+  Clock period: 8.892ns (frequency: 112.461MHz)
+  Total number of paths / destination ports: 2577 / 500
 -------------------------------------------------------------------------
-Delay:               7.835ns (Levels of Logic = 4)
+Delay:               8.892ns (Levels of Logic = 5)
   Source:            inst_vgatiming/hcnt_3 (FF)
   Destination:       inst_vgatiming/vcnt_9 (FF)
   Source Clock:      inst_clk25/clkbuf rising
@@ -746,21 +746,22 @@ Delay:               7.835ns (Levels of Logic = 4)
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
      FDR:C->Q              4   0.591   0.762  inst_vgatiming/hcnt_3 (inst_vgatiming/hcnt_3)
-     LUT2_L:I0->LO         1   0.704   0.104  inst_vgatiming/state0_FSM_FFd2-In1_SW0 (N16)
-     LUT4:I3->O            5   0.704   0.637  inst_vgatiming/state0_FSM_FFd2-In1 (inst_vgatiming/N4)
-     LUT4:I3->O           21   0.704   1.132  inst_vgatiming/state0_cmp_eq00041_1 (inst_vgatiming/state0_cmp_eq00041)
+     LUT2:I0->O            1   0.704   0.424  inst_vgatiming/state0_FSM_FFd2-In1_SW0 (N22)
+     LUT4_D:I3->LO         1   0.704   0.104  inst_vgatiming/state0_FSM_FFd2-In1 (N54)
+     LUT4:I3->O            3   0.704   0.566  inst_vgatiming/state0_FSM_FFd2-In311 (inst_vgatiming/N9)
+     LUT3:I2->O           21   0.704   1.132  inst_vgatiming/state0_cmp_eq00041_1 (inst_vgatiming/state0_cmp_eq00041)
      LUT4:I3->O           10   0.704   0.882  inst_vgatiming/vcnt_and000051 (inst_vgatiming/vcnt_and0000)
      FDRE:R                    0.911          inst_vgatiming/vcnt_0
     ----------------------------------------
-    Total                      7.835ns (4.318ns logic, 3.517ns route)
-                                       (55.1% logic, 44.9% route)
+    Total                      8.892ns (5.022ns logic, 3.870ns route)
+                                       (56.5% logic, 43.5% route)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'ov7670_pclk1'
-  Clock period: 8.020ns (frequency: 124.688MHz)
+  Clock period: 7.870ns (frequency: 127.065MHz)
   Total number of paths / destination ports: 507 / 147
 -------------------------------------------------------------------------
-Delay:               4.010ns (Levels of Logic = 1)
+Delay:               3.935ns (Levels of Logic = 1)
   Source:            inst_ov7670capt1/latched_vsync (FF)
   Destination:       inst_ov7670capt1/address_14 (FF)
   Source Clock:      ov7670_pclk1 falling
@@ -770,19 +771,19 @@ Delay:               4.010ns (Levels of Logic = 1)
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FD_1:C->Q             7   0.591   0.787  inst_ov7670capt1/latched_vsync (inst_ov7670capt1/latched_vsync)
-     LUT2:I1->O           15   0.704   1.017  inst_ov7670capt1/address_or000061 (inst_ov7670capt1/address_or0000)
+     FD_1:C->Q             7   0.591   0.712  inst_ov7670capt1/latched_vsync (inst_ov7670capt1/latched_vsync)
+     LUT4:I3->O           15   0.704   1.017  inst_ov7670capt1/address_or000063 (inst_ov7670capt1/address_or0000)
      FDRE:R                    0.911          inst_ov7670capt1/address_0
     ----------------------------------------
-    Total                      4.010ns (2.206ns logic, 1.804ns route)
-                                       (55.0% logic, 45.0% route)
+    Total                      3.935ns (2.206ns logic, 1.729ns route)
+                                       (56.1% logic, 43.9% route)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'ov7670_pclk2'
-  Clock period: 8.020ns (frequency: 124.688MHz)
+  Clock period: 7.870ns (frequency: 127.065MHz)
   Total number of paths / destination ports: 507 / 147
 -------------------------------------------------------------------------
-Delay:               4.010ns (Levels of Logic = 1)
+Delay:               3.935ns (Levels of Logic = 1)
   Source:            inst_ov7670capt2/latched_vsync (FF)
   Destination:       inst_ov7670capt2/address_14 (FF)
   Source Clock:      ov7670_pclk2 falling
@@ -792,19 +793,19 @@ Delay:               4.010ns (Levels of Logic = 1)
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FD_1:C->Q             7   0.591   0.787  inst_ov7670capt2/latched_vsync (inst_ov7670capt2/latched_vsync)
-     LUT2:I1->O           15   0.704   1.017  inst_ov7670capt2/address_or000061 (inst_ov7670capt2/address_or0000)
+     FD_1:C->Q             7   0.591   0.712  inst_ov7670capt2/latched_vsync (inst_ov7670capt2/latched_vsync)
+     LUT4:I3->O           15   0.704   1.017  inst_ov7670capt2/address_or000063 (inst_ov7670capt2/address_or0000)
      FDRE:R                    0.911          inst_ov7670capt2/address_0
     ----------------------------------------
-    Total                      4.010ns (2.206ns logic, 1.804ns route)
-                                       (55.0% logic, 45.0% route)
+    Total                      3.935ns (2.206ns logic, 1.729ns route)
+                                       (56.1% logic, 43.9% route)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'ov7670_pclk3'
-  Clock period: 8.020ns (frequency: 124.688MHz)
+  Clock period: 7.870ns (frequency: 127.065MHz)
   Total number of paths / destination ports: 507 / 147
 -------------------------------------------------------------------------
-Delay:               4.010ns (Levels of Logic = 1)
+Delay:               3.935ns (Levels of Logic = 1)
   Source:            inst_ov7670capt3/latched_vsync (FF)
   Destination:       inst_ov7670capt3/address_14 (FF)
   Source Clock:      ov7670_pclk3 falling
@@ -814,19 +815,19 @@ Delay:               4.010ns (Levels of Logic = 1)
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FD_1:C->Q             7   0.591   0.787  inst_ov7670capt3/latched_vsync (inst_ov7670capt3/latched_vsync)
-     LUT2:I1->O           15   0.704   1.017  inst_ov7670capt3/address_or000061 (inst_ov7670capt3/address_or0000)
+     FD_1:C->Q             7   0.591   0.712  inst_ov7670capt3/latched_vsync (inst_ov7670capt3/latched_vsync)
+     LUT4:I3->O           15   0.704   1.017  inst_ov7670capt3/address_or000063 (inst_ov7670capt3/address_or0000)
      FDRE:R                    0.911          inst_ov7670capt3/address_0
     ----------------------------------------
-    Total                      4.010ns (2.206ns logic, 1.804ns route)
-                                       (55.0% logic, 45.0% route)
+    Total                      3.935ns (2.206ns logic, 1.729ns route)
+                                       (56.1% logic, 43.9% route)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'ov7670_pclk4'
-  Clock period: 8.020ns (frequency: 124.688MHz)
+  Clock period: 7.870ns (frequency: 127.065MHz)
   Total number of paths / destination ports: 507 / 147
 -------------------------------------------------------------------------
-Delay:               4.010ns (Levels of Logic = 1)
+Delay:               3.935ns (Levels of Logic = 1)
   Source:            inst_ov7670capt4/latched_vsync (FF)
   Destination:       inst_ov7670capt4/address_14 (FF)
   Source Clock:      ov7670_pclk4 falling
@@ -836,36 +837,36 @@ Delay:               4.010ns (Levels of Logic = 1)
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FD_1:C->Q             7   0.591   0.787  inst_ov7670capt4/latched_vsync (inst_ov7670capt4/latched_vsync)
-     LUT2:I1->O           15   0.704   1.017  inst_ov7670capt4/address_or000061 (inst_ov7670capt4/address_or0000)
+     FD_1:C->Q             7   0.591   0.712  inst_ov7670capt4/latched_vsync (inst_ov7670capt4/latched_vsync)
+     LUT4:I3->O           15   0.704   1.017  inst_ov7670capt4/address_or000063 (inst_ov7670capt4/address_or0000)
      FDRE:R                    0.911          inst_ov7670capt4/address_0
     ----------------------------------------
-    Total                      4.010ns (2.206ns logic, 1.804ns route)
-                                       (55.0% logic, 45.0% route)
+    Total                      3.935ns (2.206ns logic, 1.729ns route)
+                                       (56.1% logic, 43.9% route)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'clk50'
-  Clock period: 8.583ns (frequency: 116.507MHz)
+  Clock period: 8.547ns (frequency: 117.000MHz)
   Total number of paths / destination ports: 11369 / 762
 -------------------------------------------------------------------------
-Delay:               8.583ns (Levels of Logic = 3)
+Delay:               8.547ns (Levels of Logic = 3)
   Source:            inst_ov7670contr2/Registers/Mrom_cmd_reg_rom00001 (RAM)
-  Destination:       inst_ov7670contr1/SCCB/busy_sr_31 (FF)
+  Destination:       inst_ov7670contr1/SCCB/data_sr_31 (FF)
   Source Clock:      clk50 rising
   Destination Clock: clk50 rising
 
-  Data Path: inst_ov7670contr2/Registers/Mrom_cmd_reg_rom00001 to inst_ov7670contr1/SCCB/busy_sr_31
+  Data Path: inst_ov7670contr2/Registers/Mrom_cmd_reg_rom00001 to inst_ov7670contr1/SCCB/data_sr_31
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
      RAMB16_S18_S18:CLKB->DOB0    2   2.800   0.622  inst_ov7670contr2/Registers/Mrom_cmd_reg_rom00001 (inst_ov7670contr1/command<0>)
      LUT4:I0->O            1   0.704   0.595  inst_ov7670contr1/Registers/done_cmp_eq00004 (inst_ov7670contr1/Registers/done_cmp_eq00004)
-     LUT4:I0->O            5   0.704   0.637  inst_ov7670contr1/Registers/done_cmp_eq000036 (led1_OBUF)
-     LUT4:I3->O           31   0.704   1.262  inst_ov7670contr1/SCCB/busy_sr_not00031 (inst_ov7670contr1/SCCB/busy_sr_not0003)
-     FDE:CE                    0.555          inst_ov7670contr1/SCCB/data_sr_1
+     LUT4:I0->O            4   0.704   0.591  inst_ov7670contr1/Registers/done_cmp_eq000036 (led1_OBUF)
+     LUT4:I3->O           63   0.704   1.272  inst_ov7670contr1/SCCB/busy_sr_not00031 (inst_ov7670contr1/SCCB/busy_sr_not0003)
+     FDE:CE                    0.555          inst_ov7670contr1/SCCB/busy_sr_0
     ----------------------------------------
-    Total                      8.583ns (5.467ns logic, 3.116ns route)
-                                       (63.7% logic, 36.3% route)
+    Total                      8.547ns (5.467ns logic, 3.080ns route)
+                                       (64.0% logic, 36.0% route)
 
 =========================================================================
 Timing constraint: Default OFFSET IN BEFORE for Clock 'clk50'
@@ -967,7 +968,7 @@ Offset:              1.946ns (Levels of Logic = 1)
 Timing constraint: Default OFFSET OUT AFTER for Clock 'clk50'
   Total number of paths / destination ports: 100 / 16
 -------------------------------------------------------------------------
-Offset:              9.330ns (Levels of Logic = 3)
+Offset:              9.284ns (Levels of Logic = 3)
   Source:            inst_ov7670contr2/Registers/Mrom_cmd_reg_rom00001 (RAM)
   Destination:       led1 (PAD)
   Source Clock:      clk50 rising
@@ -978,15 +979,15 @@ Offset:              9.330ns (Levels of Logic = 3)
     ----------------------------------------  ------------
      RAMB16_S18_S18:CLKB->DOB0    2   2.800   0.622  inst_ov7670contr2/Registers/Mrom_cmd_reg_rom00001 (inst_ov7670contr1/command<0>)
      LUT4:I0->O            1   0.704   0.595  inst_ov7670contr1/Registers/done_cmp_eq00004 (inst_ov7670contr1/Registers/done_cmp_eq00004)
-     LUT4:I0->O            5   0.704   0.633  inst_ov7670contr1/Registers/done_cmp_eq000036 (led1_OBUF)
+     LUT4:I0->O            4   0.704   0.587  inst_ov7670contr1/Registers/done_cmp_eq000036 (led1_OBUF)
      OBUF:I->O                 3.272          led1_OBUF (led1)
     ----------------------------------------
-    Total                      9.330ns (7.480ns logic, 1.850ns route)
-                                       (80.2% logic, 19.8% route)
+    Total                      9.284ns (7.480ns logic, 1.804ns route)
+                                       (80.6% logic, 19.4% route)
 
 =========================================================================
 Timing constraint: Default OFFSET OUT AFTER for Clock 'inst_clk25/clkbuf'
-  Total number of paths / destination ports: 2 / 2
+  Total number of paths / destination ports: 7 / 7
 -------------------------------------------------------------------------
 Offset:              4.496ns (Levels of Logic = 1)
   Source:            inst_vgatiming/v (FF)
@@ -1002,25 +1003,6 @@ Offset:              4.496ns (Levels of Logic = 1)
     ----------------------------------------
     Total                      4.496ns (3.863ns logic, 0.633ns route)
                                        (85.9% logic, 14.1% route)
-
-=========================================================================
-Timing constraint: Default OFFSET OUT AFTER for Clock 'inst_imagegen/o_or0000'
-  Total number of paths / destination ports: 6 / 6
--------------------------------------------------------------------------
-Offset:              4.368ns (Levels of Logic = 1)
-  Source:            inst_imagegen/o_7 (LATCH)
-  Destination:       vga_rgb<7> (PAD)
-  Source Clock:      inst_imagegen/o_or0000 falling
-
-  Data Path: inst_imagegen/o_7 to vga_rgb<7>
-                                Gate     Net
-    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
-    ----------------------------------------  ------------
-     LD:G->Q               1   0.676   0.420  inst_imagegen/o_7 (inst_imagegen/o_7)
-     OBUF:I->O                 3.272          vga_rgb_7_OBUF (vga_rgb<7>)
-    ----------------------------------------
-    Total                      4.368ns (3.948ns logic, 0.420ns route)
-                                       (90.4% logic, 9.6% route)
 
 =========================================================================
 Timing constraint: Default path analysis
@@ -1045,14 +1027,14 @@ Delay:               6.376ns (Levels of Logic = 3)
 
 
 Total REAL time to Xst completion: 11.00 secs
-Total CPU time to Xst completion: 10.64 secs
+Total CPU time to Xst completion: 10.74 secs
  
 --> 
 
 
-Total memory usage is 543148 kilobytes
+Total memory usage is 543048 kilobytes
 
 Number of errors   :    0 (   0 filtered)
-Number of warnings :  112 (   0 filtered)
-Number of infos    :   15 (   0 filtered)
+Number of warnings :  124 (   0 filtered)
+Number of infos    :   11 (   0 filtered)
 
