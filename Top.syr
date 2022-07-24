@@ -5,14 +5,14 @@ Parameter TMPDIR set to xst/projnav.tmp
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.06 secs
+Total CPU time to Xst completion: 0.05 secs
  
 --> 
 Parameter xsthdpdir set to xst
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.06 secs
+Total CPU time to Xst completion: 0.05 secs
  
 --> 
 Reading design: Top.prj
@@ -272,26 +272,41 @@ Unit <vga_imagegenerator> synthesized.
 
 Synthesizing Unit <VGA_timing_synch>.
     Related source file is "/home/user/workspace/vhdl_projects/camera2/ov7670_vga_Nexys2/vga_timing.vhd".
-    Found 10-bit comparator less for signal <activeArea1$cmp_lt0000> created at line 74.
-    Found 10-bit comparator less for signal <activeArea1$cmp_lt0001> created at line 74.
-    Found 10-bit comparator greatequal for signal <activeArea2$cmp_ge0000> created at line 75.
-    Found 10-bit comparator less for signal <activeArea2$cmp_lt0000> created at line 75.
-    Found 10-bit comparator greatequal for signal <activeArea3$cmp_ge0000> created at line 76.
-    Found 10-bit comparator less for signal <activeArea3$cmp_lt0000> created at line 76.
-    Found 10-bit comparator greatequal for signal <activeArea4$cmp_ge0000> created at line 77.
-    Found 10-bit comparator less for signal <activeArea4$cmp_lt0000> created at line 77.
+WARNING:Xst:1780 - Signal <vp> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:1780 - Signal <hp> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+    Found finite state machine <FSM_1> for signal <state0>.
+    -----------------------------------------------------------------------
+    | States             | 5                                              |
+    | Transitions        | 15                                             |
+    | Inputs             | 6                                              |
+    | Outputs            | 5                                              |
+    | Clock              | clk_vga                   (rising_edge)        |
+    | Power Up State     | 000                                            |
+    | Encoding           | automatic                                      |
+    | Implementation     | LUT                                            |
+    -----------------------------------------------------------------------
+    Found 1-bit register for signal <activeArea1>.
+    Found 1-bit register for signal <activeArea2>.
+    Found 1-bit register for signal <activeArea3>.
+    Found 1-bit register for signal <activeArea4>.
+    Found 10-bit register for signal <count10>.
+    Found 10-bit adder for signal <count10$share0000> created at line 118.
     Found 1-bit register for signal <h>.
-    Found 10-bit comparator greatequal for signal <h$cmp_ge0000> created at line 56.
-    Found 10-bit comparator lessequal for signal <h$cmp_le0000> created at line 56.
+    Found 10-bit comparator greatequal for signal <h$cmp_ge0000> created at line 59.
+    Found 10-bit comparator lessequal for signal <h$cmp_le0000> created at line 59.
     Found 10-bit up counter for signal <hcnt>.
+    Found 1-bit register for signal <state<0>>.
     Found 1-bit register for signal <v>.
-    Found 10-bit comparator greatequal for signal <v$cmp_ge0000> created at line 66.
-    Found 10-bit comparator lessequal for signal <v$cmp_le0000> created at line 66.
+    Found 10-bit comparator greatequal for signal <v$cmp_ge0000> created at line 69.
+    Found 10-bit comparator lessequal for signal <v$cmp_le0000> created at line 69.
+    Found 1-bit register for signal <v120>.
     Found 10-bit up counter for signal <vcnt>.
     Summary:
+	inferred   1 Finite State Machine(s).
 	inferred   2 Counter(s).
-	inferred   2 D-type flip-flop(s).
-	inferred  12 Comparator(s).
+	inferred  18 D-type flip-flop(s).
+	inferred   1 Adder/Subtractor(s).
+	inferred   4 Comparator(s).
 Unit <VGA_timing_synch> synthesized.
 
 
@@ -333,6 +348,7 @@ Synthesizing Unit <Top>.
     Related source file is "/home/user/workspace/vhdl_projects/camera2/ov7670_vga_Nexys2/Top.vhd".
 Unit <Top> synthesized.
 
+INFO:Xst:1767 - HDL ADVISOR - Resource sharing has identified that some arithmetic operations in this design can share the same physical resources for reduced device utilization. For improved clock frequency you may try to disable resource sharing.
 
 =========================================================================
 HDL Synthesis Report
@@ -347,17 +363,16 @@ Macro Statistics
  24-bit up counter                                     : 1
  6-bit up counter                                      : 4
  8-bit up counter                                      : 4
-# Registers                                            : 53
- 1-bit register                                        : 29
+# Registers                                            : 59
+ 1-bit register                                        : 35
  16-bit register                                       : 8
  32-bit register                                       : 8
  7-bit register                                        : 4
  8-bit register                                        : 4
 # Latches                                              : 1
  8-bit latch                                           : 1
-# Comparators                                          : 12
- 10-bit comparator greatequal                          : 5
- 10-bit comparator less                                : 5
+# Comparators                                          : 4
+ 10-bit comparator greatequal                          : 2
  10-bit comparator lessequal                           : 2
 # Tristates                                            : 4
  1-bit tristate buffer                                 : 4
@@ -368,6 +383,17 @@ Macro Statistics
 *                       Advanced HDL Synthesis                          *
 =========================================================================
 
+Analyzing FSM <FSM_1> for best encoding.
+Optimizing FSM <inst_vgatiming/state0/FSM> on signal <state0[1:3]> with gray encoding.
+-------------------
+ State | Encoding
+-------------------
+ 000   | 000
+ 001   | 001
+ 010   | 011
+ 011   | 010
+ 100   | 110
+-------------------
 Analyzing FSM <FSM_0> for best encoding.
 Optimizing FSM <inst_ov7670capt1/row/FSM> on signal <row[1:4]> with one-hot encoding.
 Optimizing FSM <inst_ov7670capt2/row/FSM> on signal <row[1:4]> with one-hot encoding.
@@ -514,7 +540,7 @@ WARNING:Xst:2677 - Node <d_latch_15> of sequential type is unconnected in block 
 Advanced HDL Synthesis Report
 
 Macro Statistics
-# FSMs                                                 : 1
+# FSMs                                                 : 2
 # RAMs                                                 : 4
  56x16-bit single-port block RAM                       : 4
 # ROMs                                                 : 4
@@ -525,13 +551,12 @@ Macro Statistics
  24-bit up counter                                     : 1
  6-bit up counter                                      : 4
  8-bit up counter                                      : 4
-# Registers                                            : 333
- Flip-Flops                                            : 333
+# Registers                                            : 339
+ Flip-Flops                                            : 339
 # Latches                                              : 1
  8-bit latch                                           : 1
-# Comparators                                          : 12
- 10-bit comparator greatequal                          : 5
- 10-bit comparator less                                : 5
+# Comparators                                          : 4
+ 10-bit comparator greatequal                          : 2
  10-bit comparator lessequal                           : 2
 
 =========================================================================
@@ -573,8 +598,8 @@ Unit <Top> processed.
 Final Register Report
 
 Macro Statistics
-# Registers                                            : 564
- Flip-Flops                                            : 564
+# Registers                                            : 573
+ Flip-Flops                                            : 573
 
 =========================================================================
 
@@ -603,26 +628,28 @@ Design Statistics
 # IOs                              : 86
 
 Cell Usage :
-# BELS                             : 1119
+# BELS                             : 1137
 #      GND                         : 5
 #      INV                         : 31
 #      LUT1                        : 181
-#      LUT2                        : 227
-#      LUT3                        : 113
-#      LUT4                        : 140
+#      LUT2                        : 233
+#      LUT2_L                      : 1
+#      LUT3                        : 116
+#      LUT3_L                      : 1
+#      LUT4                        : 145
 #      LUT4_D                      : 17
-#      LUT4_L                      : 13
+#      LUT4_L                      : 15
 #      MUXCY                       : 187
 #      MUXF5                       : 4
 #      VCC                         : 5
 #      XORCY                       : 196
-# FlipFlops/Latches                : 582
-#      FD                          : 4
+# FlipFlops/Latches                : 591
+#      FD                          : 5
 #      FD_1                        : 16
 #      FDE                         : 276
-#      FDR                         : 74
+#      FDR                         : 79
 #      FDRE                        : 198
-#      FDS                         : 4
+#      FDS                         : 7
 #      FDSE                        : 4
 #      LD                          : 6
 # RAMS                             : 18
@@ -643,9 +670,9 @@ Device utilization summary:
 
 Selected Device : 3s1200efg320-4 
 
- Number of Slices:                      389  out of   8672     4%  
- Number of Slice Flip Flops:            576  out of  17344     3%  
- Number of 4 input LUTs:                722  out of  17344     4%  
+ Number of Slices:                      396  out of   8672     4%  
+ Number of Slice Flip Flops:            585  out of  17344     3%  
+ Number of 4 input LUTs:                740  out of  17344     4%  
  Number of IOs:                          86
  Number of bonded IOBs:                  62  out of    250    24%  
     IOB Flip Flops:                       6
@@ -673,7 +700,7 @@ Clock Information:
 -------------------------------------------------+---------------------------+-------+
 Clock Signal                                     | Clock buffer(FF name)     | Load  |
 -------------------------------------------------+---------------------------+-------+
-inst_clk25/clkbuf                                | BUFG                      | 110   |
+inst_clk25/clkbuf                                | BUFG                      | 119   |
 ov7670_pclk1                                     | BUFGP                     | 39    |
 ov7670_pclk2                                     | BUFGP                     | 39    |
 ov7670_pclk3                                     | BUFGP                     | 39    |
@@ -705,28 +732,28 @@ All values displayed in nanoseconds (ns)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'inst_clk25/clkbuf'
-  Clock period: 8.045ns (frequency: 124.301MHz)
-  Total number of paths / destination ports: 3725 / 476
+  Clock period: 7.835ns (frequency: 127.632MHz)
+  Total number of paths / destination ports: 2458 / 492
 -------------------------------------------------------------------------
-Delay:               8.045ns (Levels of Logic = 4)
-  Source:            inst_vgatiming/vcnt_6 (FF)
-  Destination:       inst_addrgen3/addr_0 (FF)
+Delay:               7.835ns (Levels of Logic = 4)
+  Source:            inst_vgatiming/hcnt_3 (FF)
+  Destination:       inst_vgatiming/vcnt_9 (FF)
   Source Clock:      inst_clk25/clkbuf rising
   Destination Clock: inst_clk25/clkbuf rising
 
-  Data Path: inst_vgatiming/vcnt_6 to inst_addrgen3/addr_0
+  Data Path: inst_vgatiming/hcnt_3 to inst_vgatiming/vcnt_9
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDRE:C->Q             4   0.591   0.762  inst_vgatiming/vcnt_6 (inst_vgatiming/vcnt_6)
-     LUT4_L:I0->LO         1   0.704   0.104  inst_vgatiming/activeArea4_and00002_SW0 (N18)
-     LUT4:I3->O            7   0.704   0.712  inst_vgatiming/activeArea4_and00002 (inst_vgatiming/N111)
-     LUT4:I3->O           21   0.704   1.132  inst_vgatiming/activeArea1_and0000 (active1)
-     LUT4:I3->O           15   0.704   1.017  inst_addrgen1/addr_or000071 (inst_addrgen1/addr_or0000)
-     FDRE:R                    0.911          inst_addrgen1/addr_0
+     FDR:C->Q              4   0.591   0.762  inst_vgatiming/hcnt_3 (inst_vgatiming/hcnt_3)
+     LUT2_L:I0->LO         1   0.704   0.104  inst_vgatiming/state0_FSM_FFd2-In1_SW0 (N16)
+     LUT4:I3->O            5   0.704   0.637  inst_vgatiming/state0_FSM_FFd2-In1 (inst_vgatiming/N4)
+     LUT4:I3->O           21   0.704   1.132  inst_vgatiming/state0_cmp_eq00041_1 (inst_vgatiming/state0_cmp_eq00041)
+     LUT4:I3->O           10   0.704   0.882  inst_vgatiming/vcnt_and000051 (inst_vgatiming/vcnt_and0000)
+     FDRE:R                    0.911          inst_vgatiming/vcnt_0
     ----------------------------------------
-    Total                      8.045ns (4.318ns logic, 3.727ns route)
-                                       (53.7% logic, 46.3% route)
+    Total                      7.835ns (4.318ns logic, 3.517ns route)
+                                       (55.1% logic, 44.9% route)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'ov7670_pclk1'
@@ -1017,15 +1044,15 @@ Delay:               6.376ns (Levels of Logic = 3)
 =========================================================================
 
 
-Total REAL time to Xst completion: 11.00 secs
-Total CPU time to Xst completion: 10.78 secs
+Total REAL time to Xst completion: 12.00 secs
+Total CPU time to Xst completion: 11.26 secs
  
 --> 
 
 
-Total memory usage is 541984 kilobytes
+Total memory usage is 543128 kilobytes
 
 Number of errors   :    0 (   0 filtered)
-Number of warnings :  110 (   0 filtered)
-Number of infos    :   14 (   0 filtered)
+Number of warnings :  112 (   0 filtered)
+Number of infos    :   15 (   0 filtered)
 
