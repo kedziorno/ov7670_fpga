@@ -341,11 +341,16 @@ begin
 				camera2 <= '0';
 				camera3 <= '0';
 				camera4 <= '0';
+				led1 <= '0';
+				led2 <= '0';
+				led3 <= '0';
+				led4 <= '0';
 			when sa =>
 				if (done = '1') then
 					state := sb;
 					send <= '0';
 					resend2 <= '1';
+					led1 <= '1';
 				else
 					state := sa;
 					send <= '1';
@@ -360,6 +365,7 @@ begin
 					state := sc;
 					send <= '0';
 					resend2 <= '1';
+					led2 <= '1';
 				else
 					state := sb;
 					send <= '1';
@@ -374,6 +380,7 @@ begin
 					state := sd;
 					send <= '0';
 					resend2 <= '1';
+					led3 <= '1';
 				else
 					state := sc;
 					send <= '1';
@@ -388,6 +395,7 @@ begin
 					state := se;
 					send <= '0';
 					resend2 <= '1';
+					led4 <= '1';
 				else
 					state := sd;
 					send <= '1';
@@ -408,11 +416,6 @@ begin
 		end case;
 	end if;
 end process p0initcam;
-
-led1 <= '0';
-led2 <= '0';
-led3 <= '0';
-led4 <= '0';
 
 ov7670_sioc1 <= sioc when camera1 = '1' else '1';
 ov7670_siod1 <= siod when camera1 = '1' else '1';

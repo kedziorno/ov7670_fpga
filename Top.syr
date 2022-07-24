@@ -348,6 +348,10 @@ Synthesizing Unit <Top>.
     | Encoding           | automatic                                      |
     | Implementation     | LUT                                            |
     -----------------------------------------------------------------------
+    Found 1-bit register for signal <led1>.
+    Found 1-bit register for signal <led2>.
+    Found 1-bit register for signal <led3>.
+    Found 1-bit register for signal <led4>.
     Found 1-bit register for signal <camera1>.
     Found 1-bit register for signal <camera2>.
     Found 1-bit register for signal <camera3>.
@@ -356,7 +360,7 @@ Synthesizing Unit <Top>.
     Found 1-bit register for signal <send>.
     Summary:
 	inferred   1 Finite State Machine(s).
-	inferred   6 D-type flip-flop(s).
+	inferred  10 D-type flip-flop(s).
 Unit <Top> synthesized.
 
 INFO:Xst:1767 - HDL ADVISOR - Resource sharing has identified that some arithmetic operations in this design can share the same physical resources for reduced device utilization. For improved clock frequency you may try to disable resource sharing.
@@ -374,8 +378,8 @@ Macro Statistics
  24-bit up counter                                     : 1
  6-bit up counter                                      : 1
  8-bit up counter                                      : 1
-# Registers                                            : 50
- 1-bit register                                        : 35
+# Registers                                            : 54
+ 1-bit register                                        : 39
  16-bit register                                       : 5
  32-bit register                                       : 2
  7-bit register                                        : 4
@@ -565,8 +569,8 @@ Macro Statistics
  24-bit up counter                                     : 1
  6-bit up counter                                      : 1
  8-bit up counter                                      : 1
-# Registers                                            : 147
- Flip-Flops                                            : 147
+# Registers                                            : 151
+ Flip-Flops                                            : 151
 # Comparators                                          : 4
  10-bit comparator greatequal                          : 2
  10-bit comparator lessequal                           : 2
@@ -605,8 +609,8 @@ Unit <Top> processed.
 Final Register Report
 
 Macro Statistics
-# Registers                                            : 348
- Flip-Flops                                            : 348
+# Registers                                            : 352
+ Flip-Flops                                            : 352
 
 =========================================================================
 
@@ -635,23 +639,23 @@ Design Statistics
 # IOs                              : 86
 
 Cell Usage :
-# BELS                             : 774
+# BELS                             : 780
 #      GND                         : 5
 #      INV                         : 22
 #      LUT1                        : 160
-#      LUT2                        : 81
+#      LUT2                        : 82
 #      LUT2_L                      : 1
 #      LUT3                        : 47
 #      LUT3_D                      : 2
-#      LUT4                        : 89
+#      LUT4                        : 94
 #      LUT4_D                      : 3
 #      LUT4_L                      : 19
 #      MUXCY                       : 166
 #      MUXF5                       : 2
 #      VCC                         : 5
 #      XORCY                       : 172
-# FlipFlops/Latches                : 360
-#      FD                          : 13
+# FlipFlops/Latches                : 364
+#      FD                          : 17
 #      FD_1                        : 16
 #      FDE                         : 90
 #      FDR                         : 76
@@ -675,9 +679,9 @@ Device utilization summary:
 
 Selected Device : 3s1200efg320-4 
 
- Number of Slices:                      241  out of   8672     2%  
- Number of Slice Flip Flops:            360  out of  17344     2%  
- Number of 4 input LUTs:                424  out of  17344     2%  
+ Number of Slices:                      244  out of   8672     2%  
+ Number of Slice Flip Flops:            364  out of  17344     2%  
+ Number of 4 input LUTs:                430  out of  17344     2%  
  Number of IOs:                          86
  Number of bonded IOBs:                  62  out of    250    24%  
  Number of BRAMs:                        17  out of     28    60%  
@@ -709,7 +713,7 @@ ov7670_pclk1                       | BUFGP                  | 39    |
 ov7670_pclk2                       | BUFGP                  | 39    |
 ov7670_pclk3                       | BUFGP                  | 39    |
 ov7670_pclk4                       | BUFGP                  | 39    |
-ov7670_xclk4_OBUF1(cc1:O)          | BUFG(*)(resend2)       | 92    |
+ov7670_xclk4_OBUF1(cc1:O)          | BUFG(*)(led2)          | 96    |
 clk50                              | BUFGP                  | 26    |
 -----------------------------------+------------------------+-------+
 (*) This 1 clock signal(s) are generated by combinatorial logic,
@@ -749,7 +753,7 @@ Delay:               7.789ns (Levels of Logic = 4)
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
      FDR:C->Q              4   0.591   0.762  inst_vgatiming/hcnt_3 (inst_vgatiming/hcnt_3)
-     LUT2_L:I0->LO         1   0.704   0.104  inst_vgatiming/state0_FSM_FFd2-In1_SW0 (N10)
+     LUT2_L:I0->LO         1   0.704   0.104  inst_vgatiming/state0_FSM_FFd2-In1_SW0 (N12)
      LUT4:I3->O            4   0.704   0.591  inst_vgatiming/state0_FSM_FFd2-In1 (inst_vgatiming/N4)
      LUT4:I3->O           21   0.704   1.132  inst_vgatiming/state0_cmp_eq00041_1 (inst_vgatiming/state0_cmp_eq00041)
      LUT4:I3->O           10   0.704   0.882  inst_vgatiming/vcnt_and000051 (inst_vgatiming/vcnt_and0000)
@@ -848,10 +852,10 @@ Delay:               3.935ns (Levels of Logic = 1)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'ov7670_xclk4_OBUF1'
-  Clock period: 7.224ns (frequency: 138.427MHz)
-  Total number of paths / destination ports: 1763 / 192
+  Clock period: 7.449ns (frequency: 134.246MHz)
+  Total number of paths / destination ports: 1855 / 196
 -------------------------------------------------------------------------
-Delay:               7.224ns (Levels of Logic = 3)
+Delay:               7.449ns (Levels of Logic = 3)
   Source:            Registers/Mrom_cmd_reg_rom0000 (RAM)
   Destination:       state_FSM_FFd1 (FF)
   Source Clock:      ov7670_xclk4_OBUF1 rising
@@ -863,12 +867,12 @@ Delay:               7.224ns (Levels of Logic = 3)
     ----------------------------------------  ------------
      RAMB16_S18:CLK->DO0    2   2.800   0.622  Registers/Mrom_cmd_reg_rom0000 (command<0>)
      LUT4:I0->O            1   0.704   0.595  Registers/done_cmp_eq00004 (Registers/done_cmp_eq00004)
-     LUT4:I0->O            7   0.704   0.787  Registers/done_cmp_eq000036 (done)
+     LUT4:I0->O           11   0.704   1.012  Registers/done_cmp_eq000036 (done)
      LUT2:I1->O            1   0.704   0.000  state_FSM_FFd1-In1 (state_FSM_FFd1-In)
      FD:D                      0.308          state_FSM_FFd1
     ----------------------------------------
-    Total                      7.224ns (5.220ns logic, 2.004ns route)
-                                       (72.3% logic, 27.7% route)
+    Total                      7.449ns (5.220ns logic, 2.229ns route)
+                                       (70.1% logic, 29.9% route)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'clk50'
@@ -997,7 +1001,7 @@ Offset:              1.946ns (Levels of Logic = 1)
 
 =========================================================================
 Timing constraint: Default OFFSET OUT AFTER for Clock 'ov7670_xclk4_OBUF1'
-  Total number of paths / destination ports: 40 / 8
+  Total number of paths / destination ports: 44 / 12
 -------------------------------------------------------------------------
 Offset:              8.182ns (Levels of Logic = 4)
   Source:            SCCB/busy_sr_20 (FF)
@@ -1080,12 +1084,12 @@ Delay:               6.422ns (Levels of Logic = 3)
 
 
 Total REAL time to Xst completion: 9.00 secs
-Total CPU time to Xst completion: 9.02 secs
+Total CPU time to Xst completion: 9.28 secs
  
 --> 
 
 
-Total memory usage is 538660 kilobytes
+Total memory usage is 538724 kilobytes
 
 Number of errors   :    0 (   0 filtered)
 Number of warnings :  107 (   0 filtered)
