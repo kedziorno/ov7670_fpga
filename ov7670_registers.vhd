@@ -90,13 +90,16 @@ sequence_proc : process (clk) begin
 			sequence <= 0;
 		elsif advance = '1' then
 			sequence <= sequence + 1;
+
 		end if;
+					cmd_reg <= commandrom(sequence);
 
 		if sequence = C_CMD-1 then
-			cmd_reg <= x"FFFF";
-		else
-			cmd_reg <= commandrom(sequence);
+--			cmd_reg <= x"FFFF";
+sequence <= 0;
 		end if;
+
+		
 	end if;
 end process sequence_proc;
 end Behavioral;
