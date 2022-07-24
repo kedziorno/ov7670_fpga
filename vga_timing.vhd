@@ -64,6 +64,48 @@ hsync_gen : process(clk_vga) begin
 	end if;
 end process hsync_gen;
 
+--vsync_gen : process(clk_vga)
+--constant C1 : integer := VD+VFP;
+--constant C2 : integer := VD+VFP+VSP;
+--variable count1 : integer range 0 to 1023 := 0;
+--variable count2 : integer range 0 to 1023 := 0;
+--type states is (sa,sb,sc,sd);
+--variable state : states := sa;
+--begin
+--	if rising_edge(clk_vga) then
+--		case (state) is
+--			when sa =>
+--				v <= '1';
+--				if (vcnt = VD) then
+--					state := sb;
+--				else
+--					state := sa;
+--				end if;
+--			when sb =>
+--				v <= '1';
+--				if (vcnt = VFP) then
+--					state := sc;
+--				else
+--					state := sb;
+--				end if;
+--			when sc =>
+--				v <= '0';
+--				if (vcnt = VSP) then
+--					state := sd;
+--				else
+--					state := sc;
+--				end if;
+--			when sd =>
+--				v <= '1';
+--				if (vcnt = VBP) then
+--					state := sa;
+--				else
+--					state := sd;
+--				end if;
+--		end case;
+--	end if;
+--end process vsync_gen;
+
 vsync_gen : process(clk_vga) begin
 	if rising_edge(clk_vga) then
 		if (vcnt <= (VD+VFP) or vcnt >= (VD+VFP+VSP)) then
@@ -77,23 +119,21 @@ end process vsync_gen;
 p1 : process (clk_vga) is
 type states is (p0a,p0b);
 variable state : states := p0a;
-constant C1 : integer := 160;
-constant C2 : integer := 120;
-variable count1 : integer range 0 to 1023 := 0;
-variable count2 : integer range 0 to 1023 := 0;
+constant C1 : integer := 120;
+constant C2 : integer := 480;
 begin
 	if (rising_edge(clk_vga)) then
 		case (state) is
 			when p0a =>
 				v120 <= '1';
-				if (vcnt = C2-1) then
+				if (vcnt = C1-1) then
 					state := p0b;
 				else
 					state := p0a;
 				end if;
 			when p0b =>
 				v120 <= '0';
-				if (vcnt = 480-1) then
+				if (vcnt = C2-1) then
 					state := p0a;
 				else
 					state := p0b;
@@ -105,10 +145,7 @@ end process p1;
 p0 : process (clk_vga) is
 type states is (p0a,p0b,p0c,p0d,p0e);
 variable state : states := p0a;
-constant C1 : integer := 160;
-constant C2 : integer := 120;
 variable count1 : integer range 0 to 1023 := 0;
-variable count2 : integer range 0 to 1023 := 0;
 begin
 	if (rising_edge(clk_vga)) then
 		activeArea1 <= '0';
