@@ -19,7 +19,7 @@ entity vga_imagegenerator is
 end vga_imagegenerator;
 
 architecture Behavioral of vga_imagegenerator is
-signal d1,d2,d3,d4 : std_logic_vector(7 downto 0);
+signal d1,d2,d3,d4,o : std_logic_vector(7 downto 0);
 begin
 	-- Red : 11 downto 8
 	-- Green : 7 downto 4
@@ -33,11 +33,13 @@ d2 <= Data_in2(2)&"01" & Data_in2(1)&"01" & Data_in2(0)&"1" when active_area2 = 
 d3 <= Data_in3(2)&"01" & Data_in3(1)&"01" & Data_in3(0)&"1" when active_area3 = '1' else (others => '0');
 d4 <= Data_in4(2)&"01" & Data_in4(1)&"01" & Data_in4(0)&"1" when active_area4 = '1' else (others => '0');
 
-RGB_out <=
-d1 when active_area1 = '1' else
-d2 when active_area2 = '1' else
-d3 when active_area3 = '1' else
-d4 when active_area4 = '1';
+o <=
+d1 when (active_area1 = '1' and active_area2 = '0' and active_area3 = '0' and active_area4 = '0') else
+d2 when (active_area1 = '0' and active_area2 = '1' and active_area3 = '0' and active_area4 = '0') else
+d3 when (active_area1 = '0' and active_area2 = '0' and active_area3 = '1' and active_area4 = '0') else
+d4 when (active_area1 = '0' and active_area2 = '0' and active_area3 = '0' and active_area4 = '1');
 
+RGB_out <= o;
+ 
 end Behavioral;
 

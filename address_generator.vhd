@@ -24,13 +24,11 @@ begin
 process (clk25) begin
 	if rising_edge (clk25) then
 		if (enable='1') then
-			if (addr < 160*120-1) then
-				addr <= addr + 1 ;
+			if (addr = 160*120-1) then
+			addr <= (others => '0');	
 			else
-			addr <= (others => '0');
+			addr <= addr + 1 ;
 			end if;
-		else
-		addr <= addr;
 		end if;
 		
 		if vsync = '0' then 

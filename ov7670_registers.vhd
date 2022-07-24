@@ -18,9 +18,9 @@ end ov7670_registers;
 architecture Behavioral of ov7670_registers is
 
 signal cmd_reg : STD_LOGIC_VECTOR (15 downto 0);
-signal sequence : INTEGER := 0;
-
-type cmd_rom is array (0 to 55) of STD_LOGIC_VECTOR (15 downto 0);
+constant C_CMD : integer := 56;
+signal sequence : INTEGER range 0 to C_CMD-1 := 0;
+type cmd_rom is array (0 to C_CMD-1) of STD_LOGIC_VECTOR (15 downto 0);
 constant commandrom : cmd_rom :=(
 	0  => x"1280", -- COM7 Reset
 	1  => x"1280", -- COM7 Reset
@@ -92,9 +92,10 @@ sequence_proc : process (clk) begin
 			sequence <= sequence + 1;
 		end if;
 
-		cmd_reg <= commandrom(sequence);
-		if sequence > 55 then
+		if sequence = C_CMD-1 then
 			cmd_reg <= x"FFFF";
+		else
+			cmd_reg <= commandrom(sequence);
 		end if;
 	end if;
 end process sequence_proc;
