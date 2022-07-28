@@ -1,4 +1,23 @@
 ----------------------------------------------------------------------------------
+-- Engineer: Mike Field <hamster@snap.net.nz>
+-- 
+-- Description: Captures the pixels coming from the OV7670 camera and 
+--              Stores them in block RAM
+--
+-- The length of href last controls how often pixels are captive - (2 downto 0) stores
+-- one pixel every 4 cycles.
+--
+-- "line" is used to control how often data is captured. In this case every forth 
+-- line
+----------------------------------------------------------------------------------
+-- This is a bit tricky href starts a pixel transfer that takes 3 cycles
+         --        Input   | state after clock tick   
+         --         href   | wr_hold    d_latch           dout                we address  address_next
+         -- cycle -1  x    |    xx      xxxxxxxxxxxxxxxx  xxxxxxxxxxxx  x   xxxx     xxxx
+         -- cycle 0   1    |    x1      xxxxxxxxRRRRRGGG  xxxxxxxxxxxx  x   xxxx     addr
+         -- cycle 1   0    |    10      RRRRRGGGGGGBBBBB  xxxxxxxxxxxx  x   addr     addr
+         -- cycle 2   x    |    0x      GGGBBBBBxxxxxxxx  RRRRGGGGBBBB  1   addr     addr+1
+----------------------------------------------------------------------------------
 -- This entity controls pixel reading and writing from camera to memory
 -- The raw data is 640 x 480 pixels, 
 	-- For nexys2, it is recommended to use 160 x 120
