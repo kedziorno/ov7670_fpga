@@ -1,3 +1,9 @@
+----------------------------------------------------------------------------------
+-- Engineer: Mike Field <hamster@snap.net.nz>
+-- 
+-- Description: Controller for the OV760 camera - transferes registers to the 
+--              camera over an I2C like bus
+----------------------------------------------------------------------------------
 ---------------------------------------------
 -- simulation completed 2/08/19
 -- This entity is needed to setup the camera
