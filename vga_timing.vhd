@@ -71,10 +71,10 @@ vsync_gen : process(clk_vga) begin
 	end if;
 end process vsync_gen;
 
-activeArea1 <= '1' when (hcnt >= 0 and hcnt < 160) and (vcnt < 120) else '0';
-activeArea2 <= '1' when (hcnt >= 160 and hcnt < 320) and (vcnt < 120) else '0';
-activeArea3 <= '1' when (hcnt >= 320 and hcnt < 480) and (vcnt < 120) else '0';
-activeArea4 <= '1' when (hcnt >= 480 and hcnt < 640) and (vcnt < 120) else '0';
+activeArea1 <= '1' when (hcnt >= 0 and hcnt < 160) and (vcnt >= 0 and vcnt < 120) else '0';
+activeArea2 <= '1' when (hcnt >= 160 and hcnt < 320) and (vcnt >= 0 and vcnt < 120) else '0';
+activeArea3 <= '1' when (hcnt >= 320 and hcnt < 480) and (vcnt >= 0 and vcnt < 120) else '0';
+activeArea4 <= '1' when (hcnt >= 480 and hcnt < 640) and (vcnt >= 0 and vcnt < 120) else '0';
 
 Hsync <= h;
 Vsync <= v;
