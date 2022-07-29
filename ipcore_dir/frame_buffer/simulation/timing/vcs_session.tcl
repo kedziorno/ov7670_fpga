@@ -77,10 +77,8 @@ gui_list_add_group -id Wave.1 {frame_buffer_Group}
       gui_sg_addsignal -group frame_buffer_Group  /frame_buffer_tb/frame_buffer_synth_inst/bmg_port/ADDRA
       gui_sg_addsignal -group frame_buffer_Group  /frame_buffer_tb/frame_buffer_synth_inst/bmg_port/DINA
       gui_sg_addsignal -group frame_buffer_Group  /frame_buffer_tb/frame_buffer_synth_inst/bmg_port/WEA
-      gui_sg_addsignal -group frame_buffer_Group  /frame_buffer_tb/frame_buffer_synth_inst/bmg_port/ENA
       gui_sg_addsignal -group frame_buffer_Group  /frame_buffer_tb/frame_buffer_synth_inst/bmg_port/CLKB
       gui_sg_addsignal -group frame_buffer_Group  /frame_buffer_tb/frame_buffer_synth_inst/bmg_port/ADDRB
-      gui_sg_addsignal -group frame_buffer_Group  /frame_buffer_tb/frame_buffer_synth_inst/bmg_port/ENB
       gui_sg_addsignal -group frame_buffer_Group  /frame_buffer_tb/frame_buffer_synth_inst/bmg_port/DOUTB
 
 gui_zoom -window Wave.1 -full

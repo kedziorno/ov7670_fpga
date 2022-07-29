@@ -14,10 +14,8 @@ quietly WaveActivateNextPane {} 0
       add wave -noupdate /frame_buffer_tb/frame_buffer_synth_inst/bmg_port/ADDRA
       add wave -noupdate /frame_buffer_tb/frame_buffer_synth_inst/bmg_port/DINA
       add wave -noupdate /frame_buffer_tb/frame_buffer_synth_inst/bmg_port/WEA
-      add wave -noupdate /frame_buffer_tb/frame_buffer_synth_inst/bmg_port/ENA
       add wave -noupdate /frame_buffer_tb/frame_buffer_synth_inst/bmg_port/CLKB
       add wave -noupdate /frame_buffer_tb/frame_buffer_synth_inst/bmg_port/ADDRB
-      add wave -noupdate /frame_buffer_tb/frame_buffer_synth_inst/bmg_port/ENB
       add wave -noupdate /frame_buffer_tb/frame_buffer_synth_inst/bmg_port/DOUTB
 
 TreeUpdate [SetDefaultTree]

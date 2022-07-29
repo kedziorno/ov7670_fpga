@@ -8,7 +8,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 entity ov7670_registers is
-    Port ( clk : in  STD_LOGIC;
+    Port ( reset : in std_logic; clk : in  STD_LOGIC;
            resend : in  STD_LOGIC;
            advance : in  STD_LOGIC;
            command : out  STD_LOGIC_VECTOR (15 downto 0);
@@ -18,7 +18,7 @@ end ov7670_registers;
 architecture Behavioral of ov7670_registers is
 
 signal cmd_reg : STD_LOGIC_VECTOR (15 downto 0);
-constant C_CMD : integer := 56;
+constant C_CMD : integer := 57;
 signal sequence : INTEGER range 0 to C_CMD-1 := 0;
 type cmd_rom is array (0 to C_CMD-1) of STD_LOGIC_VECTOR (15 downto 0);
 constant commandrom : cmd_rom :=(
@@ -77,15 +77,22 @@ constant commandrom : cmd_rom :=(
 	52 => x"A990", -- TPH Total Prob High
 	53 => x"AA94", -- NALG AEC Algo select
 	54 => x"13E5", -- COM8 AGC Settings
-	55 => x"FFFF");-- STOP (using WITH .. SELECT below) 			
+	55 => x"13E5", -- COM8 AGC Settings
+	56 => x"FFFF");-- STOP (using WITH .. SELECT below) 			
 
 begin
+
 command <= cmd_reg;
 
 with cmd_reg select done <= '1' when x"FFFF", '0' when others;
 
-sequence_proc : process (clk) begin
-	if rising_edge(clk) then
+sequence_proc : process (clk,reset) begin
+if (reset = '1') then
+sequence <= 0;
+--command <= x"ffff";
+--done <= '0';
+cmd_reg <= (others => '0');
+	elsif rising_edge(clk) then
 		if resend = '1' then
 			sequence <= 0;
 		elsif advance = '1' then
@@ -101,6 +108,7 @@ sequence <= 0;
 
 		
 	end if;
+
 end process sequence_proc;
 end Behavioral;
 

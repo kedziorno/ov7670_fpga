@@ -106,14 +106,12 @@ ARCHITECTURE frame_buffer_synth_ARCH OF frame_buffer_synth IS
 COMPONENT frame_buffer_exdes 
   PORT (
       --Inputs - Port A
-    ENA            : IN STD_LOGIC;  --opt port
     WEA            : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
     ADDRA          : IN STD_LOGIC_VECTOR(14 DOWNTO 0);
     DINA           : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
     CLKA       : IN STD_LOGIC;
 
       --Inputs - Port B
-    ENB            : IN STD_LOGIC;  --opt port
     ADDRB          : IN STD_LOGIC_VECTOR(14 DOWNTO 0);
     DOUTB          : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
     CLKB           : IN STD_LOGIC
@@ -125,8 +123,6 @@ END COMPONENT;
 
   SIGNAL CLKA: STD_LOGIC := '0';
   SIGNAL RSTA: STD_LOGIC := '0';
-  SIGNAL ENA: STD_LOGIC := '0';
-  SIGNAL ENA_R: STD_LOGIC := '0';
   SIGNAL WEA: STD_LOGIC_VECTOR(0 DOWNTO 0) := (OTHERS => '0');
   SIGNAL WEA_R: STD_LOGIC_VECTOR(0 DOWNTO 0) := (OTHERS => '0');
   SIGNAL ADDRA: STD_LOGIC_VECTOR(14 DOWNTO 0) := (OTHERS => '0');
@@ -135,8 +131,6 @@ END COMPONENT;
   SIGNAL DINA_R: STD_LOGIC_VECTOR(2 DOWNTO 0) := (OTHERS => '0');
   SIGNAL CLKB: STD_LOGIC := '0';
   SIGNAL RSTB: STD_LOGIC := '0';
-  SIGNAL ENB: STD_LOGIC := '0';
-  SIGNAL ENB_R: STD_LOGIC := '0';
   SIGNAL ADDRB: STD_LOGIC_VECTOR(14 DOWNTO 0) := (OTHERS => '0');
   SIGNAL ADDRB_R: STD_LOGIC_VECTOR(14 DOWNTO 0) := (OTHERS => '0');
   SIGNAL DOUTB: STD_LOGIC_VECTOR(2 DOWNTO 0);
@@ -247,10 +241,8 @@ STATUS(7 DOWNTO 0) <= ISSUE_FLAG_STATUS;
        TB_RST => RSTA,
        ADDRA  => ADDRA,
        DINA => DINA,
-       ENA => ENA,
        WEA => WEA,
        ADDRB => ADDRB,
-       ENB => ENB,
 	   CHECK_DATA => CHECKER_EN
      );
   PROCESS(CLKA)
@@ -288,17 +280,13 @@ STATUS(7 DOWNTO 0) <= ISSUE_FLAG_STATUS;
       BEGIN
         IF(RISING_EDGE(CLKA)) THEN
 		  IF(RESET_SYNC_R3='1') THEN
-            ENA_R <= '0' AFTER 50 ns;
             WEA_R  <= (OTHERS=>'0') AFTER 50 ns;
             DINA_R <= (OTHERS=>'0') AFTER 50 ns;
-            ENB_R <= '0' AFTER 50 ns;
           
 
            ELSE
-          ENA_R <= ENA AFTER 50 ns;
             WEA_R  <= WEA AFTER 50 ns;
             DINA_R <= DINA AFTER 50 ns;
-          ENB_R <= ENB AFTER 50 ns;
 
          END IF;
 	    END IF;
@@ -321,13 +309,11 @@ STATUS(7 DOWNTO 0) <= ISSUE_FLAG_STATUS;
 
     BMG_PORT: frame_buffer_exdes PORT MAP ( 
       --Port A
-      ENA        => ENA_R,
       WEA        => WEA_R,
       ADDRA      => ADDRA_R,
       DINA       => DINA_R,
       CLKA       => CLKA,
       --Port B
-      ENB        => ENB_R, 
       ADDRB      => ADDRB_R,
       DOUTB      => DOUTB,
       CLKB       => CLKB

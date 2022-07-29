@@ -43,12 +43,10 @@ LIBRARY XilinxCoreLib;
 ENTITY frame_buffer IS
   PORT (
     clka : IN STD_LOGIC;
-    ena : IN STD_LOGIC;
     wea : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
     addra : IN STD_LOGIC_VECTOR(14 DOWNTO 0);
     dina : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
     clkb : IN STD_LOGIC;
-    enb : IN STD_LOGIC;
     addrb : IN STD_LOGIC_VECTOR(14 DOWNTO 0);
     doutb : OUT STD_LOGIC_VECTOR(2 DOWNTO 0)
   );
@@ -59,12 +57,10 @@ ARCHITECTURE frame_buffer_a OF frame_buffer IS
 COMPONENT wrapped_frame_buffer
   PORT (
     clka : IN STD_LOGIC;
-    ena : IN STD_LOGIC;
     wea : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
     addra : IN STD_LOGIC_VECTOR(14 DOWNTO 0);
     dina : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
     clkb : IN STD_LOGIC;
-    enb : IN STD_LOGIC;
     addrb : IN STD_LOGIC_VECTOR(14 DOWNTO 0);
     doutb : OUT STD_LOGIC_VECTOR(2 DOWNTO 0)
   );
@@ -75,7 +71,7 @@ END COMPONENT;
     GENERIC MAP (
       c_addra_width => 15,
       c_addrb_width => 15,
-      c_algorithm => 0,
+      c_algorithm => 1,
       c_axi_id_width => 4,
       c_axi_slave_type => 0,
       c_axi_type => 1,
@@ -87,8 +83,8 @@ END COMPONENT;
       c_enable_32bit_address => 0,
       c_family => "spartan3",
       c_has_axi_id => 0,
-      c_has_ena => 1,
-      c_has_enb => 1,
+      c_has_ena => 0,
+      c_has_enb => 0,
       c_has_injecterr => 0,
       c_has_mem_output_regs_a => 0,
       c_has_mem_output_regs_b => 0,
@@ -108,7 +104,7 @@ END COMPONENT;
       c_load_init_file => 0,
       c_mem_type => 1,
       c_mux_pipeline_stages => 0,
-      c_prim_type => 0,
+      c_prim_type => 1,
       c_read_depth_a => 19200,
       c_read_depth_b => 19200,
       c_read_width_a => 3,
@@ -129,8 +125,8 @@ END COMPONENT;
       c_web_width => 1,
       c_write_depth_a => 19200,
       c_write_depth_b => 19200,
-      c_write_mode_a => "WRITE_FIRST",
-      c_write_mode_b => "READ_FIRST",
+      c_write_mode_a => "NO_CHANGE",
+      c_write_mode_b => "NO_CHANGE",
       c_write_width_a => 3,
       c_write_width_b => 3,
       c_xdevicefamily => "spartan3e"
@@ -141,12 +137,10 @@ BEGIN
 U0 : wrapped_frame_buffer
   PORT MAP (
     clka => clka,
-    ena => ena,
     wea => wea,
     addra => addra,
     dina => dina,
     clkb => clkb,
-    enb => enb,
     addrb => addrb,
     doutb => doutb
   );

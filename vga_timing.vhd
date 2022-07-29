@@ -8,7 +8,7 @@ use IEEE.NUMERIC_STD.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
 
 entity VGA_timing_synch is
-    Port ( clk25 : in  STD_LOGIC;
+    Port ( reset : in std_logic; clk25 : in  STD_LOGIC;
            Hsync : out  STD_LOGIC;
            Vsync : out  STD_LOGIC;
            activeArea1 : out  STD_LOGIC;
@@ -33,14 +33,17 @@ signal clk_vga : STD_LOGIC;
 signal hcnt,vcnt : INTEGER range 0 to 1023 := 0;
 
 signal h,v : std_logic;
-signal hp,vp : std_logic;
+signal ph,pv : std_logic;
 
 signal v120 : std_logic;
 
 begin
 clk_vga <= clk25;
-count_proc : process(clk_vga,vcnt,hcnt) begin
-		if rising_edge(clk_vga) then
+count_proc : process(clk_vga,vcnt,hcnt,reset) begin
+if (reset = '1') then
+hcnt <= 0;
+vcnt <= 0;
+		elsif rising_edge(clk_vga) then
 			if (hcnt = (HD+HFP+HSP+HBP)) then
 				hcnt <= 0;
 				if (vcnt = (VD+VFP+VSP+VBP)) then
@@ -54,8 +57,10 @@ count_proc : process(clk_vga,vcnt,hcnt) begin
 		end if;
 end process count_proc;
 
-hsync_gen : process(clk_vga) begin
-	if rising_edge(clk_vga) then
+hsync_gen : process(clk_vga,reset) begin
+	if (reset = '1') then
+		h <= '0';
+	elsif rising_edge(clk_vga) then
 		if (hcnt <= (HD+HFP) or hcnt >= (HD+HFP+HSP)) then 
 			h <= '1';
 		else
@@ -64,50 +69,10 @@ hsync_gen : process(clk_vga) begin
 	end if;
 end process hsync_gen;
 
---vsync_gen : process(clk_vga)
---constant C1 : integer := VD+VFP;
---constant C2 : integer := VD+VFP+VSP;
---variable count1 : integer range 0 to 1023 := 0;
---variable count2 : integer range 0 to 1023 := 0;
---type states is (sa,sb,sc,sd);
---variable state : states := sa;
---begin
---	if rising_edge(clk_vga) then
---		case (state) is
---			when sa =>
---				v <= '1';
---				if (vcnt = VD) then
---					state := sb;
---				else
---					state := sa;
---				end if;
---			when sb =>
---				v <= '1';
---				if (vcnt = VFP) then
---					state := sc;
---				else
---					state := sb;
---				end if;
---			when sc =>
---				v <= '0';
---				if (vcnt = VSP) then
---					state := sd;
---				else
---					state := sc;
---				end if;
---			when sd =>
---				v <= '1';
---				if (vcnt = VBP) then
---					state := sa;
---				else
---					state := sd;
---				end if;
---		end case;
---	end if;
---end process vsync_gen;
-
-vsync_gen : process(clk_vga) begin
-	if rising_edge(clk_vga) then
+vsync_gen : process(clk_vga,reset) begin
+if (reset = '1') then
+v <= '0';
+	elsif rising_edge(clk_vga) then
 		if (vcnt <= (VD+VFP) or vcnt >= (VD+VFP+VSP)) then
 			v <= '1';
 		else
@@ -116,14 +81,25 @@ vsync_gen : process(clk_vga) begin
 	end if;
 end process vsync_gen;
 
-p1 : process (clk_vga) is
-type states is (p0a,p0b);
-variable state : states := p0a;
+p1 : process (clk_vga,reset) is
+type states is (idle,p0a,p0b);
+variable state : states := idle;
 constant C1 : integer := 120;
-constant C2 : integer := 480;
+constant C2 : integer := 360;
 begin
-	if (rising_edge(clk_vga)) then
+if (reset = '1') then
+state := idle;
+v120 <= '0';
+	elsif (rising_edge(clk_vga)) then
+		pv <= v;
 		case (state) is
+			when idle =>
+				v120 <= '0';
+				if (pv = '0' and v = '1') then
+					state := p0a;
+				else
+					state := idle;
+				end if;
 			when p0a =>
 				v120 <= '1';
 				if (vcnt = C1-1) then
@@ -134,7 +110,7 @@ begin
 			when p0b =>
 				v120 <= '0';
 				if (vcnt = C2-1) then
-					state := p0a;
+					state := idle;
 				else
 					state := p0b;
 				end if;
@@ -142,20 +118,42 @@ begin
 	end if;
 end process p1;
 
-p0 : process (clk_vga) is
-type states is (p0a,p0b,p0c,p0d,p0e);
-variable state : states := p0a;
+p0 : process (clk_vga,reset) is
+type states is (idle,p0a,p0b,p0c,p0d,p0e);
+variable state : states := idle;
 variable count1 : integer range 0 to 1023 := 0;
 begin
-	if (rising_edge(clk_vga)) then
+if (reset = '1') then
+		count1 := 0;
+		state := idle;
+		activeArea1 <= '0';
+		activeArea2 <= '0';
+		activeArea3 <= '0';
+		activeArea4 <= '0';
+	elsif (rising_edge(clk_vga)) then
 		activeArea1 <= '0';
 		activeArea2 <= '0';
 		activeArea3 <= '0';
 		activeArea4 <= '0';
 		case (state) is
-			when p0a =>
+			when idle =>
 				if (v120 = '1') then
-					if (hcnt = 160-1) then
+					if (hcnt = 0) then
+						state := p0a;
+					else
+						state := idle;
+					end if;
+				else
+					state := idle;
+				end if;
+				activeArea1 <= '0';
+				activeArea2 <= '0';
+				activeArea3 <= '0';
+				activeArea4 <= '0';
+				count1 := 0;
+			when p0a =>
+--				if (v120 = '1') then
+					if (count1 = 160-1) then
 						count1 := 0;
 						state := p0b;
 					else
@@ -166,10 +164,10 @@ begin
 					activeArea2 <= '0';
 					activeArea3 <= '0';
 					activeArea4 <= '0';
-				end if;
+--				end if;
 			when p0b =>
-				if (v120 = '1') then
-					if (hcnt = 320-1) then
+--				if (v120 = '1') then
+					if (count1 = 160-1) then
 						count1 := 0;
 						state := p0c;
 					else
@@ -180,10 +178,10 @@ begin
 					activeArea2 <= '1';
 					activeArea3 <= '0';
 					activeArea4 <= '0';
-				end if;
+--				end if;
 			when p0c =>
-				if (v120 = '1') then
-					if (hcnt = 480-1) then
+--				if (v120 = '1') then
+					if (count1 = 160-1) then
 						count1 := 0;
 						state := p0d;
 					else
@@ -194,12 +192,13 @@ begin
 					activeArea2 <= '0';
 					activeArea3 <= '1';
 					activeArea4 <= '0';
-				end if;
+--				end if;
 			when p0d =>
-				if (v120 = '1') then
-					if (hcnt = 640-1) then
+--				if (v120 = '1') then
+					if (count1 = 160-1) then
 						count1 := 0;
-						state := p0e;
+--						state := p0e;
+						state := idle;
 					else
 						count1 := count1 + 1;
 						state := p0d;
@@ -208,12 +207,12 @@ begin
 					activeArea2 <= '0';
 					activeArea3 <= '0';
 					activeArea4 <= '1';
-				end if;
+--				end if;
 			when p0e =>
-				if (v120 = '1') then
-					if (hcnt = 800-1) then
+--				if (v120 = '1') then
+					if (count1 = 160-1) then
 						count1 := 0;
-						state := p0a;
+						state := idle;
 					else
 						count1 := count1 + 1;
 						state := p0e;
@@ -222,7 +221,7 @@ begin
 					activeArea2 <= '0';
 					activeArea3 <= '0';
 					activeArea4 <= '0';
-				end if;
+--				end if;
 		end case;
 	end if;
 end process p0;

@@ -38,7 +38,7 @@ END tb_Top;
 ARCHITECTURE behavior OF tb_Top IS 
 
 component Top is
-Generic (G_PB_BITS : integer := 1); -- pushbutton debounce, 1 for simulation, default 24=300ms
+Generic (G_PB_BITS : integer := 5); -- pushbutton debounce, 1 for simulation, default 24=300ms
 Port (
 clk50	: in STD_LOGIC; -- Crystal Oscilator 50MHz  --B8
 clkcam	: in STD_LOGIC; -- Crystal Oscilator 23.9616 MHz  --U9
@@ -53,7 +53,7 @@ ov7670_pclk1,ov7670_pclk2,ov7670_pclk3,ov7670_pclk4  : in  STD_LOGIC; -- Pmod JB
 ov7670_xclk1,ov7670_xclk2,ov7670_xclk3,ov7670_xclk4  : out STD_LOGIC; -- Pmod JB2 --R18
 ov7670_vsync1,ov7670_vsync2,ov7670_vsync3,ov7670_vsync4 : in  STD_LOGIC; -- Pmod JB9 --T18
 ov7670_href1,ov7670_href2,ov7670_href3,ov7670_href4  : in  STD_LOGIC; -- Pmod JB3 --R15
-ov7670_data1,ov7670_data2,ov7670_data3,ov7670_data4  : in  STD_LOGIC_vector(7 downto 0);
+ov7670_data1,ov7670_data2,ov7670_data3,ov7670_data4  : in  STD_LOGIC_vector(2 downto 0);
 ov7670_sioc1,ov7670_sioc2,ov7670_sioc3,ov7670_sioc4  : out STD_LOGIC; -- Pmod JB10 --J12
 ov7670_siod1,ov7670_siod2,ov7670_siod3,ov7670_siod4  : inout STD_LOGIC; -- Pmod JB4 --H16
 ov7670_pwdn1,ov7670_pwdn2,ov7670_pwdn3,ov7670_pwdn4  : out STD_LOGIC; -- Pmod JA1 --L15
@@ -71,7 +71,7 @@ signal pb : std_logic := '0';
 signal ov7670_pclk1,ov7670_pclk2,ov7670_pclk3,ov7670_pclk4 : std_logic := '0';
 signal ov7670_vsync1,ov7670_vsync2,ov7670_vsync3,ov7670_vsync4 : std_logic := '0';
 signal ov7670_href1,ov7670_href2,ov7670_href3,ov7670_href4 : std_logic := '0';
-signal ov7670_data1,ov7670_data2,ov7670_data3,ov7670_data4 : std_logic_vector(7 downto 0) := (others => '0');
+signal ov7670_data1,ov7670_data2,ov7670_data3,ov7670_data4 : std_logic_vector(2 downto 0) := (others => '0');
 
 --BiDirs
 signal ov7670_siod1,ov7670_siod2,ov7670_siod3,ov7670_siod4 : std_logic;
@@ -181,25 +181,25 @@ camera_i_pwdn => camera_i_pwdn4
 
 camera_i_xclk1 <= ov7670_xclk1; -- cam <- dev
 ov7670_pclk1 <= camera_o_pclk1; -- dev <- cam
-ov7670_data1 <= camera_o_d1;
+ov7670_data1 <= camera_o_d1(2 downto 0);
 ov7670_vsync1 <= camera_o_vs1;
 ov7670_href1 <= camera_o_hs1;
 
 camera_i_xclk2 <= ov7670_xclk2; -- cam <- dev
 ov7670_pclk2 <= camera_o_pclk2; -- dev <- cam
-ov7670_data2 <= camera_o_d2;
+ov7670_data2 <= camera_o_d2(2 downto 0);
 ov7670_vsync2 <= camera_o_vs2;
 ov7670_href2 <= camera_o_hs2;
 
 camera_i_xclk3 <= ov7670_xclk3; -- cam <- dev
 ov7670_pclk3 <= camera_o_pclk3; -- dev <- cam
-ov7670_data3 <= camera_o_d3;
+ov7670_data3 <= camera_o_d3(2 downto 0);
 ov7670_vsync3 <= camera_o_vs3;
 ov7670_href3 <= camera_o_hs3;
 
 camera_i_xclk4 <= ov7670_xclk4; -- cam <- dev
 ov7670_pclk4 <= camera_o_pclk4; -- dev <- cam
-ov7670_data4 <= camera_o_d4;
+ov7670_data4 <= camera_o_d4(2 downto 0);
 ov7670_vsync4 <= camera_o_vs4;
 ov7670_href4 <= camera_o_hs4;
 

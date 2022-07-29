@@ -28,20 +28,22 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
+Library UNISIM;
+use UNISIM.vcomponents.all;
 
 entity ov7670_capture is
 Generic (PIXELS : integer := 0);
-    Port ( pclk : in  STD_LOGIC;
+    Port ( reset : in std_logic; pclk : in  STD_LOGIC;
            vsync : in  STD_LOGIC;
            href : in  STD_LOGIC;
-           d : in  STD_LOGIC_VECTOR (7 downto 0);
+           d : in  STD_LOGIC_VECTOR (2 downto 0);
            addr : out  STD_LOGIC_VECTOR (14 downto 0);
            dout : out  STD_LOGIC_VECTOR (2 downto 0);
            we : out  STD_LOGIC_VECTOR (0 downto 0));
 end ov7670_capture;
 
 architecture Behavioral of ov7670_capture is
-   signal d_latch      : std_logic_vector(15 downto 0) := (others => '0');
+   signal d_latch      : std_logic_vector((d'left+1)*2-1 downto 0) := (others => '0');
    signal address      : STD_LOGIC_VECTOR(addr'range) := (others => '0');
    signal row         : std_logic_vector(1 downto 0)  := (others => '0');
    signal href_last    : std_logic_vector(6 downto 0)  := (others => '0');
@@ -49,19 +51,29 @@ architecture Behavioral of ov7670_capture is
    signal href_hold    : std_logic := '0';
    signal latched_vsync : STD_LOGIC := '0';
    signal latched_href  : STD_LOGIC := '0';
-   signal latched_d     : STD_LOGIC_VECTOR (7 downto 0) := (others => '0');
+   signal latched_d     : STD_LOGIC_VECTOR (d'range) := (others => '0');
 begin
    addr <= address;
    we(0) <= we_reg;
 --	 dout<= d_latch(11 downto 8) & d_latch(7 downto 4) & d_latch(3 downto 0);
 --   dout<= d_latch(11) & d_latch(7) & d_latch(3);
-   dout<= d_latch(10) & d_latch(6) & d_latch(2);
+   dout<= d_latch(2 downto 0);
+	 p1 : KEEPER port map (O => d_latch(3));
+	 p2 : KEEPER port map (O => d_latch(4));
+	 p3 : KEEPER port map (O => d_latch(5));
 --   dout<= d_latch(9) & d_latch(5) & d_latch(1);
 --   dout<= d_latch(8) & d_latch(4) & d_latch(0); 
    
-capture_process: process(pclk)
+capture_process: process(pclk,reset)
    begin
-      if rising_edge(pclk) then
+	 if (reset = '1') then
+      we_reg <= '0';
+			address <= (others => '0');
+			href_hold <= '0';
+			row <= "00";
+			d_latch <= (others => '0');
+			href_last <= (others => '0');
+			elsif rising_edge(pclk) then
          if we_reg = '1' then
 					if (to_integer(unsigned(address)) = PIXELS-1) then
 						address <= (others => '0');
@@ -83,7 +95,7 @@ capture_process: process(pclk)
          
          -- capturing the data from the camera, 12-bit RGB
          if latched_href = '1' then
-            d_latch <= d_latch(7 downto 0) & latched_d;
+            d_latch(d_latch'range) <= d_latch(d'range) & latched_d;
          end if;
          we_reg  <= '0';
 
@@ -104,10 +116,19 @@ capture_process: process(pclk)
             end if;
          end if;
       end if;
-      if falling_edge(pclk) then
+		end process capture_process;
+		
+		latched_process : process(pclk,reset) is
+		begin
+			if (reset = '1') then
+			latched_href <= '0';
+			latched_d <= (others => '0');
+			latched_vsync <= '0';
+			elsif falling_edge(pclk) then
          latched_d     <= d;
          latched_href  <= href;
          latched_vsync <= vsync;
       end if;
-   end process;
+   end process latched_process;
+	 
 end Behavioral;
