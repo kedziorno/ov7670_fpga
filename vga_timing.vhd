@@ -30,7 +30,7 @@ constant VSP : INTEGER := 2;
 constant VBP : INTEGER := 33;
 
 signal clk_vga : STD_LOGIC;
-signal hcnt,vcnt : INTEGER := 0;
+signal hcnt,vcnt : INTEGER range 0 to 1023 := 0;
 
 signal h,v : std_logic;
 
