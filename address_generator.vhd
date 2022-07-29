@@ -4,6 +4,7 @@ use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 entity address_generator is
+Generic (PIXELS : integer := 0);
   Port ( 
     clk25 : in STD_LOGIC;
     enable : in STD_LOGIC;
@@ -24,7 +25,7 @@ begin
 process (clk25) begin
 	if rising_edge (clk25) then
 		if (enable='1') then
-			if (addr = 160*120-1) then
+			if (addr = PIXELS-1) then
 			addr <= (others => '0');	
 			else
 			addr <= addr + 1 ;

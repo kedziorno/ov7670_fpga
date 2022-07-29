@@ -83,8 +83,8 @@
 --    C_AXI_ID_WIDTH              :  4 
 --    C_MEM_TYPE                  :  1 
 --    C_BYTE_SIZE                 :  9 
---    C_ALGORITHM                 :  1 
---    C_PRIM_TYPE                 :  1 
+--    C_ALGORITHM                 :  0 
+--    C_PRIM_TYPE                 :  0 
 --    C_LOAD_INIT_FILE            :  0 
 --    C_INIT_FILE_NAME            :  no_coe_file_loaded 
 --    C_USE_DEFAULT_DATA          :  1 
@@ -94,11 +94,11 @@
 --    C_RST_PRIORITY_A            :  CE 
 --    C_RSTRAM_A                  :  0 
 --    C_INITA_VAL                 :  0 
---    C_HAS_ENA                   :  0 
+--    C_HAS_ENA                   :  1 
 --    C_HAS_REGCEA                :  0 
 --    C_USE_BYTE_WEA              :  0 
 --    C_WEA_WIDTH                 :  1 
---    C_WRITE_MODE_A              :  NO_CHANGE 
+--    C_WRITE_MODE_A              :  WRITE_FIRST 
 --    C_WRITE_WIDTH_A             :  3 
 --    C_READ_WIDTH_A              :  3 
 --    C_WRITE_DEPTH_A             :  19200 
@@ -108,11 +108,11 @@
 --    C_RST_PRIORITY_B            :  CE 
 --    C_RSTRAM_B                  :  0 
 --    C_INITB_VAL                 :  0 
---    C_HAS_ENB                   :  0 
+--    C_HAS_ENB                   :  1 
 --    C_HAS_REGCEB                :  0 
 --    C_USE_BYTE_WEB              :  0 
 --    C_WEB_WIDTH                 :  1 
---    C_WRITE_MODE_B              :  NO_CHANGE 
+--    C_WRITE_MODE_B              :  READ_FIRST 
 --    C_WRITE_WIDTH_B             :  3 
 --    C_READ_WIDTH_B              :  3 
 --    C_WRITE_DEPTH_B             :  19200 
@@ -231,6 +231,7 @@ ARCHITECTURE xilinx OF frame_buffer_prod IS
   COMPONENT frame_buffer_exdes IS
   PORT (
       --Port A
+    ENA            : IN STD_LOGIC;  --opt port
   
     WEA            : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
     ADDRA          : IN STD_LOGIC_VECTOR(14 DOWNTO 0);
@@ -242,6 +243,7 @@ ARCHITECTURE xilinx OF frame_buffer_prod IS
 
   
       --Port B
+    ENB            : IN STD_LOGIC;  --opt port
     ADDRB          : IN STD_LOGIC_VECTOR(14 DOWNTO 0);
     DOUTB          : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
     CLKB           : IN STD_LOGIC
@@ -256,6 +258,7 @@ BEGIN
   bmg0 : frame_buffer_exdes
     PORT MAP (
       --Port A
+      ENA        => ENA,
   
       WEA        => WEA,
       ADDRA      => ADDRA,
@@ -265,6 +268,7 @@ BEGIN
       CLKA       => CLKA,
   
       --Port B
+      ENB        => ENB, 
       ADDRB      => ADDRB,
       DOUTB      => DOUTB,
       CLKB       => CLKB

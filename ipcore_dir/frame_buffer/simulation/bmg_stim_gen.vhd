@@ -125,8 +125,10 @@ ENTITY BMG_STIM_GEN IS
             TB_RST : IN STD_LOGIC;
             ADDRA: OUT  STD_LOGIC_VECTOR(14 DOWNTO 0) := (OTHERS => '0'); 
             DINA : OUT  STD_LOGIC_VECTOR(2 DOWNTO 0) := (OTHERS => '0'); 
+            ENA : OUT STD_LOGIC :='0';
             WEA : OUT STD_LOGIC_VECTOR (0 DOWNTO 0) := (OTHERS => '0');
             ADDRB: OUT  STD_LOGIC_VECTOR(14 DOWNTO 0) := (OTHERS => '0');
+            ENB : OUT STD_LOGIC :='0';
 	        CHECK_DATA: OUT STD_LOGIC:='0'
 	  );
 END BMG_STIM_GEN;
@@ -422,6 +424,8 @@ BEGIN
  END PROCESS;
 
  
+   ENB <= DO_READ;
+   ENA <= DO_WRITE ;
  
    WEA(0) <= DO_WRITE ;
  

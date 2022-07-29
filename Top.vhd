@@ -63,6 +63,7 @@ COMPONENT clk25gen
 END COMPONENT;
 
 COMPONENT ov7670_capture
+Generic (PIXELS : integer := 19200);
 	Port ( pclk : in  STD_LOGIC;
           vsync : in  STD_LOGIC;
           href : in  STD_LOGIC;
@@ -72,26 +73,18 @@ COMPONENT ov7670_capture
           we : out  STD_LOGIC_VECTOR (0 downto 0));
 END COMPONENT;
 
-COMPONENT ov7670_controller
-	Port ( clk : in  STD_LOGIC;
-          resend : in  STD_LOGIC;
-          sioc : out  STD_LOGIC;
-          siod : inout  STD_LOGIC;
-          conf_done : out  STD_LOGIC;
-          pwdn : out  STD_LOGIC;
-			 reset: out  STD_LOGIC;
-			 xclk_in : in  STD_LOGIC;
-          xclk_out: out  STD_LOGIC);
-END COMPONENT;
-
 COMPONENT frame_buffer
-	Port ( clkA : in STD_LOGIC;
-			 weA	: in STD_LOGIC_VECTOR(0 downto 0);
-			 addrA: in STD_LOGIC_VECTOR(14 downto 0);
-			 dinA	: in STD_LOGIC_VECTOR(2 downto 0);
-			 clkB : in STD_LOGIC;
-			 addrB: in STD_LOGIC_VECTOR(14 downto 0);
-			 doutB: out STD_LOGIC_VECTOR(2 downto 0));
+  PORT (
+    clka : IN STD_LOGIC;
+    ena : IN STD_LOGIC;
+    wea : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+    addra : IN STD_LOGIC_VECTOR(14 DOWNTO 0);
+    dina : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+    clkb : IN STD_LOGIC;
+    enb : IN STD_LOGIC;
+    addrb : IN STD_LOGIC_VECTOR(14 DOWNTO 0);
+    doutb : OUT STD_LOGIC_VECTOR(2 DOWNTO 0)
+  );
 END COMPONENT;
 
 COMPONENT vga_imagegenerator
@@ -108,6 +101,7 @@ COMPONENT vga_imagegenerator
 END COMPONENT;
 
 COMPONENT address_generator
+Generic (PIXELS : integer := 19200);
 	Port ( clk25 : in STD_LOGIC;
 			 enable : in STD_LOGIC;
 			 vsync : in STD_LOGIC;
@@ -219,7 +213,9 @@ begin
 		dinA => wr_d1,
 		clkB => clk25,
 		addrB => rd_a1,
-		doutB => rd_d1);
+		doutB => rd_d1,
+		ena => '1',
+		enb => '1');
 	inst_framebuffer2 : frame_buffer port map(
 		weA => wren2,
 		clkA => ov7670_pclk2,
@@ -227,7 +223,9 @@ begin
 		dinA => wr_d2,
 		clkB => clk25,
 		addrB => rd_a2,
-		doutB => rd_d2);
+		doutB => rd_d2,
+		ena => '1',
+		enb => '1');
 	inst_framebuffer3 : frame_buffer port map(
 		weA => wren3,
 		clkA => ov7670_pclk3,
@@ -235,7 +233,9 @@ begin
 		dinA => wr_d3,
 		clkB => clk25,
 		addrB => rd_a3,
-		doutB => rd_d3);
+		doutB => rd_d3,
+		ena => '1',
+		enb => '1');
 	inst_framebuffer4 : frame_buffer port map(
 		weA => wren4,
 		clkA => ov7670_pclk4,
@@ -243,7 +243,9 @@ begin
 		dinA => wr_d4,
 		clkB => clk25,
 		addrB => rd_a4,
-		doutB => rd_d4);
+		doutB => rd_d4,
+		ena => '1',
+		enb => '1');
 	
 	inst_addrgen1 : address_generator port map(
 		clk25 => clk25,
@@ -290,17 +292,6 @@ begin
 vga_vsync <= vga_vsync_sig;
 
 cc <= clkcam when sw = '1' else clk25;
-
---	inst_ov7670contr1: ov7670_controller port map(
---		clk => clk50,
---		resend => resend,
---		sioc => ov7670_sioc1,
---		siod => ov7670_siod1,
---		conf_done => led1,
---		pwdn => ov7670_pwdn1,
---		reset => ov7670_reset1,
---		xclk_in => cc,
---		xclk_out => ov7670_xclk1);
 
 resend1 <= resend or resend2;
 

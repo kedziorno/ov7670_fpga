@@ -3,9 +3,8 @@ Release 14.7 Trace  (lin64)
 Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
 
 /home/user/.local/Xilinx/14.7/ISE_DS/ISE/bin/lin64/unwrapped/trce -filter
-/home/user/workspace/vhdl_projects/camera2/ov7670_vga_Nexys2/iseconfig/filter.filter
--intstyle ise -v 3 -s 4 -n 3 -fastpaths -xml Top.twx Top.ncd -o Top.twr Top.pcf
--ucf top.ucf
+/home/user/workspace/ov7670_vga_Nexys2/iseconfig/filter.filter -intstyle ise -v
+3 -s 4 -n 3 -fastpaths -xml Top.twx Top.ncd -o Top.twr Top.pcf -ucf top.ucf
 
 Design file:              Top.ncd
 Physical constraint file: Top.pcf
@@ -46,18 +45,62 @@ Setup/Hold to clock clk50
             |Max Setup to|Max Hold to |                  | Clock  |
 Source      | clk (edge) | clk (edge) |Internal Clock(s) | Phase  |
 ------------+------------+------------+------------------+--------+
-pb          |    2.928(R)|   -0.686(R)|clk50_BUFGP       |   0.000|
+pb          |    2.412(R)|   -0.351(R)|clk50_BUFGP       |   0.000|
 ------------+------------+------------+------------------+--------+
+
+Setup/Hold to clock ov7670_pclk1
+---------------+------------+------------+------------------+--------+
+               |Max Setup to|Max Hold to |                  | Clock  |
+Source         | clk (edge) | clk (edge) |Internal Clock(s) | Phase  |
+---------------+------------+------------+------------------+--------+
+ov7670_data1<2>|   -2.185(F)|    4.135(F)|ov7670_pclk1_BUFGP|   0.000|
+ov7670_data1<6>|   -1.881(F)|    3.893(F)|ov7670_pclk1_BUFGP|   0.000|
+ov7670_href1   |   -0.703(F)|    2.924(F)|ov7670_pclk1_BUFGP|   0.000|
+ov7670_vsync1  |   -1.354(F)|    3.444(F)|ov7670_pclk1_BUFGP|   0.000|
+---------------+------------+------------+------------------+--------+
+
+Setup/Hold to clock ov7670_pclk2
+---------------+------------+------------+------------------+--------+
+               |Max Setup to|Max Hold to |                  | Clock  |
+Source         | clk (edge) | clk (edge) |Internal Clock(s) | Phase  |
+---------------+------------+------------+------------------+--------+
+ov7670_data2<2>|   -0.877(F)|    3.047(F)|ov7670_pclk2_BUFGP|   0.000|
+ov7670_data2<6>|   -1.418(F)|    3.480(F)|ov7670_pclk2_BUFGP|   0.000|
+ov7670_href2   |   -2.086(F)|    4.015(F)|ov7670_pclk2_BUFGP|   0.000|
+ov7670_vsync2  |   -1.461(F)|    3.499(F)|ov7670_pclk2_BUFGP|   0.000|
+---------------+------------+------------+------------------+--------+
+
+Setup/Hold to clock ov7670_pclk3
+---------------+------------+------------+------------------+--------+
+               |Max Setup to|Max Hold to |                  | Clock  |
+Source         | clk (edge) | clk (edge) |Internal Clock(s) | Phase  |
+---------------+------------+------------+------------------+--------+
+ov7670_data3<2>|   -0.851(F)|    2.583(F)|ov7670_pclk3_BUFGP|   0.000|
+ov7670_data3<6>|   -0.842(F)|    2.576(F)|ov7670_pclk3_BUFGP|   0.000|
+ov7670_href3   |   -0.267(F)|    2.104(F)|ov7670_pclk3_BUFGP|   0.000|
+ov7670_vsync3  |   -0.441(F)|    2.250(F)|ov7670_pclk3_BUFGP|   0.000|
+---------------+------------+------------+------------------+--------+
+
+Setup/Hold to clock ov7670_pclk4
+---------------+------------+------------+------------------+--------+
+               |Max Setup to|Max Hold to |                  | Clock  |
+Source         | clk (edge) | clk (edge) |Internal Clock(s) | Phase  |
+---------------+------------+------------+------------------+--------+
+ov7670_data4<2>|   -0.254(F)|    1.485(F)|ov7670_pclk4_BUFGP|   0.000|
+ov7670_data4<6>|   -0.274(F)|    1.501(F)|ov7670_pclk4_BUFGP|   0.000|
+ov7670_href4   |    0.106(F)|    1.175(F)|ov7670_pclk4_BUFGP|   0.000|
+ov7670_vsync4  |    0.121(F)|    1.159(F)|ov7670_pclk4_BUFGP|   0.000|
+---------------+------------+------------+------------------+--------+
 
 Clock clk50 to Pad
 ------------+------------+------------------+--------+
             | clk (edge) |                  | Clock  |
 Destination |   to PAD   |Internal Clock(s) | Phase  |
 ------------+------------+------------------+--------+
-ov7670_xclk1|   10.468(R)|clk50_BUFGP       |   0.000|
-ov7670_xclk2|   11.987(R)|clk50_BUFGP       |   0.000|
-ov7670_xclk3|   13.629(R)|clk50_BUFGP       |   0.000|
-ov7670_xclk4|   11.638(R)|clk50_BUFGP       |   0.000|
+ov7670_xclk1|   14.815(R)|clk50_BUFGP       |   0.000|
+ov7670_xclk2|   16.085(R)|clk50_BUFGP       |   0.000|
+ov7670_xclk3|   17.362(R)|clk50_BUFGP       |   0.000|
+ov7670_xclk4|   15.343(R)|clk50_BUFGP       |   0.000|
 ------------+------------+------------------+--------+
 
 Clock clkcam to Pad
@@ -65,18 +108,18 @@ Clock clkcam to Pad
             | clk (edge) |                  | Clock  |
 Destination |   to PAD   |Internal Clock(s) | Phase  |
 ------------+------------+------------------+--------+
-led1        |   16.536(R)|ov7670_xclk4_OBUF |   0.000|
-led2        |   17.504(R)|ov7670_xclk4_OBUF |   0.000|
-led3        |   18.453(R)|ov7670_xclk4_OBUF |   0.000|
-led4        |   16.915(R)|ov7670_xclk4_OBUF |   0.000|
-ov7670_sioc1|   16.855(R)|ov7670_xclk4_OBUF |   0.000|
-ov7670_sioc2|   16.564(R)|ov7670_xclk4_OBUF |   0.000|
-ov7670_sioc3|   19.690(R)|ov7670_xclk4_OBUF |   0.000|
-ov7670_sioc4|   17.197(R)|ov7670_xclk4_OBUF |   0.000|
-ov7670_siod1|   20.241(R)|ov7670_xclk4_OBUF |   0.000|
-ov7670_siod2|   20.802(R)|ov7670_xclk4_OBUF |   0.000|
-ov7670_siod3|   22.180(R)|ov7670_xclk4_OBUF |   0.000|
-ov7670_siod4|   19.075(R)|ov7670_xclk4_OBUF |   0.000|
+led1        |   12.758(R)|ov7670_xclk4_OBUF |   0.000|
+led2        |   12.825(R)|ov7670_xclk4_OBUF |   0.000|
+led3        |   12.761(R)|ov7670_xclk4_OBUF |   0.000|
+led4        |   12.762(R)|ov7670_xclk4_OBUF |   0.000|
+ov7670_sioc1|   16.712(R)|ov7670_xclk4_OBUF |   0.000|
+ov7670_sioc2|   16.325(R)|ov7670_xclk4_OBUF |   0.000|
+ov7670_sioc3|   19.476(R)|ov7670_xclk4_OBUF |   0.000|
+ov7670_sioc4|   17.448(R)|ov7670_xclk4_OBUF |   0.000|
+ov7670_siod1|   19.298(R)|ov7670_xclk4_OBUF |   0.000|
+ov7670_siod2|   19.173(R)|ov7670_xclk4_OBUF |   0.000|
+ov7670_siod3|   21.028(R)|ov7670_xclk4_OBUF |   0.000|
+ov7670_siod4|   19.039(R)|ov7670_xclk4_OBUF |   0.000|
 ------------+------------+------------------+--------+
 
 Clock sw to Pad
@@ -84,18 +127,18 @@ Clock sw to Pad
             | clk (edge) |                  | Clock  |
 Destination |   to PAD   |Internal Clock(s) | Phase  |
 ------------+------------+------------------+--------+
-led1        |   15.835(R)|ov7670_xclk4_OBUF |   0.000|
-led2        |   16.803(R)|ov7670_xclk4_OBUF |   0.000|
-led3        |   17.752(R)|ov7670_xclk4_OBUF |   0.000|
-led4        |   16.214(R)|ov7670_xclk4_OBUF |   0.000|
-ov7670_sioc1|   16.154(R)|ov7670_xclk4_OBUF |   0.000|
-ov7670_sioc2|   15.863(R)|ov7670_xclk4_OBUF |   0.000|
-ov7670_sioc3|   18.989(R)|ov7670_xclk4_OBUF |   0.000|
-ov7670_sioc4|   16.496(R)|ov7670_xclk4_OBUF |   0.000|
-ov7670_siod1|   19.540(R)|ov7670_xclk4_OBUF |   0.000|
-ov7670_siod2|   20.101(R)|ov7670_xclk4_OBUF |   0.000|
-ov7670_siod3|   21.479(R)|ov7670_xclk4_OBUF |   0.000|
-ov7670_siod4|   18.374(R)|ov7670_xclk4_OBUF |   0.000|
+led1        |   12.384(R)|ov7670_xclk4_OBUF |   0.000|
+led2        |   12.451(R)|ov7670_xclk4_OBUF |   0.000|
+led3        |   12.387(R)|ov7670_xclk4_OBUF |   0.000|
+led4        |   12.388(R)|ov7670_xclk4_OBUF |   0.000|
+ov7670_sioc1|   16.338(R)|ov7670_xclk4_OBUF |   0.000|
+ov7670_sioc2|   15.951(R)|ov7670_xclk4_OBUF |   0.000|
+ov7670_sioc3|   19.102(R)|ov7670_xclk4_OBUF |   0.000|
+ov7670_sioc4|   17.074(R)|ov7670_xclk4_OBUF |   0.000|
+ov7670_siod1|   18.924(R)|ov7670_xclk4_OBUF |   0.000|
+ov7670_siod2|   18.799(R)|ov7670_xclk4_OBUF |   0.000|
+ov7670_siod3|   20.654(R)|ov7670_xclk4_OBUF |   0.000|
+ov7670_siod4|   18.665(R)|ov7670_xclk4_OBUF |   0.000|
 ------------+------------+------------------+--------+
 
 Clock to Setup on destination clock clk50
@@ -103,7 +146,7 @@ Clock to Setup on destination clock clk50
                | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
 Source Clock   |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
 ---------------+---------+---------+---------+---------+
-clk50          |    5.872|         |         |         |
+clk50          |    6.292|         |         |         |
 ---------------+---------+---------+---------+---------+
 
 Clock to Setup on destination clock clkcam
@@ -111,9 +154,41 @@ Clock to Setup on destination clock clkcam
                | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
 Source Clock   |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
 ---------------+---------+---------+---------+---------+
-clk50          |    7.350|         |         |         |
-clkcam         |    6.854|         |         |         |
-sw             |    6.854|         |         |         |
+clk50          |    7.694|         |         |         |
+clkcam         |    8.666|         |         |         |
+sw             |    8.666|         |         |         |
+---------------+---------+---------+---------+---------+
+
+Clock to Setup on destination clock ov7670_pclk1
+---------------+---------+---------+---------+---------+
+               | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock   |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+---------------+---------+---------+---------+---------+
+ov7670_pclk1   |    6.128|    3.524|         |         |
+---------------+---------+---------+---------+---------+
+
+Clock to Setup on destination clock ov7670_pclk2
+---------------+---------+---------+---------+---------+
+               | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock   |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+---------------+---------+---------+---------+---------+
+ov7670_pclk2   |    6.875|    3.567|         |         |
+---------------+---------+---------+---------+---------+
+
+Clock to Setup on destination clock ov7670_pclk3
+---------------+---------+---------+---------+---------+
+               | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock   |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+---------------+---------+---------+---------+---------+
+ov7670_pclk3   |    6.484|    3.530|         |         |
+---------------+---------+---------+---------+---------+
+
+Clock to Setup on destination clock ov7670_pclk4
+---------------+---------+---------+---------+---------+
+               | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock   |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+---------------+---------+---------+---------+---------+
+ov7670_pclk4   |    7.493|    3.760|         |         |
 ---------------+---------+---------+---------+---------+
 
 Clock to Setup on destination clock sw
@@ -121,34 +196,34 @@ Clock to Setup on destination clock sw
                | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
 Source Clock   |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
 ---------------+---------+---------+---------+---------+
-clk50          |    7.350|         |         |         |
-clkcam         |    6.854|         |         |         |
-sw             |    6.854|         |         |         |
+clk50          |    7.694|         |         |         |
+clkcam         |    8.666|         |         |         |
+sw             |    8.666|         |         |         |
 ---------------+---------+---------+---------+---------+
 
 Pad to Pad
 ---------------+---------------+---------+
 Source Pad     |Destination Pad|  Delay  |
 ---------------+---------------+---------+
-clkcam         |ov7670_xclk1   |    8.998|
-clkcam         |ov7670_xclk2   |   10.517|
-clkcam         |ov7670_xclk3   |   12.159|
-clkcam         |ov7670_xclk4   |   10.168|
-sw             |ov7670_xclk1   |    8.297|
-sw             |ov7670_xclk2   |    9.816|
-sw             |ov7670_xclk3   |   11.458|
-sw             |ov7670_xclk4   |    9.467|
+clkcam         |ov7670_xclk1   |    9.527|
+clkcam         |ov7670_xclk2   |   10.797|
+clkcam         |ov7670_xclk3   |   12.074|
+clkcam         |ov7670_xclk4   |   10.055|
+sw             |ov7670_xclk1   |    9.153|
+sw             |ov7670_xclk2   |   10.423|
+sw             |ov7670_xclk3   |   11.700|
+sw             |ov7670_xclk4   |    9.681|
 ---------------+---------------+---------+
 
 
-Analysis completed Sun Jul 24 16:10:51 2022 
+Analysis completed Fri Jul 29 15:01:00 2022 
 --------------------------------------------------------------------------------
 
 Trace Settings:
 -------------------------
 Trace Settings 
 
-Peak Memory Usage: 370 MB
+Peak Memory Usage: 377 MB
 
 
 

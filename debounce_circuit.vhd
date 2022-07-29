@@ -28,7 +28,7 @@ counting_proc : process (clk) begin
 			-- Counter will count 2^24 * 20ns
 			-- ~300ms
 				output <= '1';
-				counter <= (others => '0');
+				counter <= MIN;
 			else
 			-- Bouncing with high logic below 300ms will not trigger the output
 			-- output, this case, pb that reset the camera
@@ -37,7 +37,7 @@ counting_proc : process (clk) begin
 			end if;
 		else
 			output <= '0';
-			counter <= (others => '0');
+			counter <= MIN;
 		end if;
 	end if;
 end process counting_proc;

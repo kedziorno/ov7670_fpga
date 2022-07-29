@@ -88,6 +88,7 @@ USE UNISIM.VCOMPONENTS.ALL;
 ENTITY frame_buffer_exdes IS
   PORT (
       --Inputs - Port A
+    ENA            : IN STD_LOGIC;  --opt port
   
     WEA            : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
     ADDRA          : IN STD_LOGIC_VECTOR(14 DOWNTO 0);
@@ -98,6 +99,7 @@ ENTITY frame_buffer_exdes IS
 
   
       --Inputs - Port B
+    ENB            : IN STD_LOGIC;  --opt port
     ADDRB          : IN STD_LOGIC_VECTOR(14 DOWNTO 0);
     DOUTB          : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
     CLKB           : IN STD_LOGIC
@@ -119,6 +121,7 @@ ARCHITECTURE xilinx OF frame_buffer_exdes IS
   COMPONENT frame_buffer IS
   PORT (
       --Port A
+    ENA        : IN STD_LOGIC;  --opt port
   
     WEA        : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
     ADDRA      : IN STD_LOGIC_VECTOR(14 DOWNTO 0);
@@ -130,6 +133,7 @@ ARCHITECTURE xilinx OF frame_buffer_exdes IS
 
   
       --Port B
+    ENB        : IN STD_LOGIC;  --opt port
     ADDRB      : IN STD_LOGIC_VECTOR(14 DOWNTO 0);
     DOUTB      : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
     CLKB       : IN STD_LOGIC
@@ -160,6 +164,7 @@ BEGIN
   bmg0 : frame_buffer
     PORT MAP (
       --Port A
+      ENA        => ENA,
   
       WEA        => WEA,
       ADDRA      => ADDRA,
@@ -170,6 +175,7 @@ BEGIN
 
   
       --Port B
+      ENB        => ENB, 
       ADDRB      => ADDRB,
       DOUTB      => DOUTB,
       CLKB       => CLKB_buf

@@ -57,8 +57,10 @@ wave add /frame_buffer_tb/status
       wave add  /frame_buffer_tb/frame_buffer_synth_inst/BMG_PORT/ADDRA
       wave add  /frame_buffer_tb/frame_buffer_synth_inst/BMG_PORT/DINA
       wave add  /frame_buffer_tb/frame_buffer_synth_inst/BMG_PORT/WEA
+      wave add  /frame_buffer_tb/frame_buffer_synth_inst/BMG_PORT/ENA
       wave add  /frame_buffer_tb/frame_buffer_synth_inst/BMG_PORT/CLKB
       wave add  /frame_buffer_tb/frame_buffer_synth_inst/BMG_PORT/ADDRB
+      wave add  /frame_buffer_tb/frame_buffer_synth_inst/BMG_PORT/ENB
       wave add  /frame_buffer_tb/frame_buffer_synth_inst/BMG_PORT/DOUTB
 run all
 quit

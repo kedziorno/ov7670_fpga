@@ -30,6 +30,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 entity ov7670_capture is
+Generic (PIXELS : integer := 0);
     Port ( pclk : in  STD_LOGIC;
            vsync : in  STD_LOGIC;
            href : in  STD_LOGIC;
@@ -41,7 +42,7 @@ end ov7670_capture;
 
 architecture Behavioral of ov7670_capture is
    signal d_latch      : std_logic_vector(15 downto 0) := (others => '0');
-   signal address      : STD_LOGIC_VECTOR(14 downto 0) := (others => '0');
+   signal address      : STD_LOGIC_VECTOR(addr'range) := (others => '0');
    signal row         : std_logic_vector(1 downto 0)  := (others => '0');
    signal href_last    : std_logic_vector(6 downto 0)  := (others => '0');
    signal we_reg       : std_logic := '0';
@@ -62,7 +63,7 @@ capture_process: process(pclk)
    begin
       if rising_edge(pclk) then
          if we_reg = '1' then
-					if (to_integer(unsigned(address)) = 19200-1) then
+					if (to_integer(unsigned(address)) = PIXELS-1) then
 						address <= (others => '0');
 					else
             address <= std_logic_vector(unsigned(address)+1);
