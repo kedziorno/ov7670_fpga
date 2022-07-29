@@ -5,14 +5,14 @@ Parameter TMPDIR set to xst/projnav.tmp
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.05 secs
+Total CPU time to Xst completion: 0.06 secs
  
 --> 
 Parameter xsthdpdir set to xst
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.05 secs
+Total CPU time to Xst completion: 0.06 secs
  
 --> 
 Reading design: Top.prj
@@ -111,7 +111,8 @@ Cores Search Directories           : {"ipcore_dir"  }
 *                          HDL Compilation                              *
 =========================================================================
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/ov7670_registers.vhd" in Library work.
-Architecture behavioral of Entity ov7670_registers is up to date.
+Entity <ov7670_registers> compiled.
+Entity <ov7670_registers> (Architecture <behavioral>) compiled.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/ov7670_SCCB.vhd" in Library work.
 Architecture behavioral of Entity ov7670_sccb is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/clk25gen.vhd" in Library work.
@@ -129,8 +130,7 @@ Architecture behavioral of Entity address_generator is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/vga_imagegenerator.vhd" in Library work.
 Architecture behavioral of Entity vga_imagegenerator is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/vga_timing.vhd" in Library work.
-Entity <vga_timing_synch> compiled.
-Entity <vga_timing_synch> (Architecture <behavioral>) compiled.
+Architecture behavioral of Entity vga_timing_synch is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/Top.vhd" in Library work.
 Architecture structural of Entity top is up to date.
 
@@ -298,15 +298,13 @@ Unit <VGA_timing_synch> synthesized.
 
 Synthesizing Unit <ov7670_registers>.
     Related source file is "/home/user/workspace/ov7670_vga_Nexys2/ov7670_registers.vhd".
-    Found 56x16-bit ROM for signal <cmd_reg$mux0001> created at line 95.
+    Found 56x16-bit ROM for signal <cmd_reg$rom0000> created at line 97.
     Found 16-bit register for signal <cmd_reg>.
-    Found 32-bit comparator greater for signal <cmd_reg$cmp_gt0000> created at line 96.
-    Found 32-bit up counter for signal <sequence>.
+    Found 6-bit up counter for signal <sequence>.
     Summary:
 	inferred   1 ROM(s).
 	inferred   1 Counter(s).
 	inferred  16 D-type flip-flop(s).
-	inferred   1 Comparator(s).
 Unit <ov7670_registers> synthesized.
 
 
@@ -348,7 +346,7 @@ Macro Statistics
  10-bit up counter                                     : 2
  15-bit up counter                                     : 8
  24-bit up counter                                     : 1
- 32-bit up counter                                     : 4
+ 6-bit up counter                                      : 4
  8-bit up counter                                      : 4
 # Registers                                            : 53
  1-bit register                                        : 29
@@ -358,12 +356,11 @@ Macro Statistics
  8-bit register                                        : 4
 # Latches                                              : 1
  8-bit latch                                           : 1
-# Comparators                                          : 20
+# Comparators                                          : 16
  10-bit comparator greatequal                          : 5
  10-bit comparator less                                : 5
  10-bit comparator lessequal                           : 2
  16-bit comparator greatequal                          : 4
- 32-bit comparator greater                             : 4
 # Tristates                                            : 4
  1-bit tristate buffer                                 : 4
 
@@ -476,8 +473,8 @@ WARNING:Xst:2677 - Node <d_latch_14> of sequential type is unconnected in block 
 WARNING:Xst:2677 - Node <d_latch_15> of sequential type is unconnected in block <inst_ov7670capt4>.
 
 Synthesizing (advanced) Unit <ov7670_registers>.
-INFO:Xst:3044 - The ROM <Mrom_cmd_reg_mux0001> will be implemented as a read-only BLOCK RAM, absorbing the register: <cmd_reg>.
-INFO:Xst:3225 - The RAM <Mrom_cmd_reg_mux0001> will be implemented as BLOCK RAM
+INFO:Xst:3044 - The ROM <Mrom_cmd_reg_rom0000> will be implemented as a read-only BLOCK RAM, absorbing the register: <cmd_reg>.
+INFO:Xst:3225 - The RAM <Mrom_cmd_reg_rom0000> will be implemented as BLOCK RAM
     -----------------------------------------------------------------------
     | ram_type           | Block                               |          |
     -----------------------------------------------------------------------
@@ -489,8 +486,6 @@ INFO:Xst:3225 - The RAM <Mrom_cmd_reg_mux0001> will be implemented as BLOCK RAM
     |     addrA          | connected to signal <sequence>      |          |
     |     diA            | connected to internal node          |          |
     |     doA            | connected to signal <cmd_reg>       |          |
-    |     dorstA         | connected to signal <cmd_reg_cmp_gt0000> | high     |
-    | reset value        | 1111111111111111                               |
     -----------------------------------------------------------------------
     | optimization       | area                                |          |
     -----------------------------------------------------------------------
@@ -528,18 +523,17 @@ Macro Statistics
  10-bit up counter                                     : 2
  15-bit up counter                                     : 8
  24-bit up counter                                     : 1
- 32-bit up counter                                     : 4
+ 6-bit up counter                                      : 4
  8-bit up counter                                      : 4
 # Registers                                            : 333
  Flip-Flops                                            : 333
 # Latches                                              : 1
  8-bit latch                                           : 1
-# Comparators                                          : 20
+# Comparators                                          : 16
  10-bit comparator greatequal                          : 5
  10-bit comparator less                                : 5
  10-bit comparator lessequal                           : 2
  16-bit comparator greatequal                          : 4
- 32-bit comparator greater                             : 4
 
 =========================================================================
 
@@ -550,8 +544,8 @@ WARNING:Xst:1293 - FF/Latch <data_sr_0> has a constant value of 1 in block <ov76
 INFO:Xst:2261 - The FF/Latch <5> in Unit <LPM_LATCH_1> is equivalent to the following 2 FFs/Latches, which will be removed : <2> <0> 
 INFO:Xst:2261 - The FF/Latch <6> in Unit <LPM_LATCH_1> is equivalent to the following FF/Latch, which will be removed : <3> 
 WARNING:Xst:1710 - FF/Latch <6> (without init value) has a constant value of 0 in block <LPM_LATCH_1>. This FF/Latch will be trimmed during the optimization process.
-INFO:Xst:2697 - Unit <Top> : the RAMs <inst_ov7670contr4/Registers/Mrom_cmd_reg_mux0001>, <inst_ov7670contr3/Registers/Mrom_cmd_reg_mux0001> are packed into the single block RAM <inst_ov7670contr4/Registers/Mrom_cmd_reg_mux00011>
-INFO:Xst:2697 - Unit <Top> : the RAMs <inst_ov7670contr2/Registers/Mrom_cmd_reg_mux0001>, <inst_ov7670contr1/Registers/Mrom_cmd_reg_mux0001> are packed into the single block RAM <inst_ov7670contr2/Registers/Mrom_cmd_reg_mux00011>
+INFO:Xst:2697 - Unit <Top> : the RAMs <inst_ov7670contr4/Registers/Mrom_cmd_reg_rom0000>, <inst_ov7670contr3/Registers/Mrom_cmd_reg_rom0000> are packed into the single block RAM <inst_ov7670contr4/Registers/Mrom_cmd_reg_rom00001>
+INFO:Xst:2697 - Unit <Top> : the RAMs <inst_ov7670contr2/Registers/Mrom_cmd_reg_rom0000>, <inst_ov7670contr1/Registers/Mrom_cmd_reg_rom0000> are packed into the single block RAM <inst_ov7670contr2/Registers/Mrom_cmd_reg_rom00001>
 
 Optimizing unit <Top> ...
 
@@ -564,7 +558,7 @@ Optimizing unit <vga_imagegenerator> ...
 Mapping all equations...
 Building and optimizing final netlist ...
 INFO:Xst:2261 - The FF/Latch <inst_clk25/clkbuf> in Unit <Top> is equivalent to the following FF/Latch, which will be removed : <inst_clk25/clk25> 
-Found area constraint ratio of 100 (+ 5) on block Top, actual ratio is 5.
+Found area constraint ratio of 100 (+ 5) on block Top, actual ratio is 4.
 FlipFlop inst_vgatiming/v has been replicated 1 time(s) to handle iob=true attribute.
 Latch inst_imagegen/RGB_out_5 has been replicated 2 time(s) to handle iob=true attribute.
 
@@ -581,8 +575,8 @@ Unit <Top> processed.
 Final Register Report
 
 Macro Statistics
-# Registers                                            : 669
- Flip-Flops                                            : 669
+# Registers                                            : 565
+ Flip-Flops                                            : 565
 
 =========================================================================
 
@@ -611,23 +605,23 @@ Design Statistics
 # IOs                              : 86
 
 Cell Usage :
-# BELS                             : 1590
+# BELS                             : 1154
 #      GND                         : 5
-#      INV                         : 55
-#      LUT1                        : 317
-#      LUT2                        : 212
-#      LUT3                        : 106
-#      LUT4                        : 170
-#      MUXCY                       : 383
+#      INV                         : 39
+#      LUT1                        : 193
+#      LUT2                        : 216
+#      LUT3                        : 114
+#      LUT4                        : 154
+#      MUXCY                       : 219
 #      MUXF5                       : 13
 #      VCC                         : 5
-#      XORCY                       : 324
-# FlipFlops/Latches                : 687
+#      XORCY                       : 196
+# FlipFlops/Latches                : 583
 #      FD                          : 4
 #      FD_1                        : 16
 #      FDE                         : 276
 #      FDR                         : 75
-#      FDRE                        : 302
+#      FDRE                        : 198
 #      FDS                         : 4
 #      FDSE                        : 4
 #      LDCP                        : 6
@@ -649,9 +643,9 @@ Device utilization summary:
 
 Selected Device : 3s1200efg320-4 
 
- Number of Slices:                      471  out of   8672     5%  
- Number of Slice Flip Flops:            655  out of  17344     3%  
- Number of 4 input LUTs:                860  out of  17344     4%  
+ Number of Slices:                      401  out of   8672     4%  
+ Number of Slice Flip Flops:            551  out of  17344     3%  
+ Number of 4 input LUTs:                716  out of  17344     4%  
  Number of IOs:                          86
  Number of bonded IOBs:                  62  out of    250    24%  
     IOB Flip Flops:                      32
@@ -684,7 +678,7 @@ ov7670_pclk1                                 | BUFGP                           |
 ov7670_pclk2                                 | BUFGP                           | 39    |
 ov7670_pclk3                                 | BUFGP                           | 39    |
 ov7670_pclk4                                 | BUFGP                           | 39    |
-clk50                                        | BUFGP                           | 448   |
+clk50                                        | BUFGP                           | 344   |
 active4(inst_vgatiming/activeArea4_and0000:O)| NONE(*)(inst_imagegen/RGB_out_7)| 6     |
 ---------------------------------------------+---------------------------------+-------+
 (*) This 1 clock signal(s) are generated by combinatorial logic,
@@ -836,19 +830,19 @@ Delay:               3.935ns (Levels of Logic = 1)
 =========================================================================
 Timing constraint: Default period analysis for Clock 'clk50'
   Clock period: 8.943ns (frequency: 111.819MHz)
-  Total number of paths / destination ports: 13701 / 1074
+  Total number of paths / destination ports: 11345 / 758
 -------------------------------------------------------------------------
 Delay:               8.943ns (Levels of Logic = 4)
-  Source:            inst_ov7670contr2/Registers/Mrom_cmd_reg_mux00011 (RAM)
+  Source:            inst_ov7670contr2/Registers/Mrom_cmd_reg_rom00001 (RAM)
   Destination:       inst_ov7670contr1/SCCB/data_sr_31 (FF)
   Source Clock:      clk50 rising
   Destination Clock: clk50 rising
 
-  Data Path: inst_ov7670contr2/Registers/Mrom_cmd_reg_mux00011 to inst_ov7670contr1/SCCB/data_sr_31
+  Data Path: inst_ov7670contr2/Registers/Mrom_cmd_reg_rom00001 to inst_ov7670contr1/SCCB/data_sr_31
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     RAMB16_S18_S18:CLKB->DOB0    2   2.800   0.622  inst_ov7670contr2/Registers/Mrom_cmd_reg_mux00011 (inst_ov7670contr1/command<0>)
+     RAMB16_S18_S18:CLKB->DOB0    2   2.800   0.622  inst_ov7670contr2/Registers/Mrom_cmd_reg_rom00001 (inst_ov7670contr1/command<0>)
      LUT4:I0->O            1   0.704   0.595  inst_ov7670contr1/Registers/done_cmp_eq00004 (inst_ov7670contr1/Registers/done_cmp_eq00004)
      LUT4:I0->O            4   0.704   0.666  inst_ov7670contr1/Registers/done_cmp_eq000036 (led1_OBUF)
      LUT3:I1->O            1   0.704   0.000  inst_ov7670contr1/SCCB/busy_sr_not000312 (inst_ov7670contr1/SCCB/busy_sr_not000311)
@@ -959,15 +953,15 @@ Timing constraint: Default OFFSET OUT AFTER for Clock 'clk50'
   Total number of paths / destination ports: 100 / 16
 -------------------------------------------------------------------------
 Offset:              9.284ns (Levels of Logic = 3)
-  Source:            inst_ov7670contr2/Registers/Mrom_cmd_reg_mux00011 (RAM)
+  Source:            inst_ov7670contr2/Registers/Mrom_cmd_reg_rom00001 (RAM)
   Destination:       led1 (PAD)
   Source Clock:      clk50 rising
 
-  Data Path: inst_ov7670contr2/Registers/Mrom_cmd_reg_mux00011 to led1
+  Data Path: inst_ov7670contr2/Registers/Mrom_cmd_reg_rom00001 to led1
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     RAMB16_S18_S18:CLKB->DOB0    2   2.800   0.622  inst_ov7670contr2/Registers/Mrom_cmd_reg_mux00011 (inst_ov7670contr1/command<0>)
+     RAMB16_S18_S18:CLKB->DOB0    2   2.800   0.622  inst_ov7670contr2/Registers/Mrom_cmd_reg_rom00001 (inst_ov7670contr1/command<0>)
      LUT4:I0->O            1   0.704   0.595  inst_ov7670contr1/Registers/done_cmp_eq00004 (inst_ov7670contr1/Registers/done_cmp_eq00004)
      LUT4:I0->O            4   0.704   0.587  inst_ov7670contr1/Registers/done_cmp_eq000036 (led1_OBUF)
      OBUF:I->O                 3.272          led1_OBUF (led1)
@@ -1036,12 +1030,12 @@ Delay:               6.376ns (Levels of Logic = 3)
 
 
 Total REAL time to Xst completion: 12.00 secs
-Total CPU time to Xst completion: 11.39 secs
+Total CPU time to Xst completion: 11.20 secs
  
 --> 
 
 
-Total memory usage is 546212 kilobytes
+Total memory usage is 542452 kilobytes
 
 Number of errors   :    0 (   0 filtered)
 Number of warnings :  110 (   0 filtered)
