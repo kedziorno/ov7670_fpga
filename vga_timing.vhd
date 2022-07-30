@@ -224,21 +224,23 @@ end process p0;
 --activeArea2 <= '0';
 --activeArea3 <= '0';
 --activeArea4 <= '0';
---end if;
---if ((hcnt >= 160 and hcnt < 320) and (vcnt < 120)) then
+--elsif ((hcnt >= 160 and hcnt < 320) and (vcnt < 120)) then
 --activeArea2 <= '1';
 --activeArea1 <= '0';
 --activeArea3 <= '0';
 --activeArea4 <= '0';
---end if;
---if ((hcnt >= 320 and hcnt < 480) and (vcnt < 120)) then
+--elsif ((hcnt >= 320 and hcnt < 480) and (vcnt < 120)) then
 --activeArea3 <= '1';
 --activeArea1 <= '0';
 --activeArea2 <= '0';
 --activeArea4 <= '0';
---end if;
---if ((hcnt >= 480 and hcnt < 640) and (vcnt < 120)) then
+--elsif ((hcnt >= 480 and hcnt < 640) and (vcnt < 120)) then
 --activeArea4 <= '1';
+--activeArea1 <= '0';
+--activeArea2 <= '0';
+--activeArea3 <= '0';
+--else
+--activeArea4 <= '0';
 --activeArea1 <= '0';
 --activeArea2 <= '0';
 --activeArea3 <= '0';
@@ -250,6 +252,11 @@ end process p0;
 --activeArea2 <= '1' when (hcnt >= 160 and hcnt < 320) and (vcnt >= 0 and vcnt < 120) else '0';
 --activeArea3 <= '1' when (hcnt >= 320 and hcnt < 480) and (vcnt >= 0 and vcnt < 120) else '0';
 --activeArea4 <= '1' when (hcnt >= 480 and hcnt < 640) and (vcnt >= 0 and vcnt < 120) else '0';
+
+--activeArea1 <= '1' when (hcnt >= 0 and hcnt < 160) and (vcnt >= 0 and vcnt < 120) else '0';
+--activeArea2 <= '1' when (hcnt >= 0 and hcnt < 160) and (vcnt >= 120 and vcnt < 240) else '0';
+--activeArea3 <= '1' when (hcnt >= 0 and hcnt < 160) and (vcnt >= 240 and vcnt < 360) else '0';
+--activeArea4 <= '1' when (hcnt >= 0 and hcnt < 160) and (vcnt >= 360 and vcnt < 480) else '0';
 
 Hsync <= h;
 Vsync <= v;
