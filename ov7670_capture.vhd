@@ -36,9 +36,9 @@ begin
    we(0) <= we_reg;
 --	 dout<= d_latch(11 downto 8) & d_latch(7 downto 4) & d_latch(3 downto 0);
 --   dout<= d_latch(11) & d_latch(7) & d_latch(3);
-   dout<= d_latch(10) & d_latch(6) & d_latch(2);
+--   dout<= d_latch(10) & d_latch(6) & d_latch(2);
 --   dout<= d_latch(9) & d_latch(5) & d_latch(1);
---   dout<= d_latch(8) & d_latch(4) & d_latch(0); 
+   dout<= d_latch(8) & d_latch(4) & d_latch(0); 
    
 capture_process: process(pclk)
    begin
