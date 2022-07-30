@@ -304,7 +304,7 @@ resend1 <= resend or resend2;
 p0initcam : process(cc,resend) is
 	type states is (idle,sa,sa1,sb,sb1,sc,sc1,sd,sd1,se);
 	variable state : states := idle;
-	constant C_MAX : integer := 4096; -- XXX wait between cameras
+	constant C_MAX : integer := 8192; -- XXX wait between cameras
 	variable counter : integer range 0 to C_MAX-1;
 begin
 	if (resend = '1') then
