@@ -7,7 +7,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 entity ov7670_SCCB is
-    Port ( clk : in  STD_LOGIC;
+    Port ( reset : in std_logic; clk : in  STD_LOGIC;
            reg_value : in  STD_LOGIC_VECTOR (7 downto 0);
            slave_addr : in  STD_LOGIC_VECTOR (7 downto 0);
            addr_reg : in  STD_LOGIC_VECTOR (7 downto 0);
@@ -27,8 +27,10 @@ signal busy_sr : STD_LOGIC_VECTOR(31 downto 0) := (others => '0');
 signal data_sr : STD_LOGIC_VECTOR(31 downto 0) := (others => '1');
 
 begin
-	process(busy_sr, data_sr(31)) begin
-		if busy_sr(11 downto 10) = "10" or 
+	process(busy_sr, data_sr(31), reset) begin
+	if (reset = '1') then
+		siod <= '1';
+		elsif busy_sr(11 downto 10) = "10" or 
 			busy_sr(20 downto 19) = "10" or
 			busy_sr(29 downto 28) = "10" then
 			siod <= 'Z'; -- Don't Care Bit, see pg.10 and pg.13.
@@ -37,8 +39,14 @@ begin
 		end if;
 	end process;
 
-	process(clk) begin
-		if rising_edge(clk) then
+	process(clk,reset) begin
+	if (reset = '1') then
+		scaler <= x"01";
+		busy_sr <= (others => '0');
+		data_sr <= (others => '1');
+		sioc <= '1';
+		taken <= '0';
+		elsif rising_edge(clk) then
 			taken <= '0';
 			if busy_sr(31) = '0' then
 				sioc <= '1';
