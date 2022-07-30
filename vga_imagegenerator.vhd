@@ -7,7 +7,7 @@ use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 entity vga_imagegenerator is
-    Port (	clk : std_logic; Data_in1 : in  STD_LOGIC_VECTOR (2 downto 0);
+    Port (	reset : in std_logic; clk : std_logic; Data_in1 : in  STD_LOGIC_VECTOR (2 downto 0);
 						Data_in2 : in  STD_LOGIC_VECTOR (2 downto 0);
 						Data_in3 : in  STD_LOGIC_VECTOR (2 downto 0);
 						Data_in4 : in  STD_LOGIC_VECTOR (2 downto 0);
@@ -28,9 +28,11 @@ begin
 --	RGB_out <= Data_in(11 downto 9) & Data_in(7 downto 5) & Data_in(3 downto 2) when active_area = '1' else (others=>'0');
 --	RGB_out <= "00"&Data_in(2) & "00"&Data_in(1) & "0"&Data_in(0) when active_area = '1' else (others=>'0');
 
-process (clk) is
+process (clk,reset) is
 begin
-if rising_edge(clk) then
+if (reset = '1') then
+RGB_out <= (others => '0');
+elsif rising_edge(clk) then
 RGB_out <= (others => '0');
 if(active_area1 = '1') then
 RGB_out <= Data_in1(2)&"00" & Data_in1(1)&"00" & Data_in1(0)&"0";

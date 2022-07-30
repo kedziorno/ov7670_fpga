@@ -8,7 +8,7 @@ use IEEE.NUMERIC_STD.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
 
 entity VGA_timing_synch is
-    Port ( clk25 : in  STD_LOGIC;
+    Port ( reset : in std_logic; clk25 : in  STD_LOGIC;
            Hsync : out  STD_LOGIC;
            Vsync : out  STD_LOGIC;
            activeArea1 : out  STD_LOGIC;
@@ -40,8 +40,11 @@ signal v120 : std_logic;
 
 begin
 clk_vga <= clk25;
-count_proc : process(clk_vga,vcnt,hcnt) begin
-		if rising_edge(clk_vga) then
+count_proc : process(clk_vga,vcnt,hcnt,reset) begin
+if (reset = '1') then
+hcnt <= 0;
+vcnt <= 0;
+		elsif rising_edge(clk_vga) then
 			if (hcnt = (HD+HFP+HSP+HBP)) then
 				hcnt <= 0;
 				if (vcnt = (VD+VFP+VSP+VBP)) then
@@ -55,8 +58,10 @@ count_proc : process(clk_vga,vcnt,hcnt) begin
 		end if;
 end process count_proc;
 
-hsync_gen : process(clk_vga) begin
-	if rising_edge(clk_vga) then
+hsync_gen : process(clk_vga,reset) begin
+if (reset = '1') then
+h <= '0';
+	elsif rising_edge(clk_vga) then
 		if (hcnt >= (HD+HFP) and hcnt <= (HD+HFP+HSP)) then 
 			h <= '0';
 		else
@@ -65,8 +70,10 @@ hsync_gen : process(clk_vga) begin
 	end if;
 end process hsync_gen;
 
-vsync_gen : process(clk_vga) begin
-	if rising_edge(clk_vga) then
+vsync_gen : process(clk_vga,reset) begin
+if (reset = '1') then
+v <= '0';
+	elsif rising_edge(clk_vga) then
 		if (vcnt >= (VD+VFP) and vcnt <= (VD+VFP+VSP)) then
 			v <= '0';
 		else
@@ -75,13 +82,17 @@ vsync_gen : process(clk_vga) begin
 	end if;
 end process vsync_gen;
 
-p1 : process (clk_vga) is
+p1 : process (clk_vga,reset) is
 type states is (idle,p0a,p0b);
 variable state : states := idle;
 constant C1 : integer := 120-VFP-VBP; --(VD-VFP-VSP-VBP)/4;
 constant C2 : integer := 480; --VD;
 begin
-if (rising_edge(clk_vga)) then
+if (reset = '1') then
+state := idle;
+v120 <= '0';
+pv <= '0';
+elsif (rising_edge(clk_vga)) then
 		pv <= v;
 		case (state) is
 			when idle =>
@@ -109,13 +120,22 @@ if (rising_edge(clk_vga)) then
 	end if;
 end process p1;
 
-p0 : process (clk_vga) is
+p0 : process (clk_vga,reset) is
 type states is (idle,idle1a,p0a,p0b,p0c,p0d,p0e);
 variable state : states := idle;
 variable count1 : integer range 0 to 1023 := 0;
 variable counter2 : integer range 0 to HBP-1 := 0;
 begin
-if (rising_edge(clk_vga)) then
+if (reset = '1') then
+state := idle;
+count1 := 0;
+counter2 := 0;
+ph <= '0';
+activeArea1 <= '0';
+activeArea2 <= '0';
+activeArea3 <= '0';
+activeArea4 <= '0';
+elsif (rising_edge(clk_vga)) then
 	ph <= h;
 		case (state) is
 			when idle =>
