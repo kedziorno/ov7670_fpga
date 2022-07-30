@@ -28,16 +28,17 @@ begin
 --	RGB_out <= Data_in(11 downto 9) & Data_in(7 downto 5) & Data_in(3 downto 2) when active_area = '1' else (others=>'0');
 --	RGB_out <= "00"&Data_in(2) & "00"&Data_in(1) & "0"&Data_in(0) when active_area = '1' else (others=>'0');
 
-d1 <= Data_in1(2)&"01" & Data_in1(1)&"01" & Data_in1(0)&"1" when active_area1 = '1' else (others => '0');
-d2 <= Data_in2(2)&"01" & Data_in2(1)&"01" & Data_in2(0)&"1" when active_area2 = '1' else (others => '0');
-d3 <= Data_in3(2)&"01" & Data_in3(1)&"01" & Data_in3(0)&"1" when active_area3 = '1' else (others => '0');
-d4 <= Data_in4(2)&"01" & Data_in4(1)&"01" & Data_in4(0)&"1" when active_area4 = '1' else (others => '0');
+d1 <= Data_in1(2)&"00" & Data_in1(1)&"00" & Data_in1(0)&"0" when active_area1 = '1' else (others => '0');
+d2 <= Data_in2(2)&"00" & Data_in2(1)&"00" & Data_in2(0)&"0" when active_area2 = '1' else (others => '0');
+d3 <= Data_in3(2)&"00" & Data_in3(1)&"00" & Data_in3(0)&"0" when active_area3 = '1' else (others => '0');
+d4 <= Data_in4(2)&"00" & Data_in4(1)&"00" & Data_in4(0)&"0" when active_area4 = '1' else (others => '0');
 
 RGB_out <=
 d1 when active_area1 = '1' else
 d2 when active_area2 = '1' else
 d3 when active_area3 = '1' else
-d4 when active_area4 = '1';
+d4 when active_area4 = '1' else
+"00000000";
 
 end Behavioral;
 
