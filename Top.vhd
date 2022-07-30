@@ -11,6 +11,8 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+Library UNISIM;
+use UNISIM.vcomponents.all;
 
 entity Top is
 Generic (G_PB_BITS : integer := 24);
@@ -60,6 +62,7 @@ COMPONENT clk25gen
 END COMPONENT;
 
 COMPONENT ov7670_capture
+Generic (PIXELS : integer := 19200);
 	Port ( pclk : in  STD_LOGIC;
           vsync : in  STD_LOGIC;
           href : in  STD_LOGIC;
@@ -99,7 +102,7 @@ COMPONENT frame_buffer
 END COMPONENT;
 
 COMPONENT vga_imagegenerator
-	Port ( Data_in1 : in  STD_LOGIC_VECTOR (2 downto 0);
+	Port ( clk : std_logic; Data_in1 : in  STD_LOGIC_VECTOR (2 downto 0);
 						Data_in2 : in  STD_LOGIC_VECTOR (2 downto 0);
 						Data_in3 : in  STD_LOGIC_VECTOR (2 downto 0);
 						Data_in4 : in  STD_LOGIC_VECTOR (2 downto 0);
@@ -111,6 +114,7 @@ COMPONENT vga_imagegenerator
 END COMPONENT;
 
 COMPONENT address_generator
+Generic (PIXELS : integer := 19200);
 	Port ( clk25 : in STD_LOGIC;
 			 enable : in STD_LOGIC;
 			 vsync : in STD_LOGIC;
@@ -151,25 +155,41 @@ signal sioc,siod : std_logic;
 signal send,done,taken : std_logic;
 signal resend1,resend2 : std_logic;
 
+signal ov7670_pclk1buf,ov7670_pclk2buf,ov7670_pclk3buf,ov7670_pclk4buf  : std_logic;
+signal clkcambuf,clk50buf : std_logic;
+
 begin
+
+	cc1buf : IBUFG generic map (IOSTANDARD => "DEFAULT") port map (O => clkcambuf, I => clkcam);
+	cc2buf : IBUFG generic map (IOSTANDARD => "DEFAULT") port map (O => clk50buf, I => clk50);
+	pclk1buf : IBUFG generic map (IOSTANDARD => "DEFAULT") port map (O => ov7670_pclk1buf, I => ov7670_pclk1);
+	pclk2buf : IBUFG generic map (IOSTANDARD => "DEFAULT") port map (O => ov7670_pclk2buf, I => ov7670_pclk2);
+	pclk3buf : IBUFG generic map (IOSTANDARD => "DEFAULT") port map (O => ov7670_pclk3buf, I => ov7670_pclk3);
+	pclk4buf : IBUFG generic map (IOSTANDARD => "DEFAULT") port map (O => ov7670_pclk4buf, I => ov7670_pclk4);
+
 	anode <= "1111";
 
-	led1 <= ov7670_data1(0) and ov7670_data1(1) and ov7670_data1(3) and ov7670_data1(4) and ov7670_data1(5) and ov7670_data1(6) and ov7670_data1(7);
-	led2 <= ov7670_data2(0) and ov7670_data2(1) and ov7670_data2(3) and ov7670_data2(4) and ov7670_data2(5) and ov7670_data2(6) and ov7670_data2(7);
-	led3 <= ov7670_data3(0) and ov7670_data3(1) and ov7670_data3(3) and ov7670_data3(4) and ov7670_data3(5) and ov7670_data3(6) and ov7670_data3(7);
-	led4 <= ov7670_data4(0) and ov7670_data4(1) and ov7670_data4(3) and ov7670_data4(4) and ov7670_data4(5) and ov7670_data4(6) and ov7670_data4(7);
+--	led1 <= ov7670_data1(0) and ov7670_data1(1) and ov7670_data1(3) and ov7670_data1(4) and ov7670_data1(5) and ov7670_data1(6) and ov7670_data1(7);
+--	led2 <= ov7670_data2(0) and ov7670_data2(1) and ov7670_data2(3) and ov7670_data2(4) and ov7670_data2(5) and ov7670_data2(6) and ov7670_data2(7);
+--	led3 <= ov7670_data3(0) and ov7670_data3(1) and ov7670_data3(3) and ov7670_data3(4) and ov7670_data3(5) and ov7670_data3(6) and ov7670_data3(7);
+--	led4 <= ov7670_data4(0) and ov7670_data4(1) and ov7670_data4(3) and ov7670_data4(4) and ov7670_data4(5) and ov7670_data4(6) and ov7670_data4(7);
+
+	led1 <= '0';
+	led2 <= '0';
+	led3 <= '0';
+	led4 <= '0';
 
 	inst_clk25: clk25gen port map(
-		clk50 => clk50,
+		clk50 => clk50buf,
 		clk25 => clk25);
 	
 	inst_debounce: debounce_circuit port map(
-		clk => clk50,
+		clk => clk50buf,
 		input => pb,
 		output => resend);
 
 	inst_ov7670capt1: ov7670_capture port map(
-		pclk => ov7670_pclk1,
+		pclk => ov7670_pclk1buf,
 		vsync => ov7670_vsync1,
 		href => ov7670_href1,
 		d => ov7670_data1,
@@ -177,7 +197,7 @@ begin
 		dout => wr_d1,
 		we => wren1);
 	inst_ov7670capt2: ov7670_capture port map(
-		pclk => ov7670_pclk2,
+		pclk => ov7670_pclk2buf,
 		vsync => ov7670_vsync2,
 		href => ov7670_href2,
 		d => ov7670_data2,
@@ -185,7 +205,7 @@ begin
 		dout => wr_d2,
 		we => wren2);
 	inst_ov7670capt3: ov7670_capture port map(
-		pclk => ov7670_pclk3,
+		pclk => ov7670_pclk3buf,
 		vsync => ov7670_vsync3,
 		href => ov7670_href3,
 		d => ov7670_data3,
@@ -193,7 +213,7 @@ begin
 		dout => wr_d3,
 		we => wren3);
 	inst_ov7670capt4: ov7670_capture port map(
-		pclk => ov7670_pclk4,
+		pclk => ov7670_pclk4buf,
 		vsync => ov7670_vsync4,
 		href => ov7670_href4,
 		d => ov7670_data4,
@@ -203,7 +223,7 @@ begin
 	
 	inst_framebuffer1 : frame_buffer port map(
 		weA => wren1,
-		clkA => ov7670_pclk1,
+		clkA => ov7670_pclk1buf,
 		addrA => wr_a1,
 		dinA => wr_d1,
 		clkB => clk25,
@@ -211,7 +231,7 @@ begin
 		doutB => rd_d1);
 	inst_framebuffer2 : frame_buffer port map(
 		weA => wren2,
-		clkA => ov7670_pclk2,
+		clkA => ov7670_pclk2buf,
 		addrA => wr_a2,
 		dinA => wr_d2,
 		clkB => clk25,
@@ -219,7 +239,7 @@ begin
 		doutB => rd_d2);
 	inst_framebuffer3 : frame_buffer port map(
 		weA => wren3,
-		clkA => ov7670_pclk3,
+		clkA => ov7670_pclk3buf,
 		addrA => wr_a3,
 		dinA => wr_d3,
 		clkB => clk25,
@@ -227,7 +247,7 @@ begin
 		doutB => rd_d3);
 	inst_framebuffer4 : frame_buffer port map(
 		weA => wren4,
-		clkA => ov7670_pclk4,
+		clkA => ov7670_pclk4buf,
 		addrA => wr_a4,
 		dinA => wr_d4,
 		clkB => clk25,
@@ -256,6 +276,7 @@ begin
 		address => rd_a4);
 
 	inst_imagegen : vga_imagegenerator port map(
+		clk => clk25,
 		Data_in1 => rd_d1,
 		Data_in2 => rd_d2,
 		Data_in3 => rd_d3,
@@ -451,6 +472,6 @@ ov7670_xclk2 <= cc;
 ov7670_xclk3 <= cc;
 ov7670_xclk4 <= cc;
 
-cc <= clkcam when sw = '1' else clk25;
+cc <= clkcambuf when sw = '1' else clk25;
 end Structural;
 

@@ -56,8 +56,6 @@ ov7670_href1,ov7670_href2,ov7670_href3,ov7670_href4  : in  STD_LOGIC; -- Pmod JB
 ov7670_data1,ov7670_data2,ov7670_data3,ov7670_data4  : in  STD_LOGIC_vector(7 downto 0);
 ov7670_sioc1,ov7670_sioc2,ov7670_sioc3,ov7670_sioc4  : out STD_LOGIC; -- Pmod JB10 --J12
 ov7670_siod1,ov7670_siod2,ov7670_siod3,ov7670_siod4  : inout STD_LOGIC; -- Pmod JB4 --H16
-ov7670_pwdn1,ov7670_pwdn2,ov7670_pwdn3,ov7670_pwdn4  : out STD_LOGIC; -- Pmod JA1 --L15
-ov7670_reset1,ov7670_reset2,ov7670_reset3,ov7670_reset4 : out STD_LOGIC; -- Pmod JA7 --K13
 vga_hsync : out STD_LOGIC; --T4
 vga_vsync : out STD_LOGIC; --U3
 vga_rgb	: out STD_LOGIC_VECTOR(7 downto 0)
@@ -242,14 +240,6 @@ ov7670_siod1 => ov7670_siod1,
 ov7670_siod2 => ov7670_siod2,
 ov7670_siod3 => ov7670_siod3,
 ov7670_siod4 => ov7670_siod4,
-ov7670_pwdn1 => ov7670_pwdn1,
-ov7670_pwdn2 => ov7670_pwdn2,
-ov7670_pwdn3 => ov7670_pwdn3,
-ov7670_pwdn4 => ov7670_pwdn4,
-ov7670_reset1 => ov7670_reset1,
-ov7670_reset2 => ov7670_reset2,
-ov7670_reset3 => ov7670_reset3,
-ov7670_reset4 => ov7670_reset4,
 vga_hsync => vga_hsync,
 vga_vsync => vga_vsync,
 vga_rgb => vga_rgb

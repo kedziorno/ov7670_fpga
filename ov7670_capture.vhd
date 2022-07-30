@@ -85,10 +85,13 @@ capture_process: process(pclk)
             end if;
          end if;
       end if;
+		end process capture_process;
+		latch_process : process (pclk) is
+		begin
       if falling_edge(pclk) then
          latched_d     <= d;
          latched_href  <= href;
          latched_vsync <= vsync;
       end if;
-   end process;
+   end process latch_process;
 end Behavioral;
