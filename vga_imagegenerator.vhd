@@ -31,20 +31,33 @@ begin
 process (clk,reset) is
 begin
 if (reset = '1') then
+d1 <= (others => '0');
+d2 <= (others => '0');
+d3 <= (others => '0');
+d4 <= (others => '0');
+elsif (falling_edge(clk)) then
+d1 <= Data_in1(2)&"00" & Data_in1(1)&"00" & Data_in1(0)&"0";
+d2 <= Data_in2(2)&"00" & Data_in2(1)&"00" & Data_in2(0)&"0";
+d3 <= Data_in3(2)&"00" & Data_in3(1)&"00" & Data_in3(0)&"0";
+d4 <= Data_in4(2)&"00" & Data_in4(1)&"00" & Data_in4(0)&"0";
+end if;
+end process;
+
+process (clk,reset) is
+begin
+if (reset = '1') then
 RGB_out <= (others => '0');
 elsif rising_edge(clk) then
-RGB_out <= (others => '0');
 if(active_area1 = '1') then
-RGB_out <= Data_in1(2)&"00" & Data_in1(1)&"00" & Data_in1(0)&"0";
-end if;
-if(active_area2 = '1') then
-RGB_out <= Data_in2(2)&"00" & Data_in2(1)&"00" & Data_in2(0)&"0";
-end if;
-if(active_area3 = '1') then
-RGB_out <= Data_in3(2)&"00" & Data_in3(1)&"00" & Data_in3(0)&"0";
-end if;
-if(active_area4 = '1') then
-RGB_out <= Data_in4(2)&"00" & Data_in4(1)&"00" & Data_in4(0)&"0";
+RGB_out <= d1;
+elsif(active_area2 = '1') then
+RGB_out <= d2;
+elsif(active_area3 = '1') then
+RGB_out <= d3;
+elsif(active_area4 = '1') then
+RGB_out <= d4;
+else
+RGB_out <= (others => '0');
 end if;
 end if;
 end process;
