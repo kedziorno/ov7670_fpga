@@ -12,7 +12,7 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity ov7670_capture is
 Generic (PIXELS : integer := 0);
-    Port ( pclk : in  STD_LOGIC;
+    Port ( reset : in std_logic; pclk : in  STD_LOGIC;
            vsync : in  STD_LOGIC;
            href : in  STD_LOGIC;
            d : in  STD_LOGIC_VECTOR (7 downto 0);
@@ -40,9 +40,16 @@ begin
 --   dout<= d_latch(9) & d_latch(5) & d_latch(1);
    dout<= d_latch(8) & d_latch(4) & d_latch(0); 
    
-capture_process: process(pclk)
+capture_process: process(pclk,reset)
    begin
-      if rising_edge(pclk) then
+	 if (reset = '1') then
+	 address <= (others => '0');
+	 row <= "00";
+	 href_hold <= '0';
+	 d_latch <= (others => '0');
+	 we_reg <= '0';
+	 href_last <= (others => '0');
+      elsif rising_edge(pclk) then
          if we_reg = '1' then
 					if (to_integer(unsigned(address)) = PIXELS-1) then
 						address <= (others => '0');
@@ -86,9 +93,14 @@ capture_process: process(pclk)
          end if;
       end if;
 		end process capture_process;
-		latch_process : process (pclk) is
+
+		latch_process : process (pclk,reset) is
 		begin
-      if falling_edge(pclk) then
+		if (reset = '1') then
+		latched_d <= (others => '0');
+		latched_href <= '0';
+		latched_vsync <= '0';
+      elsif falling_edge(pclk) then
          latched_d     <= d;
          latched_href  <= href;
          latched_vsync <= vsync;

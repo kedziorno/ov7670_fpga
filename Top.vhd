@@ -26,6 +26,7 @@ Generic (G_PB_BITS : integer := 24);
 				led4 : out STD_LOGIC; -- Indicates configuration has been done --J14
 			  anode : out std_logic_vector(3 downto 0);
 				-- OV7670
+				ov7670_reset1,ov7670_reset2,ov7670_reset3,ov7670_reset4  : out  STD_LOGIC;
 				ov7670_pclk1,ov7670_pclk2,ov7670_pclk3,ov7670_pclk4  : in  STD_LOGIC; -- Pmod JB8 --R16
 				ov7670_xclk1,ov7670_xclk2,ov7670_xclk3,ov7670_xclk4  : out STD_LOGIC; -- Pmod JB2 --R18
 				ov7670_vsync1,ov7670_vsync2,ov7670_vsync3,ov7670_vsync4 : in  STD_LOGIC; -- Pmod JB9 --T18
@@ -57,13 +58,13 @@ Generic (PB_BITS : integer := G_PB_BITS);
 END COMPONENT;
 
 COMPONENT clk25gen
-	Port ( clk50 : in  STD_LOGIC;
+	Port ( reset : in std_logic; clk50 : in  STD_LOGIC;
           clk25 : out  STD_LOGIC);
 END COMPONENT;
 
 COMPONENT ov7670_capture
 Generic (PIXELS : integer := 19200);
-	Port ( pclk : in  STD_LOGIC;
+	Port ( reset : in std_logic; pclk : in  STD_LOGIC;
           vsync : in  STD_LOGIC;
           href : in  STD_LOGIC;
           d : in  STD_LOGIC_VECTOR (7 downto 0);
@@ -102,7 +103,7 @@ COMPONENT frame_buffer
 END COMPONENT;
 
 COMPONENT vga_imagegenerator
-	Port ( clk : std_logic; Data_in1 : in  STD_LOGIC_VECTOR (2 downto 0);
+	Port ( reset : in std_logic; clk : std_logic; Data_in1 : in  STD_LOGIC_VECTOR (2 downto 0);
 						Data_in2 : in  STD_LOGIC_VECTOR (2 downto 0);
 						Data_in3 : in  STD_LOGIC_VECTOR (2 downto 0);
 						Data_in4 : in  STD_LOGIC_VECTOR (2 downto 0);
@@ -115,14 +116,14 @@ END COMPONENT;
 
 COMPONENT address_generator
 Generic (PIXELS : integer := 19200);
-	Port ( clk25 : in STD_LOGIC;
+	Port ( reset : in std_logic; clk25 : in STD_LOGIC;
 			 enable : in STD_LOGIC;
 			 vsync : in STD_LOGIC;
 			 address : out STD_LOGIC_VECTOR (14 downto 0));
 END COMPONENT;
 
 COMPONENT VGA_timing_synch
-	Port ( clk25 : in  STD_LOGIC;
+	Port ( reset : in std_logic; clk25 : in  STD_LOGIC;
            Hsync : out  STD_LOGIC;
            Vsync : out  STD_LOGIC;
            activeArea1 : out  STD_LOGIC;
@@ -180,6 +181,7 @@ begin
 	led4 <= '0';
 
 	inst_clk25: clk25gen port map(
+		reset => resend,
 		clk50 => clk50buf,
 		clk25 => clk25);
 	
@@ -189,6 +191,7 @@ begin
 		output => resend);
 
 	inst_ov7670capt1: ov7670_capture port map(
+		reset => resend,
 		pclk => ov7670_pclk1buf,
 		vsync => ov7670_vsync1,
 		href => ov7670_href1,
@@ -197,6 +200,7 @@ begin
 		dout => wr_d1,
 		we => wren1);
 	inst_ov7670capt2: ov7670_capture port map(
+		reset => resend,
 		pclk => ov7670_pclk2buf,
 		vsync => ov7670_vsync2,
 		href => ov7670_href2,
@@ -205,6 +209,7 @@ begin
 		dout => wr_d2,
 		we => wren2);
 	inst_ov7670capt3: ov7670_capture port map(
+		reset => resend,
 		pclk => ov7670_pclk3buf,
 		vsync => ov7670_vsync3,
 		href => ov7670_href3,
@@ -213,6 +218,7 @@ begin
 		dout => wr_d3,
 		we => wren3);
 	inst_ov7670capt4: ov7670_capture port map(
+		reset => resend,
 		pclk => ov7670_pclk4buf,
 		vsync => ov7670_vsync4,
 		href => ov7670_href4,
@@ -255,27 +261,32 @@ begin
 		doutB => rd_d4);
 	
 	inst_addrgen1 : address_generator port map(
+		reset => resend,
 		clk25 => clk25,
 		enable => active1,
 		vsync => vga_vsync_sig,
 		address => rd_a1);
 	inst_addrgen2 : address_generator port map(
+		reset => resend,
 		clk25 => clk25,
 		enable => active2,
 		vsync => vga_vsync_sig,
 		address => rd_a2);
 	inst_addrgen3 : address_generator port map(
+		reset => resend,
 		clk25 => clk25,
 		enable => active3,
 		vsync => vga_vsync_sig,
 		address => rd_a3);
 	inst_addrgen4 : address_generator port map(
+		reset => resend,
 		clk25 => clk25,
 		enable => active4,
 		vsync => vga_vsync_sig,
 		address => rd_a4);
 
 	inst_imagegen : vga_imagegenerator port map(
+		reset => resend,
 		clk => clk25,
 		Data_in1 => rd_d1,
 		Data_in2 => rd_d2,
@@ -288,6 +299,7 @@ begin
 		RGB_out => vga_rgb);
 	
 	inst_vgatiming : VGA_timing_synch port map(
+		reset => resend,
 		clk25 => clk25,
 		Hsync => vga_hsync,
 		Vsync => vga_vsync_sig,
@@ -471,6 +483,11 @@ ov7670_xclk1 <= cc;
 ov7670_xclk2 <= cc;
 ov7670_xclk3 <= cc;
 ov7670_xclk4 <= cc;
+
+ov7670_reset1 <= '0' when resend = '1' else '1';
+ov7670_reset2 <= '0' when resend = '1' else '1';
+ov7670_reset3 <= '0' when resend = '1' else '1';
+ov7670_reset4 <= '0' when resend = '1' else '1';
 
 cc <= clkcambuf when sw = '1' else clk25;
 
