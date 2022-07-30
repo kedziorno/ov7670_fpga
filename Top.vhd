@@ -13,6 +13,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 entity Top is
+Generic (G_PB_BITS : integer := 24);
 	Port	(	clk50	: in STD_LOGIC; -- Crystal Oscilator 50MHz  --B8
 	clkcam	: in STD_LOGIC; -- Crystal Oscilator 23.9616 MHz  --U9
 				pb		: in STD_LOGIC; -- Push Button --B18
@@ -50,6 +51,7 @@ end Top;
 architecture Structural of Top is
 
 COMPONENT debounce_circuit
+Generic (PB_BITS : integer := G_PB_BITS);
 	Port ( clk : in STD_LOGIC;
 			 input : in STD_LOGIC;
 			 output : out STD_LOGIC);
@@ -70,17 +72,24 @@ COMPONENT ov7670_capture
           we : out  STD_LOGIC_VECTOR (0 downto 0));
 END COMPONENT;
 
-COMPONENT ov7670_controller
-	Port ( clk : in  STD_LOGIC;
+component ov7670_registers
+	Port ( reset : in std_logic; clk : in  STD_LOGIC;
           resend : in  STD_LOGIC;
-          sioc : out  STD_LOGIC;
+          advance : in  STD_LOGIC;
+          command : out  STD_LOGIC_VECTOR (15 downto 0);
+          done : out  STD_LOGIC);
+end component;
+
+component ov7670_SCCB
+	Port ( reset : in std_logic; clk : in  STD_LOGIC;
+          reg_value : in  STD_LOGIC_VECTOR (7 downto 0);
+          slave_addr : in  STD_LOGIC_VECTOR (7 downto 0);
+          addr_reg : in  STD_LOGIC_VECTOR (7 downto 0);
+          send : in  STD_LOGIC;
           siod : inout  STD_LOGIC;
-          conf_done : out  STD_LOGIC;
-          pwdn : out  STD_LOGIC;
-			 reset: out  STD_LOGIC;
-			 xclk_in : in  STD_LOGIC;
-          xclk_out: out  STD_LOGIC);
-END COMPONENT;
+          sioc : out  STD_LOGIC;
+          taken : out  STD_LOGIC);
+end component;	
 
 COMPONENT frame_buffer
 	Port ( clkA : in STD_LOGIC;
@@ -137,8 +146,21 @@ signal vga_vsync_sig : STD_LOGIC;
 
 signal cc : std_logic;
 
+constant camera_address : std_logic_vector(7 downto 0) := x"42"; -- Device write ID, see pg.10. (OV datasheet)
+
+signal camera1,camera2,camera3,camera4 : std_logic;
+signal command : std_logic_vector(15 downto 0);
+signal sioc,siod : std_logic;
+signal send,done,taken : std_logic;
+signal resend1,resend2 : std_logic;
+
 begin
-	anode <= "0111";
+	anode <= "1111";
+
+	led1 <= ov7670_data1(0);
+	led2 <= ov7670_data2(0);
+	led3 <= ov7670_data3(0);
+	led4 <= ov7670_data4(0);
 
 	inst_clk25: clk25gen port map(
 		clk50 => clk50,
@@ -148,48 +170,7 @@ begin
 		clk => clk50,
 		input => pb,
 		output => resend);
-	
-	inst_ov7670contr1: ov7670_controller port map(
-		clk => clk50,
-		resend => resend,
-		sioc => ov7670_sioc1,
-		siod => ov7670_siod1,
-		conf_done => led1,
-		pwdn => ov7670_pwdn1,
-		reset => ov7670_reset1,
-		xclk_in => cc,
-		xclk_out => ov7670_xclk1);
-	inst_ov7670contr2: ov7670_controller port map(
-		clk => clk50,
-		resend => resend,
-		sioc => ov7670_sioc2,
-		siod => ov7670_siod2,
-		conf_done => led2,
-		pwdn => ov7670_pwdn2,
-		reset => ov7670_reset2,
-		xclk_in => cc,
-		xclk_out => ov7670_xclk2);
-	inst_ov7670contr3: ov7670_controller port map(
-		clk => clk50,
-		resend => resend,
-		sioc => ov7670_sioc3,
-		siod => ov7670_siod3,
-		conf_done => led3,
-		pwdn => ov7670_pwdn3,
-		reset => ov7670_reset3,
-		xclk_in => cc,
-		xclk_out => ov7670_xclk3);
-	inst_ov7670contr4: ov7670_controller port map(
-		clk => clk50,
-		resend => resend,
-		sioc => ov7670_sioc4,
-		siod => ov7670_siod4,
-		conf_done => led4,
-		pwdn => ov7670_pwdn4,
-		reset => ov7670_reset4,
-		xclk_in => cc,
-		xclk_out => ov7670_xclk4);
-	
+
 	inst_ov7670capt1: ov7670_capture port map(
 		pclk => ov7670_pclk1,
 		vsync => ov7670_vsync1,
@@ -298,6 +279,188 @@ begin
 		activeArea4 => active4);
 
 vga_vsync <= vga_vsync_sig;
+
+Registers: ov7670_registers port map(
+	reset => resend,
+	clk => cc,
+	resend => resend1,
+	advance => taken,
+	command => command,
+	done => done);
+
+SCCB : ov7670_SCCB port map(
+	reset => resend,
+	clk => cc,
+	reg_value => command (7 downto 0),
+	slave_addr => camera_address,
+	addr_reg => command (15 downto 8),
+	send => send,
+	sioc => sioc,
+	siod => siod,
+	taken => taken);
+
+resend1 <= resend or resend2;
+
+p0initcam : process(cc,resend) is
+	type states is (idle,sa,sa1,sb,sb1,sc,sc1,sd,sd1,se);
+	variable state : states := idle;
+	constant C_MAX : integer := 4096; -- XXX wait between cameras
+	variable counter : integer range 0 to C_MAX-1;
+begin
+	if (resend = '1') then
+		state := idle;
+		send <= '0';
+		resend2 <= '0';
+		counter := 0;
+	elsif (rising_edge(cc)) then
+		case (state) is
+			when idle =>
+--				if (resend = '1') then
+					state := sa;
+					send <= '0';
+					resend2 <= '1';
+--				else
+--					state := idle;
+--					send <= '0';
+--					resend2 <= '0';
+--				end if;
+				camera1 <= '0';
+				camera2 <= '0';
+				camera3 <= '0';
+				camera4 <= '0';
+				counter := 0;
+			when sa =>
+				counter := 0;
+				if (done = '1') then
+					state := sa1;
+					send <= '0';
+					resend2 <= '1';
+				else
+					state := sa;
+					send <= '1';
+					resend2 <= '0';
+				end if;
+				camera1 <= '1';
+				camera2 <= '0';
+				camera3 <= '0';
+				camera4 <= '0';
+			when sa1 =>
+				if (counter = C_MAX-1) then
+					state := sb;
+					counter := 0;
+					resend2 <= '1';
+				else
+					state := sa1;
+					counter := counter + 1;
+					resend2 <= '0';
+				end if;
+			when sb =>
+				if (done = '1') then
+					state := sb1;
+					send <= '0';
+					resend2 <= '1';
+				else
+					state := sb;
+					send <= '1';
+					resend2 <= '0';
+				end if;
+				camera1 <= '0';
+				camera2 <= '1';
+				camera3 <= '0';
+				camera4 <= '0';
+			when sb1 =>
+				if (counter = C_MAX-1) then
+					state := sc;
+					counter := 0;
+					resend2 <= '1';
+				else
+					state := sb1;
+					counter := counter + 1;
+					resend2 <= '0';
+				end if;
+			when sc =>
+				if (done = '1') then
+					state := sc1;
+					send <= '0';
+					resend2 <= '1';
+				else
+					state := sc;
+					send <= '1';
+					resend2 <= '0';
+				end if;
+				camera1 <= '0';
+				camera2 <= '0';
+				camera3 <= '1';
+				camera4 <= '0';
+			when sc1 =>
+				if (counter = C_MAX-1) then
+					state := sd;
+					counter := 0;
+					resend2 <= '1';
+				else
+					state := sc1;
+					counter := counter + 1;
+					resend2 <= '0';
+				end if;
+			when sd =>
+				if (done = '1') then
+					state := sd1;
+					send <= '0';
+					resend2 <= '1';
+				else
+					state := sd;
+					send <= '1';
+					resend2 <= '0';
+				end if;
+				camera1 <= '0';
+				camera2 <= '0';
+				camera3 <= '0';
+				camera4 <= '1';
+			when sd1 =>
+				if (counter = C_MAX-1) then
+					state := se;
+					counter := 0;
+					resend2 <= '1';
+				else
+					state := sd1;
+					counter := counter + 1;
+					resend2 <= '0';
+				end if;
+			when se =>
+				state := se;
+				camera1 <= '0';
+				camera2 <= '0';
+				camera3 <= '0';
+				camera4 <= '0';
+				send <= '0';
+				resend2 <= '0';
+			when others =>
+				state := idle;
+		end case;
+	end if;
+end process p0initcam;
+
+ov7670_sioc1 <= sioc when camera1 = '1' else '1';
+ov7670_siod1 <= siod when camera1 = '1' else '1';
+ov7670_sioc2 <= sioc when camera2 = '1' else '1';
+ov7670_siod2 <= siod when camera2 = '1' else '1';
+ov7670_sioc3 <= sioc when camera3 = '1' else '1';
+ov7670_siod3 <= siod when camera3 = '1' else '1';
+ov7670_sioc4 <= sioc when camera4 = '1' else '1';
+ov7670_siod4 <= siod when camera4 = '1' else '1';
+
+ov7670_pwdn1 <= '0';
+ov7670_pwdn2 <= '0';
+ov7670_pwdn3 <= '0';
+ov7670_pwdn4 <= '0';
+ov7670_reset1 <= '1';
+ov7670_reset2 <= '1';
+ov7670_reset3 <= '1';
+ov7670_reset4 <= '1';
+ov7670_xclk1 <= cc;
+ov7670_xclk2 <= cc;
+ov7670_xclk3 <= cc;
+ov7670_xclk4 <= cc;
 
 cc <= clkcam when sw = '1' else clk25;
 end Structural;

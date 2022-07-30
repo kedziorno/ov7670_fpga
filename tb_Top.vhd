@@ -38,6 +38,7 @@ END tb_Top;
 ARCHITECTURE behavior OF tb_Top IS 
 
 component Top is
+Generic (G_PB_BITS : integer := 5);
 Port (
 clk50	: in STD_LOGIC; -- Crystal Oscilator 50MHz  --B8
 clkcam	: in STD_LOGIC; -- Crystal Oscilator 23.9616 MHz  --U9
@@ -282,7 +283,7 @@ camera_i_rst2 <= '0';
 camera_i_rst3 <= '0';
 camera_i_rst4 <= '0';
 pb <= '1';
-wait for 100 ns;
+wait for 1000 ns;
 --i_reset <= '0';
 camera_i_rst1 <= '1';
 camera_i_rst2 <= '1';
