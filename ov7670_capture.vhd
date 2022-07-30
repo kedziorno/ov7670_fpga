@@ -11,6 +11,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 entity ov7670_capture is
+Generic (PIXELS : integer := 0);
     Port ( pclk : in  STD_LOGIC;
            vsync : in  STD_LOGIC;
            href : in  STD_LOGIC;
@@ -43,7 +44,7 @@ capture_process: process(pclk)
    begin
       if rising_edge(pclk) then
          if we_reg = '1' then
-					if (to_integer(unsigned(address)) = 19200-1) then
+					if (to_integer(unsigned(address)) = PIXELS-1) then
 						address <= (others => '0');
 					else
             address <= std_logic_vector(unsigned(address)+1);
