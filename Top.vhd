@@ -35,9 +35,6 @@ Generic (G_PB_BITS : integer := 24);
 									-- D3 : Pmod JA9 --M14			-- D7 : Pmod JB7  --P17
 				ov7670_sioc1,ov7670_sioc2,ov7670_sioc3,ov7670_sioc4  : out STD_LOGIC; -- Pmod JB10 --J12
 				ov7670_siod1,ov7670_siod2,ov7670_siod3,ov7670_siod4  : inout STD_LOGIC; -- Pmod JB4 --H16
-				ov7670_pwdn1,ov7670_pwdn2,ov7670_pwdn3,ov7670_pwdn4  : out STD_LOGIC; -- Pmod JA1 --L15
-				ov7670_reset1,ov7670_reset2,ov7670_reset3,ov7670_reset4 : out STD_LOGIC; -- Pmod JA7 --K13
-				
 				--VGA
 				vga_hsync : out STD_LOGIC; --T4
 				vga_vsync : out STD_LOGIC; --U3
@@ -449,14 +446,6 @@ ov7670_siod3 <= siod when camera3 = '1' else '1';
 ov7670_sioc4 <= sioc when camera4 = '1' else '1';
 ov7670_siod4 <= siod when camera4 = '1' else '1';
 
-ov7670_pwdn1 <= '0';
-ov7670_pwdn2 <= '0';
-ov7670_pwdn3 <= '0';
-ov7670_pwdn4 <= '0';
-ov7670_reset1 <= '1';
-ov7670_reset2 <= '1';
-ov7670_reset3 <= '1';
-ov7670_reset4 <= '1';
 ov7670_xclk1 <= cc;
 ov7670_xclk2 <= cc;
 ov7670_xclk3 <= cc;
