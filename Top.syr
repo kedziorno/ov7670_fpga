@@ -4,15 +4,15 @@ Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
 Parameter TMPDIR set to xst/projnav.tmp
 
 
-Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.05 secs
+Total REAL time to Xst completion: 1.00 secs
+Total CPU time to Xst completion: 0.06 secs
  
 --> 
 Parameter xsthdpdir set to xst
 
 
-Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.05 secs
+Total REAL time to Xst completion: 1.00 secs
+Total CPU time to Xst completion: 0.06 secs
  
 --> 
 Reading design: Top.prj
@@ -121,8 +121,7 @@ Architecture frame_buffer_a of Entity frame_buffer is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/address_generator.vhd" in Library work.
 Architecture behavioral of Entity address_generator is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/vga_imagegenerator.vhd" in Library work.
-Entity <vga_imagegenerator> compiled.
-Entity <vga_imagegenerator> (Architecture <behavioral>) compiled.
+Architecture behavioral of Entity vga_imagegenerator is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/vga_timing.vhd" in Library work.
 Architecture behavioral of Entity vga_timing_synch is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/ov7670_registers.vhd" in Library work.
@@ -130,7 +129,8 @@ Architecture behavioral of Entity ov7670_registers is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/ov7670_SCCB.vhd" in Library work.
 Architecture behavioral of Entity ov7670_sccb is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/Top.vhd" in Library work.
-Architecture structural of Entity top is up to date.
+Entity <top> compiled.
+Entity <top> (Architecture <structural>) compiled.
 
 =========================================================================
 *                     Design Hierarchy Analysis                         *
@@ -607,14 +607,14 @@ Design Statistics
 # IOs                              : 86
 
 Cell Usage :
-# BELS                             : 1014
+# BELS                             : 1022
 #      GND                         : 5
 #      INV                         : 32
 #      LUT1                        : 184
 #      LUT2                        : 87
 #      LUT2_L                      : 2
 #      LUT3                        : 62
-#      LUT4                        : 180
+#      LUT4                        : 188
 #      LUT4_D                      : 3
 #      LUT4_L                      : 7
 #      MUXCY                       : 210
@@ -639,8 +639,8 @@ Cell Usage :
 # Clock Buffers                    : 7
 #      BUFG                        : 2
 #      BUFGP                       : 5
-# IO Buffers                       : 61
-#      IBUF                        : 23
+# IO Buffers                       : 81
+#      IBUF                        : 43
 #      OBUF                        : 38
 =========================================================================
 
@@ -651,9 +651,9 @@ Selected Device : 3s1200efg320-4
 
  Number of Slices:                      297  out of   8672     3%  
  Number of Slice Flip Flops:            378  out of  17344     2%  
- Number of 4 input LUTs:                557  out of  17344     3%  
+ Number of 4 input LUTs:                565  out of  17344     3%  
  Number of IOs:                          86
- Number of bonded IOBs:                  66  out of    250    26%  
+ Number of bonded IOBs:                  86  out of    250    34%  
  Number of BRAMs:                        16  out of     28    57%  
  Number of GCLKs:                         7  out of     24    29%  
 
@@ -705,7 +705,7 @@ Speed Grade: -4
    Minimum period: 8.020ns (Maximum Frequency: 124.688MHz)
    Minimum input arrival time before clock: 4.707ns
    Maximum output required time after clock: 12.129ns
-   Maximum combinational path delay: 6.422ns
+   Maximum combinational path delay: 7.337ns
 
 Timing Detail:
 --------------
@@ -727,7 +727,7 @@ Delay:               7.250ns (Levels of Logic = 3)
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
      FDRE:C->Q             7   0.591   0.883  inst_vgatiming/vcnt_8 (inst_vgatiming/vcnt_8)
-     LUT4:I0->O            1   0.704   0.499  inst_vgatiming/activeArea4_and00002_SW1 (N55)
+     LUT4:I0->O            1   0.704   0.499  inst_vgatiming/activeArea4_and00002_SW1 (N63)
      LUT4:I1->O           23   0.704   1.237  inst_vgatiming/activeArea1_and0000 (active1)
      LUT3:I2->O           15   0.704   1.017  inst_addrgen1/addr_or00001 (inst_addrgen1/addr_or0000)
      FDRE:R                    0.911          inst_addrgen1/addr_0
@@ -900,77 +900,77 @@ Offset:              4.707ns (Levels of Logic = 2)
 Timing constraint: Default OFFSET IN BEFORE for Clock 'ov7670_pclk4'
   Total number of paths / destination ports: 4 / 4
 -------------------------------------------------------------------------
-Offset:              1.946ns (Levels of Logic = 1)
-  Source:            ov7670_href4 (PAD)
-  Destination:       inst_ov7670capt4/latched_href (FF)
+Offset:              1.973ns (Levels of Logic = 1)
+  Source:            ov7670_data4<6> (PAD)
+  Destination:       inst_ov7670capt4/latched_d_6 (FF)
   Destination Clock: ov7670_pclk4 falling
 
-  Data Path: ov7670_href4 to inst_ov7670capt4/latched_href
+  Data Path: ov7670_data4<6> to inst_ov7670capt4/latched_d_6
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     IBUF:I->O             1   1.218   0.420  ov7670_href4_IBUF (ov7670_href4_IBUF)
-     FD_1:D                    0.308          inst_ov7670capt4/latched_href
+     IBUF:I->O             2   1.218   0.447  ov7670_data4_6_IBUF (ov7670_data4_6_IBUF)
+     FD_1:D                    0.308          inst_ov7670capt4/latched_d_6
     ----------------------------------------
-    Total                      1.946ns (1.526ns logic, 0.420ns route)
-                                       (78.4% logic, 21.6% route)
+    Total                      1.973ns (1.526ns logic, 0.447ns route)
+                                       (77.3% logic, 22.7% route)
 
 =========================================================================
 Timing constraint: Default OFFSET IN BEFORE for Clock 'ov7670_pclk3'
   Total number of paths / destination ports: 4 / 4
 -------------------------------------------------------------------------
-Offset:              1.946ns (Levels of Logic = 1)
-  Source:            ov7670_href3 (PAD)
-  Destination:       inst_ov7670capt3/latched_href (FF)
+Offset:              1.973ns (Levels of Logic = 1)
+  Source:            ov7670_data3<6> (PAD)
+  Destination:       inst_ov7670capt3/latched_d_6 (FF)
   Destination Clock: ov7670_pclk3 falling
 
-  Data Path: ov7670_href3 to inst_ov7670capt3/latched_href
+  Data Path: ov7670_data3<6> to inst_ov7670capt3/latched_d_6
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     IBUF:I->O             1   1.218   0.420  ov7670_href3_IBUF (ov7670_href3_IBUF)
-     FD_1:D                    0.308          inst_ov7670capt3/latched_href
+     IBUF:I->O             2   1.218   0.447  ov7670_data3_6_IBUF (ov7670_data3_6_IBUF)
+     FD_1:D                    0.308          inst_ov7670capt3/latched_d_6
     ----------------------------------------
-    Total                      1.946ns (1.526ns logic, 0.420ns route)
-                                       (78.4% logic, 21.6% route)
+    Total                      1.973ns (1.526ns logic, 0.447ns route)
+                                       (77.3% logic, 22.7% route)
 
 =========================================================================
 Timing constraint: Default OFFSET IN BEFORE for Clock 'ov7670_pclk2'
   Total number of paths / destination ports: 4 / 4
 -------------------------------------------------------------------------
-Offset:              1.946ns (Levels of Logic = 1)
-  Source:            ov7670_href2 (PAD)
-  Destination:       inst_ov7670capt2/latched_href (FF)
+Offset:              1.973ns (Levels of Logic = 1)
+  Source:            ov7670_data2<6> (PAD)
+  Destination:       inst_ov7670capt2/latched_d_6 (FF)
   Destination Clock: ov7670_pclk2 falling
 
-  Data Path: ov7670_href2 to inst_ov7670capt2/latched_href
+  Data Path: ov7670_data2<6> to inst_ov7670capt2/latched_d_6
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     IBUF:I->O             1   1.218   0.420  ov7670_href2_IBUF (ov7670_href2_IBUF)
-     FD_1:D                    0.308          inst_ov7670capt2/latched_href
+     IBUF:I->O             2   1.218   0.447  ov7670_data2_6_IBUF (ov7670_data2_6_IBUF)
+     FD_1:D                    0.308          inst_ov7670capt2/latched_d_6
     ----------------------------------------
-    Total                      1.946ns (1.526ns logic, 0.420ns route)
-                                       (78.4% logic, 21.6% route)
+    Total                      1.973ns (1.526ns logic, 0.447ns route)
+                                       (77.3% logic, 22.7% route)
 
 =========================================================================
 Timing constraint: Default OFFSET IN BEFORE for Clock 'ov7670_pclk1'
   Total number of paths / destination ports: 4 / 4
 -------------------------------------------------------------------------
-Offset:              1.946ns (Levels of Logic = 1)
-  Source:            ov7670_href1 (PAD)
-  Destination:       inst_ov7670capt1/latched_href (FF)
+Offset:              1.973ns (Levels of Logic = 1)
+  Source:            ov7670_data1<6> (PAD)
+  Destination:       inst_ov7670capt1/latched_d_6 (FF)
   Destination Clock: ov7670_pclk1 falling
 
-  Data Path: ov7670_href1 to inst_ov7670capt1/latched_href
+  Data Path: ov7670_data1<6> to inst_ov7670capt1/latched_d_6
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     IBUF:I->O             1   1.218   0.420  ov7670_href1_IBUF (ov7670_href1_IBUF)
-     FD_1:D                    0.308          inst_ov7670capt1/latched_href
+     IBUF:I->O             2   1.218   0.447  ov7670_data1_6_IBUF (ov7670_data1_6_IBUF)
+     FD_1:D                    0.308          inst_ov7670capt1/latched_d_6
     ----------------------------------------
-    Total                      1.946ns (1.526ns logic, 0.420ns route)
-                                       (78.4% logic, 21.6% route)
+    Total                      1.973ns (1.526ns logic, 0.447ns route)
+                                       (77.3% logic, 22.7% route)
 
 =========================================================================
 Timing constraint: Default OFFSET OUT AFTER for Clock 'ov7670_xclk4_OBUF1'
@@ -1028,7 +1028,7 @@ Offset:              12.129ns (Levels of Logic = 7)
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
      FDRE:C->Q             4   0.591   0.762  inst_vgatiming/vcnt_6 (inst_vgatiming/vcnt_6)
-     LUT4_D:I0->LO         1   0.704   0.104  inst_vgatiming/activeArea4_and00002_SW0 (N80)
+     LUT4_D:I0->LO         1   0.704   0.104  inst_vgatiming/activeArea4_and00002_SW0 (N88)
      LUT4:I3->O            2   0.704   0.622  inst_vgatiming/activeArea4_and00002 (inst_vgatiming/N111)
      LUT4:I0->O           16   0.704   1.113  inst_vgatiming/activeArea4_and0000 (active4)
      LUT4:I1->O            3   0.704   0.566  inst_imagegen/RGB_out<1>11 (N1)
@@ -1041,33 +1041,34 @@ Offset:              12.129ns (Levels of Logic = 7)
 
 =========================================================================
 Timing constraint: Default path analysis
-  Total number of paths / destination ports: 12 / 8
+  Total number of paths / destination ports: 36 / 8
 -------------------------------------------------------------------------
-Delay:               6.422ns (Levels of Logic = 3)
-  Source:            sw (PAD)
-  Destination:       ov7670_xclk1 (PAD)
+Delay:               7.337ns (Levels of Logic = 4)
+  Source:            ov7670_data1<4> (PAD)
+  Destination:       led1 (PAD)
 
-  Data Path: sw to ov7670_xclk1
+  Data Path: ov7670_data1<4> to led1
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     IBUF:I->O             1   1.218   0.595  sw_IBUF (sw_IBUF)
-     LUT3:I0->O            5   0.704   0.633  cc1 (ov7670_xclk4_OBUF1)
-     OBUF:I->O                 3.272          ov7670_xclk1_OBUF (ov7670_xclk1)
+     IBUF:I->O             1   1.218   0.595  ov7670_data1_4_IBUF (ov7670_data1_4_IBUF)
+     LUT4:I0->O            1   0.704   0.424  led1_SW0 (N20)
+     LUT4:I3->O            1   0.704   0.420  led1 (led1_OBUF)
+     OBUF:I->O                 3.272          led1_OBUF (led1)
     ----------------------------------------
-    Total                      6.422ns (5.194ns logic, 1.228ns route)
-                                       (80.9% logic, 19.1% route)
+    Total                      7.337ns (5.898ns logic, 1.439ns route)
+                                       (80.4% logic, 19.6% route)
 
 =========================================================================
 
 
-Total REAL time to Xst completion: 10.00 secs
-Total CPU time to Xst completion: 9.97 secs
+Total REAL time to Xst completion: 11.00 secs
+Total CPU time to Xst completion: 10.03 secs
  
 --> 
 
 
-Total memory usage is 538636 kilobytes
+Total memory usage is 538600 kilobytes
 
 Number of errors   :    0 (   0 filtered)
 Number of warnings :  104 (   0 filtered)
