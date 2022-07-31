@@ -85,8 +85,11 @@ signal vga_vsync : std_logic;
 signal vga_rgb : std_logic_vector(7 downto 0);
 
 -- Clock period definitions
-constant clk50_period : time := 20 ns;
-constant vga_25dot175 : time := 39.7219464 ns;
+constant clk50_period : time := 20 ns; -- 50mhz
+constant clkcam_period : time := 10 ns; -- 100mhz
+constant vga_25dot175 : time := 39.7219464 ns; -- 25.175mhz
+constant camera_i_xclk_period1 : time := 41.733 ns; -- 23.9616mhz
+constant camera_i_xclk_period2 : time := 41.667 ns; -- 24mhz
 
 COMPONENT camera
 GENERIC(
@@ -119,7 +122,6 @@ signal camera_o_vs1,camera_o_vs2,camera_o_vs3,camera_o_vs4 : std_logic;
 signal camera_o_hs1,camera_o_hs2,camera_o_hs3,camera_o_hs4 : std_logic;
 signal camera_o_pclk1,camera_o_pclk2,camera_o_pclk3,camera_o_pclk4 : std_logic;
 signal camera_o_d1,camera_o_d2,camera_o_d3,camera_o_d4 : std_logic_vector(7 downto 0);
-constant camera_i_xclk_period : time := 41.733 ns;
 
 signal xclk : std_logic;
 signal sw : std_logic;
@@ -245,7 +247,6 @@ vga_hsync => vga_hsync,
 vga_vsync => vga_vsync,
 vga_rgb => vga_rgb
 );
-clkcam <= xclk;
 
 -- Clock process definitions
 clk50_process :process
@@ -256,13 +257,21 @@ clk50 <= '1';
 wait for clk50_period/2;
 end process;
 
-camera_i_xclkp :process
+clkcam_process :process
 begin
-xclk <= '0';
-wait for camera_i_xclk_period/2;
-xclk <= '1';
-wait for camera_i_xclk_period/2;
+clkcam <= '0';
+wait for clkcam_period/2;
+clkcam <= '1';
+wait for clkcam_period/2;
 end process;
+
+--camera_i_xclkp :process
+--begin
+--xclk <= '0';
+--wait for camera_i_xclk_period/2;
+--xclk <= '1';
+--wait for camera_i_xclk_period/2;
+--end process;
 
 -- Stimulus process
 stim_proc : process
