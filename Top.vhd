@@ -15,7 +15,10 @@ Library UNISIM;
 use UNISIM.vcomponents.all;
 
 entity Top is
-Generic (G_PB_BITS : integer := 24);
+Generic (
+G_PB_BITS : integer := 24;
+G_WAIT1 : integer := 20 -- wait for reset dcm and cameras
+);
 	Port	(	clk50	: in STD_LOGIC; -- Crystal Oscilator 50MHz  --B8
 	clkcam	: in STD_LOGIC; -- Crystal Oscilator 23.9616 MHz  --U9
 				pb		: in STD_LOGIC; -- Push Button --B18
@@ -162,6 +165,8 @@ signal clkcambuf,clk50buf : std_logic;
 signal ov7670_pclk1buf1,ov7670_pclk2buf1,ov7670_pclk3buf1,ov7670_pclk4buf1 : std_logic;
 
 signal clock1a,clock1b,clock2a,clock2b : std_logic;
+
+signal resetdcm : std_logic;
 
 begin
 
@@ -319,7 +324,7 @@ vga_vsync <= vga_vsync_sig;
 
 Registers: ov7670_registers port map(
 	reset => resend,
-	clk => cc,
+	clk => clkcambuf,
 	resend => resend1,
 	advance => taken,
 	command => command,
@@ -327,7 +332,7 @@ Registers: ov7670_registers port map(
 
 SCCB : ov7670_SCCB port map(
 	reset => resend,
-	clk => cc,
+	clk => clkcambuf,
 	reg_value => command (7 downto 0),
 	slave_addr => camera_address,
 	addr_reg => command (15 downto 8),
@@ -338,24 +343,26 @@ SCCB : ov7670_SCCB port map(
 
 resend1 <= resend or resend2;
 
-p0initcam : process(cc,resend) is
-	type states is (idle,sa,sa1,sb,sb1,sc,sc1,sd,sd1,se);
+p0initcam : process(clkcambuf,resend) is
+	type states is (idle,wait4dcm,sa,sa1,sb,sb1,sc,sc1,sd,sd1,se);
 	variable state : states := idle;
 	constant C_MAX : integer := 8192; -- XXX wait between cameras
 	variable counter : integer range 0 to C_MAX-1;
+	constant C_W4DCM : integer := 2**G_WAIT1;
+	variable w4dcmcnt : integer range 0 to C_W4DCM-1;
 begin
 	if (resend = '1') then
 		state := idle;
 		send <= '0';
 		resend2 <= '0';
 		counter := 0;
-	elsif (rising_edge(cc)) then
+		resetdcm <= '0';
+		w4dcmcnt := 0;
+	elsif (rising_edge(clkcambuf)) then
 		case (state) is
 			when idle =>
 --				if (resend = '1') then
-					state := sa;
-					send <= '0';
-					resend2 <= '1';
+					state := wait4dcm;
 --				else
 --					state := idle;
 --					send <= '0';
@@ -366,7 +373,22 @@ begin
 				camera3 <= '0';
 				camera4 <= '0';
 				counter := 0;
+				w4dcmcnt := 0;
+				resetdcm <= '0';
+			when wait4dcm =>
+				if (w4dcmcnt = C_W4DCM-1) then
+					resetdcm <= '0';
+					w4dcmcnt := 0;
+					state := sa;
+					send <= '0';
+					resend2 <= '1';
+				else
+					resetdcm <= '1';
+					w4dcmcnt := w4dcmcnt + 1;
+					state := wait4dcm;
+				end if;
 			when sa =>
+				resetdcm <= '0';
 				counter := 0;
 				if (done = '1') then
 					state := sa1;
@@ -486,15 +508,15 @@ ov7670_siod3 <= siod when camera3 = '1' else '1';
 ov7670_sioc4 <= sioc when camera4 = '1' else '1';
 ov7670_siod4 <= siod when camera4 = '1' else '1';
 
-ov7670_xclk1 <= cc;
-ov7670_xclk2 <= cc;
-ov7670_xclk3 <= cc;
-ov7670_xclk4 <= cc;
+OBUF_xclk1 : OBUF port map (O => ov7670_xclk1, I => cc);
+OBUF_xclk2 : OBUF port map (O => ov7670_xclk2, I => cc);
+OBUF_xclk3 : OBUF port map (O => ov7670_xclk3, I => cc);
+OBUF_xclk4 : OBUF port map (O => ov7670_xclk4, I => cc);
 
-ov7670_reset1 <= '0' when resend = '1' else '1';
-ov7670_reset2 <= '0' when resend = '1' else '1';
-ov7670_reset3 <= '0' when resend = '1' else '1';
-ov7670_reset4 <= '0' when resend = '1' else '1';
+ov7670_reset1 <= '0' when resetdcm = '1' else '1';
+ov7670_reset2 <= '0' when resetdcm = '1' else '1';
+ov7670_reset3 <= '0' when resetdcm = '1' else '1';
+ov7670_reset4 <= '0' when resetdcm = '1' else '1';
 
 --cc <= clkcambuf when sw = '1' else clk25;
 
@@ -533,7 +555,7 @@ CLKIN => clkcambuf, -- Clock input (from IBUFG, BUFG or DCM)
 PSCLK => '0', -- Dynamic phase adjust clock input
 PSEN => '0', -- Dynamic phase adjust enable input
 PSINCDEC => '0', -- Dynamic phase adjust increment/decrement
-RST => pb -- DCM asynchronous reset input
+RST => resetdcm -- DCM asynchronous reset input
 );
 vga_bufa : IBUFG generic map (IOSTANDARD => "DEFAULT") port map (O => clkcambuf, I => clkcam);
 vga_bufb : BUFG port map (O => clock1b, I => clock1a);
@@ -573,7 +595,7 @@ CLKIN => clk50buf, -- Clock input (from IBUFG, BUFG or DCM)
 PSCLK => '0', -- Dynamic phase adjust clock input
 PSEN => '0', -- Dynamic phase adjust enable input
 PSINCDEC => '0', -- Dynamic phase adjust increment/decrement
-RST => pb -- DCM asynchronous reset input
+RST => resetdcm -- DCM asynchronous reset input
 );
 cam_bufa : BUFG port map (O => clk50buf, I => clkcambuf);
 cam_bufb : BUFG port map (O => clock2b, I => clock2a);

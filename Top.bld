@@ -2,9 +2,9 @@ Release 14.7 ngdbuild P.20131013 (lin64)
 Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
 
 Command Line:
-/home/user/.local/Xilinx/14.7/ISE_DS/ISE/bin/lin64/unwrapped/ngdbuild -intstyle
-ise -dd _ngo -sd ipcore_dir -nt timestamp -uc top.ucf -p xc3s1200e-fg320-4
-Top.ngc Top.ngd
+/home/user/.local/Xilinx/14.7/ISE_DS/ISE/bin/lin64/unwrapped/ngdbuild -filter
+iseconfig/filter.filter -intstyle ise -dd _ngo -sd ipcore_dir -nt timestamp -uc
+top.ucf -p xc3s1200e-fg320-4 Top.ngc Top.ngd
 
 Reading NGO file "/home/user/workspace/ov7670_vga_Nexys2/Top.ngc" ...
 Loading design module "ipcore_dir/frame_buffer.ngc"...
@@ -14,36 +14,6 @@ Done.
 Annotating constraints to design from ucf file "top.ucf" ...
 Resolving constraint associations...
 Checking Constraint Associations...
-WARNING:ConstraintSystem:119 - Constraint <NET "ov7670_data4<7>"
-   IOSTANDARD="LVCMOS33";> [top.ucf(80)]: This constraint cannot be distributed
-   from the design objects matching 'NET "ov7670_data4<7>"' because those design
-   objects do not contain or drive any instances of the correct type.
-
-WARNING:ConstraintSystem:119 - Constraint <NET "ov7670_data4<6>"
-   IOSTANDARD="LVCMOS33";> [top.ucf(81)]: This constraint cannot be distributed
-   from the design objects matching 'NET "ov7670_data4<6>"' because those design
-   objects do not contain or drive any instances of the correct type.
-
-WARNING:ConstraintSystem:119 - Constraint <NET "ov7670_data4<5>"
-   IOSTANDARD="LVCMOS33";> [top.ucf(82)]: This constraint cannot be distributed
-   from the design objects matching 'NET "ov7670_data4<5>"' because those design
-   objects do not contain or drive any instances of the correct type.
-
-WARNING:ConstraintSystem:119 - Constraint <NET "ov7670_data4<3>"
-   IOSTANDARD="LVCMOS33";> [top.ucf(84)]: This constraint cannot be distributed
-   from the design objects matching 'NET "ov7670_data4<3>"' because those design
-   objects do not contain or drive any instances of the correct type.
-
-WARNING:ConstraintSystem:119 - Constraint <NET "ov7670_data4<2>"
-   IOSTANDARD="LVCMOS33";> [top.ucf(85)]: This constraint cannot be distributed
-   from the design objects matching 'NET "ov7670_data4<2>"' because those design
-   objects do not contain or drive any instances of the correct type.
-
-WARNING:ConstraintSystem:119 - Constraint <NET "ov7670_data4<1>"
-   IOSTANDARD="LVCMOS33";> [top.ucf(86)]: This constraint cannot be distributed
-   from the design objects matching 'NET "ov7670_data4<1>"' because those design
-   objects do not contain or drive any instances of the correct type.
-
 WARNING:ConstraintSystem:137 - Constraint <NET "clk50" TNM_NET = clk50;>
    [top.ucf(97)]: No appropriate instances for the TNM constraint are driven by
    "clk50".
@@ -73,12 +43,6 @@ INFO:ConstraintSystem:178 - TNM 'clkcam', used in period specification
    CLKFX: <TIMESPEC TS_clk251 = PERIOD "clk251" TS_clkcam / 0.25 HIGH 50%
    INPUT_JITTER 80 ps>
 
-INFO:ConstraintSystem:178 - TNM 'clkcam', used in period specification
-   'TS_clkcam', was traced into DCM_SP instance DCM_cam. The following new TNM
-   groups and period specifications were generated at the DCM_SP output(s): 
-   CLKFX: <TIMESPEC TS_ov7670_xclk4_OBUF1 = PERIOD "ov7670_xclk4_OBUF1"
-   TS_clkcam / 0.24 HIGH 50% INPUT_JITTER 80 ps>
-
 Done...
 
 INFO:NgdBuild:1222 - Setting CLKIN_PERIOD attribute associated with DCM instance
@@ -100,9 +64,9 @@ Partition Implementation Status
 
 NGDBUILD Design Results Summary:
   Number of errors:     0
-  Number of warnings:  10
+  Number of warnings:   4
 
-Total memory usage is 401012 kilobytes
+Total memory usage is 402064 kilobytes
 
 Writing NGD file "Top.ngd" ...
 Total REAL time to NGDBUILD completion:  3 sec
