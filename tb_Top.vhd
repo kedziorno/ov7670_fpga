@@ -39,8 +39,8 @@ ARCHITECTURE behavior OF tb_Top IS
 
 component Top is
 Generic (
-G_PB_BITS : integer := 5;
-G_WAIT1 : integer := 6
+G_PB_BITS : integer := 6;
+G_WAIT1 : integer := 7
 );
 Port (
 clk50	: in STD_LOGIC; -- Crystal Oscilator 50MHz  --B8
@@ -286,7 +286,7 @@ stim_proc : process
 begin
 -- hold reset state for 100 ns.
 pb <= '1';
-wait for 1500 ns;
+wait for 2500 ns;
 --wait for 500 ns;
 pb <= '0';
 wait for clk50_period*10;

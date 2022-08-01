@@ -31,6 +31,9 @@ architecture Behavioral of ov7670_capture is
    signal latched_vsync : STD_LOGIC := '0';
    signal latched_href  : STD_LOGIC := '0';
    signal latched_d     : STD_LOGIC_VECTOR (7 downto 0) := (others => '0');
+--	 attribute IOB : string;
+--	 attribute IOB of latched_vsync : signal is "TRUE";
+--	 attribute IOB of latched_href : signal is "TRUE";
 begin
    addr <= address;
    we(0) <= we_reg;
