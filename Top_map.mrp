@@ -12,19 +12,19 @@ Target Device  : xc3s1200e
 Target Package : fg320
 Target Speed   : -4
 Mapper Version : spartan3e -- $Revision: 1.55 $
-Mapped Date    : Sun Jul 31 19:25:50 2022
+Mapped Date    : Mon Aug  1 12:31:28 2022
 
 Design Summary
 --------------
 Number of errors:      0
-Number of warnings:  523
+Number of warnings:  524
 Logic Utilization:
   Number of Slice Flip Flops:           417 out of  17,344    2%
   Number of 4 input LUTs:               561 out of  17,344    3%
 Logic Distribution:
-  Number of occupied Slices:            494 out of   8,672    5%
-    Number of Slices containing only related logic:     494 out of     494 100%
-    Number of Slices containing unrelated logic:          0 out of     494   0%
+  Number of occupied Slices:            519 out of   8,672    5%
+    Number of Slices containing only related logic:     519 out of     519 100%
+    Number of Slices containing unrelated logic:          0 out of     519   0%
       *See NOTES below for an explanation of the effects of unrelated logic.
   Total Number of 4 input LUTs:         752 out of  17,344    4%
     Number used as logic:               561
@@ -41,9 +41,9 @@ Logic Distribution:
 
 Average Fanout of Non-Clock Nets:                3.60
 
-Peak Memory Usage:  721 MB
-Total REAL time to MAP completion:  19 secs 
-Total CPU time to MAP completion:   19 secs 
+Peak Memory Usage:  722 MB
+Total REAL time to MAP completion:  17 secs 
+Total CPU time to MAP completion:   17 secs 
 
 Table of Contents
 -----------------
@@ -1286,6 +1286,10 @@ WARNING:Pack:2780 - The register "w4dcmcnt_18" has the property IOB=TRUE, but it
    did not join an IO component because it is not connected to any IO element.
 WARNING:Pack:2780 - The register "w4dcmcnt_19" has the property IOB=TRUE, but it
    did not join an IO component because it is not connected to any IO element.
+WARNING:Pack:2352 - One or more I/O components have illegal IFD_DELAY_VALUE or
+   IBUF_DELAY_VALUE attributes.  For each occurrence, the system will choose
+   sensible defaults.  To view each occurrence, create a detailed map report
+   (run map using the -detail option).
 WARNING:Place:1019 - A clock IOB / clock component pair have been found that are
    not placed at an optimal clock IOB / clock site pair. The clock component
    <ov7670_pclk1_BUFGP/BUFG> is placed at site <BUFGMUX_X3Y2>. The IO component
@@ -1318,8 +1322,8 @@ WARNING:Place:1019 - A clock IOB / clock component pair have been found that are
    is recommended that this error condition be corrected in the design.
 WARNING:Place:1019 - A clock IOB / clock component pair have been found that are
    not placed at an optimal clock IOB / clock site pair. The clock component
-   <clkcambuf_BUFG> is placed at site <BUFGMUX_X3Y5>. The IO component <clkcam>
-   is placed at site <U9>.  This will not allow the use of the fast path between
+   <cam_bufa> is placed at site <BUFGMUX_X2Y0>. The IO component <clkcam> is
+   placed at site <U9>.  This will not allow the use of the fast path between
    the IO and the Clock buffer. This is normally an ERROR but the
    CLOCK_DEDICATED_ROUTE constraint was applied on COMP.PIN <clkcam.PAD>
    allowing your design to continue. This constraint disables all clock placer
@@ -1379,6 +1383,9 @@ INFO:LIT:395 - The above info message is repeated 25 more times for the
    ov7670_data4<1>
    To see the details of these info messages, please use the -detail switch.
 INFO:MapLib:562 - No environment variables are currently set.
+INFO:LIT:244 - All of the single ended outputs in this design are using slew
+   rate limited output drivers. The delay on speed critical single ended outputs
+   can be dramatically reduced by designating them as fast outputs.
 INFO:Pack:1716 - Initializing temperature to 85.000 Celsius. (default - Range:
    -40.000 to 100.000 Celsius)
 INFO:Pack:1720 - Initializing voltage to 1.140 Volts. (default - Range: 1.140 to
@@ -1442,69 +1449,69 @@ Section 6 - IOB Properties
 | IOB Name                           | Type             | Direction | IO Standard          | Diff  | Drive    | Slew | Reg (s)      | Resistor | IOB      |
 |                                    |                  |           |                      | Term  | Strength | Rate |              |          | Delay    |
 +---------------------------------------------------------------------------------------------------------------------------------------------------------+
-| anode<0>                           | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
-| anode<1>                           | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
-| anode<2>                           | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
-| anode<3>                           | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
+| anode<0>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| anode<1>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| anode<2>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| anode<3>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | clk50                              | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
 | clkcam                             | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| led1                               | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
-| led2                               | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
+| led1                               | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| led2                               | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | led3                               | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | led4                               | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| ov7670_data1<0>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      | IFF1         |          | 0 / 3    |
-| ov7670_data1<1>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data1<2>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data1<3>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data1<4>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      | IFF1         |          | 0 / 3    |
-| ov7670_data1<5>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data1<6>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data1<7>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data2<0>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      | IFF1         |          | 0 / 3    |
-| ov7670_data2<1>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data2<2>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data2<3>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data2<4>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      | IFF1         |          | 0 / 3    |
-| ov7670_data2<5>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data2<6>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data2<7>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data3<0>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      | IFF1         |          | 0 / 3    |
-| ov7670_data3<1>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data3<2>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data3<3>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data3<4>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      | IFF2         |          | 0 / 3    |
-| ov7670_data3<5>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data3<6>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data3<7>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
+| ov7670_data1<0>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      | IFF1         |          | 0 / 3    |
+| ov7670_data1<1>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data1<2>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data1<3>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data1<4>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      | IFF1         |          | 0 / 3    |
+| ov7670_data1<5>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data1<6>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data1<7>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data2<0>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      | IFF1         |          | 0 / 3    |
+| ov7670_data2<1>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data2<2>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data2<3>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data2<4>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      | IFF1         |          | 0 / 3    |
+| ov7670_data2<5>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data2<6>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data2<7>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data3<0>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      | IFF1         |          | 0 / 3    |
+| ov7670_data3<1>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data3<2>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data3<3>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data3<4>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      | IFF2         |          | 0 / 3    |
+| ov7670_data3<5>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data3<6>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data3<7>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
 | ov7670_data4<0>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      | IFF1         |          | 0 / 3    |
 | ov7670_data4<4>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      | IFF1         |          | 0 / 3    |
-| ov7670_href1                       | IBUF             | INPUT     | LVCMOS33             |       |          |      | IFF1         |          | 0 / 3    |
-| ov7670_href2                       | IBUF             | INPUT     | LVCMOS33             |       |          |      | IFF1         |          | 0 / 3    |
-| ov7670_href3                       | IBUF             | INPUT     | LVCMOS33             |       |          |      | IFF1         |          | 0 / 3    |
+| ov7670_href1                       | IBUF             | INPUT     | LVCMOS25             |       |          |      | IFF1         |          | 0 / 0    |
+| ov7670_href2                       | IBUF             | INPUT     | LVCMOS25             |       |          |      | IFF1         |          | 0 / 0    |
+| ov7670_href3                       | IBUF             | INPUT     | LVCMOS25             |       |          |      | IFF1         |          | 0 / 0    |
 | ov7670_href4                       | IBUF             | INPUT     | LVCMOS25             |       |          |      | IFF1         |          | 0 / 3    |
-| ov7670_pclk1                       | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_pclk2                       | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_pclk3                       | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
+| ov7670_pclk1                       | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 12 / 0   |
+| ov7670_pclk2                       | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 12 / 0   |
+| ov7670_pclk3                       | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 12 / 0   |
 | ov7670_pclk4                       | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_reset1                      | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
-| ov7670_reset2                      | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
-| ov7670_reset3                      | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
+| ov7670_reset1                      | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| ov7670_reset2                      | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| ov7670_reset3                      | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | ov7670_reset4                      | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| ov7670_sioc1                       | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
-| ov7670_sioc2                       | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
-| ov7670_sioc3                       | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
+| ov7670_sioc1                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| ov7670_sioc2                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| ov7670_sioc3                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | ov7670_sioc4                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| ov7670_siod1                       | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
-| ov7670_siod2                       | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
-| ov7670_siod3                       | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
+| ov7670_siod1                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| ov7670_siod2                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| ov7670_siod3                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | ov7670_siod4                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| ov7670_vsync1                      | IBUF             | INPUT     | LVCMOS33             |       |          |      | IFF1         |          | 0 / 3    |
-| ov7670_vsync2                      | IBUF             | INPUT     | LVCMOS33             |       |          |      | IFF2         |          | 0 / 3    |
-| ov7670_vsync3                      | IBUF             | INPUT     | LVCMOS33             |       |          |      | IFF1         |          | 0 / 3    |
+| ov7670_vsync1                      | IBUF             | INPUT     | LVCMOS25             |       |          |      | IFF1         |          | 0 / 0    |
+| ov7670_vsync2                      | IBUF             | INPUT     | LVCMOS25             |       |          |      | IFF2         |          | 0 / 0    |
+| ov7670_vsync3                      | IBUF             | INPUT     | LVCMOS25             |       |          |      | IFF1         |          | 0 / 0    |
 | ov7670_vsync4                      | IBUF             | INPUT     | LVCMOS25             |       |          |      | IFF1         |          | 0 / 3    |
-| ov7670_xclk1                       | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
-| ov7670_xclk2                       | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
-| ov7670_xclk3                       | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
+| ov7670_xclk1                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| ov7670_xclk2                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| ov7670_xclk3                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | ov7670_xclk4                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | pb                                 | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
 | sw                                 | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
