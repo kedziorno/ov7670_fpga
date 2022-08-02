@@ -27,7 +27,8 @@ architecture Behavioral of ov7670_capture is
 --   signal row         : std_logic_vector(1 downto 0)  := (others => '0');
    signal row         : std_logic_vector(0 downto 0)  := (others => '0');
 --   signal href_last    : std_logic_vector(6 downto 0)  := (others => '0');
-   signal href_last    : std_logic_vector(0 downto 0)  := (others => '0');
+--   signal href_last    : std_logic_vector(0 downto 0)  := (others => '0');
+--   signal href_last    : std_logic_vector(1 downto 0)  := (others => '0');
    signal we_reg       : std_logic := '0';
    signal href_hold    : std_logic := '0';
    signal latched_vsync : STD_LOGIC := '0';
@@ -56,7 +57,7 @@ capture_process: process(pclk,reset)
 	 href_hold <= '0';
 	 d_latch <= (others => '0');
 	 we_reg <= '0';
-	 href_last <= (others => '0');
+--	 href_last <= (others => '0');
       elsif rising_edge(pclk) then
          if we_reg = '1' then
 					if (to_integer(unsigned(address)) = PIXELS-1) then
@@ -77,41 +78,42 @@ capture_process: process(pclk,reset)
                when "1"   => row <= "0";
                when others => row <= "0";
             end case;
-						we_reg <= '1';
+--						we_reg <= '1';
 						else
-						we_reg  <= '0';
+--						we_reg  <= '0';
          end if;
          href_hold <= latched_href;
          
          -- capturing the data from the camera, 12-bit RGB
          if latched_href = '1' then
             d_latch <= d_latch(7 downto 0) & latched_d;
-						we_reg <= '1';
+						we_reg <= not we_reg;
+--						we_reg <= '1';
 				else
 				we_reg  <= '0';
 				d_latch <= (others => '0');
          end if;
          
-						we_reg  <= '0';
+--						we_reg  <= '0';
 
          -- Is a new screen about to start (i.e. we have to restart capturing
          if latched_vsync = '1' then 
             address      <= (others => '0');
-            href_last    <= (others => '0');
+--            href_last    <= (others => '0');
             row         <= (others => '0');
-						we_reg <= '0';
+--						we_reg <= '0';
          else
             -- If not, set the write enable whenever we need to capture a pixel
-            if href_last(href_last'high) = '1' then
+--            if href_last(href_last'high) = '1' then
 --               if row = "10" then
 --               if row = "0" then
-                  we_reg <= '1';
+--                  we_reg <= '1';
 --               end if;
-               href_last <= (others => '0');
-            else
-               href_last <= href_last(href_last'high-1 downto 0) & latched_href;
-							 we_reg <= '0';
-            end if;
+--               href_last <= (others => '0');
+--            else
+--               href_last <= href_last(href_last'high-1 downto 0) & latched_href;
+--							 we_reg <= '0';
+--            end if;
          end if;
       end if;
 		end process capture_process;

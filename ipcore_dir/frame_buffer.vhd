@@ -125,8 +125,8 @@ END COMPONENT;
       c_web_width => 1,
       c_write_depth_a => 307200,
       c_write_depth_b => 307200,
-      c_write_mode_a => "NO_CHANGE",
-      c_write_mode_b => "NO_CHANGE",
+      c_write_mode_a => "WRITE_FIRST",
+      c_write_mode_b => "WRITE_FIRST",
       c_write_width_a => 1,
       c_write_width_b => 1,
       c_xdevicefamily => "spartan3e"

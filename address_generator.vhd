@@ -34,10 +34,10 @@ addr <= (others => '0');
 			addr <= addr + 1 ;
 			end if;
 		else
---		addr <= addr;
+		addr <= addr;
 		end if;
 		
-		if vsync = '0' then 
+		if vsync = '0' then -- this V depend from VGA
 			addr <= (others => '0');
 		end if;
 	end if;
