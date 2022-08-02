@@ -3,45 +3,61 @@ Xilinx Mapping Report File for Design 'Top'
 
 Design Information
 ------------------
-Command Line   : map -intstyle ise -p xc3s1200e-fg320-4 -timing -logic_opt on
--ol high -xe n -t 1 -register_duplication on -cm area -ir off -pr b -power on -o
-Top_map.ncd Top.ngd Top.pcf 
+Command Line   : map -intstyle ise -p xc3s1200e-fg320-4 -cm area -ir off -pr off
+-c 100 -o Top_map.ncd Top.ngd Top.pcf 
 Target Device  : xc3s1200e
 Target Package : fg320
 Target Speed   : -4
 Mapper Version : spartan3e -- $Revision: 1.55 $
-Mapped Date    : Tue Aug  2 16:15:47 2022
+Mapped Date    : Tue Aug  2 19:27:19 2022
 
 Design Summary
 --------------
 Number of errors:      0
-Number of warnings:  406
+Number of warnings:   24
 Logic Utilization:
-  Number of Slice Flip Flops:           287 out of  17,344    1%
-  Number of 4 input LUTs:               432 out of  17,344    2%
+  Number of Slice Flip Flops:           253 out of  17,344    1%
+  Number of 4 input LUTs:               430 out of  17,344    2%
 Logic Distribution:
-  Number of occupied Slices:            323 out of   8,672    3%
-    Number of Slices containing only related logic:     323 out of     323 100%
-    Number of Slices containing unrelated logic:          0 out of     323   0%
+  Number of occupied Slices:            302 out of   8,672    3%
+    Number of Slices containing only related logic:     302 out of     302 100%
+    Number of Slices containing unrelated logic:          0 out of     302   0%
       *See NOTES below for an explanation of the effects of unrelated logic.
-  Total Number of 4 input LUTs:         566 out of  17,344    3%
-    Number used as logic:               432
+  Total Number of 4 input LUTs:         564 out of  17,344    3%
+    Number used as logic:               430
     Number used as a route-thru:        134
 
   The Slice Logic Distribution report is not meaningful if the design is
   over-mapped for a non-slice resource or if Placement fails.
 
-  Number of bonded IOBs:                 73 out of     250   29%
-    IOB Flip Flops:                       7
+  Number of bonded IOBs:                 75 out of     250   30%
   Number of RAMB16s:                     19 out of      28   67%
   Number of BUFGMUXs:                     6 out of      24   25%
   Number of DCMs:                         3 out of       8   37%
 
-Average Fanout of Non-Clock Nets:                3.89
+Average Fanout of Non-Clock Nets:                4.09
 
-Peak Memory Usage:  717 MB
-Total REAL time to MAP completion:  16 secs 
-Total CPU time to MAP completion:   16 secs 
+Peak Memory Usage:  603 MB
+Total REAL time to MAP completion:  3 secs 
+Total CPU time to MAP completion:   3 secs 
+
+NOTES:
+
+   Related logic is defined as being logic that shares connectivity - e.g. two
+   LUTs are "related" if they share common inputs.  When assembling slices,
+   Map gives priority to combine logic that is related.  Doing so results in
+   the best timing performance.
+
+   Unrelated logic shares no connectivity.  Map will only begin packing
+   unrelated logic into a slice once 99% of the slices are occupied through
+   related logic packing.
+
+   Note that once logic distribution reaches the 99% level through related
+   logic packing, this does not mean the device is completely utilized.
+   Unrelated logic packing will then begin, continuing until all usable LUTs
+   and FFs are occupied.  Depending on your timing budget, increased levels of
+   unrelated logic packing may adversely affect the overall timing performance
+   of your design.
 
 Table of Contents
 -----------------
@@ -64,903 +80,6 @@ Section 1 - Errors
 
 Section 2 - Warnings
 --------------------
-WARNING:MapLib:701 - Signal ov7670_pclk2 connected to top level port
-   ov7670_pclk2 has been removed.
-WARNING:MapLib:701 - Signal ov7670_pclk3 connected to top level port
-   ov7670_pclk3 has been removed.
-WARNING:MapLib:701 - Signal ov7670_pclk4 connected to top level port
-   ov7670_pclk4 has been removed.
-WARNING:MapLib:41 - All members of TNM group "ov7670_pclk2" have been optimized
-   out of the design.
-WARNING:MapLib:41 - All members of TNM group "ov7670_pclk3" have been optimized
-   out of the design.
-WARNING:MapLib:41 - All members of TNM group "ov7670_pclk4" have been optimized
-   out of the design.
-WARNING:MapLib:50 - The period specification "TS_ov7670_pclk2" has been
-   discarded because the group "ov7670_pclk2" has been optimized away.
-WARNING:MapLib:50 - The period specification "TS_ov7670_pclk3" has been
-   discarded because the group "ov7670_pclk3" has been optimized away.
-WARNING:MapLib:50 - The period specification "TS_ov7670_pclk4" has been
-   discarded because the group "ov7670_pclk4" has been optimized away.
-WARNING:Pack:1542 - The register inst_imagegen/RGB_out_1_1 has the property
-   IOB=TRUE, but was not packed into the output side of an I/O component. The
-   output register symbol "inst_imagegen/RGB_out_1_1" has loads outside the I/O
-   component.
-   The output register symbol "inst_imagegen/RGB_out_1_1" has loads outside the
-   I/O component.
-WARNING:Pack:1542 - The register inst_imagegen/RGB_out_1_1 has the property
-   IOB=TRUE, but was not packed into the output side of an I/O component. The
-   output register symbol "inst_imagegen/RGB_out_1_1" has loads outside the I/O
-   component.
-   The output register symbol "inst_imagegen/RGB_out_1_1" has loads outside the
-   I/O component.
-WARNING:Pack:1542 - The register resetdcm_1 has the property IOB=TRUE, but was
-   not packed into the output side of an I/O component. The register symbol
-   "resetdcm_1" has no connections inside the I/O component.
-WARNING:Pack:1542 - The register resetdcm_1 has the property IOB=TRUE, but was
-   not packed into the output side of an I/O component. The register symbol
-   "resetdcm_1" has no connections inside the I/O component.
-WARNING:Pack:1542 - The register resetdcm_1 has the property IOB=TRUE, but was
-   not packed into the output side of an I/O component. The register symbol
-   "resetdcm_1" has no connections inside the I/O component.
-WARNING:Pack:1542 - The register resetdcm_1 has the property IOB=TRUE, but was
-   not packed into the output side of an I/O component. The register symbol
-   "resetdcm_1" has no connections inside the I/O component.
-WARNING:Pack:1542 - The register resetdcm_1 has the property IOB=TRUE, but was
-   not packed into the output side of an I/O component. The output register
-   symbol "resetdcm_1" has loads outside the I/O component.
-   The output register symbol "resetdcm_1" has loads outside the I/O component.
-WARNING:Pack:1542 - The register resetdcm_1 has the property IOB=TRUE, but was
-   not packed into the output side of an I/O component. The output register
-   symbol "resetdcm_1" has loads outside the I/O component.
-   The output register symbol "resetdcm_1" has loads outside the I/O component.
-WARNING:Pack:1542 - The register resetdcm_1 has the property IOB=TRUE, but was
-   not packed into the output side of an I/O component. The output register
-   symbol "resetdcm_1" has loads outside the I/O component.
-   The output register symbol "resetdcm_1" has loads outside the I/O component.
-WARNING:Pack:2780 - The register "SCCB/busy_sr_3_BRB2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/busy_sr_4_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/busy_sr_5_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/busy_sr_6_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/busy_sr_7_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/busy_sr_8_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/busy_sr_9_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_ov7670capt1/href_last_0" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register
-   "inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/val
-   id.cstr/has_mux_b.B/sel_pipe_0" has the property IOB=TRUE, but it did not
-   join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register
-   "inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/val
-   id.cstr/has_mux_b.B/sel_pipe_1" has the property IOB=TRUE, but it did not
-   join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register
-   "inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/val
-   id.cstr/has_mux_b.B/sel_pipe_2" has the property IOB=TRUE, but it did not
-   join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register
-   "inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/val
-   id.cstr/has_mux_b.B/sel_pipe_3" has the property IOB=TRUE, but it did not
-   join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register
-   "inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/val
-   id.cstr/has_mux_b.B/sel_pipe_4" has the property IOB=TRUE, but it did not
-   join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "Registers/sequence_0" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "Registers/sequence_1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "Registers/sequence_2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "Registers/sequence_3" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "Registers/sequence_4" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "Registers/sequence_5" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_2_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_3_BRB0" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_3_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_3_BRB2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_3_BRB3" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_4_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_4_BRB2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_5_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_5_BRB2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_6_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_6_BRB2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_7_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_7_BRB2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_8_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_8_BRB2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_9_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_9_BRB2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/counter_10" has the property IOB=TRUE,
-   but it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "SCCB/counter_11" has the property IOB=TRUE,
-   but it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "SCCB/counter_12" has the property IOB=TRUE,
-   but it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "SCCB/counter_13" has the property IOB=TRUE,
-   but it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "SCCB/counter_14" has the property IOB=TRUE,
-   but it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "camera1" has the property IOB=TRUE, but it did
-   not join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "Registers/cmd_reg_10" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "Registers/cmd_reg_11" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "Registers/cmd_reg_12" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "Registers/cmd_reg_13" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "Registers/cmd_reg_14" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "Registers/cmd_reg_15" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_debounce/counter_0" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_debounce/counter_1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_debounce/counter_2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_debounce/counter_3" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_debounce/counter_4" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_debounce/counter_5" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_debounce/counter_6" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_debounce/counter_7" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_debounce/counter_8" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_debounce/counter_9" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_10_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_10_BRB2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_11_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_12_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_20_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_12_BRB2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_13_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_21_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_13_BRB2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_30_BRB0" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_14_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_22_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_30_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_14_BRB2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_30_BRB4" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_31_BRB0" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_15_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_23_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_31_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_15_BRB2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_16_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_24_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_16_BRB2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_17_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_25_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_17_BRB2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_18_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_26_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_18_BRB2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_19_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_27_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_19_BRB2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_28_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_29_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/busy_sr_30" has the property IOB=TRUE,
-   but it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "SCCB/busy_sr_31" has the property IOB=TRUE,
-   but it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "SCCB/busy_sr_29" has the property IOB=TRUE,
-   but it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "counter_0" has the property IOB=TRUE, but it
-   did not join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "counter_1" has the property IOB=TRUE, but it
-   did not join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "counter_2" has the property IOB=TRUE, but it
-   did not join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "counter_3" has the property IOB=TRUE, but it
-   did not join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "counter_4" has the property IOB=TRUE, but it
-   did not join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "counter_5" has the property IOB=TRUE, but it
-   did not join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "counter_6" has the property IOB=TRUE, but it
-   did not join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "counter_7" has the property IOB=TRUE, but it
-   did not join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "counter_8" has the property IOB=TRUE, but it
-   did not join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "counter_9" has the property IOB=TRUE, but it
-   did not join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "inst_ov7670capt1/address_10" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "resetdcm1_BRB0" has the property IOB=TRUE, but
-   it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "resetdcm1_BRB1" has the property IOB=TRUE, but
-   it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "resetdcm1_BRB2" has the property IOB=TRUE, but
-   it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "resetdcm1_BRB3" has the property IOB=TRUE, but
-   it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "SCCB/data_sr_1" has the property IOB=TRUE, but
-   it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "inst_debounce/output" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "send_BRB1" has the property IOB=TRUE, but it
-   did not join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "send_BRB2" has the property IOB=TRUE, but it
-   did not join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "send_BRB3" has the property IOB=TRUE, but it
-   did not join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "SCCB/taken_BRB0" has the property IOB=TRUE,
-   but it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "SCCB/taken_BRB1" has the property IOB=TRUE,
-   but it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "SCCB/taken_BRB2" has the property IOB=TRUE,
-   but it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "inst_imagegen/d1_1" has the property IOB=TRUE,
-   but it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "inst_vgatiming/v_1" has the property IOB=TRUE,
-   but it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "inst_vgatiming/hcnt_0" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_vgatiming/hcnt_1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_vgatiming/hcnt_2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_vgatiming/hcnt_3" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_vgatiming/hcnt_4" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_vgatiming/hcnt_5" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_vgatiming/hcnt_6" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_vgatiming/hcnt_7" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_vgatiming/hcnt_8" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_vgatiming/hcnt_9" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_addrgen1/addr_10" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_addrgen1/addr_11" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_addrgen1/addr_12" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_addrgen1/addr_13" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_addrgen1/addr_14" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_addrgen1/addr_15" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_addrgen1/addr_16" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_addrgen1/addr_17" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_addrgen1/addr_18" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_ov7670capt1/we_reg" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "resend2_BRB0" has the property IOB=TRUE, but
-   it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "resend2_BRB1" has the property IOB=TRUE, but
-   it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "resend2_BRB2" has the property IOB=TRUE, but
-   it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "resend2_BRB3" has the property IOB=TRUE, but
-   it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "inst_vgatiming/vcnt_0" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_vgatiming/vcnt_1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_vgatiming/vcnt_2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_vgatiming/vcnt_3" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_vgatiming/vcnt_4" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_vgatiming/vcnt_5" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_vgatiming/vcnt_6" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_vgatiming/vcnt_7" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_vgatiming/vcnt_8" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_vgatiming/vcnt_9" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_debounce/counter_10" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_debounce/counter_11" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_debounce/counter_20" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_debounce/counter_12" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_debounce/counter_21" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_debounce/counter_13" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_debounce/counter_22" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_debounce/counter_14" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_debounce/counter_23" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_debounce/counter_15" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_debounce/counter_16" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_debounce/counter_17" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_debounce/counter_18" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_debounce/counter_19" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/counter_0" has the property IOB=TRUE, but
-   it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "SCCB/counter_1" has the property IOB=TRUE, but
-   it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "SCCB/counter_2" has the property IOB=TRUE, but
-   it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "SCCB/counter_3" has the property IOB=TRUE, but
-   it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "SCCB/counter_4" has the property IOB=TRUE, but
-   it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "SCCB/counter_5" has the property IOB=TRUE, but
-   it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "SCCB/counter_6" has the property IOB=TRUE, but
-   it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "SCCB/counter_7" has the property IOB=TRUE, but
-   it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "SCCB/counter_8" has the property IOB=TRUE, but
-   it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "SCCB/counter_9" has the property IOB=TRUE, but
-   it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "Registers/cmd_reg_0" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "Registers/cmd_reg_1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "Registers/cmd_reg_2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "Registers/cmd_reg_3" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "Registers/cmd_reg_4" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "Registers/cmd_reg_5" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "Registers/cmd_reg_6" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "Registers/cmd_reg_7" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "Registers/cmd_reg_8" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "Registers/cmd_reg_9" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/counter_15_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/counter_16_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/counter_17_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/counter_18_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/counter_19_BRB0" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/counter_19_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/busy_sr_0" has the property IOB=TRUE, but
-   it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "SCCB/busy_sr_1" has the property IOB=TRUE, but
-   it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "SCCB/busy_sr_2" has the property IOB=TRUE, but
-   it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "inst_ov7670capt1/address_11_BRB0" has the
-   property IOB=TRUE, but it did not join an IO component because it is not
-   connected to any IO element.
-WARNING:Pack:2780 - The register "inst_ov7670capt1/address_12_BRB0" has the
-   property IOB=TRUE, but it did not join an IO component because it is not
-   connected to any IO element.
-WARNING:Pack:2780 - The register "inst_ov7670capt1/address_13_BRB0" has the
-   property IOB=TRUE, but it did not join an IO component because it is not
-   connected to any IO element.
-WARNING:Pack:2780 - The register "inst_ov7670capt1/address_14_BRB1" has the
-   property IOB=TRUE, but it did not join an IO component because it is not
-   connected to any IO element.
-WARNING:Pack:2780 - The register "inst_ov7670capt1/address_15_BRB1" has the
-   property IOB=TRUE, but it did not join an IO component because it is not
-   connected to any IO element.
-WARNING:Pack:2780 - The register "inst_ov7670capt1/address_16_BRB1" has the
-   property IOB=TRUE, but it did not join an IO component because it is not
-   connected to any IO element.
-WARNING:Pack:2780 - The register "inst_ov7670capt1/address_17_BRB0" has the
-   property IOB=TRUE, but it did not join an IO component because it is not
-   connected to any IO element.
-WARNING:Pack:2780 - The register "inst_ov7670capt1/address_17_BRB1" has the
-   property IOB=TRUE, but it did not join an IO component because it is not
-   connected to any IO element.
-WARNING:Pack:2780 - The register "inst_ov7670capt1/address_17_BRB2" has the
-   property IOB=TRUE, but it did not join an IO component because it is not
-   connected to any IO element.
-WARNING:Pack:2780 - The register "inst_ov7670capt1/address_17_BRB3" has the
-   property IOB=TRUE, but it did not join an IO component because it is not
-   connected to any IO element.
-WARNING:Pack:2780 - The register "inst_ov7670capt1/address_18_BRB0" has the
-   property IOB=TRUE, but it did not join an IO component because it is not
-   connected to any IO element.
-WARNING:Pack:2780 - The register "inst_ov7670capt1/address_18_BRB1" has the
-   property IOB=TRUE, but it did not join an IO component because it is not
-   connected to any IO element.
-WARNING:Pack:2780 - The register "counter_10" has the property IOB=TRUE, but it
-   did not join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "counter_11" has the property IOB=TRUE, but it
-   did not join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "counter_12" has the property IOB=TRUE, but it
-   did not join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "inst_addrgen1/addr_0" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_addrgen1/addr_1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_addrgen1/addr_2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_addrgen1/addr_3" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_addrgen1/addr_4" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_addrgen1/addr_5" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_addrgen1/addr_6" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_addrgen1/addr_7" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_addrgen1/addr_8" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_addrgen1/addr_9" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_ov7670capt1/address_0" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_ov7670capt1/address_1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_ov7670capt1/address_2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_ov7670capt1/address_3" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_ov7670capt1/address_4" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_ov7670capt1/address_5" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_ov7670capt1/address_6" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_ov7670capt1/address_7" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_ov7670capt1/address_8" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_ov7670capt1/address_9" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/scaler_0" has the property IOB=TRUE, but
-   it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "SCCB/scaler_1" has the property IOB=TRUE, but
-   it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "SCCB/scaler_2" has the property IOB=TRUE, but
-   it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "inst_ov7670capt1/d_latch_0" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/scaler_3" has the property IOB=TRUE, but
-   it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "SCCB/scaler_4" has the property IOB=TRUE, but
-   it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "SCCB/scaler_5" has the property IOB=TRUE, but
-   it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "SCCB/scaler_6" has the property IOB=TRUE, but
-   it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "SCCB/scaler_7" has the property IOB=TRUE, but
-   it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "inst_ov7670capt1/d_latch_8" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/sioc" has the property IOB=TRUE, but it
-   did not join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "state_FSM_FFd1" has the property IOB=TRUE, but
-   it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "state_FSM_FFd2" has the property IOB=TRUE, but
-   it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "state_FSM_FFd3" has the property IOB=TRUE, but
-   it did not join an IO component because it is not connected to any IO
-   element.
-WARNING:Pack:2780 - The register "SCCB/busy_sr_10_BRB1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/busy_sr_11_BRB2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/busy_sr_12_BRB2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/busy_sr_20_BRB2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/busy_sr_13_BRB2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/busy_sr_21_BRB2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/busy_sr_14_BRB2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/busy_sr_22_BRB2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/busy_sr_15_BRB2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/busy_sr_23_BRB2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/busy_sr_16_BRB2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/busy_sr_24_BRB2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/busy_sr_17_BRB2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/busy_sr_25_BRB2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/busy_sr_18_BRB2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/busy_sr_26_BRB2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/busy_sr_19_BRB2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/busy_sr_27_BRB2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "SCCB/busy_sr_28_BRB2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "w4dcmcnt_0" has the property IOB=TRUE, but it
-   did not join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "w4dcmcnt_1" has the property IOB=TRUE, but it
-   did not join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "w4dcmcnt_2" has the property IOB=TRUE, but it
-   did not join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "w4dcmcnt_3" has the property IOB=TRUE, but it
-   did not join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "w4dcmcnt_4" has the property IOB=TRUE, but it
-   did not join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "w4dcmcnt_5" has the property IOB=TRUE, but it
-   did not join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "w4dcmcnt_6" has the property IOB=TRUE, but it
-   did not join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "w4dcmcnt_7" has the property IOB=TRUE, but it
-   did not join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "w4dcmcnt_8" has the property IOB=TRUE, but it
-   did not join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "w4dcmcnt_9" has the property IOB=TRUE, but it
-   did not join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "w4dcmcnt_10" has the property IOB=TRUE, but it
-   did not join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "w4dcmcnt_11" has the property IOB=TRUE, but it
-   did not join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "w4dcmcnt_12" has the property IOB=TRUE, but it
-   did not join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "w4dcmcnt_13" has the property IOB=TRUE, but it
-   did not join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "w4dcmcnt_14" has the property IOB=TRUE, but it
-   did not join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "w4dcmcnt_15" has the property IOB=TRUE, but it
-   did not join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "w4dcmcnt_16" has the property IOB=TRUE, but it
-   did not join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "w4dcmcnt_17" has the property IOB=TRUE, but it
-   did not join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "w4dcmcnt_18" has the property IOB=TRUE, but it
-   did not join an IO component because it is not connected to any IO element.
-WARNING:Pack:2780 - The register "w4dcmcnt_19" has the property IOB=TRUE, but it
-   did not join an IO component because it is not connected to any IO element.
-WARNING:Place:1019 - A clock IOB / clock component pair have been found that are
-   not placed at an optimal clock IOB / clock site pair. The clock component
-   <clkcambuf_BUFG> is placed at site <BUFGMUX_X1Y10>. The IO component <clkcam>
-   is placed at site <U9>.  This will not allow the use of the fast path between
-   the IO and the Clock buffer. This is normally an ERROR but the
-   CLOCK_DEDICATED_ROUTE constraint was applied on COMP.PIN <clkcam.PAD>
-   allowing your design to continue. This constraint disables all clock placer
-   rules related to the specified COMP.PIN. The use of this override is highly
-   discouraged as it may lead to very poor timing results. It is recommended
-   that this error condition be corrected in the design.
-WARNING:Place:1013 - A clock IOB / DCM component pair have been found that are
-   not placed at an optimal clock IOB / DCM site pair.  The clock component
-   <DCM_pclk1> is placed at site <DCM_X1Y3>.  The clock IO/DCM site can be
-   paired if they are placed/locked in the same quadrant.  The IO component
-   <ov7670_pclk1> is placed at site <L16>.  This will not allow the use of the
-   fast path between the IO and the Clock buffer. This is normally an ERROR but
-   the CLOCK_DEDICATED_ROUTE constraint was applied on COMP.PIN
-   <ov7670_pclk1.PAD> allowing your design to continue. This constraint disables
-   all clock placer rules related to the specified COMP.PIN. The use of this
-   override is highly discouraged as it may lead to very poor timing results. It
-   is recommended that this error condition be corrected in the design.
 WARNING:PhysDesignRules:367 - The signal <sw_IBUF> is incomplete. The signal
    does not drive any load pins in the design.
 WARNING:PhysDesignRules:367 - The signal <clk50_IBUF> is incomplete. The signal
@@ -972,6 +91,10 @@ WARNING:PhysDesignRules:367 - The signal <ov7670_vsync3_IBUF> is incomplete. The
 WARNING:PhysDesignRules:367 - The signal <ov7670_href2_IBUF> is incomplete. The
    signal does not drive any load pins in the design.
 WARNING:PhysDesignRules:367 - The signal <ov7670_href3_IBUF> is incomplete. The
+   signal does not drive any load pins in the design.
+WARNING:PhysDesignRules:367 - The signal <ov7670_pclk2_IBUF> is incomplete. The
+   signal does not drive any load pins in the design.
+WARNING:PhysDesignRules:367 - The signal <ov7670_pclk3_IBUF> is incomplete. The
    signal does not drive any load pins in the design.
 WARNING:PhysDesignRules:367 - The signal <ov7670_data2<0>_IBUF> is incomplete.
    The signal does not drive any load pins in the design.
@@ -1009,34 +132,26 @@ WARNING:PhysDesignRules:367 - The signal <ov7670_data3<7>_IBUF> is incomplete.
 Section 3 - Informational
 -------------------------
 INFO:LIT:243 - Logical network ov7670_href4 has no load.
-INFO:LIT:395 - The above info message is repeated 31 more times for the
+INFO:LIT:395 - The above info message is repeated 34 more times for the
    following (max. 5 shown):
+   ov7670_pclk4,
    ov7670_vsync4,
    ov7670_data4<7>,
    ov7670_data4<6>,
-   ov7670_data4<5>,
-   ov7670_data4<4>
+   ov7670_data4<5>
    To see the details of these info messages, please use the -detail switch.
 INFO:MapLib:562 - No environment variables are currently set.
-INFO:Pack:1716 - Initializing temperature to 85.000 Celsius. (default - Range:
-   -40.000 to 100.000 Celsius)
-INFO:Pack:1720 - Initializing voltage to 1.140 Volts. (default - Range: 1.140 to
-   1.320 Volts)
-INFO:Place:834 - Only a subset of IOs are locked. Out of 38 IOs, 33 are locked
-   and 5 are not locked. If you would like to print the names of these IOs,
-   please set the environment variable XIL_PAR_DESIGN_CHECK_VERBOSE to 1. 
-INFO:Pack:1650 - Map created a placed design.
+INFO:LIT:244 - All of the single ended outputs in this design are using slew
+   rate limited output drivers. The delay on speed critical single ended outputs
+   can be dramatically reduced by designating them as fast outputs.
 INFO:PhysDesignRules:772 - To achieve optimal frequency synthesis performance
    with the CLKFX and CLKFX180 outputs of the DCM comp DCM_cam, consult the
    device Interactive Data Sheet.
-INFO:Map:207 - Power optimization/reduction has been run on this design. Please
-   use XPower to analyze and report the power usage for this design.
 
 Section 4 - Removed Logic Summary
 ---------------------------------
-  12 block(s) removed
    4 block(s) optimized away
-  13 signal(s) removed
+   1 signal(s) removed
 
 Section 5 - Removed Logic
 -------------------------
@@ -1052,36 +167,6 @@ above the place where that logic is listed in the trimming report, then locate
 the lines that are least indented (begin at the leftmost edge).
 
 The signal "inst_framebuffer1/N0" is sourceless and has been removed.
-
-The trimmed logic reported below is either:
-   1. part of a cycle
-   2. part of disabled logic
-   3. a side-effect of other trimmed logic
-
-The signal "clock4a" is unused and has been removed.
-The signal "clock4b" is unused and has been removed.
- Unused block "pclk2_buf" (CKBUF) removed.
-The signal "clock5a" is unused and has been removed.
-The signal "clock5b" is unused and has been removed.
- Unused block "pclk3_buf" (CKBUF) removed.
-The signal "clock6a" is unused and has been removed.
-The signal "clock6b" is unused and has been removed.
- Unused block "pclk4_buf" (CKBUF) removed.
-The signal "ov7670_pclk2" is unused and has been removed.
- Unused block "ov7670_pclk2" (PAD) removed.
-The signal "ov7670_pclk2buf" is unused and has been removed.
- Unused block "pclk2_bufa" (CKBUF) removed.
-The signal "ov7670_pclk3" is unused and has been removed.
- Unused block "ov7670_pclk3" (PAD) removed.
-The signal "ov7670_pclk3buf" is unused and has been removed.
- Unused block "pclk3_bufa" (CKBUF) removed.
-The signal "ov7670_pclk4" is unused and has been removed.
- Unused block "ov7670_pclk4" (PAD) removed.
-The signal "ov7670_pclk4buf" is unused and has been removed.
- Unused block "pclk4_bufa" (CKBUF) removed.
-Unused block "DCM_pclk2" (DCM_SP) removed.
-Unused block "DCM_pclk3" (DCM_SP) removed.
-Unused block "DCM_pclk4" (DCM_SP) removed.
 
 Optimized Block(s):
 TYPE 		BLOCK
@@ -1100,70 +185,72 @@ Section 6 - IOB Properties
 | IOB Name                           | Type             | Direction | IO Standard          | Diff  | Drive    | Slew | Reg (s)      | Resistor | IOB      |
 |                                    |                  |           |                      | Term  | Strength | Rate |              |          | Delay    |
 +---------------------------------------------------------------------------------------------------------------------------------------------------------+
-| anode<0>                           | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
-| anode<1>                           | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
-| anode<2>                           | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
-| anode<3>                           | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
+| anode<0>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| anode<1>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| anode<2>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| anode<3>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | clk50                              | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
 | clkcam                             | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| led1                               | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
-| led2                               | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
+| led1                               | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| led2                               | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | led3                               | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | led4                               | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| ov7670_data1<0>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      | IFF1         |          | 0 / 3    |
-| ov7670_data1<1>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data1<2>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data1<3>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data1<4>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data1<5>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data1<6>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data1<7>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data2<0>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data2<1>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data2<2>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data2<3>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data2<4>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data2<5>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data2<6>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data2<7>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data3<0>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data3<1>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data3<2>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data3<3>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data3<4>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data3<5>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data3<6>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_data3<7>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_href1                       | IBUF             | INPUT     | LVCMOS33             |       |          |      | IFF1         |          | 0 / 3    |
-| ov7670_href2                       | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_href3                       | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_pclk1                       | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_pwdn1                       | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST | OFF1         |          | 0 / 0    |
-| ov7670_pwdn2                       | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
-| ov7670_pwdn3                       | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
+| ov7670_data1<0>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data1<1>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data1<2>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data1<3>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data1<4>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data1<5>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data1<6>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data1<7>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data2<0>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data2<1>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data2<2>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data2<3>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data2<4>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data2<5>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data2<6>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data2<7>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data3<0>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data3<1>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data3<2>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data3<3>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data3<4>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data3<5>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data3<6>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_data3<7>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_href1                       | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_href2                       | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_href3                       | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_pclk1                       | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_pclk2                       | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_pclk3                       | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_pwdn1                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| ov7670_pwdn2                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| ov7670_pwdn3                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | ov7670_pwdn4                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| ov7670_reset1                      | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
-| ov7670_reset2                      | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
-| ov7670_reset3                      | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
+| ov7670_reset1                      | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| ov7670_reset2                      | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| ov7670_reset3                      | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | ov7670_reset4                      | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| ov7670_sioc1                       | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
-| ov7670_sioc2                       | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
-| ov7670_sioc3                       | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
+| ov7670_sioc1                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| ov7670_sioc2                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| ov7670_sioc3                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | ov7670_sioc4                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| ov7670_siod1                       | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
-| ov7670_siod2                       | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
-| ov7670_siod3                       | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
+| ov7670_siod1                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| ov7670_siod2                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| ov7670_siod3                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | ov7670_siod4                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| ov7670_vsync1                      | IBUF             | INPUT     | LVCMOS33             |       |          |      | IFF1         |          | 0 / 3    |
-| ov7670_vsync2                      | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_vsync3                      | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_xclk1                       | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
-| ov7670_xclk2                       | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
-| ov7670_xclk3                       | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
+| ov7670_vsync1                      | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_vsync2                      | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_vsync3                      | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| ov7670_xclk1                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| ov7670_xclk2                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| ov7670_xclk3                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | ov7670_xclk4                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | pb                                 | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
 | sw                                 | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| vga_hsync                          | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW | OFF1         |          | 0 / 0    |
+| vga_hsync                          | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | vga_rgb<0>                         | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | vga_rgb<1>                         | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | vga_rgb<2>                         | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
@@ -1171,8 +258,8 @@ Section 6 - IOB Properties
 | vga_rgb<4>                         | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | vga_rgb<5>                         | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | vga_rgb<6>                         | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| vga_rgb<7>                         | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW | OFF1         |          | 0 / 0    |
-| vga_vsync                          | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW | OFF1         |          | 0 / 0    |
+| vga_rgb<7>                         | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| vga_vsync                          | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 +---------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 Section 7 - RPMs
@@ -1201,15 +288,7 @@ Area Group Information
 
 Section 10 - Timing Report
 --------------------------
-A logic-level (pre-route) timing report can be generated by using Xilinx static
-timing analysis tools, Timing Analyzer (GUI) or TRCE (command line), with the
-mapped NCD and PCF files. Please note that this timing report will be generated
-using estimated delay information. For accurate numbers, please generate a
-timing report with the post Place and Route NCD file.
-
-For more information about the Timing Analyzer, consult the Xilinx Timing
-Analyzer Reference Manual; for more information about TRCE, consult the Xilinx
-Command Line Tools User Guide "TRACE" chapter.
+This design was not run using timing mode.
 
 Section 11 - Configuration String Details
 -----------------------------------------

@@ -168,10 +168,10 @@ signal clock5a,clock5b,clock6a,clock6b : std_logic;
 
 signal resetdcm,resetdcm1 : std_logic;
 
-attribute IOB : string;
-attribute IOB of ov7670_data1,ov7670_data2,ov7670_data3,ov7670_data4 : signal is "TRUE";
-attribute IOB of ov7670_href1,ov7670_href2,ov7670_href3,ov7670_href4 : signal is "TRUE";
-attribute IOB of ov7670_vsync1,ov7670_vsync2,ov7670_vsync3,ov7670_vsync4: signal is "TRUE";
+--attribute IOB : string;
+--attribute IOB of ov7670_data1,ov7670_data2,ov7670_data3,ov7670_data4 : signal is "TRUE";
+--attribute IOB of ov7670_href1,ov7670_href2,ov7670_href3,ov7670_href4 : signal is "TRUE";
+--attribute IOB of ov7670_vsync1,ov7670_vsync2,ov7670_vsync3,ov7670_vsync4: signal is "TRUE";
 
 begin
 
@@ -390,23 +390,11 @@ begin
 				if (w4dcmcnt = C_W4DCM-1) then
 					resetdcm <= '0';
 					w4dcmcnt := 0;
-					state := wait4dcmpclk;
+					state := sa;
 				else
 					resetdcm <= '1';
 					w4dcmcnt := w4dcmcnt + 1;
 					state := wait4dcm;
-				end if;
-			when wait4dcmpclk =>
-				if (w4dcmcnt = C_W4DCM-1) then
-					resetdcm1 <= '0';
-					w4dcmcnt := 0;
-					state := sa;
-					send <= '0';
-					resend2 <= '1';
-				else
-					resetdcm1 <= '1';
-					w4dcmcnt := w4dcmcnt + 1;
-					state := wait4dcmpclk;
 				end if;
 			when sa =>
 				resetdcm <= '0';
@@ -428,13 +416,25 @@ begin
 			when sa1 =>
 				if (counter = C_MAX-1) then
 --					state := sb;
-					state := sa1;
+					state := wait4dcmpclk ;
 					counter := 0;
 					resend2 <= '1';
 				else
 					state := sa1;
 					counter := counter + 1;
 					resend2 <= '0';
+				end if;
+			when wait4dcmpclk =>
+				if (w4dcmcnt = C_W4DCM-1) then
+					resetdcm1 <= '0';
+					w4dcmcnt := 0;
+					state := se;
+					send <= '0';
+					resend2 <= '1';
+				else
+					resetdcm1 <= '1';
+					w4dcmcnt := w4dcmcnt + 1;
+					state := wait4dcmpclk;
 				end if;
 			when sb =>
 				if (done = '1') then
@@ -524,27 +524,42 @@ end process p0initcam;
 
 ov7670_sioc1 <= sioc when camera1 = '1' else '1';
 ov7670_siod1 <= siod when camera1 = '1' else '1';
-ov7670_sioc2 <= sioc when camera2 = '1' else '1';
-ov7670_siod2 <= siod when camera2 = '1' else '1';
-ov7670_sioc3 <= sioc when camera3 = '1' else '1';
-ov7670_siod3 <= siod when camera3 = '1' else '1';
-ov7670_sioc4 <= sioc when camera4 = '1' else '1';
-ov7670_siod4 <= siod when camera4 = '1' else '1';
+ov7670_sioc2 <= '0';
+ov7670_siod2 <= '0';
+ov7670_sioc3 <= '0';
+ov7670_siod3 <= '0';
+ov7670_sioc4 <= '0';
+ov7670_siod4 <= '0';
+--ov7670_sioc2 <= sioc when camera2 = '1' else '1';
+--ov7670_siod2 <= siod when camera2 = '1' else '1';
+--ov7670_sioc3 <= sioc when camera3 = '1' else '1';
+--ov7670_siod3 <= siod when camera3 = '1' else '1';
+--ov7670_sioc4 <= sioc when camera4 = '1' else '1';
+--ov7670_siod4 <= siod when camera4 = '1' else '1';
 
 OBUF_xclk1 : OBUF port map (O => ov7670_xclk1, I => cc);
-OBUF_xclk2 : OBUF port map (O => ov7670_xclk2, I => cc);
-OBUF_xclk3 : OBUF port map (O => ov7670_xclk3, I => cc);
-OBUF_xclk4 : OBUF port map (O => ov7670_xclk4, I => cc);
+OBUF_xclk2 : ov7670_xclk2 <= '0';
+OBUF_xclk3 : ov7670_xclk3 <= '0';
+OBUF_xclk4 : ov7670_xclk4 <= '0';
+--OBUF_xclk2 : OBUF port map (O => ov7670_xclk2, I => cc);
+--OBUF_xclk3 : OBUF port map (O => ov7670_xclk3, I => cc);
+--OBUF_xclk4 : OBUF port map (O => ov7670_xclk4, I => cc);
 
 ov7670_reset1 <= '0' when resetdcm = '1' else '1';
-ov7670_reset2 <= '0' when resetdcm = '1' else '1';
-ov7670_reset3 <= '0' when resetdcm = '1' else '1';
-ov7670_reset4 <= '0' when resetdcm = '1' else '1';
+ov7670_reset2 <= '1';
+ov7670_reset3 <= '1';
+ov7670_reset4 <= '1';
+--ov7670_reset2 <= '0' when resetdcm = '1' else '1';
+--ov7670_reset3 <= '0' when resetdcm = '1' else '1';
+--ov7670_reset4 <= '0' when resetdcm = '1' else '1';
 
 ov7670_pwdn1 <= '1' when resetdcm = '1' else '0';
-ov7670_pwdn2 <= '1' when resetdcm = '1' else '0';
-ov7670_pwdn3 <= '1' when resetdcm = '1' else '0';
-ov7670_pwdn4 <= '1' when resetdcm = '1' else '0';
+ov7670_pwdn2 <= '0';
+ov7670_pwdn3 <= '0';
+ov7670_pwdn4 <= '0';
+--ov7670_pwdn2 <= '1' when resetdcm = '1' else '0';
+--ov7670_pwdn3 <= '1' when resetdcm = '1' else '0';
+--ov7670_pwdn4 <= '1' when resetdcm = '1' else '0';
 
 --cc <= clkcambuf when sw = '1' else clk25;
 
@@ -668,128 +683,128 @@ RST => resetdcm1 -- DCM asynchronous reset input
 pclk1_bufa : IBUFG generic map (IOSTANDARD => "DEFAULT") port map (O => ov7670_pclk1buf, I => ov7670_pclk1);
 pclk1_buf : BUFG port map (O => clock3b, I => clock3a);
 ov7670_pclk1buf1 <= clock3b;
-	
-DCM_pclk2 : DCM
-generic map (
-CLKDV_DIVIDE => 2.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
-CLKFX_DIVIDE => 2, -- Can be any interger from 1 to 32
-CLKFX_MULTIPLY => 2, -- Can be any integer from 1 to 32
-CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
-CLKIN_PERIOD => 41.667, -- Specify period of input clock
-CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of NONE, FIXED or VARIABLE
-CLK_FEEDBACK => "1X", -- Specify clock feedback of NONE, 1X or 2X
-DESKEW_ADJUST => "SYSTEM_SYNCHRONOUS", -- SOURCE_SYNCHRONOUS, SYSTEM_SYNCHRONOUS or an integer from 0 to 15
-DFS_FREQUENCY_MODE => "LOW", -- HIGH or LOW frequency mode for frequency synthesis
-DLL_FREQUENCY_MODE => "LOW", -- HIGH or LOW frequency mode for DLL
-DUTY_CYCLE_CORRECTION => TRUE, -- Duty cycle correction, TRUE or FALSE
-FACTORY_JF => X"C080", -- FACTORY JF Values
-PHASE_SHIFT => 0, -- Amount of fixed phase shift from -255 to 255
-SIM_MODE => "SAFE", -- Simulation: "SAFE" vs "FAST", see "Synthesis and Simulation
-STARTUP_WAIT => TRUE) -- Delay configuration DONE until DCM LOCK, TRUE/FALSE
-port map (
-CLK0 => clock4a, -- 0 degree DCM CLK ouptput
-CLK180 => open, -- 180 degree DCM CLK output
-CLK270 => open, -- 270 degree DCM CLK output
-CLK2X => open, -- 2X DCM CLK output
-CLK2X180 => open, -- 2X, 180 degree DCM CLK out
-CLK90 => open, -- 90 degree DCM CLK output
-CLKDV => open, -- Divided DCM CLK out (CLKDV_DIVIDE)
-CLKFX => open, -- DCM CLK synthesis out (M/D)
-CLKFX180 => open, -- 180 degree CLK synthesis out
-LOCKED => open, -- DCM LOCK status output
-PSDONE => open, -- Dynamic phase adjust done output
-STATUS => open, -- 8-bit DCM status bits output
-CLKFB => clock4b, -- DCM clock feedback
-CLKIN => ov7670_pclk2buf, -- Clock input (from IBUFG, BUFG or DCM)
-PSCLK => '0', -- Dynamic phase adjust clock input
-PSEN => '0', -- Dynamic phase adjust enable input
-PSINCDEC => '0', -- Dynamic phase adjust increment/decrement
-RST => resetdcm1 -- DCM asynchronous reset input
-);
-pclk2_bufa : IBUFG generic map (IOSTANDARD => "DEFAULT") port map (O => ov7670_pclk2buf, I => ov7670_pclk2);
-pclk2_buf : BUFG port map (O => clock4b, I => clock4a);
-ov7670_pclk2buf1 <= clock4b;
-
-DCM_pclk3 : DCM
-generic map (
-CLKDV_DIVIDE => 2.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
-CLKFX_DIVIDE => 2, -- Can be any interger from 1 to 32
-CLKFX_MULTIPLY => 2, -- Can be any integer from 1 to 32
-CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
-CLKIN_PERIOD => 41.667, -- Specify period of input clock
-CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of NONE, FIXED or VARIABLE
-CLK_FEEDBACK => "1X", -- Specify clock feedback of NONE, 1X or 2X
-DESKEW_ADJUST => "SYSTEM_SYNCHRONOUS", -- SOURCE_SYNCHRONOUS, SYSTEM_SYNCHRONOUS or an integer from 0 to 15
-DFS_FREQUENCY_MODE => "LOW", -- HIGH or LOW frequency mode for frequency synthesis
-DLL_FREQUENCY_MODE => "LOW", -- HIGH or LOW frequency mode for DLL
-DUTY_CYCLE_CORRECTION => TRUE, -- Duty cycle correction, TRUE or FALSE
-FACTORY_JF => X"C080", -- FACTORY JF Values
-PHASE_SHIFT => 0, -- Amount of fixed phase shift from -255 to 255
-SIM_MODE => "SAFE", -- Simulation: "SAFE" vs "FAST", see "Synthesis and Simulation
-STARTUP_WAIT => TRUE) -- Delay configuration DONE until DCM LOCK, TRUE/FALSE
-port map (
-CLK0 => clock5a, -- 0 degree DCM CLK ouptput
-CLK180 => open, -- 180 degree DCM CLK output
-CLK270 => open, -- 270 degree DCM CLK output
-CLK2X => open, -- 2X DCM CLK output
-CLK2X180 => open, -- 2X, 180 degree DCM CLK out
-CLK90 => open, -- 90 degree DCM CLK output
-CLKDV => open, -- Divided DCM CLK out (CLKDV_DIVIDE)
-CLKFX => open, -- DCM CLK synthesis out (M/D)
-CLKFX180 => open, -- 180 degree CLK synthesis out
-LOCKED => open, -- DCM LOCK status output
-PSDONE => open, -- Dynamic phase adjust done output
-STATUS => open, -- 8-bit DCM status bits output
-CLKFB => clock5b, -- DCM clock feedback
-CLKIN => ov7670_pclk3buf, -- Clock input (from IBUFG, BUFG or DCM)
-PSCLK => '0', -- Dynamic phase adjust clock input
-PSEN => '0', -- Dynamic phase adjust enable input
-PSINCDEC => '0', -- Dynamic phase adjust increment/decrement
-RST => resetdcm1 -- DCM asynchronous reset input
-);
-pclk3_bufa : IBUFG generic map (IOSTANDARD => "DEFAULT") port map (O => ov7670_pclk3buf, I => ov7670_pclk3);
-pclk3_buf : BUFG port map (O => clock5b, I => clock5a);
-ov7670_pclk3buf1 <= clock5b;
-
-DCM_pclk4 : DCM
-generic map (
-CLKDV_DIVIDE => 2.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
-CLKFX_DIVIDE => 2, -- Can be any interger from 1 to 32
-CLKFX_MULTIPLY => 2, -- Can be any integer from 1 to 32
-CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
-CLKIN_PERIOD => 41.667, -- Specify period of input clock
-CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of NONE, FIXED or VARIABLE
-CLK_FEEDBACK => "1X", -- Specify clock feedback of NONE, 1X or 2X
-DESKEW_ADJUST => "SYSTEM_SYNCHRONOUS", -- SOURCE_SYNCHRONOUS, SYSTEM_SYNCHRONOUS or an integer from 0 to 15
-DFS_FREQUENCY_MODE => "LOW", -- HIGH or LOW frequency mode for frequency synthesis
-DLL_FREQUENCY_MODE => "LOW", -- HIGH or LOW frequency mode for DLL
-DUTY_CYCLE_CORRECTION => TRUE, -- Duty cycle correction, TRUE or FALSE
-FACTORY_JF => X"C080", -- FACTORY JF Values
-PHASE_SHIFT => 0, -- Amount of fixed phase shift from -255 to 255
-SIM_MODE => "SAFE", -- Simulation: "SAFE" vs "FAST", see "Synthesis and Simulation
-STARTUP_WAIT => TRUE) -- Delay configuration DONE until DCM LOCK, TRUE/FALSE
-port map (
-CLK0 => clock6a, -- 0 degree DCM CLK ouptput
-CLK180 => open, -- 180 degree DCM CLK output
-CLK270 => open, -- 270 degree DCM CLK output
-CLK2X => open, -- 2X DCM CLK output
-CLK2X180 => open, -- 2X, 180 degree DCM CLK out
-CLK90 => open, -- 90 degree DCM CLK output
-CLKDV => open, -- Divided DCM CLK out (CLKDV_DIVIDE)
-CLKFX => open, -- DCM CLK synthesis out (M/D)
-CLKFX180 => open, -- 180 degree CLK synthesis out
-LOCKED => open, -- DCM LOCK status output
-PSDONE => open, -- Dynamic phase adjust done output
-STATUS => open, -- 8-bit DCM status bits output
-CLKFB => clock6b, -- DCM clock feedback
-CLKIN => ov7670_pclk4buf, -- Clock input (from IBUFG, BUFG or DCM)
-PSCLK => '0', -- Dynamic phase adjust clock input
-PSEN => '0', -- Dynamic phase adjust enable input
-PSINCDEC => '0', -- Dynamic phase adjust increment/decrement
-RST => resetdcm1 -- DCM asynchronous reset input
-);
-pclk4_bufa : IBUFG generic map (IOSTANDARD => "DEFAULT") port map (O => ov7670_pclk4buf, I => ov7670_pclk4);
-pclk4_buf : BUFG port map (O => clock6b, I => clock6a);
-ov7670_pclk4buf1 <= clock6b;
+--	
+--DCM_pclk2 : DCM
+--generic map (
+--CLKDV_DIVIDE => 2.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
+--CLKFX_DIVIDE => 2, -- Can be any interger from 1 to 32
+--CLKFX_MULTIPLY => 2, -- Can be any integer from 1 to 32
+--CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
+--CLKIN_PERIOD => 41.667, -- Specify period of input clock
+--CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of NONE, FIXED or VARIABLE
+--CLK_FEEDBACK => "1X", -- Specify clock feedback of NONE, 1X or 2X
+--DESKEW_ADJUST => "SYSTEM_SYNCHRONOUS", -- SOURCE_SYNCHRONOUS, SYSTEM_SYNCHRONOUS or an integer from 0 to 15
+--DFS_FREQUENCY_MODE => "LOW", -- HIGH or LOW frequency mode for frequency synthesis
+--DLL_FREQUENCY_MODE => "LOW", -- HIGH or LOW frequency mode for DLL
+--DUTY_CYCLE_CORRECTION => TRUE, -- Duty cycle correction, TRUE or FALSE
+--FACTORY_JF => X"C080", -- FACTORY JF Values
+--PHASE_SHIFT => 0, -- Amount of fixed phase shift from -255 to 255
+--SIM_MODE => "SAFE", -- Simulation: "SAFE" vs "FAST", see "Synthesis and Simulation
+--STARTUP_WAIT => TRUE) -- Delay configuration DONE until DCM LOCK, TRUE/FALSE
+--port map (
+--CLK0 => clock4a, -- 0 degree DCM CLK ouptput
+--CLK180 => open, -- 180 degree DCM CLK output
+--CLK270 => open, -- 270 degree DCM CLK output
+--CLK2X => open, -- 2X DCM CLK output
+--CLK2X180 => open, -- 2X, 180 degree DCM CLK out
+--CLK90 => open, -- 90 degree DCM CLK output
+--CLKDV => open, -- Divided DCM CLK out (CLKDV_DIVIDE)
+--CLKFX => open, -- DCM CLK synthesis out (M/D)
+--CLKFX180 => open, -- 180 degree CLK synthesis out
+--LOCKED => open, -- DCM LOCK status output
+--PSDONE => open, -- Dynamic phase adjust done output
+--STATUS => open, -- 8-bit DCM status bits output
+--CLKFB => clock4b, -- DCM clock feedback
+--CLKIN => ov7670_pclk2buf, -- Clock input (from IBUFG, BUFG or DCM)
+--PSCLK => '0', -- Dynamic phase adjust clock input
+--PSEN => '0', -- Dynamic phase adjust enable input
+--PSINCDEC => '0', -- Dynamic phase adjust increment/decrement
+--RST => resetdcm1 -- DCM asynchronous reset input
+--);
+--pclk2_bufa : IBUFG generic map (IOSTANDARD => "DEFAULT") port map (O => ov7670_pclk2buf, I => ov7670_pclk2);
+--pclk2_buf : BUFG port map (O => clock4b, I => clock4a);
+--ov7670_pclk2buf1 <= clock4b;
+--
+--DCM_pclk3 : DCM
+--generic map (
+--CLKDV_DIVIDE => 2.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
+--CLKFX_DIVIDE => 2, -- Can be any interger from 1 to 32
+--CLKFX_MULTIPLY => 2, -- Can be any integer from 1 to 32
+--CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
+--CLKIN_PERIOD => 41.667, -- Specify period of input clock
+--CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of NONE, FIXED or VARIABLE
+--CLK_FEEDBACK => "1X", -- Specify clock feedback of NONE, 1X or 2X
+--DESKEW_ADJUST => "SYSTEM_SYNCHRONOUS", -- SOURCE_SYNCHRONOUS, SYSTEM_SYNCHRONOUS or an integer from 0 to 15
+--DFS_FREQUENCY_MODE => "LOW", -- HIGH or LOW frequency mode for frequency synthesis
+--DLL_FREQUENCY_MODE => "LOW", -- HIGH or LOW frequency mode for DLL
+--DUTY_CYCLE_CORRECTION => TRUE, -- Duty cycle correction, TRUE or FALSE
+--FACTORY_JF => X"C080", -- FACTORY JF Values
+--PHASE_SHIFT => 0, -- Amount of fixed phase shift from -255 to 255
+--SIM_MODE => "SAFE", -- Simulation: "SAFE" vs "FAST", see "Synthesis and Simulation
+--STARTUP_WAIT => TRUE) -- Delay configuration DONE until DCM LOCK, TRUE/FALSE
+--port map (
+--CLK0 => clock5a, -- 0 degree DCM CLK ouptput
+--CLK180 => open, -- 180 degree DCM CLK output
+--CLK270 => open, -- 270 degree DCM CLK output
+--CLK2X => open, -- 2X DCM CLK output
+--CLK2X180 => open, -- 2X, 180 degree DCM CLK out
+--CLK90 => open, -- 90 degree DCM CLK output
+--CLKDV => open, -- Divided DCM CLK out (CLKDV_DIVIDE)
+--CLKFX => open, -- DCM CLK synthesis out (M/D)
+--CLKFX180 => open, -- 180 degree CLK synthesis out
+--LOCKED => open, -- DCM LOCK status output
+--PSDONE => open, -- Dynamic phase adjust done output
+--STATUS => open, -- 8-bit DCM status bits output
+--CLKFB => clock5b, -- DCM clock feedback
+--CLKIN => ov7670_pclk3buf, -- Clock input (from IBUFG, BUFG or DCM)
+--PSCLK => '0', -- Dynamic phase adjust clock input
+--PSEN => '0', -- Dynamic phase adjust enable input
+--PSINCDEC => '0', -- Dynamic phase adjust increment/decrement
+--RST => resetdcm1 -- DCM asynchronous reset input
+--);
+--pclk3_bufa : IBUFG generic map (IOSTANDARD => "DEFAULT") port map (O => ov7670_pclk3buf, I => ov7670_pclk3);
+--pclk3_buf : BUFG port map (O => clock5b, I => clock5a);
+--ov7670_pclk3buf1 <= clock5b;
+--
+--DCM_pclk4 : DCM
+--generic map (
+--CLKDV_DIVIDE => 2.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
+--CLKFX_DIVIDE => 2, -- Can be any interger from 1 to 32
+--CLKFX_MULTIPLY => 2, -- Can be any integer from 1 to 32
+--CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
+--CLKIN_PERIOD => 41.667, -- Specify period of input clock
+--CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of NONE, FIXED or VARIABLE
+--CLK_FEEDBACK => "1X", -- Specify clock feedback of NONE, 1X or 2X
+--DESKEW_ADJUST => "SYSTEM_SYNCHRONOUS", -- SOURCE_SYNCHRONOUS, SYSTEM_SYNCHRONOUS or an integer from 0 to 15
+--DFS_FREQUENCY_MODE => "LOW", -- HIGH or LOW frequency mode for frequency synthesis
+--DLL_FREQUENCY_MODE => "LOW", -- HIGH or LOW frequency mode for DLL
+--DUTY_CYCLE_CORRECTION => TRUE, -- Duty cycle correction, TRUE or FALSE
+--FACTORY_JF => X"C080", -- FACTORY JF Values
+--PHASE_SHIFT => 0, -- Amount of fixed phase shift from -255 to 255
+--SIM_MODE => "SAFE", -- Simulation: "SAFE" vs "FAST", see "Synthesis and Simulation
+--STARTUP_WAIT => TRUE) -- Delay configuration DONE until DCM LOCK, TRUE/FALSE
+--port map (
+--CLK0 => clock6a, -- 0 degree DCM CLK ouptput
+--CLK180 => open, -- 180 degree DCM CLK output
+--CLK270 => open, -- 270 degree DCM CLK output
+--CLK2X => open, -- 2X DCM CLK output
+--CLK2X180 => open, -- 2X, 180 degree DCM CLK out
+--CLK90 => open, -- 90 degree DCM CLK output
+--CLKDV => open, -- Divided DCM CLK out (CLKDV_DIVIDE)
+--CLKFX => open, -- DCM CLK synthesis out (M/D)
+--CLKFX180 => open, -- 180 degree CLK synthesis out
+--LOCKED => open, -- DCM LOCK status output
+--PSDONE => open, -- Dynamic phase adjust done output
+--STATUS => open, -- 8-bit DCM status bits output
+--CLKFB => clock6b, -- DCM clock feedback
+--CLKIN => ov7670_pclk4buf, -- Clock input (from IBUFG, BUFG or DCM)
+--PSCLK => '0', -- Dynamic phase adjust clock input
+--PSEN => '0', -- Dynamic phase adjust enable input
+--PSINCDEC => '0', -- Dynamic phase adjust increment/decrement
+--RST => resetdcm1 -- DCM asynchronous reset input
+--);
+--pclk4_bufa : IBUFG generic map (IOSTANDARD => "DEFAULT") port map (O => ov7670_pclk4buf, I => ov7670_pclk4);
+--pclk4_buf : BUFG port map (O => clock6b, I => clock6a);
+--ov7670_pclk4buf1 <= clock6b;
 
 end Structural;
