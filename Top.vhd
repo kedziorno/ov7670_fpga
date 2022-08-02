@@ -189,15 +189,15 @@ begin
 
 	anode <= "1111";
 
---	led1 <= ov7670_data1(0) and ov7670_data1(1) and ov7670_data1(3) and ov7670_data1(4) and ov7670_data1(5) and ov7670_data1(6) and ov7670_data1(7);
---	led2 <= ov7670_data2(0) and ov7670_data2(1) and ov7670_data2(3) and ov7670_data2(4) and ov7670_data2(5) and ov7670_data2(6) and ov7670_data2(7);
---	led3 <= ov7670_data3(0) and ov7670_data3(1) and ov7670_data3(3) and ov7670_data3(4) and ov7670_data3(5) and ov7670_data3(6) and ov7670_data3(7);
---	led4 <= ov7670_data4(0) and ov7670_data4(1) and ov7670_data4(3) and ov7670_data4(4) and ov7670_data4(5) and ov7670_data4(6) and ov7670_data4(7);
+	led1 <= ov7670_data1(0) and ov7670_data1(1) and ov7670_data1(2) and ov7670_data1(3) and ov7670_data1(4) and ov7670_data1(5) and ov7670_data1(6) and ov7670_data1(7);
+	led2 <= ov7670_data2(0) and ov7670_data2(1) and ov7670_data2(2) and ov7670_data2(3) and ov7670_data2(4) and ov7670_data2(5) and ov7670_data2(6) and ov7670_data2(7);
+	led3 <= ov7670_data3(0) and ov7670_data3(1) and ov7670_data3(2) and ov7670_data3(3) and ov7670_data3(4) and ov7670_data3(5) and ov7670_data3(6) and ov7670_data3(7);
+	led4 <= ov7670_data4(0) and ov7670_data4(1) and ov7670_data4(2) and ov7670_data4(3) and ov7670_data4(4) and ov7670_data4(5) and ov7670_data4(6) and ov7670_data4(7);
 
-	led1 <= '0';
-	led2 <= '0';
-	led3 <= '0';
-	led4 <= '0';
+--	led1 <= '0';
+--	led2 <= '0';
+--	led3 <= '0';
+--	led4 <= '0';
 
 --	inst_clk25: clk25gen port map(
 --		reset => resend,
