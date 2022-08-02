@@ -30,6 +30,7 @@ G_WAIT1 : integer := 20 -- wait for reset dcm and cameras
 			  anode : out std_logic_vector(3 downto 0);
 				-- OV7670
 				ov7670_reset1,ov7670_reset2,ov7670_reset3,ov7670_reset4  : out  STD_LOGIC;
+				ov7670_pwdn1,ov7670_pwdn2,ov7670_pwdn3,ov7670_pwdn4: out  STD_LOGIC;
 				ov7670_pclk1,ov7670_pclk2,ov7670_pclk3,ov7670_pclk4  : in  STD_LOGIC; -- Pmod JB8 --R16
 				ov7670_xclk1,ov7670_xclk2,ov7670_xclk3,ov7670_xclk4  : out STD_LOGIC; -- Pmod JB2 --R18
 				ov7670_vsync1,ov7670_vsync2,ov7670_vsync3,ov7670_vsync4 : in  STD_LOGIC; -- Pmod JB9 --T18
@@ -170,11 +171,10 @@ signal clock5a,clock5b,clock6a,clock6b : std_logic;
 
 signal resetdcm,resetdcm1 : std_logic;
 
---attribute IOB : string;
---attribute IOB of ov7670_pclk1 : signal is "TRUE";
---attribute IOB of ov7670_pclk2 : signal is "TRUE";
---attribute IOB of ov7670_pclk3 : signal is "TRUE";
---attribute IOB of ov7670_pclk4 : signal is "TRUE";
+attribute IOB : string;
+attribute IOB of ov7670_data1,ov7670_data2,ov7670_data3,ov7670_data4 : signal is "TRUE";
+attribute IOB of ov7670_href1,ov7670_href2,ov7670_href3,ov7670_href4 : signal is "TRUE";
+attribute IOB of ov7670_vsync1,ov7670_vsync2,ov7670_vsync3,ov7670_vsync4: signal is "TRUE";
 
 begin
 
@@ -542,6 +542,11 @@ ov7670_reset1 <= '0' when resetdcm = '1' else '1';
 ov7670_reset2 <= '0' when resetdcm = '1' else '1';
 ov7670_reset3 <= '0' when resetdcm = '1' else '1';
 ov7670_reset4 <= '0' when resetdcm = '1' else '1';
+
+ov7670_pwdn1 <= '1' when resetdcm = '1' else '0';
+ov7670_pwdn2 <= '1' when resetdcm = '1' else '0';
+ov7670_pwdn3 <= '1' when resetdcm = '1' else '0';
+ov7670_pwdn4 <= '1' when resetdcm = '1' else '0';
 
 --cc <= clkcambuf when sw = '1' else clk25;
 
