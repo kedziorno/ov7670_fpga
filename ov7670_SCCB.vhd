@@ -7,6 +7,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 entity ov7670_SCCB is
+Generic (FE_WAIT_BITS : integer := 0);
     Port ( reset : in std_logic; clk : in  STD_LOGIC;
            reg_value : in  STD_LOGIC_VECTOR (7 downto 0);
            slave_addr : in  STD_LOGIC_VECTOR (7 downto 0);
@@ -39,22 +40,38 @@ begin
 		end if;
 	end process;
 
-	process(clk,reset) begin
+	process(clk,reset)
+	constant C_MAX : integer := 2**FE_WAIT_BITS;
+	variable counter : integer  range 0 to C_MAX-1;
+	begin
 	if (reset = '1') then
 		scaler <= x"01";
 		busy_sr <= (others => '0');
 		data_sr <= (others => '1');
 		sioc <= '1';
 		taken <= '0';
+		counter := 0;
 		elsif rising_edge(clk) then
 			taken <= '0';
 			if busy_sr(31) = '0' then
 				sioc <= '1';
 				if send = '1' then
 					if scaler = "00000000" then
-						data_sr <= "100" & slave_addr & '0' & addr_reg & '0' & reg_value & '0' & "01";-- see pg.10
-						busy_sr <= "111" & "111111111" & "111111111" & "111111111" & "11"; -- pg.10
-						taken <= '1';
+						if (addr_reg = x"ff" and reg_value = x"fe") then
+							data_sr <= (others => '1');-- see pg.10
+							busy_sr <= (others => '0'); -- pg.10
+							if (counter = C_MAX-1) then
+								counter := 0;
+								taken <= '1';
+							else
+								counter := counter + 1;
+								taken <= '0';
+							end if;
+						else
+							data_sr <= "100" & slave_addr & '0' & addr_reg & '0' & reg_value & '0' & "01";-- see pg.10
+							busy_sr <= "111" & "111111111" & "111111111" & "111111111" & "11"; -- pg.10
+							taken <= '1';
+						end if;
 					else
 						scaler <= scaler+1; -- this only happens once each cycle
 					end if;
