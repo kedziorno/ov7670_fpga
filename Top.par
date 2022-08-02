@@ -1,7 +1,7 @@
 Release 14.7 par P.20131013 (lin64)
 Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
 
-xilinx::  Mon Aug 01 18:00:02 2022
+xilinx::  Mon Aug 01 19:13:53 2022
 
 par -w -intstyle ise -pl high -rl high -xe n -t 1 -power on Top_map.ncd Top.ncd
 Top.pcf 
@@ -22,7 +22,7 @@ Device speed data version:  "PRODUCTION 1.27 2013-10-13".
 
 Design Summary Report:
 
- Number of External IOBs                          76 out of 250    30%
+ Number of External IOBs                          80 out of 250    32%
 
    Number of External Input IOBs                 42
 
@@ -30,10 +30,10 @@ Design Summary Report:
         Number of LOCed External Input IBUFs     37 out of 42     88%
 
 
-   Number of External Output IOBs                34
+   Number of External Output IOBs                38
 
-      Number of External Output IOBs             34
-        Number of LOCed External Output IOBs     30 out of 34     88%
+      Number of External Output IOBs             38
+        Number of LOCed External Output IOBs     33 out of 38     86%
 
 
    Number of External Bidir IOBs                  0
@@ -42,7 +42,7 @@ Design Summary Report:
    Number of BUFGMUXs                        9 out of 24     37%
    Number of DCMs                            6 out of 8      75%
    Number of RAMB16s                        16 out of 28     57%
-   Number of Slices                        488 out of 8672    5%
+   Number of Slices                        494 out of 8672    5%
       Number of SLICEMs                      0 out of 4336    0%
 
 
@@ -76,13 +76,13 @@ WARNING:Par:288 - The signal ov7670_data3<7>_IBUF has no load.  PAR will not att
 Starting Router
 
 
-Phase  1  : 3680 unrouted;      REAL time: 9 secs 
+Phase  1  : 3687 unrouted;      REAL time: 9 secs 
 
-Phase  2  : 3258 unrouted;      REAL time: 9 secs 
+Phase  2  : 3264 unrouted;      REAL time: 9 secs 
 
-Phase  3  : 1064 unrouted;      REAL time: 11 secs 
+Phase  3  : 1061 unrouted;      REAL time: 11 secs 
 
-Phase  4  : 1064 unrouted; (Setup:0, Hold:0, Component Switching Limit:0)     REAL time: 12 secs 
+Phase  4  : 1061 unrouted; (Setup:0, Hold:0, Component Switching Limit:0)     REAL time: 12 secs 
 
 Phase  5  : 0 unrouted; (Setup:0, Hold:0, Component Switching Limit:0)     REAL time: 12 secs 
 
@@ -113,17 +113,17 @@ Generating Clock Report
 +---------------------+--------------+------+------+------------+-------------+
 |        Clock Net    |   Resource   |Locked|Fanout|Net Skew(ns)|Max Delay(ns)|
 +---------------------+--------------+------+------+------------+-------------+
-|           clkcambuf |  BUFGMUX_X1Y1| No   |  130 |  0.125     |  0.301      |
+|           clkcambuf |  BUFGMUX_X3Y8| No   |  141 |  0.197     |  0.290      |
 +---------------------+--------------+------+------+------------+-------------+
-|             clock3b |  BUFGMUX_X3Y4| No   |   34 |  0.056     |  0.219      |
+|             clock3b |  BUFGMUX_X3Y6| No   |   33 |  0.059     |  0.219      |
 +---------------------+--------------+------+------+------------+-------------+
-|             clock4b | BUFGMUX_X1Y10| No   |   33 |  0.112     |  0.377      |
+|             clock4b | BUFGMUX_X2Y10| No   |   33 |  0.175     |  0.373      |
 +---------------------+--------------+------+------+------------+-------------+
-|             clock5b |  BUFGMUX_X1Y0| No   |   35 |  0.195     |  0.370      |
+|             clock5b | BUFGMUX_X1Y10| No   |   33 |  0.148     |  0.344      |
 +---------------------+--------------+------+------+------------+-------------+
-|             clock6b | BUFGMUX_X2Y10| No   |   34 |  0.183     |  0.373      |
+|             clock6b |  BUFGMUX_X1Y0| No   |   33 |  0.187     |  0.373      |
 +---------------------+--------------+------+------+------------+-------------+
-|               clk25 |  BUFGMUX_X2Y0| No   |  109 |  0.206     |  0.375      |
+|               clk25 |  BUFGMUX_X2Y1| No   |  103 |  0.197     |  0.373      |
 +---------------------+--------------+------+------+------------+-------------+
 
 * Net Skew is the difference between the minimum and maximum routing
@@ -145,27 +145,27 @@ Asterisk (*) preceding a constraint indicates it was not met.
   Constraint                                |    Check    | Worst Case |  Best Case | Timing |   Timing   
                                             |             |    Slack   | Achievable | Errors |    Score   
 ----------------------------------------------------------------------------------------------------------
-  TS_clkcam = PERIOD TIMEGRP "clkcam" 10 ns | SETUP       |     2.778ns|     7.222ns|       0|           0
-   HIGH 50% INPUT_JITTER 0.08 ns            | HOLD        |     1.138ns|            |       0|           0
+  TS_clkcam = PERIOD TIMEGRP "clkcam" 10 ns | SETUP       |     2.122ns|     7.878ns|       0|           0
+   HIGH 50% INPUT_JITTER 0.08 ns            | HOLD        |     1.104ns|            |       0|           0
 ----------------------------------------------------------------------------------------------------------
-  TS_clk251 = PERIOD TIMEGRP "clk251" TS_cl | SETUP       |    12.051ns|    15.898ns|       0|           0
-  kcam * 4 HIGH 50% INPUT_JITTER 0.08       | HOLD        |     0.942ns|            |       0|           0
+  TS_clk251 = PERIOD TIMEGRP "clk251" TS_cl | SETUP       |    11.611ns|    16.778ns|       0|           0
+  kcam * 4 HIGH 50% INPUT_JITTER 0.08       | HOLD        |     1.072ns|            |       0|           0
      ns                                     |             |            |            |        |            
 ----------------------------------------------------------------------------------------------------------
-  TS_clock5a = PERIOD TIMEGRP "clock5a" TS_ | SETUP       |    13.786ns|    14.095ns|       0|           0
-  ov7670_pclk3 HIGH 50% INPUT_JITTER        | HOLD        |     0.912ns|            |       0|           0
+  TS_clock6a = PERIOD TIMEGRP "clock6a" TS_ | SETUP       |    13.714ns|    14.239ns|       0|           0
+  ov7670_pclk4 HIGH 50% INPUT_JITTER        | HOLD        |     0.801ns|            |       0|           0
     0.1 ns                                  |             |            |            |        |            
 ----------------------------------------------------------------------------------------------------------
-  TS_clock4a = PERIOD TIMEGRP "clock4a" TS_ | SETUP       |    14.093ns|    13.481ns|       0|           0
-  ov7670_pclk2 HIGH 50% INPUT_JITTER        | HOLD        |     0.659ns|            |       0|           0
+  TS_clock4a = PERIOD TIMEGRP "clock4a" TS_ | SETUP       |    14.786ns|    12.095ns|       0|           0
+  ov7670_pclk2 HIGH 50% INPUT_JITTER        | HOLD        |     1.278ns|            |       0|           0
     0.1 ns                                  |             |            |            |        |            
 ----------------------------------------------------------------------------------------------------------
-  TS_clock6a = PERIOD TIMEGRP "clock6a" TS_ | SETUP       |    14.627ns|    12.413ns|       0|           0
-  ov7670_pclk4 HIGH 50% INPUT_JITTER        | HOLD        |     0.766ns|            |       0|           0
+  TS_clock5a = PERIOD TIMEGRP "clock5a" TS_ | SETUP       |    15.129ns|    11.409ns|       0|           0
+  ov7670_pclk3 HIGH 50% INPUT_JITTER        | HOLD        |     1.327ns|            |       0|           0
     0.1 ns                                  |             |            |            |        |            
 ----------------------------------------------------------------------------------------------------------
-  TS_clock3a = PERIOD TIMEGRP "clock3a" TS_ | SETUP       |    16.113ns|     9.441ns|       0|           0
-  ov7670_pclk1 HIGH 50% INPUT_JITTER        | HOLD        |     1.031ns|            |       0|           0
+  TS_clock3a = PERIOD TIMEGRP "clock3a" TS_ | SETUP       |    16.059ns|     9.549ns|       0|           0
+  ov7670_pclk1 HIGH 50% INPUT_JITTER        | HOLD        |     0.623ns|            |       0|           0
     0.1 ns                                  |             |            |            |        |            
 ----------------------------------------------------------------------------------------------------------
   TS_ov7670_pclk1 = PERIOD TIMEGRP "ov7670_ | MINLOWPULSE |    21.666ns|    20.000ns|       0|           0
@@ -196,8 +196,8 @@ Derived Constraints for TS_clkcam
 |           Constraint          | Requirement |-------------+-------------|-------------+-------------|-------------+-------------|
 |                               |             |   Direct    | Derivative  |   Direct    | Derivative  |   Direct    | Derivative  |
 +-------------------------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+
-|TS_clkcam                      |     10.000ns|      7.222ns|      3.974ns|            0|            0|         4698|         2411|
-| TS_clk251                     |     40.000ns|     15.898ns|          N/A|            0|            0|         2411|            0|
+|TS_clkcam                      |     10.000ns|      7.878ns|      4.194ns|            0|            0|         4722|         2411|
+| TS_clk251                     |     40.000ns|     16.778ns|          N/A|            0|            0|         2411|            0|
 +-------------------------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+
 
 Derived Constraints for TS_ov7670_pclk1
@@ -206,8 +206,8 @@ Derived Constraints for TS_ov7670_pclk1
 |           Constraint          | Requirement |-------------+-------------|-------------+-------------|-------------+-------------|
 |                               |             |   Direct    | Derivative  |   Direct    | Derivative  |   Direct    | Derivative  |
 +-------------------------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+
-|TS_ov7670_pclk1                |     41.667ns|     20.000ns|      9.441ns|            0|            0|            0|          606|
-| TS_clock3a                    |     41.667ns|      9.441ns|          N/A|            0|            0|          606|            0|
+|TS_ov7670_pclk1                |     41.667ns|     20.000ns|      9.549ns|            0|            0|            0|          606|
+| TS_clock3a                    |     41.667ns|      9.549ns|          N/A|            0|            0|          606|            0|
 +-------------------------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+
 
 Derived Constraints for TS_ov7670_pclk2
@@ -216,8 +216,8 @@ Derived Constraints for TS_ov7670_pclk2
 |           Constraint          | Requirement |-------------+-------------|-------------+-------------|-------------+-------------|
 |                               |             |   Direct    | Derivative  |   Direct    | Derivative  |   Direct    | Derivative  |
 +-------------------------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+
-|TS_ov7670_pclk2                |     41.667ns|     20.000ns|     13.481ns|            0|            0|            0|          606|
-| TS_clock4a                    |     41.667ns|     13.481ns|          N/A|            0|            0|          606|            0|
+|TS_ov7670_pclk2                |     41.667ns|     20.000ns|     12.095ns|            0|            0|            0|          606|
+| TS_clock4a                    |     41.667ns|     12.095ns|          N/A|            0|            0|          606|            0|
 +-------------------------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+
 
 Derived Constraints for TS_ov7670_pclk3
@@ -226,8 +226,8 @@ Derived Constraints for TS_ov7670_pclk3
 |           Constraint          | Requirement |-------------+-------------|-------------+-------------|-------------+-------------|
 |                               |             |   Direct    | Derivative  |   Direct    | Derivative  |   Direct    | Derivative  |
 +-------------------------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+
-|TS_ov7670_pclk3                |     41.667ns|     20.000ns|     14.095ns|            0|            0|            0|          606|
-| TS_clock5a                    |     41.667ns|     14.095ns|          N/A|            0|            0|          606|            0|
+|TS_ov7670_pclk3                |     41.667ns|     20.000ns|     11.409ns|            0|            0|            0|          606|
+| TS_clock5a                    |     41.667ns|     11.409ns|          N/A|            0|            0|          606|            0|
 +-------------------------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+
 
 Derived Constraints for TS_ov7670_pclk4
@@ -236,8 +236,8 @@ Derived Constraints for TS_ov7670_pclk4
 |           Constraint          | Requirement |-------------+-------------|-------------+-------------|-------------+-------------|
 |                               |             |   Direct    | Derivative  |   Direct    | Derivative  |   Direct    | Derivative  |
 +-------------------------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+
-|TS_ov7670_pclk4                |     41.667ns|     20.000ns|     12.413ns|            0|            0|            0|          606|
-| TS_clock6a                    |     41.667ns|     12.413ns|          N/A|            0|            0|          606|            0|
+|TS_ov7670_pclk4                |     41.667ns|     20.000ns|     14.239ns|            0|            0|            0|          606|
+| TS_clock6a                    |     41.667ns|     14.239ns|          N/A|            0|            0|          606|            0|
 +-------------------------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+
 
 All constraints were met.
@@ -254,7 +254,7 @@ WARNING:Par:283 - There are 20 loadless signals in this design. This design will
 Total REAL time to PAR completion: 14 secs 
 Total CPU time to PAR completion: 14 secs 
 
-Peak Memory Usage:  561 MB
+Peak Memory Usage:  562 MB
 
 Placer: Placement generated during map.
 Routing: Completed - No errors found.
