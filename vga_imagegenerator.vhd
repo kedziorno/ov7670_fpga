@@ -7,10 +7,10 @@ use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 entity vga_imagegenerator is
-    Port (	reset : in std_logic; clk : std_logic; Data_in1 : in  STD_LOGIC_VECTOR (2 downto 0);
-						Data_in2 : in  STD_LOGIC_VECTOR (2 downto 0);
-						Data_in3 : in  STD_LOGIC_VECTOR (2 downto 0);
-						Data_in4 : in  STD_LOGIC_VECTOR (2 downto 0);
+    Port (	reset : in std_logic; clk : std_logic; Data_in1 : in  STD_LOGIC_VECTOR (0 downto 0);
+						Data_in2 : in  STD_LOGIC_VECTOR (0 downto 0);
+						Data_in3 : in  STD_LOGIC_VECTOR (0 downto 0);
+						Data_in4 : in  STD_LOGIC_VECTOR (0 downto 0);
 						active_area1 : in  STD_LOGIC;
 						active_area2 : in  STD_LOGIC;
 						active_area3 : in  STD_LOGIC;
@@ -36,10 +36,14 @@ d2 <= (others => '0');
 d3 <= (others => '0');
 d4 <= (others => '0');
 elsif (falling_edge(clk)) then
-d1 <= Data_in1(2)&"00" & Data_in1(1)&"00" & Data_in1(0)&"0";
-d2 <= Data_in2(2)&"00" & Data_in2(1)&"00" & Data_in2(0)&"0";
-d3 <= Data_in3(2)&"00" & Data_in3(1)&"00" & Data_in3(0)&"0";
-d4 <= Data_in4(2)&"00" & Data_in4(1)&"00" & Data_in4(0)&"0";
+--d1 <= Data_in1(2)&"00" & Data_in1(1)&"00" & Data_in1(0)&"0";
+--d2 <= Data_in2(2)&"00" & Data_in2(1)&"00" & Data_in2(0)&"0";
+--d3 <= Data_in3(2)&"00" & Data_in3(1)&"00" & Data_in3(0)&"0";
+--d4 <= Data_in4(2)&"00" & Data_in4(1)&"00" & Data_in4(0)&"0";
+d1 <= Data_in1(0)&"00" & Data_in1(0)&"00" & Data_in1(0)&"0";
+d2 <= Data_in2(0)&"00" & Data_in2(0)&"00" & Data_in2(0)&"0";
+d3 <= Data_in3(0)&"00" & Data_in3(0)&"00" & Data_in3(0)&"0";
+d4 <= Data_in4(0)&"00" & Data_in4(0)&"00" & Data_in4(0)&"0";
 end if;
 end process;
 

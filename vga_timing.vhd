@@ -250,42 +250,42 @@ end process vsync_gen;
 --	end if;
 --end process p0;
 --
-aaproc : process(clk_vga,reset) is
-begin
-if (reset = '1') then
-activeArea1 <= '0';
-activeArea2 <= '0';
-activeArea3 <= '0';
-activeArea4 <= '0';
-elsif (rising_edge(clk_vga)) then
-if ((hcnt >= 0 and hcnt < 160) and (vcnt < 120)) then
-activeArea1 <= '1';
-activeArea2 <= '0';
-activeArea3 <= '0';
-activeArea4 <= '0';
-elsif ((hcnt >= 160 and hcnt < 320) and (vcnt < 120)) then
-activeArea2 <= '1';
-activeArea1 <= '0';
-activeArea3 <= '0';
-activeArea4 <= '0';
-elsif ((hcnt >= 320 and hcnt < 480) and (vcnt < 120)) then
-activeArea3 <= '1';
-activeArea1 <= '0';
-activeArea2 <= '0';
-activeArea4 <= '0';
-elsif ((hcnt >= 480 and hcnt < 640) and (vcnt < 120)) then
-activeArea4 <= '1';
-activeArea1 <= '0';
-activeArea2 <= '0';
-activeArea3 <= '0';
-else
-activeArea4 <= '0';
-activeArea1 <= '0';
-activeArea2 <= '0';
-activeArea3 <= '0';
-end if;
-end if;
-end process;
+--aaproc : process(clk_vga,reset) is
+--begin
+--if (reset = '1') then
+--activeArea1 <= '0';
+--activeArea2 <= '0';
+--activeArea3 <= '0';
+--activeArea4 <= '0';
+--elsif (rising_edge(clk_vga)) then
+--if ((hcnt >= 0 and hcnt < 160) and (vcnt < 120)) then
+--activeArea1 <= '1';
+--activeArea2 <= '0';
+--activeArea3 <= '0';
+--activeArea4 <= '0';
+--elsif ((hcnt >= 160 and hcnt < 320) and (vcnt < 120)) then
+--activeArea2 <= '1';
+--activeArea1 <= '0';
+--activeArea3 <= '0';
+--activeArea4 <= '0';
+--elsif ((hcnt >= 320 and hcnt < 480) and (vcnt < 120)) then
+--activeArea3 <= '1';
+--activeArea1 <= '0';
+--activeArea2 <= '0';
+--activeArea4 <= '0';
+--elsif ((hcnt >= 480 and hcnt < 640) and (vcnt < 120)) then
+--activeArea4 <= '1';
+--activeArea1 <= '0';
+--activeArea2 <= '0';
+--activeArea3 <= '0';
+--else
+--activeArea4 <= '0';
+--activeArea1 <= '0';
+--activeArea2 <= '0';
+--activeArea3 <= '0';
+--end if;
+--end if;
+--end process;
 --
 --activeArea1 <= '1' when (hcnt >= 0 and hcnt < 160) and (vcnt >= 0 and vcnt < 120) else '0';
 --activeArea2 <= '1' when (hcnt >= 160 and hcnt < 320) and (vcnt >= 0 and vcnt < 120) else '0';
@@ -299,6 +299,10 @@ end process;
 --
 Hsync <= h;
 Vsync <= v;
+activeArea1 <= '1' when (hcnt <= HD) and (vcnt <= VD) else '0';
+activeArea2 <= '0';
+activeArea3 <= '0';
+activeArea4 <= '0';
 
 --p3 : process (clkdv_vga,reset,h) is
 --	constant C_PW : integer := 95;
