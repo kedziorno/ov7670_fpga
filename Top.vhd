@@ -17,7 +17,8 @@ use UNISIM.vcomponents.all;
 entity Top is
 Generic (
 G_PB_BITS : integer := 24;
-G_WAIT1 : integer := 20 -- wait for reset dcm and cameras
+G_WAIT1 : integer := 20; -- wait for reset dcm and cameras
+G_FE_WAIT_BITS : integer := 20 -- sccb wait for cameras
 );
 	Port	(	clk50	: in STD_LOGIC; -- Crystal Oscilator 50MHz  --B8
 	clkcam	: in STD_LOGIC; -- Crystal Oscilator 23.9616 MHz  --U9
@@ -61,19 +62,14 @@ Generic (PB_BITS : integer := G_PB_BITS);
 			 output : out STD_LOGIC);
 END COMPONENT;
 
-COMPONENT clk25gen
-	Port ( reset : in std_logic; clk50 : in  STD_LOGIC;
-          clk25 : out  STD_LOGIC);
-END COMPONENT;
-
 COMPONENT ov7670_capture
-Generic (PIXELS : integer := 19200);
+Generic (PIXELS : integer := 307200);
 	Port ( reset : in std_logic; pclk : in  STD_LOGIC;
           vsync : in  STD_LOGIC;
           href : in  STD_LOGIC;
           d : in  STD_LOGIC_VECTOR (7 downto 0);
-          addr : out  STD_LOGIC_VECTOR (14 downto 0);
-          dout : out  STD_LOGIC_VECTOR (2 downto 0);
+          addr : out  STD_LOGIC_VECTOR (18 downto 0);
+          dout : out  STD_LOGIC_VECTOR (0 downto 0);
           we : out  STD_LOGIC_VECTOR (0 downto 0));
 END COMPONENT;
 
@@ -86,6 +82,7 @@ component ov7670_registers
 end component;
 
 component ov7670_SCCB
+Generic (FE_WAIT_BITS : integer := G_FE_WAIT_BITS);
 	Port ( reset : in std_logic; clk : in  STD_LOGIC;
           reg_value : in  STD_LOGIC_VECTOR (7 downto 0);
           slave_addr : in  STD_LOGIC_VECTOR (7 downto 0);
@@ -99,18 +96,18 @@ end component;
 COMPONENT frame_buffer
 	Port ( clkA : in STD_LOGIC;
 			 weA	: in STD_LOGIC_VECTOR(0 downto 0);
-			 addrA: in STD_LOGIC_VECTOR(14 downto 0);
-			 dinA	: in STD_LOGIC_VECTOR(2 downto 0);
+			 addrA: in STD_LOGIC_VECTOR(18 downto 0);
+			 dinA	: in STD_LOGIC_VECTOR(0 downto 0);
 			 clkB : in STD_LOGIC;
-			 addrB: in STD_LOGIC_VECTOR(14 downto 0);
-			 doutB: out STD_LOGIC_VECTOR(2 downto 0));
+			 addrB: in STD_LOGIC_VECTOR(18 downto 0);
+			 doutB: out STD_LOGIC_VECTOR(0 downto 0));
 END COMPONENT;
 
 COMPONENT vga_imagegenerator
-	Port ( reset : in std_logic; clk : std_logic; Data_in1 : in  STD_LOGIC_VECTOR (2 downto 0);
-						Data_in2 : in  STD_LOGIC_VECTOR (2 downto 0);
-						Data_in3 : in  STD_LOGIC_VECTOR (2 downto 0);
-						Data_in4 : in  STD_LOGIC_VECTOR (2 downto 0);
+	Port ( reset : in std_logic; clk : std_logic; Data_in1 : in  STD_LOGIC_VECTOR (0 downto 0);
+						Data_in2 : in  STD_LOGIC_VECTOR (0 downto 0);
+						Data_in3 : in  STD_LOGIC_VECTOR (0 downto 0);
+						Data_in4 : in  STD_LOGIC_VECTOR (0 downto 0);
 						active_area1 : in  STD_LOGIC;
 						active_area2 : in  STD_LOGIC;
 						active_area3 : in  STD_LOGIC;
@@ -119,11 +116,11 @@ COMPONENT vga_imagegenerator
 END COMPONENT;
 
 COMPONENT address_generator
-Generic (PIXELS : integer := 19200);
+Generic (PIXELS : integer := 307200);
 	Port ( reset : in std_logic; clk25 : in STD_LOGIC;
 			 enable : in STD_LOGIC;
 			 vsync : in STD_LOGIC;
-			 address : out STD_LOGIC_VECTOR (14 downto 0));
+			 address : out STD_LOGIC_VECTOR (18 downto 0));
 END COMPONENT;
 
 COMPONENT VGA_timing_synch
@@ -141,10 +138,10 @@ signal resend : STD_LOGIC;
 
 -- RAM
 signal wren1,wren2,wren3,wren4 : STD_LOGIC_VECTOR(0 downto 0);
-signal wr_d1,wr_d2,wr_d3,wr_d4 : STD_LOGIC_VECTOR(2 downto 0);
-signal wr_a1,wr_a2,wr_a3,wr_a4 : STD_LOGIC_VECTOR(14 downto 0);
-signal rd_d1,rd_d2,rd_d3,rd_d4 : STD_LOGIC_VECTOR(2 downto 0);
-signal rd_a1,rd_a2,rd_a3,rd_a4 : STD_LOGIC_VECTOR(14 downto 0);
+signal wr_d1,wr_d2,wr_d3,wr_d4 : STD_LOGIC_VECTOR(0 downto 0);
+signal wr_a1,wr_a2,wr_a3,wr_a4 : STD_LOGIC_VECTOR(18 downto 0);
+signal rd_d1,rd_d2,rd_d3,rd_d4 : STD_LOGIC_VECTOR(0 downto 0);
+signal rd_a1,rd_a2,rd_a3,rd_a4 : STD_LOGIC_VECTOR(18 downto 0);
 
 --VGA
 signal active1,active2,active3,active4 : STD_LOGIC;
@@ -190,14 +187,14 @@ begin
 	anode <= "1111";
 
 	led1 <= ov7670_data1(0) and ov7670_data1(1) and ov7670_data1(2) and ov7670_data1(3) and ov7670_data1(4) and ov7670_data1(5) and ov7670_data1(6) and ov7670_data1(7);
-	led2 <= ov7670_data2(0) and ov7670_data2(1) and ov7670_data2(2) and ov7670_data2(3) and ov7670_data2(4) and ov7670_data2(5) and ov7670_data2(6) and ov7670_data2(7);
-	led3 <= ov7670_data3(0) and ov7670_data3(1) and ov7670_data3(2) and ov7670_data3(3) and ov7670_data3(4) and ov7670_data3(5) and ov7670_data3(6) and ov7670_data3(7);
-	led4 <= ov7670_data4(0) and ov7670_data4(1) and ov7670_data4(2) and ov7670_data4(3) and ov7670_data4(4) and ov7670_data4(5) and ov7670_data4(6) and ov7670_data4(7);
+--	led2 <= ov7670_data2(0) and ov7670_data2(1) and ov7670_data2(2) and ov7670_data2(3) and ov7670_data2(4) and ov7670_data2(5) and ov7670_data2(6) and ov7670_data2(7);
+--	led3 <= ov7670_data3(0) and ov7670_data3(1) and ov7670_data3(2) and ov7670_data3(3) and ov7670_data3(4) and ov7670_data3(5) and ov7670_data3(6) and ov7670_data3(7);
+--	led4 <= ov7670_data4(0) and ov7670_data4(1) and ov7670_data4(2) and ov7670_data4(3) and ov7670_data4(4) and ov7670_data4(5) and ov7670_data4(6) and ov7670_data4(7);
 
 --	led1 <= '0';
---	led2 <= '0';
---	led3 <= '0';
---	led4 <= '0';
+	led2 <= '0';
+	led3 <= '0';
+	led4 <= '0';
 
 --	inst_clk25: clk25gen port map(
 --		reset => resend,
@@ -223,33 +220,33 @@ begin
 		addr => wr_a1,
 		dout => wr_d1,
 		we => wren1);
-	inst_ov7670capt2: ov7670_capture port map(
-		reset => resend,
-		pclk => ov7670_pclk2buf1,
-		vsync => ov7670_vsync2,
-		href => ov7670_href2,
-		d => ov7670_data2,
-		addr => wr_a2,
-		dout => wr_d2,
-		we => wren2);
-	inst_ov7670capt3: ov7670_capture port map(
-		reset => resend,
-		pclk => ov7670_pclk3buf1,
-		vsync => ov7670_vsync3,
-		href => ov7670_href3,
-		d => ov7670_data3,
-		addr => wr_a3,
-		dout => wr_d3,
-		we => wren3);
-	inst_ov7670capt4: ov7670_capture port map(
-		reset => resend,
-		pclk => ov7670_pclk4buf1,
-		vsync => ov7670_vsync4,
-		href => ov7670_href4,
-		d => ov7670_data4,
-		addr => wr_a4,
-		dout => wr_d4,
-		we => wren4);
+--	inst_ov7670capt2: ov7670_capture port map(
+--		reset => resend,
+--		pclk => ov7670_pclk2buf1,
+--		vsync => ov7670_vsync2,
+--		href => ov7670_href2,
+--		d => ov7670_data2,
+--		addr => wr_a2,
+--		dout => wr_d2,
+--		we => wren2);
+--	inst_ov7670capt3: ov7670_capture port map(
+--		reset => resend,
+--		pclk => ov7670_pclk3buf1,
+--		vsync => ov7670_vsync3,
+--		href => ov7670_href3,
+--		d => ov7670_data3,
+--		addr => wr_a3,
+--		dout => wr_d3,
+--		we => wren3);
+--	inst_ov7670capt4: ov7670_capture port map(
+--		reset => resend,
+--		pclk => ov7670_pclk4buf1,
+--		vsync => ov7670_vsync4,
+--		href => ov7670_href4,
+--		d => ov7670_data4,
+--		addr => wr_a4,
+--		dout => wr_d4,
+--		we => wren4);
 	
 	inst_framebuffer1 : frame_buffer port map(
 		weA => wren1,
@@ -259,30 +256,30 @@ begin
 		clkB => clk25,
 		addrB => rd_a1,
 		doutB => rd_d1);
-	inst_framebuffer2 : frame_buffer port map(
-		weA => wren2,
-		clkA => ov7670_pclk2buf1,
-		addrA => wr_a2,
-		dinA => wr_d2,
-		clkB => clk25,
-		addrB => rd_a2,
-		doutB => rd_d2);
-	inst_framebuffer3 : frame_buffer port map(
-		weA => wren3,
-		clkA => ov7670_pclk3buf1,
-		addrA => wr_a3,
-		dinA => wr_d3,
-		clkB => clk25,
-		addrB => rd_a3,
-		doutB => rd_d3);
-	inst_framebuffer4 : frame_buffer port map(
-		weA => wren4,
-		clkA => ov7670_pclk4buf1,
-		addrA => wr_a4,
-		dinA => wr_d4,
-		clkB => clk25,
-		addrB => rd_a4,
-		doutB => rd_d4);
+--	inst_framebuffer2 : frame_buffer port map(
+--		weA => wren2,
+--		clkA => ov7670_pclk2buf1,
+--		addrA => wr_a2,
+--		dinA => wr_d2,
+--		clkB => clk25,
+--		addrB => rd_a2,
+--		doutB => rd_d2);
+--	inst_framebuffer3 : frame_buffer port map(
+--		weA => wren3,
+--		clkA => ov7670_pclk3buf1,
+--		addrA => wr_a3,
+--		dinA => wr_d3,
+--		clkB => clk25,
+--		addrB => rd_a3,
+--		doutB => rd_d3);
+--	inst_framebuffer4 : frame_buffer port map(
+--		weA => wren4,
+--		clkA => ov7670_pclk4buf1,
+--		addrA => wr_a4,
+--		dinA => wr_d4,
+--		clkB => clk25,
+--		addrB => rd_a4,
+--		doutB => rd_d4);
 	
 	inst_addrgen1 : address_generator port map(
 		reset => resend,
@@ -290,24 +287,24 @@ begin
 		enable => active1,
 		vsync => vga_vsync_sig,
 		address => rd_a1);
-	inst_addrgen2 : address_generator port map(
-		reset => resend,
-		clk25 => clk25,
-		enable => active2,
-		vsync => vga_vsync_sig,
-		address => rd_a2);
-	inst_addrgen3 : address_generator port map(
-		reset => resend,
-		clk25 => clk25,
-		enable => active3,
-		vsync => vga_vsync_sig,
-		address => rd_a3);
-	inst_addrgen4 : address_generator port map(
-		reset => resend,
-		clk25 => clk25,
-		enable => active4,
-		vsync => vga_vsync_sig,
-		address => rd_a4);
+--	inst_addrgen2 : address_generator port map(
+--		reset => resend,
+--		clk25 => clk25,
+--		enable => active2,
+--		vsync => vga_vsync_sig,
+--		address => rd_a2);
+--	inst_addrgen3 : address_generator port map(
+--		reset => resend,
+--		clk25 => clk25,
+--		enable => active3,
+--		vsync => vga_vsync_sig,
+--		address => rd_a3);
+--	inst_addrgen4 : address_generator port map(
+--		reset => resend,
+--		clk25 => clk25,
+--		enable => active4,
+--		vsync => vga_vsync_sig,
+--		address => rd_a4);
 
 	inst_imagegen : vga_imagegenerator port map(
 		reset => resend,
@@ -430,7 +427,8 @@ begin
 				camera4 <= '0';
 			when sa1 =>
 				if (counter = C_MAX-1) then
-					state := sb;
+--					state := sb;
+					state := sa1;
 					counter := 0;
 					resend2 <= '1';
 				else

@@ -40,7 +40,8 @@ ARCHITECTURE behavior OF tb_Top IS
 component Top is
 Generic (
 G_PB_BITS : integer := 6;
-G_WAIT1 : integer := 7
+G_WAIT1 : integer := 7; -- wait for reset dcm and cameras
+G_FE_WAIT_BITS : integer := 9 -- sccb wait for cameras
 );
 Port (
 clk50	: in STD_LOGIC; -- Crystal Oscilator 50MHz  --B8
