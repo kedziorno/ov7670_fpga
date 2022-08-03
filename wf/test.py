@@ -17,33 +17,45 @@ t_timescale = next(tokens)
 t_module = next(tokens)
 
 max = 0
+max1 = 0
+i = 0
 list1 = []
 list2 = []
+list3 = []
 
 with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_date.data) as writer:
 	for token in tokens:
 		if token.kind is TokenKind.VAR:
 			v = Variable(ident=token.var.id_code,type='wire',size=1,init='X')
-			writer.register_alias(t_module.scope.ident,token.var.reference,v)
+			v1 = writer.register_alias(scope=t_module.scope.ident,name=token.var.reference,var=v)
+#			v1 = writer.register_var(scope=t_module.scope.ident,name=token.var.reference,var_type='wire',size=1,init='X')
 			list1.append(token.var.id_code)
 			list2.append(token.var.reference)
-		elif token.kind is TokenKind.CHANGE_TIME:
+			list3.append(v1)
+#			list3.append(v)
+		if token.kind is TokenKind.CHANGE_TIME:
 			if token.data > max:
 				max = token.data
-			
-			#v = ScalarVariable(ident='asd',type='int',size=0,init='0')
-			#writer.change(v,max,token.data)
+			v = ScalarVariable(ident=str(max),type='str',size=8,init='1111')
+			writer.change(v,max,max)
+			max1=0
+		if token.kind is TokenKind.CHANGE_SCALAR:
 			#real_var = writer.register_var('', 'x', 'real', init=1.23)
 			#print (max)
-		#elif token.kind is TokenKind.CHANGE_SCALAR:
-				#v1 = writer.register_alias(token.scope.ident,token.data.id_code,'integer',8)
-				#v = ScalarVariable(ident=token.data.id_code,type='scalar',size=1,init=token.data.id_code)
-				#writer.change(v,max,token.data.value)
-			#token = next(tokens)
+			print (token.data)
+			#v1 = writer.register_alias(token.data,token.data.id_code,'integer',8)
+			#v1 = writer.register_alias(scope='asd',name=token.data.id_code,var='string')
+			v = ScalarVariable(ident=token.data.id_code,type='int',size=max1,init=token.data.value)
+			#print (v.ident)
+			#print (v.value)
+			writer.change(v,max,max1)
+			max1 = max1 + 1
+		#print (max1)
 
 print ("max "+str(max))
 print (list1)
 print (list2)
+print (list3)
 			
 f.close()
 w.close()
