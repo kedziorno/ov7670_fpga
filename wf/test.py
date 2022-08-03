@@ -22,17 +22,19 @@ i = 0
 list1 = []
 list2 = []
 list3 = []
+list4 = []
 
 with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_date.data) as writer:
 	for token in tokens:
 		if token.kind is TokenKind.VAR:
+			#print (token.data)
 			v = Variable(ident=token.var.id_code,type='wire',size=1,init='X')
-			v1 = writer.register_alias(scope=t_module.scope.ident,name=token.var.reference,var=v)
-#			v1 = writer.register_var(scope=t_module.scope.ident,name=token.var.reference,var_type='wire',size=1,init='X')
+			v1 = writer.register_var(scope=t_module.scope.ident,name=token.var.id_code,var_type='wire',size=1,init='X')
+			v2 = writer.register_alias(scope=t_module.scope.ident,name=token.var.reference,var=v)
 			list1.append(token.var.id_code)
 			list2.append(token.var.reference)
 			list3.append(v1)
-#			list3.append(v)
+			list4.append(v2)
 		if token.kind is TokenKind.CHANGE_TIME:
 			if token.data > max:
 				max = token.data
@@ -56,6 +58,7 @@ print ("max "+str(max))
 print (list1)
 print (list2)
 print (list3)
+print (list4)
 			
 f.close()
 w.close()
