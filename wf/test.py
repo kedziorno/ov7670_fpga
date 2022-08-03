@@ -4,7 +4,7 @@ from vcd import VCDWriter
 import io
 from vcd.reader import TokenKind, tokenize, ScopeDecl, ScopeType
 from vcd.common import ScopeType
-from vcd.writer import Variable
+from vcd.writer import Variable,ScalarVariable
  
 f = open("wf.1.vcd","rb")
 w = open("aaaa.vcd","w");
@@ -19,7 +19,8 @@ t_module = next(tokens)
 max = 0
 
 with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_date.data) as writer:
-	for token in tokens:
+	token = next(tokens)
+	while token:
 		if token.kind is TokenKind.VAR:
 			v = Variable(ident=token.var.id_code,type='wire',size=1,init='X')
 			writer.register_alias(t_module.scope.ident,token.var.reference,v)
@@ -27,9 +28,14 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 			#print (token.data)
 			if token.data > max:
 				max = token.data
+				#v = Variable(ident=token.data,type='event',size=1,init=token.data)
+				v = ScalarVariable(ident='0',type='int',size=1,init='0')
+				writer.change(v,token.data,token.data)
+				#real_var = writer.register_var('', 'x', 'real', init=1.23)
+				#print (max)
 		if token.kind is TokenKind.CHANGE_SCALAR:
-			v = Variable(ident=token.data,type='wire',size=1,init=token.data.value)
-			writer.register_alias('aaa',token.data.id_code,v)
+			v = Variable(ident=token.data.id_code,type='wire',size=1,init=token.data.value)
+		token = next(tokens)
 	print ("max "+str(max))
 			
 f.close()
