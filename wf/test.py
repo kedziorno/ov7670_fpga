@@ -58,12 +58,12 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 				for l in list3:
 					#print (l.ident)
 					if l.ident == token.data.id_code:
-						writer.dump_on(max+1)
+						writer.dump_on(max)
 						print ("bbb " + str(max))
 						v = ScalarVariable(ident=token.data.id_code,type='wire',size='1',init=token.data.value)
 						print (v.ident)
 						print (v.value)
-						writer.change(l,max+1,v.value)
+						writer.change(l,max,v.value)
 						max1 = max1 + 1
 						#writer.dump_on(max)
 				#writer.change(v,max,v.value)
