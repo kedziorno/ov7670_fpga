@@ -150,12 +150,12 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 				i = i + 1
 				#list4.append(v1)
 				print ("--------------------header get")
-				get_header = 1
 				token = next(lt)
 				continue
 			if token.kind is TokenKind.UPSCOPE or token.kind is TokenKind.ENDDEFINITIONS:
-				 token = next(lt)
-				 continue
+				get_header = 1
+				token = next(lt)
+				continue
 			#if token.kind is TokenKind.CHANGE_TIME or TokenKind.CHANGE_SCALAR:
 			#if get_first == 0:
 			if token.kind is TokenKind.CHANGE_TIME and token.data == 0:
