@@ -117,24 +117,30 @@ list4 = []
 with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_date.data) as writer:
 	for lt in list_tokens:
 		token = next(lt)
+		#list1 = []
+		#list2 = []
+		#list3.clear()
+		#list4 = []
 		while 1:
 			#print (token)
 			if index == num_ct[num_ct_index]:
 				index = 0
+				#list1 = []
+				#list2 = []
+				list3.clear()
+				#list4 = []
 				break
-			if (token.kind is TokenKind.DATE or token.kind is TokenKind.VERSION or token.kind is TokenKind.TIMESCALE or token.kind is TokenKind.SCOPE) and get_header == 1:
-				token = next(lt)
-				continue
-			if token.kind is TokenKind.VAR and get_header == 1:
+			if (token.kind is TokenKind.DATE or token.kind is TokenKind.VERSION or token.kind is TokenKind.TIMESCALE or token.kind is TokenKind.SCOPE):
 				token = next(lt)
 				continue
 			#for token in lt:
-			if token.kind is TokenKind.VAR and get_header == 0:
-				#print (token.data)
+			if token.kind is TokenKind.VAR:
+				print (token.data)
 				#v = Variable(ident=token.var.id_code,type='wire',size=1,init='X').format_value(VarType.parameter,True)
 				v = ScalarVariable(ident=token.var.id_code,type='wire',size=1,init='X')
 				#v1 = writer.register_var(scope=t_module.scope.ident,name=token.var.id_code,var_type='wire',size=1,init='X')
-				writer.register_alias(scope=t_module.scope.ident,name=token.var.reference,var=v)
+				if get_header == 0:
+					writer.register_alias(scope=t_module.scope.ident,name=token.var.reference,var=v)
 				#writer.change(v,0,'X')
 				#writer.dump_on(i-1)
 				#writer.dump_off(i)
@@ -144,6 +150,7 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 				i = i + 1
 				#list4.append(v1)
 				print ("--------------------header get")
+				get_header = 1
 				token = next(lt)
 				continue
 			if token.kind is TokenKind.UPSCOPE or token.kind is TokenKind.ENDDEFINITIONS:
@@ -164,28 +171,21 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 			#if get_first == 1:
 			if token.kind is TokenKind.CHANGE_SCALAR and prev_max == 0:
 				print ("firstbbbbb")
-				i = len(list1)-1
+				i = len(list3)-1
 				#while i >= 0:
 				print ("iiiiiii "+str(i))
 				#print (token)
 					#token = next(lt)
 					#print ("oldmaxxxxxxxxxxxxxxxx "+str(max))
 				#while i >= 0:
-
 				for l in list3:
 					#print (l)
 					#print ("identttttttttttttttttt "+l.ident)
 					print (token)
 					v = Variable(ident=token.data.id_code,type='wire',size='1',init=token.data.value)
 					if l.ident == token.data.id_code:
-						if get_header == 0:
-							writer.dump_on(max)
-						else:
-							writer.dump_on(max)
-						if get_header == 0:
-							writer.change(l,max,v.value)
-						else:
-							writer.change(l,max,v.value)
+						writer.dump_on(max+1)
+						writer.change(l,max+1,v.value)
 						#print ("oldmaxxxxxxxxxxxxx "+str(oldmax))
 						#print (token)
 						#i = i - 1
@@ -217,17 +217,14 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 					#print (l.ident)
 					if l.ident == token.data.id_code:
 						v = ScalarVariable(ident=token.data.id_code,type='wire',size='1',init=token.data.value)
-						if get_header == 0:
-							writer.dump_on(max)
-						else:
-							writer.dump_on(max+1)
+						writer.dump_on(max+1)
 						#print ("bbb " + str(max))
 						#print (v.ident)
 						#print (v.value)
-						#if get_header == 0:
-						#	writer.change(l,max,v.value)
-						#else:
-						#	writer.change(l,max+1,v.value)
+						if get_header == 0:
+							writer.change(l,max,v.value)
+						else:
+							writer.change(l,max+1,v.value)
 						max1 = max1 + 1
 						#writer.dump_on(max)
 				token = next(lt)
@@ -240,20 +237,21 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 				#	continue
 			#writer.change(v,max,v.value)
 			#max1 = max1 + 1
+		
 		num_ct_index = num_ct_index + 1
 		print ("max "+str(max))
 		print ("oldmax "+str(oldmax))
 		print ("indexxxxxxxxxxxxxxxxxxxxx "+str(index))	
 		
-		get_header = 1
+		#get_header = 0
 		get_first = 0
 		oldmax = max
 		#print ("max "+str(max))
 		#print ("oldmax "+str(oldmax))
-		#print (list1)
-		#print (list2)
+		print (list1)
+		print (list2)
 		print (list3)
-		#print (list4)
+		print (list4)
 
 
 w.close()
