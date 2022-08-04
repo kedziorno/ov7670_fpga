@@ -118,7 +118,7 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 	for lt in list_tokens:
 		token = next(lt)
 		while 1:
-			print (token)
+			#print (token)
 			if index == num_ct[num_ct_index]:
 				index = 0
 				break
@@ -143,55 +143,57 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 				list3.append(v)
 				i = i + 1
 				#list4.append(v1)
-				#print ("--------------------header get")
+				print ("--------------------header get")
 				token = next(lt)
 				continue
 			if token.kind is TokenKind.UPSCOPE or token.kind is TokenKind.ENDDEFINITIONS:
 				 token = next(lt)
 				 continue
 			#if token.kind is TokenKind.CHANGE_TIME or TokenKind.CHANGE_SCALAR:
-			if get_first == 0:
-				if token.kind is TokenKind.CHANGE_TIME and token.data == 0:
-					print ("firstaaaaa")
-					get_first = 1
-					prev_max = token.data
-					#print (token)
-					#print ("asdasd "+str(prev_max))
-					token = next(lt)
-					index = index + 1
-					continue
-					#print ("iiiiiii "+str(i))
-			if get_first == 1:
-				if token.kind is TokenKind.CHANGE_SCALAR and prev_max == 0:
-					print ("firstbbbbb")
-					i = len(list1)-1
-					#while i >= 0:
-					print ("iiiiiii "+str(i))
-					#print (token)
-						#token = next(lt)
-						#print ("oldmaxxxxxxxxxxxxxxxx "+str(max))
-					#while i >= 0:
-					for l in list3:
-						#print ("identttttttttttttttttt "+l.ident)
-						if l.ident == token.data.id_code:
-							if get_header == 0:
-								writer.dump_on(max)
-							else:
-								writer.dump_on(max+1)
-							v = ScalarVariable(ident=token.data.id_code,type='wire',size='1',init=token.data.value)
-							if get_header == 0:
-								writer.change(l,max,token.data.value)
-							else:
-								writer.change(l,max+1,token.data.value)
-							#print ("oldmaxxxxxxxxxxxxx "+str(oldmax))
-							#print (token.data.id_code)
-							#print (token.data.value)
+			#if get_first == 0:
+			if token.kind is TokenKind.CHANGE_TIME and token.data == 0:
+				print ("firstaaaaa")
+				get_first = 1
+				prev_max = token.data
+				print (token)
+				#print ("asdasd "+str(prev_max))
+				token = next(lt)
+				index = index + 1
+				continue
+				#print ("iiiiiii "+str(i))
+			#if get_first == 1:
+			if token.kind is TokenKind.CHANGE_SCALAR and prev_max == 0:
+				print ("firstbbbbb")
+				i = len(list1)-1
+				#while i >= 0:
+				print ("iiiiiii "+str(i))
+				#print (token)
+					#token = next(lt)
+					#print ("oldmaxxxxxxxxxxxxxxxx "+str(max))
+				#while i >= 0:
+
+				for l in list3:
+					#print (l)
+					#print ("identttttttttttttttttt "+l.ident)
+					print (token)
+					v = Variable(ident=token.data.id_code,type='wire',size='1',init=token.data.value)
+					if l.ident == token.data.id_code:
+						if get_header == 0:
+							writer.dump_on(max)
+						else:
+							writer.dump_on(max)
+						if get_header == 0:
+							writer.change(l,max,v.value)
+						else:
+							writer.change(l,max,v.value)
+						#print ("oldmaxxxxxxxxxxxxx "+str(oldmax))
+						#print (token)
 						#i = i - 1
 						token = next(lt)
 						#i = i - 1
-					get_first = 1
-					prev_max = 1
-					continue
+				get_first = 1
+				prev_max = 1
+				continue
 			if token.kind is TokenKind.CHANGE_TIME and prev_max == 1:
 				#print (token)
 				if token.data + oldmax > max:
@@ -222,10 +224,10 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 						#print ("bbb " + str(max))
 						#print (v.ident)
 						#print (v.value)
-						if get_header == 0:
-							writer.change(l,max,v.value)
-						else:
-							writer.change(l,max+1,v.value)
+						#if get_header == 0:
+						#	writer.change(l,max,v.value)
+						#else:
+						#	writer.change(l,max+1,v.value)
 						max1 = max1 + 1
 						#writer.dump_on(max)
 				token = next(lt)
