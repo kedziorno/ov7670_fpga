@@ -118,15 +118,10 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 	for lt in list_tokens:
 		token = next(lt)
 		while 1:
-			#try:
-			#	pass
-			#except StopIteration:
-			#	break
-			#else:
+			print (token)
 			if index == num_ct[num_ct_index]:
 				index = 0
 				break
-			#print (token)
 			if (token.kind is TokenKind.DATE or token.kind is TokenKind.VERSION or token.kind is TokenKind.TIMESCALE or token.kind is TokenKind.SCOPE) and get_header == 1:
 				token = next(lt)
 				continue
@@ -171,29 +166,29 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 					print ("firstbbbbb")
 					i = len(list1)-1
 					#while i >= 0:
-						#print ("iiiiiii "+str(i))
+					print ("iiiiiii "+str(i))
 					#print (token)
 						#token = next(lt)
 						#print ("oldmaxxxxxxxxxxxxxxxx "+str(max))
-					while i >= 0:
-						for l in list3:
-							#print ("identttttttttttttttttt "+l.ident)
-							if l.ident == token.data.id_code:
-								if get_header == 0:
-									writer.dump_on(max)
-								else:
-									writer.dump_on(max+1)
-								v = ScalarVariable(ident=token.data.id_code,type='wire',size='1',init=token.data.value)
-								if get_header == 0:
-									writer.change(l,max,token.data.value)
-								else:
-									writer.change(l,max+1,token.data.value)
-								#print ("oldmaxxxxxxxxxxxxx "+str(oldmax))
-								print (token.data.id_code)
-								print (token.data.value)
-							#i = i - 1
+					#while i >= 0:
+					for l in list3:
+						#print ("identttttttttttttttttt "+l.ident)
+						if l.ident == token.data.id_code:
+							if get_header == 0:
+								writer.dump_on(max)
+							else:
+								writer.dump_on(max+1)
+							v = ScalarVariable(ident=token.data.id_code,type='wire',size='1',init=token.data.value)
+							if get_header == 0:
+								writer.change(l,max,token.data.value)
+							else:
+								writer.change(l,max+1,token.data.value)
+							#print ("oldmaxxxxxxxxxxxxx "+str(oldmax))
+							#print (token.data.id_code)
+							#print (token.data.value)
+						#i = i - 1
 						token = next(lt)
-						i = i - 1
+						#i = i - 1
 					get_first = 1
 					prev_max = 1
 					continue
