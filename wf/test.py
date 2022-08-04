@@ -46,7 +46,7 @@ def file_sort(directory,file):
 	#return file_list
 
 file_list = file_sort(directory,file)
-print (file_list)
+#print (file_list)
 #for item in file_list:
 #	line = "ctime: {:<20} | name: {:>20}".format(item[0],item[1])
 #	print(line)
@@ -62,12 +62,12 @@ print (file_list)
 w = open("aaaa.vcd","w");
 
 list_tokens = []
+opened_files = []
 
 for fl in file_list:
 	f = open(fl,"rb")
 	list_tokens.append(tokenize(f))
-	#f.close()
-
+	opened_files.append(f)
 
 t_date = next(list_tokens[0])
 t_version = next(list_tokens[0])
@@ -79,6 +79,9 @@ oldmax = 0
 max1 = 0
 i = 1
 get_header = 0
+get_first = 0
+prev_max = 0
+
 list1 = []
 list2 = []
 list3 = []
@@ -87,7 +90,7 @@ list4 = []
 with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_date.data) as writer:
 	for lt in list_tokens:
 		for token in lt:
-			#print (token.data)
+			#print (token)
 			if get_header == 0:
 				if token.kind is TokenKind.VAR:
 					#print (token.data)
@@ -103,44 +106,73 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 					list3.append(v)
 					i = i + 1
 					#list4.append(v1)
+					print ("--------------------header get")
 			if token.kind is TokenKind.CHANGE_TIME or TokenKind.CHANGE_SCALAR:
-				if token.kind is TokenKind.CHANGE_TIME:
-					if token.data + oldmax > max:
-						max = token.data + oldmax 
-					#v = Variable(ident=str(token.data),type='timestamp',size=8,init='0')
-						#writer.dump_on(max)
-						#writer.dump_off(max)
-					#print ('#'+str(token.data))
-					#	max1=0
-				if token.kind is TokenKind.CHANGE_SCALAR:
-					#real_var = writer.register_var('', 'x', 'real', init=1.23)
-					#print (max)
-					#print (token.data)
-					#v1 = writer.register_alias(token.data,token.data.id_code,'integer',8)
-					#v1 = writer.register_alias(scope='asd',name=token.data.id_code,var='string')
-					for l in list3:
-						#print (l.ident)
-						if l.ident == token.data.id_code:
-							v = ScalarVariable(ident=token.data.id_code,type='wire',size='1',init=token.data.value)
-							if get_header == 0:
-								writer.dump_on(max)
-							else:
-								writer.dump_on(max+1)
-							#print ("bbb " + str(max))
-							#print (v.ident)
-							#print (v.value)
-							if get_header == 0:
-								writer.change(l,max,v.value)
-							else:
-								writer.change(l,max+1,v.value)
-							max1 = max1 + 1
+				if get_first == 0:
+					if token.kind is TokenKind.CHANGE_TIME and token.data == 0:
+						print ("first")
+						get_first = 1
+						#prev_max = token.data
+						#print ("asdasd "+str(prev_max))
+						continue
+				if get_first == 1:
+						i = len(list1)-1
+						#print ("iiiiiii "+str(i))
+						if token.kind is TokenKind.CHANGE_SCALAR:
+							while i >= 0:
+								print ("iiiiiii "+str(i))
+								#print (token.data.id_code)
+								#print (token.data.value)
+								print (token)
+								#token = next(lt)
+								#print ("oldmaxxxxxxxxxxxxxxxx "+str(max))
+								for l in list3:
+									#print ("identttttttttttttttttt "+l.ident)
+									if l.ident == token.data.id_code:
+										v = ScalarVariable(ident=token.data.id_code,type='wire',size='1',init=token.data.value)
+										writer.change(l,max,v)
+								i = i - 1
+								get_first = 0
+								#token = next(lt)
+				else:
+					if token.kind is TokenKind.CHANGE_TIME:
+						if token.data + oldmax > max:
+							max = token.data + oldmax 
+						#v = Variable(ident=str(token.data),type='timestamp',size=8,init='0')
 							#writer.dump_on(max)
-					#writer.change(v,max,v.value)
-					#max1 = max1 + 1
+							#writer.dump_off(max)
+						#print ('#'+str(token.data))
+						#	max1=0
+					if token.kind is TokenKind.CHANGE_SCALAR:
+						#real_var = writer.register_var('', 'x', 'real', init=1.23)
+						#print (max)
+						#print (token.data)
+						#v1 = writer.register_alias(token.data,token.data.id_code,'integer',8)
+						#v1 = writer.register_alias(scope='asd',name=token.data.id_code,var='string')
+						for l in list3:
+							#print (l.ident)
+							if l.ident == token.data.id_code:
+								v = ScalarVariable(ident=token.data.id_code,type='wire',size='1',init=token.data.value)
+								if get_header == 0:
+									writer.dump_on(max)
+								else:
+									writer.dump_on(max)
+								#print ("bbb " + str(max))
+								#print (v.ident)
+								#print (v.value)
+								if get_header == 0:
+									writer.change(l,max,v.value)
+								else:
+									writer.change(l,max,v.value)
+								max1 = max1 + 1
+								#writer.dump_on(max)
+						#writer.change(v,max,v.value)
+						#max1 = max1 + 1
 		print ("max "+str(max))
 		print ("oldmax "+str(oldmax))
 	
 		get_header = 1
+		get_first = 0
 		oldmax = max
 		#print ("max "+str(max))
 		#print ("oldmax "+str(oldmax))
@@ -151,6 +183,9 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 
 
 w.close()
+
+for of in opened_files:
+	of.close()
 
 #asd = t_module.scope
 #sd = ScopeDecl(type_=asd.type_,ident=asd.ident)
