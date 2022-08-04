@@ -1,11 +1,60 @@
-import sys
-from vcd import VCDWriter
-
 import io
+import sys
+import os
+import time
+
+from vcd import VCDWriter
 from vcd.reader import TokenKind, tokenize, ScopeDecl, ScopeType
 from vcd.common import ScopeType,VarType
 from vcd.writer import Variable,ScalarVariable
- 
+
+#print(sys.argv[0])
+#print("Hello ",sys.argv[1],", welcome!")
+
+script = sys.argv[0]
+directory = sys.argv[1]
+file = sys.argv[2]
+
+files = []
+
+#print (sorted(os.listdir(sys.argv[1])))
+
+# https://stackoverflow.com/a/168580
+def file_sort(directory,file):
+	currentmin = 0
+	file_list = []
+	#for fn in os.listdir(directory):
+	#	if fn.endswith('.vcd'):
+	#		file_list.append(fn)
+	#		file_list.sort(key=lambda s: os.path.getctime(os.path.join(directory,fn)))
+	a = [s for s in os.listdir(directory) if os.path.isfile(os.path.join(directory, s)) and s.startswith(file) and s.endswith('.vcd')]
+	a.sort(key=lambda s: os.path.getmtime(os.path.join(directory, s)))
+	return a
+#	for i in os.listdir(directory):
+#		a = os.stat(os.path.join(directory,i))
+#		if a.st_ctime > currentmin:
+#			currentmin = a.st_ctime
+#			file_list.append([i,time.ctime(a.st_ctime),time.ctime(a.st_atime)])
+#		else:
+#			file_list.insert(0,[i,time.ctime(a.st_ctime),time.ctime(a.st_atime)])
+#	return file_list
+	#print (file_list)
+	#return file_list
+
+file_list = file_sort(directory,file)
+print (file_list)
+#for item in file_list:
+#	line = "ctime: {:<20} | name: {:>20}".format(item[0],item[1])
+#	print(line)
+
+#for fn in os.listdir(directory):
+#	if fn.endswith('.vcd'):
+#		files.append(fn)
+
+#print (sorted(files))
+
+#exit (1)
+
 f = open("wf.1.vcd","rb")
 g = open("wf.2.vcd","rb")
 h = open("wf.3.vcd","rb")
