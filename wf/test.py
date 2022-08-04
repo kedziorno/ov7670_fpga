@@ -8,12 +8,15 @@ from vcd.writer import Variable,ScalarVariable
  
 f = open("wf.1.vcd","rb")
 g = open("wf.2.vcd","rb")
+h = open("wf.3.vcd","rb")
+
 
 w = open("aaaa.vcd","w");
 
 list_tokens = []
 list_tokens.append(tokenize(f))
 list_tokens.append(tokenize(g))
+list_tokens.append(tokenize(h))
 
 t_date = next(list_tokens[0])
 t_version = next(list_tokens[0])
@@ -33,7 +36,8 @@ list4 = []
 with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_date.data) as writer:
 	for lt in list_tokens:
 		for token in lt:
-			if get_header is 0:
+			#print (token.data)
+			if get_header == 0:
 				if token.kind is TokenKind.VAR:
 					#print (token.data)
 					#v = Variable(ident=token.var.id_code,type='wire',size=1,init='X').format_value(VarType.parameter,True)
@@ -55,7 +59,7 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 					#v = Variable(ident=str(token.data),type='timestamp',size=8,init='0')
 						#writer.dump_on(max)
 						#writer.dump_off(max)
-					#print ("aaa " + str(max))
+					#print ('#'+str(token.data))
 					#	max1=0
 				if token.kind is TokenKind.CHANGE_SCALAR:
 					#real_var = writer.register_var('', 'x', 'real', init=1.23)
@@ -66,29 +70,40 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 					for l in list3:
 						#print (l.ident)
 						if l.ident == token.data.id_code:
-							writer.dump_on(max)
-							#print ("bbb " + str(max))
 							v = ScalarVariable(ident=token.data.id_code,type='wire',size='1',init=token.data.value)
+							if get_header == 0:
+								writer.dump_on(max)
+							else:
+								writer.dump_on(max+1)
+							#print ("bbb " + str(max))
 							#print (v.ident)
 							#print (v.value)
-							writer.change(l,max,v.value)
+							if get_header == 0:
+								writer.change(l,max,v.value)
+							else:
+								writer.change(l,max+1,v.value)
 							max1 = max1 + 1
 							#writer.dump_on(max)
 					#writer.change(v,max,v.value)
 					#max1 = max1 + 1
-		get_header = 1
-		oldmax = max
 		print ("max "+str(max))
 		print ("oldmax "+str(oldmax))
-		print (list1)
-		print (list2)
-		print (list3)
-		print (list4)
+	
+		get_header = 1
+		oldmax = max
+		#print ("max "+str(max))
+		#print ("oldmax "+str(oldmax))
+		#print (list1)
+		#print (list2)
+		#print (list3)
+		#print (list4)
 
+
+w.close()
 			
 f.close()
 g.close()
-w.close()
+h.close()
 
 #asd = t_module.scope
 #sd = ScopeDecl(type_=asd.type_,ident=asd.ident)
