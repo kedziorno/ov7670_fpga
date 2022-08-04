@@ -1,3 +1,7 @@
+# This simple script concatenate/merge/stick VCD files generated from Xilinx ChipScope
+# Tested with ISE 14.7 and Pulseview and use pyvcd library
+# usage "script [path/to/VCDs] [prefix_files_VCD]"
+
 import io
 import sys
 import os
@@ -55,17 +59,15 @@ print (file_list)
 
 #exit (1)
 
-f = open("wf.1.vcd","rb")
-g = open("wf.2.vcd","rb")
-h = open("wf.3.vcd","rb")
-
-
 w = open("aaaa.vcd","w");
 
 list_tokens = []
-list_tokens.append(tokenize(f))
-list_tokens.append(tokenize(g))
-list_tokens.append(tokenize(h))
+
+for fl in file_list:
+	f = open(fl,"rb")
+	list_tokens.append(tokenize(f))
+	#f.close()
+
 
 t_date = next(list_tokens[0])
 t_version = next(list_tokens[0])
@@ -149,10 +151,6 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 
 
 w.close()
-			
-f.close()
-g.close()
-h.close()
 
 #asd = t_module.scope
 #sd = ScopeDecl(type_=asd.type_,ident=asd.ident)
