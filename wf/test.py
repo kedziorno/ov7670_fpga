@@ -123,13 +123,6 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 		#list4 = []
 		while 1:
 			#print (token)
-			if index == num_ct[num_ct_index]:
-				index = 0
-				#list1 = []
-				#list2 = []
-				list3.clear()
-				#list4 = []
-				break
 			if (token.kind is TokenKind.DATE or token.kind is TokenKind.VERSION or token.kind is TokenKind.TIMESCALE or token.kind is TokenKind.SCOPE):
 				token = next(lt)
 				continue
@@ -153,7 +146,7 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 				token = next(lt)
 				continue
 			if token.kind is TokenKind.UPSCOPE or token.kind is TokenKind.ENDDEFINITIONS:
-				get_header = 1
+				get_header = 1 #hack - next event
 				token = next(lt)
 				continue
 			#if token.kind is TokenKind.CHANGE_TIME or TokenKind.CHANGE_SCALAR:
@@ -236,8 +229,16 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 							writer.change(l,max,v.value)
 						max1 = max1 + 1
 						#writer.dump_on(max)
-				token = next(lt)
-				continue
+				if index == num_ct[num_ct_index]:
+					index = 0
+					#list1 = []
+					#list2 = []
+					list3.clear()
+					#list4 = []
+					break
+				else:
+					token = next(lt)
+					continue
 				#print ("indexxxxxxxxxxxxxxxxxxxxx "+str(index))
 				#if index == 8000:
 				#	break
