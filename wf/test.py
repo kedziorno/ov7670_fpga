@@ -41,13 +41,14 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 			i = i + 1
 			#list4.append(v1)
 		if token.kind is TokenKind.CHANGE_TIME or TokenKind.CHANGE_SCALAR:
-			#if token.kind is TokenKind.CHANGE_TIME:
-			#	if token.data > max:
-			#		max = token.data
-			#	v = ScalarVariable(ident=str(max),type='int',size=8,init='0')
-			#	writer.change(v,1,1)
-			#	print ("aaa " + str(max))
-			#	max1=0
+			if token.kind is TokenKind.CHANGE_TIME:
+				if token.data > max:
+					max = token.data
+				#v = Variable(ident=str(token.data),type='timestamp',size=8,init='0')
+					#writer.dump_on(max)
+					#writer.dump_off(max)
+				print ("aaa " + str(max))
+				#	max1=0
 			if token.kind is TokenKind.CHANGE_SCALAR:
 				#real_var = writer.register_var('', 'x', 'real', init=1.23)
 				#print (max)
@@ -57,12 +58,14 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 				for l in list3:
 					#print (l.ident)
 					if l.ident == token.data.id_code:
+						writer.dump_on(max+1)
 						print ("bbb " + str(max))
 						v = ScalarVariable(ident=token.data.id_code,type='wire',size='1',init=token.data.value)
 						print (v.ident)
 						print (v.value)
-						writer.change(l,1,v.value)
+						writer.change(l,max+1,v.value)
 						max1 = max1 + 1
+						#writer.dump_on(max)
 				#writer.change(v,max,v.value)
 				#max1 = max1 + 1
 			#print (max1)
