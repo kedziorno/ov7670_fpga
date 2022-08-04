@@ -3,7 +3,7 @@ from vcd import VCDWriter
 
 import io
 from vcd.reader import TokenKind, tokenize, ScopeDecl, ScopeType
-from vcd.common import ScopeType
+from vcd.common import ScopeType,VarType
 from vcd.writer import Variable,ScalarVariable
  
 f = open("wf.1.vcd","rb")
@@ -18,7 +18,7 @@ t_module = next(tokens)
 
 max = 0
 max1 = 0
-i = 0
+i = 1
 list1 = []
 list2 = []
 list3 = []
@@ -27,32 +27,45 @@ list4 = []
 with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_date.data) as writer:
 	for token in tokens:
 		if token.kind is TokenKind.VAR:
-			#print (token.data)
-			v = Variable(ident=token.var.id_code,type='wire',size=1,init='X')
-			v1 = writer.register_var(scope=t_module.scope.ident,name=token.var.id_code,var_type='wire',size=1,init='X')
-			v2 = writer.register_alias(scope=t_module.scope.ident,name=token.var.reference,var=v)
+			print (token.data)
+			#v = Variable(ident=token.var.id_code,type='wire',size=1,init='X').format_value(VarType.parameter,True)
+			v = ScalarVariable(ident=token.var.id_code,type='wire',size=1,init='X')
+			#v1 = writer.register_var(scope=t_module.scope.ident,name=token.var.id_code,var_type='wire',size=1,init='X')
+			writer.register_alias(scope=t_module.scope.ident,name=token.var.reference,var=v)
+			#writer.change(v,0,'X')
+			#writer.dump_on(i-1)
+			#writer.dump_off(i)
 			list1.append(token.var.id_code)
 			list2.append(token.var.reference)
-			list3.append(v1)
-			list4.append(v2)
-		if token.kind is TokenKind.CHANGE_TIME:
-			if token.data > max:
-				max = token.data
-			v = ScalarVariable(ident=str(max),type='str',size=8,init='1111')
-			writer.change(v,max,max)
-			max1=0
-		if token.kind is TokenKind.CHANGE_SCALAR:
-			#real_var = writer.register_var('', 'x', 'real', init=1.23)
-			#print (max)
-			print (token.data)
-			#v1 = writer.register_alias(token.data,token.data.id_code,'integer',8)
-			#v1 = writer.register_alias(scope='asd',name=token.data.id_code,var='string')
-			v = ScalarVariable(ident=token.data.id_code,type='int',size=max1,init=token.data.value)
-			#print (v.ident)
-			#print (v.value)
-			writer.change(v,max,max1)
-			max1 = max1 + 1
-		#print (max1)
+			list3.append(v)
+			i = i + 1
+			#list4.append(v1)
+		if token.kind is TokenKind.CHANGE_TIME or TokenKind.CHANGE_SCALAR:
+			#if token.kind is TokenKind.CHANGE_TIME:
+			#	if token.data > max:
+			#		max = token.data
+			#	v = ScalarVariable(ident=str(max),type='int',size=8,init='0')
+			#	writer.change(v,1,1)
+			#	print ("aaa " + str(max))
+			#	max1=0
+			if token.kind is TokenKind.CHANGE_SCALAR:
+				#real_var = writer.register_var('', 'x', 'real', init=1.23)
+				#print (max)
+				print (token.data)
+				#v1 = writer.register_alias(token.data,token.data.id_code,'integer',8)
+				#v1 = writer.register_alias(scope='asd',name=token.data.id_code,var='string')
+				for l in list3:
+					#print (l.ident)
+					if l.ident == token.data.id_code:
+						print ("bbb " + str(max))
+						v = ScalarVariable(ident=token.data.id_code,type='wire',size='1',init=token.data.value)
+						print (v.ident)
+						print (v.value)
+						writer.change(l,1,v.value)
+						max1 = max1 + 1
+				#writer.change(v,max,v.value)
+				#max1 = max1 + 1
+			#print (max1)
 
 print ("max "+str(max))
 print (list1)
