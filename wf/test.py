@@ -177,14 +177,14 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 					print (token)
 					v = Variable(ident=token.data.id_code,type='wire',size='1',init=token.data.value)
 					if l.ident == token.data.id_code:
-						if get_header == 0:
-							writer.dump_on(max+1)
+						if get_header == 1:
+							writer.dump_on(oldmax+1)
 						else:
-							writer.dump_on(max)
-						if get_header == 0:
-							writer.change(l,max+1,v.value)
+							writer.dump_on(oldmax)
+						if get_header == 1:
+							writer.change(l,oldmax+1,v.value)
 						else:
-							writer.change(l,max,v.value)
+							writer.change(l,oldmax,v.value)
 						#print ("oldmaxxxxxxxxxxxxx "+str(oldmax))
 						#print (token)
 						#i = i - 1
@@ -216,17 +216,17 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 					#print (l.ident)
 					if l.ident == token.data.id_code:
 						v = ScalarVariable(ident=token.data.id_code,type='wire',size='1',init=token.data.value)
-						if get_header == 0:
-							writer.dump_on(max+1)
-						else:
+						if get_header == 1:
 							writer.dump_on(max)
+						else:
+							writer.dump_on(max+1)
 						#print ("bbb " + str(max))
 						#print (v.ident)
 						#print (v.value)
-						if get_header == 0:
-							writer.change(l,max+1,v.value)
-						else:
+						if get_header == 1:
 							writer.change(l,max,v.value)
+						else:
+							writer.change(l,max+1,v.value)
 						max1 = max1 + 1
 						#writer.dump_on(max)
 				if index == num_ct[num_ct_index]:
