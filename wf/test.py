@@ -1,6 +1,12 @@
-# This simple script concatenate/merge/stick VCD files generated from Xilinx ChipScope
-# Tested with ISE 14.7 and Pulseview and use pyvcd library
+# This script concatenate/merge/stick VCD files generated from Xilinx ChipScope
+# Tested with ISE 14.7 version and Sigrok Pulseview - this use pyvcd library
 # usage "script [path/to/VCDs] [prefix_files_VCD]"
+# ver 0.1
+# TODO check counter between files
+# PYVCD use objects (added to list3) where this list must be empty
+# between change to next file. Without this, probe #0 for current file is not
+# properly added. Without this transit between current probe end and
+# begining next probe is mandacious.   
 
 import io
 import sys
