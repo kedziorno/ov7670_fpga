@@ -84,14 +84,11 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 		token = next(lt)
 		print ("file : "+str(num_ct_index))
 		while 1:
-			#print (list3)
 			if (token.kind is TokenKind.DATE or token.kind is TokenKind.VERSION or token.kind is TokenKind.TIMESCALE or token.kind is TokenKind.SCOPE):
 				try:
 					token = next(lt)
 					continue
 				except StopIteration:
-					print ("aaaaaa")
-					print (str(num_ct[num_ct_index]))
 					index = 0
 					list3.clear()
 					break
@@ -106,8 +103,6 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 					token = next(lt)
 					continue
 				except StopIteration:
-					print ("bbbbbb")
-					print (str(num_ct[num_ct_index]))
 					index = 0
 					list3.clear()
 					break
@@ -117,8 +112,6 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 					token = next(lt)
 					continue
 				except StopIteration:
-					print ("cccccc")
-					print (str(num_ct[num_ct_index]))
 					index = 0
 					list3.clear()
 					break
@@ -129,8 +122,6 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 					token = next(lt)
 					continue
 				except StopIteration:
-					print ("dddddd")
-					print (str(num_ct[num_ct_index]))
 					index = 0
 					list3.clear()
 					break
@@ -154,8 +145,6 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 						token = next(lt)
 						continue
 					except StopIteration:
-						print ("eeeeee")
-						print (str(num_ct[num_ct_index]))
 						index = 0
 						list3.clear()
 						break
@@ -167,8 +156,6 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 					token = next(lt)
 					continue
 				except StopIteration:
-					print ("ffffff")
-					print (str(num_ct[num_ct_index]))
 					index = 0
 					list3.clear()
 					break
@@ -188,13 +175,9 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 					token = next(lt)
 					continue
 				except StopIteration:
-					print ("gggggg")
-					print (str(num_ct[num_ct_index]))
 					index = 0
 					list3.clear()
 					break
-		print ("oldmax "+str(oldmax))
-		print ("   max "+str(max))
 		num_ct_index = num_ct_index + 1
 		oldmax = max + 1
 	
