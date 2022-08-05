@@ -70,10 +70,7 @@ t_module = next(list_tokens[0])
 
 max = 0
 oldmax = 0
-max1 = 0
-i = 1
 get_header = 0
-get_first = 0
 prev_max = 0
 index = 0
 
@@ -104,7 +101,6 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 				token = next(lt)
 				continue
 			if token.kind is TokenKind.CHANGE_TIME and token.data == 0:
-				get_first = 1
 				prev_max = token.data
 				token = next(lt)
 				index = index + 1
@@ -123,7 +119,6 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 						else:
 							writer.change(l,oldmax,v.value)
 						token = next(lt)
-				get_first = 1
 				prev_max = 1
 				continue
 			if token.kind is TokenKind.CHANGE_TIME and prev_max == 1:
@@ -144,7 +139,6 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 							writer.change(l,max,v.value)
 						else:
 							writer.change(l,max+1,v.value)
-						max1 = max1 + 1
 				if index == num_ct[num_ct_index]:
 					index = 0
 					list3.clear()
@@ -152,10 +146,7 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 				else:
 					token = next(lt)
 					continue
-		
 		num_ct_index = num_ct_index + 1
-		
-		get_first = 0
 		oldmax = max
 
 w.close()
