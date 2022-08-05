@@ -46,7 +46,9 @@ def file_sort(directory,file):
 	#return file_list
 
 file_list = file_sort(directory,file)
-#print (file_list)
+print (file_list)
+print ("files " + str(len(file_list)))
+
 #for item in file_list:
 #	line = "ctime: {:<20} | name: {:>20}".format(item[0],item[1])
 #	print(line)
@@ -74,6 +76,7 @@ for fl in file_list:
 		if token.kind is TokenKind.CHANGE_TIME:
 			#print (token)
 			index_ct = index_ct + 1
+	print ("file nr "+str(num_ct_index)+" -> "+str(index_ct)+" probes")
 	num_ct.insert(num_ct_index,index_ct)
 	index_ct = 0
 	num_ct_index = num_ct_index + 1
@@ -81,7 +84,7 @@ for fl in file_list:
 num_ct_index = 0
 index_ct = 0
 
-print (num_ct)
+#print (num_ct)
 
 #exit (1)
 
@@ -121,6 +124,7 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 		#list2 = []
 		#list3.clear()
 		#list4 = []
+		print ("file : "+str(num_ct_index))
 		while 1:
 			#print (token)
 			if (token.kind is TokenKind.DATE or token.kind is TokenKind.VERSION or token.kind is TokenKind.TIMESCALE or token.kind is TokenKind.SCOPE):
@@ -128,7 +132,7 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 				continue
 			#for token in lt:
 			if token.kind is TokenKind.VAR:
-				print (token.data)
+				#print (token.data)
 				#v = Variable(ident=token.var.id_code,type='wire',size=1,init='X').format_value(VarType.parameter,True)
 				v = ScalarVariable(ident=token.var.id_code,type='wire',size=1,init='X')
 				#v1 = writer.register_var(scope=t_module.scope.ident,name=token.var.id_code,var_type='wire',size=1,init='X')
@@ -140,9 +144,9 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 				list1.append(token.var.id_code)
 				list2.append(token.var.reference)
 				list3.append(v)
-				i = i + 1
+				#i = i + 1
 				#list4.append(v1)
-				print ("--------------------header get")
+				#print ("--------------------header get")
 				token = next(lt)
 				continue
 			if token.kind is TokenKind.UPSCOPE or token.kind is TokenKind.ENDDEFINITIONS:
@@ -152,10 +156,10 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 			#if token.kind is TokenKind.CHANGE_TIME or TokenKind.CHANGE_SCALAR:
 			#if get_first == 0:
 			if token.kind is TokenKind.CHANGE_TIME and token.data == 0:
-				print ("firstaaaaa")
+				#print ("firstaaaaa")
 				get_first = 1
 				prev_max = token.data
-				print (token)
+				#print (token)
 				#print ("asdasd "+str(prev_max))
 				token = next(lt)
 				index = index + 1
@@ -163,10 +167,10 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 				#print ("iiiiiii "+str(i))
 			#if get_first == 1:
 			if token.kind is TokenKind.CHANGE_SCALAR and prev_max == 0:
-				print ("firstbbbbb")
+				#print ("firstbbbbb")
 				i = len(list3)-1
 				#while i >= 0:
-				print ("iiiiiii "+str(i))
+				#print ("iiiiiii "+str(i))
 				#print (token)
 					#token = next(lt)
 					#print ("oldmaxxxxxxxxxxxxxxxx "+str(max))
@@ -174,7 +178,7 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 				for l in list3:
 					#print (l)
 					#print ("identttttttttttttttttt "+l.ident)
-					print (token)
+					#print (token)
 					v = Variable(ident=token.data.id_code,type='wire',size='1',init=token.data.value)
 					if l.ident == token.data.id_code:
 						if get_header == 1:
@@ -249,19 +253,19 @@ with VCDWriter(w, timescale=t_timescale.data, version=t_version.data, date=t_dat
 			#max1 = max1 + 1
 		
 		num_ct_index = num_ct_index + 1
-		print ("max "+str(max))
-		print ("oldmax "+str(oldmax))
-		print ("indexxxxxxxxxxxxxxxxxxxxx "+str(index))	
+		#print ("max "+str(max))
+		#print ("oldmax "+str(oldmax))
+		#print ("indexxxxxxxxxxxxxxxxxxxxx "+str(index))	
 		
 		#get_header = 0
 		get_first = 0
 		oldmax = max
 		#print ("max "+str(max))
 		#print ("oldmax "+str(oldmax))
-		print (list1)
-		print (list2)
-		print (list3)
-		print (list4)
+		#print (list1)
+		#print (list2)
+		#print (list3)
+		#print (list4)
 
 
 w.close()
