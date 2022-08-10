@@ -10,7 +10,7 @@ Generic (PIXELS : integer := 0);
 		clk25 : in STD_LOGIC;
     enable : in STD_LOGIC;
     vsync : in STD_LOGIC;
-    address : out STD_LOGIC_VECTOR (18 downto 0)
+    address : out STD_LOGIC_VECTOR (14 downto 0)
   );  
 end address_generator;
 
