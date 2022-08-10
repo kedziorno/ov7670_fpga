@@ -23,6 +23,7 @@ constant MAX : integer := 47;
 signal cmd_reg : STD_LOGIC_VECTOR (15 downto 0);
 signal sequence : INTEGER range 0 to MAX-1 := 0;
 
+-- XXX https://github.com/westonb/OV7670-Verilog/blob/master/src/OV7670_config_rom.v
 type cmd_rom is array (0 to MAX-1) of STD_LOGIC_VECTOR (15 downto 0);
 constant commandrom : cmd_rom :=(
 	0  => x"1280",
