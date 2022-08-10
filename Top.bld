@@ -4,15 +4,51 @@ Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
 Command Line:
 /home/user/.local/Xilinx/14.7/ISE_DS/ISE/bin/lin64/unwrapped/ngdbuild -intstyle
 ise -dd _ngo -sd ipcore_dir -nt timestamp -uc top.ucf -p xc3s1200e-fg320-4
-Top.ngc Top.ngd
+Top_cs.ngc Top.ngd
 
-Reading NGO file "/home/user/workspace/ov7670_vga_Nexys2/Top.ngc" ...
+Reading NGO file "/home/user/workspace/ov7670_vga_Nexys2/Top_cs.ngc" ...
+INFO:NgdBuild:1317 - Using core chipscope_ila_v1 requires a ChipScopePro
+   license.  The following blocks are instances of core chipscope_ila_v1:
+	/Top/U_ila_pro_0
+
+-----------------------------------------------
+INFO:Security:71 - If a license for part 'xc3s1200e' is available, it will be
+possible to use 'ChipScopePro_TDP' instead of 'ChipScopePro'.
+WARNING:Security:42 - Your software subscription period has lapsed. Your current
+version of Xilinx tools will continue to function, but you no longer qualify for
+Xilinx software updates or new releases.
+
+-----------------------------------------------
+
+-----------------------------------------------
 Gathering constraint information from source properties...
 Done.
 
 Annotating constraints to design from ucf file "top.ucf" ...
 Resolving constraint associations...
 Checking Constraint Associations...
+WARNING:ConstraintSystem:56 - Constraint <TIMESPEC TS_J_CLK = PERIOD "J_CLK"
+   30000.000000000 pS HIGH 50.000000000 %;>: Unable to find an active 'TNM' or
+   'TimeGrp' constraint named 'J_CLK'.
+
+WARNING:ConstraintSystem:56 - Constraint <TIMESPEC TS_U_TO_J = FROM "U_CLK" TO
+   "J_CLK" 15000.000000000 pS;>: Unable to find an active 'TimeGrp' or 'TNM' or
+   'TPSync' constraint named 'J_CLK'.
+
+WARNING:ConstraintSystem:56 - Constraint <TIMESPEC TS_J_TO_D = FROM "J_CLK" TO
+   "D_CLK" TIG;>: Unable to find an active 'TimeGrp' or 'TNM' or 'TPSync'
+   constraint named 'J_CLK'.
+
+WARNING:ConstraintSystem:56 - Constraint <TIMESPEC TS_D_TO_J = FROM "D_CLK" TO
+   "J_CLK" TIG;>: Unable to find an active 'TimeGrp' or 'TNM' or 'TPSync'
+   constraint named 'J_CLK'.
+
+INFO:ConstraintSystem:178 - TNM 'clkcam', used in period specification
+   'TS_clkcam', was traced into DCM_SP instance DCM_vga. The following new TNM
+   groups and period specifications were generated at the DCM_SP output(s): 
+   CLKDV: <TIMESPEC TS_clk251_0 = PERIOD "clk251_0" TS_clkcam * 4 HIGH 50%
+   INPUT_JITTER 80 ps>
+
 INFO:ConstraintSystem:178 - TNM 'ov7670_pclk1', used in period specification
    'TS_ov7670_pclk1', was traced into DCM_SP instance DCM_pclk1. The following
    new TNM groups and period specifications were generated at the DCM_SP
@@ -22,6 +58,10 @@ INFO:ConstraintSystem:178 - TNM 'ov7670_pclk1', used in period specification
 
 Done...
 
+INFO:NgdBuild:1222 - Setting CLKIN_PERIOD attribute associated with DCM instance
+   DCM_vga to 10.000000 ns based on the period specification (<TIMESPEC
+   TS_clkcam = PERIOD "clkcam" 10 ns HIGH 50% INPUT_JITTER 80 ps;>
+   [top.ucf(105)]).
 INFO:NgdBuild:1222 - Setting CLKIN_PERIOD attribute associated with DCM instance
    DCM_cam to 10.000000 ns based on the period specification (<TIMESPEC
    TS_clkcam = PERIOD "clkcam" 10 ns HIGH 50% INPUT_JITTER 80 ps;>
@@ -37,9 +77,9 @@ Partition Implementation Status
 
 NGDBUILD Design Results Summary:
   Number of errors:     0
-  Number of warnings:   0
+  Number of warnings:   4
 
-Total memory usage is 384992 kilobytes
+Total memory usage is 406004 kilobytes
 
 Writing NGD file "Top.ngd" ...
 Total REAL time to NGDBUILD completion:  3 sec

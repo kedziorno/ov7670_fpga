@@ -175,9 +175,9 @@ signal resetdcm,resetdcm1 : std_logic;
 
 begin
 
-	vga_rgb <= (others => '0');
-	vga_hsync <= '0';
-	vga_vsync <= '0';
+--	vga_rgb <= (others => '0');
+--	vga_hsync <= '0';
+--	vga_vsync <= '0';
 --	pclk1buf : IBUFG port map (O => ov7670_pclk1buf, I => ov7670_pclk1);
 --	pclk2buf : IBUFG port map (O => ov7670_pclk2buf, I => ov7670_pclk2);
 --	pclk3buf : IBUFG port map (O => ov7670_pclk3buf, I => ov7670_pclk3);
@@ -252,14 +252,14 @@ begin
 --		dout => wr_d4,
 --		we => wren4);
 	
---	inst_framebuffer1 : frame_buffer port map(
---		weA => wren1,
---		clkA => ov7670_pclk1buf1,
---		addrA => wr_a1,
---		dinA => wr_d1,
---		clkB => clk25,
---		addrB => rd_a1,
---		doutB => rd_d1);
+	inst_framebuffer1 : frame_buffer port map(
+		weA => wren1,
+		clkA => ov7670_pclk1buf1,
+		addrA => wr_a1,
+		dinA => wr_d1,
+		clkB => clk25,
+		addrB => rd_a1,
+		doutB => rd_d1);
 --	inst_framebuffer2 : frame_buffer port map(
 --		weA => wren2,
 --		clkA => ov7670_pclk2buf1,
@@ -285,12 +285,12 @@ begin
 --		addrB => rd_a4,
 --		doutB => rd_d4);
 	
---	inst_addrgen1 : address_generator port map(
---		reset => resend,
---		clk25 => clk25,
---		enable => active1,
---		vsync => vga_vsync_sig,
---		address => rd_a1);
+	inst_addrgen1 : address_generator port map(
+		reset => resend,
+		clk25 => clk25,
+		enable => active1,
+		vsync => vga_vsync_sig,
+		address => rd_a1);
 --	inst_addrgen2 : address_generator port map(
 --		reset => resend,
 --		clk25 => clk25,
@@ -310,30 +310,30 @@ begin
 --		vsync => vga_vsync_sig,
 --		address => rd_a4);
 
---	inst_imagegen : vga_imagegenerator port map(
---		reset => resend,
---		clk => clk25,
---		Data_in1 => rd_d1,
---		Data_in2 => rd_d2,
---		Data_in3 => rd_d3,
---		Data_in4 => rd_d4,
---		active_area1 => active1,
---		active_area2 => active2,
---		active_area3 => active3,
---		active_area4 => active4,
---		RGB_out => vga_rgb);
---	
---	inst_vgatiming : VGA_timing_synch port map(
---		reset => resend,
---		clk25 => clk25,
---		Hsync => vga_hsync,
---		Vsync => vga_vsync_sig,
---		activeArea1 => active1,
---		activeArea2 => active2,
---		activeArea3 => active3,
---		activeArea4 => active4);
+	inst_imagegen : vga_imagegenerator port map(
+		reset => resend,
+		clk => clk25,
+		Data_in1 => rd_d1,
+		Data_in2 => rd_d2,
+		Data_in3 => rd_d3,
+		Data_in4 => rd_d4,
+		active_area1 => active1,
+		active_area2 => active2,
+		active_area3 => active3,
+		active_area4 => active4,
+		RGB_out => vga_rgb);
+	
+	inst_vgatiming : VGA_timing_synch port map(
+		reset => resend,
+		clk25 => clk25,
+		Hsync => vga_hsync,
+		Vsync => vga_vsync_sig,
+		activeArea1 => active1,
+		activeArea2 => active2,
+		activeArea3 => active3,
+		activeArea4 => active4);
 
---vga_vsync <= vga_vsync_sig;
+vga_vsync <= vga_vsync_sig;
 
 Registers: ov7670_registers port map(
 	reset => resend,
@@ -567,45 +567,45 @@ ov7670_pwdn4 <= '0';
 
 --cc <= clkcambuf when sw = '1' else clk25;
 
---DCM_vga : DCM
---generic map (
---CLKDV_DIVIDE => 4.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
---CLKFX_DIVIDE => 32, -- Can be any interger from 1 to 32
---CLKFX_MULTIPLY => 32, -- Can be any integer from 1 to 32
---CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
---CLKIN_PERIOD => 10.0, -- Specify period of input clock
---CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of NONE, FIXED or VARIABLE
---CLK_FEEDBACK => "1X", -- Specify clock feedback of NONE, 1X or 2X
---DESKEW_ADJUST => "SYSTEM_SYNCHRONOUS", -- SOURCE_SYNCHRONOUS, SYSTEM_SYNCHRONOUS or an integer from 0 to 15
---DFS_FREQUENCY_MODE => "LOW", -- HIGH or LOW frequency mode for frequency synthesis
---DLL_FREQUENCY_MODE => "LOW", -- HIGH or LOW frequency mode for DLL
---DUTY_CYCLE_CORRECTION => TRUE, -- Duty cycle correction, TRUE or FALSE
---FACTORY_JF => X"C080", -- FACTORY JF Values
---PHASE_SHIFT => 0, -- Amount of fixed phase shift from -255 to 255
---SIM_MODE => "SAFE", -- Simulation: "SAFE" vs "FAST", see "Synthesis and Simulation
---STARTUP_WAIT => FALSE) -- Delay configuration DONE until DCM LOCK, TRUE/FALSE
---port map (
---CLK0 => clock1a, -- 0 degree DCM CLK ouptput
---CLK180 => open, -- 180 degree DCM CLK output
---CLK270 => open, -- 270 degree DCM CLK output
---CLK2X => open, -- 2X DCM CLK output
---CLK2X180 => open, -- 2X, 180 degree DCM CLK out
---CLK90 => open, -- 90 degree DCM CLK output
---CLKDV => clk25, -- Divided DCM CLK out (CLKDV_DIVIDE)
---CLKFX => open, -- DCM CLK synthesis out (M/D)
---CLKFX180 => open, -- 180 degree CLK synthesis out
---LOCKED => open, -- DCM LOCK status output
---PSDONE => open, -- Dynamic phase adjust done output
---STATUS => open, -- 8-bit DCM status bits output
---CLKFB => clock1b, -- DCM clock feedback
---CLKIN => clkcambuf, -- Clock input (from IBUFG, BUFG or DCM)
---PSCLK => '0', -- Dynamic phase adjust clock input
---PSEN => '0', -- Dynamic phase adjust enable input
---PSINCDEC => '0', -- Dynamic phase adjust increment/decrement
---RST => resetdcm -- DCM asynchronous reset input
---);
+DCM_vga : DCM
+generic map (
+CLKDV_DIVIDE => 4.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
+CLKFX_DIVIDE => 32, -- Can be any interger from 1 to 32
+CLKFX_MULTIPLY => 32, -- Can be any integer from 1 to 32
+CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
+CLKIN_PERIOD => 10.0, -- Specify period of input clock
+CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of NONE, FIXED or VARIABLE
+CLK_FEEDBACK => "1X", -- Specify clock feedback of NONE, 1X or 2X
+DESKEW_ADJUST => "SYSTEM_SYNCHRONOUS", -- SOURCE_SYNCHRONOUS, SYSTEM_SYNCHRONOUS or an integer from 0 to 15
+DFS_FREQUENCY_MODE => "LOW", -- HIGH or LOW frequency mode for frequency synthesis
+DLL_FREQUENCY_MODE => "LOW", -- HIGH or LOW frequency mode for DLL
+DUTY_CYCLE_CORRECTION => TRUE, -- Duty cycle correction, TRUE or FALSE
+FACTORY_JF => X"C080", -- FACTORY JF Values
+PHASE_SHIFT => 0, -- Amount of fixed phase shift from -255 to 255
+SIM_MODE => "SAFE", -- Simulation: "SAFE" vs "FAST", see "Synthesis and Simulation
+STARTUP_WAIT => FALSE) -- Delay configuration DONE until DCM LOCK, TRUE/FALSE
+port map (
+CLK0 => clock1a, -- 0 degree DCM CLK ouptput
+CLK180 => open, -- 180 degree DCM CLK output
+CLK270 => open, -- 270 degree DCM CLK output
+CLK2X => open, -- 2X DCM CLK output
+CLK2X180 => open, -- 2X, 180 degree DCM CLK out
+CLK90 => open, -- 90 degree DCM CLK output
+CLKDV => clk25, -- Divided DCM CLK out (CLKDV_DIVIDE)
+CLKFX => open, -- DCM CLK synthesis out (M/D)
+CLKFX180 => open, -- 180 degree CLK synthesis out
+LOCKED => open, -- DCM LOCK status output
+PSDONE => open, -- Dynamic phase adjust done output
+STATUS => open, -- 8-bit DCM status bits output
+CLKFB => clock1b, -- DCM clock feedback
+CLKIN => clkcambuf, -- Clock input (from IBUFG, BUFG or DCM)
+PSCLK => '0', -- Dynamic phase adjust clock input
+PSEN => '0', -- Dynamic phase adjust enable input
+PSINCDEC => '0', -- Dynamic phase adjust increment/decrement
+RST => resetdcm -- DCM asynchronous reset input
+);
 vga_bufa : IBUFG generic map (IOSTANDARD => "DEFAULT") port map (O => clkcambuf, I => clkcam);
---vga_bufb : BUFG port map (O => clock1b, I => clock1a);
+vga_bufb : BUFG port map (O => clock1b, I => clock1a);
 
 DCM_cam : DCM
 generic map (
