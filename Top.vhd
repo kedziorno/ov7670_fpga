@@ -63,7 +63,7 @@ Generic (PB_BITS : integer := G_PB_BITS);
 END COMPONENT;
 
 COMPONENT ov7670_capture
-Generic (PIXELS : integer := 307200);
+Generic (PIXELS : integer := 19200);
 	Port ( reset : in std_logic; pclk : in  STD_LOGIC;
           vsync : in  STD_LOGIC;
           href : in  STD_LOGIC;
@@ -116,7 +116,7 @@ COMPONENT vga_imagegenerator
 END COMPONENT;
 
 COMPONENT address_generator
-Generic (PIXELS : integer := 307200);
+Generic (PIXELS : integer := 19200);
 	Port ( reset : in std_logic; clk25 : in STD_LOGIC;
 			 enable : in STD_LOGIC;
 			 vsync : in STD_LOGIC;
