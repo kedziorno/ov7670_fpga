@@ -14,11 +14,15 @@ use IEEE.STD_LOGIC_1164.ALL;
 Library UNISIM;
 use UNISIM.vcomponents.all;
 
+use WORK.st7735r_p_package.ALL;
+use WORK.st7735r_p_screen.ALL;
+
 entity Top is
 Generic (
 G_PB_BITS : integer := 24;
 G_WAIT1 : integer := 20; -- wait for reset dcm and cameras
-G_FE_WAIT_BITS : integer := 20 -- sccb wait for cameras
+G_FE_WAIT_BITS : integer := 20; -- sccb wait for cameras
+SPI_SPEED_MODE : integer := C_CLOCK_COUNTER_EF
 );
 	Port	(	clk50	: in STD_LOGIC; -- Crystal Oscilator 50MHz  --B8
 	clkcam	: in STD_LOGIC; -- Crystal Oscilator 23.9616 MHz  --U9
@@ -46,10 +50,12 @@ G_FE_WAIT_BITS : integer := 20 -- sccb wait for cameras
 				--VGA
 				vga_hsync : out STD_LOGIC; --T4
 				vga_vsync : out STD_LOGIC; --U3
-				vga_rgb	: out STD_LOGIC_VECTOR(7 downto 0)
-				-- R : R9(MSB), T8, R8
-				-- G : N8, P8, P6
-				-- Bc: U5, U4(LSB) 
+				vga_rgb	: out STD_LOGIC_VECTOR(7 downto 0); -- R : R9(MSB), T8, R8 , G : N8, P8, P6 , Bc: U5, U4(LSB)
+				o_cs : out STD_LOGIC;
+				o_do : out STD_LOGIC;
+				o_ck : out STD_LOGIC;
+				o_reset : out STD_LOGIC;
+				o_rs : out STD_LOGIC
 			 );
 end Top;
 
@@ -69,7 +75,7 @@ Generic (PIXELS : integer := 19200);
           href : in  STD_LOGIC;
           d : in  STD_LOGIC_VECTOR (7 downto 0);
           addr : out  STD_LOGIC_VECTOR (14 downto 0);
-          dout : out  STD_LOGIC_VECTOR (7 downto 0);
+          dout : out  STD_LOGIC_VECTOR (11 downto 0);
           we : out  STD_LOGIC_VECTOR (0 downto 0));
 END COMPONENT;
 
@@ -97,23 +103,23 @@ COMPONENT frame_buffer
 	Port ( clkA : in STD_LOGIC;
 			 weA	: in STD_LOGIC_VECTOR(0 downto 0);
 			 addrA: in STD_LOGIC_VECTOR(14 downto 0);
-			 dinA	: in STD_LOGIC_VECTOR(7 downto 0);
+			 dinA	: in STD_LOGIC_VECTOR(11 downto 0);
 			 clkB : in STD_LOGIC;
 			 addrB: in STD_LOGIC_VECTOR(14 downto 0);
-			 doutB: out STD_LOGIC_VECTOR(7 downto 0));
+			 doutB: out STD_LOGIC_VECTOR(11 downto 0));
 END COMPONENT;
 
-COMPONENT vga_imagegenerator
-	Port ( reset : in std_logic; clk : std_logic; Data_in1 : in  STD_LOGIC_VECTOR (7 downto 0);
-						Data_in2 : in  STD_LOGIC_VECTOR (7 downto 0);
-						Data_in3 : in  STD_LOGIC_VECTOR (7 downto 0);
-						Data_in4 : in  STD_LOGIC_VECTOR (7 downto 0);
-						active_area1 : in  STD_LOGIC;
-						active_area2 : in  STD_LOGIC;
-						active_area3 : in  STD_LOGIC;
-						active_area4 : in  STD_LOGIC;
-           RGB_out : out  STD_LOGIC_VECTOR (7 downto 0));
-END COMPONENT;
+--COMPONENT vga_imagegenerator
+--	Port ( reset : in std_logic; clk : std_logic; Data_in1 : in  STD_LOGIC_VECTOR (11 downto 0);
+--						Data_in2 : in  STD_LOGIC_VECTOR (11 downto 0);
+--						Data_in3 : in  STD_LOGIC_VECTOR (11 downto 0);
+--						Data_in4 : in  STD_LOGIC_VECTOR (11 downto 0);
+--						active_area1 : in  STD_LOGIC;
+--						active_area2 : in  STD_LOGIC;
+--						active_area3 : in  STD_LOGIC;
+--						active_area4 : in  STD_LOGIC;
+--           RGB_out : out  STD_LOGIC_VECTOR (7 downto 0));
+--END COMPONENT;
 
 COMPONENT address_generator
 Generic (PIXELS : integer := 19200);
@@ -123,24 +129,24 @@ Generic (PIXELS : integer := 19200);
 			 address : out STD_LOGIC_VECTOR (14 downto 0));
 END COMPONENT;
 
-COMPONENT VGA_timing_synch
-	Port ( reset : in std_logic; clk25 : in  STD_LOGIC;
-           Hsync : out  STD_LOGIC;
-           Vsync : out  STD_LOGIC;
-           activeArea1 : out  STD_LOGIC;
-           activeArea2 : out  STD_LOGIC;
-           activeArea3 : out  STD_LOGIC;
-           activeArea4 : out  STD_LOGIC);
-END COMPONENT;
+--COMPONENT VGA_timing_synch
+--	Port ( reset : in std_logic; clk25 : in  STD_LOGIC;
+--           Hsync : out  STD_LOGIC;
+--           Vsync : out  STD_LOGIC;
+--           activeArea1 : out  STD_LOGIC;
+--           activeArea2 : out  STD_LOGIC;
+--           activeArea3 : out  STD_LOGIC;
+--           activeArea4 : out  STD_LOGIC);
+--END COMPONENT;
 
 signal clk25 : STD_LOGIC;
 signal resend : STD_LOGIC;
 
 -- RAM
 signal wren1,wren2,wren3,wren4 : STD_LOGIC_VECTOR(0 downto 0);
-signal wr_d1,wr_d2,wr_d3,wr_d4 : STD_LOGIC_VECTOR(7 downto 0);
+signal wr_d1,wr_d2,wr_d3,wr_d4 : STD_LOGIC_VECTOR(11 downto 0);
 signal wr_a1,wr_a2,wr_a3,wr_a4 : STD_LOGIC_VECTOR(14 downto 0);
-signal rd_d1,rd_d2,rd_d3,rd_d4 : STD_LOGIC_VECTOR(7 downto 0);
+signal rd_d1,rd_d2,rd_d3,rd_d4 : STD_LOGIC_VECTOR(11 downto 0);
 signal rd_a1,rd_a2,rd_a3,rd_a4 : STD_LOGIC_VECTOR(14 downto 0);
 
 --VGA
@@ -173,11 +179,96 @@ signal resetdcm,resetdcm1 : std_logic;
 --attribute IOB of ov7670_href1,ov7670_href2,ov7670_href3,ov7670_href4 : signal is "TRUE";
 --attribute IOB of ov7670_vsync1,ov7670_vsync2,ov7670_vsync3,ov7670_vsync4: signal is "TRUE";
 
+component my_spi is
+generic (
+C_CLOCK_COUNTER : integer
+);
+port (
+i_clock : in std_logic;
+i_reset : in std_logic;
+i_enable : in std_logic;
+i_data_byte : in BYTE_TYPE;
+o_cs : out std_logic;
+o_do : out std_logic;
+o_ck : out std_logic;
+o_sended : out std_logic
+);
+end component my_spi;
+
+component st7735r_initialize is
+generic (
+C_CLOCK_COUNTER : integer
+);
+port (
+i_clock : in std_logic;
+i_reset : in std_logic;
+i_run : in std_logic;
+i_color : in COLOR_TYPE;
+i_sended : in std_logic;
+o_initialized : out std_logic;
+o_enable : out std_logic;
+o_data_byte : out BYTE_TYPE;
+o_reset : out std_logic;
+o_rs : out std_logic;
+o_cs : out std_logic
+);
+end component st7735r_initialize;
+
+signal spi_enable,spi_cs,spi_do,spi_ck,spi_sended : std_logic;
+signal spi_data_byte : BYTE_TYPE;
+signal initialize_run,initialize_sended : std_logic;
+signal initialize_initialized,initialize_enable,initialize_reset,initialize_rs,initialize_cs : std_logic;
+signal initialize_color : COLOR_TYPE;
+signal initialize_data_byte : BYTE_TYPE;
+
 begin
 
---	vga_rgb <= (others => '0');
---	vga_hsync <= '0';
---	vga_vsync <= '0';
+o_cs <= spi_cs; -- TODO use initialize_cs mux
+o_do <= spi_do;
+o_ck <= spi_ck;
+o_reset <= initialize_reset when initialize_run = '1' else '1';
+o_rs <= initialize_rs when initialize_run = '1' else '1';
+
+spi_data_byte <= initialize_data_byte when initialize_run = '1' else (others => '0');
+spi_enable <= initialize_enable when initialize_run = '1' else '0';
+initialize_sended <= spi_sended when initialize_run = '1' else '0';
+
+c0 : my_spi
+generic map (
+C_CLOCK_COUNTER => SPI_SPEED_MODE
+)
+port map (
+	i_clock => clkcambuf,
+	i_reset => resend,
+	i_enable => spi_enable,
+	i_data_byte => spi_data_byte,
+	o_cs => spi_cs,
+	o_do => spi_do,
+	o_ck => spi_ck,
+	o_sended => spi_sended
+);
+
+c1 : st7735r_initialize
+generic map (
+C_CLOCK_COUNTER => SPI_SPEED_MODE
+)
+port map (
+	i_clock => clkcambuf,
+	i_reset => resend,
+	i_run => initialize_run,
+	i_color => initialize_color,
+	i_sended => initialize_sended,
+	o_initialized => initialize_initialized,
+	o_cs => initialize_cs,
+	o_reset => initialize_reset,
+	o_rs => initialize_rs,
+	o_enable => initialize_enable,
+	o_data_byte => initialize_data_byte
+);
+
+	vga_rgb <= (others => '0');
+	vga_hsync <= '0';
+	vga_vsync <= '0';
 --	pclk1buf : IBUFG port map (O => ov7670_pclk1buf, I => ov7670_pclk1);
 --	pclk2buf : IBUFG port map (O => ov7670_pclk2buf, I => ov7670_pclk2);
 --	pclk3buf : IBUFG port map (O => ov7670_pclk3buf, I => ov7670_pclk3);
@@ -310,30 +401,30 @@ begin
 --		vsync => vga_vsync_sig,
 --		address => rd_a4);
 
-	inst_imagegen : vga_imagegenerator port map(
-		reset => resend,
-		clk => clk25,
-		Data_in1 => rd_d1,
-		Data_in2 => rd_d2,
-		Data_in3 => rd_d3,
-		Data_in4 => rd_d4,
-		active_area1 => active1,
-		active_area2 => active2,
-		active_area3 => active3,
-		active_area4 => active4,
-		RGB_out => vga_rgb);
+--	inst_imagegen : vga_imagegenerator port map(
+--		reset => resend,
+--		clk => clk25,
+--		Data_in1 => rd_d1,
+--		Data_in2 => rd_d2,
+--		Data_in3 => rd_d3,
+--		Data_in4 => rd_d4,
+--		active_area1 => active1,
+--		active_area2 => active2,
+--		active_area3 => active3,
+--		active_area4 => active4,
+--		RGB_out => vga_rgb);
 	
-	inst_vgatiming : VGA_timing_synch port map(
-		reset => resend,
-		clk25 => clk25,
-		Hsync => vga_hsync,
-		Vsync => vga_vsync_sig,
-		activeArea1 => active1,
-		activeArea2 => active2,
-		activeArea3 => active3,
-		activeArea4 => active4);
+--	inst_vgatiming : VGA_timing_synch port map(
+--		reset => resend,
+--		clk25 => clk25,
+--		Hsync => vga_hsync,
+--		Vsync => vga_vsync_sig,
+--		activeArea1 => active1,
+--		activeArea2 => active2,
+--		activeArea3 => active3,
+--		activeArea4 => active4);
 
-vga_vsync <= vga_vsync_sig;
+--vga_vsync <= vga_vsync_sig;
 
 Registers: ov7670_registers port map(
 	reset => resend,
@@ -357,7 +448,7 @@ SCCB : ov7670_SCCB port map(
 resend1 <= resend or resend2;
 
 p0initcam : process(clkcambuf,resend) is
-	type states is (idle,wait4dcm,wait4dcmpclk,sa,sa1,sb,sb1,sc,sc1,sd,sd1,se);
+	type states is (idle,wait4dcm,wait4dcmpclk,sa,sa1,sb,sb1,sc,sc1,sd,sd1,se,display_initialize,display_is_initialize,display_done);
 	variable state : states := idle;
 	constant C_MAX : integer := 8192; -- XXX wait between cameras
 	variable counter : integer range 0 to C_MAX-1;
@@ -372,6 +463,7 @@ begin
 		resetdcm <= '0';
 		resetdcm1 <= '0';
 		w4dcmcnt := 0;
+		initialize_run <= '0';
 	elsif (rising_edge(clkcambuf)) then
 		case (state) is
 			when idle =>
@@ -513,13 +605,26 @@ begin
 					resend2 <= '0';
 				end if;
 			when se =>
-				state := se;
+				state := display_initialize;
 				camera1 <= '0';
 				camera2 <= '0';
 				camera3 <= '0';
 				camera4 <= '0';
 				send <= '0';
 				resend2 <= '0';
+			when display_initialize =>
+				initialize_run <= '1';
+				initialize_color <= SCREEN_ORANGE;
+				state := display_is_initialize;
+			when display_is_initialize =>
+				if (initialize_initialized = '1') then
+					state := display_done;
+				else
+					state := display_is_initialize;
+				end if;
+			when display_done =>
+				initialize_run <= '0';
+				state := display_done;
 			when others =>
 				state := idle;
 		end case;

@@ -45,10 +45,10 @@ ENTITY frame_buffer IS
     clka : IN STD_LOGIC;
     wea : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
     addra : IN STD_LOGIC_VECTOR(14 DOWNTO 0);
-    dina : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+    dina : IN STD_LOGIC_VECTOR(11 DOWNTO 0);
     clkb : IN STD_LOGIC;
     addrb : IN STD_LOGIC_VECTOR(14 DOWNTO 0);
-    doutb : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
+    doutb : OUT STD_LOGIC_VECTOR(11 DOWNTO 0)
   );
 END frame_buffer;
 
@@ -59,10 +59,10 @@ COMPONENT wrapped_frame_buffer
     clka : IN STD_LOGIC;
     wea : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
     addra : IN STD_LOGIC_VECTOR(14 DOWNTO 0);
-    dina : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+    dina : IN STD_LOGIC_VECTOR(11 DOWNTO 0);
     clkb : IN STD_LOGIC;
     addrb : IN STD_LOGIC_VECTOR(14 DOWNTO 0);
-    doutb : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
+    doutb : OUT STD_LOGIC_VECTOR(11 DOWNTO 0)
   );
 END COMPONENT;
 
@@ -107,8 +107,8 @@ END COMPONENT;
       c_prim_type => 1,
       c_read_depth_a => 19200,
       c_read_depth_b => 19200,
-      c_read_width_a => 8,
-      c_read_width_b => 8,
+      c_read_width_a => 12,
+      c_read_width_b => 12,
       c_rst_priority_a => "CE",
       c_rst_priority_b => "CE",
       c_rst_type => "SYNC",
@@ -127,8 +127,8 @@ END COMPONENT;
       c_write_depth_b => 19200,
       c_write_mode_a => "NO_CHANGE",
       c_write_mode_b => "NO_CHANGE",
-      c_write_width_a => 8,
-      c_write_width_b => 8,
+      c_write_width_a => 12,
+      c_write_width_b => 12,
       c_xdevicefamily => "spartan3e"
     );
 -- synthesis translate_on

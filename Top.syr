@@ -5,14 +5,14 @@ Parameter TMPDIR set to xst/projnav.tmp
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.08 secs
+Total CPU time to Xst completion: 0.05 secs
  
 --> 
 Parameter xsthdpdir set to xst
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.08 secs
+Total CPU time to Xst completion: 0.05 secs
  
 --> 
 Reading design: Top.prj
@@ -110,25 +110,29 @@ Cores Search Directories           : {"ipcore_dir"  }
 =========================================================================
 *                          HDL Compilation                              *
 =========================================================================
+Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/p_package.vhd" in Library work.
+Architecture st7735r_p_package of Entity st7735r_p_package is up to date.
+Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/p_screen.vhd" in Library work.
+Architecture st7735r_p_screen of Entity st7735r_p_screen is up to date.
+Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/my_spi.vhd" in Library work.
+Architecture behavioral of Entity my_spi is up to date.
+Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/st7735_initialize.vhd" in Library work.
+Architecture behavioral of Entity st7735r_initialize is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/debounce_circuit.vhd" in Library work.
 Architecture behavioral of Entity debounce_circuit is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/ov7670_capture.vhd" in Library work.
-Entity <ov7670_capture> compiled.
-Entity <ov7670_capture> (Architecture <behavioral>) compiled.
+Architecture behavioral of Entity ov7670_capture is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/ipcore_dir/frame_buffer.vhd" in Library work.
 Architecture frame_buffer_a of Entity frame_buffer is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/address_generator.vhd" in Library work.
 Architecture behavioral of Entity address_generator is up to date.
-Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/vga_imagegenerator.vhd" in Library work.
-Architecture behavioral of Entity vga_imagegenerator is up to date.
-Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/vga_timing.vhd" in Library work.
-Architecture behavioral of Entity vga_timing_synch is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/ov7670_registers.vhd" in Library work.
 Architecture behavioral of Entity ov7670_registers is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/ov7670_SCCB.vhd" in Library work.
 Architecture behavioral of Entity ov7670_sccb is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/Top.vhd" in Library work.
-Architecture structural of Entity top is up to date.
+Entity <top> compiled.
+Entity <top> (Architecture <structural>) compiled.
 
 =========================================================================
 *                     Design Hierarchy Analysis                         *
@@ -137,6 +141,13 @@ Analyzing hierarchy for entity <Top> in library <work> (architecture <structural
 	G_FE_WAIT_BITS = 20
 	G_PB_BITS = 24
 	G_WAIT1 = 20
+	SPI_SPEED_MODE = 8
+
+Analyzing hierarchy for entity <my_spi> in library <work> (architecture <behavioral>) with generics.
+	C_CLOCK_COUNTER = 8
+
+Analyzing hierarchy for entity <st7735r_initialize> in library <work> (architecture <behavioral>) with generics.
+	C_CLOCK_COUNTER = 8
 
 Analyzing hierarchy for entity <debounce_circuit> in library <work> (architecture <behavioral>) with generics.
 	PB_BITS = 24
@@ -146,10 +157,6 @@ Analyzing hierarchy for entity <ov7670_capture> in library <work> (architecture 
 
 Analyzing hierarchy for entity <address_generator> in library <work> (architecture <behavioral>) with generics.
 	PIXELS = 19200
-
-Analyzing hierarchy for entity <vga_imagegenerator> in library <work> (architecture <behavioral>).
-
-Analyzing hierarchy for entity <VGA_timing_synch> in library <work> (architecture <behavioral>).
 
 Analyzing hierarchy for entity <ov7670_registers> in library <work> (architecture <behavioral>).
 
@@ -164,7 +171,8 @@ Analyzing generic Entity <Top> in library <work> (Architecture <structural>).
 	G_FE_WAIT_BITS = 20
 	G_PB_BITS = 24
 	G_WAIT1 = 20
-WARNING:Xst:2211 - "/home/user/workspace/ov7670_vga_Nexys2/Top.vhd" line 255: Instantiating black box module <frame_buffer>.
+	SPI_SPEED_MODE = 8
+WARNING:Xst:2211 - "/home/user/workspace/ov7670_vga_Nexys2/Top.vhd" line 346: Instantiating black box module <frame_buffer>.
     Set user-defined property "CAPACITANCE =  DONT_CARE" for instance <OBUF_xclk1> in unit <Top>.
     Set user-defined property "DRIVE =  12" for instance <OBUF_xclk1> in unit <Top>.
     Set user-defined property "IOSTANDARD =  DEFAULT" for instance <OBUF_xclk1> in unit <Top>.
@@ -225,7 +233,16 @@ WARNING:Xst:2211 - "/home/user/workspace/ov7670_vga_Nexys2/Top.vhd" line 255: In
     Set user-defined property "IBUF_DELAY_VALUE =  0" for instance <pclk1_bufa> in unit <Top>.
     Set user-defined property "IBUF_LOW_PWR =  TRUE" for instance <pclk1_bufa> in unit <Top>.
     Set user-defined property "IOSTANDARD =  DEFAULT" for instance <pclk1_bufa> in unit <Top>.
+INFO:Xst:2679 - Register <initialize_color> in unit <Top> has a constant value of 1111110101100000 during circuit operation. The register is replaced by logic.
 Entity <Top> analyzed. Unit <Top> generated.
+
+Analyzing generic Entity <my_spi> in library <work> (Architecture <behavioral>).
+	C_CLOCK_COUNTER = 8
+Entity <my_spi> analyzed. Unit <my_spi> generated.
+
+Analyzing generic Entity <st7735r_initialize> in library <work> (Architecture <behavioral>).
+	C_CLOCK_COUNTER = 8
+Entity <st7735r_initialize> analyzed. Unit <st7735r_initialize> generated.
 
 Analyzing generic Entity <debounce_circuit> in library <work> (Architecture <behavioral>).
 	PB_BITS = 24
@@ -239,12 +256,6 @@ Entity <ov7670_capture> analyzed. Unit <ov7670_capture> generated.
 Analyzing generic Entity <address_generator> in library <work> (Architecture <behavioral>).
 	PIXELS = 19200
 Entity <address_generator> analyzed. Unit <address_generator> generated.
-
-Analyzing Entity <vga_imagegenerator> in library <work> (Architecture <behavioral>).
-Entity <vga_imagegenerator> analyzed. Unit <vga_imagegenerator> generated.
-
-Analyzing Entity <VGA_timing_synch> in library <work> (Architecture <behavioral>).
-Entity <VGA_timing_synch> analyzed. Unit <VGA_timing_synch> generated.
 
 Analyzing Entity <ov7670_registers> in library <work> (Architecture <behavioral>).
 Entity <ov7670_registers> analyzed. Unit <ov7670_registers> generated.
@@ -260,6 +271,62 @@ Entity <ov7670_SCCB> analyzed. Unit <ov7670_SCCB> generated.
 
 Performing bidirectional port resolution...
 
+Synthesizing Unit <my_spi>.
+    Related source file is "/home/user/workspace/ov7670_vga_Nexys2/my_spi.vhd".
+    Found 1-bit register for signal <ck>.
+    Found 3-bit register for signal <clock_counter>.
+    Found 3-bit adder for signal <clock_counter$addsub0000> created at line 71.
+    Found 1-bit register for signal <clock_data>.
+    Found 1-bit register for signal <clock_divider>.
+    Found 1-bit register for signal <d<0>>.
+    Found 3-bit register for signal <data_index>.
+    Found 3-bit adder for signal <data_index$addsub0000> created at line 103.
+    Summary:
+	inferred  10 D-type flip-flop(s).
+	inferred   2 Adder/Subtractor(s).
+Unit <my_spi> synthesized.
+
+
+Synthesizing Unit <st7735r_initialize>.
+    Related source file is "/home/user/workspace/ov7670_vga_Nexys2/st7735_initialize.vhd".
+    Found 166x8-bit ROM for signal <data_byte$rom0000> created at line 195.
+    Found 22x8-bit ROM for signal <data_byte$rom0001> created at line 317.
+    Found finite state machine <FSM_0> for signal <state>.
+    -----------------------------------------------------------------------
+    | States             | 40                                             |
+    | Transitions        | 78                                             |
+    | Inputs             | 11                                             |
+    | Outputs            | 40                                             |
+    | Clock              | i_clock                   (rising_edge)        |
+    | Reset              | i_reset                   (positive)           |
+    | Reset type         | asynchronous                                   |
+    | Reset State        | idle                                           |
+    | Power Up State     | idle                                           |
+    | Encoding           | automatic                                      |
+    | Implementation     | LUT                                            |
+    -----------------------------------------------------------------------
+    Using one-hot encoding for signal <$mux0000>.
+    Using one-hot encoding for signal <$mux0001>.
+    Found 21x6-bit ROM for signal <$mux0001> created at line 319.
+    Found 165x43-bit ROM for signal <$mux0000> created at line 197.
+    Found 1-bit register for signal <cs>.
+    Found 8-bit register for signal <data_byte>.
+    Found 16-bit register for signal <data_index>.
+    Found 16-bit adder for signal <data_index$share0000> created at line 105.
+    Found 1-bit register for signal <enable>.
+    Found 1-bit register for signal <initialized>.
+    Found 1-bit register for signal <reset>.
+    Found 1-bit register for signal <rs>.
+    Found 26-bit register for signal <w0_index>.
+    Found 26-bit adder for signal <w0_index$share0000> created at line 105.
+    Summary:
+	inferred   1 Finite State Machine(s).
+	inferred   4 ROM(s).
+	inferred  55 D-type flip-flop(s).
+	inferred   2 Adder/Subtractor(s).
+Unit <st7735r_initialize> synthesized.
+
+
 Synthesizing Unit <debounce_circuit>.
     Related source file is "/home/user/workspace/ov7670_vga_Nexys2/debounce_circuit.vhd".
     Found 1-bit register for signal <output>.
@@ -272,7 +339,7 @@ Unit <debounce_circuit> synthesized.
 
 Synthesizing Unit <ov7670_capture>.
     Related source file is "/home/user/workspace/ov7670_vga_Nexys2/ov7670_capture.vhd".
-WARNING:Xst:646 - Signal <d_latch<15:11>> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <d_latch<15:12>> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
     Found 15-bit register for signal <address>.
     Found 15-bit adder for signal <address$addsub0000> created at line 68.
     Found 16-bit register for signal <d_latch>.
@@ -296,48 +363,6 @@ Synthesizing Unit <address_generator>.
 	inferred  15 D-type flip-flop(s).
 	inferred   1 Adder/Subtractor(s).
 Unit <address_generator> synthesized.
-
-
-Synthesizing Unit <vga_imagegenerator>.
-    Related source file is "/home/user/workspace/ov7670_vga_Nexys2/vga_imagegenerator.vhd".
-WARNING:Xst:647 - Input <clk> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
-WARNING:Xst:647 - Input <Data_in2> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
-WARNING:Xst:647 - Input <Data_in3> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
-WARNING:Xst:647 - Input <Data_in4> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
-WARNING:Xst:647 - Input <reset> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
-WARNING:Xst:647 - Input <active_area2> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
-WARNING:Xst:647 - Input <active_area3> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
-WARNING:Xst:647 - Input <active_area4> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
-WARNING:Xst:1780 - Signal <d4> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
-WARNING:Xst:1780 - Signal <d3> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
-WARNING:Xst:1780 - Signal <d2> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
-WARNING:Xst:1780 - Signal <d1> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
-Unit <vga_imagegenerator> synthesized.
-
-
-Synthesizing Unit <VGA_timing_synch>.
-    Related source file is "/home/user/workspace/ov7670_vga_Nexys2/vga_timing.vhd".
-WARNING:Xst:1780 - Signal <v120> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
-WARNING:Xst:1780 - Signal <pv> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
-WARNING:Xst:1780 - Signal <ph> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
-WARNING:Xst:1780 - Signal <display_flag> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
-WARNING:Xst:1780 - Signal <clkdv_vga> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
-WARNING:Xst:1780 - Signal <activeh> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
-    Found 10-bit comparator less for signal <activeArea1$cmp_lt0000> created at line 303.
-    Found 10-bit comparator less for signal <activeArea1$cmp_lt0001> created at line 303.
-    Found 1-bit register for signal <h>.
-    Found 10-bit comparator greatequal for signal <h$cmp_ge0000> created at line 71.
-    Found 10-bit comparator lessequal for signal <h$cmp_le0000> created at line 71.
-    Found 10-bit up counter for signal <hcnt>.
-    Found 1-bit register for signal <v>.
-    Found 10-bit comparator greatequal for signal <v$cmp_ge0000> created at line 83.
-    Found 10-bit comparator lessequal for signal <v$cmp_le0000> created at line 83.
-    Found 10-bit up counter for signal <vcnt>.
-    Summary:
-	inferred   2 Counter(s).
-	inferred   2 D-type flip-flop(s).
-	inferred   6 Comparator(s).
-Unit <VGA_timing_synch> synthesized.
 
 
 Synthesizing Unit <ov7670_registers>.
@@ -396,9 +421,11 @@ WARNING:Xst:1780 - Signal <wr_d2> is never used or assigned. This unconnected si
 WARNING:Xst:1780 - Signal <wr_a4> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <wr_a3> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <wr_a2> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
-WARNING:Xst:653 - Signal <rd_d4> is used but never assigned. This sourceless signal will be automatically connected to value 00000000.
-WARNING:Xst:653 - Signal <rd_d3> is used but never assigned. This sourceless signal will be automatically connected to value 00000000.
-WARNING:Xst:653 - Signal <rd_d2> is used but never assigned. This sourceless signal will be automatically connected to value 00000000.
+WARNING:Xst:653 - Signal <vga_vsync_sig> is used but never assigned. This sourceless signal will be automatically connected to value 0.
+WARNING:Xst:1780 - Signal <rd_d4> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:1780 - Signal <rd_d3> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:1780 - Signal <rd_d2> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <rd_d1> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <rd_a4> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <rd_a3> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <rd_a2> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -408,6 +435,7 @@ WARNING:Xst:1780 - Signal <ov7670_pclk3buf1> is never used or assigned. This unc
 WARNING:Xst:1780 - Signal <ov7670_pclk3buf> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <ov7670_pclk2buf1> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <ov7670_pclk2buf> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <initialize_cs> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <clock6b> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <clock6a> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <clock5b> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -417,18 +445,22 @@ WARNING:Xst:1780 - Signal <clock4a> is never used or assigned. This unconnected 
 WARNING:Xst:646 - Signal <camera4> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:646 - Signal <camera3> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:646 - Signal <camera2> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:1780 - Signal <active4> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:1780 - Signal <active3> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:1780 - Signal <active2> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:653 - Signal <active1> is used but never assigned. This sourceless signal will be automatically connected to value 0.
 INFO:Xst:1799 - State 0110 is never reached in FSM <state>.
 INFO:Xst:1799 - State 0101 is never reached in FSM <state>.
 INFO:Xst:1799 - State 0111 is never reached in FSM <state>.
 INFO:Xst:1799 - State 1000 is never reached in FSM <state>.
 INFO:Xst:1799 - State 1001 is never reached in FSM <state>.
 INFO:Xst:1799 - State 1010 is never reached in FSM <state>.
-    Found finite state machine <FSM_0> for signal <state>.
+    Found finite state machine <FSM_1> for signal <state>.
     -----------------------------------------------------------------------
-    | States             | 6                                              |
-    | Transitions        | 10                                             |
-    | Inputs             | 3                                              |
-    | Outputs            | 6                                              |
+    | States             | 9                                              |
+    | Transitions        | 14                                             |
+    | Inputs             | 4                                              |
+    | Outputs            | 8                                              |
     | Clock              | clkcambuf                 (rising_edge)        |
     | Reset              | resend                    (positive)           |
     | Reset type         | asynchronous                                   |
@@ -440,6 +472,7 @@ INFO:Xst:1799 - State 1010 is never reached in FSM <state>.
     Found 1-bit register for signal <camera1>.
     Found 13-bit register for signal <counter>.
     Found 13-bit adder for signal <counter$addsub0000>.
+    Found 1-bit register for signal <initialize_run>.
     Found 1-bit register for signal <resend2>.
     Found 1-bit register for signal <resetdcm>.
     Found 1-bit register for signal <resetdcm1>.
@@ -448,7 +481,7 @@ INFO:Xst:1799 - State 1010 is never reached in FSM <state>.
     Found 20-bit adder for signal <w4dcmcnt$addsub0000>.
     Summary:
 	inferred   1 Finite State Machine(s).
-	inferred  38 D-type flip-flop(s).
+	inferred  39 D-type flip-flop(s).
 	inferred   2 Adder/Subtractor(s).
 Unit <Top> synthesized.
 
@@ -458,30 +491,34 @@ INFO:Xst:1767 - HDL ADVISOR - Resource sharing has identified that some arithmet
 HDL Synthesis Report
 
 Macro Statistics
-# ROMs                                                 : 1
+# ROMs                                                 : 5
+ 165x43-bit ROM                                        : 1
+ 166x8-bit ROM                                         : 1
+ 21x6-bit ROM                                          : 1
+ 22x8-bit ROM                                          : 1
  47x16-bit ROM                                         : 1
-# Adders/Subtractors                                   : 4
+# Adders/Subtractors                                   : 8
  13-bit adder                                          : 1
  15-bit adder                                          : 2
+ 16-bit adder                                          : 1
  20-bit adder                                          : 1
-# Counters                                             : 6
- 10-bit up counter                                     : 2
+ 26-bit adder                                          : 1
+ 3-bit adder                                           : 2
+# Counters                                             : 4
  20-bit up counter                                     : 1
  24-bit up counter                                     : 1
  6-bit up counter                                      : 1
  8-bit up counter                                      : 1
-# Registers                                            : 22
- 1-bit register                                        : 13
+# Registers                                            : 35
+ 1-bit register                                        : 21
  13-bit register                                       : 1
  15-bit register                                       : 2
- 16-bit register                                       : 2
+ 16-bit register                                       : 3
  20-bit register                                       : 1
+ 26-bit register                                       : 1
+ 3-bit register                                        : 2
  32-bit register                                       : 2
- 8-bit register                                        : 1
-# Comparators                                          : 6
- 10-bit comparator greatequal                          : 2
- 10-bit comparator less                                : 2
- 10-bit comparator lessequal                           : 2
+ 8-bit register                                        : 2
 # Multiplexers                                         : 2
  32-bit 4-to-1 multiplexer                             : 2
 # Tristates                                            : 1
@@ -493,36 +530,81 @@ Macro Statistics
 *                       Advanced HDL Synthesis                          *
 =========================================================================
 
-Analyzing FSM <FSM_0> for best encoding.
-Optimizing FSM <state/FSM> on signal <state[1:3]> with gray encoding.
--------------------
+Analyzing FSM <FSM_1> for best encoding.
+Optimizing FSM <state/FSM> on signal <state[1:9]> with one-hot encoding.
+--------------------
  State | Encoding
--------------------
- 0000  | 000
- 0001  | 001
- 0010  | 110
- 0011  | 011
- 0100  | 010
+--------------------
+ 0000  | 000000001
+ 0001  | 000000010
+ 0010  | 000010000
+ 0011  | 000000100
+ 0100  | 000001000
  0101  | unreached
  0110  | unreached
  0111  | unreached
  1000  | unreached
  1001  | unreached
  1010  | unreached
- 1011  | 111
--------------------
+ 1011  | 000100000
+ 1100  | 001000000
+ 1101  | 010000000
+ 1110  | 100000000
+--------------------
+Analyzing FSM <FSM_0> for best encoding.
+Optimizing FSM <c1/state/FSM> on signal <state[1:40]> with one-hot encoding.
+----------------------------------------------------------------
+ State              | Encoding
+----------------------------------------------------------------
+ idle               | 0000000000000000000000000000000000000001
+ smallwait0         | 0000000000000000000000000000000000000010
+ smallwait1         | 0000000000000000000000000000000000000100
+ smallwait2         | 0000000000000000000000000000000000001000
+ swreset            | 0000000000000000000000000000000000010000
+ initwait0          | 0000000000000000000000000000000000100000
+ initwait0a         | 0000000000000000000000000000000001000000
+ slpout             | 0000000000000000000000000000000010000000
+ initwait1          | 0000000000000000000000000000000100000000
+ initwait1a         | 0000000000000000000000000000001000000000
+ start              | 0000000000000000000000000000010000000000
+ check_index        | 0000000000000000000000000000100000000000
+ initwait4          | 0000000000000000000000000001000000000000
+ wait0              | 0000000000000000000000000010000000000000
+ wait1              | 0000000000000000000000000100000000000000
+ initwait4a         | 0000000000000000000000001000000000000000
+ noron              | 0000000000000000000000010000000000000000
+ initwait2          | 0000000000000000000000100000000000000000
+ initwait2a         | 0000000000000000000001000000000000000000
+ dispon             | 0000000000000000000010000000000000000000
+ initwait3          | 0000000000000000000100000000000000000000
+ initwait3a         | 0000000000000000001000000000000000000000
+ csup               | 0000000000000000010000000000000000000000
+ bsinitwait         | 0000000000000000100000000000000000000000
+ bsstart            | 0000000000000001000000000000000000000000
+ bs_check_index     | 0000000000000010000000000000000000000000
+ bswaitdata0        | 0000000000000100000000000000000000000000
+ bswait0            | 0000000000001000000000000000000000000000
+ bswait1            | 0000000000010000000000000000000000000000
+ bswaitdata0a       | 0000000000100000000000000000000000000000
+ bsfillbytel        | 0000000001000000000000000000000000000000
+ bsfillbytelwait0   | 0000000010000000000000000000000000000000
+ bsfillbytelwait0a  | 0000000100000000000000000000000000000000
+ bsfillbyteh        | 0000001000000000000000000000000000000000
+ bsfillbytehwait0   | 0000010000000000000000000000000000000000
+ bsfillbytehwait0a  | 0000100000000000000000000000000000000000
+ bsfill_check_index | 0001000000000000000000000000000000000000
+ bscsup             | 0010000000000000000000000000000000000000
+ bsfillwait0        | 0100000000000000000000000000000000000000
+ bsfillwait1        | 1000000000000000000000000000000000000000
+----------------------------------------------------------------
 Reading core <ipcore_dir/frame_buffer.ngc>.
 Loading core <frame_buffer> for timing and area information for instance <inst_framebuffer1>.
-WARNING:Xst:2677 - Node <latched_d_7> of sequential type is unconnected in block <inst_ov7670capt1>.
-WARNING:Xst:2677 - Node <d_latch_7> of sequential type is unconnected in block <inst_ov7670capt1>.
-WARNING:Xst:2677 - Node <d_latch_11> of sequential type is unconnected in block <inst_ov7670capt1>.
+INFO:Xst:2261 - The FF/Latch <addr_0> in Unit <inst_addrgen1> is equivalent to the following 14 FFs/Latches, which will be removed : <addr_1> <addr_2> <addr_3> <addr_4> <addr_5> <addr_6> <addr_7> <addr_8> <addr_9> <addr_10> <addr_11> <addr_12> <addr_13> <addr_14> 
+WARNING:Xst:1293 - FF/Latch <addr_0> has a constant value of 0 in block <inst_addrgen1>. This FF/Latch will be trimmed during the optimization process.
 WARNING:Xst:2677 - Node <d_latch_12> of sequential type is unconnected in block <inst_ov7670capt1>.
 WARNING:Xst:2677 - Node <d_latch_13> of sequential type is unconnected in block <inst_ov7670capt1>.
 WARNING:Xst:2677 - Node <d_latch_14> of sequential type is unconnected in block <inst_ov7670capt1>.
 WARNING:Xst:2677 - Node <d_latch_15> of sequential type is unconnected in block <inst_ov7670capt1>.
-WARNING:Xst:2677 - Node <latched_d_7> of sequential type is unconnected in block <ov7670_capture>.
-WARNING:Xst:2677 - Node <d_latch_7> of sequential type is unconnected in block <ov7670_capture>.
-WARNING:Xst:2677 - Node <d_latch_11> of sequential type is unconnected in block <ov7670_capture>.
 WARNING:Xst:2677 - Node <d_latch_12> of sequential type is unconnected in block <ov7670_capture>.
 WARNING:Xst:2677 - Node <d_latch_13> of sequential type is unconnected in block <ov7670_capture>.
 WARNING:Xst:2677 - Node <d_latch_14> of sequential type is unconnected in block <ov7670_capture>.
@@ -532,25 +614,27 @@ WARNING:Xst:2677 - Node <d_latch_15> of sequential type is unconnected in block 
 Advanced HDL Synthesis Report
 
 Macro Statistics
-# FSMs                                                 : 1
-# ROMs                                                 : 1
+# FSMs                                                 : 2
+# ROMs                                                 : 5
+ 165x43-bit ROM                                        : 1
+ 166x8-bit ROM                                         : 1
+ 21x6-bit ROM                                          : 1
+ 22x8-bit ROM                                          : 1
  47x16-bit ROM                                         : 1
-# Adders/Subtractors                                   : 4
+# Adders/Subtractors                                   : 8
  13-bit adder                                          : 1
  15-bit adder                                          : 2
+ 16-bit adder                                          : 1
  20-bit adder                                          : 1
-# Counters                                             : 6
- 10-bit up counter                                     : 2
+ 26-bit adder                                          : 1
+ 3-bit adder                                           : 2
+# Counters                                             : 4
  20-bit up counter                                     : 1
  24-bit up counter                                     : 1
  6-bit up counter                                      : 1
  8-bit up counter                                      : 1
-# Registers                                            : 173
- Flip-Flops                                            : 173
-# Comparators                                          : 6
- 10-bit comparator greatequal                          : 2
- 10-bit comparator less                                : 2
- 10-bit comparator lessequal                           : 2
+# Registers                                            : 240
+ Flip-Flops                                            : 240
 # Multiplexers                                         : 2
  32-bit 4-to-1 multiplexer                             : 2
 
@@ -559,6 +643,21 @@ Macro Statistics
 =========================================================================
 *                         Low Level Synthesis                           *
 =========================================================================
+WARNING:Xst:1293 - FF/Latch <addr_0> has a constant value of 0 in block <address_generator>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <addr_1> has a constant value of 0 in block <address_generator>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <addr_2> has a constant value of 0 in block <address_generator>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <addr_3> has a constant value of 0 in block <address_generator>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <addr_4> has a constant value of 0 in block <address_generator>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <addr_5> has a constant value of 0 in block <address_generator>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <addr_6> has a constant value of 0 in block <address_generator>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <addr_7> has a constant value of 0 in block <address_generator>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <addr_8> has a constant value of 0 in block <address_generator>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <addr_9> has a constant value of 0 in block <address_generator>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <addr_10> has a constant value of 0 in block <address_generator>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <addr_11> has a constant value of 0 in block <address_generator>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <addr_12> has a constant value of 0 in block <address_generator>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <addr_13> has a constant value of 0 in block <address_generator>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <addr_14> has a constant value of 0 in block <address_generator>. This FF/Latch will be trimmed during the optimization process.
 WARNING:Xst:1293 - FF/Latch <data_sr_0> has a constant value of 1 in block <ov7670_SCCB>. This FF/Latch will be trimmed during the optimization process.
 INFO:Xst:1901 - Instance DCM_vga in unit Top of type DCM has been replaced by DCM_SP
 INFO:Xst:1901 - Instance DCM_cam in unit Top of type DCM has been replaced by DCM_SP
@@ -567,19 +666,20 @@ WARNING:Xst:2041 - Unit ov7670_SCCB: 1 internal tristate is replaced by logic (p
 
 Optimizing unit <Top> ...
 
+Optimizing unit <my_spi> ...
+
+Optimizing unit <st7735r_initialize> ...
+
 Optimizing unit <ov7670_capture> ...
-
-Optimizing unit <address_generator> ...
-
-Optimizing unit <VGA_timing_synch> ...
 
 Optimizing unit <ov7670_registers> ...
 
 Optimizing unit <ov7670_SCCB> ...
+WARNING:Xst:2677 - Node <c1/cs> of sequential type is unconnected in block <Top>.
 
 Mapping all equations...
 Building and optimizing final netlist ...
-Found area constraint ratio of 100 (+ 5) on block Top, actual ratio is 3.
+Found area constraint ratio of 100 (+ 5) on block Top, actual ratio is 5.
 
 Final Macro Processing ...
 
@@ -587,8 +687,8 @@ Final Macro Processing ...
 Final Register Report
 
 Macro Statistics
-# Registers                                            : 253
- Flip-Flops                                            : 253
+# Registers                                            : 330
+ Flip-Flops                                            : 330
 
 =========================================================================
 
@@ -614,41 +714,44 @@ Optimization Goal                  : Speed
 Keep Hierarchy                     : No
 
 Design Statistics
-# IOs                              : 86
+# IOs                              : 91
 
 Cell Usage :
-# BELS                             : 833
+# BELS                             : 1191
 #      GND                         : 2
 #      INV                         : 13
-#      LUT1                        : 126
-#      LUT2                        : 84
-#      LUT3                        : 106
-#      LUT3_L                      : 3
-#      LUT4                        : 164
-#      LUT4_D                      : 5
-#      LUT4_L                      : 3
-#      MUXCY                       : 142
-#      MUXF5                       : 33
-#      MUXF6                       : 15
+#      LUT1                        : 133
+#      LUT2                        : 82
+#      LUT2_D                      : 1
+#      LUT2_L                      : 6
+#      LUT3                        : 140
+#      LUT3_D                      : 4
+#      LUT3_L                      : 5
+#      LUT4                        : 373
+#      LUT4_D                      : 20
+#      LUT4_L                      : 25
+#      MUXCY                       : 165
+#      MUXF5                       : 57
+#      MUXF6                       : 21
 #      VCC                         : 2
-#      XORCY                       : 135
-# FlipFlops/Latches                : 256
-#      FDC                         : 80
-#      FDC_1                       : 9
-#      FDCE                        : 105
-#      FDE                         : 4
-#      FDP                         : 1
-#      FDPE                        : 32
+#      XORCY                       : 142
+# FlipFlops/Latches                : 333
+#      FDC                         : 161
+#      FDC_1                       : 10
+#      FDCE                        : 88
+#      FDE                         : 12
+#      FDP                         : 4
+#      FDPE                        : 33
 #      FDR                         : 25
-# RAMS                             : 10
-#      RAMB16_S1_S1                : 8
-#      RAMB16_S4_S4                : 2
-# Clock Buffers                    : 6
-#      BUFG                        : 6
-# IO Buffers                       : 50
-#      IBUF                        : 10
+# RAMS                             : 15
+#      RAMB16_S1_S1                : 12
+#      RAMB16_S4_S4                : 3
+# Clock Buffers                    : 5
+#      BUFG                        : 5
+# IO Buffers                       : 56
+#      IBUF                        : 11
 #      IBUFG                       : 2
-#      OBUF                        : 38
+#      OBUF                        : 43
 # DCMs                             : 3
 #      DCM_SP                      : 3
 =========================================================================
@@ -658,13 +761,13 @@ Device utilization summary:
 
 Selected Device : 3s1200efg320-4 
 
- Number of Slices:                      279  out of   8672     3%  
- Number of Slice Flip Flops:            256  out of  17344     1%  
- Number of 4 input LUTs:                504  out of  17344     2%  
- Number of IOs:                          86
- Number of bonded IOBs:                  50  out of    250    20%  
- Number of BRAMs:                        10  out of     28    35%  
- Number of GCLKs:                         6  out of     24    25%  
+ Number of Slices:                      439  out of   8672     5%  
+ Number of Slice Flip Flops:            333  out of  17344     1%  
+ Number of 4 input LUTs:                802  out of  17344     4%  
+ Number of IOs:                          91
+ Number of bonded IOBs:                  56  out of    250    22%  
+ Number of BRAMs:                        15  out of     28    53%  
+ Number of GCLKs:                         5  out of     24    20%  
  Number of DCMs:                          3  out of      8    37%  
 
 ---------------------------
@@ -688,26 +791,29 @@ Clock Information:
 -----------------------------------+------------------------+-------+
 Clock Signal                       | Clock buffer(FF name)  | Load  |
 -----------------------------------+------------------------+-------+
-clkcam                             | DCM_vga:CLKDV          | 50    |
-ov7670_pclk1                       | DCM_pclk1:CLK0         | 45    |
-clkcam                             | IBUFG+BUFG             | 181   |
+clkcam                             | DCM_vga:CLKDV          | 18    |
+ov7670_pclk1                       | DCM_pclk1:CLK0         | 53    |
+clkcam                             | IBUFG+BUFG             | 286   |
+c0/clock_data                      | NONE(c0/data_index_2)  | 3     |
+c0/clock_divider                   | NONE(c0/d_0)           | 3     |
 -----------------------------------+------------------------+-------+
+INFO:Xst:2169 - HDL ADVISOR - Some clock signals were not automatically buffered by XST with BUFG/BUFR resources. Please use the buffer_type constraint in order to insert these buffers to the clock signals to help prevent skew problems.
 
 Asynchronous Control Signals Information:
 ----------------------------------------
 --------------------------------------------+--------------------------+-------+
 Control Signal                              | Buffer(FF name)          | Load  |
 --------------------------------------------+--------------------------+-------+
-inst_debounce/output(inst_debounce/output:Q)| NONE(Registers/cmd_reg_0)| 227   |
+inst_debounce/output(inst_debounce/output:Q)| NONE(Registers/cmd_reg_0)| 296   |
 --------------------------------------------+--------------------------+-------+
 
 Timing Summary:
 ---------------
 Speed Grade: -4
 
-   Minimum period: 7.960ns (Maximum Frequency: 125.628MHz)
+   Minimum period: 9.447ns (Maximum Frequency: 105.851MHz)
    Minimum input arrival time before clock: 4.707ns
-   Maximum output required time after clock: 8.898ns
+   Maximum output required time after clock: 8.888ns
    Maximum combinational path delay: No path found
 
 Timing Detail:
@@ -715,38 +821,9 @@ Timing Detail:
 All values displayed in nanoseconds (ns)
 
 =========================================================================
-Timing constraint: Default period analysis for Clock 'clkcam'
-  Clock period: 6.618ns (frequency: 151.103MHz)
-  Total number of paths / destination ports: 7119 / 514
--------------------------------------------------------------------------
-Delay:               6.618ns (Levels of Logic = 8)
-  Source:            w4dcmcnt_7 (FF)
-  Destination:       w4dcmcnt_1 (FF)
-  Source Clock:      clkcam rising
-  Destination Clock: clkcam rising
-
-  Data Path: w4dcmcnt_7 to w4dcmcnt_1
-                                Gate     Net
-    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
-    ----------------------------------------  ------------
-     FDC:C->Q              3   0.591   0.706  w4dcmcnt_7 (w4dcmcnt_7)
-     LUT4:I0->O            1   0.704   0.000  state_cmp_eq0000_wg_lut<0> (state_cmp_eq0000_wg_lut<0>)
-     MUXCY:S->O            1   0.464   0.000  state_cmp_eq0000_wg_cy<0> (state_cmp_eq0000_wg_cy<0>)
-     MUXCY:CI->O           1   0.059   0.000  state_cmp_eq0000_wg_cy<1> (state_cmp_eq0000_wg_cy<1>)
-     MUXCY:CI->O           1   0.059   0.000  state_cmp_eq0000_wg_cy<2> (state_cmp_eq0000_wg_cy<2>)
-     MUXCY:CI->O           1   0.059   0.000  state_cmp_eq0000_wg_cy<3> (state_cmp_eq0000_wg_cy<3>)
-     MUXCY:CI->O           7   0.459   0.712  state_cmp_eq0000_wg_cy<4> (state_cmp_eq0000)
-     LUT4_D:I3->O         19   0.704   1.089  w4dcmcnt_mux0000<0>41 (N6)
-     LUT4:I3->O            1   0.704   0.000  w4dcmcnt_mux0000<18>1 (w4dcmcnt_mux0000<18>)
-     FDC:D                     0.308          w4dcmcnt_1
-    ----------------------------------------
-    Total                      6.618ns (4.111ns logic, 2.507ns route)
-                                       (62.1% logic, 37.9% route)
-
-=========================================================================
 Timing constraint: Default period analysis for Clock 'ov7670_pclk1'
   Clock period: 7.960ns (frequency: 125.628MHz)
-  Total number of paths / destination ports: 588 / 213
+  Total number of paths / destination ports: 680 / 301
 -------------------------------------------------------------------------
 Delay:               3.980ns (Levels of Logic = 1)
   Source:            inst_ov7670capt1/latched_vsync (FF)
@@ -764,6 +841,77 @@ Delay:               3.980ns (Levels of Logic = 1)
     ----------------------------------------
     Total                      3.980ns (1.850ns logic, 2.130ns route)
                                        (46.5% logic, 53.5% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'clkcam'
+  Clock period: 9.447ns (frequency: 105.851MHz)
+  Total number of paths / destination ports: 15653 / 423
+-------------------------------------------------------------------------
+Delay:               9.447ns (Levels of Logic = 6)
+  Source:            c1/data_index_0 (FF)
+  Destination:       c1/data_index_15 (FF)
+  Source Clock:      clkcam rising
+  Destination Clock: clkcam rising
+
+  Data Path: c1/data_index_0 to c1/data_index_15
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDC:C->Q             67   0.591   1.448  c1/data_index_0 (c1/data_index_0)
+     LUT4_D:I0->O          8   0.704   0.761  c1/Mrom__mux0000201 (c1/Mrom__mux000020)
+     LUT4_D:I3->LO         1   0.704   0.104  c1/state_cmp_eq0004247 (N267)
+     LUT4:I3->O            3   0.704   0.535  c1/state_cmp_eq00071 (c1/state_cmp_eq0007)
+     LUT4:I3->O            1   0.704   0.455  c1/data_index_mux0000<0>1_SW1 (N147)
+     LUT3_D:I2->O         15   0.704   1.021  c1/data_index_mux0000<0>1 (c1/N21)
+     LUT4:I3->O            1   0.704   0.000  c1/data_index_mux0000<8>1 (c1/data_index_mux0000<8>)
+     FDC:D                     0.308          c1/data_index_8
+    ----------------------------------------
+    Total                      9.447ns (5.123ns logic, 4.324ns route)
+                                       (54.2% logic, 45.8% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'c0/clock_data'
+  Clock period: 2.447ns (frequency: 408.664MHz)
+  Total number of paths / destination ports: 6 / 3
+-------------------------------------------------------------------------
+Delay:               2.447ns (Levels of Logic = 1)
+  Source:            c0/data_index_0 (FF)
+  Destination:       c0/data_index_1 (FF)
+  Source Clock:      c0/clock_data rising
+  Destination Clock: c0/clock_data rising
+
+  Data Path: c0/data_index_0 to c0/data_index_1
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDC:C->Q              6   0.591   0.844  c0/data_index_0 (c0/data_index_0)
+     LUT4:I0->O            1   0.704   0.000  c0/data_index_mux0002<1>1 (c0/data_index_mux0002<1>)
+     FDC:D                     0.308          c0/data_index_1
+    ----------------------------------------
+    Total                      2.447ns (1.603ns logic, 0.844ns route)
+                                       (65.5% logic, 34.5% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'c0/clock_divider'
+  Clock period: 2.085ns (frequency: 479.616MHz)
+  Total number of paths / destination ports: 3 / 3
+-------------------------------------------------------------------------
+Delay:               2.085ns (Levels of Logic = 1)
+  Source:            c0/d_0 (FF)
+  Destination:       c0/d_0 (FF)
+  Source Clock:      c0/clock_divider rising
+  Destination Clock: c0/clock_divider rising
+
+  Data Path: c0/d_0 to c0/d_0
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDC:C->Q              2   0.591   0.482  c0/d_0 (c0/d_0)
+     LUT3:I2->O            1   0.704   0.000  c0/d_0_mux00001 (c0/d_0_mux0000)
+     FDC:D                     0.308          c0/d_0
+    ----------------------------------------
+    Total                      2.085ns (1.603ns logic, 0.482ns route)
+                                       (76.9% logic, 23.1% route)
 
 =========================================================================
 Timing constraint: Default OFFSET IN BEFORE for Clock 'clkcam'
@@ -787,7 +935,7 @@ Offset:              4.707ns (Levels of Logic = 2)
 
 =========================================================================
 Timing constraint: Default OFFSET IN BEFORE for Clock 'ov7670_pclk1'
-  Total number of paths / destination ports: 9 / 9
+  Total number of paths / destination ports: 10 / 10
 -------------------------------------------------------------------------
 Offset:              1.946ns (Levels of Logic = 1)
   Source:            ov7670_href1 (PAD)
@@ -806,38 +954,79 @@ Offset:              1.946ns (Levels of Logic = 1)
 
 =========================================================================
 Timing constraint: Default OFFSET OUT AFTER for Clock 'clkcam'
-  Total number of paths / destination ports: 166 / 14
+  Total number of paths / destination ports: 40 / 8
 -------------------------------------------------------------------------
-Offset:              8.898ns (Levels of Logic = 4)
-  Source:            inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[6].ram.r/s3_init.ram/dpram.dp4x4.ram (RAM)
-  Destination:       vga_rgb<7> (PAD)
-  Source Clock:      clkcam rising 0.2X
+Offset:              8.888ns (Levels of Logic = 4)
+  Source:            initialize_run (FF)
+  Destination:       o_do (PAD)
+  Source Clock:      clkcam rising
 
-  Data Path: inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[6].ram.r/s3_init.ram/dpram.dp4x4.ram to vga_rgb<7>
+  Data Path: initialize_run to o_do
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     RAMB16_S4_S4:CLKB->DOB3    1   2.800   0.499  U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[6].ram.r/s3_init.ram/dpram.dp4x4.ram (U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[6].ram.ram_doutb<3>)
-     LUT4:I1->O            1   0.704   0.499  U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/has_mux_b.B/Mmux_dout_mux81 (doutb<7>)
-     end scope: 'inst_framebuffer1'
-     LUT2:I1->O            1   0.704   0.420  inst_imagegen/RGB_out<7>1 (vga_rgb_7_OBUF)
-     OBUF:I->O                 3.272          vga_rgb_7_OBUF (vga_rgb<7>)
+     FDC:C->Q             21   0.591   1.303  initialize_run (initialize_run)
+     LUT4:I0->O            1   0.704   0.595  c0/o_do85 (c0/o_do85)
+     LUT4:I0->O            1   0.704   0.595  c0/o_do136 (c0/o_do136)
+     LUT4:I0->O            1   0.704   0.420  c0/o_do159 (o_do_OBUF)
+     OBUF:I->O                 3.272          o_do_OBUF (o_do)
     ----------------------------------------
-    Total                      8.898ns (7.480ns logic, 1.418ns route)
-                                       (84.1% logic, 15.9% route)
+    Total                      8.888ns (5.975ns logic, 2.913ns route)
+                                       (67.2% logic, 32.8% route)
+
+=========================================================================
+Timing constraint: Default OFFSET OUT AFTER for Clock 'c0/clock_divider'
+  Total number of paths / destination ports: 1 / 1
+-------------------------------------------------------------------------
+Offset:              4.310ns (Levels of Logic = 1)
+  Source:            c0/ck (FF)
+  Destination:       o_ck (PAD)
+  Source Clock:      c0/clock_divider rising
+
+  Data Path: c0/ck to o_ck
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDC:C->Q              2   0.591   0.447  c0/ck (c0/ck)
+     OBUF:I->O                 3.272          o_ck_OBUF (o_ck)
+    ----------------------------------------
+    Total                      4.310ns (3.863ns logic, 0.447ns route)
+                                       (89.6% logic, 10.4% route)
+
+=========================================================================
+Timing constraint: Default OFFSET OUT AFTER for Clock 'c0/clock_data'
+  Total number of paths / destination ports: 8 / 1
+-------------------------------------------------------------------------
+Offset:              8.333ns (Levels of Logic = 4)
+  Source:            c0/data_index_2 (FF)
+  Destination:       o_do (PAD)
+  Source Clock:      c0/clock_data rising
+
+  Data Path: c0/data_index_2 to o_do
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDC:C->Q              6   0.591   0.748  c0/data_index_2 (c0/data_index_2)
+     LUT4:I1->O            1   0.704   0.595  c0/o_do85 (c0/o_do85)
+     LUT4:I0->O            1   0.704   0.595  c0/o_do136 (c0/o_do136)
+     LUT4:I0->O            1   0.704   0.420  c0/o_do159 (o_do_OBUF)
+     OBUF:I->O                 3.272          o_do_OBUF (o_do)
+    ----------------------------------------
+    Total                      8.333ns (5.975ns logic, 2.358ns route)
+                                       (71.7% logic, 28.3% route)
 
 =========================================================================
 
 
-Total REAL time to Xst completion: 11.00 secs
-Total CPU time to Xst completion: 10.19 secs
+Total REAL time to Xst completion: 21.00 secs
+Total CPU time to Xst completion: 17.08 secs
  
 --> 
 
 
-Total memory usage is 534088 kilobytes
+Total memory usage is 544148 kilobytes
 
 Number of errors   :    0 (   0 filtered)
 Number of warnings :   80 (   0 filtered)
-Number of infos    :   11 (   0 filtered)
+Number of infos    :   14 (   0 filtered)
 

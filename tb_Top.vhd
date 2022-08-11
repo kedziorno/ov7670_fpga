@@ -27,6 +27,7 @@
 --------------------------------------------------------------------------------
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
+USE WORK.st7735r_p_package.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -41,7 +42,8 @@ component Top is
 Generic (
 G_PB_BITS : integer := 6;
 G_WAIT1 : integer := 7; -- wait for reset dcm and cameras
-G_FE_WAIT_BITS : integer := 9 -- sccb wait for cameras
+G_FE_WAIT_BITS : integer := 9; -- sccb wait for cameras
+SPI_SPEED_MODE : integer := C_CLOCK_COUNTER_MF
 );
 Port (
 clk50	: in STD_LOGIC; -- Crystal Oscilator 50MHz  --B8
@@ -63,7 +65,12 @@ ov7670_sioc1,ov7670_sioc2,ov7670_sioc3,ov7670_sioc4  : out STD_LOGIC; -- Pmod JB
 ov7670_siod1,ov7670_siod2,ov7670_siod3,ov7670_siod4  : inout STD_LOGIC; -- Pmod JB4 --H16
 vga_hsync : out STD_LOGIC; --T4
 vga_vsync : out STD_LOGIC; --U3
-vga_rgb	: out STD_LOGIC_VECTOR(7 downto 0)
+vga_rgb	: out STD_LOGIC_VECTOR(7 downto 0);
+o_cs : out STD_LOGIC;
+o_do : out STD_LOGIC;
+o_ck : out STD_LOGIC;
+o_reset : out STD_LOGIC;
+o_rs : out STD_LOGIC
 );
 end component Top;
 
@@ -88,6 +95,11 @@ signal ov7670_reset1,ov7670_reset2,ov7670_reset3,ov7670_reset4 : std_logic;
 signal vga_hsync : std_logic;
 signal vga_vsync : std_logic;
 signal vga_rgb : std_logic_vector(7 downto 0);
+signal o_cs : STD_LOGIC;
+signal o_do : STD_LOGIC;
+signal o_ck : STD_LOGIC;
+signal o_reset : STD_LOGIC;
+signal o_rs : STD_LOGIC;
 
 -- Clock period definitions
 constant clk50_period : time := 20 ns; -- 50mhz
@@ -254,7 +266,12 @@ ov7670_siod3 => ov7670_siod3,
 ov7670_siod4 => ov7670_siod4,
 vga_hsync => vga_hsync,
 vga_vsync => vga_vsync,
-vga_rgb => vga_rgb
+vga_rgb => vga_rgb,
+o_cs => o_cs,
+o_do => o_do,
+o_ck => o_ck,
+o_reset => o_reset,
+o_rs => o_rs
 );
 
 -- Clock process definitions
