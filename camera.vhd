@@ -243,11 +243,11 @@ begin
 						counth0 := counth0 + 1;
 					end if;
 			end case;
---			if (a = '1') then
+			if (a = '1') then
 				camera_o_hs <= vhref;
---			else
---				camera_o_hs <= '0';
---			end if;
+			else
+				camera_o_hs <= '0';
+			end if;
 		end if;
 	end process p2;
 
@@ -273,7 +273,8 @@ begin
 			state := s1;
 			count := 0;
 		elsif (falling_edge(camera_i_xclk)) then
-			if (pixel_time = '1') then
+--			if (pixel_time = '1') then
+			if (a = '1') then
 				case (state) is
 					when s1 =>
 						vd := startdata(count);

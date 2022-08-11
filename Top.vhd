@@ -276,7 +276,7 @@ port map (
 	o_data_byte => initialize_data_byte
 );
 
-poled : process(clkcambuf,resend) is
+poled : process(ov7670_pclk1buf1,resend) is
 	type states is (idle,
 	a1,b1,c1,d1,
 --	a2,b2,c2,d2,
@@ -290,15 +290,14 @@ poled : process(clkcambuf,resend) is
 	);
 	variable state : states;
 	variable w0_index : integer range 0 to SPI_SPEED_MODE-1;
-	constant MAX_RD : unsigned(14 downto 0) := (others => '1');
-	variable aaa : unsigned(14 downto 0);
+	constant MAX_RD : std_logic_vector(14 downto 0) := (others => '1');
 begin
 	if (resend = '1') then
 		state := idle;
 		spi_enable_data <= '0';
 		spi_data_byte_data <= (others => '0');
 		w0_index := 0;
-	elsif (rising_edge(clkcambuf)) then
+	elsif (rising_edge(ov7670_pclk1buf1)) then
 		pvs <= ov7670_vsync1;
 		case (state) is
 			when idle =>
@@ -310,7 +309,6 @@ begin
 			
 			-- caset
 			when a1 =>
-				state := b1;
 				spi_enable_data <= '1';
 				spi_rs_data <= '0';
 				spi_data_byte_data <= x"2a";
@@ -341,7 +339,6 @@ begin
 
 			-- xs0
 			when a3 =>
-				state := b3;
 				spi_enable_data <= '1';
 				spi_rs_data <= '1';
 				spi_data_byte_data <= x"00";
@@ -372,7 +369,6 @@ begin
 
 			-- xs1
 			when a4 =>
-				state := b4;
 				spi_enable_data <= '1';
 				spi_rs_data <= '1';
 				spi_data_byte_data <= x"00";
@@ -403,7 +399,6 @@ begin
 
 			-- xe0
 			when a5 =>
-				state := b5;
 				spi_enable_data <= '1';
 				spi_rs_data <= '1';
 				spi_data_byte_data <= x"00";
@@ -434,7 +429,6 @@ begin
 
 			-- xe1
 			when a6 =>
-				state := b6;
 				spi_enable_data <= '1';
 				spi_rs_data <= '1';
 				spi_data_byte_data <= x"78";
@@ -465,7 +459,6 @@ begin
 
 			-- memwr
 			when a7 =>
-				state := b7;
 				spi_enable_data <= '1';
 				spi_rs_data <= '0';
 				spi_data_byte_data <= x"2c";
@@ -495,7 +488,6 @@ begin
 				state := a8;
 
 			when a8 =>
-				state := b8;
 				spi_enable_data <= '1';
 				spi_rs_data <= '1';
 				spi_data_byte_data <= rd_d1(7 downto 0);
@@ -525,7 +517,6 @@ begin
 				state := a9;
 
 			when a9 =>
-				state := b9;
 				spi_enable_data <= '1';
 				spi_rs_data <= '1';
 				spi_data_byte_data <= "0000"&rd_d1(11 downto 8);
@@ -552,8 +543,7 @@ begin
 					w0_index := w0_index + 1;
 				end if;
 			when d9 =>
-				aaa := unsigned(rd_a1);
-				if (aaa = MAX_RD-1) then
+				if (rd_a1 = MAX_RD-1) then
 					state := idle;
 				else
 					state := a8;
