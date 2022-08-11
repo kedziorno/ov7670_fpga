@@ -96,7 +96,7 @@ capture_process: process(pclk,reset)
 				d_latch <= (others => '0');
          end if;
          
---						we_reg  <= '0';
+--						we_reg  <= '1';
 
          -- Is a new screen about to start (i.e. we have to restart capturing
          if latched_vsync = '1' then 
