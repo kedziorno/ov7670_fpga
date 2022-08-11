@@ -11,6 +11,10 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+use IEEE.numeric_std.all;
+
 Library UNISIM;
 use UNISIM.vcomponents.all;
 
@@ -109,17 +113,17 @@ COMPONENT frame_buffer
 			 doutB: out STD_LOGIC_VECTOR(11 downto 0));
 END COMPONENT;
 
---COMPONENT vga_imagegenerator
---	Port ( reset : in std_logic; clk : std_logic; Data_in1 : in  STD_LOGIC_VECTOR (11 downto 0);
---						Data_in2 : in  STD_LOGIC_VECTOR (11 downto 0);
---						Data_in3 : in  STD_LOGIC_VECTOR (11 downto 0);
---						Data_in4 : in  STD_LOGIC_VECTOR (11 downto 0);
---						active_area1 : in  STD_LOGIC;
---						active_area2 : in  STD_LOGIC;
---						active_area3 : in  STD_LOGIC;
---						active_area4 : in  STD_LOGIC;
---           RGB_out : out  STD_LOGIC_VECTOR (7 downto 0));
---END COMPONENT;
+COMPONENT vga_imagegenerator
+	Port ( reset : in std_logic; clk : std_logic; Data_in1 : in  STD_LOGIC_VECTOR (11 downto 0);
+						Data_in2 : in  STD_LOGIC_VECTOR (11 downto 0);
+						Data_in3 : in  STD_LOGIC_VECTOR (11 downto 0);
+						Data_in4 : in  STD_LOGIC_VECTOR (11 downto 0);
+						active_area1 : in  STD_LOGIC;
+						active_area2 : in  STD_LOGIC;
+						active_area3 : in  STD_LOGIC;
+						active_area4 : in  STD_LOGIC;
+           RGB_out : out  STD_LOGIC_VECTOR (7 downto 0));
+END COMPONENT;
 
 COMPONENT address_generator
 Generic (PIXELS : integer := 19200);
@@ -129,15 +133,15 @@ Generic (PIXELS : integer := 19200);
 			 address : out STD_LOGIC_VECTOR (14 downto 0));
 END COMPONENT;
 
---COMPONENT VGA_timing_synch
---	Port ( reset : in std_logic; clk25 : in  STD_LOGIC;
---           Hsync : out  STD_LOGIC;
---           Vsync : out  STD_LOGIC;
---           activeArea1 : out  STD_LOGIC;
---           activeArea2 : out  STD_LOGIC;
---           activeArea3 : out  STD_LOGIC;
---           activeArea4 : out  STD_LOGIC);
---END COMPONENT;
+COMPONENT VGA_timing_synch
+	Port ( reset : in std_logic; clk25 : in  STD_LOGIC;
+           Hsync : out  STD_LOGIC;
+           Vsync : out  STD_LOGIC;
+           activeArea1 : out  STD_LOGIC;
+           activeArea2 : out  STD_LOGIC;
+           activeArea3 : out  STD_LOGIC;
+           activeArea4 : out  STD_LOGIC);
+END COMPONENT;
 
 signal clk25 : STD_LOGIC;
 signal resend : STD_LOGIC;
@@ -216,10 +220,16 @@ end component st7735r_initialize;
 
 signal spi_enable,spi_cs,spi_do,spi_ck,spi_sended : std_logic;
 signal spi_data_byte : BYTE_TYPE;
+
 signal initialize_run,initialize_sended : std_logic;
 signal initialize_initialized,initialize_enable,initialize_reset,initialize_rs,initialize_cs : std_logic;
 signal initialize_color : COLOR_TYPE;
 signal initialize_data_byte : BYTE_TYPE;
+
+signal spi_enable_data,spi_data,spi_rs_data : std_logic;
+signal spi_data_byte_data : BYTE_TYPE;
+
+signal pvs : std_logic;
 
 begin
 
@@ -227,10 +237,10 @@ o_cs <= spi_cs; -- TODO use initialize_cs mux
 o_do <= spi_do;
 o_ck <= spi_ck;
 o_reset <= initialize_reset when initialize_run = '1' else '1';
-o_rs <= initialize_rs when initialize_run = '1' else '1';
+o_rs <= initialize_rs when initialize_run = '1' else spi_rs_data when spi_data = '1' else '1';
 
-spi_data_byte <= initialize_data_byte when initialize_run = '1' else (others => '0');
-spi_enable <= initialize_enable when initialize_run = '1' else '0';
+spi_data_byte <= initialize_data_byte when initialize_run = '1' else spi_data_byte_data when spi_data = '1' else (others => '0');
+spi_enable <= initialize_enable when initialize_run = '1' else spi_enable_data when spi_data = '1' else '0';
 initialize_sended <= spi_sended when initialize_run = '1' else '0';
 
 c0 : my_spi
@@ -266,9 +276,296 @@ port map (
 	o_data_byte => initialize_data_byte
 );
 
-	vga_rgb <= (others => '0');
-	vga_hsync <= '0';
-	vga_vsync <= '0';
+poled : process(clkcambuf,resend) is
+	type states is (idle,
+	a1,b1,c1,d1,
+--	a2,b2,c2,d2,
+	a3,b3,c3,d3,
+	a4,b4,c4,d4,
+	a5,b5,c5,d5,
+	a6,b6,c6,d6,
+	a7,b7,c7,d7,
+	a8,b8,c8,d8,
+	a9,b9,c9,d9
+	);
+	variable state : states;
+	variable w0_index : integer range 0 to SPI_SPEED_MODE-1;
+	constant MAX_RD : unsigned(14 downto 0) := (others => '1');
+	variable aaa : unsigned(14 downto 0);
+begin
+	if (resend = '1') then
+		state := idle;
+		spi_enable_data <= '0';
+		spi_data_byte_data <= (others => '0');
+		w0_index := 0;
+	elsif (rising_edge(clkcambuf)) then
+		pvs <= ov7670_vsync1;
+		case (state) is
+			when idle =>
+				if (pvs = '0' and ov7670_vsync1 = '1') then
+					state := a1;
+				else
+					state := idle;
+				end if;
+			
+			-- caset
+			when a1 =>
+				state := b1;
+				spi_enable_data <= '1';
+				spi_rs_data <= '0';
+				spi_data_byte_data <= x"2a";
+				if (spi_sended = '1') then
+					state := b1;
+				else
+					state := a1;
+				end if;
+			when b1 =>
+				if (w0_index = SPI_SPEED_MODE - 1) then
+					state := c1;
+					w0_index := 0;
+					spi_enable_data <= '0';
+				else
+					state := b1;
+					w0_index := w0_index + 1;
+				end if;				
+			when c1 =>
+				if (w0_index = SPI_SPEED_MODE - 1) then
+					state := d1;
+					w0_index := 0;
+				else
+					state := c1;
+					w0_index := w0_index + 1;
+				end if;
+			when d1 =>
+				state := a3;
+
+			-- xs0
+			when a3 =>
+				state := b3;
+				spi_enable_data <= '1';
+				spi_rs_data <= '1';
+				spi_data_byte_data <= x"00";
+				if (spi_sended = '1') then
+					state := b3;
+				else
+					state := a3;
+				end if;
+			when b3 =>
+				if (w0_index = SPI_SPEED_MODE - 1) then
+					state := c3;
+					w0_index := 0;
+					spi_enable_data <= '0';
+				else
+					state := b3;
+					w0_index := w0_index + 1;
+				end if;				
+			when c3 =>
+				if (w0_index = SPI_SPEED_MODE - 1) then
+					state := d3;
+					w0_index := 0;
+				else
+					state := c3;
+					w0_index := w0_index + 1;
+				end if;
+			when d3 =>
+				state := a4;
+
+			-- xs1
+			when a4 =>
+				state := b4;
+				spi_enable_data <= '1';
+				spi_rs_data <= '1';
+				spi_data_byte_data <= x"00";
+				if (spi_sended = '1') then
+					state := b4;
+				else
+					state := a4;
+				end if;
+			when b4 =>
+				if (w0_index = SPI_SPEED_MODE - 1) then
+					state := c4;
+					w0_index := 0;
+					spi_enable_data <= '0';
+				else
+					state := b4;
+					w0_index := w0_index + 1;
+				end if;				
+			when c4 =>
+				if (w0_index = SPI_SPEED_MODE - 1) then
+					state := d4;
+					w0_index := 0;
+				else
+					state := c4;
+					w0_index := w0_index + 1;
+				end if;
+			when d4 =>
+				state := a5;
+
+			-- xe0
+			when a5 =>
+				state := b5;
+				spi_enable_data <= '1';
+				spi_rs_data <= '1';
+				spi_data_byte_data <= x"00";
+				if (spi_sended = '1') then
+					state := b5;
+				else
+					state := a5;
+				end if;
+			when b5 =>
+				if (w0_index = SPI_SPEED_MODE - 1) then
+					state := c5;
+					w0_index := 0;
+					spi_enable_data <= '0';
+				else
+					state := b5;
+					w0_index := w0_index + 1;
+				end if;				
+			when c5 =>
+				if (w0_index = SPI_SPEED_MODE - 1) then
+					state := d5;
+					w0_index := 0;
+				else
+					state := c5;
+					w0_index := w0_index + 1;
+				end if;
+			when d5 =>
+				state := a6;
+
+			-- xe1
+			when a6 =>
+				state := b6;
+				spi_enable_data <= '1';
+				spi_rs_data <= '1';
+				spi_data_byte_data <= x"78";
+				if (spi_sended = '1') then
+					state := b6;
+				else
+					state := a6;
+				end if;
+			when b6 =>
+				if (w0_index = SPI_SPEED_MODE - 1) then
+					state := c6;
+					w0_index := 0;
+					spi_enable_data <= '0';
+				else
+					state := b6;
+					w0_index := w0_index + 1;
+				end if;				
+			when c6 =>
+				if (w0_index = SPI_SPEED_MODE - 1) then
+					state := d6;
+					w0_index := 0;
+				else
+					state := c6;
+					w0_index := w0_index + 1;
+				end if;
+			when d6 =>
+				state := a7;
+
+			-- memwr
+			when a7 =>
+				state := b7;
+				spi_enable_data <= '1';
+				spi_rs_data <= '0';
+				spi_data_byte_data <= x"2c";
+				if (spi_sended = '1') then
+					state := b7;
+				else
+					state := a7;
+				end if;
+			when b7 =>
+				if (w0_index = SPI_SPEED_MODE - 1) then
+					state := c7;
+					w0_index := 0;
+					spi_enable_data <= '0';
+				else
+					state := b7;
+					w0_index := w0_index + 1;
+				end if;				
+			when c7 =>
+				if (w0_index = SPI_SPEED_MODE - 1) then
+					state := d7;
+					w0_index := 0;
+				else
+					state := c7;
+					w0_index := w0_index + 1;
+				end if;
+			when d7 =>
+				state := a8;
+
+			when a8 =>
+				state := b8;
+				spi_enable_data <= '1';
+				spi_rs_data <= '1';
+				spi_data_byte_data <= rd_d1(7 downto 0);
+				if (spi_sended = '1') then
+					state := b8;
+				else
+					state := a8;
+				end if;
+			when b8 =>
+				if (w0_index = SPI_SPEED_MODE - 1) then
+					state := c8;
+					w0_index := 0;
+					spi_enable_data <= '0';
+				else
+					state := b8;
+					w0_index := w0_index + 1;
+				end if;				
+			when c8 =>
+				if (w0_index = SPI_SPEED_MODE - 1) then
+					state := d8;
+					w0_index := 0;
+				else
+					state := c8;
+					w0_index := w0_index + 1;
+				end if;
+			when d8 =>
+				state := a9;
+
+			when a9 =>
+				state := b9;
+				spi_enable_data <= '1';
+				spi_rs_data <= '1';
+				spi_data_byte_data <= "0000"&rd_d1(11 downto 8);
+				if (spi_sended = '1') then
+					state := b9;
+				else
+					state := a9;
+				end if;
+			when b9 =>
+				if (w0_index = SPI_SPEED_MODE - 1) then
+					state := c9;
+					w0_index := 0;
+					spi_enable_data <= '0';
+				else
+					state := b9;
+					w0_index := w0_index + 1;
+				end if;				
+			when c9 =>
+				if (w0_index = SPI_SPEED_MODE - 1) then
+					state := d9;
+					w0_index := 0;
+				else
+					state := c9;
+					w0_index := w0_index + 1;
+				end if;
+			when d9 =>
+				aaa := unsigned(rd_a1);
+				if (aaa = MAX_RD-1) then
+					state := idle;
+				else
+					state := a8;
+				end if;
+
+		end case;
+	end if;
+end process poled;
+
+--	vga_rgb <= (others => '0');
+--	vga_hsync <= '0';
+--	vga_vsync <= '0';
 --	pclk1buf : IBUFG port map (O => ov7670_pclk1buf, I => ov7670_pclk1);
 --	pclk2buf : IBUFG port map (O => ov7670_pclk2buf, I => ov7670_pclk2);
 --	pclk3buf : IBUFG port map (O => ov7670_pclk3buf, I => ov7670_pclk3);
@@ -375,7 +672,7 @@ port map (
 --		clkB => clk25,
 --		addrB => rd_a4,
 --		doutB => rd_d4);
-	
+--	active1 <= '1';
 	inst_addrgen1 : address_generator port map(
 		reset => resend,
 		clk25 => clk25,
@@ -401,30 +698,30 @@ port map (
 --		vsync => vga_vsync_sig,
 --		address => rd_a4);
 
---	inst_imagegen : vga_imagegenerator port map(
---		reset => resend,
---		clk => clk25,
---		Data_in1 => rd_d1,
---		Data_in2 => rd_d2,
---		Data_in3 => rd_d3,
---		Data_in4 => rd_d4,
---		active_area1 => active1,
---		active_area2 => active2,
---		active_area3 => active3,
---		active_area4 => active4,
---		RGB_out => vga_rgb);
+	inst_imagegen : vga_imagegenerator port map(
+		reset => resend,
+		clk => clk25,
+		Data_in1 => rd_d1,
+		Data_in2 => rd_d2,
+		Data_in3 => rd_d3,
+		Data_in4 => rd_d4,
+		active_area1 => active1,
+		active_area2 => active2,
+		active_area3 => active3,
+		active_area4 => active4,
+		RGB_out => vga_rgb);
 	
---	inst_vgatiming : VGA_timing_synch port map(
---		reset => resend,
---		clk25 => clk25,
---		Hsync => vga_hsync,
---		Vsync => vga_vsync_sig,
---		activeArea1 => active1,
---		activeArea2 => active2,
---		activeArea3 => active3,
---		activeArea4 => active4);
+	inst_vgatiming : VGA_timing_synch port map(
+		reset => resend,
+		clk25 => clk25,
+		Hsync => vga_hsync,
+		Vsync => vga_vsync_sig,
+		activeArea1 => active1,
+		activeArea2 => active2,
+		activeArea3 => active3,
+		activeArea4 => active4);
 
---vga_vsync <= vga_vsync_sig;
+vga_vsync <= vga_vsync_sig;
 
 Registers: ov7670_registers port map(
 	reset => resend,
@@ -464,6 +761,7 @@ begin
 		resetdcm1 <= '0';
 		w4dcmcnt := 0;
 		initialize_run <= '0';
+		spi_data <= '0';
 	elsif (rising_edge(clkcambuf)) then
 		case (state) is
 			when idle =>
@@ -625,6 +923,7 @@ begin
 			when display_done =>
 				initialize_run <= '0';
 				state := display_done;
+				spi_data <= '1';
 			when others =>
 				state := idle;
 		end case;
