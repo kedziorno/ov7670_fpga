@@ -63,13 +63,13 @@ Generic (PB_BITS : integer := G_PB_BITS);
 END COMPONENT;
 
 COMPONENT ov7670_capture
-Generic (PIXELS : integer := 19200);
+Generic (PIXELS : integer := 76800);
 	Port ( reset : in std_logic; pclk : in  STD_LOGIC;
           vsync : in  STD_LOGIC;
           href : in  STD_LOGIC;
           d : in  STD_LOGIC_VECTOR (7 downto 0);
-          addr : out  STD_LOGIC_VECTOR (14 downto 0);
-          dout : out  STD_LOGIC_VECTOR (7 downto 0);
+          addr : out  STD_LOGIC_VECTOR (16 downto 0);
+          dout : out  STD_LOGIC_VECTOR (4 downto 0);
           we : out  STD_LOGIC_VECTOR (0 downto 0));
 END COMPONENT;
 
@@ -96,18 +96,18 @@ end component;
 COMPONENT frame_buffer
 	Port ( clkA : in STD_LOGIC;
 			 weA	: in STD_LOGIC_VECTOR(0 downto 0);
-			 addrA: in STD_LOGIC_VECTOR(14 downto 0);
-			 dinA	: in STD_LOGIC_VECTOR(7 downto 0);
+			 addrA: in STD_LOGIC_VECTOR(16 downto 0);
+			 dinA	: in STD_LOGIC_VECTOR(4 downto 0);
 			 clkB : in STD_LOGIC;
-			 addrB: in STD_LOGIC_VECTOR(14 downto 0);
-			 doutB: out STD_LOGIC_VECTOR(7 downto 0));
+			 addrB: in STD_LOGIC_VECTOR(16 downto 0);
+			 doutB: out STD_LOGIC_VECTOR(4 downto 0));
 END COMPONENT;
 
 COMPONENT vga_imagegenerator
-	Port ( reset : in std_logic; clk : std_logic; Data_in1 : in  STD_LOGIC_VECTOR (7 downto 0);
-						Data_in2 : in  STD_LOGIC_VECTOR (7 downto 0);
-						Data_in3 : in  STD_LOGIC_VECTOR (7 downto 0);
-						Data_in4 : in  STD_LOGIC_VECTOR (7 downto 0);
+	Port ( reset : in std_logic; clk : std_logic; Data_in1 : in  STD_LOGIC_VECTOR (4 downto 0);
+						Data_in2 : in  STD_LOGIC_VECTOR (4 downto 0);
+						Data_in3 : in  STD_LOGIC_VECTOR (4 downto 0);
+						Data_in4 : in  STD_LOGIC_VECTOR (4 downto 0);
 						active_area1 : in  STD_LOGIC;
 						active_area2 : in  STD_LOGIC;
 						active_area3 : in  STD_LOGIC;
@@ -116,11 +116,11 @@ COMPONENT vga_imagegenerator
 END COMPONENT;
 
 COMPONENT address_generator
-Generic (PIXELS : integer := 19200);
+Generic (PIXELS : integer := 76800);
 	Port ( reset : in std_logic; clk25 : in STD_LOGIC;
 			 enable : in STD_LOGIC;
 			 vsync : in STD_LOGIC;
-			 address : out STD_LOGIC_VECTOR (14 downto 0));
+			 address : out STD_LOGIC_VECTOR (16 downto 0));
 END COMPONENT;
 
 COMPONENT VGA_timing_synch
@@ -138,10 +138,10 @@ signal resend : STD_LOGIC;
 
 -- RAM
 signal wren1,wren2,wren3,wren4 : STD_LOGIC_VECTOR(0 downto 0);
-signal wr_d1,wr_d2,wr_d3,wr_d4 : STD_LOGIC_VECTOR(7 downto 0);
-signal wr_a1,wr_a2,wr_a3,wr_a4 : STD_LOGIC_VECTOR(14 downto 0);
-signal rd_d1,rd_d2,rd_d3,rd_d4 : STD_LOGIC_VECTOR(7 downto 0);
-signal rd_a1,rd_a2,rd_a3,rd_a4 : STD_LOGIC_VECTOR(14 downto 0);
+signal wr_d1,wr_d2,wr_d3,wr_d4 : STD_LOGIC_VECTOR(4 downto 0);
+signal wr_a1,wr_a2,wr_a3,wr_a4 : STD_LOGIC_VECTOR(16 downto 0);
+signal rd_d1,rd_d2,rd_d3,rd_d4 : STD_LOGIC_VECTOR(4 downto 0);
+signal rd_a1,rd_a2,rd_a3,rd_a4 : STD_LOGIC_VECTOR(16 downto 0);
 
 --VGA
 signal active1,active2,active3,active4 : STD_LOGIC;
