@@ -247,11 +247,13 @@ signal pvs : std_logic;
 
 signal fifo_empty,fifo_full,fifo_rd,fifo_wr : std_logic;
 
+signal stop_capture,send_pixels,done_pixels : std_logic;
+
 begin
 
-o_cs <= spi_cs; -- TODO use initialize_cs mux
-o_do <= spi_do;
-o_ck <= spi_ck;
+o_cs <= spi_cs when (initialize_run = '1' or send_pixels = '1') else '1'; -- TODO use initialize_cs mux
+o_do <= spi_do when (initialize_run = '1' or send_pixels = '1') else '0';
+o_ck <= spi_ck when (initialize_run = '1' or send_pixels = '1') else '0';
 o_reset <= initialize_reset when initialize_run = '1' else '1';
 o_rs <= initialize_rs when initialize_run = '1' else spi_rs_data when spi_data = '1' else '1';
 
@@ -264,7 +266,7 @@ generic map (
 C_CLOCK_COUNTER => SPI_SPEED_MODE
 )
 port map (
-	i_clock => clkcambuf,
+	i_clock => clk25,
 	i_reset => resend,
 	i_enable => spi_enable,
 	i_data_byte => spi_data_byte,
@@ -279,7 +281,7 @@ generic map (
 C_CLOCK_COUNTER => SPI_SPEED_MODE
 )
 port map (
-	i_clock => clkcambuf,
+	i_clock => clk25,
 	i_reset => resend,
 	i_run => initialize_run,
 	i_color => initialize_color,
@@ -292,7 +294,49 @@ port map (
 	o_data_byte => initialize_data_byte
 );
 
-poled : process(clkcambuf,resend) is
+--stop_capture <= not stop_capture when ov7670_vsync1 = '1' else '0' when resend = '1' else stop_capture;
+
+fsm1 : process (clk25,resend) is
+	type states is (a,b);
+	variable state : states;
+	constant MAX_RD : std_logic_vector(14 downto 0) := std_logic_vector(to_unsigned(19200,15));
+begin
+	if (resend = '1') then
+		state := a;
+		stop_capture <= '0';
+	elsif (rising_edge(clk25)) then
+		pvs <= ov7670_vsync1;
+		if (pvs = '0' and ov7670_vsync1 = '1') then
+			stop_capture <= not stop_capture;
+		else
+			stop_capture <= stop_capture;
+		end if;
+		case (state) is
+			when a =>
+				if (wr_a1 = MAX_RD-1) then
+					state := b;
+--					stop_capture <= not stop_capture;
+					send_pixels <= '1';
+				else
+					state := a;
+--					stop_capture <= stop_capture;
+					send_pixels <= '0';
+				end if;
+			when b =>
+				if (done_pixels = '1') then
+					state := a;
+--					stop_capture <= not stop_capture;
+					send_pixels <= '0';
+				else
+					state := b;
+--					stop_capture <= stop_capture;
+					send_pixels <= '1';
+				end if;
+		end case;
+	end if;
+end process fsm1;
+
+poled : process(clk25,resend) is
 	type states is (idle,
 	a1,b1,c1,d1,
 --	a2,b2,c2,d2,
@@ -308,7 +352,6 @@ poled : process(clkcambuf,resend) is
 	variable w0_index : integer range 0 to SPI_SPEED_MODE-1;
 	constant MAX_PIXELS : integer := 19200;
 	variable w1_index : integer range 0 to MAX_PIXELS-1;
-	constant MAX_RD : std_logic_vector(14 downto 0) := (others => '1');
 begin
 	if (resend = '1') then
 		state := idle;
@@ -316,11 +359,12 @@ begin
 		spi_data_byte_data <= (others => '0');
 		w0_index := 0;
 		w1_index := 0;
-	elsif (rising_edge(clkcambuf)) then
-		pvs <= ov7670_vsync1;
+		done_pixels <= '0';
+	elsif (rising_edge(clk25)) then
 		case (state) is
 			when idle =>
-				if (pvs = '0' and ov7670_vsync1 = '1') then
+				done_pixels <= '0';
+				if (send_pixels = '1') then
 					state := a1;
 				else
 					state := idle;
@@ -565,9 +609,11 @@ begin
 				if (w1_index = MAX_PIXELS-1) then
 					state := idle;
 					w1_index := 0;
+					done_pixels <= '1';
 				else
 					state := a8;
 					w1_index := w1_index + 1;
+					done_pixels <= '0';
 				end if;
 
 		end case;
@@ -615,7 +661,7 @@ end process poled;
 --	ov7670_pclk4buf1 <= ov7670_pclk4buf;
 
 	inst_ov7670capt1: ov7670_capture port map(
-		reset => resend,
+		reset => stop_capture,
 		pclk => ov7670_pclk1buf1,
 		vsync => ov7670_vsync1,
 		href => ov7670_href1,
@@ -703,7 +749,7 @@ end process poled;
 	inst_addrgen1 : address_generator port map(
 		reset => resend,
 		clk25 => clk25,
-		enable => '1',
+		enable => send_pixels,
 		vsync => not ov7670_vsync1,
 		address => rd_a1);
 --	inst_addrgen2 : address_generator port map(
