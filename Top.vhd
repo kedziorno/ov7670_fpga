@@ -306,6 +306,8 @@ poled : process(clkcambuf,resend) is
 	);
 	variable state : states;
 	variable w0_index : integer range 0 to SPI_SPEED_MODE-1;
+	constant MAX_PIXELS : integer := 19200;
+	variable w1_index : integer range 0 to MAX_PIXELS-1;
 	constant MAX_RD : std_logic_vector(14 downto 0) := (others => '1');
 begin
 	if (resend = '1') then
@@ -313,6 +315,7 @@ begin
 		spi_enable_data <= '0';
 		spi_data_byte_data <= (others => '0');
 		w0_index := 0;
+		w1_index := 0;
 	elsif (rising_edge(clkcambuf)) then
 		pvs <= ov7670_vsync1;
 		case (state) is
@@ -559,19 +562,21 @@ begin
 					w0_index := w0_index + 1;
 				end if;
 			when d9 =>
-				if (rd_a1 = MAX_RD-1) then
+				if (w1_index = MAX_PIXELS-1) then
 					state := idle;
+					w1_index := 0;
 				else
 					state := a8;
+					w1_index := w1_index + 1;
 				end if;
 
 		end case;
 	end if;
 end process poled;
 
---	vga_rgb <= (others => '0');
---	vga_hsync <= '0';
---	vga_vsync <= '0';
+	vga_rgb <= (others => '0');
+	vga_hsync <= '0';
+	vga_vsync <= '0';
 --	pclk1buf : IBUFG port map (O => ov7670_pclk1buf, I => ov7670_pclk1);
 --	pclk2buf : IBUFG port map (O => ov7670_pclk2buf, I => ov7670_pclk2);
 --	pclk3buf : IBUFG port map (O => ov7670_pclk3buf, I => ov7670_pclk3);
@@ -693,12 +698,13 @@ end process poled;
 --		clkB => clk25,
 --		addrB => rd_a4,
 --		doutB => rd_d4);
+
 --	active1 <= '1';
 	inst_addrgen1 : address_generator port map(
 		reset => resend,
 		clk25 => clk25,
-		enable => active1,
-		vsync => vga_vsync_sig,
+		enable => '1',
+		vsync => not ov7670_vsync1,
 		address => rd_a1);
 --	inst_addrgen2 : address_generator port map(
 --		reset => resend,
@@ -719,31 +725,31 @@ end process poled;
 --		vsync => vga_vsync_sig,
 --		address => rd_a4);
 
-	inst_imagegen : vga_imagegenerator port map(
-		reset => resend,
-		clk => clk25,
-		Data_in1 => rd_d1,
-		Data_in2 => rd_d2,
-		Data_in3 => rd_d3,
-		Data_in4 => rd_d4,
-		active_area1 => active1,
-		active_area2 => active2,
-		active_area3 => active3,
-		active_area4 => active4,
-		RGB_out => vga_rgb);
+--	inst_imagegen : vga_imagegenerator port map(
+--		reset => resend,
+--		clk => clk25,
+--		Data_in1 => rd_d1,
+--		Data_in2 => rd_d2,
+--		Data_in3 => rd_d3,
+--		Data_in4 => rd_d4,
+--		active_area1 => active1,
+--		active_area2 => active2,
+--		active_area3 => active3,
+--		active_area4 => active4,
+--		RGB_out => vga_rgb);
 	
-	inst_vgatiming : VGA_timing_synch port map(
-		reset => resend,
-		clk25 => clk25,
-		Hsync => vga_hsync_sig,
-		Vsync => vga_vsync_sig,
-		activeArea1 => active1,
-		activeArea2 => active2,
-		activeArea3 => active3,
-		activeArea4 => active4);
+--	inst_vgatiming : VGA_timing_synch port map(
+--		reset => resend,
+--		clk25 => clk25,
+--		Hsync => vga_hsync_sig,
+--		Vsync => vga_vsync_sig,
+--		activeArea1 => active1,
+--		activeArea2 => active2,
+--		activeArea3 => active3,
+--		activeArea4 => active4);
 
-vga_vsync <= vga_vsync_sig;
-vga_hsync <= vga_hsync_sig;
+--vga_vsync <= vga_vsync_sig;
+--vga_hsync <= vga_hsync_sig;
 
 Registers: ov7670_registers port map(
 	reset => resend,
