@@ -215,7 +215,7 @@ begin
 		constant startdata : tdata := (x"FF",x"EE",x"DD",x"CC",x"BB");
 		constant enddata : tdata := (x"BB",x"CC",x"DD",x"EE",x"FF");
 		constant odddata : std_logic_vector(7 downto 0) := x"55";
-		constant evendata : std_logic_vector(7 downto 0) := x"55";
+		constant evendata : std_logic_vector(7 downto 0) := x"AA";
 		type states is (s1,s2,s3);
 		variable state : states;
 		variable vd : std_logic_vector(7 downto 0);
