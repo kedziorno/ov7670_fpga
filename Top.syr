@@ -5,14 +5,14 @@ Parameter TMPDIR set to xst/projnav.tmp
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.05 secs
+Total CPU time to Xst completion: 0.06 secs
  
 --> 
 Parameter xsthdpdir set to xst
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.05 secs
+Total CPU time to Xst completion: 0.06 secs
  
 --> 
 Reading design: Top.prj
@@ -67,24 +67,26 @@ Mux Extraction                     : Yes
 Resource Sharing                   : YES
 Asynchronous To Synchronous        : NO
 Multiplier Style                   : Auto
-Automatic Register Balancing       : No
+Automatic Register Balancing       : Yes
 
 ---- Target Options
 Add IO Buffers                     : YES
 Global Maximum Fanout              : 500
 Add Generic Clock Buffer(BUFG)     : 24
 Register Duplication               : YES
+Move First FlipFlop Stage          : YES
+Move Last FlipFlop Stage           : YES
 Slice Packing                      : YES
 Optimize Instantiated Primitives   : NO
 Use Clock Enable                   : Yes
 Use Synchronous Set                : Yes
 Use Synchronous Reset              : Yes
-Pack IO Registers into IOBs        : Auto
+Pack IO Registers into IOBs        : True
 Equivalent register Removal        : YES
 
 ---- General Options
 Optimization Goal                  : Speed
-Optimization Effort                : 1
+Optimization Effort                : 2
 Keep Hierarchy                     : No
 Netlist Hierarchy                  : As_Optimized
 RTL Output                         : Yes
@@ -754,6 +756,36 @@ WARNING:Xst:2677 - Node <c1/cs> of sequential type is unconnected in block <Top>
 Mapping all equations...
 Building and optimizing final netlist ...
 Found area constraint ratio of 100 (+ 5) on block Top, actual ratio is 6.
+
+Pipelining and Register Balancing Report ...
+
+Processing Unit <Top> :
+	Register(s) c1/state_FSM_FFd19 c1/state_FSM_FFd15 c1/state_FSM_FFd34 c1/state_FSM_FFd31 has(ve) been forward balanced into : c1/enable_mux0000124_FRB.
+	Register(s) c1/state_FSM_FFd27 c1/state_FSM_FFd9 c1/state_FSM_FFd6 has(ve) been forward balanced into : c1/enable_mux0000117_FRB.
+	Register(s) c1/state_FSM_FFd28 c1/state_FSM_FFd23 c1/state_FSM_FFd20 c1/state_FSM_FFd35 has(ve) been forward balanced into : c1/enable_mux0000114_FRB.
+	Register(s) c1/state_FSM_FFd32 c1/state_FSM_FFd2 c1/state_FSM_FFd13 c1/state_FSM_FFd14 has(ve) been forward balanced into : c1/enable_mux00001112_FRB.
+	Register(s) c1/state_FSM_FFd33 c1/state_FSM_FFd36 has(ve) been forward balanced into : c1/data_byte_mux0000<0>3_SW0_FRB.
+	Register(s) c1/data_byte_1 has(ve) been backward balanced into : c1/data_byte_1_BRB1 c1/data_byte_1_BRB3 c1/data_byte_1_BRB4 c1/data_byte_1_BRB5 c1/data_byte_1_BRB6.
+	Register(s) c1/data_byte_4 has(ve) been backward balanced into : c1/data_byte_4_BRB0 c1/data_byte_4_BRB1 c1/data_byte_4_BRB2 c1/data_byte_4_BRB3.
+	Register(s) c1/data_byte_6 has(ve) been backward balanced into : c1/data_byte_6_BRB0 c1/data_byte_6_BRB2 c1/data_byte_6_BRB3 c1/data_byte_6_BRB4 c1/data_byte_6_BRB5 .
+	Register(s) c1/data_byte_7 has(ve) been backward balanced into : c1/data_byte_7_BRB3 c1/data_byte_7_BRB4 c1/data_byte_7_BRB5 c1/data_byte_7_BRB6 c1/data_byte_7_BRB8 c1/data_byte_7_BRB9 .
+	Register(s) c1/reset has(ve) been backward balanced into : c1/reset_BRB0 c1/reset_BRB1 c1/reset_BRB2 c1/reset_BRB3.
+	Register(s) c1/rs has(ve) been backward balanced into : c1/rs_BRB0 c1/rs_BRB2 c1/rs_BRB3 c1/rs_BRB4 c1/rs_BRB5 c1/rs_BRB6 c1/rs_BRB7.
+	Register(s) c1/w0_index_10 has(ve) been backward balanced into : c1/w0_index_10_BRB0 c1/w0_index_10_BRB2 .
+	Register(s) c1/w0_index_11 has(ve) been backward balanced into : c1/w0_index_11_BRB0 c1/w0_index_11_BRB1 c1/w0_index_11_BRB2 c1/w0_index_11_BRB3.
+	Register(s) c1/w0_index_3 has(ve) been backward balanced into : c1/w0_index_3_BRB0 c1/w0_index_3_BRB2 .
+	Register(s) c1/w0_index_4 has(ve) been backward balanced into : c1/w0_index_4_BRB0 c1/w0_index_4_BRB2 .
+	Register(s) c1/w0_index_5 has(ve) been backward balanced into : c1/w0_index_5_BRB0 c1/w0_index_5_BRB2 .
+	Register(s) c1/w0_index_6 has(ve) been backward balanced into : c1/w0_index_6_BRB0 c1/w0_index_6_BRB2 .
+	Register(s) c1/w0_index_7 has(ve) been backward balanced into : c1/w0_index_7_BRB0 c1/w0_index_7_BRB2 .
+	Register(s) c1/w0_index_8 has(ve) been backward balanced into : c1/w0_index_8_BRB0 c1/w0_index_8_BRB2 .
+	Register(s) c1/w0_index_9 has(ve) been backward balanced into : c1/w0_index_9_BRB0 c1/w0_index_9_BRB2 .
+Unit <Top> processed.
+Replicating register c0/ck to handle IOB=TRUE attribute
+Replicating register cc to handle IOB=TRUE attribute
+Replicating register resetdcm to handle IOB=TRUE attribute
+Replicating register inst_vgatiming/v to handle IOB=TRUE attribute
+
 FlipFlop c1/data_index_0 has been replicated 1 time(s)
 
 Final Macro Processing ...
@@ -762,8 +794,8 @@ Final Macro Processing ...
 Final Register Report
 
 Macro Statistics
-# Registers                                            : 419
- Flip-Flops                                            : 419
+# Registers                                            : 464
+ Flip-Flops                                            : 464
 
 =========================================================================
 
@@ -792,30 +824,31 @@ Design Statistics
 # IOs                              : 91
 
 Cell Usage :
-# BELS                             : 1453
+# BELS                             : 1428
 #      GND                         : 2
-#      INV                         : 20
+#      INV                         : 19
 #      LUT1                        : 165
-#      LUT2                        : 136
+#      LUT2                        : 135
 #      LUT2_D                      : 1
-#      LUT2_L                      : 6
-#      LUT3                        : 157
-#      LUT3_D                      : 7
-#      LUT3_L                      : 7
-#      LUT4                        : 442
-#      LUT4_D                      : 23
-#      LUT4_L                      : 31
-#      MUXCY                       : 197
-#      MUXF5                       : 60
-#      MUXF6                       : 20
+#      LUT2_L                      : 5
+#      LUT3                        : 161
+#      LUT3_D                      : 5
+#      LUT3_L                      : 8
+#      LUT4                        : 438
+#      LUT4_D                      : 21
+#      LUT4_L                      : 20
+#      MUXCY                       : 187
+#      MUXF5                       : 63
+#      MUXF6                       : 19
 #      VCC                         : 2
 #      XORCY                       : 177
-# FlipFlops/Latches                : 422
-#      FDC                         : 211
+# FlipFlops/Latches                : 467
+#      FD                          : 10
+#      FDC                         : 228
 #      FDC_1                       : 10
-#      FDCE                        : 124
-#      FDE                         : 14
-#      FDP                         : 5
+#      FDCE                        : 125
+#      FDE                         : 30
+#      FDP                         : 6
 #      FDPE                        : 33
 #      FDR                         : 25
 # RAMS                             : 15
@@ -834,11 +867,12 @@ Device utilization summary:
 
 Selected Device : 3s1200efg320-4 
 
- Number of Slices:                      540  out of   8672     6%  
- Number of Slice Flip Flops:            422  out of  17344     2%  
- Number of 4 input LUTs:                995  out of  17344     5%  
+ Number of Slices:                      530  out of   8672     6%  
+ Number of Slice Flip Flops:            453  out of  17344     2%  
+ Number of 4 input LUTs:                978  out of  17344     5%  
  Number of IOs:                          91
  Number of bonded IOBs:                  56  out of    250    22%  
+    IOB Flip Flops:                      14
  Number of BRAMs:                        15  out of     28    53%  
  Number of GCLKs:                         4  out of     24    16%  
 
@@ -863,11 +897,11 @@ Clock Information:
 -----------------------------------+------------------------+-------+
 Clock Signal                       | Clock buffer(FF name)  | Load  |
 -----------------------------------+------------------------+-------+
-clk251                             | BUFG                   | 55    |
+clk251                             | BUFG                   | 56    |
 ov7670_pclk1                       | IBUFG+BUFG             | 53    |
-clkcam                             | IBUFG+BUFG             | 338   |
+clkcam                             | IBUFG+BUFG             | 381   |
 c0/clock_data                      | NONE(c0/data_index_2)  | 3     |
-c0/clock_divider                   | NONE(c0/d_0)           | 3     |
+c0/clock_divider                   | NONE(c0/d_0)           | 4     |
 -----------------------------------+------------------------+-------+
 INFO:Xst:2169 - HDL ADVISOR - Some clock signals were not automatically buffered by XST with BUFG/BUFR resources. Please use the buffer_type constraint in order to insert these buffers to the clock signals to help prevent skew problems.
 
@@ -876,17 +910,17 @@ Asynchronous Control Signals Information:
 --------------------------------------------+--------------------------+-------+
 Control Signal                              | Buffer(FF name)          | Load  |
 --------------------------------------------+--------------------------+-------+
-inst_debounce/output(inst_debounce/output:Q)| NONE(Registers/cmd_reg_0)| 379   |
-resetdcm(resetdcm:Q)                        | NONE(cc)                 | 4     |
+inst_debounce/output(inst_debounce/output:Q)| NONE(Registers/cmd_reg_0)| 397   |
+resetdcm_1(resetdcm_1:Q)                    | NONE(cc)                 | 5     |
 --------------------------------------------+--------------------------+-------+
 
 Timing Summary:
 ---------------
 Speed Grade: -4
 
-   Minimum period: 9.349ns (Maximum Frequency: 106.959MHz)
+   Minimum period: 10.080ns (Maximum Frequency: 99.208MHz)
    Minimum input arrival time before clock: 4.707ns
-   Maximum output required time after clock: 9.075ns
+   Maximum output required time after clock: 10.927ns
    Maximum combinational path delay: No path found
 
 Timing Detail:
@@ -896,7 +930,7 @@ All values displayed in nanoseconds (ns)
 =========================================================================
 Timing constraint: Default period analysis for Clock 'clk251'
   Clock period: 6.596ns (frequency: 151.607MHz)
-  Total number of paths / destination ports: 1213 / 284
+  Total number of paths / destination ports: 1223 / 285
 -------------------------------------------------------------------------
 Delay:               6.596ns (Levels of Logic = 4)
   Source:            inst_addrgen1/addr_5 (FF)
@@ -912,8 +946,8 @@ Delay:               6.596ns (Levels of Logic = 4)
      LUT4_L:I0->LO         1   0.704   0.135  inst_addrgen1/addr_mux0003<0>142 (inst_addrgen1/addr_mux0003<0>142)
      LUT4:I2->O            1   0.704   0.424  inst_addrgen1/addr_mux0003<0>152 (inst_addrgen1/addr_mux0003<0>152)
      LUT4_D:I3->O         14   0.704   1.079  inst_addrgen1/addr_mux0003<0>179 (inst_addrgen1/N01)
-     LUT2:I1->O            1   0.704   0.000  inst_addrgen1/addr_mux0003<14>1 (inst_addrgen1/addr_mux0003<14>)
-     FDCE:D                    0.308          inst_addrgen1/addr_0
+     LUT2:I1->O            1   0.704   0.000  inst_addrgen1/addr_mux0003<13>1 (inst_addrgen1/addr_mux0003<13>)
+     FDCE:D                    0.308          inst_addrgen1/addr_1
     ----------------------------------------
     Total                      6.596ns (3.715ns logic, 2.881ns route)
                                        (56.3% logic, 43.7% route)
@@ -942,30 +976,30 @@ Delay:               3.980ns (Levels of Logic = 1)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'clkcam'
-  Clock period: 9.349ns (frequency: 106.959MHz)
-  Total number of paths / destination ports: 16304 / 486
+  Clock period: 10.080ns (frequency: 99.208MHz)
+  Total number of paths / destination ports: 20289 / 546
 -------------------------------------------------------------------------
-Delay:               9.349ns (Levels of Logic = 6)
-  Source:            c1/data_index_3 (FF)
-  Destination:       c1/data_index_15 (FF)
+Delay:               10.080ns (Levels of Logic = 6)
+  Source:            c1/w0_index_11_BRB3 (FF)
+  Destination:       c1/w0_index_25 (FF)
   Source Clock:      clkcam rising
   Destination Clock: clkcam rising
 
-  Data Path: c1/data_index_3 to c1/data_index_15
+  Data Path: c1/w0_index_11_BRB3 to c1/w0_index_25
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDC:C->Q             61   0.591   1.350  c1/data_index_3 (c1/data_index_3)
-     LUT4_D:I1->O          8   0.704   0.761  c1/Mrom__mux0000201 (c1/Mrom__mux000020)
-     LUT4_D:I3->LO         1   0.704   0.104  c1/state_cmp_eq0004247 (N311)
-     LUT4:I3->O            3   0.704   0.535  c1/state_cmp_eq00071 (c1/state_cmp_eq0007)
-     LUT4:I3->O            1   0.704   0.455  c1/data_index_mux0000<0>1_SW1 (N170)
-     LUT3_D:I2->O         15   0.704   1.021  c1/data_index_mux0000<0>1 (c1/N21)
-     LUT4:I3->O            1   0.704   0.000  c1/data_index_mux0000<8>1 (c1/data_index_mux0000<8>)
-     FDC:D                     0.308          c1/data_index_8
+     FD:C->Q               9   0.591   0.855  c1/w0_index_11_BRB3 (c1/w0_index_11_BRB3)
+     LUT4:I2->O            7   0.704   0.883  c1/w0_index_mux0000<3>1 (c1/w0_index_3)
+     LUT4:I0->O            1   0.704   0.424  c1/state_cmp_eq000211_SW0 (N96)
+     LUT4:I3->O           37   0.704   1.268  c1/state_cmp_eq0000 (c1/state_cmp_eq0000)
+     LUT4:I3->O            1   0.704   0.455  c1/w0_index_mux0000<0>143 (c1/w0_index_mux0000<0>143)
+     LUT3:I2->O           18   0.704   1.072  c1/w0_index_mux0000<0>145 (c1/N12)
+     LUT4:I3->O            1   0.704   0.000  c1/w0_index_mux0000<2>1 (c1/w0_index_mux0000<2>)
+     FDC:D                     0.308          c1/w0_index_2
     ----------------------------------------
-    Total                      9.349ns (5.123ns logic, 4.226ns route)
-                                       (54.8% logic, 45.2% route)
+    Total                     10.080ns (5.123ns logic, 4.957ns route)
+                                       (50.8% logic, 49.2% route)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'c0/clock_data'
@@ -992,7 +1026,7 @@ Delay:               2.643ns (Levels of Logic = 1)
 =========================================================================
 Timing constraint: Default period analysis for Clock 'c0/clock_divider'
   Clock period: 2.225ns (frequency: 449.438MHz)
-  Total number of paths / destination ports: 3 / 3
+  Total number of paths / destination ports: 4 / 4
 -------------------------------------------------------------------------
 Delay:               2.225ns (Levels of Logic = 1)
   Source:            c0/d_0 (FF)
@@ -1052,26 +1086,29 @@ Offset:              2.057ns (Levels of Logic = 1)
 
 =========================================================================
 Timing constraint: Default OFFSET OUT AFTER for Clock 'clkcam'
-  Total number of paths / destination ports: 75 / 9
+  Total number of paths / destination ports: 117 / 9
 -------------------------------------------------------------------------
-Offset:              9.053ns (Levels of Logic = 5)
-  Source:            initialize_run (FF)
+Offset:              10.927ns (Levels of Logic = 8)
+  Source:            c1/data_byte_7_BRB4 (FF)
   Destination:       o_do (PAD)
   Source Clock:      clkcam rising
 
-  Data Path: initialize_run to o_do
+  Data Path: c1/data_byte_7_BRB4 to o_do
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDC:C->Q             24   0.591   1.427  initialize_run (initialize_run)
-     LUT4:I0->O            1   0.704   0.000  c0/o_do261_F (N280)
+     FDE:C->Q              2   0.591   0.622  c1/data_byte_7_BRB4 (c1/data_byte_7_BRB4)
+     LUT3:I0->O            1   0.704   0.499  c1/Mrom_data_byte_rom0000771_4 (N166)
+     LUT4:I1->O            1   0.704   0.000  c1/data_byte_mux0000<7>2 (c1/data_byte_mux0000<7>1)
+     MUXF5:I0->O           2   0.321   0.451  c1/data_byte_mux0000<7>_f5 (c1/data_byte_7)
+     LUT4:I3->O            1   0.704   0.000  c0/o_do261_F (N337)
      MUXF5:I0->O           1   0.321   0.455  c0/o_do261 (c0/o_do261)
      LUT4:I2->O            1   0.704   0.455  c0/o_do292 (c0/o_do292)
      LUT4:I2->O            1   0.704   0.420  c0/o_do336 (o_do_OBUF)
      OBUF:I->O                 3.272          o_do_OBUF (o_do)
     ----------------------------------------
-    Total                      9.053ns (6.296ns logic, 2.757ns route)
-                                       (69.5% logic, 30.5% route)
+    Total                     10.927ns (8.025ns logic, 2.902ns route)
+                                       (73.4% logic, 26.6% route)
 
 =========================================================================
 Timing constraint: Default OFFSET OUT AFTER for Clock 'clk251'
@@ -1100,7 +1137,7 @@ Offset:              9.075ns (Levels of Logic = 5)
 Timing constraint: Default OFFSET OUT AFTER for Clock 'c0/clock_divider'
   Total number of paths / destination ports: 1 / 1
 -------------------------------------------------------------------------
-Offset:              4.310ns (Levels of Logic = 1)
+Offset:              4.283ns (Levels of Logic = 1)
   Source:            c0/ck (FF)
   Destination:       o_ck (PAD)
   Source Clock:      c0/clock_divider rising
@@ -1109,11 +1146,11 @@ Offset:              4.310ns (Levels of Logic = 1)
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDC:C->Q              2   0.591   0.447  c0/ck (c0/ck)
+     FDC:C->Q              1   0.591   0.420  c0/ck (c0/ck)
      OBUF:I->O                 3.272          o_ck_OBUF (o_ck)
     ----------------------------------------
-    Total                      4.310ns (3.863ns logic, 0.447ns route)
-                                       (89.6% logic, 10.4% route)
+    Total                      4.283ns (3.863ns logic, 0.420ns route)
+                                       (90.2% logic, 9.8% route)
 
 =========================================================================
 Timing constraint: Default OFFSET OUT AFTER for Clock 'c0/clock_data'
@@ -1141,13 +1178,13 @@ Offset:              8.806ns (Levels of Logic = 5)
 =========================================================================
 
 
-Total REAL time to Xst completion: 21.00 secs
-Total CPU time to Xst completion: 18.88 secs
+Total REAL time to Xst completion: 22.00 secs
+Total CPU time to Xst completion: 20.33 secs
  
 --> 
 
 
-Total memory usage is 550508 kilobytes
+Total memory usage is 550788 kilobytes
 
 Number of errors   :    0 (   0 filtered)
 Number of warnings :   91 (   0 filtered)
