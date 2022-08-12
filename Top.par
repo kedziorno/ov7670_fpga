@@ -1,26 +1,25 @@
 Release 14.7 par P.20131013 (lin64)
 Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
 
-work::  Fri Aug 12 22:46:16 2022
+work::  Sat Aug 13 00:44:44 2022
 
-par -w -intstyle ise -pl std -rl std -xe n -t 1 Top_map.ncd Top.ncd Top.pcf 
+par -w -intstyle ise -ol std -rl std -t 1 Top_map.ncd Top.ncd Top.pcf 
 
 
 Constraints file: Top.pcf.
 Loading device for application Rf_Device from file '3s1200e.nph' in environment
 /home/user/.local/Xilinx/14.7/ISE_DS/ISE/.
    "Top" is an NCD, version 3.2, device xc3s1200e, package fg320, speed -4
-WARNING:Par:281 - 
-   Use of the PAR Extra Effort Levels (-xe n or c) is only available for the Placer and Router when the PAR Effort Level
-   set to maximum (-ol high) or when the Placer or Router Effort Level is set to maximum (-pl high or -rl high).  It is
-   strongly recommended that the Placer Effort Level be set to "h"igh when using PAR Extra Effort Levels
-
+INFO:Par:469 - Although the Overall Effort Level (-ol) for this implementation has been set to Standard, Placer will run
+   at effort level High. To override this, please set the Placer Effort Level (-pl) to Standard.
+WARNING:Par:69 - Option -rl overrides some effects of -ol.
 
 Initializing temperature to 85.000 Celsius. (default - Range: -40.000 to 100.000 Celsius)
 Initializing voltage to 1.140 Volts. (default - Range: 1.140 to 1.320 Volts)
 
 
 Device speed data version:  "PRODUCTION 1.27 2013-10-13".
+
 
 
 Design Summary Report:
@@ -42,21 +41,18 @@ Design Summary Report:
    Number of External Bidir IOBs                  0
 
 
-   Number of BSCANs                          1 out of 1     100%
-   Number of BUFGMUXs                        5 out of 24     20%
-   Number of RAMB16s                        21 out of 28     75%
-   Number of Slices                        787 out of 8672    9%
-      Number of SLICEMs                     49 out of 4336    1%
+   Number of BUFGMUXs                        3 out of 24     12%
+   Number of RAMB16s                        15 out of 28     53%
+   Number of Slices                        593 out of 8672    6%
+      Number of SLICEMs                      0 out of 4336    0%
 
 
 
-Overall effort level (-ol):   Not applicable because -pl and -rl switches are used
-Placer effort level (-pl):    Standard 
-Placer cost table entry (-t): 1
+Overall effort level (-ol):   Standard 
 Router effort level (-rl):    Standard 
 
-Starting initial Timing Analysis.  REAL time: 3 secs 
-Finished initial Timing Analysis.  REAL time: 3 secs 
+Starting initial Timing Analysis.  REAL time: 4 secs 
+Finished initial Timing Analysis.  REAL time: 4 secs 
 
 WARNING:Par:288 - The signal sw_IBUF has no load.  PAR will not attempt to route this signal.
 WARNING:Par:288 - The signal clk50_IBUF has no load.  PAR will not attempt to route this signal.
@@ -82,100 +78,35 @@ WARNING:Par:288 - The signal ov7670_data3<4>_IBUF has no load.  PAR will not att
 WARNING:Par:288 - The signal ov7670_data3<5>_IBUF has no load.  PAR will not attempt to route this signal.
 WARNING:Par:288 - The signal ov7670_data3<6>_IBUF has no load.  PAR will not attempt to route this signal.
 WARNING:Par:288 - The signal ov7670_data3<7>_IBUF has no load.  PAR will not attempt to route this signal.
-
-Starting Placer
-Total REAL time at the beginning of Placer: 4 secs 
-Total CPU  time at the beginning of Placer: 2 secs 
-
-Phase 1.1  Initial Placement Analysis
-Phase 1.1  Initial Placement Analysis (Checksum:551eddce) REAL time: 5 secs 
-
-Phase 2.7  Design Feasibility Check
-INFO:Place:834 - Only a subset of IOs are locked. Out of 43 IOs, 38 are locked and 5 are not locked. If you would like
-   to print the names of these IOs, please set the environment variable XIL_PAR_DESIGN_CHECK_VERBOSE to 1. 
-Phase 2.7  Design Feasibility Check (Checksum:551eddce) REAL time: 5 secs 
-
-Phase 3.31  Local Placement Optimization
-Phase 3.31  Local Placement Optimization (Checksum:7dd4ae11) REAL time: 5 secs 
-
-Phase 4.2  Initial Clock and IO Placement
-...
-..................
-WARNING:Place:1019 - A clock IOB / clock component pair have been found that are not placed at an optimal clock IOB /
-   clock site pair. The clock component <ov7670_pclk1buf1_BUFG> is placed at site <BUFGMUX_X2Y1>. The IO component
-   <ov7670_pclk1> is placed at site <L16>.  This will not allow the use of the fast path between the IO and the Clock
-   buffer. This is normally an ERROR but the CLOCK_DEDICATED_ROUTE constraint was applied on COMP.PIN <ov7670_pclk1.PAD>
-   allowing your design to continue. This constraint disables all clock placer rules related to the specified COMP.PIN.
-   The use of this override is highly discouraged as it may lead to very poor timing results. It is recommended that
-   this error condition be corrected in the design.
-WARNING:Place:1019 - A clock IOB / clock component pair have been found that are not placed at an optimal clock IOB /
-   clock site pair. The clock component <clkcambuf_BUFG> is placed at site <BUFGMUX_X2Y10>. The IO component <clkcam> is
-   placed at site <U9>.  This will not allow the use of the fast path between the IO and the Clock buffer. This is
-   normally an ERROR but the CLOCK_DEDICATED_ROUTE constraint was applied on COMP.PIN <clkcam.PAD> allowing your design
-   to continue. This constraint disables all clock placer rules related to the specified COMP.PIN. The use of this
-   override is highly discouraged as it may lead to very poor timing results. It is recommended that this error
-   condition be corrected in the design.
-Phase 4.2  Initial Clock and IO Placement (Checksum:7b2d6846) REAL time: 5 secs 
-
-Phase 5.30  Global Clock Region Assignment
-Phase 5.30  Global Clock Region Assignment (Checksum:7b2d6846) REAL time: 5 secs 
-
-Phase 6.36  Local Placement Optimization
-Phase 6.36  Local Placement Optimization (Checksum:7b2d6846) REAL time: 5 secs 
-
-Phase 7.3  Local Placement Optimization
-...
-Phase 7.3  Local Placement Optimization (Checksum:629c60c6) REAL time: 5 secs 
-
-Phase 8.5  Local Placement Optimization
-Phase 8.5  Local Placement Optimization (Checksum:629c60c6) REAL time: 5 secs 
-
-Phase 9.8  Global Placement
-...............................................
-Phase 9.8  Global Placement (Checksum:59c38e66) REAL time: 8 secs 
-
-Phase 10.5  Local Placement Optimization
-Phase 10.5  Local Placement Optimization (Checksum:59c38e66) REAL time: 8 secs 
-
-Phase 11.18  Placement Optimization
-Phase 11.18  Placement Optimization (Checksum:b3180082) REAL time: 8 secs 
-
-Phase 12.5  Local Placement Optimization
-Phase 12.5  Local Placement Optimization (Checksum:b3180082) REAL time: 8 secs 
-
-Total REAL time to Placer completion: 8 secs 
-Total CPU  time to Placer completion: 6 secs 
-Writing design to file Top.ncd
-
-
-
 Starting Router
 
 
-Phase  1  : 6049 unrouted;      REAL time: 14 secs 
+Phase  1  : 4421 unrouted;      REAL time: 10 secs 
 
-Phase  2  : 5380 unrouted;      REAL time: 14 secs 
+Phase  2  : 4021 unrouted;      REAL time: 10 secs 
 
-Phase  3  : 1197 unrouted;      REAL time: 15 secs 
+Phase  3  : 816 unrouted;      REAL time: 11 secs 
 
-Phase  4  : 1197 unrouted; (Setup:0, Hold:0, Component Switching Limit:0)     REAL time: 16 secs 
+Phase  4  : 828 unrouted; (Setup:0, Hold:0, Component Switching Limit:0)     REAL time: 11 secs 
 
-Phase  5  : 0 unrouted; (Setup:0, Hold:0, Component Switching Limit:0)     REAL time: 17 secs 
+Phase  5  : 0 unrouted; (Setup:0, Hold:0, Component Switching Limit:0)     REAL time: 12 secs 
 
 Updating file: Top.ncd with current fully routed design.
 
-Phase  6  : 0 unrouted; (Setup:0, Hold:0, Component Switching Limit:0)     REAL time: 17 secs 
+Phase  6  : 0 unrouted; (Setup:0, Hold:0, Component Switching Limit:0)     REAL time: 12 secs 
 
-Phase  7  : 0 unrouted; (Setup:0, Hold:0, Component Switching Limit:0)     REAL time: 17 secs 
+Phase  7  : 0 unrouted; (Setup:0, Hold:0, Component Switching Limit:0)     REAL time: 12 secs 
 
-Phase  8  : 0 unrouted; (Setup:0, Hold:0, Component Switching Limit:0)     REAL time: 17 secs 
-WARNING:Route:455 - CLK Net:icon_control0<13> may have excessive skew because 
-      1 CLK pins and 3 NON_CLK pins failed to route using a CLK template.
+Phase  8  : 0 unrouted; (Setup:0, Hold:0, Component Switching Limit:0)     REAL time: 13 secs 
+WARNING:Route:455 - CLK Net:c0/clock_data may have excessive skew because 
+      2 CLK pins and 0 NON_CLK pins failed to route using a CLK template.
+WARNING:Route:455 - CLK Net:clk25 may have excessive skew because 
+      15 CLK pins and 1 NON_CLK pins failed to route using a CLK template.
 WARNING:Route:455 - CLK Net:c0/clock_divider may have excessive skew because 
       0 CLK pins and 1 NON_CLK pins failed to route using a CLK template.
 
-Total REAL time to Router completion: 17 secs 
-Total CPU time to Router completion: 13 secs 
+Total REAL time to Router completion: 13 secs 
+Total CPU time to Router completion: 12 secs 
 
 Partition Implementation Status
 -------------------------------
@@ -193,24 +124,17 @@ Generating Clock Report
 +---------------------+--------------+------+------+------------+-------------+
 |        Clock Net    |   Resource   |Locked|Fanout|Net Skew(ns)|Max Delay(ns)|
 +---------------------+--------------+------+------+------------+-------------+
-|    icon_control0<0> | BUFGMUX_X1Y11| No   |   98 |  0.131     |  0.373      |
+|           clkcambuf |  BUFGMUX_X1Y1| No   |  314 |  0.206     |  0.378      |
 +---------------------+--------------+------+------+------------+-------------+
-|               clk25 | BUFGMUX_X2Y11| No   |  283 |  0.199     |  0.374      |
+|    ov7670_pclk1buf1 |  BUFGMUX_X2Y1| No   |   49 |  0.137     |  0.375      |
 +---------------------+--------------+------+------+------------+-------------+
-|           clkcambuf | BUFGMUX_X2Y10| No   |  117 |  0.199     |  0.374      |
+|            clk50buf | BUFGMUX_X2Y11| No   |    3 |  0.047     |  0.302      |
 +---------------------+--------------+------+------+------------+-------------+
-|    ov7670_pclk1buf1 |  BUFGMUX_X2Y1| No   |   40 |  0.109     |  0.375      |
+|               clk25 |         Local|      |   18 |  3.837     |  4.788      |
 +---------------------+--------------+------+------+------------+-------------+
-|            clk50buf |  BUFGMUX_X1Y1| No   |    3 |  0.086     |  0.302      |
+|    c0/clock_divider |         Local|      |    4 |  0.045     |  1.953      |
 +---------------------+--------------+------+------+------------+-------------+
-|U_icon_pro/U0/iUPDAT |              |      |      |            |             |
-|               E_OUT |         Local|      |    1 |  0.000     |  1.846      |
-+---------------------+--------------+------+------+------------+-------------+
-|    c0/clock_divider |         Local|      |    3 |  0.000     |  0.710      |
-+---------------------+--------------+------+------+------------+-------------+
-|       c0/clock_data |         Local|      |    2 |  0.003     |  0.681      |
-+---------------------+--------------+------+------+------------+-------------+
-|   icon_control0<13> |         Local|      |    4 |  0.000     |  0.888      |
+|       c0/clock_data |         Local|      |    2 |  0.269     |  1.208      |
 +---------------------+--------------+------+------+------------+-------------+
 
 * Net Skew is the difference between the minimum and maximum routing
@@ -223,8 +147,6 @@ for example SLICE loads not FF loads.
 
 Timing Score: 0 (Setup: 0, Hold: 0, Component Switching Limit: 0)
 
-Number of Timing Constraints that were not applied: 2
-
 Asterisk (*) preceding a constraint indicates it was not met.
    This may be due to a setup or hold violation.
 
@@ -232,32 +154,16 @@ Asterisk (*) preceding a constraint indicates it was not met.
   Constraint                                |    Check    | Worst Case |  Best Case | Timing |   Timing   
                                             |             |    Slack   | Achievable | Errors |    Score   
 ----------------------------------------------------------------------------------------------------------
-  TS_clkcam = PERIOD TIMEGRP "clkcam" 10 ns | SETUP       |     0.395ns|     9.605ns|       0|           0
-   HIGH 50% INPUT_JITTER 0.08 ns            | HOLD        |     1.035ns|            |       0|           0
+  TS_clkcam = PERIOD TIMEGRP "clkcam" 10 ns | SETUP       |     0.292ns|     9.708ns|       0|           0
+   HIGH 50% INPUT_JITTER 0.08 ns            | HOLD        |     1.000ns|            |       0|           0
 ----------------------------------------------------------------------------------------------------------
-  TS_ov7670_pclk1 = PERIOD TIMEGRP "ov7670_ | SETUP       |     4.962ns|    12.295ns|       0|           0
-  pclk1" 20.833 ns HIGH 50%         INPUT_J | HOLD        |     0.925ns|            |       0|           0
+  TS_ov7670_pclk1 = PERIOD TIMEGRP "ov7670_ | SETUP       |     5.525ns|    11.269ns|       0|           0
+  pclk1" 20.833 ns HIGH 50%         INPUT_J | HOLD        |     0.927ns|            |       0|           0
   ITTER 0.1 ns                              |             |            |            |        |            
-----------------------------------------------------------------------------------------------------------
-  TS_U_TO_U = MAXDELAY FROM TIMEGRP "U_CLK" | SETUP       |    13.517ns|     1.483ns|       0|           0
-   TO TIMEGRP "U_CLK" 15 ns                 |             |            |            |        |            
-----------------------------------------------------------------------------------------------------------
-  PATH "TS_D2_TO_T2_ila_pro_0_path" TIG     | SETUP       |         N/A|     6.357ns|     N/A|           0
-----------------------------------------------------------------------------------------------------------
-  PATH "TS_J2_TO_D2_ila_pro_0_path" TIG     | N/A         |         N/A|         N/A|     N/A|         N/A
-----------------------------------------------------------------------------------------------------------
-  PATH "TS_J3_TO_D2_ila_pro_0_path" TIG     | N/A         |         N/A|         N/A|     N/A|         N/A
-----------------------------------------------------------------------------------------------------------
-  PATH "TS_J4_TO_D2_ila_pro_0_path" TIG     | MAXDELAY    |         N/A|     5.067ns|     N/A|           0
 ----------------------------------------------------------------------------------------------------------
 
 
 All constraints were met.
-INFO:Timing:2761 - N/A entries in the Constraints List may indicate that the 
-   constraint is not analyzed due to the following: No paths covered by this 
-   constraint; Other constraints intersect with this constraint; or This 
-   constraint was disabled by a Path Tracing Control. Please run the Timespec 
-   Interaction Report (TSI) via command line (trce tsi) or Timing Analyzer GUI.
 
 
 Generating Pad Report.
@@ -266,17 +172,17 @@ All signals are completely routed.
 
 WARNING:Par:283 - There are 24 loadless signals in this design. This design will cause Bitgen to issue DRC warnings.
 
-Total REAL time to PAR completion: 18 secs 
-Total CPU time to PAR completion: 14 secs 
+Total REAL time to PAR completion: 13 secs 
+Total CPU time to PAR completion: 13 secs 
 
-Peak Memory Usage:  598 MB
+Peak Memory Usage:  528 MB
 
-Placement: Completed - No errors found.
+Placer: Placement generated during map.
 Routing: Completed - No errors found.
 Timing: Completed - No errors found.
 
 Number of error messages: 0
-Number of warning messages: 31
+Number of warning messages: 30
 Number of info messages: 1
 
 Writing design to file Top.ncd
