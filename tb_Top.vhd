@@ -75,7 +75,6 @@ o_rs : out STD_LOGIC
 end component Top;
 
 --Inputs
-signal clk50 : std_logic := '0';
 signal clkcam : std_logic := '0';
 signal pb : std_logic := '0';
 signal ov7670_pclk1,ov7670_pclk2,ov7670_pclk3,ov7670_pclk4 : std_logic := '0';
@@ -101,14 +100,18 @@ signal o_ck : STD_LOGIC;
 signal o_reset : STD_LOGIC;
 signal o_rs : STD_LOGIC;
 
--- Clock period definitions
+-- Constants and Clock period definitions
 constant clk50_period : time := 20 ns; -- 50mhz
 constant clkcam_period : time := 10 ns; -- 100mhz
 constant vga_25dot175 : time := 39.7219464 ns; -- 25.175mhz
 constant camera_i_xclk_period1 : time := 41.733 ns; -- 23.9616mhz
 constant camera_i_xclk_period2 : time := 41.667 ns; -- 24mhz
+constant camera_i_xclk_period3 : time := 1000.000 ns; -- 1mhz
+constant USE_OUT_CLOCK : std_logic := '1'; -- XXX use outcoming signal clock to camera
+signal camera_i_xclk : std_logic := '0';
+constant camera_i_xclk_period : time := camera_i_xclk_period3;
 
-COMPONENT camera
+COMPONENT camera_qqvga
 GENERIC(
 constant CLOCK_PERIOD : integer := 42; -- 21/42/100 ns - 10/24/48 MHZ - Min/Typ/Max Unit
 constant RAW_RGB : integer := 0; -- 0 - RAW / 1 - RGB
@@ -140,16 +143,11 @@ signal camera_o_hs1,camera_o_hs2,camera_o_hs3,camera_o_hs4 : std_logic;
 signal camera_o_pclk1,camera_o_pclk2,camera_o_pclk3,camera_o_pclk4 : std_logic;
 signal camera_o_d1,camera_o_d2,camera_o_d3,camera_o_d4 : std_logic_vector(7 downto 0);
 
-signal xclk : std_logic;
-signal sw : std_logic;
-
 signal anode : std_logic_vector (3 downto 0);
 
 BEGIN
 
-sw <= '1';
-
-cam1 : camera PORT MAP (
+cam1 : camera_qqvga PORT MAP (
 camera_io_scl => camera_io_scl1,
 camera_io_sda => camera_io_sda1,
 camera_o_vs => camera_o_vs1,
@@ -161,7 +159,7 @@ camera_i_rst => camera_i_rst1,
 camera_i_pwdn => camera_i_pwdn1
 );
 
-cam2 : camera PORT MAP (
+cam2 : camera_qqvga PORT MAP (
 camera_io_scl => camera_io_scl2,
 camera_io_sda => camera_io_sda2,
 camera_o_vs => camera_o_vs2,
@@ -173,7 +171,7 @@ camera_i_rst => camera_i_rst2,
 camera_i_pwdn => camera_i_pwdn2
 );
 
-cam3 : camera PORT MAP (
+cam3 : camera_qqvga PORT MAP (
 camera_io_scl => camera_io_scl3,
 camera_io_sda => camera_io_sda3,
 camera_o_vs => camera_o_vs3,
@@ -185,7 +183,7 @@ camera_i_rst => camera_i_rst3,
 camera_i_pwdn => camera_i_pwdn3
 );
 
-cam4 : camera PORT MAP (
+cam4 : camera_qqvga PORT MAP (
 camera_io_scl => camera_io_scl4,
 camera_io_sda => camera_io_sda4,
 camera_o_vs => camera_o_vs4,
@@ -197,25 +195,25 @@ camera_i_rst => camera_i_rst4,
 camera_i_pwdn => camera_i_pwdn4
 );
 
-camera_i_xclk1 <= ov7670_xclk1; -- cam <- dev
+camera_i_xclk1 <= ov7670_xclk1 when USE_OUT_CLOCK = '0' else camera_i_xclk; -- cam <- dev
 ov7670_pclk1 <= camera_o_pclk1; -- dev <- cam
 ov7670_data1 <= camera_o_d1;
 ov7670_vsync1 <= camera_o_vs1;
 ov7670_href1 <= camera_o_hs1;
 
-camera_i_xclk2 <= ov7670_xclk2; -- cam <- dev
+camera_i_xclk2 <= ov7670_xclk2 when USE_OUT_CLOCK = '0' else camera_i_xclk; -- cam <- dev
 ov7670_pclk2 <= camera_o_pclk2; -- dev <- cam
 ov7670_data2 <= camera_o_d2;
 ov7670_vsync2 <= camera_o_vs2;
 ov7670_href2 <= camera_o_hs2;
 
-camera_i_xclk3 <= ov7670_xclk3; -- cam <- dev
+camera_i_xclk3 <= ov7670_xclk3 when USE_OUT_CLOCK = '0' else camera_i_xclk; -- cam <- dev
 ov7670_pclk3 <= camera_o_pclk3; -- dev <- cam
 ov7670_data3 <= camera_o_d3;
 ov7670_vsync3 <= camera_o_vs3;
 ov7670_href3 <= camera_o_hs3;
 
-camera_i_xclk4 <= ov7670_xclk4; -- cam <- dev
+camera_i_xclk4 <= ov7670_xclk4 when USE_OUT_CLOCK = '0' else camera_i_xclk; -- cam <- dev
 ov7670_pclk4 <= camera_o_pclk4; -- dev <- cam
 ov7670_data4 <= camera_o_d4;
 ov7670_vsync4 <= camera_o_vs4;
@@ -223,10 +221,10 @@ ov7670_href4 <= camera_o_hs4;
 
 -- Instantiate the Unit Under Test (UUT)
 uut: Top PORT MAP (
-clk50 => clk50,
+clk50 => '0',
 clkcam => clkcam,
 pb => pb,
-sw => sw,
+sw => '0',
 led1 => led1,
 led2 => led2,
 led3 => led3,
@@ -274,13 +272,12 @@ o_reset => o_reset,
 o_rs => o_rs
 );
 
--- Clock process definitions
-clk50_process :process
+camera_xclk_process :process
 begin
-clk50 <= '0';
-wait for clk50_period/2;
-clk50 <= '1';
-wait for clk50_period/2;
+camera_i_xclk <= '0';
+wait for camera_i_xclk_period/2;
+camera_i_xclk <= '1';
+wait for camera_i_xclk_period/2;
 end process;
 
 clkcam_process :process
@@ -291,14 +288,6 @@ clkcam <= '1';
 wait for clkcam_period/2;
 end process;
 
---camera_i_xclkp :process
---begin
---xclk <= '0';
---wait for camera_i_xclk_period/2;
---xclk <= '1';
---wait for camera_i_xclk_period/2;
---end process;
-
 -- Stimulus process
 stim_proc : process
 begin
@@ -307,7 +296,7 @@ pb <= '1';
 wait for 2500 ns;
 --wait for 500 ns;
 pb <= '0';
-wait for clk50_period*10;
+wait for clkcam_period*10;
 -- insert stimulus here
 wait;
 end process;
