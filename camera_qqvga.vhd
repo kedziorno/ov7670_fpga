@@ -56,18 +56,19 @@ architecture Behavioral of camera_qqvga is
 	constant CLOCK_PERIOD3 : integer := 100;
 	-- 1 or 2 pclk for tp
 	constant tp : integer := 2**RAW_RGB;
-	-- tline = 784tp = 640tp + 144tp
+	-- tline = 784tp = 640tp + 144tp -- for VGA
+	-- tline = (href1+href0)*tp
 	constant HREF1 : real := 320.0;
 	constant CHREF1 : real := HREF1 * real(tp); -- HREF 1 pulse time
 	constant HREF0 : real := 1247.0;
 	constant CHREF0 : real := HREF0 * real(tp); -- HREF 0 pulse time
 	constant tline : real := CHREF1 + CHREF0;
-	-- VSYNC pulse have 510tline
+	-- VSYNC pulse have (510/4)*tline
 	constant CVSYNC1 : real := 0.7505;
 	constant VSYNC1 : real := CVSYNC1 * real(tline);
 	constant CVSYNC2 : real := 5.0560; -- 5.0565
 	constant VSYNC2 : real := CVSYNC2 * real(tline);
-	constant CVSYNC3 : real := 120.0;
+	constant CVSYNC3 : real := 120.0000;
 	constant VSYNC3 : real := CVSYNC3 * real(tline);
 	constant CVSYNC4 : real := 1.7775; --1.8025
 	constant VSYNC4 : real := CVSYNC4 * real(tline);
@@ -150,51 +151,6 @@ begin
 		end if;
 	end process p1;
 
-	-- emulate qqvga
---	pa1 : process(camera_i_rst,camera_i_xclk) is
---		constant C_MAX1 : integer := 1*integer(tline);
---		constant C_MAX2 : integer := 3*integer(tline);
---		variable counter1 : integer range 0 to C_MAX1 - 1;
---		variable counter2 : integer range 0 to C_MAX2 - 1;
---		type states is (sa,sb,sc);
---		variable state : states;
---	begin
---		if (camera_i_rst = '0') then
---			a <= '0';
---			counter1 := 0;
---			counter2 := 0;
---			state := sa;
---		elsif (falling_edge(camera_i_xclk)) then
---			case (state) is
---				when sa =>
---					if (pixel_time = '1') then
---						state := sb;
---					else
---						state := sa;
---					end if;
---				when sb =>
---					if (counter1 = C_MAX1 - 1) then
---						counter1 := 0;
---						state := sc;
---						a <= '0';
---					else
---						counter1 := counter1 + 1;
---						state := sb;
---						a <= '1';
---					end if;
---				when sc =>
---					a <= '0';
---					if (counter2 = C_MAX2 - 1) then
---						counter2 := 0;
---						state := sa;
---					else
---						counter2 := counter2 + 1;
---						state := sc;
---					end if;
---			end case;
---		end if;
---	end process pa1;
-
 	-- generate href pulse
 	-- on falling edge
 	p2 : process (camera_i_rst,camera_i_xclk,href_time) is
@@ -243,11 +199,7 @@ begin
 						counth0 := counth0 + 1;
 					end if;
 			end case;
---			if (a = '1') then
-				camera_o_hs <= vhref;
---			else
---				camera_o_hs <= '0';
---			end if;
+			camera_o_hs <= vhref;
 		end if;
 	end process p2;
 
