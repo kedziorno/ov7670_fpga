@@ -31,7 +31,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 -- XXX ov7670 camera emulator vga 640x480 30fps
 -- XXX based on datasheet VGA Frame Timing Figure 6 p. 7
-entity camera is
+entity camera_vga is
 generic (
 constant CLOCK_PERIOD : integer := 42; -- 21/42/100 ns - 10/24/48 MHZ - Min/Typ/Max Unit
 constant RAW_RGB : integer := 0; -- 0 - RAW / 1 - RGB
@@ -48,9 +48,9 @@ camera_o_d : out std_logic_vector(7 downto 0);
 camera_i_rst : in std_logic;
 camera_i_pwdn : in std_logic
 );
-end camera;
+end camera_vga;
 
-architecture Behavioral of camera is
+architecture Behavioral of camera_vga is
 	constant CLOCK_PERIOD1 : integer := 21;
 	constant CLOCK_PERIOD2 : integer := 42;
 	constant CLOCK_PERIOD3 : integer := 100;
@@ -86,7 +86,7 @@ begin
 		if (camera_i_rst = '0') then
 			assert (CLOCK_PERIOD = CLOCK_PERIOD1 or CLOCK_PERIOD = CLOCK_PERIOD2 or CLOCK_PERIOD = CLOCK_PERIOD3)
 			report "-- CLOCK_PERIOD must have " & integer'image(CLOCK_PERIOD1) & "," & integer'image(CLOCK_PERIOD2) & "," & integer'image(CLOCK_PERIOD3) & " --"
-			severity failure;
+			severity warning;
 		end if;
 	end process p0;
 
@@ -150,51 +150,6 @@ begin
 		end if;
 	end process p1;
 
-	-- emulate qqvga
-	pa1 : process(camera_i_rst,camera_i_xclk) is
-		constant C_MAX1 : integer := 1*tline;
-		constant C_MAX2 : integer := 3*tline;
-		variable counter1 : integer range 0 to C_MAX1 - 1;
-		variable counter2 : integer range 0 to C_MAX2 - 1;
-		type states is (sa,sb,sc);
-		variable state : states;
-	begin
-		if (camera_i_rst = '0') then
-			a <= '0';
-			counter1 := 0;
-			counter2 := 0;
-			state := sa;
-		elsif (falling_edge(camera_i_xclk)) then
-			case (state) is
-				when sa =>
-					if (pixel_time = '1') then
-						state := sb;
-					else
-						state := sa;
-					end if;
-				when sb =>
-					if (counter1 = C_MAX1 - 1) then
-						counter1 := 0;
-						state := sc;
-						a <= '0';
-					else
-						counter1 := counter1 + 1;
-						state := sb;
-						a <= '1';
-					end if;
-				when sc =>
-					a <= '0';
-					if (counter2 = C_MAX2 - 1) then
-						counter2 := 0;
-						state := sa;
-					else
-						counter2 := counter2 + 1;
-						state := sc;
-					end if;
-			end case;
-		end if;
-	end process pa1;
-
 	-- generate href pulse
 	-- on falling edge
 	p2 : process (camera_i_rst,camera_i_xclk,href_time) is
@@ -243,11 +198,7 @@ begin
 						counth0 := counth0 + 1;
 					end if;
 			end case;
-			if (a = '1') then
-				camera_o_hs <= vhref;
-			else
-				camera_o_hs <= '0';
-			end if;
+			camera_o_hs <= vhref;
 		end if;
 	end process p2;
 
@@ -273,8 +224,7 @@ begin
 			state := s1;
 			count := 0;
 		elsif (falling_edge(camera_i_xclk)) then
---			if (pixel_time = '1') then
-			if (a = '1') then
+			if (pixel_time = '1') then
 				case (state) is
 					when s1 =>
 						vd := startdata(count);
