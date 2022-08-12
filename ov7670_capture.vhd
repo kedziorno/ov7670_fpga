@@ -42,6 +42,7 @@ begin
    addr <= address;
    we(0) <= we_reg;
 	 dout<= d_latch(11 downto 8) & d_latch(7 downto 4) & d_latch(3 downto 0);
+--	 dout<= "00000000000"&d_latch(0);
 --	 dout<= d_latch(11 downto 9) & d_latch(7 downto 5) & d_latch(3 downto 2);
 --	 dout<= d_latch(10 downto 8) & d_latch(6 downto 4) & d_latch(3 downto 2);
 --   dout<= d_latch(11) & d_latch(7) & d_latch(3);
