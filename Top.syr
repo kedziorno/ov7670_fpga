@@ -4,14 +4,14 @@ Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
 Parameter TMPDIR set to xst/projnav.tmp
 
 
-Total REAL time to Xst completion: 1.00 secs
+Total REAL time to Xst completion: 0.00 secs
 Total CPU time to Xst completion: 0.06 secs
  
 --> 
 Parameter xsthdpdir set to xst
 
 
-Total REAL time to Xst completion: 1.00 secs
+Total REAL time to Xst completion: 0.00 secs
 Total CPU time to Xst completion: 0.06 secs
  
 --> 
@@ -180,7 +180,7 @@ Analyzing generic Entity <Top> in library <work> (Architecture <structural>).
 	G_PB_BITS = 24
 	G_WAIT1 = 20
 	SPI_SPEED_MODE = 8
-WARNING:Xst:2211 - "/home/user/workspace/ov7670_vga_Nexys2/Top.vhd" line 633: Instantiating black box module <frame_buffer>.
+WARNING:Xst:2211 - "/home/user/workspace/ov7670_vga_Nexys2/Top.vhd" line 664: Instantiating black box module <frame_buffer>.
     Set user-defined property "CAPACITANCE =  DONT_CARE" for instance <OBUF_xclk1> in unit <Top>.
     Set user-defined property "DRIVE =  12" for instance <OBUF_xclk1> in unit <Top>.
     Set user-defined property "IOSTANDARD =  DEFAULT" for instance <OBUF_xclk1> in unit <Top>.
@@ -207,7 +207,7 @@ WARNING:Xst:2211 - "/home/user/workspace/ov7670_vga_Nexys2/Top.vhd" line 633: In
     Set user-defined property "IOSTANDARD =  DEFAULT" for instance <vga_bufa> in unit <Top>.
     Set user-defined property "CLKDV_DIVIDE =  2.0000000000000000" for instance <DCM_cam> in unit <Top>.
     Set user-defined property "CLKFX_DIVIDE =  25" for instance <DCM_cam> in unit <Top>.
-    Set user-defined property "CLKFX_MULTIPLY =  12" for instance <DCM_cam> in unit <Top>.
+    Set user-defined property "CLKFX_MULTIPLY =  4" for instance <DCM_cam> in unit <Top>.
     Set user-defined property "CLKIN_DIVIDE_BY_2 =  FALSE" for instance <DCM_cam> in unit <Top>.
     Set user-defined property "CLKIN_PERIOD =  10.0000000000000000" for instance <DCM_cam> in unit <Top>.
     Set user-defined property "CLKOUT_PHASE_SHIFT =  NONE" for instance <DCM_cam> in unit <Top>.
@@ -493,6 +493,10 @@ WARNING:Xst:1780 - Signal <ov7670_pclk3buf> is never used or assigned. This unco
 WARNING:Xst:1780 - Signal <ov7670_pclk2buf1> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <ov7670_pclk2buf> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:646 - Signal <initialize_cs> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:1780 - Signal <fifo_wr> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:1780 - Signal <fifo_rd> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:1780 - Signal <fifo_full> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:1780 - Signal <fifo_empty> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <clock6b> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <clock6a> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <clock5b> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -528,7 +532,7 @@ INFO:Xst:1799 - State 1010 is never reached in FSM <state0>.
     | Transitions        | 60                                             |
     | Inputs             | 5                                              |
     | Outputs            | 33                                             |
-    | Clock              | ov7670_pclk1buf1          (rising_edge)        |
+    | Clock              | clkcambuf                 (rising_edge)        |
     | Reset              | resend                    (positive)           |
     | Reset type         | asynchronous                                   |
     | Reset State        | 000000                                         |
@@ -827,21 +831,21 @@ Design Statistics
 # IOs                              : 91
 
 Cell Usage :
-# BELS                             : 1454
+# BELS                             : 1455
 #      GND                         : 2
 #      INV                         : 16
 #      LUT1                        : 165
 #      LUT2                        : 117
-#      LUT2_D                      : 1
-#      LUT2_L                      : 6
-#      LUT3                        : 172
+#      LUT2_D                      : 2
+#      LUT2_L                      : 7
+#      LUT3                        : 171
 #      LUT3_D                      : 6
-#      LUT3_L                      : 9
-#      LUT4                        : 450
-#      LUT4_D                      : 21
-#      LUT4_L                      : 27
+#      LUT3_L                      : 7
+#      LUT4                        : 446
+#      LUT4_D                      : 20
+#      LUT4_L                      : 33
 #      MUXCY                       : 197
-#      MUXF5                       : 65
+#      MUXF5                       : 66
 #      MUXF6                       : 21
 #      VCC                         : 2
 #      XORCY                       : 177
@@ -871,7 +875,7 @@ Device utilization summary:
 
 Selected Device : 3s1200efg320-4 
 
- Number of Slices:                      541  out of   8672     6%  
+ Number of Slices:                      540  out of   8672     6%  
  Number of Slice Flip Flops:            418  out of  17344     2%  
  Number of 4 input LUTs:                990  out of  17344     5%  
  Number of IOs:                          91
@@ -902,8 +906,8 @@ Clock Information:
 Clock Signal                       | Clock buffer(FF name)  | Load  |
 -----------------------------------+------------------------+-------+
 clkcam                             | DCM_vga:CLKDV          | 55    |
-ov7670_pclk1                       | DCM_pclk1:CLK0         | 100   |
-clkcam                             | IBUFG+BUFG             | 287   |
+ov7670_pclk1                       | DCM_pclk1:CLK0         | 53    |
+clkcam                             | IBUFG+BUFG             | 334   |
 c0/clock_data                      | NONE(c0/data_index_2)  | 3     |
 c0/clock_divider                   | NONE(c0/d_0)           | 3     |
 -----------------------------------+------------------------+-------+
@@ -933,7 +937,7 @@ All values displayed in nanoseconds (ns)
 =========================================================================
 Timing constraint: Default period analysis for Clock 'clkcam'
   Clock period: 9.447ns (frequency: 105.854MHz)
-  Total number of paths / destination ports: 16892 / 708
+  Total number of paths / destination ports: 17610 / 764
 -------------------------------------------------------------------------
 Delay:               9.447ns (Levels of Logic = 6)
   Source:            c1/data_index_0 (FF)
@@ -947,9 +951,9 @@ Delay:               9.447ns (Levels of Logic = 6)
     ----------------------------------------  ------------
      FDC:C->Q             66   0.591   1.448  c1/data_index_0 (c1/data_index_0)
      LUT4_D:I0->O          8   0.704   0.761  c1/Mrom__mux0000201 (c1/Mrom__mux000020)
-     LUT4_D:I3->LO         1   0.704   0.104  c1/state_cmp_eq0004247 (N322)
+     LUT4_D:I3->LO         1   0.704   0.104  c1/state_cmp_eq0004247 (N321)
      LUT4:I3->O            3   0.704   0.535  c1/state_cmp_eq00071 (c1/state_cmp_eq0007)
-     LUT4:I3->O            1   0.704   0.455  c1/data_index_mux0000<0>1_SW1 (N172)
+     LUT4:I3->O            1   0.704   0.455  c1/data_index_mux0000<0>1_SW1 (N184)
      LUT3_D:I2->O         15   0.704   1.021  c1/data_index_mux0000<0>1 (c1/N21)
      LUT4:I3->O            1   0.704   0.000  c1/data_index_mux0000<8>1 (c1/data_index_mux0000<8>)
      FDC:D                     0.308          c1/data_index_8
@@ -960,7 +964,7 @@ Delay:               9.447ns (Levels of Logic = 6)
 =========================================================================
 Timing constraint: Default period analysis for Clock 'ov7670_pclk1'
   Clock period: 7.960ns (frequency: 125.628MHz)
-  Total number of paths / destination ports: 1225 / 355
+  Total number of paths / destination ports: 680 / 301
 -------------------------------------------------------------------------
 Delay:               3.980ns (Levels of Logic = 1)
   Source:            inst_ov7670capt1/latched_vsync (FF)
@@ -1024,29 +1028,8 @@ Delay:               2.225ns (Levels of Logic = 1)
                                        (72.0% logic, 28.0% route)
 
 =========================================================================
-Timing constraint: Default OFFSET IN BEFORE for Clock 'ov7670_pclk1'
-  Total number of paths / destination ports: 13 / 13
--------------------------------------------------------------------------
-Offset:              4.091ns (Levels of Logic = 3)
-  Source:            ov7670_vsync1 (PAD)
-  Destination:       state_FSM_FFd32 (FF)
-  Destination Clock: ov7670_pclk1 rising
-
-  Data Path: ov7670_vsync1 to state_FSM_FFd32
-                                Gate     Net
-    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
-    ----------------------------------------  ------------
-     IBUF:I->O             3   1.218   0.706  ov7670_vsync1_IBUF (ov7670_vsync1_IBUF)
-     LUT2:I0->O            2   0.704   0.451  state_FSM_FFd33-In_SW0 (N01)
-     LUT4:I3->O            1   0.704   0.000  state_FSM_FFd33-In (state_FSM_FFd33-In)
-     FDP:D                     0.308          state_FSM_FFd33
-    ----------------------------------------
-    Total                      4.091ns (2.934ns logic, 1.157ns route)
-                                       (71.7% logic, 28.3% route)
-
-=========================================================================
 Timing constraint: Default OFFSET IN BEFORE for Clock 'clkcam'
-  Total number of paths / destination ports: 25 / 25
+  Total number of paths / destination ports: 28 / 28
 -------------------------------------------------------------------------
 Offset:              4.707ns (Levels of Logic = 2)
   Source:            pb (PAD)
@@ -1065,8 +1048,27 @@ Offset:              4.707ns (Levels of Logic = 2)
                                        (60.2% logic, 39.8% route)
 
 =========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'ov7670_pclk1'
+  Total number of paths / destination ports: 10 / 10
+-------------------------------------------------------------------------
+Offset:              2.057ns (Levels of Logic = 1)
+  Source:            ov7670_vsync1 (PAD)
+  Destination:       inst_ov7670capt1/latched_vsync (FF)
+  Destination Clock: ov7670_pclk1 falling
+
+  Data Path: ov7670_vsync1 to inst_ov7670capt1/latched_vsync
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O             3   1.218   0.531  ov7670_vsync1_IBUF (ov7670_vsync1_IBUF)
+     FDC_1:D                   0.308          inst_ov7670capt1/latched_vsync
+    ----------------------------------------
+    Total                      2.057ns (1.526ns logic, 0.531ns route)
+                                       (74.2% logic, 25.8% route)
+
+=========================================================================
 Timing constraint: Default OFFSET OUT AFTER for Clock 'clkcam'
-  Total number of paths / destination ports: 209 / 18
+  Total number of paths / destination ports: 220 / 18
 -------------------------------------------------------------------------
 Offset:              9.075ns (Levels of Logic = 5)
   Source:            inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/has_mux_b.B/sel_pipe_2 (FF)
@@ -1086,29 +1088,6 @@ Offset:              9.075ns (Levels of Logic = 5)
     ----------------------------------------
     Total                      9.075ns (5.975ns logic, 3.100ns route)
                                        (65.8% logic, 34.2% route)
-
-=========================================================================
-Timing constraint: Default OFFSET OUT AFTER for Clock 'ov7670_pclk1'
-  Total number of paths / destination ports: 11 / 3
--------------------------------------------------------------------------
-Offset:              8.108ns (Levels of Logic = 5)
-  Source:            spi_data_byte_data_7 (FF)
-  Destination:       o_do (PAD)
-  Source Clock:      ov7670_pclk1 rising
-
-  Data Path: spi_data_byte_data_7 to o_do
-                                Gate     Net
-    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
-    ----------------------------------------  ------------
-     FDC:C->Q              2   0.591   0.482  spi_data_byte_data_7 (spi_data_byte_data_7)
-     LUT4:I2->O            1   0.704   0.000  c0/o_do261_F (N294)
-     MUXF5:I0->O           1   0.321   0.455  c0/o_do261 (c0/o_do261)
-     LUT4:I2->O            1   0.704   0.455  c0/o_do292 (c0/o_do292)
-     LUT4:I2->O            1   0.704   0.420  c0/o_do336 (o_do_OBUF)
-     OBUF:I->O                 3.272          o_do_OBUF (o_do)
-    ----------------------------------------
-    Total                      8.108ns (6.296ns logic, 1.812ns route)
-                                       (77.7% logic, 22.3% route)
 
 =========================================================================
 Timing constraint: Default OFFSET OUT AFTER for Clock 'c0/clock_divider'
@@ -1155,15 +1134,15 @@ Offset:              8.806ns (Levels of Logic = 5)
 =========================================================================
 
 
-Total REAL time to Xst completion: 25.00 secs
-Total CPU time to Xst completion: 18.03 secs
+Total REAL time to Xst completion: 19.00 secs
+Total CPU time to Xst completion: 17.79 secs
  
 --> 
 
 
-Total memory usage is 550928 kilobytes
+Total memory usage is 550896 kilobytes
 
 Number of errors   :    0 (   0 filtered)
-Number of warnings :   79 (   0 filtered)
+Number of warnings :   83 (   0 filtered)
 Number of infos    :   13 (   0 filtered)
 

@@ -101,7 +101,7 @@ Generic (FE_WAIT_BITS : integer := G_FE_WAIT_BITS);
           siod : inout  STD_LOGIC;
           sioc : out  STD_LOGIC;
           taken : out  STD_LOGIC);
-end component;	
+end component;
 
 COMPONENT frame_buffer
 	Port ( clkA : in STD_LOGIC;
@@ -111,6 +111,20 @@ COMPONENT frame_buffer
 			 clkB : in STD_LOGIC;
 			 addrB: in STD_LOGIC_VECTOR(14 downto 0);
 			 doutB: out STD_LOGIC_VECTOR(11 downto 0));
+END COMPONENT;
+
+COMPONENT fifo
+  PORT (
+    rst : IN STD_LOGIC;
+    wr_clk : IN STD_LOGIC;
+    rd_clk : IN STD_LOGIC;
+    din : IN STD_LOGIC_VECTOR(11 DOWNTO 0);
+    wr_en : IN STD_LOGIC;
+    rd_en : IN STD_LOGIC;
+    dout : OUT STD_LOGIC_VECTOR(11 DOWNTO 0);
+    full : OUT STD_LOGIC;
+    empty : OUT STD_LOGIC
+  );
 END COMPONENT;
 
 COMPONENT vga_imagegenerator
@@ -155,7 +169,7 @@ signal rd_a1,rd_a2,rd_a3,rd_a4 : STD_LOGIC_VECTOR(14 downto 0);
 
 --VGA
 signal active1,active2,active3,active4 : STD_LOGIC;
-signal vga_vsync_sig : STD_LOGIC;
+signal vga_vsync_sig,vga_hsync_sig : STD_LOGIC;
 
 signal cc : std_logic;
 
@@ -231,6 +245,8 @@ signal spi_data_byte_data : BYTE_TYPE;
 
 signal pvs : std_logic;
 
+signal fifo_empty,fifo_full,fifo_rd,fifo_wr : std_logic;
+
 begin
 
 o_cs <= spi_cs; -- TODO use initialize_cs mux
@@ -276,7 +292,7 @@ port map (
 	o_data_byte => initialize_data_byte
 );
 
-poled : process(ov7670_pclk1buf1,resend) is
+poled : process(clkcambuf,resend) is
 	type states is (idle,
 	a1,b1,c1,d1,
 --	a2,b2,c2,d2,
@@ -297,7 +313,7 @@ begin
 		spi_enable_data <= '0';
 		spi_data_byte_data <= (others => '0');
 		w0_index := 0;
-	elsif (rising_edge(ov7670_pclk1buf1)) then
+	elsif (rising_edge(clkcambuf)) then
 		pvs <= ov7670_vsync1;
 		case (state) is
 			when idle =>
@@ -629,7 +645,22 @@ end process poled;
 --		addr => wr_a4,
 --		dout => wr_d4,
 --		we => wren4);
-	
+
+--inst_fifo1 : fifo
+--PORT MAP (
+--	rst => resend,
+--	wr_clk => ov7670_pclk1buf1,
+--	rd_clk => clk25,
+--	din => wr_d1,
+--	wr_en => fifo_wr,
+--	rd_en => fifo_rd,
+--	dout => rd_d1,
+--	full => fifo_full,
+--	empty => fifo_empty
+--);
+--fifo_rd <= '0' when fifo_empty = '1' and fifo_full = '0' else active1;
+--fifo_wr <= '0' when fifo_full = '1' and fifo_empty = '0' else wren1(0);
+
 	inst_framebuffer1 : frame_buffer port map(
 		weA => wren1,
 		clkA => ov7670_pclk1buf1,
@@ -704,7 +735,7 @@ end process poled;
 	inst_vgatiming : VGA_timing_synch port map(
 		reset => resend,
 		clk25 => clk25,
-		Hsync => vga_hsync,
+		Hsync => vga_hsync_sig,
 		Vsync => vga_vsync_sig,
 		activeArea1 => active1,
 		activeArea2 => active2,
@@ -712,6 +743,7 @@ end process poled;
 		activeArea4 => active4);
 
 vga_vsync <= vga_vsync_sig;
+vga_hsync <= vga_hsync_sig;
 
 Registers: ov7670_registers port map(
 	reset => resend,
@@ -1005,8 +1037,9 @@ DCM_cam : DCM
 generic map (
 CLKDV_DIVIDE => 2.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
 CLKFX_DIVIDE => 25, -- Can be any interger from 1 to 32
+CLKFX_MULTIPLY => 4, -- Can be any integer from 1 to 32 -- 16mhz
 --CLKFX_MULTIPLY => 6, -- Can be any integer from 1 to 32 -- 24mhz
-CLKFX_MULTIPLY => 12, -- Can be any integer from 1 to 32 -- 48mhz
+--CLKFX_MULTIPLY => 12, -- Can be any integer from 1 to 32 -- 48mhz
 CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
 CLKIN_PERIOD => 10.0, -- Specify period of input clock
 CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of NONE, FIXED or VARIABLE
