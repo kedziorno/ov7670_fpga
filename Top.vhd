@@ -611,12 +611,6 @@ begin
 					w1_index := w1_index + 1;
 					done_pixels <= '0';
 				end if;
---	inst_addrgen1 : address_generator port map(
---		reset => resend,
---		clk25 => clk25,
---		enable => send_pixels,
---		vsync => not ov7670_vsync1,
---		address => rd_a1);
 
 		end case;
 	end if;
@@ -629,12 +623,6 @@ end process poled;
 	anode <= "1111";
 
 	led1 <= ov7670_data1(0) or ov7670_data1(1) or ov7670_data1(2) or ov7670_data1(3) or ov7670_data1(4) or ov7670_data1(5) or ov7670_data1(6) or ov7670_data1(7);
-	--led2 <= wr_a1(13) or wr_a1(12) or wr_a1(11) or wr_a1(10) or wr_a1(9) or wr_a1(8) or 
-	--wr_a1(7) or wr_a1(6) or wr_a1(5) or wr_a1(4) or wr_a1(3) or wr_a1(2) or wr_a1(1) or wr_a1(0) ;
-	--led3 <= wr_d1(0);
-	--led4 <= wren1(0);
-
---	led1 <= '0';
 	led2 <= '0';
 	led3 <= '0';
 	led4 <= '0';
@@ -677,14 +665,6 @@ end process poled;
 		clkB => clk25,
 		addrB => rd_a1,
 		doutB => rd_d1);
-
---	active1 <= '1';
---	inst_addrgen1 : address_generator port map(
---		reset => resend,
---		clk25 => clk25,
---		enable => send_pixels,
---		vsync => not ov7670_vsync1,
---		address => rd_a1);
 
 Registers: ov7670_registers port map(
 	reset => resend,
@@ -875,7 +855,7 @@ begin
 				resend2 <= '0';
 			when display_initialize =>
 				initialize_run <= '1';
-				initialize_color <= SCREEN_ORANGE;
+				initialize_color <= SCREEN_BLACK;
 				state := display_is_initialize;
 			when display_is_initialize =>
 				if (initialize_initialized = '1') then
