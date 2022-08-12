@@ -225,8 +225,7 @@ begin
 			state := s1;
 			count := 0;
 		elsif (falling_edge(camera_i_xclk)) then
---			if (pixel_time = '1') then
-			if (a = '1') then
+			if (pixel_time = '1') then
 				case (state) is
 					when s1 =>
 						vd := startdata(count);
