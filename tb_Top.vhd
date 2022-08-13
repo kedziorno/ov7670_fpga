@@ -49,7 +49,7 @@ Port (
 clk50	: in STD_LOGIC; -- Crystal Oscilator 50MHz  --B8
 clkcam	: in STD_LOGIC; -- Crystal Oscilator 23.9616 MHz  --U9
 pb		: in STD_LOGIC; -- Push Button --B18
-sw		: in STD_LOGIC; -- Push Button --G18
+sw		: in STD_LOGIC_VECTOR(3 downto 0); -- Push Button --G18
 led1 : out STD_LOGIC; -- Indicates configuration has been done --J14
 led2 : out STD_LOGIC; -- Indicates configuration has been done --J14
 led3 : out STD_LOGIC; -- Indicates configuration has been done --J14
@@ -63,9 +63,6 @@ ov7670_href1,ov7670_href2,ov7670_href3,ov7670_href4  : in  STD_LOGIC; -- Pmod JB
 ov7670_data1,ov7670_data2,ov7670_data3,ov7670_data4  : in  STD_LOGIC_vector(7 downto 0);
 ov7670_sioc1,ov7670_sioc2,ov7670_sioc3,ov7670_sioc4  : out STD_LOGIC; -- Pmod JB10 --J12
 ov7670_siod1,ov7670_siod2,ov7670_siod3,ov7670_siod4  : inout STD_LOGIC; -- Pmod JB4 --H16
-vga_hsync : out STD_LOGIC; --T4
-vga_vsync : out STD_LOGIC; --U3
-vga_rgb	: out STD_LOGIC_VECTOR(7 downto 0);
 o_cs : out STD_LOGIC;
 o_do : out STD_LOGIC;
 o_ck : out STD_LOGIC;
@@ -77,6 +74,7 @@ end component Top;
 --Inputs
 signal clkcam : std_logic := '0';
 signal pb : std_logic := '0';
+signal sw : std_logic_vector(3 downto 0) := (others => '0');
 signal ov7670_pclk1,ov7670_pclk2,ov7670_pclk3,ov7670_pclk4 : std_logic := '0';
 signal ov7670_vsync1,ov7670_vsync2,ov7670_vsync3,ov7670_vsync4 : std_logic := '0';
 signal ov7670_href1,ov7670_href2,ov7670_href3,ov7670_href4 : std_logic := '0';
@@ -91,9 +89,6 @@ signal ov7670_xclk1,ov7670_xclk2,ov7670_xclk3,ov7670_xclk4 : std_logic;
 signal ov7670_sioc1,ov7670_sioc2,ov7670_sioc3,ov7670_sioc4 : std_logic;
 signal ov7670_pwdn1,ov7670_pwdn2,ov7670_pwdn3,ov7670_pwdn4 : std_logic;
 signal ov7670_reset1,ov7670_reset2,ov7670_reset3,ov7670_reset4 : std_logic;
-signal vga_hsync : std_logic;
-signal vga_vsync : std_logic;
-signal vga_rgb : std_logic_vector(7 downto 0);
 signal o_cs : STD_LOGIC;
 signal o_do : STD_LOGIC;
 signal o_ck : STD_LOGIC;
@@ -225,7 +220,7 @@ uut: Top PORT MAP (
 clk50 => '0',
 clkcam => clkcam,
 pb => pb,
-sw => '0',
+sw => sw,
 led1 => led1,
 led2 => led2,
 led3 => led3,
@@ -263,9 +258,6 @@ ov7670_siod1 => ov7670_siod1,
 ov7670_siod2 => ov7670_siod2,
 ov7670_siod3 => ov7670_siod3,
 ov7670_siod4 => ov7670_siod4,
-vga_hsync => vga_hsync,
-vga_vsync => vga_vsync,
-vga_rgb => vga_rgb,
 o_cs => o_cs,
 o_do => o_do,
 o_ck => o_ck,
