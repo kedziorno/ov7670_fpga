@@ -24,14 +24,14 @@ use WORK.st7735r_p_screen.ALL;
 entity Top is
 Generic (
 G_PB_BITS : integer := 24;
-G_WAIT1 : integer := 2; -- wait for reset dcm and cameras
+G_WAIT1 : integer := 20; -- wait for reset dcm and cameras
 G_FE_WAIT_BITS : integer := 20; -- sccb wait for cameras
 SPI_SPEED_MODE : integer := C_CLOCK_COUNTER_EF
 );
 	Port	(	clk50	: in STD_LOGIC; -- Crystal Oscilator 50MHz  --B8
 	clkcam	: in STD_LOGIC; -- Crystal Oscilator 23.9616 MHz  --U9
 				pb		: in STD_LOGIC; -- Push Button --B18
-				sw		: in STD_LOGIC; -- Push Button --G18
+				sw		: in STD_LOGIC_VECTOR(3 downto 0);
 				led1 : out STD_LOGIC; -- Indicates configuration has been done --J14
 				led2 : out STD_LOGIC; -- Indicates configuration has been done --J14
 				led3 : out STD_LOGIC; -- Indicates configuration has been done --J14
@@ -52,9 +52,6 @@ SPI_SPEED_MODE : integer := C_CLOCK_COUNTER_EF
 				ov7670_sioc1,ov7670_sioc2,ov7670_sioc3,ov7670_sioc4  : out STD_LOGIC; -- Pmod JB10 --J12
 				ov7670_siod1,ov7670_siod2,ov7670_siod3,ov7670_siod4  : inout STD_LOGIC; -- Pmod JB4 --H16
 				--VGA
-				vga_hsync : out STD_LOGIC; --T4
-				vga_vsync : out STD_LOGIC; --U3
-				vga_rgb	: out STD_LOGIC_VECTOR(7 downto 0); -- R : R9(MSB), T8, R8 , G : N8, P8, P6 , Bc: U5, U4(LSB)
 				o_cs : out STD_LOGIC;
 				o_do : out STD_LOGIC;
 				o_ck : out STD_LOGIC;
@@ -183,6 +180,7 @@ signal sioc,siod : std_logic;
 signal send,done,taken : std_logic;
 signal resend1,resend2 : std_logic;
 
+--signal ov7670_pclk1buf2,ov7670_pclk1buf3,ov7670_pclk1buf4 : std_logic;
 signal ov7670_pclk1buf,ov7670_pclk2buf,ov7670_pclk3buf,ov7670_pclk4buf  : std_logic;
 signal clkcambuf,clk50buf : std_logic;
 
@@ -246,9 +244,19 @@ signal fifo_empty,fifo_full,fifo_rd,fifo_wr : std_logic;
 
 signal stop_capture,send_pixels,done_pixels : std_logic;
 
+signal ov7670_pclkbufmux,ov7670_vsyncmux,ov7670_hrefmux : std_logic;
+signal ov7670_datamux : std_logic_vector(7 downto 0);
+
 begin
 
-o_cs <= spi_cs when (initialize_run = '1' or send_pixels = '1') else '1'; -- TODO use initialize_cs mux
+anode <= "1111";
+
+led1 <= ov7670_data1(0) or ov7670_data1(1) or ov7670_data1(2) or ov7670_data1(3) or ov7670_data1(4) or ov7670_data1(5) or ov7670_data1(6) or ov7670_data1(7);
+led2 <= ov7670_data2(0) or ov7670_data2(1) or ov7670_data2(2) or ov7670_data2(3) or ov7670_data2(4) or ov7670_data2(5) or ov7670_data2(6) or ov7670_data2(7);
+led3 <= ov7670_data3(0) or ov7670_data3(1) or ov7670_data3(2) or ov7670_data3(3) or ov7670_data3(4) or ov7670_data3(5) or ov7670_data3(6) or ov7670_data3(7);
+led4 <= ov7670_data4(0) or ov7670_data4(1) or ov7670_data4(2) or ov7670_data4(3) or ov7670_data4(4) or ov7670_data4(5) or ov7670_data4(6) or ov7670_data4(7);
+
+o_cs <= spi_cs when (initialize_run = '1' or send_pixels = '1') else '1';
 o_do <= spi_do when (initialize_run = '1' or send_pixels = '1') else '0';
 o_ck <= spi_ck when (initialize_run = '1' or send_pixels = '1') else '0';
 o_reset <= initialize_reset when initialize_run = '1' else '1';
@@ -291,8 +299,6 @@ port map (
 	o_data_byte => initialize_data_byte
 );
 
---stop_capture <= not stop_capture when ov7670_vsync1 = '1' else '0' when resend = '1' else stop_capture;
-
 fsm1 : process (clkcambuf,resend) is
 	type states is (a,b);
 	variable state : states;
@@ -302,8 +308,8 @@ begin
 		state := a;
 		stop_capture <= '0';
 	elsif (rising_edge(clkcambuf)) then
-		pvs <= ov7670_vsync1;
-		if (pvs = '0' and ov7670_vsync1 = '1') then
+		pvs <= ov7670_vsyncmux;
+		if (pvs = '0' and ov7670_vsyncmux = '1') then
 			stop_capture <= not stop_capture;
 		else
 			stop_capture <= stop_capture;
@@ -760,7 +766,7 @@ begin
 					w0_index := w0_index + 1;
 				end if;
 			when d13 =>
-				if (ov7670_vsync1 = '1') then
+				if (ov7670_vsyncmux = '1') then
 					rd_a1 <= (others => '0');
 					state := idle;
 				else
@@ -780,16 +786,40 @@ begin
 	end if;
 end process poled;
 
-	vga_rgb <= (others => '0');
-	vga_hsync <= '0';
-	vga_vsync <= '0';
-
-	anode <= "1111";
-
-	led1 <= ov7670_data1(0) or ov7670_data1(1) or ov7670_data1(2) or ov7670_data1(3) or ov7670_data1(4) or ov7670_data1(5) or ov7670_data1(6) or ov7670_data1(7);
-	led2 <= '0';
-	led3 <= '0';
-	led4 <= '0';
+p0mux : process (sw(0),sw(1),sw(2),sw(3),
+ov7670_pclk1buf1,ov7670_pclk2buf1,ov7670_pclk3buf1,ov7670_pclk4buf1,
+ov7670_vsync1,ov7670_vsync2,ov7670_vsync3,ov7670_vsync4,
+ov7670_href1,ov7670_href2,ov7670_href3,ov7670_href4,
+ov7670_data1,ov7670_data2,ov7670_data3,ov7670_data4
+) is
+begin
+	if (sw(0) = '1' and sw(1) = '0' and sw(2) = '0' and sw(3) = '0') then
+		ov7670_pclkbufmux <= ov7670_pclk1buf1;
+		ov7670_vsyncmux <= ov7670_vsync1;
+		ov7670_hrefmux <= ov7670_href1;
+		ov7670_datamux <= ov7670_data1;
+	elsif (sw(0) = '0' and sw(1) = '1' and sw(2) = '0' and sw(3) = '0') then
+		ov7670_pclkbufmux <= ov7670_pclk2buf1;
+		ov7670_vsyncmux <= ov7670_vsync2;
+		ov7670_hrefmux <= ov7670_href2;
+		ov7670_datamux <= ov7670_data2;
+	elsif (sw(0) = '0' and sw(1) = '0' and sw(2) = '1' and sw(3) = '0') then
+		ov7670_pclkbufmux <= ov7670_pclk3buf1;
+		ov7670_vsyncmux <= ov7670_vsync3;
+		ov7670_hrefmux <= ov7670_href3;
+		ov7670_datamux <= ov7670_data3;
+	elsif (sw(0) = '0' and sw(1) = '0' and sw(2) = '0' and sw(3) = '1') then
+		ov7670_pclkbufmux <= ov7670_pclk4buf1;
+		ov7670_vsyncmux <= ov7670_vsync4;
+		ov7670_hrefmux <= ov7670_href4;
+		ov7670_datamux <= ov7670_data4;
+	else
+		ov7670_pclkbufmux <= '0';
+		ov7670_vsyncmux <= '0';
+		ov7670_hrefmux <= '0';
+		ov7670_datamux <= (others => '0');
+	end if;
+end process p0mux;
 
 	inst_debounce: debounce_circuit port map(
 		clk => clkcambuf,
@@ -798,35 +828,20 @@ end process poled;
 
 	inst_ov7670capt1: ov7670_capture port map(
 		reset => stop_capture,
-		pclk => ov7670_pclk1buf1,
-		vsync => ov7670_vsync1,
-		href => ov7670_href1,
-		d => ov7670_data1,
+		pclk => ov7670_pclkbufmux,
+		vsync => ov7670_vsyncmux,
+		href => ov7670_hrefmux,
+		d => ov7670_datamux,
 		addr => wr_a1,
 		dout => wr_d1,
 		we => wren1);
 
---inst_fifo1 : fifo
---PORT MAP (
---	rst => resend,
---	wr_clk => ov7670_pclk1buf1,
---	rd_clk => clk25,
---	din => wr_d1,
---	wr_en => fifo_wr,
---	rd_en => fifo_rd,
---	dout => rd_d1,
---	full => fifo_full,
---	empty => fifo_empty
---);
---fifo_rd <= '0' when fifo_empty = '1' and fifo_full = '0' else active1;
---fifo_wr <= '0' when fifo_full = '1' and fifo_empty = '0' else wren1(0);
-
 	inst_framebuffer1 : frame_buffer port map(
 		weA => wren1,
-		clkA => ov7670_pclk1buf1,
+		clkA => ov7670_pclkbufmux,
 		addrA => wr_a1,
 		dinA => wr_d1,
-		clkB => ov7670_pclk1buf1,
+		clkB => cc,
 		addrB => rd_a1,
 		doutB => rd_d1);
 
@@ -929,7 +944,7 @@ begin
 				if (w4dcmcnt = C_W4DCM-1) then
 					resetdcm1 <= '0';
 					w4dcmcnt := 0;
-					state := se;
+					state := sb;--se;
 					send <= '0';
 					resend2 <= '1';
 				else
@@ -1039,47 +1054,29 @@ end process p0initcam;
 
 ov7670_sioc1 <= sioc when camera1 = '1' else '1';
 ov7670_siod1 <= siod when camera1 = '1' else '1';
-ov7670_sioc2 <= '0';
-ov7670_siod2 <= '0';
-ov7670_sioc3 <= '0';
-ov7670_siod3 <= '0';
-ov7670_sioc4 <= '0';
-ov7670_siod4 <= '0';
+ov7670_sioc2 <= sioc when camera2 = '1' else '1';
+ov7670_siod2 <= siod when camera2 = '1' else '1';
+ov7670_sioc3 <= sioc when camera3 = '1' else '1';
+ov7670_siod3 <= siod when camera3 = '1' else '1';
+ov7670_sioc4 <= sioc when camera4 = '1' else '1';
+ov7670_siod4 <= siod when camera4 = '1' else '1';
 
 OBUF_xclk1 : OBUF port map (O => ov7670_xclk1, I => cc);
-OBUF_xclk2 : ov7670_xclk2 <= '0';
-OBUF_xclk3 : ov7670_xclk3 <= '0';
-OBUF_xclk4 : ov7670_xclk4 <= '0';
+OBUF_xclk2 : OBUF port map (O => ov7670_xclk2, I => cc);
+OBUF_xclk3 : OBUF port map (O => ov7670_xclk3, I => cc);
+OBUF_xclk4 : OBUF port map (O => ov7670_xclk4, I => cc);
 
 ov7670_reset1 <= '0' when resetdcm = '1' else '1';
-ov7670_reset2 <= '1';
-ov7670_reset3 <= '1';
-ov7670_reset4 <= '1';
+ov7670_reset2 <= '0' when resetdcm = '1' else '1';
+ov7670_reset3 <= '0' when resetdcm = '1' else '1';
+ov7670_reset4 <= '0' when resetdcm = '1' else '1';
 
 ov7670_pwdn1 <= '1' when resetdcm = '1' else '0';
-ov7670_pwdn2 <= '0';
-ov7670_pwdn3 <= '0';
-ov7670_pwdn4 <= '0';
+ov7670_pwdn2 <= '1' when resetdcm = '1' else '0';
+ov7670_pwdn3 <= '1' when resetdcm = '1' else '0';
+ov7670_pwdn4 <= '1' when resetdcm = '1' else '0';
 
 vga_bufa : IBUFG generic map (IOSTANDARD => "DEFAULT") port map (O => clkcambuf, I => clkcam);
-
---pdiv_vga : process (clkcambuf,resetdcm) is
---	constant C_MAX : integer := 2;
---	variable i : integer range 0 to C_MAX-1;
---begin
---	if (resetdcm = '1') then
---		i := 0;
---		clk25 <= '0';
---	elsif (rising_edge(clkcambuf)) then
---		if (i = C_MAX-1) then
---			clk25 <= not clk25;
---			i := 0;
---		else
---			clk25 <= clk25;
---			i := i + 1;
---		end if;
---	end if;
---end process pdiv_vga;
 
 cam_bufa : BUFG port map (O => clk50buf, I => clkcambuf);
 
@@ -1102,5 +1099,8 @@ begin
 end process pdiv_cam;
 
 cam_buf1 : IBUFG generic map (IOSTANDARD => "DEFAULT") port map (O => ov7670_pclk1buf1, I => ov7670_pclk1);
+cam_buf2 : IBUFG generic map (IOSTANDARD => "DEFAULT") port map (O => ov7670_pclk2buf1, I => ov7670_pclk2);
+cam_buf3 : IBUFG generic map (IOSTANDARD => "DEFAULT") port map (O => ov7670_pclk3buf1, I => ov7670_pclk3);
+cam_buf4 : IBUFG generic map (IOSTANDARD => "DEFAULT") port map (O => ov7670_pclk4buf1, I => ov7670_pclk4);
 
 end Structural;
