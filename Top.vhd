@@ -760,10 +760,10 @@ begin
 					w0_index := w0_index + 1;
 				end if;
 			when d13 =>
---				if (ov7670_vsync1 = '1') then
---					rd_a1 <= (others => '0');
---					state := idle;
---				else
+				if (ov7670_vsync1 = '1') then
+					rd_a1 <= (others => '0');
+					state := idle;
+				else
 					rd_a1 <= std_logic_vector(to_unsigned(w1_index,15));
 					if (w1_index = MAX_PIXELS-1) then
 						state := idle;
@@ -774,7 +774,7 @@ begin
 						w1_index := w1_index + 1;
 						done_pixels <= '0';
 					end if;
---				end if;
+				end if;
 
 		end case;
 	end if;
@@ -1063,23 +1063,23 @@ ov7670_pwdn4 <= '0';
 
 vga_bufa : IBUFG generic map (IOSTANDARD => "DEFAULT") port map (O => clkcambuf, I => clkcam);
 
-pdiv_vga : process (clkcambuf,resetdcm) is
-	constant C_MAX : integer := 2;
-	variable i : integer range 0 to C_MAX-1;
-begin
-	if (resetdcm = '1') then
-		i := 0;
-		clk25 <= '0';
-	elsif (rising_edge(clkcambuf)) then
-		if (i = C_MAX-1) then
-			clk25 <= not clk25;
-			i := 0;
-		else
-			clk25 <= clk25;
-			i := i + 1;
-		end if;
-	end if;
-end process pdiv_vga;
+--pdiv_vga : process (clkcambuf,resetdcm) is
+--	constant C_MAX : integer := 2;
+--	variable i : integer range 0 to C_MAX-1;
+--begin
+--	if (resetdcm = '1') then
+--		i := 0;
+--		clk25 <= '0';
+--	elsif (rising_edge(clkcambuf)) then
+--		if (i = C_MAX-1) then
+--			clk25 <= not clk25;
+--			i := 0;
+--		else
+--			clk25 <= clk25;
+--			i := i + 1;
+--		end if;
+--	end if;
+--end process pdiv_vga;
 
 cam_bufa : BUFG port map (O => clk50buf, I => clkcambuf);
 
