@@ -74,7 +74,7 @@ package st7735r_p_screen is
 	x"0e",x"00",
 	x"20",x"01",--INVOFF
 	x"36",x"01",--MADCTL
-	x"e0",x"00",--ROTATION (ST7735_MADCTL_MX | ST7735_MADCTL_MY) 0x40 | 0x80
+	x"20",x"00",--ROTATION (ST7735_MADCTL_MX | ST7735_MADCTL_MY) 0x40 | 0x80
 	x"3a",x"01",--COLMOD
 	x"05",x"00",
 	x"2a",x"01",--CASET

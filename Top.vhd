@@ -24,7 +24,7 @@ use WORK.st7735r_p_screen.ALL;
 entity Top is
 Generic (
 G_PB_BITS : integer := 24;
-G_WAIT1 : integer := 20; -- wait for reset dcm and cameras
+G_WAIT1 : integer := 2; -- wait for reset dcm and cameras
 G_FE_WAIT_BITS : integer := 20; -- sccb wait for cameras
 SPI_SPEED_MODE : integer := C_CLOCK_COUNTER_EF
 );
@@ -79,7 +79,7 @@ Generic (PIXELS : integer := 19200);
           href : in  STD_LOGIC;
           d : in  STD_LOGIC_VECTOR (7 downto 0);
           addr : out  STD_LOGIC_VECTOR (14 downto 0);
-          dout : out  STD_LOGIC_VECTOR (11 downto 0);
+          dout : out  STD_LOGIC_VECTOR (15 downto 0);
           we : out  STD_LOGIC_VECTOR (0 downto 0));
 END COMPONENT;
 
@@ -104,13 +104,15 @@ Generic (FE_WAIT_BITS : integer := G_FE_WAIT_BITS);
 end component;
 
 COMPONENT frame_buffer
-	Port ( clkA : in STD_LOGIC;
-			 weA	: in STD_LOGIC_VECTOR(0 downto 0);
-			 addrA: in STD_LOGIC_VECTOR(14 downto 0);
-			 dinA	: in STD_LOGIC_VECTOR(11 downto 0);
-			 clkB : in STD_LOGIC;
-			 addrB: in STD_LOGIC_VECTOR(14 downto 0);
-			 doutB: out STD_LOGIC_VECTOR(11 downto 0));
+  PORT (
+    clka : IN STD_LOGIC;
+    wea : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+    addra : IN STD_LOGIC_VECTOR(14 DOWNTO 0);
+    dina : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+    clkb : IN STD_LOGIC;
+    addrb : IN STD_LOGIC_VECTOR(14 DOWNTO 0);
+    doutb : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
+  );
 END COMPONENT;
 
 COMPONENT fifo
@@ -162,9 +164,9 @@ signal resend : STD_LOGIC;
 
 -- RAM
 signal wren1,wren2,wren3,wren4 : STD_LOGIC_VECTOR(0 downto 0);
-signal wr_d1,wr_d2,wr_d3,wr_d4 : STD_LOGIC_VECTOR(11 downto 0);
+signal wr_d1,wr_d2,wr_d3,wr_d4 : STD_LOGIC_VECTOR(15 downto 0);
 signal wr_a1,wr_a2,wr_a3,wr_a4 : STD_LOGIC_VECTOR(14 downto 0);
-signal rd_d1,rd_d2,rd_d3,rd_d4 : STD_LOGIC_VECTOR(11 downto 0);
+signal rd_d1,rd_d2,rd_d3,rd_d4 : STD_LOGIC_VECTOR(15 downto 0);
 signal rd_a1,rd_a2,rd_a3,rd_a4 : STD_LOGIC_VECTOR(14 downto 0);
 
 --VGA
@@ -334,14 +336,18 @@ end process fsm1;
 poled : process(clkcambuf,resend) is
 	type states is (idle,
 	a1,b1,c1,d1,
---	a2,b2,c2,d2,
+	a2,b2,c2,d2,
 	a3,b3,c3,d3,
 	a4,b4,c4,d4,
 	a5,b5,c5,d5,
 	a6,b6,c6,d6,
 	a7,b7,c7,d7,
 	a8,b8,c8,d8,
-	a9,b9,c9,d9
+	a9,b9,c9,d9,
+	a10,b10,c10,d10,
+	a11,b11,c11,d11,
+	a12,b12,c12,d12,
+	a13,b13,c13,d13
 	);
 	variable state : states;
 	variable w0_index : integer range 0 to SPI_SPEED_MODE-1;
@@ -355,21 +361,24 @@ begin
 		w0_index := 0;
 		w1_index := 0;
 		done_pixels <= '0';
+		rd_a1 <= (others => '0');
 	elsif (rising_edge(clkcambuf)) then
 		case (state) is
 			when idle =>
 				done_pixels <= '0';
+				w0_index := 0;
+				w1_index := 0;
 				if (send_pixels = '1') then
 					state := a1;
 				else
 					state := idle;
 				end if;
-			
-			-- caset
+
+			-- raset
 			when a1 =>
 				spi_enable_data <= '1';
 				spi_rs_data <= '0';
-				spi_data_byte_data <= x"2a";
+				spi_data_byte_data <= x"2b";
 				if (spi_sended = '1') then
 					state := b1;
 				else
@@ -393,9 +402,39 @@ begin
 					w0_index := w0_index + 1;
 				end if;
 			when d1 =>
-				state := a3;
+				state := a2;
 
 			-- xs0
+			when a2 =>
+				spi_enable_data <= '1';
+				spi_rs_data <= '1';
+				spi_data_byte_data <= x"00";
+				if (spi_sended = '1') then
+					state := b2;
+				else
+					state := a2;
+				end if;
+			when b2 =>
+				if (w0_index = SPI_SPEED_MODE - 1) then
+					state := c2;
+					w0_index := 0;
+					spi_enable_data <= '0';
+				else
+					state := b2;
+					w0_index := w0_index + 1;
+				end if;				
+			when c2 =>
+				if (w0_index = SPI_SPEED_MODE - 1) then
+					state := d2;
+					w0_index := 0;
+				else
+					state := c2;
+					w0_index := w0_index + 1;
+				end if;
+			when d2 =>
+				state := a3;
+
+			-- xs1
 			when a3 =>
 				spi_enable_data <= '1';
 				spi_rs_data <= '1';
@@ -425,7 +464,7 @@ begin
 			when d3 =>
 				state := a4;
 
-			-- xs1
+			-- xe0
 			when a4 =>
 				spi_enable_data <= '1';
 				spi_rs_data <= '1';
@@ -455,11 +494,11 @@ begin
 			when d4 =>
 				state := a5;
 
-			-- xe0
+			-- xe1
 			when a5 =>
 				spi_enable_data <= '1';
 				spi_rs_data <= '1';
-				spi_data_byte_data <= x"00";
+				spi_data_byte_data <= x"7f";
 				if (spi_sended = '1') then
 					state := b5;
 				else
@@ -485,11 +524,11 @@ begin
 			when d5 =>
 				state := a6;
 
-			-- xe1
+			-- caset
 			when a6 =>
 				spi_enable_data <= '1';
-				spi_rs_data <= '1';
-				spi_data_byte_data <= x"9f";
+				spi_rs_data <= '0';
+				spi_data_byte_data <= x"2a";
 				if (spi_sended = '1') then
 					state := b6;
 				else
@@ -515,11 +554,11 @@ begin
 			when d6 =>
 				state := a7;
 
-			-- memwr
+			-- xs0
 			when a7 =>
 				spi_enable_data <= '1';
-				spi_rs_data <= '0';
-				spi_data_byte_data <= x"2c";
+				spi_rs_data <= '1';
+				spi_data_byte_data <= x"00";
 				if (spi_sended = '1') then
 					state := b7;
 				else
@@ -545,10 +584,11 @@ begin
 			when d7 =>
 				state := a8;
 
+			-- xs1
 			when a8 =>
 				spi_enable_data <= '1';
 				spi_rs_data <= '1';
-				spi_data_byte_data <= rd_d1(7 downto 0);
+				spi_data_byte_data <= x"00";
 				if (spi_sended = '1') then
 					state := b8;
 				else
@@ -574,10 +614,11 @@ begin
 			when d8 =>
 				state := a9;
 
+			-- xe0
 			when a9 =>
 				spi_enable_data <= '1';
 				spi_rs_data <= '1';
-				spi_data_byte_data <= "0000"&rd_d1(11 downto 8);
+				spi_data_byte_data <= x"00";
 				if (spi_sended = '1') then
 					state := b9;
 				else
@@ -601,16 +642,139 @@ begin
 					w0_index := w0_index + 1;
 				end if;
 			when d9 =>
-				rd_a1 <= std_logic_vector(to_unsigned(w1_index,15));
-				if (w1_index = MAX_PIXELS-1) then
-					state := idle;
-					w1_index := 0;
-					done_pixels <= '1';
+				state := a10;
+
+			-- xe1
+			when a10 =>
+				spi_enable_data <= '1';
+				spi_rs_data <= '1';
+				spi_data_byte_data <= x"9f";
+				if (spi_sended = '1') then
+					state := b10;
 				else
-					state := a8;
-					w1_index := w1_index + 1;
-					done_pixels <= '0';
+					state := a10;
 				end if;
+			when b10 =>
+				if (w0_index = SPI_SPEED_MODE - 1) then
+					state := c10;
+					w0_index := 0;
+					spi_enable_data <= '0';
+				else
+					state := b10;
+					w0_index := w0_index + 1;
+				end if;				
+			when c10 =>
+				if (w0_index = SPI_SPEED_MODE - 1) then
+					state := d10;
+					w0_index := 0;
+				else
+					state := c10;
+					w0_index := w0_index + 1;
+				end if;
+			when d10 =>
+				state := a11;
+
+			-- memwr
+			when a11 =>
+				spi_enable_data <= '1';
+				spi_rs_data <= '0';
+				spi_data_byte_data <= x"2c";
+				if (spi_sended = '1') then
+					state := b11;
+				else
+					state := a11;
+				end if;
+			when b11 =>
+				if (w0_index = SPI_SPEED_MODE - 1) then
+					state := c11;
+					w0_index := 0;
+					spi_enable_data <= '0';
+				else
+					state := b11;
+					w0_index := w0_index + 1;
+				end if;				
+			when c11 =>
+				if (w0_index = SPI_SPEED_MODE - 1) then
+					state := d11;
+					w0_index := 0;
+				else
+					state := c11;
+					w0_index := w0_index + 1;
+				end if;
+			when d11 =>
+				state := a12;
+
+			when a12 =>
+				spi_enable_data <= '1';
+				spi_rs_data <= '1';
+				spi_data_byte_data <= rd_d1(7 downto 0);
+				if (spi_sended = '1') then
+					state := b12;
+				else
+					state := a12;
+				end if;
+			when b12 =>
+				if (w0_index = SPI_SPEED_MODE - 1) then
+					state := c12;
+					w0_index := 0;
+					spi_enable_data <= '0';
+				else
+					state := b12;
+					w0_index := w0_index + 1;
+				end if;				
+			when c12 =>
+				if (w0_index = SPI_SPEED_MODE - 1) then
+					state := d12;
+					w0_index := 0;
+				else
+					state := c12;
+					w0_index := w0_index + 1;
+				end if;
+			when d12 =>
+				state := a13;
+
+			when a13 =>
+				spi_enable_data <= '1';
+				spi_rs_data <= '1';
+				spi_data_byte_data <= rd_d1(15 downto 8);
+				if (spi_sended = '1') then
+					state := b13;
+				else
+					state := a13;
+				end if;
+			when b13 =>
+				if (w0_index = SPI_SPEED_MODE - 1) then
+					state := c13;
+					w0_index := 0;
+					spi_enable_data <= '0';
+				else
+					state := b13;
+					w0_index := w0_index + 1;
+				end if;				
+			when c13 =>
+				if (w0_index = SPI_SPEED_MODE - 1) then
+					state := d13;
+					w0_index := 0;
+				else
+					state := c13;
+					w0_index := w0_index + 1;
+				end if;
+			when d13 =>
+--				if (ov7670_vsync1 = '1') then
+--					rd_a1 <= (others => '0');
+--					state := idle;
+--				else
+					rd_a1 <= std_logic_vector(to_unsigned(w1_index,15));
+					if (w1_index = MAX_PIXELS-1) then
+						state := idle;
+						w1_index := 0;
+						done_pixels <= '1';
+					else
+						state := a12;
+						w1_index := w1_index + 1;
+						done_pixels <= '0';
+					end if;
+--				end if;
 
 		end case;
 	end if;
