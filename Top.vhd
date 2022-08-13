@@ -826,7 +826,7 @@ end process poled;
 		clkA => ov7670_pclk1buf1,
 		addrA => wr_a1,
 		dinA => wr_d1,
-		clkB => clk25,
+		clkB => ov7670_pclk1buf1,
 		addrB => rd_a1,
 		doutB => rd_d1);
 
