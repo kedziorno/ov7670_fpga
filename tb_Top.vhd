@@ -108,7 +108,7 @@ constant camera_i_xclk_period1 : time := 41.733 ns; -- 23.9616mhz
 constant camera_i_xclk_period2 : time := 41.667 ns; -- 24mhz
 constant camera_i_xclk_period3 : time := 1000.000 ns; -- 1mhz
 constant camera_i_xclk_period4 : time := 625.000 ns; -- 1.6mhz
-constant USE_OUT_CLOCK : std_logic := '1'; -- XXX use outcoming signal clock to camera
+constant USE_OUT_CLOCK : std_logic := '0'; -- XXX use outcoming signal clock to camera
 signal camera_i_xclk : std_logic := '0';
 constant camera_i_xclk_period : time := camera_i_xclk_period4;
 
