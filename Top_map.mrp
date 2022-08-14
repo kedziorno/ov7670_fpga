@@ -9,32 +9,32 @@ Target Device  : xc3s1200e
 Target Package : fg320
 Target Speed   : -4
 Mapper Version : spartan3e -- $Revision: 1.55 $
-Mapped Date    : Sat Aug 13 18:31:56 2022
+Mapped Date    : Sun Aug 14 14:13:08 2022
 
 Design Summary
 --------------
 Number of errors:      0
-Number of warnings:    1
+Number of warnings:    5
 Logic Utilization:
-  Number of Slice Flip Flops:           453 out of  17,344    2%
-  Number of 4 input LUTs:               950 out of  17,344    5%
+  Number of Slice Flip Flops:           452 out of  17,344    2%
+  Number of 4 input LUTs:               928 out of  17,344    5%
 Logic Distribution:
-  Number of occupied Slices:            709 out of   8,672    8%
-    Number of Slices containing only related logic:     709 out of     709 100%
-    Number of Slices containing unrelated logic:          0 out of     709   0%
+  Number of occupied Slices:            703 out of   8,672    8%
+    Number of Slices containing only related logic:     703 out of     703 100%
+    Number of Slices containing unrelated logic:          0 out of     703   0%
       *See NOTES below for an explanation of the effects of unrelated logic.
-  Total Number of 4 input LUTs:       1,241 out of  17,344    7%
-    Number used as logic:               950
+  Total Number of 4 input LUTs:       1,219 out of  17,344    7%
+    Number used as logic:               928
     Number used as a route-thru:        291
 
   The Slice Logic Distribution report is not meaningful if the design is
   over-mapped for a non-slice resource or if Placement fails.
 
-  Number of bonded IOBs:                 84 out of     250   33%
+  Number of bonded IOBs:                 88 out of     250   35%
   Number of RAMB16s:                     19 out of      28   67%
-  Number of BUFGMUXs:                     4 out of      24   16%
+  Number of BUFGMUXs:                     8 out of      24   33%
 
-Average Fanout of Non-Clock Nets:                3.70
+Average Fanout of Non-Clock Nets:                3.71
 
 Peak Memory Usage:  592 MB
 Total REAL time to MAP completion:  4 secs 
@@ -79,12 +79,43 @@ Section 1 - Errors
 
 Section 2 - Warnings
 --------------------
+WARNING:LIT:178 - Clock buffer BUFGMUX symbol
+   "physical_group_ov7670_pclk1buf1/cam_buf1b" (output signal=ov7670_pclk1buf1)
+   does not drive clock loads. Driving only non-clock loads with a clock buffer
+   will cause ALL of the dedicated clock routing resources for this buffer to be
+   wasted. The non-clock loads are:
+   Pin I2 of ov7670_pclkbufmux51
+WARNING:LIT:178 - Clock buffer BUFGMUX symbol
+   "physical_group_ov7670_pclk2buf1/cam_buf2b" (output signal=ov7670_pclk2buf1)
+   does not drive clock loads. Driving only non-clock loads with a clock buffer
+   will cause ALL of the dedicated clock routing resources for this buffer to be
+   wasted. The non-clock loads are:
+   Pin I3 of ov7670_pclkbufmux51
+WARNING:LIT:178 - Clock buffer BUFGMUX symbol
+   "physical_group_ov7670_pclk3buf1/cam_buf3b" (output signal=ov7670_pclk3buf1)
+   does not drive clock loads. Driving only non-clock loads with a clock buffer
+   will cause ALL of the dedicated clock routing resources for this buffer to be
+   wasted. The non-clock loads are:
+   Pin I2 of ov7670_pclkbufmux68_F
+WARNING:LIT:178 - Clock buffer BUFGMUX symbol
+   "physical_group_ov7670_pclk4buf1/cam_buf4b" (output signal=ov7670_pclk4buf1)
+   does not drive clock loads. Driving only non-clock loads with a clock buffer
+   will cause ALL of the dedicated clock routing resources for this buffer to be
+   wasted. The non-clock loads are:
+   Pin I1 of ov7670_pclkbufmux68_G
 WARNING:PhysDesignRules:367 - The signal <clk50_IBUF> is incomplete. The signal
    does not drive any load pins in the design.
 
 Section 3 - Informational
 -------------------------
-INFO:LIT:243 - Logical network clk50_IBUF has no load.
+INFO:LIT:243 - Logical network o_jc<7> has no load.
+INFO:LIT:395 - The above info message is repeated 4 more times for the following
+   (max. 5 shown):
+   o_jc<6>,
+   o_jc<5>,
+   o_jc<4>,
+   clk50_IBUF
+   To see the details of these info messages, please use the -detail switch.
 INFO:MapLib:562 - No environment variables are currently set.
 INFO:LIT:244 - All of the single ended outputs in this design are using slew
    rate limited output drivers. The delay on speed critical single ended outputs
@@ -140,6 +171,10 @@ Section 6 - IOB Properties
 | o_ck                               | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | o_cs                               | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | o_do                               | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| o_jc<0>                            | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| o_jc<1>                            | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| o_jc<2>                            | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| o_jc<3>                            | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | o_reset                            | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | o_rs                               | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | ov7670_data1<0>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
