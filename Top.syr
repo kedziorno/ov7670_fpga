@@ -5,14 +5,14 @@ Parameter TMPDIR set to xst/projnav.tmp
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.05 secs
+Total CPU time to Xst completion: 0.06 secs
  
 --> 
 Parameter xsthdpdir set to xst
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.05 secs
+Total CPU time to Xst completion: 0.06 secs
  
 --> 
 Reading design: Top.prj
@@ -190,7 +190,7 @@ WARNING:Xst:2211 - "/home/user/workspace/ov7670_vga_Nexys2/Top.vhd" line 812: In
     Set user-defined property "SLEW =  SLOW" for instance <OBUF_xclk4> in unit <Top>.
     Set user-defined property "CLKDV_DIVIDE =  2.0000000000000000" for instance <DCM_xcam> in unit <Top>.
     Set user-defined property "CLKFX_DIVIDE =  25" for instance <DCM_xcam> in unit <Top>.
-    Set user-defined property "CLKFX_MULTIPLY =  12" for instance <DCM_xcam> in unit <Top>.
+    Set user-defined property "CLKFX_MULTIPLY =  6" for instance <DCM_xcam> in unit <Top>.
     Set user-defined property "CLKIN_DIVIDE_BY_2 =  FALSE" for instance <DCM_xcam> in unit <Top>.
     Set user-defined property "CLKIN_PERIOD =  10.0000000000000000" for instance <DCM_xcam> in unit <Top>.
     Set user-defined property "CLKOUT_PHASE_SHIFT =  NONE" for instance <DCM_xcam> in unit <Top>.
@@ -779,7 +779,7 @@ WARNING:Xst:2677 - Node <c1/cs> of sequential type is unconnected in block <Top>
 Mapping all equations...
 Building and optimizing final netlist ...
 Found area constraint ratio of 100 (+ 5) on block Top, actual ratio is 7.
-FlipFlop initialize_run has been replicated 2 time(s)
+FlipFlop initialize_run has been replicated 1 time(s)
 
 Final Macro Processing ...
 
@@ -787,8 +787,8 @@ Final Macro Processing ...
 Final Register Report
 
 Macro Statistics
-# Registers                                            : 449
- Flip-Flops                                            : 449
+# Registers                                            : 448
+ Flip-Flops                                            : 448
 
 =========================================================================
 
@@ -817,25 +817,27 @@ Design Statistics
 # IOs                              : 92
 
 Cell Usage :
-# BELS                             : 1654
+# BELS                             : 1660
 #      GND                         : 2
-#      INV                         : 16
+#      INV                         : 15
 #      LUT1                        : 147
-#      LUT2                        : 101
-#      LUT2_D                      : 1
-#      LUT3                        : 219
-#      LUT3_L                      : 2
-#      LUT4                        : 541
-#      LUT4_D                      : 2
+#      LUT2                        : 111
+#      LUT2_L                      : 2
+#      LUT3                        : 210
+#      LUT3_D                      : 1
+#      LUT3_L                      : 6
+#      LUT4                        : 535
+#      LUT4_D                      : 6
+#      LUT4_L                      : 3
 #      MUXCY                       : 179
-#      MUXF5                       : 167
+#      MUXF5                       : 166
 #      MUXF6                       : 70
 #      MUXF7                       : 32
 #      MUXF8                       : 16
 #      VCC                         : 2
 #      XORCY                       : 157
-# FlipFlops/Latches                : 454
-#      FDC                         : 245
+# FlipFlops/Latches                : 453
+#      FDC                         : 244
 #      FDC_1                       : 10
 #      FDCE                        : 118
 #      FDE                         : 18
@@ -861,9 +863,9 @@ Device utilization summary:
 
 Selected Device : 3s1200efg320-4 
 
- Number of Slices:                      655  out of   8672     7%  
- Number of Slice Flip Flops:            454  out of  17344     2%  
- Number of 4 input LUTs:               1029  out of  17344     5%  
+ Number of Slices:                      658  out of   8672     7%  
+ Number of Slice Flip Flops:            453  out of  17344     2%  
+ Number of 4 input LUTs:               1036  out of  17344     5%  
  Number of IOs:                          92
  Number of bonded IOBs:                  87  out of    250    34%  
  Number of BRAMs:                        19  out of     28    67%  
@@ -892,8 +894,8 @@ Clock Information:
 Clock Signal                       | Clock buffer(FF name)                                                                                                                    | Load  |
 -----------------------------------+------------------------------------------------------------------------------------------------------------------------------------------+-------+
 clkcam                             | DCM_xcam:CLKFX                                                                                                                           | 225   |
-o_jc_0_OBUF1(ov7670_pclkbufmux66:O)| BUFG(*)(inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/s3_init.ram/dpram.dp1x1.ram)| 61    |
-clkcam                             | IBUFG+BUFG                                                                                                                               | 200   |
+o_jc_0_OBUF1(ov7670_pclkbufmux67:O)| BUFG(*)(inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/s3_init.ram/dpram.dp1x1.ram)| 61    |
+clkcam                             | IBUFG+BUFG                                                                                                                               | 199   |
 c0/clock_data                      | NONE(c0/data_index_2)                                                                                                                    | 3     |
 c0/clock_divider                   | NONE(c0/d_0)                                                                                                                             | 3     |
 -----------------------------------+------------------------------------------------------------------------------------------------------------------------------------------+-------+
@@ -907,7 +909,7 @@ Asynchronous Control Signals Information:
 --------------------------------------------+---------------------------------+-------+
 Control Signal                              | Buffer(FF name)                 | Load  |
 --------------------------------------------+---------------------------------+-------+
-inst_debounce/output(inst_debounce/output:Q)| NONE(Registers/cmd_reg_0)       | 369   |
+inst_debounce/output(inst_debounce/output:Q)| NONE(Registers/cmd_reg_0)       | 368   |
 stop_capture(stop_capture:Q)                | NONE(inst_ov7670capt1/address_0)| 42    |
 --------------------------------------------+---------------------------------+-------+
 
@@ -915,10 +917,10 @@ Timing Summary:
 ---------------
 Speed Grade: -4
 
-   Minimum period: 54.372ns (Maximum Frequency: 18.392MHz)
-   Minimum input arrival time before clock: 7.769ns
-   Maximum output required time after clock: 9.411ns
-   Maximum combinational path delay: 9.751ns
+   Minimum period: 7.960ns (Maximum Frequency: 125.628MHz)
+   Minimum input arrival time before clock: 7.746ns
+   Maximum output required time after clock: 9.061ns
+   Maximum combinational path delay: 10.698ns
 
 Timing Detail:
 --------------
@@ -926,26 +928,32 @@ All values displayed in nanoseconds (ns)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'clkcam'
-  Clock period: 54.372ns (frequency: 18.392MHz)
-  Total number of paths / destination ports: 19132 / 850
+  Clock period: 6.649ns (frequency: 150.399MHz)
+  Total number of paths / destination ports: 19159 / 849
 -------------------------------------------------------------------------
-Delay:               4.531ns (Levels of Logic = 2)
-  Source:            spi_data (FF)
-  Destination:       state0_FSM_FFd4 (FF)
+Delay:               6.649ns (Levels of Logic = 8)
+  Source:            w4dcmcnt_7 (FF)
+  Destination:       w4dcmcnt_1 (FF)
   Source Clock:      clkcam rising
-  Destination Clock: clkcam rising 0.5X
+  Destination Clock: clkcam rising
 
-  Data Path: spi_data to state0_FSM_FFd4
+  Data Path: w4dcmcnt_7 to w4dcmcnt_1
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDCE:C->Q            11   0.591   0.937  spi_data (spi_data)
-     LUT4_D:I3->O         24   0.704   1.287  c0/o_sended_and00001 (spi_sended)
-     LUT3:I2->O            1   0.704   0.000  state0_FSM_FFd44-In1 (state0_FSM_FFd44-In)
-     FDC:D                     0.308          state0_FSM_FFd44
+     FDC:C->Q              3   0.591   0.706  w4dcmcnt_7 (w4dcmcnt_7)
+     LUT4:I0->O            1   0.704   0.000  state1_cmp_eq0000_wg_lut<0> (state1_cmp_eq0000_wg_lut<0>)
+     MUXCY:S->O            1   0.464   0.000  state1_cmp_eq0000_wg_cy<0> (state1_cmp_eq0000_wg_cy<0>)
+     MUXCY:CI->O           1   0.059   0.000  state1_cmp_eq0000_wg_cy<1> (state1_cmp_eq0000_wg_cy<1>)
+     MUXCY:CI->O           1   0.059   0.000  state1_cmp_eq0000_wg_cy<2> (state1_cmp_eq0000_wg_cy<2>)
+     MUXCY:CI->O           1   0.059   0.000  state1_cmp_eq0000_wg_cy<3> (state1_cmp_eq0000_wg_cy<3>)
+     MUXCY:CI->O           7   0.459   0.743  state1_cmp_eq0000_wg_cy<4> (state1_cmp_eq0000)
+     LUT3_D:I2->O         19   0.704   1.089  w4dcmcnt_mux0000<0>11 (N11)
+     LUT4:I3->O            1   0.704   0.000  w4dcmcnt_mux0000<18>1 (w4dcmcnt_mux0000<18>)
+     FDC:D                     0.308          w4dcmcnt_1
     ----------------------------------------
-    Total                      4.531ns (2.307ns logic, 2.224ns route)
-                                       (50.9% logic, 49.1% route)
+    Total                      6.649ns (4.111ns logic, 2.538ns route)
+                                       (61.8% logic, 38.2% route)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'o_jc_0_OBUF1'
@@ -971,10 +979,10 @@ Delay:               3.980ns (Levels of Logic = 1)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'c0/clock_data'
-  Clock period: 2.390ns (frequency: 418.410MHz)
+  Clock period: 2.665ns (frequency: 375.234MHz)
   Total number of paths / destination ports: 6 / 3
 -------------------------------------------------------------------------
-Delay:               2.390ns (Levels of Logic = 1)
+Delay:               2.665ns (Levels of Logic = 1)
   Source:            c0/data_index_2 (FF)
   Destination:       c0/data_index_2 (FF)
   Source Clock:      c0/clock_data rising
@@ -984,12 +992,12 @@ Delay:               2.390ns (Levels of Logic = 1)
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDC:C->Q              7   0.591   0.787  c0/data_index_2 (c0/data_index_2)
+     FDC:C->Q             13   0.591   1.062  c0/data_index_2 (c0/data_index_2)
      LUT4:I1->O            1   0.704   0.000  c0/data_index_mux0002<0>1 (c0/data_index_mux0002<0>)
      FDC:D                     0.308          c0/data_index_2
     ----------------------------------------
-    Total                      2.390ns (1.603ns logic, 0.787ns route)
-                                       (67.1% logic, 32.9% route)
+    Total                      2.665ns (1.603ns logic, 1.062ns route)
+                                       (60.2% logic, 39.8% route)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'c0/clock_divider'
@@ -1017,69 +1025,69 @@ Delay:               2.129ns (Levels of Logic = 1)
 Timing constraint: Default OFFSET IN BEFORE for Clock 'clkcam'
   Total number of paths / destination ports: 64 / 28
 -------------------------------------------------------------------------
-Offset:              7.769ns (Levels of Logic = 5)
-  Source:            sw<1> (PAD)
+Offset:              7.746ns (Levels of Logic = 5)
+  Source:            sw<0> (PAD)
   Destination:       stop_capture (FF)
-  Destination Clock: clkcam rising 0.5X
+  Destination Clock: clkcam rising 0.2X
 
-  Data Path: sw<1> to stop_capture
+  Data Path: sw<0> to stop_capture
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     IBUF:I->O            12   1.218   1.136  sw_1_IBUF (sw_1_IBUF)
-     LUT2:I0->O           22   0.704   1.199  ov7670_hrefmux21 (ov7670_datamux<0>21)
-     LUT3:I2->O            1   0.704   0.000  ov7670_vsyncmux66_G (N200)
+     IBUF:I->O            14   1.218   1.175  sw_0_IBUF (sw_0_IBUF)
+     LUT2:I0->O           20   0.704   1.137  ov7670_hrefmux21 (ov7670_datamux<0>21)
+     LUT3:I2->O            1   0.704   0.000  ov7670_vsyncmux66_G (N191)
      MUXF5:I1->O           5   0.321   0.808  ov7670_vsyncmux66 (o_jc_1_OBUF)
      LUT4:I0->O            1   0.704   0.420  stop_capture_not00021 (stop_capture_not0002)
      FDCE:CE                   0.555          stop_capture
     ----------------------------------------
-    Total                      7.769ns (4.206ns logic, 3.563ns route)
-                                       (54.1% logic, 45.9% route)
+    Total                      7.746ns (4.206ns logic, 3.540ns route)
+                                       (54.3% logic, 45.7% route)
 
 =========================================================================
 Timing constraint: Default OFFSET IN BEFORE for Clock 'o_jc_0_OBUF1'
   Total number of paths / destination ports: 130 / 10
 -------------------------------------------------------------------------
-Offset:              5.590ns (Levels of Logic = 4)
-  Source:            sw<1> (PAD)
+Offset:              5.567ns (Levels of Logic = 4)
+  Source:            sw<0> (PAD)
   Destination:       inst_ov7670capt1/latched_href (FF)
   Destination Clock: o_jc_0_OBUF1 falling
 
-  Data Path: sw<1> to inst_ov7670capt1/latched_href
+  Data Path: sw<0> to inst_ov7670capt1/latched_href
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     IBUF:I->O            12   1.218   1.136  sw_1_IBUF (sw_1_IBUF)
-     LUT2:I0->O           22   0.704   1.199  ov7670_hrefmux21 (ov7670_datamux<0>21)
-     LUT3:I2->O            1   0.704   0.000  ov7670_hrefmux66_G (N182)
+     IBUF:I->O            14   1.218   1.175  sw_0_IBUF (sw_0_IBUF)
+     LUT2:I0->O           20   0.704   1.137  ov7670_hrefmux21 (ov7670_datamux<0>21)
+     LUT3:I2->O            1   0.704   0.000  ov7670_hrefmux66_G (N173)
      MUXF5:I1->O           2   0.321   0.000  ov7670_hrefmux66 (o_jc_2_OBUF)
      FDC_1:D                   0.308          inst_ov7670capt1/latched_href
     ----------------------------------------
-    Total                      5.590ns (3.255ns logic, 2.335ns route)
-                                       (58.2% logic, 41.8% route)
+    Total                      5.567ns (3.255ns logic, 2.312ns route)
+                                       (58.5% logic, 41.5% route)
 
 =========================================================================
 Timing constraint: Default OFFSET OUT AFTER for Clock 'clkcam'
-  Total number of paths / destination ports: 117 / 21
+  Total number of paths / destination ports: 118 / 21
 -------------------------------------------------------------------------
-Offset:              9.411ns (Levels of Logic = 5)
-  Source:            spi_data (FF)
+Offset:              9.061ns (Levels of Logic = 5)
+  Source:            initialize_run (FF)
   Destination:       o_do (PAD)
   Source Clock:      clkcam rising
 
-  Data Path: spi_data to o_do
+  Data Path: initialize_run to o_do
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDCE:C->Q            11   0.591   0.937  spi_data (spi_data)
-     LUT4_D:I3->O         12   0.704   1.136  spi_enable11 (spi_enable)
-     LUT4:I0->O            2   0.704   0.622  o_do337 (o_do337)
-     LUT4:I0->O            1   0.704   0.000  o_do342_F (N177)
-     MUXF5:I0->O           1   0.321   0.420  o_do342 (o_do_OBUF)
+     FDC:C->Q             26   0.591   1.435  initialize_run (initialize_run)
+     LUT4:I0->O            1   0.704   0.000  o_do261_F (N168)
+     MUXF5:I0->O           1   0.321   0.455  o_do261 (o_do261)
+     LUT4:I2->O            1   0.704   0.455  o_do292 (o_do292)
+     LUT4:I2->O            1   0.704   0.420  o_do342 (o_do_OBUF)
      OBUF:I->O                 3.272          o_do_OBUF (o_do)
     ----------------------------------------
-    Total                      9.411ns (6.296ns logic, 3.115ns route)
-                                       (66.9% logic, 33.1% route)
+    Total                      9.061ns (6.296ns logic, 2.765ns route)
+                                       (69.5% logic, 30.5% route)
 
 =========================================================================
 Timing constraint: Default OFFSET OUT AFTER for Clock 'c0/clock_divider'
@@ -1103,9 +1111,9 @@ Offset:              5.609ns (Levels of Logic = 2)
 
 =========================================================================
 Timing constraint: Default OFFSET OUT AFTER for Clock 'c0/clock_data'
-  Total number of paths / destination ports: 7 / 1
+  Total number of paths / destination ports: 13 / 1
 -------------------------------------------------------------------------
-Offset:              7.210ns (Levels of Logic = 4)
+Offset:              8.828ns (Levels of Logic = 5)
   Source:            c0/data_index_2 (FF)
   Destination:       o_do (PAD)
   Source Clock:      c0/clock_data rising
@@ -1114,20 +1122,21 @@ Offset:              7.210ns (Levels of Logic = 4)
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDC:C->Q              7   0.591   0.708  c0/data_index_2 (c0/data_index_2)
-     MUXF5:S->O            1   0.739   0.455  o_do103 (o_do103)
-     LUT4:I2->O            1   0.704   0.000  o_do342_G (N178)
-     MUXF5:I1->O           1   0.321   0.420  o_do342 (o_do_OBUF)
+     FDC:C->Q             13   0.591   1.158  c0/data_index_2 (c0/data_index_2)
+     LUT4:I0->O            1   0.704   0.000  o_do1731 (o_do1731)
+     MUXF5:I1->O           1   0.321   0.499  o_do173_f5 (o_do173)
+     LUT4:I1->O            1   0.704   0.455  o_do292 (o_do292)
+     LUT4:I2->O            1   0.704   0.420  o_do342 (o_do_OBUF)
      OBUF:I->O                 3.272          o_do_OBUF (o_do)
     ----------------------------------------
-    Total                      7.210ns (5.627ns logic, 1.583ns route)
-                                       (78.0% logic, 22.0% route)
+    Total                      8.828ns (6.296ns logic, 2.532ns route)
+                                       (71.3% logic, 28.7% route)
 
 =========================================================================
 Timing constraint: Default path analysis
-  Total number of paths / destination ports: 81 / 8
+  Total number of paths / destination ports: 83 / 8
 -------------------------------------------------------------------------
-Delay:               9.751ns (Levels of Logic = 5)
+Delay:               10.698ns (Levels of Logic = 5)
   Source:            ov7670_pclk4 (PAD)
   Destination:       o_jc<0> (PAD)
 
@@ -1136,24 +1145,24 @@ Delay:               9.751ns (Levels of Logic = 5)
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
      IBUFG:I->O            1   2.675   0.420  cam_buf4a (a4)
-     BUFG:I->O             1   1.457   0.455  cam_buf4b (ov7670_pclk4buf1)
-     LUT4:I2->O            1   0.704   0.000  ov7670_pclkbufmux66_F (N203)
-     MUXF5:I0->O           2   0.321   0.447  ov7670_pclkbufmux66 (o_jc_0_OBUF1)
+     BUFG:I->O             1   1.457   0.424  cam_buf4b (ov7670_pclk4buf1)
+     LUT4:I3->O            1   0.704   0.595  ov7670_pclkbufmux67_SW0 (N100)
+     LUT4:I0->O            2   0.704   0.447  ov7670_pclkbufmux67 (o_jc_0_OBUF1)
      OBUF:I->O                 3.272          o_jc_0_OBUF (o_jc<0>)
     ----------------------------------------
-    Total                      9.751ns (8.429ns logic, 1.322ns route)
-                                       (86.4% logic, 13.6% route)
+    Total                     10.698ns (8.812ns logic, 1.886ns route)
+                                       (82.4% logic, 17.6% route)
 
 =========================================================================
 
 
-Total REAL time to Xst completion: 22.00 secs
-Total CPU time to Xst completion: 20.60 secs
+Total REAL time to Xst completion: 20.00 secs
+Total CPU time to Xst completion: 19.02 secs
  
 --> 
 
 
-Total memory usage is 557760 kilobytes
+Total memory usage is 557676 kilobytes
 
 Number of errors   :    0 (   0 filtered)
 Number of warnings :   46 (   0 filtered)
