@@ -5,14 +5,14 @@ Parameter TMPDIR set to xst/projnav.tmp
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.05 secs
+Total CPU time to Xst completion: 0.08 secs
  
 --> 
 Parameter xsthdpdir set to xst
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.05 secs
+Total CPU time to Xst completion: 0.08 secs
  
 --> 
 Reading design: Top.prj
@@ -167,7 +167,7 @@ Analyzing generic Entity <Top> in library <work> (Architecture <structural>).
 	G_PB_BITS = 24
 	G_WAIT1 = 20
 	SPI_SPEED_MODE = 8
-WARNING:Xst:2211 - "/home/user/workspace/ov7670_vga_Nexys2/Top.vhd" line 828: Instantiating black box module <frame_buffer>.
+WARNING:Xst:2211 - "/home/user/workspace/ov7670_vga_Nexys2/Top.vhd" line 817: Instantiating black box module <frame_buffer>.
     Set user-defined property "CAPACITANCE =  DONT_CARE" for instance <OBUF_xclk1> in unit <Top>.
     Set user-defined property "DRIVE =  12" for instance <OBUF_xclk1> in unit <Top>.
     Set user-defined property "IOSTANDARD =  DEFAULT" for instance <OBUF_xclk1> in unit <Top>.
@@ -448,10 +448,10 @@ WARNING:Xst:1780 - Signal <active1> is never used or assigned. This unconnected 
     -----------------------------------------------------------------------
     Found finite state machine <FSM_3> for signal <state>.
     -----------------------------------------------------------------------
-    | States             | 3                                              |
-    | Transitions        | 6                                              |
-    | Inputs             | 3                                              |
-    | Outputs            | 4                                              |
+    | States             | 4                                              |
+    | Transitions        | 9                                              |
+    | Inputs             | 5                                              |
+    | Outputs            | 5                                              |
     | Clock              | clkcambuf                 (rising_edge)        |
     | Reset              | resend                    (positive)           |
     | Reset type         | asynchronous                                   |
@@ -468,6 +468,7 @@ WARNING:Xst:1780 - Signal <active1> is never used or assigned. This unconnected 
     Found 13-bit adder for signal <counter$addsub0000>.
     Found 1-bit register for signal <done_pixels>.
     Found 1-bit register for signal <initialize_run>.
+    Found 1-bit register for signal <pstop_capture>.
     Found 1-bit register for signal <pvs>.
     Found 15-bit register for signal <rd_a1>.
     Found 1-bit register for signal <resend2>.
@@ -483,12 +484,12 @@ WARNING:Xst:1780 - Signal <active1> is never used or assigned. This unconnected 
     Found 3-bit register for signal <w0_index>.
     Found 3-bit adder for signal <w0_index$addsub0000>.
     Found 15-bit register for signal <w1_index>.
-    Found 15-bit adder for signal <w1_index$addsub0000> created at line 770.
+    Found 15-bit adder for signal <w1_index$addsub0000> created at line 759.
     Found 20-bit register for signal <w4dcmcnt>.
     Found 20-bit adder for signal <w4dcmcnt$addsub0000>.
     Summary:
 	inferred   3 Finite State Machine(s).
-	inferred  90 D-type flip-flop(s).
+	inferred  91 D-type flip-flop(s).
 	inferred   4 Adder/Subtractor(s).
 Unit <Top> synthesized.
 
@@ -516,8 +517,8 @@ Macro Statistics
  24-bit up counter                                     : 1
  6-bit up counter                                      : 1
  8-bit up counter                                      : 1
-# Registers                                            : 48
- 1-bit register                                        : 31
+# Registers                                            : 49
+ 1-bit register                                        : 32
  13-bit register                                       : 1
  15-bit register                                       : 3
  16-bit register                                       : 3
@@ -538,13 +539,14 @@ Macro Statistics
 =========================================================================
 
 Analyzing FSM <FSM_3> for best encoding.
-Optimizing FSM <state/FSM> on signal <state[1:2]> with gray encoding.
+Optimizing FSM <state/FSM> on signal <state[1:2]> with user encoding.
 -------------------
  State | Encoding
 -------------------
  00    | 00
  01    | 01
- 10    | 11
+ 10    | 10
+ 11    | 11
 -------------------
 Analyzing FSM <FSM_2> for best encoding.
 Optimizing FSM <state1/FSM> on signal <state1[1:15]> with one-hot encoding.
@@ -698,8 +700,8 @@ Macro Statistics
  24-bit up counter                                     : 1
  6-bit up counter                                      : 1
  8-bit up counter                                      : 1
-# Registers                                            : 280
- Flip-Flops                                            : 280
+# Registers                                            : 281
+ Flip-Flops                                            : 281
 # Multiplexers                                         : 2
  32-bit 4-to-1 multiplexer                             : 2
 
@@ -739,8 +741,8 @@ Final Macro Processing ...
 Final Register Report
 
 Macro Statistics
-# Registers                                            : 450
- Flip-Flops                                            : 450
+# Registers                                            : 451
+ Flip-Flops                                            : 451
 
 =========================================================================
 
@@ -769,22 +771,22 @@ Design Statistics
 # IOs                              : 92
 
 Cell Usage :
-# BELS                             : 1655
+# BELS                             : 1656
 #      GND                         : 2
 #      INV                         : 16
 #      LUT1                        : 147
 #      LUT2                        : 100
-#      LUT3                        : 226
-#      LUT4                        : 540
+#      LUT3                        : 224
+#      LUT4                        : 542
 #      MUXCY                       : 179
-#      MUXF5                       : 168
+#      MUXF5                       : 169
 #      MUXF6                       : 70
 #      MUXF7                       : 32
 #      MUXF8                       : 16
 #      VCC                         : 2
 #      XORCY                       : 157
-# FlipFlops/Latches                : 455
-#      FDC                         : 242
+# FlipFlops/Latches                : 456
+#      FDC                         : 243
 #      FDC_1                       : 10
 #      FDCE                        : 122
 #      FDE                         : 18
@@ -811,7 +813,7 @@ Device utilization summary:
 Selected Device : 3s1200efg320-4 
 
  Number of Slices:                      654  out of   8672     7%  
- Number of Slice Flip Flops:            455  out of  17344     2%  
+ Number of Slice Flip Flops:            456  out of  17344     2%  
  Number of 4 input LUTs:               1029  out of  17344     5%  
  Number of IOs:                          92
  Number of bonded IOBs:                  87  out of    250    34%  
@@ -842,7 +844,7 @@ Clock Signal                       | Clock buffer(FF name)                      
 -----------------------------------+------------------------------------------------------------------------------------------------------------------------------------------+-------+
 clkcam                             | DCM_xcam:CLKFX                                                                                                                           | 24    |
 o_jc_0_OBUF1(ov7670_pclkbufmux68:O)| BUFG(*)(inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/s3_init.ram/dpram.dp1x1.ram)| 61    |
-clkcam                             | IBUFG+BUFG                                                                                                                               | 402   |
+clkcam                             | IBUFG+BUFG                                                                                                                               | 403   |
 c0/clock_data                      | NONE(c0/data_index_2)                                                                                                                    | 3     |
 c0/clock_divider                   | NONE(c0/d_0)                                                                                                                             | 3     |
 -----------------------------------+------------------------------------------------------------------------------------------------------------------------------------------+-------+
@@ -856,7 +858,7 @@ Asynchronous Control Signals Information:
 --------------------------------------------+---------------------------------+-------+
 Control Signal                              | Buffer(FF name)                 | Load  |
 --------------------------------------------+---------------------------------+-------+
-inst_debounce/output(inst_debounce/output:Q)| NONE(Registers/cmd_reg_0)       | 370   |
+inst_debounce/output(inst_debounce/output:Q)| NONE(Registers/cmd_reg_0)       | 371   |
 stop_capture(stop_capture:Q)                | NONE(inst_ov7670capt1/address_0)| 42    |
 --------------------------------------------+---------------------------------+-------+
 
@@ -865,7 +867,7 @@ Timing Summary:
 Speed Grade: -4
 
    Minimum period: 48.792ns (Maximum Frequency: 20.495MHz)
-   Minimum input arrival time before clock: 7.813ns
+   Minimum input arrival time before clock: 7.909ns
    Maximum output required time after clock: 9.890ns
    Maximum combinational path delay: 10.954ns
 
@@ -876,7 +878,7 @@ All values displayed in nanoseconds (ns)
 =========================================================================
 Timing constraint: Default period analysis for Clock 'clkcam'
   Clock period: 48.792ns (frequency: 20.495MHz)
-  Total number of paths / destination ports: 19297 / 855
+  Total number of paths / destination ports: 19301 / 856
 -------------------------------------------------------------------------
 Delay:               4.066ns (Levels of Logic = 3)
   Source:            rd_a1_13_1 (FF)
@@ -967,7 +969,7 @@ Delay:               2.129ns (Levels of Logic = 1)
 Timing constraint: Default OFFSET IN BEFORE for Clock 'clkcam'
   Total number of paths / destination ports: 64 / 28
 -------------------------------------------------------------------------
-Offset:              7.813ns (Levels of Logic = 5)
+Offset:              7.909ns (Levels of Logic = 5)
   Source:            sw<1> (PAD)
   Destination:       stop_capture (FF)
   Destination Clock: clkcam rising
@@ -978,13 +980,13 @@ Offset:              7.813ns (Levels of Logic = 5)
     ----------------------------------------  ------------
      IBUF:I->O            12   1.218   1.136  sw_1_IBUF (sw_1_IBUF)
      LUT2:I0->O           22   0.704   1.339  ov7670_hrefmux21 (ov7670_datamux<0>21)
-     LUT3:I0->O            1   0.704   0.000  ov7670_vsyncmux66_G (N205)
-     MUXF5:I1->O           5   0.321   0.712  ov7670_vsyncmux66 (o_jc_1_OBUF)
-     LUT3:I1->O            1   0.704   0.420  state_FSM_FFd2-In11 (stop_capture_not0002)
+     LUT3:I0->O            1   0.704   0.000  ov7670_vsyncmux66_G (N207)
+     MUXF5:I1->O           5   0.321   0.808  ov7670_vsyncmux66 (o_jc_1_OBUF)
+     LUT4:I0->O            1   0.704   0.420  stop_capture_not00021 (stop_capture_not0002)
      FDCE:CE                   0.555          stop_capture
     ----------------------------------------
-    Total                      7.813ns (4.206ns logic, 3.607ns route)
-                                       (53.8% logic, 46.2% route)
+    Total                      7.909ns (4.206ns logic, 3.703ns route)
+                                       (53.2% logic, 46.8% route)
 
 =========================================================================
 Timing constraint: Default OFFSET IN BEFORE for Clock 'o_jc_0_OBUF1'
@@ -1001,7 +1003,7 @@ Offset:              5.730ns (Levels of Logic = 4)
     ----------------------------------------  ------------
      IBUF:I->O            12   1.218   1.136  sw_1_IBUF (sw_1_IBUF)
      LUT2:I0->O           22   0.704   1.339  ov7670_hrefmux21 (ov7670_datamux<0>21)
-     LUT3:I0->O            1   0.704   0.000  ov7670_hrefmux66_G (N187)
+     LUT3:I0->O            1   0.704   0.000  ov7670_hrefmux66_G (N189)
      MUXF5:I1->O           2   0.321   0.000  ov7670_hrefmux66 (o_jc_2_OBUF)
      FDC_1:D                   0.308          inst_ov7670capt1/latched_href
     ----------------------------------------
@@ -1024,7 +1026,7 @@ Offset:              9.890ns (Levels of Logic = 5)
      FDC:C->Q             23   0.591   1.377  initialize_run (initialize_run)
      LUT4:I0->O           14   0.704   1.175  spi_enable11 (spi_enable)
      LUT4:I0->O            2   0.704   0.622  o_do337 (o_do337)
-     LUT4:I0->O            1   0.704   0.000  o_do342_F (N182)
+     LUT4:I0->O            1   0.704   0.000  o_do342_F (N184)
      MUXF5:I0->O           1   0.321   0.420  o_do342 (o_do_OBUF)
      OBUF:I->O                 3.272          o_do_OBUF (o_do)
     ----------------------------------------
@@ -1066,7 +1068,7 @@ Offset:              7.171ns (Levels of Logic = 4)
     ----------------------------------------  ------------
      FDC:C->Q              6   0.591   0.669  c0/data_index_2 (c0/data_index_2)
      MUXF5:S->O            1   0.739   0.455  o_do103 (o_do103)
-     LUT4:I2->O            1   0.704   0.000  o_do342_G (N183)
+     LUT4:I2->O            1   0.704   0.000  o_do342_G (N185)
      MUXF5:I1->O           1   0.321   0.420  o_do342 (o_do_OBUF)
      OBUF:I->O                 3.272          o_do_OBUF (o_do)
     ----------------------------------------
@@ -1088,7 +1090,7 @@ Delay:               10.954ns (Levels of Logic = 6)
      IBUFG:I->O            1   2.675   0.420  cam_buf1a (a1)
      BUFG:I->O             1   1.457   0.455  cam_buf1b (ov7670_pclk1buf1)
      LUT4:I2->O            1   0.704   0.499  ov7670_pclkbufmux51 (ov7670_pclkbufmux51)
-     LUT4:I1->O            1   0.704   0.000  ov7670_pclkbufmux68_F (N206)
+     LUT4:I1->O            1   0.704   0.000  ov7670_pclkbufmux68_F (N208)
      MUXF5:I0->O           2   0.321   0.447  ov7670_pclkbufmux68 (o_jc_0_OBUF1)
      OBUF:I->O                 3.272          o_jc_0_OBUF (o_jc<0>)
     ----------------------------------------
@@ -1098,13 +1100,13 @@ Delay:               10.954ns (Levels of Logic = 6)
 =========================================================================
 
 
-Total REAL time to Xst completion: 25.00 secs
-Total CPU time to Xst completion: 18.99 secs
+Total REAL time to Xst completion: 24.00 secs
+Total CPU time to Xst completion: 20.38 secs
  
 --> 
 
 
-Total memory usage is 557348 kilobytes
+Total memory usage is 557388 kilobytes
 
 Number of errors   :    0 (   0 filtered)
 Number of warnings :   52 (   0 filtered)

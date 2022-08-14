@@ -199,12 +199,12 @@ signal pvs : std_logic;
 
 signal fifo_empty,fifo_full,fifo_rd,fifo_wr : std_logic;
 
-signal stop_capture,send_pixels,done_pixels : std_logic;
+signal pstop_capture,stop_capture,send_pixels,done_pixels : std_logic;
 
 signal ov7670_pclkbufmux,ov7670_vsyncmux,ov7670_hrefmux : std_logic;
 signal ov7670_datamux : std_logic_vector(7 downto 0);
 signal a1,b1,a2,b2,a3,b3,a4,b4 : std_logic;
-
+	
 begin
 
 o_jc(0) <= ov7670_pclkbufmux;
@@ -267,22 +267,24 @@ port map (
 );
 
 fsm1 : process (clkcambuf,resend) is
-	type states is (a,b,c);
+	type states is (a,b,c,d);
 	variable state : states;
 	constant MAX_RD : std_logic_vector(14 downto 0) := std_logic_vector(to_unsigned(19200,15));
 begin
 	if (resend = '1') then
 		state := a;
 		stop_capture <= '0';
+		pstop_capture <= '0';
 		pvs <= '0';
 		send_pixels <= '0';
 		done_pixels <= '0';
 	elsif (rising_edge(clkcambuf)) then
 		pvs <= ov7670_vsyncmux;
+		pstop_capture <= stop_capture;
 		case (state) is
 			when a =>
 				send_pixels <= '0';
-				stop_capture <= '0';
+				done_pixels <= '0';
 				if (pvs = '0' and ov7670_vsyncmux = '1') then
 					stop_capture <= not stop_capture;
 					state := b;
@@ -291,36 +293,23 @@ begin
 					state := a;
 				end if;
 			when b =>
+				if (pstop_capture = '0' and stop_capture = '1') then
+					state := c;
+				else
+					state := a;
+				end if;
+			when c =>
 				done_pixels <= '0';
 				if  (rd_a1 = MAX_RD-1) then
-					state := c;
---					stop_capture <= not stop_capture;
+					state := d;
 					send_pixels <= '0';
 				else
-					state := b;
---					stop_capture <= stop_capture;
+					state := c;
 					send_pixels <= '1';
 				end if;
---				if (done_pixels = '1') then
---					state := c;
---					stop_capture <= not stop_capture;
---					send_pixels <= '0';
---				else
---					state := b;
---					stop_capture <= stop_capture;
---					send_pixels <= '1';
---				end if;
-			when c =>
---				if (done_pixels = '1') then
-					state := a;
---					stop_capture <= not stop_capture;
---					send_pixels <= '0';
-					done_pixels <= '1';
---				else
---					state := c;
---					stop_capture <= stop_capture;
---					send_pixels <= '1';
---				end if;
+			when d =>
+				state := a;
+				done_pixels <= '1';
 		end case;
 	end if;
 end process fsm1;
