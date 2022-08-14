@@ -67,24 +67,26 @@ Mux Extraction                     : Yes
 Resource Sharing                   : YES
 Asynchronous To Synchronous        : NO
 Multiplier Style                   : Auto
-Automatic Register Balancing       : No
+Automatic Register Balancing       : Yes
 
 ---- Target Options
 Add IO Buffers                     : YES
 Global Maximum Fanout              : 500
 Add Generic Clock Buffer(BUFG)     : 24
 Register Duplication               : YES
+Move First FlipFlop Stage          : YES
+Move Last FlipFlop Stage           : YES
 Slice Packing                      : YES
 Optimize Instantiated Primitives   : NO
 Use Clock Enable                   : Yes
 Use Synchronous Set                : Yes
 Use Synchronous Reset              : Yes
-Pack IO Registers into IOBs        : Auto
+Pack IO Registers into IOBs        : True
 Equivalent register Removal        : YES
 
 ---- General Options
 Optimization Goal                  : Speed
-Optimization Effort                : 1
+Optimization Effort                : 2
 Keep Hierarchy                     : No
 Netlist Hierarchy                  : As_Optimized
 RTL Output                         : Yes
@@ -113,8 +115,7 @@ Cores Search Directories           : {"ipcore_dir"  }
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/p_package.vhd" in Library work.
 Architecture st7735r_p_package of Entity st7735r_p_package is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/p_screen.vhd" in Library work.
-Package <st7735r_p_screen> compiled.
-Package body <st7735r_p_screen> compiled.
+Architecture st7735r_p_screen of Entity st7735r_p_screen is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/my_spi.vhd" in Library work.
 Architecture behavioral of Entity my_spi is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/st7735_initialize.vhd" in Library work.
@@ -126,8 +127,7 @@ Architecture behavioral of Entity ov7670_capture is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/ipcore_dir/frame_buffer.vhd" in Library work.
 Architecture frame_buffer_a of Entity frame_buffer is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/ov7670_registers.vhd" in Library work.
-Entity <ov7670_registers> compiled.
-Entity <ov7670_registers> (Architecture <behavioral>) compiled.
+Architecture behavioral of Entity ov7670_registers is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/ov7670_SCCB.vhd" in Library work.
 Architecture behavioral of Entity ov7670_sccb is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/Top.vhd" in Library work.
@@ -731,6 +731,8 @@ WARNING:Xst:2677 - Node <c1/cs> of sequential type is unconnected in block <Top>
 Mapping all equations...
 Building and optimizing final netlist ...
 Found area constraint ratio of 100 (+ 5) on block Top, actual ratio is 7.
+Replicating register resetdcm to handle IOB=TRUE attribute
+
 FlipFlop rd_a1_10 has been replicated 1 time(s)
 FlipFlop rd_a1_11 has been replicated 1 time(s)
 FlipFlop rd_a1_12 has been replicated 1 time(s)
@@ -742,8 +744,8 @@ Final Macro Processing ...
 Final Register Report
 
 Macro Statistics
-# Registers                                            : 451
- Flip-Flops                                            : 451
+# Registers                                            : 452
+ Flip-Flops                                            : 452
 
 =========================================================================
 
@@ -772,22 +774,22 @@ Design Statistics
 # IOs                              : 92
 
 Cell Usage :
-# BELS                             : 1656
+# BELS                             : 1633
 #      GND                         : 2
-#      INV                         : 16
+#      INV                         : 15
 #      LUT1                        : 147
 #      LUT2                        : 100
-#      LUT3                        : 224
-#      LUT4                        : 542
-#      MUXCY                       : 179
-#      MUXF5                       : 169
+#      LUT3                        : 219
+#      LUT4                        : 539
+#      MUXCY                       : 169
+#      MUXF5                       : 165
 #      MUXF6                       : 70
 #      MUXF7                       : 32
 #      MUXF8                       : 16
 #      VCC                         : 2
 #      XORCY                       : 157
-# FlipFlops/Latches                : 456
-#      FDC                         : 243
+# FlipFlops/Latches                : 457
+#      FDC                         : 244
 #      FDC_1                       : 10
 #      FDCE                        : 122
 #      FDE                         : 18
@@ -813,11 +815,12 @@ Device utilization summary:
 
 Selected Device : 3s1200efg320-4 
 
- Number of Slices:                      654  out of   8672     7%  
+ Number of Slices:                      647  out of   8672     7%  
  Number of Slice Flip Flops:            456  out of  17344     2%  
- Number of 4 input LUTs:               1029  out of  17344     5%  
+ Number of 4 input LUTs:               1020  out of  17344     5%  
  Number of IOs:                          92
  Number of bonded IOBs:                  87  out of    250    34%  
+    IOB Flip Flops:                       1
  Number of BRAMs:                        19  out of     28    67%  
  Number of GCLKs:                         8  out of     24    33%  
  Number of DCMs:                          1  out of      8    12%  
@@ -845,7 +848,7 @@ Clock Signal                       | Clock buffer(FF name)                      
 -----------------------------------+------------------------------------------------------------------------------------------------------------------------------------------+-------+
 clkcam                             | DCM_xcam:CLKFX                                                                                                                           | 24    |
 o_jc_0_OBUF1(ov7670_pclkbufmux68:O)| BUFG(*)(inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/s3_init.ram/dpram.dp1x1.ram)| 61    |
-clkcam                             | IBUFG+BUFG                                                                                                                               | 403   |
+clkcam                             | IBUFG+BUFG                                                                                                                               | 404   |
 c0/clock_data                      | NONE(c0/data_index_2)                                                                                                                    | 3     |
 c0/clock_divider                   | NONE(c0/d_0)                                                                                                                             | 3     |
 -----------------------------------+------------------------------------------------------------------------------------------------------------------------------------------+-------+
@@ -859,7 +862,7 @@ Asynchronous Control Signals Information:
 --------------------------------------------+---------------------------------+-------+
 Control Signal                              | Buffer(FF name)                 | Load  |
 --------------------------------------------+---------------------------------+-------+
-inst_debounce/output(inst_debounce/output:Q)| NONE(Registers/cmd_reg_0)       | 371   |
+inst_debounce/output(inst_debounce/output:Q)| NONE(Registers/cmd_reg_0)       | 372   |
 stop_capture(stop_capture:Q)                | NONE(inst_ov7670capt1/address_0)| 42    |
 --------------------------------------------+---------------------------------+-------+
 
@@ -879,7 +882,7 @@ All values displayed in nanoseconds (ns)
 =========================================================================
 Timing constraint: Default period analysis for Clock 'clkcam'
   Clock period: 48.792ns (frequency: 20.495MHz)
-  Total number of paths / destination ports: 19301 / 856
+  Total number of paths / destination ports: 19431 / 857
 -------------------------------------------------------------------------
 Delay:               4.066ns (Levels of Logic = 3)
   Source:            rd_a1_13_1 (FF)
@@ -981,7 +984,7 @@ Offset:              7.909ns (Levels of Logic = 5)
     ----------------------------------------  ------------
      IBUF:I->O            12   1.218   1.136  sw_1_IBUF (sw_1_IBUF)
      LUT2:I0->O           22   0.704   1.339  ov7670_hrefmux21 (ov7670_datamux<0>21)
-     LUT3:I0->O            1   0.704   0.000  ov7670_vsyncmux66_G (N207)
+     LUT3:I0->O            1   0.704   0.000  ov7670_vsyncmux66_G (N236)
      MUXF5:I1->O           5   0.321   0.808  ov7670_vsyncmux66 (o_jc_1_OBUF)
      LUT4:I0->O            1   0.704   0.420  stop_capture_not00021 (stop_capture_not0002)
      FDCE:CE                   0.555          stop_capture
@@ -1004,7 +1007,7 @@ Offset:              5.730ns (Levels of Logic = 4)
     ----------------------------------------  ------------
      IBUF:I->O            12   1.218   1.136  sw_1_IBUF (sw_1_IBUF)
      LUT2:I0->O           22   0.704   1.339  ov7670_hrefmux21 (ov7670_datamux<0>21)
-     LUT3:I0->O            1   0.704   0.000  ov7670_hrefmux66_G (N189)
+     LUT3:I0->O            1   0.704   0.000  ov7670_hrefmux66_G (N218)
      MUXF5:I1->O           2   0.321   0.000  ov7670_hrefmux66 (o_jc_2_OBUF)
      FDC_1:D                   0.308          inst_ov7670capt1/latched_href
     ----------------------------------------
@@ -1027,7 +1030,7 @@ Offset:              9.890ns (Levels of Logic = 5)
      FDC:C->Q             23   0.591   1.377  initialize_run (initialize_run)
      LUT4:I0->O           14   0.704   1.175  spi_enable11 (spi_enable)
      LUT4:I0->O            2   0.704   0.622  o_do337 (o_do337)
-     LUT4:I0->O            1   0.704   0.000  o_do342_F (N184)
+     LUT4:I0->O            1   0.704   0.000  o_do342_F (N213)
      MUXF5:I0->O           1   0.321   0.420  o_do342 (o_do_OBUF)
      OBUF:I->O                 3.272          o_do_OBUF (o_do)
     ----------------------------------------
@@ -1069,7 +1072,7 @@ Offset:              7.171ns (Levels of Logic = 4)
     ----------------------------------------  ------------
      FDC:C->Q              6   0.591   0.669  c0/data_index_2 (c0/data_index_2)
      MUXF5:S->O            1   0.739   0.455  o_do103 (o_do103)
-     LUT4:I2->O            1   0.704   0.000  o_do342_G (N185)
+     LUT4:I2->O            1   0.704   0.000  o_do342_G (N214)
      MUXF5:I1->O           1   0.321   0.420  o_do342 (o_do_OBUF)
      OBUF:I->O                 3.272          o_do_OBUF (o_do)
     ----------------------------------------
@@ -1091,7 +1094,7 @@ Delay:               10.954ns (Levels of Logic = 6)
      IBUFG:I->O            1   2.675   0.420  cam_buf1a (a1)
      BUFG:I->O             1   1.457   0.455  cam_buf1b (ov7670_pclk1buf1)
      LUT4:I2->O            1   0.704   0.499  ov7670_pclkbufmux51 (ov7670_pclkbufmux51)
-     LUT4:I1->O            1   0.704   0.000  ov7670_pclkbufmux68_F (N208)
+     LUT4:I1->O            1   0.704   0.000  ov7670_pclkbufmux68_F (N237)
      MUXF5:I0->O           2   0.321   0.447  ov7670_pclkbufmux68 (o_jc_0_OBUF1)
      OBUF:I->O                 3.272          o_jc_0_OBUF (o_jc<0>)
     ----------------------------------------
@@ -1101,13 +1104,13 @@ Delay:               10.954ns (Levels of Logic = 6)
 =========================================================================
 
 
-Total REAL time to Xst completion: 26.00 secs
-Total CPU time to Xst completion: 21.51 secs
+Total REAL time to Xst completion: 23.00 secs
+Total CPU time to Xst completion: 21.68 secs
  
 --> 
 
 
-Total memory usage is 557288 kilobytes
+Total memory usage is 557496 kilobytes
 
 Number of errors   :    0 (   0 filtered)
 Number of warnings :   52 (   0 filtered)

@@ -740,13 +740,6 @@ begin
 					w0_index := w0_index + 1;
 				end if;
 			when d13 =>
---				if (ov7670_vsyncmux = '1') then
---					rd_a1 <= (others => '0');
---					w1_index := 0;
---					state := idle;
---					done_pixels <= '1';
---					state := d13;
---				else
 				if (done_pixels = '1') then
 					state := idle;
 					w1_index := 0;
@@ -865,13 +858,7 @@ begin
 	elsif (rising_edge(clkcambuf)) then
 		case (state) is
 			when idle =>
---				if (resend = '1') then
-					state := wait4dcm;
---				else
---					state := idle;
---					send <= '0';
---					resend2 <= '0';
---				end if;
+				state := wait4dcm;
 				camera1 <= '0';
 				camera2 <= '0';
 				camera3 <= '0';
@@ -910,7 +897,6 @@ begin
 			when sa1 =>
 				if (counter = C_MAX-1) then
 					state := sb;
---					state := wait4dcmpclk ;
 					counter := 0;
 					send <= '0';
 					resend2 <= '1';
@@ -919,18 +905,6 @@ begin
 					counter := counter + 1;
 					resend2 <= '0';
 				end if;
---			when wait4dcmpclk =>
---				if (w4dcmcnt = C_W4DCM-1) then
---					resetdcm1 <= '0';
---					w4dcmcnt := 0;
---					state := sb;--se;
---					send <= '0';
---					resend2 <= '1';
---				else
---					resetdcm1 <= '1';
---					w4dcmcnt := w4dcmcnt + 1;
---					state := wait4dcmpclk;
---				end if;
 			when sb =>
 				if (done = '1') then
 					state := sb1;
