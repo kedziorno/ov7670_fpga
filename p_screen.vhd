@@ -76,7 +76,8 @@ package st7735r_p_screen is
 	x"36",x"01",--MADCTL
 	x"20",x"00",--ROTATION (ST7735_MADCTL_MX | ST7735_MADCTL_MY) 0x40 | 0x80
 	x"3a",x"01",--COLMOD
-	x"05",x"00",
+--	x"03",x"00", -- XXX rgb 444 p. 38 st7735 datasheet
+	x"05",x"00", -- XXX rgb 565 p. 39 st7735 datasheet
 	x"2a",x"01",--CASET
 	x"00",x"00",
 	x"00",x"00",
