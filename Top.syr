@@ -5,14 +5,14 @@ Parameter TMPDIR set to xst/projnav.tmp
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.07 secs
+Total CPU time to Xst completion: 0.05 secs
  
 --> 
 Parameter xsthdpdir set to xst
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.07 secs
+Total CPU time to Xst completion: 0.05 secs
  
 --> 
 Reading design: Top.prj
@@ -67,26 +67,24 @@ Mux Extraction                     : Yes
 Resource Sharing                   : YES
 Asynchronous To Synchronous        : NO
 Multiplier Style                   : Auto
-Automatic Register Balancing       : Yes
+Automatic Register Balancing       : No
 
 ---- Target Options
 Add IO Buffers                     : YES
 Global Maximum Fanout              : 500
 Add Generic Clock Buffer(BUFG)     : 24
 Register Duplication               : YES
-Move First FlipFlop Stage          : YES
-Move Last FlipFlop Stage           : YES
 Slice Packing                      : YES
 Optimize Instantiated Primitives   : NO
 Use Clock Enable                   : Yes
 Use Synchronous Set                : Yes
 Use Synchronous Reset              : Yes
-Pack IO Registers into IOBs        : True
+Pack IO Registers into IOBs        : Auto
 Equivalent register Removal        : YES
 
 ---- General Options
 Optimization Goal                  : Speed
-Optimization Effort                : 2
+Optimization Effort                : 1
 Keep Hierarchy                     : No
 Netlist Hierarchy                  : As_Optimized
 RTL Output                         : Yes
@@ -130,13 +128,17 @@ Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/ov7670_registers.vhd
 Architecture behavioral of Entity ov7670_registers is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/ov7670_SCCB.vhd" in Library work.
 Architecture behavioral of Entity ov7670_sccb is up to date.
+Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/ipcore_dir/fifo.vhd" in Library work.
+Architecture fifo_a of Entity fifo is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/Top.vhd" in Library work.
-Architecture structural of Entity top is up to date.
+Entity <top> compiled.
+Entity <top> (Architecture <structural>) compiled.
 
 =========================================================================
 *                     Design Hierarchy Analysis                         *
 =========================================================================
 Analyzing hierarchy for entity <Top> in library <work> (architecture <structural>) with generics.
+	DCM_SIM_MODE = "SAFE"
 	G_FE_WAIT_BITS = 20
 	G_PB_BITS = 24
 	G_WAIT1 = 20
@@ -164,11 +166,12 @@ Analyzing hierarchy for entity <ov7670_SCCB> in library <work> (architecture <be
 *                            HDL Analysis                               *
 =========================================================================
 Analyzing generic Entity <Top> in library <work> (Architecture <structural>).
+	DCM_SIM_MODE = "SAFE"
 	G_FE_WAIT_BITS = 20
 	G_PB_BITS = 24
 	G_WAIT1 = 20
 	SPI_SPEED_MODE = 8
-WARNING:Xst:2211 - "/home/user/workspace/ov7670_vga_Nexys2/Top.vhd" line 817: Instantiating black box module <frame_buffer>.
+WARNING:Xst:2211 - "/home/user/workspace/ov7670_vga_Nexys2/Top.vhd" line 812: Instantiating black box module <frame_buffer>.
     Set user-defined property "CAPACITANCE =  DONT_CARE" for instance <OBUF_xclk1> in unit <Top>.
     Set user-defined property "DRIVE =  12" for instance <OBUF_xclk1> in unit <Top>.
     Set user-defined property "IOSTANDARD =  DEFAULT" for instance <OBUF_xclk1> in unit <Top>.
@@ -205,22 +208,70 @@ WARNING:Xst:2211 - "/home/user/workspace/ov7670_vga_Nexys2/Top.vhd" line 817: In
     Set user-defined property "IBUF_DELAY_VALUE =  0" for instance <xcam_bufa> in unit <Top>.
     Set user-defined property "IBUF_LOW_PWR =  TRUE" for instance <xcam_bufa> in unit <Top>.
     Set user-defined property "IOSTANDARD =  DEFAULT" for instance <xcam_bufa> in unit <Top>.
-    Set user-defined property "CAPACITANCE =  DONT_CARE" for instance <cam_buf1a> in unit <Top>.
-    Set user-defined property "IBUF_DELAY_VALUE =  0" for instance <cam_buf1a> in unit <Top>.
-    Set user-defined property "IBUF_LOW_PWR =  TRUE" for instance <cam_buf1a> in unit <Top>.
-    Set user-defined property "IOSTANDARD =  DEFAULT" for instance <cam_buf1a> in unit <Top>.
-    Set user-defined property "CAPACITANCE =  DONT_CARE" for instance <cam_buf2a> in unit <Top>.
-    Set user-defined property "IBUF_DELAY_VALUE =  0" for instance <cam_buf2a> in unit <Top>.
-    Set user-defined property "IBUF_LOW_PWR =  TRUE" for instance <cam_buf2a> in unit <Top>.
-    Set user-defined property "IOSTANDARD =  DEFAULT" for instance <cam_buf2a> in unit <Top>.
-    Set user-defined property "CAPACITANCE =  DONT_CARE" for instance <cam_buf3a> in unit <Top>.
-    Set user-defined property "IBUF_DELAY_VALUE =  0" for instance <cam_buf3a> in unit <Top>.
-    Set user-defined property "IBUF_LOW_PWR =  TRUE" for instance <cam_buf3a> in unit <Top>.
-    Set user-defined property "IOSTANDARD =  DEFAULT" for instance <cam_buf3a> in unit <Top>.
     Set user-defined property "CAPACITANCE =  DONT_CARE" for instance <cam_buf4a> in unit <Top>.
     Set user-defined property "IBUF_DELAY_VALUE =  0" for instance <cam_buf4a> in unit <Top>.
     Set user-defined property "IBUF_LOW_PWR =  TRUE" for instance <cam_buf4a> in unit <Top>.
     Set user-defined property "IOSTANDARD =  DEFAULT" for instance <cam_buf4a> in unit <Top>.
+    Set user-defined property "CLKDV_DIVIDE =  2.0000000000000000" for instance <DCM_pclk1> in unit <Top>.
+    Set user-defined property "CLKFX_DIVIDE =  2" for instance <DCM_pclk1> in unit <Top>.
+    Set user-defined property "CLKFX_MULTIPLY =  2" for instance <DCM_pclk1> in unit <Top>.
+    Set user-defined property "CLKIN_DIVIDE_BY_2 =  FALSE" for instance <DCM_pclk1> in unit <Top>.
+    Set user-defined property "CLKIN_PERIOD =  20.0000000000000000" for instance <DCM_pclk1> in unit <Top>.
+    Set user-defined property "CLKOUT_PHASE_SHIFT =  NONE" for instance <DCM_pclk1> in unit <Top>.
+    Set user-defined property "CLK_FEEDBACK =  1X" for instance <DCM_pclk1> in unit <Top>.
+    Set user-defined property "DESKEW_ADJUST =  SYSTEM_SYNCHRONOUS" for instance <DCM_pclk1> in unit <Top>.
+    Set user-defined property "DFS_FREQUENCY_MODE =  LOW" for instance <DCM_pclk1> in unit <Top>.
+    Set user-defined property "DLL_FREQUENCY_MODE =  LOW" for instance <DCM_pclk1> in unit <Top>.
+    Set user-defined property "DSS_MODE =  NONE" for instance <DCM_pclk1> in unit <Top>.
+    Set user-defined property "DUTY_CYCLE_CORRECTION =  TRUE" for instance <DCM_pclk1> in unit <Top>.
+    Set user-defined property "FACTORY_JF =  C080" for instance <DCM_pclk1> in unit <Top>.
+    Set user-defined property "PHASE_SHIFT =  0" for instance <DCM_pclk1> in unit <Top>.
+    Set user-defined property "SIM_MODE =  SAFE" for instance <DCM_pclk1> in unit <Top>.
+    Set user-defined property "STARTUP_WAIT =  TRUE" for instance <DCM_pclk1> in unit <Top>.
+    Set user-defined property "CAPACITANCE =  DONT_CARE" for instance <pclk1_bufa> in unit <Top>.
+    Set user-defined property "IBUF_DELAY_VALUE =  0" for instance <pclk1_bufa> in unit <Top>.
+    Set user-defined property "IBUF_LOW_PWR =  TRUE" for instance <pclk1_bufa> in unit <Top>.
+    Set user-defined property "IOSTANDARD =  DEFAULT" for instance <pclk1_bufa> in unit <Top>.
+    Set user-defined property "CLKDV_DIVIDE =  2.0000000000000000" for instance <DCM_pclk2> in unit <Top>.
+    Set user-defined property "CLKFX_DIVIDE =  2" for instance <DCM_pclk2> in unit <Top>.
+    Set user-defined property "CLKFX_MULTIPLY =  2" for instance <DCM_pclk2> in unit <Top>.
+    Set user-defined property "CLKIN_DIVIDE_BY_2 =  FALSE" for instance <DCM_pclk2> in unit <Top>.
+    Set user-defined property "CLKIN_PERIOD =  20.0000000000000000" for instance <DCM_pclk2> in unit <Top>.
+    Set user-defined property "CLKOUT_PHASE_SHIFT =  NONE" for instance <DCM_pclk2> in unit <Top>.
+    Set user-defined property "CLK_FEEDBACK =  1X" for instance <DCM_pclk2> in unit <Top>.
+    Set user-defined property "DESKEW_ADJUST =  SYSTEM_SYNCHRONOUS" for instance <DCM_pclk2> in unit <Top>.
+    Set user-defined property "DFS_FREQUENCY_MODE =  LOW" for instance <DCM_pclk2> in unit <Top>.
+    Set user-defined property "DLL_FREQUENCY_MODE =  LOW" for instance <DCM_pclk2> in unit <Top>.
+    Set user-defined property "DSS_MODE =  NONE" for instance <DCM_pclk2> in unit <Top>.
+    Set user-defined property "DUTY_CYCLE_CORRECTION =  TRUE" for instance <DCM_pclk2> in unit <Top>.
+    Set user-defined property "FACTORY_JF =  C080" for instance <DCM_pclk2> in unit <Top>.
+    Set user-defined property "PHASE_SHIFT =  0" for instance <DCM_pclk2> in unit <Top>.
+    Set user-defined property "SIM_MODE =  SAFE" for instance <DCM_pclk2> in unit <Top>.
+    Set user-defined property "STARTUP_WAIT =  TRUE" for instance <DCM_pclk2> in unit <Top>.
+    Set user-defined property "CAPACITANCE =  DONT_CARE" for instance <pclk2_bufa> in unit <Top>.
+    Set user-defined property "IBUF_DELAY_VALUE =  0" for instance <pclk2_bufa> in unit <Top>.
+    Set user-defined property "IBUF_LOW_PWR =  TRUE" for instance <pclk2_bufa> in unit <Top>.
+    Set user-defined property "IOSTANDARD =  DEFAULT" for instance <pclk2_bufa> in unit <Top>.
+    Set user-defined property "CLKDV_DIVIDE =  2.0000000000000000" for instance <DCM_pclk3> in unit <Top>.
+    Set user-defined property "CLKFX_DIVIDE =  2" for instance <DCM_pclk3> in unit <Top>.
+    Set user-defined property "CLKFX_MULTIPLY =  2" for instance <DCM_pclk3> in unit <Top>.
+    Set user-defined property "CLKIN_DIVIDE_BY_2 =  FALSE" for instance <DCM_pclk3> in unit <Top>.
+    Set user-defined property "CLKIN_PERIOD =  20.0000000000000000" for instance <DCM_pclk3> in unit <Top>.
+    Set user-defined property "CLKOUT_PHASE_SHIFT =  NONE" for instance <DCM_pclk3> in unit <Top>.
+    Set user-defined property "CLK_FEEDBACK =  1X" for instance <DCM_pclk3> in unit <Top>.
+    Set user-defined property "DESKEW_ADJUST =  SYSTEM_SYNCHRONOUS" for instance <DCM_pclk3> in unit <Top>.
+    Set user-defined property "DFS_FREQUENCY_MODE =  LOW" for instance <DCM_pclk3> in unit <Top>.
+    Set user-defined property "DLL_FREQUENCY_MODE =  LOW" for instance <DCM_pclk3> in unit <Top>.
+    Set user-defined property "DSS_MODE =  NONE" for instance <DCM_pclk3> in unit <Top>.
+    Set user-defined property "DUTY_CYCLE_CORRECTION =  TRUE" for instance <DCM_pclk3> in unit <Top>.
+    Set user-defined property "FACTORY_JF =  C080" for instance <DCM_pclk3> in unit <Top>.
+    Set user-defined property "PHASE_SHIFT =  0" for instance <DCM_pclk3> in unit <Top>.
+    Set user-defined property "SIM_MODE =  SAFE" for instance <DCM_pclk3> in unit <Top>.
+    Set user-defined property "STARTUP_WAIT =  TRUE" for instance <DCM_pclk3> in unit <Top>.
+    Set user-defined property "CAPACITANCE =  DONT_CARE" for instance <pclk3_bufa> in unit <Top>.
+    Set user-defined property "IBUF_DELAY_VALUE =  0" for instance <pclk3_bufa> in unit <Top>.
+    Set user-defined property "IBUF_LOW_PWR =  TRUE" for instance <pclk3_bufa> in unit <Top>.
+    Set user-defined property "IOSTANDARD =  DEFAULT" for instance <pclk3_bufa> in unit <Top>.
 INFO:Xst:2679 - Register <initialize_color> in unit <Top> has a constant value of 0000000000000000 during circuit operation. The register is replaced by logic.
 Entity <Top> analyzed. Unit <Top> generated.
 
@@ -403,12 +454,6 @@ WARNING:Xst:1780 - Signal <clock6b> is never used or assigned. This unconnected 
 WARNING:Xst:1780 - Signal <clock6a> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <clock5b> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <clock5a> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
-WARNING:Xst:1780 - Signal <clock4b> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
-WARNING:Xst:1780 - Signal <clock4a> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
-WARNING:Xst:1780 - Signal <clock3b> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
-WARNING:Xst:1780 - Signal <clock3a> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
-WARNING:Xst:1780 - Signal <clock1b> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
-WARNING:Xst:1780 - Signal <clock1a> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <clk50buf> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <clk25> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <b4> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -425,7 +470,7 @@ WARNING:Xst:1780 - Signal <active1> is never used or assigned. This unconnected 
     | Transitions        | 95                                             |
     | Inputs             | 5                                              |
     | Outputs            | 53                                             |
-    | Clock              | clkcambuf                 (rising_edge)        |
+    | Clock              | cc                        (rising_edge)        |
     | Reset              | resend                    (positive)           |
     | Reset type         | asynchronous                                   |
     | Reset State        | 000000                                         |
@@ -453,7 +498,7 @@ WARNING:Xst:1780 - Signal <active1> is never used or assigned. This unconnected 
     | Transitions        | 9                                              |
     | Inputs             | 5                                              |
     | Outputs            | 5                                              |
-    | Clock              | clkcambuf                 (rising_edge)        |
+    | Clock              | cc                        (rising_edge)        |
     | Reset              | resend                    (positive)           |
     | Reset type         | asynchronous                                   |
     | Reset State        | 00                                             |
@@ -485,7 +530,7 @@ WARNING:Xst:1780 - Signal <active1> is never used or assigned. This unconnected 
     Found 3-bit register for signal <w0_index>.
     Found 3-bit adder for signal <w0_index$addsub0000>.
     Found 15-bit register for signal <w1_index>.
-    Found 15-bit adder for signal <w1_index$addsub0000> created at line 759.
+    Found 15-bit adder for signal <w1_index$addsub0000> created at line 754.
     Found 20-bit register for signal <w4dcmcnt>.
     Found 20-bit adder for signal <w4dcmcnt$addsub0000>.
     Summary:
@@ -713,6 +758,9 @@ Macro Statistics
 =========================================================================
 WARNING:Xst:1293 - FF/Latch <data_sr_0> has a constant value of 1 in block <ov7670_SCCB>. This FF/Latch will be trimmed during the optimization process.
 INFO:Xst:1901 - Instance DCM_xcam in unit Top of type DCM has been replaced by DCM_SP
+INFO:Xst:1901 - Instance DCM_pclk1 in unit Top of type DCM has been replaced by DCM_SP
+INFO:Xst:1901 - Instance DCM_pclk2 in unit Top of type DCM has been replaced by DCM_SP
+INFO:Xst:1901 - Instance DCM_pclk3 in unit Top of type DCM has been replaced by DCM_SP
 WARNING:Xst:2041 - Unit ov7670_SCCB: 1 internal tristate is replaced by logic (pull-up yes): siod.
 
 Optimizing unit <Top> ...
@@ -731,12 +779,7 @@ WARNING:Xst:2677 - Node <c1/cs> of sequential type is unconnected in block <Top>
 Mapping all equations...
 Building and optimizing final netlist ...
 Found area constraint ratio of 100 (+ 5) on block Top, actual ratio is 7.
-Replicating register resetdcm to handle IOB=TRUE attribute
-
-FlipFlop rd_a1_10 has been replicated 1 time(s)
-FlipFlop rd_a1_11 has been replicated 1 time(s)
-FlipFlop rd_a1_12 has been replicated 1 time(s)
-FlipFlop rd_a1_13 has been replicated 1 time(s)
+FlipFlop initialize_run has been replicated 2 time(s)
 
 Final Macro Processing ...
 
@@ -744,8 +787,8 @@ Final Macro Processing ...
 Final Register Report
 
 Macro Statistics
-# Registers                                            : 452
- Flip-Flops                                            : 452
+# Registers                                            : 449
+ Flip-Flops                                            : 449
 
 =========================================================================
 
@@ -774,24 +817,27 @@ Design Statistics
 # IOs                              : 92
 
 Cell Usage :
-# BELS                             : 1633
+# BELS                             : 1654
 #      GND                         : 2
-#      INV                         : 15
+#      INV                         : 16
 #      LUT1                        : 147
-#      LUT2                        : 100
+#      LUT2                        : 101
+#      LUT2_D                      : 1
 #      LUT3                        : 219
-#      LUT4                        : 539
-#      MUXCY                       : 169
-#      MUXF5                       : 165
+#      LUT3_L                      : 2
+#      LUT4                        : 541
+#      LUT4_D                      : 2
+#      MUXCY                       : 179
+#      MUXF5                       : 167
 #      MUXF6                       : 70
 #      MUXF7                       : 32
 #      MUXF8                       : 16
 #      VCC                         : 2
 #      XORCY                       : 157
-# FlipFlops/Latches                : 457
-#      FDC                         : 244
+# FlipFlops/Latches                : 454
+#      FDC                         : 245
 #      FDC_1                       : 10
-#      FDCE                        : 122
+#      FDCE                        : 118
 #      FDE                         : 18
 #      FDP                         : 5
 #      FDPE                        : 33
@@ -806,8 +852,8 @@ Cell Usage :
 #      IBUF                        : 45
 #      IBUFG                       : 5
 #      OBUF                        : 37
-# DCMs                             : 1
-#      DCM_SP                      : 1
+# DCMs                             : 4
+#      DCM_SP                      : 4
 =========================================================================
 
 Device utilization summary:
@@ -815,15 +861,14 @@ Device utilization summary:
 
 Selected Device : 3s1200efg320-4 
 
- Number of Slices:                      647  out of   8672     7%  
- Number of Slice Flip Flops:            456  out of  17344     2%  
- Number of 4 input LUTs:               1020  out of  17344     5%  
+ Number of Slices:                      655  out of   8672     7%  
+ Number of Slice Flip Flops:            454  out of  17344     2%  
+ Number of 4 input LUTs:               1029  out of  17344     5%  
  Number of IOs:                          92
  Number of bonded IOBs:                  87  out of    250    34%  
-    IOB Flip Flops:                       1
  Number of BRAMs:                        19  out of     28    67%  
  Number of GCLKs:                         8  out of     24    33%  
- Number of DCMs:                          1  out of      8    12%  
+ Number of DCMs:                          4  out of      8    50%  
 
 ---------------------------
 Partition Resource Summary:
@@ -846,9 +891,9 @@ Clock Information:
 -----------------------------------+------------------------------------------------------------------------------------------------------------------------------------------+-------+
 Clock Signal                       | Clock buffer(FF name)                                                                                                                    | Load  |
 -----------------------------------+------------------------------------------------------------------------------------------------------------------------------------------+-------+
-clkcam                             | DCM_xcam:CLKFX                                                                                                                           | 24    |
-o_jc_0_OBUF1(ov7670_pclkbufmux68:O)| BUFG(*)(inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/s3_init.ram/dpram.dp1x1.ram)| 61    |
-clkcam                             | IBUFG+BUFG                                                                                                                               | 404   |
+clkcam                             | DCM_xcam:CLKFX                                                                                                                           | 225   |
+o_jc_0_OBUF1(ov7670_pclkbufmux66:O)| BUFG(*)(inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/s3_init.ram/dpram.dp1x1.ram)| 61    |
+clkcam                             | IBUFG+BUFG                                                                                                                               | 200   |
 c0/clock_data                      | NONE(c0/data_index_2)                                                                                                                    | 3     |
 c0/clock_divider                   | NONE(c0/d_0)                                                                                                                             | 3     |
 -----------------------------------+------------------------------------------------------------------------------------------------------------------------------------------+-------+
@@ -862,7 +907,7 @@ Asynchronous Control Signals Information:
 --------------------------------------------+---------------------------------+-------+
 Control Signal                              | Buffer(FF name)                 | Load  |
 --------------------------------------------+---------------------------------+-------+
-inst_debounce/output(inst_debounce/output:Q)| NONE(Registers/cmd_reg_0)       | 372   |
+inst_debounce/output(inst_debounce/output:Q)| NONE(Registers/cmd_reg_0)       | 369   |
 stop_capture(stop_capture:Q)                | NONE(inst_ov7670capt1/address_0)| 42    |
 --------------------------------------------+---------------------------------+-------+
 
@@ -870,10 +915,10 @@ Timing Summary:
 ---------------
 Speed Grade: -4
 
-   Minimum period: 48.792ns (Maximum Frequency: 20.495MHz)
-   Minimum input arrival time before clock: 7.909ns
-   Maximum output required time after clock: 9.890ns
-   Maximum combinational path delay: 10.954ns
+   Minimum period: 54.372ns (Maximum Frequency: 18.392MHz)
+   Minimum input arrival time before clock: 7.769ns
+   Maximum output required time after clock: 9.411ns
+   Maximum combinational path delay: 9.751ns
 
 Timing Detail:
 --------------
@@ -881,27 +926,26 @@ All values displayed in nanoseconds (ns)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'clkcam'
-  Clock period: 48.792ns (frequency: 20.495MHz)
-  Total number of paths / destination ports: 19431 / 857
+  Clock period: 54.372ns (frequency: 18.392MHz)
+  Total number of paths / destination ports: 19132 / 850
 -------------------------------------------------------------------------
-Delay:               4.066ns (Levels of Logic = 3)
-  Source:            rd_a1_13_1 (FF)
-  Destination:       inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram (RAM)
+Delay:               4.531ns (Levels of Logic = 2)
+  Source:            spi_data (FF)
+  Destination:       state0_FSM_FFd4 (FF)
   Source Clock:      clkcam rising
   Destination Clock: clkcam rising 0.5X
 
-  Data Path: rd_a1_13_1 to inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram
+  Data Path: spi_data to state0_FSM_FFd4
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDCE:C->Q            19   0.591   1.260  rd_a1_13_1 (rd_a1_13_1)
-     begin scope: 'inst_framebuffer1'
-     LUT4:I0->O            1   0.704   0.000  U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/bindec_b.bindec_inst_b/ADDR[4]_PWR_16_o_equal_19_o<4>1 (U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/bindec_b.bindec_inst_b/ADDR[4]_PWR_16_o_equal_19_o<4>)
-     MUXF5:I1->O           1   0.321   0.420  U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/bindec_b.bindec_inst_b/ADDR[4]_PWR_16_o_equal_19_o<4>_f5 (U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/bindec_b.bindec_inst_b/ADDR[4]_PWR_16_o_equal_19_o<4>_f5)
-     RAMB16_S18_S18:ENB        0.770          U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram
+     FDCE:C->Q            11   0.591   0.937  spi_data (spi_data)
+     LUT4_D:I3->O         24   0.704   1.287  c0/o_sended_and00001 (spi_sended)
+     LUT3:I2->O            1   0.704   0.000  state0_FSM_FFd44-In1 (state0_FSM_FFd44-In)
+     FDC:D                     0.308          state0_FSM_FFd44
     ----------------------------------------
-    Total                      4.066ns (2.386ns logic, 1.680ns route)
-                                       (58.7% logic, 41.3% route)
+    Total                      4.531ns (2.307ns logic, 2.224ns route)
+                                       (50.9% logic, 49.1% route)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'o_jc_0_OBUF1'
@@ -927,10 +971,10 @@ Delay:               3.980ns (Levels of Logic = 1)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'c0/clock_data'
-  Clock period: 2.351ns (frequency: 425.351MHz)
+  Clock period: 2.390ns (frequency: 418.410MHz)
   Total number of paths / destination ports: 6 / 3
 -------------------------------------------------------------------------
-Delay:               2.351ns (Levels of Logic = 1)
+Delay:               2.390ns (Levels of Logic = 1)
   Source:            c0/data_index_2 (FF)
   Destination:       c0/data_index_2 (FF)
   Source Clock:      c0/clock_data rising
@@ -940,12 +984,12 @@ Delay:               2.351ns (Levels of Logic = 1)
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDC:C->Q              6   0.591   0.748  c0/data_index_2 (c0/data_index_2)
+     FDC:C->Q              7   0.591   0.787  c0/data_index_2 (c0/data_index_2)
      LUT4:I1->O            1   0.704   0.000  c0/data_index_mux0002<0>1 (c0/data_index_mux0002<0>)
      FDC:D                     0.308          c0/data_index_2
     ----------------------------------------
-    Total                      2.351ns (1.603ns logic, 0.748ns route)
-                                       (68.2% logic, 31.8% route)
+    Total                      2.390ns (1.603ns logic, 0.787ns route)
+                                       (67.1% logic, 32.9% route)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'c0/clock_divider'
@@ -973,30 +1017,30 @@ Delay:               2.129ns (Levels of Logic = 1)
 Timing constraint: Default OFFSET IN BEFORE for Clock 'clkcam'
   Total number of paths / destination ports: 64 / 28
 -------------------------------------------------------------------------
-Offset:              7.909ns (Levels of Logic = 5)
+Offset:              7.769ns (Levels of Logic = 5)
   Source:            sw<1> (PAD)
   Destination:       stop_capture (FF)
-  Destination Clock: clkcam rising
+  Destination Clock: clkcam rising 0.5X
 
   Data Path: sw<1> to stop_capture
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
      IBUF:I->O            12   1.218   1.136  sw_1_IBUF (sw_1_IBUF)
-     LUT2:I0->O           22   0.704   1.339  ov7670_hrefmux21 (ov7670_datamux<0>21)
-     LUT3:I0->O            1   0.704   0.000  ov7670_vsyncmux66_G (N236)
+     LUT2:I0->O           22   0.704   1.199  ov7670_hrefmux21 (ov7670_datamux<0>21)
+     LUT3:I2->O            1   0.704   0.000  ov7670_vsyncmux66_G (N200)
      MUXF5:I1->O           5   0.321   0.808  ov7670_vsyncmux66 (o_jc_1_OBUF)
      LUT4:I0->O            1   0.704   0.420  stop_capture_not00021 (stop_capture_not0002)
      FDCE:CE                   0.555          stop_capture
     ----------------------------------------
-    Total                      7.909ns (4.206ns logic, 3.703ns route)
-                                       (53.2% logic, 46.8% route)
+    Total                      7.769ns (4.206ns logic, 3.563ns route)
+                                       (54.1% logic, 45.9% route)
 
 =========================================================================
 Timing constraint: Default OFFSET IN BEFORE for Clock 'o_jc_0_OBUF1'
   Total number of paths / destination ports: 130 / 10
 -------------------------------------------------------------------------
-Offset:              5.730ns (Levels of Logic = 4)
+Offset:              5.590ns (Levels of Logic = 4)
   Source:            sw<1> (PAD)
   Destination:       inst_ov7670capt1/latched_href (FF)
   Destination Clock: o_jc_0_OBUF1 falling
@@ -1006,36 +1050,36 @@ Offset:              5.730ns (Levels of Logic = 4)
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
      IBUF:I->O            12   1.218   1.136  sw_1_IBUF (sw_1_IBUF)
-     LUT2:I0->O           22   0.704   1.339  ov7670_hrefmux21 (ov7670_datamux<0>21)
-     LUT3:I0->O            1   0.704   0.000  ov7670_hrefmux66_G (N218)
+     LUT2:I0->O           22   0.704   1.199  ov7670_hrefmux21 (ov7670_datamux<0>21)
+     LUT3:I2->O            1   0.704   0.000  ov7670_hrefmux66_G (N182)
      MUXF5:I1->O           2   0.321   0.000  ov7670_hrefmux66 (o_jc_2_OBUF)
      FDC_1:D                   0.308          inst_ov7670capt1/latched_href
     ----------------------------------------
-    Total                      5.730ns (3.255ns logic, 2.475ns route)
-                                       (56.8% logic, 43.2% route)
+    Total                      5.590ns (3.255ns logic, 2.335ns route)
+                                       (58.2% logic, 41.8% route)
 
 =========================================================================
 Timing constraint: Default OFFSET OUT AFTER for Clock 'clkcam'
   Total number of paths / destination ports: 117 / 21
 -------------------------------------------------------------------------
-Offset:              9.890ns (Levels of Logic = 5)
-  Source:            initialize_run (FF)
+Offset:              9.411ns (Levels of Logic = 5)
+  Source:            spi_data (FF)
   Destination:       o_do (PAD)
   Source Clock:      clkcam rising
 
-  Data Path: initialize_run to o_do
+  Data Path: spi_data to o_do
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDC:C->Q             23   0.591   1.377  initialize_run (initialize_run)
-     LUT4:I0->O           14   0.704   1.175  spi_enable11 (spi_enable)
+     FDCE:C->Q            11   0.591   0.937  spi_data (spi_data)
+     LUT4_D:I3->O         12   0.704   1.136  spi_enable11 (spi_enable)
      LUT4:I0->O            2   0.704   0.622  o_do337 (o_do337)
-     LUT4:I0->O            1   0.704   0.000  o_do342_F (N213)
+     LUT4:I0->O            1   0.704   0.000  o_do342_F (N177)
      MUXF5:I0->O           1   0.321   0.420  o_do342 (o_do_OBUF)
      OBUF:I->O                 3.272          o_do_OBUF (o_do)
     ----------------------------------------
-    Total                      9.890ns (6.296ns logic, 3.594ns route)
-                                       (63.7% logic, 36.3% route)
+    Total                      9.411ns (6.296ns logic, 3.115ns route)
+                                       (66.9% logic, 33.1% route)
 
 =========================================================================
 Timing constraint: Default OFFSET OUT AFTER for Clock 'c0/clock_divider'
@@ -1061,7 +1105,7 @@ Offset:              5.609ns (Levels of Logic = 2)
 Timing constraint: Default OFFSET OUT AFTER for Clock 'c0/clock_data'
   Total number of paths / destination ports: 7 / 1
 -------------------------------------------------------------------------
-Offset:              7.171ns (Levels of Logic = 4)
+Offset:              7.210ns (Levels of Logic = 4)
   Source:            c0/data_index_2 (FF)
   Destination:       o_do (PAD)
   Source Clock:      c0/clock_data rising
@@ -1070,49 +1114,48 @@ Offset:              7.171ns (Levels of Logic = 4)
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDC:C->Q              6   0.591   0.669  c0/data_index_2 (c0/data_index_2)
+     FDC:C->Q              7   0.591   0.708  c0/data_index_2 (c0/data_index_2)
      MUXF5:S->O            1   0.739   0.455  o_do103 (o_do103)
-     LUT4:I2->O            1   0.704   0.000  o_do342_G (N214)
+     LUT4:I2->O            1   0.704   0.000  o_do342_G (N178)
      MUXF5:I1->O           1   0.321   0.420  o_do342 (o_do_OBUF)
      OBUF:I->O                 3.272          o_do_OBUF (o_do)
     ----------------------------------------
-    Total                      7.171ns (5.627ns logic, 1.544ns route)
-                                       (78.5% logic, 21.5% route)
+    Total                      7.210ns (5.627ns logic, 1.583ns route)
+                                       (78.0% logic, 22.0% route)
 
 =========================================================================
 Timing constraint: Default path analysis
-  Total number of paths / destination ports: 84 / 8
+  Total number of paths / destination ports: 81 / 8
 -------------------------------------------------------------------------
-Delay:               10.954ns (Levels of Logic = 6)
-  Source:            ov7670_pclk1 (PAD)
+Delay:               9.751ns (Levels of Logic = 5)
+  Source:            ov7670_pclk4 (PAD)
   Destination:       o_jc<0> (PAD)
 
-  Data Path: ov7670_pclk1 to o_jc<0>
+  Data Path: ov7670_pclk4 to o_jc<0>
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     IBUFG:I->O            1   2.675   0.420  cam_buf1a (a1)
-     BUFG:I->O             1   1.457   0.455  cam_buf1b (ov7670_pclk1buf1)
-     LUT4:I2->O            1   0.704   0.499  ov7670_pclkbufmux51 (ov7670_pclkbufmux51)
-     LUT4:I1->O            1   0.704   0.000  ov7670_pclkbufmux68_F (N237)
-     MUXF5:I0->O           2   0.321   0.447  ov7670_pclkbufmux68 (o_jc_0_OBUF1)
+     IBUFG:I->O            1   2.675   0.420  cam_buf4a (a4)
+     BUFG:I->O             1   1.457   0.455  cam_buf4b (ov7670_pclk4buf1)
+     LUT4:I2->O            1   0.704   0.000  ov7670_pclkbufmux66_F (N203)
+     MUXF5:I0->O           2   0.321   0.447  ov7670_pclkbufmux66 (o_jc_0_OBUF1)
      OBUF:I->O                 3.272          o_jc_0_OBUF (o_jc<0>)
     ----------------------------------------
-    Total                     10.954ns (9.133ns logic, 1.821ns route)
-                                       (83.4% logic, 16.6% route)
+    Total                      9.751ns (8.429ns logic, 1.322ns route)
+                                       (86.4% logic, 13.6% route)
 
 =========================================================================
 
 
-Total REAL time to Xst completion: 23.00 secs
-Total CPU time to Xst completion: 21.68 secs
+Total REAL time to Xst completion: 22.00 secs
+Total CPU time to Xst completion: 20.60 secs
  
 --> 
 
 
-Total memory usage is 557496 kilobytes
+Total memory usage is 557760 kilobytes
 
 Number of errors   :    0 (   0 filtered)
-Number of warnings :   52 (   0 filtered)
-Number of infos    :    5 (   0 filtered)
+Number of warnings :   46 (   0 filtered)
+Number of infos    :    8 (   0 filtered)
 

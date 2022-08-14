@@ -43,7 +43,8 @@ Generic (
 G_PB_BITS : integer := 6;
 G_WAIT1 : integer := 7; -- wait for reset dcm and cameras
 G_FE_WAIT_BITS : integer := 9; -- sccb wait for cameras
-SPI_SPEED_MODE : integer := C_CLOCK_COUNTER_MF
+SPI_SPEED_MODE : integer := C_CLOCK_COUNTER_MF;
+DCM_SIM_MODE : string := "FAST" -- SAFE / FAST
 );
 Port (
 clk50	: in STD_LOGIC; -- Crystal Oscilator 50MHz  --B8
