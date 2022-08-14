@@ -1,7 +1,7 @@
 Release 14.7 par P.20131013 (lin64)
 Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
 
-work::  Sun Aug 14 20:27:31 2022
+work::  Sun Aug 14 23:17:44 2022
 
 par -w -intstyle ise -pl high -rl high -xe n -t 1 Top_map.ncd Top.ncd Top.pcf 
 
@@ -41,7 +41,7 @@ Design Summary Report:
    Number of BUFGMUXs                        8 out of 24     33%
    Number of DCMs                            1 out of 8      12%
    Number of RAMB16s                        19 out of 28     67%
-   Number of Slices                        719 out of 8672    8%
+   Number of Slices                        790 out of 8672    9%
       Number of SLICEMs                     64 out of 4336    1%
 
 
@@ -49,44 +49,39 @@ Design Summary Report:
 Overall effort level (-ol):   Not applicable because -pl and -rl switches are used
 Router effort level (-rl):    High 
 
-Starting initial Timing Analysis.  REAL time: 5 secs 
-Finished initial Timing Analysis.  REAL time: 5 secs 
+Starting initial Timing Analysis.  REAL time: 4 secs 
+Finished initial Timing Analysis.  REAL time: 4 secs 
 
 WARNING:Par:288 - The signal clk50_IBUF has no load.  PAR will not attempt to route this signal.
 Starting Router
 
 
-Phase  1  : 5348 unrouted;      REAL time: 11 secs 
+Phase  1  : 5429 unrouted;      REAL time: 10 secs 
 
-Phase  2  : 4872 unrouted;      REAL time: 11 secs 
+Phase  2  : 4927 unrouted;      REAL time: 11 secs 
 
-Phase  3  : 1242 unrouted;      REAL time: 12 secs 
+Phase  3  : 1235 unrouted;      REAL time: 11 secs 
 
-Phase  4  : 1340 unrouted; (Setup:901517, Hold:0, Component Switching Limit:0)     REAL time: 40 secs 
-WARNING:Route:441 - The router has detected a very high timing score (901517) for this design. It is extremely unlikely
-   the router will be able to meet your timing requirements. To prevent excessive run time the router will change
-   strategy. The router will now work to completely route this design but not to improve timing. This behavior will
-   allow you to use the Static Timing Report and FPGA Editor to isolate the paths with timing problems. The cause of
-   this behavior is either overly difficult constraints, or issues with the implementation or synthesis of logic in the
-   critical timing path. If you would prefer the router continue trying to meet timing and you are willing to accept a
-   long run time set the option "-xe c" to override the present behavior.
+Phase  4  : 1278 unrouted; (Setup:155125, Hold:0, Component Switching Limit:0)     REAL time: 12 secs 
 
-Phase  5  : 0 unrouted; (Setup:1055714, Hold:0, Component Switching Limit:0)     REAL time: 40 secs 
+Phase  5  : 0 unrouted; (Setup:155282, Hold:0, Component Switching Limit:0)     REAL time: 13 secs 
 
 Updating file: Top.ncd with current fully routed design.
 
-Phase  6  : 0 unrouted; (Setup:1055714, Hold:0, Component Switching Limit:0)     REAL time: 41 secs 
+Phase  6  : 0 unrouted; (Setup:155282, Hold:0, Component Switching Limit:0)     REAL time: 14 secs 
 
-Phase  7  : 0 unrouted; (Setup:1055714, Hold:0, Component Switching Limit:0)     REAL time: 41 secs 
+Phase  7  : 0 unrouted; (Setup:153165, Hold:0, Component Switching Limit:0)     REAL time: 18 secs 
 
-Phase  8  : 0 unrouted; (Setup:1053802, Hold:0, Component Switching Limit:0)     REAL time: 41 secs 
+Phase  8  : 0 unrouted; (Setup:153165, Hold:0, Component Switching Limit:0)     REAL time: 18 secs 
+
+Phase  9  : 0 unrouted; (Setup:153165, Hold:0, Component Switching Limit:0)     REAL time: 18 secs 
 WARNING:Route:455 - CLK Net:c0/clock_data may have excessive skew because 
       2 CLK pins and 0 NON_CLK pins failed to route using a CLK template.
 WARNING:Route:455 - CLK Net:c0/clock_divider may have excessive skew because 
       0 CLK pins and 1 NON_CLK pins failed to route using a CLK template.
 
-Total REAL time to Router completion: 41 secs 
-Total CPU time to Router completion: 40 secs 
+Total REAL time to Router completion: 18 secs 
+Total CPU time to Router completion: 18 secs 
 
 Partition Implementation Status
 -------------------------------
@@ -104,15 +99,15 @@ Generating Clock Report
 +---------------------+--------------+------+------+------------+-------------+
 |        Clock Net    |   Resource   |Locked|Fanout|Net Skew(ns)|Max Delay(ns)|
 +---------------------+--------------+------+------+------------+-------------+
-|           clkcambuf |  BUFGMUX_X1Y1| No   |  302 |  0.188     |  0.373      |
+|           clkcambuf |  BUFGMUX_X1Y1| No   |  181 |  0.145     |  0.314      |
 +---------------------+--------------+------+------+------------+-------------+
-|                  cc | BUFGMUX_X1Y10| No   |   24 |  0.138     |  0.373      |
+|         o_jc_0_OBUF |  BUFGMUX_X2Y0| No   |   57 |  0.194     |  0.370      |
 +---------------------+--------------+------+------+------------+-------------+
-|         o_jc_0_OBUF |  BUFGMUX_X2Y0| No   |   57 |  0.200     |  0.373      |
+|                  cc | BUFGMUX_X1Y10| No   |  174 |  0.201     |  0.376      |
 +---------------------+--------------+------+------+------------+-------------+
-|    c0/clock_divider |         Local|      |    4 |  0.150     |  2.092      |
+|    c0/clock_divider |         Local|      |    4 |  0.282     |  2.389      |
 +---------------------+--------------+------+------+------------+-------------+
-|       c0/clock_data |         Local|      |    2 |  0.000     |  0.889      |
+|       c0/clock_data |         Local|      |    2 |  0.000     |  1.234      |
 +---------------------+--------------+------+------+------------+-------------+
 
 * Net Skew is the difference between the minimum and maximum routing
@@ -123,7 +118,7 @@ the minimum and maximum path delays which includes logic delays.
 * The fanout is the number of component pins not the individual BEL loads,
 for example SLICE loads not FF loads.
 
-Timing Score: 1053802 (Setup: 1053802, Hold: 0, Component Switching Limit: 0)
+Timing Score: 153165 (Setup: 153165, Hold: 0, Component Switching Limit: 0)
 
 WARNING:Par:468 - Your design did not meet timing.  The following are some suggestions to assist you to meet timing in
    your design.
@@ -151,11 +146,11 @@ Asterisk (*) preceding a constraint indicates it was not met.
   Constraint                                |    Check    | Worst Case |  Best Case | Timing |   Timing   
                                             |             |    Slack   | Achievable | Errors |    Score   
 ----------------------------------------------------------------------------------------------------------
-* TS_clkcam = PERIOD TIMEGRP "clkcam" 10 ns | SETUP       |   -11.224ns|   144.580ns|      50|      214911
-   HIGH 50% INPUT_JITTER 0.08 ns            | HOLD        |     1.094ns|            |       0|           0
+* TS_cc1 = PERIOD TIMEGRP "cc1" TS_clkcam / | SETUP       |    -4.060ns|   143.204ns|      66|      150001
+   0.24 HIGH 50% INPUT_JITTER 0.08 ns       | HOLD        |     1.032ns|            |       0|           0
 ----------------------------------------------------------------------------------------------------------
-* TS_cc1 = PERIOD TIMEGRP "cc1" TS_clkcam / | SETUP       |    -7.934ns|   219.259ns|     280|      838891
-   0.48 HIGH 50% INPUT_JITTER 0.08 ns       | HOLD        |     9.290ns|            |       0|           0
+* TS_clkcam = PERIOD TIMEGRP "clkcam" 10 ns | SETUP       |    -1.582ns|    19.490ns|       2|        3164
+   HIGH 50% INPUT_JITTER 0.08 ns            | HOLD        |     1.010ns|            |       0|           0
 ----------------------------------------------------------------------------------------------------------
 
 
@@ -169,8 +164,8 @@ Derived Constraints for TS_clkcam
 |           Constraint          | Requirement |-------------+-------------|-------------+-------------|-------------+-------------|
 |                               |             |   Direct    | Derivative  |   Direct    | Derivative  |   Direct    | Derivative  |
 +-------------------------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+
-|TS_clkcam                      |     10.000ns|    144.580ns|    105.244ns|           50|          280|        19141|          290|
-| TS_cc1                        |     20.833ns|    219.259ns|          N/A|          280|            0|          290|            0|
+|TS_clkcam                      |     10.000ns|     19.490ns|     34.369ns|            2|           66|         6282|        14607|
+| TS_cc1                        |     41.667ns|    143.204ns|          N/A|           66|            0|        14607|            0|
 +-------------------------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+
 
 2 constraints not met.
@@ -182,17 +177,17 @@ All signals are completely routed.
 
 WARNING:Par:283 - There are 1 loadless signals in this design. This design will cause Bitgen to issue DRC warnings.
 
-Total REAL time to PAR completion: 42 secs 
-Total CPU time to PAR completion: 41 secs 
+Total REAL time to PAR completion: 19 secs 
+Total CPU time to PAR completion: 18 secs 
 
-Peak Memory Usage:  549 MB
+Peak Memory Usage:  589 MB
 
 Placer: Placement generated during map.
 Routing: Completed - No errors found.
-Timing: Completed - 330 errors found.
+Timing: Completed - 68 errors found.
 
 Number of error messages: 0
-Number of warning messages: 7
+Number of warning messages: 6
 Number of info messages: 0
 
 Writing design to file Top.ncd

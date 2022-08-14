@@ -238,7 +238,7 @@ generic map (
 C_CLOCK_COUNTER => SPI_SPEED_MODE
 )
 port map (
-	i_clock => clkcambuf,
+	i_clock => cc,
 	i_reset => resend,
 	i_enable => spi_enable,
 	i_data_byte => spi_data_byte,
@@ -253,7 +253,7 @@ generic map (
 C_CLOCK_COUNTER => SPI_SPEED_MODE
 )
 port map (
-	i_clock => clkcambuf,
+	i_clock => cc,
 	i_reset => resend,
 	i_run => initialize_run,
 	i_color => initialize_color,
@@ -266,7 +266,7 @@ port map (
 	o_data_byte => initialize_data_byte
 );
 
-fsm1 : process (clkcambuf,resend) is
+fsm1 : process (cc,resend) is
 	type states is (a,b,c,d);
 	variable state : states;
 	constant MAX_RD : std_logic_vector(14 downto 0) := std_logic_vector(to_unsigned(19200,15));
@@ -278,7 +278,7 @@ begin
 		pvs <= '0';
 		send_pixels <= '0';
 		done_pixels <= '0';
-	elsif (rising_edge(clkcambuf)) then
+	elsif (rising_edge(cc)) then
 		pvs <= ov7670_vsyncmux;
 		pstop_capture <= stop_capture;
 		case (state) is
@@ -314,7 +314,7 @@ begin
 	end if;
 end process fsm1;
 
-poled : process(clkcambuf,resend) is
+poled : process(cc,resend) is
 	type states is (idle,
 	a1,b1,c1,d1,
 	a2,b2,c2,d2,
@@ -342,7 +342,7 @@ begin
 		w0_index := 0;
 		w1_index := 0;
 		rd_a1 <= (others => '0');
-	elsif (rising_edge(clkcambuf)) then
+	elsif (rising_edge(cc)) then
 		case (state) is
 			when idle =>
 				w0_index := 0;
@@ -1044,8 +1044,8 @@ generic map (
 CLKDV_DIVIDE => 2.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
 CLKFX_DIVIDE => 25, -- Can be any interger from 1 to 32
 --CLKFX_MULTIPLY => 4, -- Can be any integer from 1 to 32 -- 16mhz
---CLKFX_MULTIPLY => 6, -- Can be any integer from 1 to 32 -- 24mhz
-CLKFX_MULTIPLY => 12, -- Can be any integer from 1 to 32 -- 48mhz
+CLKFX_MULTIPLY => 6, -- Can be any integer from 1 to 32 -- 24mhz
+--CLKFX_MULTIPLY => 12, -- Can be any integer from 1 to 32 -- 48mhz
 CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
 CLKIN_PERIOD => 10.0, -- Specify period of input clock
 CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of NONE, FIXED or VARIABLE
