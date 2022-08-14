@@ -903,27 +903,28 @@ begin
 				camera4 <= '0';
 			when sa1 =>
 				if (counter = C_MAX-1) then
---					state := sb;
-					state := wait4dcmpclk ;
+					state := sb;
+--					state := wait4dcmpclk ;
 					counter := 0;
+					send <= '0';
 					resend2 <= '1';
 				else
 					state := sa1;
 					counter := counter + 1;
 					resend2 <= '0';
 				end if;
-			when wait4dcmpclk =>
-				if (w4dcmcnt = C_W4DCM-1) then
-					resetdcm1 <= '0';
-					w4dcmcnt := 0;
-					state := sb;--se;
-					send <= '0';
-					resend2 <= '1';
-				else
-					resetdcm1 <= '1';
-					w4dcmcnt := w4dcmcnt + 1;
-					state := wait4dcmpclk;
-				end if;
+--			when wait4dcmpclk =>
+--				if (w4dcmcnt = C_W4DCM-1) then
+--					resetdcm1 <= '0';
+--					w4dcmcnt := 0;
+--					state := sb;--se;
+--					send <= '0';
+--					resend2 <= '1';
+--				else
+--					resetdcm1 <= '1';
+--					w4dcmcnt := w4dcmcnt + 1;
+--					state := wait4dcmpclk;
+--				end if;
 			when sb =>
 				if (done = '1') then
 					state := sb1;
@@ -997,13 +998,23 @@ begin
 					resend2 <= '0';
 				end if;
 			when se =>
-				state := display_initialize;
+				state := wait4dcmpclk;
 				camera1 <= '0';
 				camera2 <= '0';
 				camera3 <= '0';
 				camera4 <= '0';
 				send <= '0';
 				resend2 <= '0';
+			when wait4dcmpclk =>
+				if (w4dcmcnt = C_W4DCM-1) then
+					resetdcm1 <= '0';
+					w4dcmcnt := 0;
+					state := display_initialize;
+				else
+					resetdcm1 <= '1';
+					w4dcmcnt := w4dcmcnt + 1;
+					state := wait4dcmpclk;
+				end if;
 			when display_initialize =>
 				initialize_run <= '1';
 				initialize_color <= SCREEN_BLACK;
@@ -1048,29 +1059,69 @@ ov7670_pwdn2 <= '1' when resetdcm = '1' else '0';
 ov7670_pwdn3 <= '1' when resetdcm = '1' else '0';
 ov7670_pwdn4 <= '1' when resetdcm = '1' else '0';
 
-vga_bufa : IBUFG generic map (IOSTANDARD => "DEFAULT") port map (O => clkcambuf, I => clkcam);
+DCM_xcam : DCM
+generic map (
+CLKDV_DIVIDE => 2.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
+CLKFX_DIVIDE => 25, -- Can be any interger from 1 to 32
+--CLKFX_MULTIPLY => 4, -- Can be any integer from 1 to 32 -- 16mhz
+--CLKFX_MULTIPLY => 6, -- Can be any integer from 1 to 32 -- 24mhz
+CLKFX_MULTIPLY => 12, -- Can be any integer from 1 to 32 -- 48mhz
+CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
+CLKIN_PERIOD => 10.0, -- Specify period of input clock
+CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of NONE, FIXED or VARIABLE
+CLK_FEEDBACK => "1X", -- Specify clock feedback of NONE, 1X or 2X
+DESKEW_ADJUST => "SYSTEM_SYNCHRONOUS", -- SOURCE_SYNCHRONOUS, SYSTEM_SYNCHRONOUS or an integer from 0 to 15
+DFS_FREQUENCY_MODE => "LOW", -- HIGH or LOW frequency mode for frequency synthesis
+DLL_FREQUENCY_MODE => "LOW", -- HIGH or LOW frequency mode for DLL
+DUTY_CYCLE_CORRECTION => TRUE, -- Duty cycle correction, TRUE or FALSE
+FACTORY_JF => X"C080", -- FACTORY JF Values
+PHASE_SHIFT => 0, -- Amount of fixed phase shift from -255 to 255
+SIM_MODE => "SAFE", -- Simulation: "SAFE" vs "FAST", see "Synthesis and Simulation
+STARTUP_WAIT => FALSE) -- Delay configuration DONE until DCM LOCK, TRUE/FALSE
+port map (
+CLK0 => clock2a, -- 0 degree DCM CLK ouptput
+CLK180 => open, -- 180 degree DCM CLK output
+CLK270 => open, -- 270 degree DCM CLK output
+CLK2X => open, -- 2X DCM CLK output
+CLK2X180 => open, -- 2X, 180 degree DCM CLK out
+CLK90 => open, -- 90 degree DCM CLK output
+CLKDV => open, -- Divided DCM CLK out (CLKDV_DIVIDE)
+CLKFX => cc, -- DCM CLK synthesis out (M/D)
+CLKFX180 => open, -- 180 degree CLK synthesis out
+LOCKED => open, -- DCM LOCK status output
+PSDONE => open, -- Dynamic phase adjust done output
+STATUS => open, -- 8-bit DCM status bits output
+CLKFB => clock2b, -- DCM clock feedback
+CLKIN => clkcambuf, -- Clock input (from IBUFG, BUFG or DCM)
+PSCLK => '0', -- Dynamic phase adjust clock input
+PSEN => '0', -- Dynamic phase adjust enable input
+PSINCDEC => '0', -- Dynamic phase adjust increment/decrement
+RST => resetdcm1 -- DCM asynchronous reset input
+);
+xcam_bufb : BUFG port map (O => clock2b, I => clock2a);
 
-cam_bufa : BUFG port map (O => clk50buf, I => clkcambuf);
+xcam_bufa : IBUFG generic map (IOSTANDARD => "DEFAULT") port map (O => clkcambuf, I => clkcam);
+--xcam_bufb : BUFG port map (O => clk50buf, I => clkcambuf);
 
-pdiv_cam : process (clk50buf,resetdcm) is
-	constant C_MAX : integer := 2;
-	variable i : integer range 0 to C_MAX-1;
-begin
-	if (resetdcm = '1') then
-		i := 0;
-		cc <= '0';
-	elsif (rising_edge(clk50buf)) then
-		if (i = C_MAX-1) then
---			cc <= not cc;
-			cc <= '1';
-			i := 0;
-		else
---			cc <= cc;
-			cc <= '0';
-			i := i + 1;
-		end if;
-	end if;
-end process pdiv_cam;
+--pdiv_cam : process (clk50buf,resetdcm) is
+--	constant C_MAX : integer := 2;
+--	variable i : integer range 0 to C_MAX-1;
+--begin
+--	if (resetdcm = '1') then
+--		i := 0;
+--		cc <= '0';
+--	elsif (rising_edge(clk50buf)) then
+--		if (i = C_MAX-1) then
+----			cc <= not cc;
+--			cc <= '1';
+--			i := 0;
+--		else
+----			cc <= cc;
+--			cc <= '0';
+--			i := i + 1;
+--		end if;
+--	end if;
+--end process pdiv_cam;
 
 cam_buf1a : IBUFG generic map (IOSTANDARD => "DEFAULT") port map (O => a1, I => ov7670_pclk1);
 cam_buf1b : BUFG port map (O => ov7670_pclk1buf1, I => a1);
