@@ -103,9 +103,11 @@ constant camera_i_xclk_period1 : time := 41.733 ns; -- 23.9616mhz
 constant camera_i_xclk_period2 : time := 41.667 ns; -- 24mhz
 constant camera_i_xclk_period3 : time := 1000.000 ns; -- 1mhz
 constant camera_i_xclk_period4 : time := 625.000 ns; -- 1.6mhz
-constant USE_OUT_CLOCK : std_logic := '0'; -- XXX use outcoming signal clock to camera
+constant camera_i_xclk_period5 : time := 666.333 ns; -- 1.5mhz
+constant camera_i_xclk_period6 : time := 334.079 ns; -- 2.99mhz
+constant USE_OUT_CLOCK : std_logic := '1'; -- XXX 1 use outcoming signal clock to camera, 0 going from board(div/dcm)
 signal camera_i_xclk : std_logic := '0';
-constant camera_i_xclk_period : time := camera_i_xclk_period4;
+constant camera_i_xclk_period : time := camera_i_xclk_period6;
 
 COMPONENT camera_qqvga
 GENERIC(
@@ -266,11 +268,18 @@ o_rs => o_rs
 );
 
 camera_xclk_process :process
+variable flag : std_logic := '0';
 begin
+if (flag = '0') then
+flag := '1';
+wait for camera_i_xclk_period*15;
+else
+flag := '1';
 camera_i_xclk <= '0';
 wait for camera_i_xclk_period/2;
 camera_i_xclk <= '1';
 wait for camera_i_xclk_period/2;
+end if;
 end process;
 
 clkcam_process :process
@@ -283,6 +292,8 @@ end process;
 
 -- Stimulus process
 stim_proc : process
+	constant C_W1 : time := 1 ms;
+	constant C_W2 : time := 400 ms;
 begin
 -- hold reset state for 100 ns.
 pb <= '1';
@@ -290,51 +301,55 @@ wait for 2500 ns;
 --wait for 500 ns;
 pb <= '0';
 wait for clkcam_period*10;
-
+sw(0) <= 'U';
+sw(1) <= 'U';
+sw(2) <= 'U';
+sw(3) <= 'U';
+wait for clkcam_period;
 sw(0) <= '1';
---wait for 10 ms;
---sw(0) <= '1';
---sw(1) <= '0';
---sw(2) <= '0';
---sw(3) <= '0';
---wait for 10 ms;
---sw(0) <= '0';
---sw(1) <= '0';
---sw(2) <= '0';
---sw(3) <= '0';
---
---wait for 10 ms;
---sw(0) <= '0';
---sw(1) <= '1';
---sw(2) <= '0';
---sw(3) <= '0';
---wait for 10 ms;
---sw(0) <= '0';
---sw(1) <= '0';
---sw(2) <= '0';
---sw(3) <= '0';
---
---wait for 10 ms;
---sw(0) <= '0';
---sw(1) <= '0';
---sw(2) <= '1';
---sw(3) <= '0';
---wait for 10 ms;
---sw(0) <= '0';
---sw(1) <= '0';
---sw(2) <= '0';
---sw(3) <= '0';
---
---wait for 10 ms;
---sw(0) <= '0';
---sw(1) <= '0';
---sw(2) <= '0';
---sw(3) <= '1';
---wait for 10 ms;
---sw(0) <= '0';
---sw(1) <= '0';
---sw(2) <= '0';
---sw(3) <= '0';
+sw(1) <= '0';
+sw(2) <= '0';
+sw(3) <= '0';
+wait for C_W2;
+sw(0) <= '0';
+sw(1) <= '0';
+sw(2) <= '0';
+sw(3) <= '0';
+wait for C_W1;
+sw(0) <= '0';
+sw(1) <= '1';
+sw(2) <= '0';
+sw(3) <= '0';
+wait for C_W2;
+sw(0) <= '0';
+sw(1) <= '0';
+sw(2) <= '0';
+sw(3) <= '0';
+wait for C_W1;
+sw(0) <= '0';
+sw(1) <= '0';
+sw(2) <= '1';
+sw(3) <= '0';
+wait for C_W2;
+sw(0) <= '0';
+sw(1) <= '0';
+sw(2) <= '0';
+sw(3) <= '0';
+wait for C_W1;
+sw(0) <= '0';
+sw(1) <= '0';
+sw(2) <= '0';
+sw(3) <= '1';
+wait for C_W2;
+sw(0) <= '0';
+sw(1) <= '0';
+sw(2) <= '0';
+sw(3) <= '0';
+wait for C_W1;
+sw(0) <= 'U';
+sw(1) <= 'U';
+sw(2) <= 'U';
+sw(3) <= 'U';
 
 -- insert stimulus here
 wait;

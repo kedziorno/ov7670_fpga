@@ -223,11 +223,11 @@ led2 <= ov7670_data2(0) or ov7670_data2(1) or ov7670_data2(2) or ov7670_data2(3)
 led3 <= ov7670_data3(0) or ov7670_data3(1) or ov7670_data3(2) or ov7670_data3(3) or ov7670_data3(4) or ov7670_data3(5) or ov7670_data3(6) or ov7670_data3(7);
 led4 <= ov7670_data4(0) or ov7670_data4(1) or ov7670_data4(2) or ov7670_data4(3) or ov7670_data4(4) or ov7670_data4(5) or ov7670_data4(6) or ov7670_data4(7);
 
-o_cs <= spi_cs when (initialize_run = '1' or send_pixels = '1') else '1';
-o_do <= spi_do when (initialize_run = '1' or send_pixels = '1') else '0';
-o_ck <= spi_ck when (initialize_run = '1' or send_pixels = '1') else '0';
+o_cs <= spi_cs when initialize_run = '1' or (send_pixels = '1' and stop_capture = '1') else '1';
+o_do <= spi_do when initialize_run = '1' or (send_pixels = '1' and stop_capture = '1') else '0';
+o_ck <= spi_ck when initialize_run = '1' or (send_pixels = '1' and stop_capture = '1') else '0';
 o_reset <= initialize_reset when initialize_run = '1' else '1';
-o_rs <= initialize_rs when initialize_run = '1' else spi_rs_data when spi_data = '1' else '1';
+o_rs <= initialize_rs when initialize_run = '1' else spi_rs_data when (send_pixels = '1' and stop_capture = '1') else '1';
 
 spi_data_byte <= initialize_data_byte when initialize_run = '1' else spi_data_byte_data when spi_data = '1' else (others => '0');
 spi_enable <= initialize_enable when initialize_run = '1' else spi_enable_data when spi_data = '1' else '0';
@@ -267,7 +267,7 @@ port map (
 );
 
 fsm1 : process (clkcambuf,resend) is
-	type states is (a,b);
+	type states is (a,b,c);
 	variable state : states;
 	constant MAX_RD : std_logic_vector(14 downto 0) := std_logic_vector(to_unsigned(19200,15));
 begin
@@ -276,27 +276,24 @@ begin
 		stop_capture <= '0';
 		pvs <= '0';
 		send_pixels <= '0';
+		done_pixels <= '0';
 	elsif (rising_edge(clkcambuf)) then
 		pvs <= ov7670_vsyncmux;
-		if (pvs = '0' and ov7670_vsyncmux = '1') then
-			stop_capture <= not stop_capture;
-		else
-			stop_capture <= stop_capture;
-		end if;
 		case (state) is
 			when a =>
-				if (wr_a1 = MAX_RD-1) then
+				send_pixels <= '0';
+				stop_capture <= '0';
+				if (pvs = '0' and ov7670_vsyncmux = '1') then
+					stop_capture <= not stop_capture;
 					state := b;
---					stop_capture <= not stop_capture;
-					send_pixels <= '1';
 				else
+					stop_capture <= stop_capture;
 					state := a;
---					stop_capture <= stop_capture;
-					send_pixels <= '0';
 				end if;
 			when b =>
-				if (done_pixels = '1') then
-					state := a;
+				done_pixels <= '0';
+				if  (rd_a1 = MAX_RD-1) then
+					state := c;
 --					stop_capture <= not stop_capture;
 					send_pixels <= '0';
 				else
@@ -304,6 +301,26 @@ begin
 --					stop_capture <= stop_capture;
 					send_pixels <= '1';
 				end if;
+--				if (done_pixels = '1') then
+--					state := c;
+--					stop_capture <= not stop_capture;
+--					send_pixels <= '0';
+--				else
+--					state := b;
+--					stop_capture <= stop_capture;
+--					send_pixels <= '1';
+--				end if;
+			when c =>
+--				if (done_pixels = '1') then
+					state := a;
+--					stop_capture <= not stop_capture;
+--					send_pixels <= '0';
+					done_pixels <= '1';
+--				else
+--					state := c;
+--					stop_capture <= stop_capture;
+--					send_pixels <= '1';
+--				end if;
 		end case;
 	end if;
 end process fsm1;
@@ -335,18 +352,17 @@ begin
 		spi_data_byte_data <= (others => '0');
 		w0_index := 0;
 		w1_index := 0;
-		done_pixels <= '0';
 		rd_a1 <= (others => '0');
 	elsif (rising_edge(clkcambuf)) then
 		case (state) is
 			when idle =>
-				done_pixels <= '0';
 				w0_index := 0;
-				w1_index := 0;
 				if (send_pixels = '1') then
 					state := a1;
+					w1_index := 0;
 				else
 					state := idle;
+					w1_index := w1_index;
 				end if;
 
 			-- raset
@@ -742,19 +758,20 @@ begin
 --					done_pixels <= '1';
 --					state := d13;
 --				else
-					rd_a1 <= std_logic_vector(to_unsigned(w1_index,15));
+				if (done_pixels = '1') then
+					state := idle;
+					w1_index := 0;
+				else
 					if (w1_index = MAX_PIXELS-1) then
 						state := idle;
 						w1_index := 0;
-						done_pixels <= '1';
 					else
 						state := a12;
 						w1_index := w1_index + 1;
-						done_pixels <= '0';
 					end if;
---				end if;
-
-		end case;
+				end if;
+				rd_a1 <= std_logic_vector(to_unsigned(w1_index,15));
+			end case;
 	end if;
 end process poled;
 
