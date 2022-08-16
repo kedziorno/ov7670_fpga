@@ -57,9 +57,7 @@ rxclk <= andout(0) or andout(1) or andout(2) or andout(3) or andout(4);
 
 p0 : process (areset,clk0) is
 begin
-if (areset = '1') then
-clockp <= (others => '0');
-elsif (rising_edge(clk0)) then
+if (rising_edge(clk0)) then
 clockp(0) <= clk1;
 clockp(1) <= clk2;
 clockp(2) <= clk3;
@@ -70,9 +68,7 @@ end process p0;
 
 p1 : process (areset,clk0) is
 begin
-if (areset = '1') then
-clockn <= (others => '0');
-elsif (rising_edge(clk0)) then
+if (rising_edge(clk0)) then
 clockn(0) <= not clk1;
 clockn(1) <= not clk2;
 clockn(2) <= not clk3;
