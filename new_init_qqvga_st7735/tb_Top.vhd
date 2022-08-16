@@ -294,7 +294,7 @@ end process;
 -- Stimulus process
 stim_proc : process
 	constant C_W1 : time := 1 ms;
-	constant C_W2 : time := 400 ms;
+	constant C_W2 : time := 100 ms;
 begin
 -- hold reset state for 100 ns.
 pb <= '1';
@@ -313,8 +313,8 @@ sw(2) <= '0';
 sw(3) <= '0';
 wait for C_W2;
 sw(0) <= '0';
-sw(1) <= '0';
-sw(2) <= '0';
+sw(1) <= '1';
+sw(2) <= '1';
 sw(3) <= '0';
 wait for C_W1;
 sw(0) <= '0';
@@ -322,18 +322,18 @@ sw(1) <= '1';
 sw(2) <= '0';
 sw(3) <= '0';
 wait for C_W2;
-sw(0) <= '0';
+sw(0) <= '1';
 sw(1) <= '0';
 sw(2) <= '0';
-sw(3) <= '0';
+sw(3) <= '1';
 wait for C_W1;
 sw(0) <= '0';
 sw(1) <= '0';
 sw(2) <= '1';
 sw(3) <= '0';
 wait for C_W2;
-sw(0) <= '0';
-sw(1) <= '0';
+sw(0) <= '1';
+sw(1) <= '1';
 sw(2) <= '0';
 sw(3) <= '0';
 wait for C_W1;
@@ -344,8 +344,8 @@ sw(3) <= '1';
 wait for C_W2;
 sw(0) <= '0';
 sw(1) <= '0';
-sw(2) <= '0';
-sw(3) <= '0';
+sw(2) <= '1';
+sw(3) <= '1';
 wait for C_W1;
 sw(0) <= 'U';
 sw(1) <= 'U';
@@ -353,6 +353,7 @@ sw(2) <= 'U';
 sw(3) <= 'U';
 
 -- insert stimulus here
+report "done" severity failure;
 wait;
 end process;
 

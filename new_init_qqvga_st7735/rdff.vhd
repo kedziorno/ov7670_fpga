@@ -31,21 +31,23 @@ use ieee.std_logic_1164.all;
 entity rdff1b is port (
     clk, reset: in std_logic;
     d:      in std_logic; 
-    q:      buffer std_logic; 
-    qb:     buffer std_logic); 
+    q:      out std_logic; 
+    qb:     out std_logic); 
 end rdff1b;
 
 architecture archrdff1b of rdff1b is
 begin
-p1: process (reset, clk) begin
+p1: process (reset, clk)
+	variable vq : std_logic;
+begin
     if reset = '1' then
-        q <= '0';
---				qb <= '1';
+        vq := '0';
     elsif (rising_edge(clk)) then
-        q <= d;
+        vq := d;
+				q <= vq;
+				qb <= not vq;
     end if;
    end process;
-   qb <= not q;
 end archrdff1b;
 ----------------------------------------
 library ieee;

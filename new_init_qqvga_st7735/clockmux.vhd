@@ -42,7 +42,7 @@ port (
 	i_reset : in std_logic; -- Asynch Resets
 	i_clk : in std_logic_vector(N-1 downto 0); -- Clock 1-N
 	i_sel : in std_logic_vector(N-1 downto 0); -- Clock Select Mux N
-	o_clk : buffer std_logic -- out
+	o_clk : out std_logic -- out
 );
 end clockmux;
 
@@ -51,8 +51,8 @@ architecture a1 of clockmux is
 component rdff1b is port (
 clk, reset: in std_logic;
 d: in std_logic; 
-q: buffer std_logic; 
-qb: buffer std_logic); 
+q: out std_logic; 
+qb: out std_logic); 
 end component rdff1b;
 for all : rdff1b use entity work.rdff1b(archrdff1b);
 
@@ -69,12 +69,14 @@ begin
 --vor <= '0' when i_reset = '1' else vor;
 --vand <= '1' when i_reset = '1' else vand;
 
+-- XXX ff chain 2
 --g0 : for i in 0 to N-1 generate
 --	u0 : rdff1b port map (clk => clockp(i), reset => i_reset, d => sel(i), q => t1(i), qb => open);
 --	u1 : rdff1b port map (clk => clockn(i), reset => i_reset, d => t1(i), q => t2(i), qb => t3(i));
 --	u2 : AND2 port map (I0 => t2(i), I1 => clockp(i), O => andout(i));
 --end generate g0;
 
+-- XXX ff chain 1
 g0 : for i in 0 to N-1 generate
 	u0 : rdff1b port map (clk => clockp(i), reset => i_reset, d => sel(i), q => t1(i), qb => t3(i));
 	u2 : AND2 port map (I0 => t1(i), I1 => clockp(i), O => andout(i));
