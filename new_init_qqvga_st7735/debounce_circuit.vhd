@@ -23,14 +23,22 @@ signal counter : unsigned(PB_BITS-1 downto 0) := (others => '0');
 --signal counter : unsigned(1 downto 0) := (others => '0');
 
 begin
-counting_proc : process (clk) begin
+counting_proc : process (clk)
+constant CV : integer := 256;
+variable v : integer range 0 to CV-1 := 0;
+begin
 	if rising_edge (clk) then
 		if input = '1' then
 			if counter = MAX then 
 			-- Counter will count 2^24 * 20ns
 			-- ~300ms
-				output <= '1';
+				if (v = CV-1) then
 				counter <= MIN;
+				v := 0;
+				else
+				output <= '1';
+				v := v + 1;
+				end if;
 			else
 			-- Bouncing with high logic below 300ms will not trigger the output
 			-- output, this case, pb that reset the camera
