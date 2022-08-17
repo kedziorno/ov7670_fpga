@@ -42,6 +42,8 @@ p1: process (reset, clk)
 begin
     if reset = '1' then
         vq := '0';
+				q <= '0';
+				qb <= '1';
     elsif (rising_edge(clk)) then
         vq := d;
 				q <= vq;

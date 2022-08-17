@@ -36,16 +36,16 @@ signal clockp,clockn,t1,t2,t3,andout,sel : std_logic_vector(4 downto 0);
 
 begin
 
-g0 : for i in 0 to 4 generate
-	u0 : rdff1b port map (clk => clockp(i), reset => areset, d => sel(i), q => t1(i), qb => open);
-	u1 : rdff1b port map (clk => clockn(i), reset => areset, d => t1(i), q => t2(i), qb => t3(i));
-	u2 : AND2 port map (I0 => t2(i), I1 => clockp(i), O => andout(i));
-end generate g0;
-
 --g0 : for i in 0 to 4 generate
---	u0 : rdff1b port map (clk => clockp(i), reset => areset, d => sel(i), q => t1(i), qb => t3(i));
---	u2 : AND2 port map (I0 => t1(i), I1 => clockp(i), O => andout(i));
+--	u0 : rdff1b port map (clk => clockp(i), reset => areset, d => sel(i), q => t1(i), qb => open);
+--	u1 : rdff1b port map (clk => clockn(i), reset => areset, d => t1(i), q => t2(i), qb => t3(i));
+--	u2 : AND2 port map (I0 => t2(i), I1 => clockp(i), O => andout(i));
 --end generate g0;
+
+g0 : for i in 0 to 4 generate
+	u0 : rdff1b port map (clk => clockp(i), reset => areset, d => sel(i), q => t1(i), qb => t3(i));
+	u2 : AND2 port map (I0 => t1(i), I1 => clockp(i), O => andout(i));
+end generate g0;
 
 --p4 : process (areset) is
 --begin
@@ -83,7 +83,7 @@ sel(4) <= t3(0) and t3(1) and t3(2) and t3(3) and sel0;
 p0 : process (areset,clk0) is
 begin
 if (areset = '1') then
-clockp(3 downto 0) <= (others => '1');
+clockp(3 downto 0) <= (others => '0');
 elsif (rising_edge(clk0)) then
 --if (rising_edge(clk0)) then
 clockp(0) <= clk1;
@@ -94,13 +94,21 @@ clockp(3) <= clk4;
 end if;
 end process p0;
 
+--p5 : process (areset) is
+--begin
+--if (areset = '1') then
+--clockp(4) <= '0';
+--clockn(4) <= '1';
+--else
 clockp(4) <= clk0;
 clockn(4) <= not clk0;
+--end if;
+--end process p5;
 
 p1 : process (areset,clk0) is
 begin
 if (areset = '1') then
-clockn(3 downto 0) <= (others => '0');
+clockn(3 downto 0) <= (others => '1');
 elsif (rising_edge(clk0)) then
 --if (rising_edge(clk0)) then
 clockn(0) <= not clk1;
