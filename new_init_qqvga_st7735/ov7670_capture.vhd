@@ -57,8 +57,8 @@ capture_process: process(pclk,reset)
 	 if (reset = '1') then
 	 address <= (others => '0');
 --	 row <= "00";
-	 row <= (others => '0');
-	 href_hold <= '0';
+--	 row <= (others => '0');
+--	 href_hold <= '0';
 	 d_latch <= (others => '0');
 	 we_reg <= '0';
 --	 href_last <= (others => '0');
@@ -72,21 +72,21 @@ capture_process: process(pclk,reset)
          end if;
 
          -- detect the rising edge on href - the start of the scan row
-         if href_hold = '0' and latched_href = '1' then
-            case row is
+--         if href_hold = '0' and latched_href = '1' then
+--            case row is
 --               when "00"   => row <= "01";
 --               when "01"   => row <= "10";
 --               when "10"   => row <= "11";
 --               when others => row <= "00";
-               when "0"   => row <= "1";
-               when "1"   => row <= "0";
-               when others => row <= "0";
-            end case;
+--               when "0"   => row <= "1";
+--               when "1"   => row <= "0";
+--               when others => row <= "0";
+--            end case;
 --						we_reg <= '1';
-						else
+--						else
 --						we_reg  <= '0';
-         end if;
-         href_hold <= latched_href;
+--         end if;
+--         href_hold <= latched_href;
          
          -- capturing the data from the camera, 12-bit RGB
          if latched_href = '1' then
@@ -104,9 +104,9 @@ capture_process: process(pclk,reset)
          if latched_vsync = '1' then 
             address      <= (others => '0');
 --            href_last    <= (others => '0');
-            row         <= (others => '0');
+--            row         <= (others => '0');
 --						we_reg <= '0';
-         else
+--         else
             -- If not, set the write enable whenever we need to capture a pixel
 --            if href_last(href_last'high) = '1' then
 --               if row = "10" then
@@ -118,6 +118,8 @@ capture_process: process(pclk,reset)
 --               href_last <= href_last(href_last'high-1 downto 0) & latched_href;
 --							 we_reg <= '0';
 --            end if;
+--address <= address;
+--row <= row;
          end if;
       end if;
 		end process capture_process;
