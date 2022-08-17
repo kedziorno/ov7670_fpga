@@ -294,7 +294,7 @@ end process;
 -- Stimulus process
 stim_proc : process
 	constant C_W1 : time := 1 ms;
-	constant C_W2 : time := 100 ms;
+	constant C_W2 : time := 10 ms;
 begin
 -- hold reset state for 100 ns.
 pb <= '1';
@@ -302,11 +302,11 @@ wait for 2500 ns;
 --wait for 500 ns;
 pb <= '0';
 wait for clkcam_period*10;
-sw(0) <= 'U';
-sw(1) <= 'U';
-sw(2) <= 'U';
-sw(3) <= 'U';
-wait for clkcam_period;
+sw(0) <= '0';
+sw(1) <= '0';
+sw(2) <= '0';
+sw(3) <= '0';
+wait for 14.8 ms;
 sw(0) <= '1';
 sw(1) <= '0';
 sw(2) <= '0';
