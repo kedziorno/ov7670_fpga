@@ -4,13 +4,16 @@ use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 entity address_generator is
-Generic (PIXELS : integer := 0);
+Generic (
+PIXELS : integer := 0;
+ADDRESS1 : integer := 0
+);
   Port ( 
     reset : in std_logic;
 		clk25 : in STD_LOGIC;
     enable : in STD_LOGIC;
     vsync : in STD_LOGIC;
-    address : out STD_LOGIC_VECTOR (18 downto 0)
+    address : out STD_LOGIC_VECTOR (ADDRESS1-1 downto 0)
   );  
 end address_generator;
 
