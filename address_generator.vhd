@@ -53,7 +53,7 @@ vmax2 := 0;
 			vmax1 := 0;
 --		else
 --			addr <= addr;
-			va := (others => '0');
+--			va := (others => '0');
 			address <= addr;
 		end if;
 		if (enable='0') then
@@ -73,7 +73,7 @@ vmax2 := 0;
 				va := std_logic_vector(to_unsigned(vmax1,address'left+1));
 --				vmax2 <= vmax2 + 1;
 --			end if;
-				address <= std_logic_vector(to_unsigned(to_integer(unsigned(addr))+to_integer(unsigned(va)),address'left+1));
+				address <= std_logic_vector(to_unsigned(to_integer(unsigned(addr))+to_integer(unsigned(va))-CMAX1,address'left+1));
 		end if;
 		if vsync = '0' then -- this V depend from VGA
 			addr <= (others => '0');
