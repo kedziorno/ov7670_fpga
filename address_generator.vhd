@@ -23,20 +23,20 @@ architecture Behavioral of address_generator is
 
   signal addr: STD_LOGIC_VECTOR(address'range) := (others => '0');
   signal tva: STD_LOGIC_VECTOR(address'range) := (others => '0');
+signal va : std_logic_vector(address'range);
   
 begin
 
 --  address <= addr; 
 
 process (clk25,reset)
-variable va : std_logic_vector(address'range);
 constant CMAX1 : integer := 160;
 constant CMAX2 : integer := 3;
 variable vmax1 : integer range 0 to CMAX1-1;
 variable vmax2 : integer range 0 to CMAX2-1;
-variable a,b,c,d : integer;
 begin
 if (reset = '1') then
+va <= (others => '0');
 addr <= (others => '0');
 tva <= (others => '0');
 vmax1 := 0;
@@ -48,8 +48,8 @@ vmax2 := 0;
 			else
 			addr <= std_logic_vector(to_unsigned(to_integer(unsigned(addr)) + 1,address'left+1));
 			end if;
-			report "va : "&integer'image(to_integer(unsigned(va))) severity warning;
-			va := std_logic_vector(to_unsigned(to_integer(unsigned(addr))-CMAX1,address'left+1));
+--			report "va : "&integer'image(to_integer(unsigned(va))) severity warning;
+			va <= std_logic_vector(to_unsigned(to_integer(unsigned(addr)),address'left+1));
 			vmax1 := 0;
 --		else
 --			addr <= addr;
@@ -70,7 +70,7 @@ vmax2 := 0;
 --					va := std_logic_vector(to_unsigned(to_integer(unsigned(va))+1,address'left+1));
 					vmax1 := vmax1 + 1;
 				end if;
-				va := std_logic_vector(to_unsigned(vmax1,address'left+1));
+				va <= std_logic_vector(to_unsigned(vmax1,address'left+1));
 --				vmax2 <= vmax2 + 1;
 --			end if;
 				address <= std_logic_vector(to_unsigned(to_integer(unsigned(addr))+to_integer(unsigned(va))-CMAX1,address'left+1));
@@ -79,6 +79,6 @@ vmax2 := 0;
 			addr <= (others => '0');
 		end if;
 	end if;
-	tva <= va;
+--	tva <= va;
 end process;    
 end Behavioral;

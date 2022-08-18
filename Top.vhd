@@ -310,7 +310,8 @@ debug(4) <= ov7670_data1(7);
 	inst_addrgen1 : address_generator port map(
 		reset => resend,
 		clk25 => cc4,
-		enable => activeRender1,
+--		enable => activeRender1,
+		enable => active1,
 		vsync => vga_vsync_sig,
 		address => rd_a1);
 --	inst_addrgen2 : address_generator port map(
@@ -591,7 +592,7 @@ ov7670_pwdn4 <= '0';
 --cc <= clkcambuf when sw = '1' else clk25;
 
 p0 : process (resend,clk25) is
-	constant CMAX : integer := 4;
+	constant CMAX : integer := 2;
 	variable vmax : integer range 0 to CMAX-1;
 begin
 	if (resend = '1') then
@@ -599,10 +600,12 @@ begin
 		vmax := 0;
 	elsif (rising_edge(clk25)) then
 		if (vmax = CMAX-1) then
-			cc4 <= '1';
+--			cc4 <= '1';
+			cc4 <= not cc4;
 			vmax := 0;
 		else
-			cc4 <= '0';
+--			cc4 <= '0';
+			cc4 <= cc4;
 			vmax := vmax + 1;
 		end if;
 	end if;
