@@ -56,6 +56,10 @@ end Top;
 
 architecture Structural of Top is
 
+constant ADDRESS : integer := 15;
+constant BITS : integer := 16;
+constant PIXELS : integer := 160*120;
+
 COMPONENT debounce_circuit
 Generic (PB_BITS : integer := G_PB_BITS);
 	Port ( clk : in STD_LOGIC;
@@ -64,13 +68,17 @@ Generic (PB_BITS : integer := G_PB_BITS);
 END COMPONENT;
 
 COMPONENT ov7670_capture
-Generic (PIXELS : integer := 307200);
+Generic (
+PIXELS : integer := PIXELS;
+ADDRESS1 : integer := ADDRESS;
+BITS : integer := BITS
+);
 	Port ( reset : in std_logic; pclk : in  STD_LOGIC;
           vsync : in  STD_LOGIC;
           href : in  STD_LOGIC;
           d : in  STD_LOGIC_VECTOR (7 downto 0);
-          addr : out  STD_LOGIC_VECTOR (18 downto 0);
-          dout : out  STD_LOGIC_VECTOR (0 downto 0);
+          addr : out  STD_LOGIC_VECTOR (ADDRESS1-1 downto 0);
+          dout : out  STD_LOGIC_VECTOR (BITS-1 downto 0);
           we : out  STD_LOGIC_VECTOR (0 downto 0));
 END COMPONENT;
 
@@ -97,18 +105,19 @@ end component;
 COMPONENT frame_buffer
 	Port ( clkA : in STD_LOGIC;
 			 weA	: in STD_LOGIC_VECTOR(0 downto 0);
-			 addrA: in STD_LOGIC_VECTOR(18 downto 0);
-			 dinA	: in STD_LOGIC_VECTOR(0 downto 0);
+			 addrA: in STD_LOGIC_VECTOR(ADDRESS-1 downto 0);
+			 dinA	: in STD_LOGIC_VECTOR(BITS-1 downto 0);
 			 clkB : in STD_LOGIC;
-			 addrB: in STD_LOGIC_VECTOR(18 downto 0);
-			 doutB: out STD_LOGIC_VECTOR(0 downto 0));
+			 addrB: in STD_LOGIC_VECTOR(ADDRESS-1 downto 0);
+			 doutB: out STD_LOGIC_VECTOR(BITS-1 downto 0));
 END COMPONENT;
 
 COMPONENT vga_imagegenerator
-	Port ( reset : in std_logic; clk : std_logic; Data_in1 : in  STD_LOGIC_VECTOR (0 downto 0);
-						Data_in2 : in  STD_LOGIC_VECTOR (0 downto 0);
-						Data_in3 : in  STD_LOGIC_VECTOR (0 downto 0);
-						Data_in4 : in  STD_LOGIC_VECTOR (0 downto 0);
+Generic (BITS : integer := BITS);
+	Port ( reset : in std_logic; clk : std_logic; Data_in1 : in  STD_LOGIC_VECTOR (BITS-1 downto 0);
+						Data_in2 : in  STD_LOGIC_VECTOR (BITS-1 downto 0);
+						Data_in3 : in  STD_LOGIC_VECTOR (BITS-1 downto 0);
+						Data_in4 : in  STD_LOGIC_VECTOR (BITS-1 downto 0);
 						active_area1 : in  STD_LOGIC;
 						active_area2 : in  STD_LOGIC;
 						active_area3 : in  STD_LOGIC;
@@ -117,11 +126,14 @@ COMPONENT vga_imagegenerator
 END COMPONENT;
 
 COMPONENT address_generator
-Generic (PIXELS : integer := 307200);
+Generic (
+PIXELS : integer  := PIXELS;
+ADDRESS1 : integer := ADDRESS
+);
 	Port ( reset : in std_logic; clk25 : in STD_LOGIC;
 			 enable : in STD_LOGIC;
 			 vsync : in STD_LOGIC;
-			 address : out STD_LOGIC_VECTOR (18 downto 0));
+			 address : out STD_LOGIC_VECTOR (ADDRESS1-1 downto 0));
 END COMPONENT;
 
 COMPONENT VGA_timing_synch
@@ -139,10 +151,10 @@ signal resend : STD_LOGIC;
 
 -- RAM
 signal wren1,wren2,wren3,wren4 : STD_LOGIC_VECTOR(0 downto 0);
-signal wr_d1,wr_d2,wr_d3,wr_d4 : STD_LOGIC_VECTOR(0 downto 0);
-signal wr_a1,wr_a2,wr_a3,wr_a4 : STD_LOGIC_VECTOR(18 downto 0);
-signal rd_d1,rd_d2,rd_d3,rd_d4 : STD_LOGIC_VECTOR(0 downto 0);
-signal rd_a1,rd_a2,rd_a3,rd_a4 : STD_LOGIC_VECTOR(18 downto 0);
+signal wr_d1,wr_d2,wr_d3,wr_d4 : STD_LOGIC_VECTOR(BITS-1 downto 0);
+signal wr_a1,wr_a2,wr_a3,wr_a4 : STD_LOGIC_VECTOR(ADDRESS-1 downto 0);
+signal rd_d1,rd_d2,rd_d3,rd_d4 : STD_LOGIC_VECTOR(BITS-1 downto 0);
+signal rd_a1,rd_a2,rd_a3,rd_a4 : STD_LOGIC_VECTOR(ADDRESS-1 downto 0);
 
 --VGA
 signal active1,active2,active3,active4 : STD_LOGIC;
@@ -174,6 +186,8 @@ signal resetdcm,resetdcm1 : std_logic;
 --attribute IOB of ov7670_href1,ov7670_href2,ov7670_href3,ov7670_href4 : signal is "TRUE";
 --attribute IOB of ov7670_vsync1,ov7670_vsync2,ov7670_vsync3,ov7670_vsync4: signal is "TRUE";
 
+signal cc4 : std_logic;
+
 begin
 
 debug(0) <= ov7670_pclk1buf1;
@@ -197,8 +211,7 @@ debug(4) <= ov7670_data1(7);
 	anode <= "1111";
 
 	led1 <= ov7670_data1(0) or ov7670_data1(1) or ov7670_data1(2) or ov7670_data1(3) or ov7670_data1(4) or ov7670_data1(5) or ov7670_data1(6) or ov7670_data1(7);
-	led2 <= wr_a1(17) or wr_a1(16) or wr_a1(15) or wr_a1(14) or wr_a1(13) or wr_a1(12) or wr_a1(11) or wr_a1(10) or wr_a1(9) or wr_a1(8) or 
-	wr_a1(7) or wr_a1(6) or wr_a1(5) or wr_a1(4) or wr_a1(3) or wr_a1(2) or wr_a1(1) or wr_a1(0) ;
+	led2 <= wr_a1(14) or wr_a1(13) or wr_a1(12) or wr_a1(11) or wr_a1(10) or wr_a1(9) or wr_a1(8) or wr_a1(7) or wr_a1(6) or wr_a1(5) or wr_a1(4) or wr_a1(3) or wr_a1(2) or wr_a1(1) or wr_a1(0);
 	led3 <= wr_d1(0);
 	led4 <= wren1(0);
 
@@ -294,7 +307,7 @@ debug(4) <= ov7670_data1(7);
 	
 	inst_addrgen1 : address_generator port map(
 		reset => resend,
-		clk25 => clk25,
+		clk25 => cc4,
 		enable => active1,
 		vsync => vga_vsync_sig,
 		address => rd_a1);
@@ -573,6 +586,24 @@ ov7670_pwdn4 <= '0';
 --ov7670_pwdn4 <= '1' when resetdcm = '1' else '0';
 
 --cc <= clkcambuf when sw = '1' else clk25;
+
+p0 : process (resend,clk25) is
+	constant CMAX : integer := 4;
+	variable vmax : integer range 0 to CMAX-1;
+begin
+	if (resend = '1') then
+		cc4 <= '0';
+		vmax := 0;
+	elsif (rising_edge(clk25)) then
+		if (vmax = CMAX-1) then
+			cc4 <= '1';
+			vmax := 0;
+		else
+			cc4 <= '0';
+			vmax := vmax + 1;
+		end if;
+	end if;
+end process p0;
 
 DCM_vga : DCM
 generic map (

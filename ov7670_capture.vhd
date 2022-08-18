@@ -11,13 +11,17 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 entity ov7670_capture is
-Generic (PIXELS : integer := 0);
+Generic (
+PIXELS : integer := 0;
+ADDRESS1 : integer := 0;
+BITS : integer := 0
+);
     Port ( reset : in std_logic; pclk : in  STD_LOGIC;
            vsync : in  STD_LOGIC;
            href : in  STD_LOGIC;
            d : in  STD_LOGIC_VECTOR (7 downto 0);
-           addr : out  STD_LOGIC_VECTOR (18 downto 0);
-           dout : out  STD_LOGIC_VECTOR (0 downto 0);
+           addr : out  STD_LOGIC_VECTOR (ADDRESS1-1 downto 0);
+           dout : out  STD_LOGIC_VECTOR (BITS-1 downto 0);
            we : out  STD_LOGIC_VECTOR (0 downto 0));
 end ov7670_capture;
 
@@ -41,12 +45,12 @@ architecture Behavioral of ov7670_capture is
 begin
    addr <= address;
    we(0) <= we_reg;
---	 dout<= d_latch(11 downto 8) & d_latch(7 downto 4) & d_latch(3 downto 0);
+	 dout<= d_latch;
 --   dout<= d_latch(11) & d_latch(7) & d_latch(3);
 --   dout<= d_latch(10) & d_latch(6) & d_latch(2);
 --   dout<= d_latch(9) & d_latch(5) & d_latch(1);
 --   dout<= d_latch(8) & d_latch(4) & d_latch(0); 
-   dout(0)<= d_latch(8); 
+--   dout(0)<= d_latch(8); 
    
 capture_process: process(pclk,reset)
    begin
