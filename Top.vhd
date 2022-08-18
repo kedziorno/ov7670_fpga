@@ -46,10 +46,11 @@ G_FE_WAIT_BITS : integer := 20 -- sccb wait for cameras
 				--VGA
 				vga_hsync : out STD_LOGIC; --T4
 				vga_vsync : out STD_LOGIC; --U3
-				vga_rgb	: out STD_LOGIC_VECTOR(7 downto 0)
+				vga_rgb	: out STD_LOGIC_VECTOR(7 downto 0);
 				-- R : R9(MSB), T8, R8
 				-- G : N8, P8, P6
-				-- Bc: U5, U4(LSB) 
+				-- Bc: U5, U4(LSB)
+				debug : out std_logic_vector(4 downto 0)
 			 );
 end Top;
 
@@ -174,6 +175,12 @@ signal resetdcm,resetdcm1 : std_logic;
 --attribute IOB of ov7670_vsync1,ov7670_vsync2,ov7670_vsync3,ov7670_vsync4: signal is "TRUE";
 
 begin
+
+debug(0) <= ov7670_pclk1buf1;
+debug(1) <= ov7670_vsync1;
+debug(2) <= ov7670_href1;
+debug(3) <= ov7670_data1(0);
+debug(4) <= ov7670_data1(7);
 
 --	vga_rgb <= (others => '0');
 --	vga_hsync <= '0';
