@@ -14,7 +14,8 @@ entity VGA_timing_synch is
            activeArea1 : out  STD_LOGIC;
            activeArea2 : out  STD_LOGIC;
            activeArea3 : out  STD_LOGIC;
-           activeArea4 : out  STD_LOGIC);
+           activeArea4 : out  STD_LOGIC;
+					 activeRender1 : out  STD_LOGIC);
 end VGA_timing_synch;
 
 architecture Behavioral of VGA_timing_synch is
@@ -300,7 +301,8 @@ end process vsync_gen;
 Hsync <= h;
 Vsync <= v;
 --activeArea1 <= '1' when (hcnt <= HD) and (vcnt <= VD) else '0';
-activeArea1 <= '1' when (hcnt <= HD) and ((vcnt <= VD) and (vcnt mod 4 = 0)) else '0';
+activeArea1 <= '1' when (hcnt <= HD) and (vcnt <= VD) else '0';
+activeRender1 <= '1' when (hcnt <= HD) and (vcnt mod 4 = 0) else '0';
 --activeArea1 <= '1' when (hcnt < 160) and (vcnt < 120) else '0';
 activeArea2 <= '0';
 activeArea3 <= '0';
