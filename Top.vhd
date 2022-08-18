@@ -137,13 +137,14 @@ ADDRESS1 : integer := ADDRESS
 END COMPONENT;
 
 COMPONENT VGA_timing_synch
-	Port ( reset : in std_logic; clk25 : in  STD_LOGIC;
+    Port ( reset : in std_logic; clk25 : in  STD_LOGIC;
            Hsync : out  STD_LOGIC;
            Vsync : out  STD_LOGIC;
            activeArea1 : out  STD_LOGIC;
            activeArea2 : out  STD_LOGIC;
            activeArea3 : out  STD_LOGIC;
-           activeArea4 : out  STD_LOGIC);
+           activeArea4 : out  STD_LOGIC;
+					 activeRender1 : out  STD_LOGIC);
 END COMPONENT;
 
 signal clk25 : STD_LOGIC;
@@ -187,6 +188,7 @@ signal resetdcm,resetdcm1 : std_logic;
 --attribute IOB of ov7670_vsync1,ov7670_vsync2,ov7670_vsync3,ov7670_vsync4: signal is "TRUE";
 
 signal cc4 : std_logic;
+signal activeRender1 : std_logic;
 
 begin
 
@@ -308,7 +310,7 @@ debug(4) <= ov7670_data1(7);
 	inst_addrgen1 : address_generator port map(
 		reset => resend,
 		clk25 => cc4,
-		enable => active1,
+		enable => activeRender1,
 		vsync => vga_vsync_sig,
 		address => rd_a1);
 --	inst_addrgen2 : address_generator port map(
@@ -351,7 +353,8 @@ debug(4) <= ov7670_data1(7);
 		activeArea1 => active1,
 		activeArea2 => active2,
 		activeArea3 => active3,
-		activeArea4 => active4);
+		activeArea4 => active4,
+		activeRender1 => activeRender1);
 
 vga_vsync <= vga_vsync_sig;
 
