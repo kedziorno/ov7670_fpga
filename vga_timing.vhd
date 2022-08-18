@@ -299,7 +299,8 @@ end process vsync_gen;
 --
 Hsync <= h;
 Vsync <= v;
-activeArea1 <= '1' when (hcnt <= HD) and (vcnt <= VD) else '0';
+--activeArea1 <= '1' when (hcnt <= HD) and (vcnt <= VD) else '0';
+activeArea1 <= '1' when (hcnt <= HD) and ((vcnt <= VD) and (vcnt mod 4 = 0)) else '0';
 --activeArea1 <= '1' when (hcnt < 160) and (vcnt < 120) else '0';
 activeArea2 <= '0';
 activeArea3 <= '0';
