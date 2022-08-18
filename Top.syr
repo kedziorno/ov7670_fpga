@@ -4,15 +4,15 @@ Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
 Parameter TMPDIR set to xst/projnav.tmp
 
 
-Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.12 secs
+Total REAL time to Xst completion: 1.00 secs
+Total CPU time to Xst completion: 0.07 secs
  
 --> 
 Parameter xsthdpdir set to xst
 
 
-Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.12 secs
+Total REAL time to Xst completion: 1.00 secs
+Total CPU time to Xst completion: 0.07 secs
  
 --> 
 Reading design: Top.prj
@@ -117,12 +117,12 @@ Architecture behavioral of Entity ov7670_capture is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/ipcore_dir/frame_buffer.vhd" in Library work.
 Architecture frame_buffer_a of Entity frame_buffer is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/address_generator.vhd" in Library work.
-Entity <address_generator> compiled.
-Entity <address_generator> (Architecture <behavioral>) compiled.
+Architecture behavioral of Entity address_generator is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/vga_imagegenerator.vhd" in Library work.
 Architecture behavioral of Entity vga_imagegenerator is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/vga_timing.vhd" in Library work.
-Architecture behavioral of Entity vga_timing_synch is up to date.
+Entity <vga_timing_synch> compiled.
+Entity <vga_timing_synch> (Architecture <behavioral>) compiled.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/ov7670_registers.vhd" in Library work.
 Architecture behavioral of Entity ov7670_registers is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/ov7670_SCCB.vhd" in Library work.
@@ -303,11 +303,12 @@ WARNING:Xst:646 - Signal <tva> is assigned but never used. This unconnected sign
     Found 15-bit register for signal <addr>.
     Found 15-bit adder for signal <addr$addsub0000> created at line 49.
     Found 15-bit adder for signal <address$addsub0000> created at line 76.
+    Found 15-bit subtractor for signal <address$addsub0001> created at line 76.
     Found 8-bit register for signal <vmax1>.
     Found 8-bit adder for signal <vmax1$addsub0000> created at line 71.
     Summary:
 	inferred  38 D-type flip-flop(s).
-	inferred   3 Adder/Subtractor(s).
+	inferred   4 Adder/Subtractor(s).
 Unit <address_generator> synthesized.
 
 
@@ -477,9 +478,10 @@ HDL Synthesis Report
 Macro Statistics
 # ROMs                                                 : 1
  47x16-bit ROM                                         : 1
-# Adders/Subtractors                                   : 6
+# Adders/Subtractors                                   : 7
  13-bit adder                                          : 1
  15-bit adder                                          : 3
+ 15-bit subtractor                                     : 1
  20-bit adder                                          : 1
  8-bit adder                                           : 1
 # Counters                                             : 7
@@ -539,9 +541,10 @@ Macro Statistics
 # FSMs                                                 : 1
 # ROMs                                                 : 1
  47x16-bit ROM                                         : 1
-# Adders/Subtractors                                   : 6
+# Adders/Subtractors                                   : 7
  13-bit adder                                          : 1
  15-bit adder                                          : 3
+ 15-bit subtractor                                     : 1
  20-bit adder                                          : 1
  8-bit adder                                           : 1
 # Counters                                             : 7
@@ -622,25 +625,23 @@ Design Statistics
 # IOs                              : 91
 
 Cell Usage :
-# BELS                             : 1115
+# BELS                             : 1145
 #      GND                         : 2
-#      INV                         : 14
-#      LUT1                        : 133
-#      LUT2                        : 86
-#      LUT2_L                      : 1
-#      LUT3                        : 149
-#      LUT3_D                      : 2
-#      LUT3_L                      : 1
-#      LUT4                        : 177
-#      LUT4_D                      : 5
-#      LUT4_L                      : 7
-#      MUXCY                       : 156
-#      MUXF5                       : 119
+#      INV                         : 22
+#      LUT1                        : 135
+#      LUT2                        : 83
+#      LUT3                        : 153
+#      LUT3_D                      : 1
+#      LUT4                        : 182
+#      LUT4_D                      : 4
+#      LUT4_L                      : 5
+#      MUXCY                       : 165
+#      MUXF5                       : 120
 #      MUXF6                       : 63
 #      MUXF7                       : 32
 #      MUXF8                       : 16
 #      VCC                         : 2
-#      XORCY                       : 150
+#      XORCY                       : 160
 # FlipFlops/Latches                : 291
 #      FDC                         : 97
 #      FDC_1                       : 10
@@ -668,9 +669,9 @@ Device utilization summary:
 
 Selected Device : 3s1200efg320-4 
 
- Number of Slices:                      407  out of   8672     4%  
+ Number of Slices:                      413  out of   8672     4%  
  Number of Slice Flip Flops:            291  out of  17344     1%  
- Number of 4 input LUTs:                575  out of  17344     3%  
+ Number of 4 input LUTs:                585  out of  17344     3%  
  Number of IOs:                          91
  Number of bonded IOBs:                  56  out of    250    22%  
  Number of BRAMs:                        19  out of     28    67%  
@@ -716,7 +717,7 @@ Timing Summary:
 ---------------
 Speed Grade: -4
 
-   Minimum period: 7.960ns (Maximum Frequency: 125.628MHz)
+   Minimum period: 9.797ns (Maximum Frequency: 102.072MHz)
    Minimum input arrival time before clock: 4.707ns
    Maximum output required time after clock: 10.782ns
    Maximum combinational path delay: 7.535ns
@@ -749,10 +750,10 @@ Delay:               3.980ns (Levels of Logic = 1)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'clkcam'
-  Clock period: 7.389ns (frequency: 135.336MHz)
+  Clock period: 7.560ns (frequency: 132.275MHz)
   Total number of paths / destination ports: 6423 / 338
 -------------------------------------------------------------------------
-Delay:               7.389ns (Levels of Logic = 5)
+Delay:               7.560ns (Levels of Logic = 5)
   Source:            counter_9 (FF)
   Destination:       counter_0 (FF)
   Source Clock:      clkcam rising
@@ -764,47 +765,51 @@ Delay:               7.389ns (Levels of Logic = 5)
     ----------------------------------------  ------------
      FDC:C->Q              3   0.591   0.706  counter_9 (counter_9)
      LUT4:I0->O            1   0.704   0.424  state_cmp_eq000117 (state_cmp_eq000117)
-     LUT4:I3->O            1   0.704   0.424  state_cmp_eq000127_SW0 (N50)
-     LUT4_D:I3->O          2   0.704   0.451  state_cmp_eq000127 (state_cmp_eq0001)
-     LUT4_D:I3->O         12   0.704   0.965  counter_mux0000<0>21 (N3)
+     LUT4:I3->O            1   0.704   0.424  state_cmp_eq000127_SW0 (N52)
+     LUT4_D:I3->O          2   0.704   0.622  state_cmp_eq000127 (state_cmp_eq0001)
+     LUT4_D:I0->O         12   0.704   0.965  counter_mux0000<0>21 (N3)
      LUT4:I3->O            1   0.704   0.000  counter_mux0000<8>1 (counter_mux0000<8>)
      FDC:D                     0.308          counter_4
     ----------------------------------------
-    Total                      7.389ns (4.419ns logic, 2.970ns route)
-                                       (59.8% logic, 40.2% route)
+    Total                      7.560ns (4.419ns logic, 3.141ns route)
+                                       (58.5% logic, 41.5% route)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'cc41'
-  Clock period: 7.672ns (frequency: 130.344MHz)
-  Total number of paths / destination ports: 1052 / 38
+  Clock period: 9.797ns (frequency: 102.072MHz)
+  Total number of paths / destination ports: 3570 / 38
 -------------------------------------------------------------------------
-Delay:               7.672ns (Levels of Logic = 12)
-  Source:            inst_addrgen1/vmax1_3 (FF)
+Delay:               9.797ns (Levels of Logic = 16)
+  Source:            inst_addrgen1/vmax1_0 (FF)
   Destination:       inst_addrgen1/address_14 (FF)
   Source Clock:      cc41 rising
   Destination Clock: cc41 rising
 
-  Data Path: inst_addrgen1/vmax1_3 to inst_addrgen1/address_14
+  Data Path: inst_addrgen1/vmax1_0 to inst_addrgen1/address_14
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDC:C->Q              9   0.591   0.899  inst_addrgen1/vmax1_3 (inst_addrgen1/vmax1_3)
-     LUT2:I1->O            1   0.704   0.455  inst_addrgen1/vmax1_mux0001<7>174_SW0 (N26)
-     LUT4:I2->O            2   0.704   0.526  inst_addrgen1/vmax1_mux0001<7>11111 (inst_addrgen1/vmax1_mux0001<7>)
-     LUT2:I1->O            1   0.704   0.000  inst_addrgen1/Madd_address_addsub0000_lut<7> (inst_addrgen1/Madd_address_addsub0000_lut<7>)
-     MUXCY:S->O            1   0.464   0.000  inst_addrgen1/Madd_address_addsub0000_cy<7> (inst_addrgen1/Madd_address_addsub0000_cy<7>)
-     MUXCY:CI->O           1   0.059   0.000  inst_addrgen1/Madd_address_addsub0000_cy<8> (inst_addrgen1/Madd_address_addsub0000_cy<8>)
-     MUXCY:CI->O           1   0.059   0.000  inst_addrgen1/Madd_address_addsub0000_cy<9> (inst_addrgen1/Madd_address_addsub0000_cy<9>)
-     MUXCY:CI->O           1   0.059   0.000  inst_addrgen1/Madd_address_addsub0000_cy<10> (inst_addrgen1/Madd_address_addsub0000_cy<10>)
-     MUXCY:CI->O           1   0.059   0.000  inst_addrgen1/Madd_address_addsub0000_cy<11> (inst_addrgen1/Madd_address_addsub0000_cy<11>)
-     MUXCY:CI->O           1   0.059   0.000  inst_addrgen1/Madd_address_addsub0000_cy<12> (inst_addrgen1/Madd_address_addsub0000_cy<12>)
-     MUXCY:CI->O           0   0.059   0.000  inst_addrgen1/Madd_address_addsub0000_cy<13> (inst_addrgen1/Madd_address_addsub0000_cy<13>)
-     XORCY:CI->O           1   0.804   0.455  inst_addrgen1/Madd_address_addsub0000_xor<14> (inst_addrgen1/address_addsub0000<14>)
+     FDC:C->Q              9   0.591   0.824  inst_addrgen1/vmax1_0 (inst_addrgen1/vmax1_0)
+     LUT4_L:I3->LO         1   0.704   0.104  inst_addrgen1/vmax1_mux0001<5>156_SW1 (N36)
+     LUT4:I3->O            2   0.704   0.451  inst_addrgen1/vmax1_mux0001<5>156 (inst_addrgen1/vmax1_mux0001<5>156)
+     LUT4:I3->O            1   0.704   0.000  inst_addrgen1/Madd_address_addsub0000_lut<5> (inst_addrgen1/Madd_address_addsub0000_lut<5>)
+     MUXCY:S->O            1   0.464   0.000  inst_addrgen1/Madd_address_addsub0000_cy<5> (inst_addrgen1/Madd_address_addsub0000_cy<5>)
+     MUXCY:CI->O           1   0.059   0.000  inst_addrgen1/Madd_address_addsub0000_cy<6> (inst_addrgen1/Madd_address_addsub0000_cy<6>)
+     XORCY:CI->O           1   0.804   0.595  inst_addrgen1/Madd_address_addsub0000_xor<7> (inst_addrgen1/address_addsub0000<7>)
+     LUT1:I0->O            1   0.704   0.000  inst_addrgen1/Msub_address_addsub0001_cy<7>_rt (inst_addrgen1/Msub_address_addsub0001_cy<7>_rt)
+     MUXCY:S->O            1   0.464   0.000  inst_addrgen1/Msub_address_addsub0001_cy<7> (inst_addrgen1/Msub_address_addsub0001_cy<7>)
+     MUXCY:CI->O           1   0.059   0.000  inst_addrgen1/Msub_address_addsub0001_cy<8> (inst_addrgen1/Msub_address_addsub0001_cy<8>)
+     MUXCY:CI->O           1   0.059   0.000  inst_addrgen1/Msub_address_addsub0001_cy<9> (inst_addrgen1/Msub_address_addsub0001_cy<9>)
+     MUXCY:CI->O           1   0.059   0.000  inst_addrgen1/Msub_address_addsub0001_cy<10> (inst_addrgen1/Msub_address_addsub0001_cy<10>)
+     MUXCY:CI->O           1   0.059   0.000  inst_addrgen1/Msub_address_addsub0001_cy<11> (inst_addrgen1/Msub_address_addsub0001_cy<11>)
+     MUXCY:CI->O           1   0.059   0.000  inst_addrgen1/Msub_address_addsub0001_cy<12> (inst_addrgen1/Msub_address_addsub0001_cy<12>)
+     MUXCY:CI->O           0   0.059   0.000  inst_addrgen1/Msub_address_addsub0001_cy<13> (inst_addrgen1/Msub_address_addsub0001_cy<13>)
+     XORCY:CI->O           1   0.804   0.455  inst_addrgen1/Msub_address_addsub0001_xor<14> (inst_addrgen1/address_addsub0001<14>)
      LUT3:I2->O            1   0.704   0.000  inst_addrgen1/address_mux0001<14>1 (inst_addrgen1/address_mux0001<14>)
      FDE:D                     0.308          inst_addrgen1/address_14
     ----------------------------------------
-    Total                      7.672ns (5.337ns logic, 2.335ns route)
-                                       (69.6% logic, 30.4% route)
+    Total                      9.797ns (7.368ns logic, 2.429ns route)
+                                       (75.2% logic, 24.8% route)
 
 =========================================================================
 Timing constraint: Default OFFSET IN BEFORE for Clock 'clkcam'
@@ -915,13 +920,13 @@ Delay:               7.535ns (Levels of Logic = 4)
 =========================================================================
 
 
-Total REAL time to Xst completion: 15.00 secs
-Total CPU time to Xst completion: 14.74 secs
+Total REAL time to Xst completion: 16.00 secs
+Total CPU time to Xst completion: 13.97 secs
  
 --> 
 
 
-Total memory usage is 536216 kilobytes
+Total memory usage is 536448 kilobytes
 
 Number of errors   :    0 (   0 filtered)
 Number of warnings :   67 (   0 filtered)
