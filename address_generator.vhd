@@ -78,13 +78,14 @@ if (enable='0') then
 --vmax2 <= 0;
 --vmax1 := 0;
 --tva := (others => '0');
-
+--vmax1 := 0;
 				if (vmax1 >= 0 and vmax1 < CMAX1*1) then
+				tva := (others => '0');
 --					va := std_logic_vector(to_unsigned(to_integer(unsigned(va))+1,address'left+1));
 --					vmax1 <= vmax1 + 1;
-vmax1 := vmax1 + 1;				
-				ta0 := std_logic_vector(to_unsigned(to_integer(unsigned(tva))+to_integer(unsigned(addr))-CMAX1,address'left+1));
-				tva := std_logic_vector(to_unsigned(vmax1,address'left+1));
+--vmax1 := vmax1 + 1;				
+--				ta0 := std_logic_vector(to_unsigned(to_integer(unsigned(tva))+to_integer(unsigned(addr))-CMAX1,address'left+1));
+--				tva := std_logic_vector(to_unsigned(vmax1,address'left+1));
 				end if;
 				if (vmax1 >= CMAX1*1 and vmax1 < CMAX1*2) then
 ----					tva <= std_logic_vector(to_unsigned(to_integer(unsigned(addr))-CMAX1+1,address'left+1));
@@ -93,6 +94,10 @@ vmax1 := vmax1 + 1;
 --vmax2 <= 0;
 --vmax1 := 0;
 tva := (others => '0');
+--vmax1 := vmax1 + 1;
+--				ta0 := std_logic_vector(to_unsigned(to_integer(unsigned(tva))+to_integer(unsigned(addr))-2*CMAX1,address'left+1));
+--				tva := std_logic_vector(to_unsigned(vmax1,address'left+1));
+
 --				if (vmax1 <= CMAX1*2-1) then
 --					va := std_logic_vector(to_unsigned(to_integer(unsigned(va))+1,address'left+1));
 --					vmax1 <= vmax1 + 1;
@@ -102,13 +107,18 @@ tva := (others => '0');
 --				vmax2 <= vmax2 + 1;
 					
 				end if;
-				if (vmax1 >= CMAX1*2 and vmax1 < CMAX1*3-1) then
+				if (vmax1 >= CMAX1*2 and vmax1 < CMAX1*3) then
+				tva := (others => '0');
+--				vmax1 := vmax1 + 1;
+--				ta0 := std_logic_vector(to_unsigned(to_integer(unsigned(tva))+to_integer(unsigned(addr))-3*CMAX1,address'left+1));
+--				tva := std_logic_vector(to_unsigned(vmax1,address'left+1));
+
 ----					tva <= std_logic_vector(to_unsigned(to_integer(unsigned(addr))-CMAX1+1,address'left+1));
 ----					va := (others => '0');
 --ta0 := (others => '0');
 --vmax2 <= 0;
 --vmax1 := 0;
-tva := addr;
+--tva := addr;
 				end if;
 va <= tva;
 address <= ta0;
