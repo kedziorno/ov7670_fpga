@@ -133,6 +133,7 @@ ADDRESS1 : integer := ADDRESS
 	Port ( reset : in std_logic; clk25 : in STD_LOGIC;
 			 enable : in STD_LOGIC;
 			 vsync : in STD_LOGIC;
+				activeh : in STD_LOGIC;
 			 address : out STD_LOGIC_VECTOR (ADDRESS1-1 downto 0));
 END COMPONENT;
 
@@ -144,6 +145,7 @@ COMPONENT VGA_timing_synch
            activeArea2 : out  STD_LOGIC;
            activeArea3 : out  STD_LOGIC;
            activeArea4 : out  STD_LOGIC;
+					 activehaaddrgen : out STD_LOGIC;
 					 activeRender1 : out  STD_LOGIC);
 END COMPONENT;
 
@@ -189,6 +191,7 @@ signal resetdcm,resetdcm1 : std_logic;
 
 signal cc4 : std_logic;
 signal activeRender1 : std_logic;
+signal activehaaddrgen : std_logic;
 
 begin
 
@@ -279,6 +282,7 @@ debug(4) <= ov7670_data1(7);
 		clkA => ov7670_pclk1buf1,
 		addrA => wr_a1,
 		dinA => wr_d1,
+--		clkB => clk25,
 		clkB => cc4,
 		addrB => rd_a1,
 		doutB => rd_d1);
@@ -309,11 +313,14 @@ debug(4) <= ov7670_data1(7);
 	
 	inst_addrgen1 : address_generator port map(
 		reset => resend,
+--		clk25 => clk25,
 		clk25 => cc4,
 		enable => activeRender1, -- slide
 --		enable => active1, -- dont slide
 		vsync => vga_vsync_sig,
-		address => rd_a1);
+--		vsync => not ov7670_vsync1,
+		address => rd_a1,
+		activeh => activehaaddrgen);
 --	inst_addrgen2 : address_generator port map(
 --		reset => resend,
 --		clk25 => clk25,
@@ -355,6 +362,7 @@ debug(4) <= ov7670_data1(7);
 		activeArea2 => active2,
 		activeArea3 => active3,
 		activeArea4 => active4,
+		activehaaddrgen => activehaaddrgen,
 		activeRender1 => activeRender1);
 
 vga_vsync <= vga_vsync_sig;
