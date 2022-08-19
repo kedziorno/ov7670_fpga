@@ -544,6 +544,7 @@ begin
 	elsif(rising_edge(clk25))then
 --		if(hPos <= HD and vPos <= VD)then
 		if(hPos >= 145 and hPos < 785 and vPos < VD and vPos mod 4 = 0)then
+--		if(hPos < HD and vPos < VD and vPos mod 4 = 0)then
 			videoOn <= '1';
 		else
 			videoOn <= '0';
