@@ -310,8 +310,8 @@ debug(4) <= ov7670_data1(7);
 	inst_addrgen1 : address_generator port map(
 		reset => resend,
 		clk25 => cc4,
-		enable => activeRender1,
---		enable => active1,
+		enable => activeRender1, -- slide
+--		enable => active1, -- dont slide
 		vsync => vga_vsync_sig,
 		address => rd_a1);
 --	inst_addrgen2 : address_generator port map(
