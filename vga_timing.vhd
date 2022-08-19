@@ -15,6 +15,7 @@ entity VGA_timing_synch is
            activeArea2 : out  STD_LOGIC;
            activeArea3 : out  STD_LOGIC;
            activeArea4 : out  STD_LOGIC;
+					 activehaaddrgen : out STD_LOGIC;
 					 activeRender1 : out  STD_LOGIC);
 end VGA_timing_synch;
 

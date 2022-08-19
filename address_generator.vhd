@@ -133,10 +133,10 @@
 --end Behavioral;
 
 
-
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.numeric_std.ALL;
+--use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 entity address_generator is
@@ -149,6 +149,7 @@ ADDRESS1 : integer := 0
 		clk25 : in STD_LOGIC;
     enable : in STD_LOGIC;
     vsync : in STD_LOGIC;
+		activeh : in STD_LOGIC;
     address : out STD_LOGIC_VECTOR (ADDRESS1-1 downto 0)
   );  
 end address_generator;
@@ -162,23 +163,185 @@ begin
 
   address <= addr; 
 
-process (clk25,reset) begin
+process (clk25,reset)
+variable va : std_logic_vector(addr'range);
+type states is (idle,a0,a,a1,b,b1,c,c1);
+variable state : states;
+constant CCOUNT1 : integer := 160;
+constant CCOUNT2 : integer := 40;
+variable count1 : integer range 0 to CCOUNT1-1;
+variable count2 : integer range 0 to CCOUNT2-1;
+begin
 if (reset = '1') then
-addr <= (others => '0');
-	elsif rising_edge (clk25) then
-		if (enable='1') then
-			if (addr = PIXELS-1) then
+	va := (others => '0');
+	state := idle;
+	count1 := 0;
+	addr <= (others => '0');
+elsif rising_edge (clk25) then
+	if (enable='1') then
+		if (addr = PIXELS-1) then
 			addr <= (others => '0');
-			else
-			addr <= addr + 1 ;
-			end if;
 		else
-		addr <= addr;
+			addr <= addr+1;
 		end if;
-		
-		if vsync = '0' then -- this V depend from VGA
-			addr <= (others => '0');
-		end if;
+--		if (to_integer(unsigned(addr)) = PIXELS-1) then
+--			addr <= (others => '0');
+--		else
+--			addr <= std_logic_vector(to_unsigned(to_integer(unsigned(addr))+1,addr'left+1));
+--		end if;
+--		state := idle;
+		state := a0;
+		va := std_logic_vector(to_unsigned(to_integer(unsigned(addr))-CCOUNT1+2,addr'left+1));
+		count1 := 0;
+		count2 := 0;
+	else
+--		addr <= va;
+		case (state) is
+			when idle =>
+				if (activeh = '1') then
+					state := a0;
+				else
+					state := idle;
+				end if;
+			when a0 =>
+--				addr <= std_logic_vector(to_unsigned(to_integer(unsigned(va)),addr'left+1));
+				if (count2 = CCOUNT2-1) then
+--					addr <= std_logic_vector(to_unsigned(to_integer(unsigned(va))+count1,addr'left+1));
+--					addr <= (others => '0');
+					state := a;
+					count2 := 0;
+				else
+--					addr <= std_logic_vector(to_unsigned(to_integer(unsigned(va))+count1,addr'left+1));
+--					addr <= (others => '0');
+					state := a0;
+					count2 := count2 + 1;
+				end if;
+			when a =>
+				if (count1 = CCOUNT1-1) then
+					addr <= std_logic_vector(to_unsigned(to_integer(unsigned(va))+count1,addr'left+1));
+--					addr <= (others => '0');
+					state := a1;
+					count1 := 0;
+				else
+					addr <= std_logic_vector(to_unsigned(to_integer(unsigned(va))+count1,addr'left+1));
+--					addr <= (others => '0');
+					state := a;
+					count1 := count1 + 1;
+				end if;
+			when a1 =>
+				if (count2 = CCOUNT2-1) then
+--					addr <= std_logic_vector(to_unsigned(to_integer(unsigned(va))+count1,addr'left+1));
+--					addr <= (others => '0');
+					state := b;
+					count2 := 0;
+				else
+--					addr <= std_logic_vector(to_unsigned(to_integer(unsigned(va))+count1,addr'left+1));
+--					addr <= (others => '0');
+					state := a1;
+					count2 := count2 + 1;
+				end if;
+			when b =>
+				if (count1 = CCOUNT1-1) then
+					addr <= std_logic_vector(to_unsigned(to_integer(unsigned(va))+count1,addr'left+1));
+--					addr <= (others => '0');
+					state := b1;
+					count1 := 0;
+				else
+					addr <= std_logic_vector(to_unsigned(to_integer(unsigned(va))+count1,addr'left+1));
+--					addr <= (others => '0');
+					state := b;
+					count1 := count1 + 1;
+				end if;
+			when b1 =>
+				if (count2 = CCOUNT2-1) then
+--					addr <= std_logic_vector(to_unsigned(to_integer(unsigned(va))+count1,addr'left+1));
+--					addr <= (others => '0');
+					state := c;
+					count2 := 0;
+				else
+--					addr <= std_logic_vector(to_unsigned(to_integer(unsigned(va))+count1,addr'left+1));
+--					addr <= (others => '0');
+					state := b1;
+					count2 := count2 + 1;
+				end if;
+			when c =>
+				if (count1 = CCOUNT1-1) then
+					addr <= std_logic_vector(to_unsigned(to_integer(unsigned(va))+count1,addr'left+1));
+--					addr <= (others => '0');
+					state := c1;
+					count1 := 0;
+				else
+					addr <= std_logic_vector(to_unsigned(to_integer(unsigned(va))+count1,addr'left+1));
+--					addr <= (others => '0');
+					state := c;
+					count1 := count1 + 1;
+				end if;
+			when c1 =>
+				if (count2 = CCOUNT2-1) then
+--					addr <= std_logic_vector(to_unsigned(to_integer(unsigned(va))+count1,addr'left+1));
+--					addr <= (others => '0');
+					state := idle;
+					count2 := 0;
+				else
+--					addr <= std_logic_vector(to_unsigned(to_integer(unsigned(va))+count1,addr'left+1));
+--					addr <= (others => '0');
+					state := c1;
+					count2 := count2 + 1;
+				end if;
+		end case;
 	end if;
+	if vsync = '0' then -- this V depend from VGA
+		addr <= (others => '0');
+	end if;
+end if;
 end process;    
 end Behavioral;
+
+--library IEEE;
+--use IEEE.STD_LOGIC_1164.ALL;
+--use IEEE.STD_LOGIC_ARITH.ALL;
+--use IEEE.STD_LOGIC_UNSIGNED.ALL;
+--
+--entity address_generator is
+--Generic (
+--PIXELS : integer := 0;
+--ADDRESS1 : integer := 0
+--);
+--  Port ( 
+--    reset : in std_logic;
+--		clk25 : in STD_LOGIC;
+--    enable : in STD_LOGIC;
+--    vsync : in STD_LOGIC;
+--    address : out STD_LOGIC_VECTOR (ADDRESS1-1 downto 0)
+--  );  
+--end address_generator;
+--
+--
+--architecture Behavioral of address_generator is
+--
+--  signal addr: STD_LOGIC_VECTOR(address'range) := (others => '0');
+--  
+--begin
+--
+--  address <= addr; 
+--
+--process (clk25,reset) begin
+--if (reset = '1') then
+--addr <= (others => '0');
+--	elsif rising_edge (clk25) then
+--		if (enable='1') then
+--			if (addr = PIXELS-1) then
+--			addr <= (others => '0');
+--			else
+--			addr <= addr + 1 ;
+--			end if;
+--		else
+--		addr <= addr;
+--		end if;
+--		
+--		if vsync = '0' then -- this V depend from VGA
+--			addr <= (others => '0');
+--		end if;
+--	end if;
+--end process;    
+--end Behavioral;
