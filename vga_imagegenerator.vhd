@@ -27,7 +27,8 @@ begin
 	-- Blue : 3 downto 0
 	-- Nexys2 D/A converter supports 3 bits red, 3 bits green, and 2 bits blue. 
 --	RGB_out <= Data_in(11 downto 9) & Data_in(7 downto 5) & Data_in(3 downto 2) when active_area = '1' else (others=>'0');
-	RGB_out <= Data_in1(7 downto 5) & Data_in1(4 downto 2) & Data_in1(1 downto 0) when active_area1 = '1' else (others=>'0');
+--	RGB_out <= Data_in1(7 downto 5) & Data_in1(4 downto 2) & Data_in1(1 downto 0) when active_area1 = '1' else (others=>'0');
+	RGB_out <= Data_in1(10 downto 8) & Data_in1(6 downto 4) & Data_in1(1 downto 0) when active_area1 = '1' else (others=>'0');
 
 --process (clk,reset) is
 --begin
