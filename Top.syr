@@ -5,14 +5,14 @@ Parameter TMPDIR set to xst/projnav.tmp
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.05 secs
+Total CPU time to Xst completion: 0.08 secs
  
 --> 
 Parameter xsthdpdir set to xst
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.05 secs
+Total CPU time to Xst completion: 0.09 secs
  
 --> 
 Reading design: Top.prj
@@ -245,6 +245,7 @@ Entity <ov7670_capture> analyzed. Unit <ov7670_capture> generated.
 Analyzing generic Entity <address_generator> in library <work> (Architecture <behavioral>).
 	ADDRESS1 = 15
 	PIXELS = 19200
+INFO:Xst:2679 - Register <ta0> in unit <address_generator> has a constant value of 000000000000000 during circuit operation. The register is replaced by logic.
 Entity <address_generator> analyzed. Unit <address_generator> generated.
 
 Analyzing generic Entity <vga_imagegenerator> in library <work> (Architecture <behavioral>).
@@ -302,25 +303,12 @@ WARNING:Xst:1780 - Signal <a1> is never used or assigned. This unconnected signa
 WARNING:Xst:1780 - Signal <a0> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
     Found 15-bit register for signal <address>.
     Found 15-bit register for signal <addr>.
-    Found 15-bit subtractor for signal <n0003$sub0000> created at line 54.
-    Found 15-bit register for signal <ta0>.
-    Found 15-bit adder for signal <ta0$addsub0000> created at line 86.
-    Found 9-bit comparator greatequal for signal <ta0$cmp_ge0000> created at line 82.
-    Found 15-bit subtractor for signal <ta0$sub0000> created at line 86.
     Found 15-bit register for signal <ta1>.
     Found 15-bit adder for signal <ta1$addsub0000> created at line 51.
-    Found 15-bit register for signal <tva>.
-    Found 9-bit adder for signal <tva$add0001> created at line 85.
-    Found 9-bit comparator greatequal for signal <tva$cmp_ge0000> created at line 89.
-    Found 9-bit comparator greatequal for signal <tva$cmp_ge0001> created at line 105.
-    Found 9-bit comparator less for signal <tva$cmp_lt0000> created at line 89.
-    Found 9-bit comparator less for signal <tva$cmp_lt0001> created at line 105.
-    Found 9-bit register for signal <vmax1>.
-    Found 9-bit comparator less for signal <vmax1$cmp_lt0000> created at line 82.
+    Found 1-bit register for signal <vmax1>.
     Summary:
-	inferred  84 D-type flip-flop(s).
-	inferred   5 Adder/Subtractor(s).
-	inferred   6 Comparator(s).
+	inferred  46 D-type flip-flop(s).
+	inferred   1 Adder/Subtractor(s).
 Unit <address_generator> synthesized.
 
 
@@ -573,15 +561,13 @@ HDL Synthesis Report
 Macro Statistics
 # ROMs                                                 : 1
  47x16-bit ROM                                         : 1
-# Adders/Subtractors                                   : 12
+# Adders/Subtractors                                   : 8
  10-bit adder                                          : 2
  13-bit adder                                          : 1
- 15-bit adder                                          : 3
- 15-bit subtractor                                     : 2
+ 15-bit adder                                          : 2
  19-bit adder                                          : 1
  20-bit adder                                          : 1
  6-bit adder                                           : 1
- 9-bit adder                                           : 1
 # Counters                                             : 13
  10-bit up counter                                     : 2
  11-bit up counter                                     : 1
@@ -594,23 +580,20 @@ Macro Statistics
  6-bit up counter                                      : 2
  7-bit up counter                                      : 1
  8-bit up counter                                      : 1
-# Registers                                            : 41
+# Registers                                            : 38
  1-bit register                                        : 23
  10-bit register                                       : 2
  13-bit register                                       : 1
- 15-bit register                                       : 6
+ 15-bit register                                       : 4
  16-bit register                                       : 2
  19-bit register                                       : 1
  20-bit register                                       : 1
  32-bit register                                       : 2
  6-bit register                                        : 1
  8-bit register                                        : 1
- 9-bit register                                        : 1
-# Comparators                                          : 9
+# Comparators                                          : 3
  10-bit comparator greatequal                          : 1
  10-bit comparator less                                : 2
- 9-bit comparator greatequal                           : 3
- 9-bit comparator less                                 : 3
 # Multiplexers                                         : 2
  32-bit 4-to-1 multiplexer                             : 2
 # Tristates                                            : 1
@@ -693,14 +676,12 @@ Macro Statistics
 # FSMs                                                 : 5
 # ROMs                                                 : 1
  47x16-bit ROM                                         : 1
-# Adders/Subtractors                                   : 11
+# Adders/Subtractors                                   : 7
  10-bit adder                                          : 2
  13-bit adder                                          : 1
- 15-bit adder                                          : 3
- 15-bit subtractor                                     : 2
+ 15-bit adder                                          : 2
  20-bit adder                                          : 1
  6-bit adder                                           : 1
- 9-bit adder                                           : 1
 # Counters                                             : 13
  10-bit up counter                                     : 2
  11-bit up counter                                     : 1
@@ -713,13 +694,11 @@ Macro Statistics
  6-bit up counter                                      : 2
  7-bit up counter                                      : 1
  8-bit up counter                                      : 1
-# Registers                                            : 284
- Flip-Flops                                            : 284
-# Comparators                                          : 9
+# Registers                                            : 245
+ Flip-Flops                                            : 245
+# Comparators                                          : 3
  10-bit comparator greatequal                          : 1
  10-bit comparator less                                : 2
- 9-bit comparator greatequal                           : 3
- 9-bit comparator less                                 : 3
 # Multiplexers                                         : 2
  32-bit 4-to-1 multiplexer                             : 2
 
@@ -751,7 +730,7 @@ Optimizing unit <ov7670_SCCB> ...
 
 Mapping all equations...
 Building and optimizing final netlist ...
-Found area constraint ratio of 100 (+ 5) on block Top, actual ratio is 7.
+Found area constraint ratio of 100 (+ 5) on block Top, actual ratio is 6.
 
 Final Macro Processing ...
 
@@ -759,8 +738,8 @@ Final Macro Processing ...
 Final Register Report
 
 Macro Statistics
-# Registers                                            : 443
- Flip-Flops                                            : 443
+# Registers                                            : 404
+ Flip-Flops                                            : 404
 
 =========================================================================
 
@@ -789,27 +768,27 @@ Design Statistics
 # IOs                              : 91
 
 Cell Usage :
-# BELS                             : 1676
+# BELS                             : 1460
 #      GND                         : 2
-#      INV                         : 30
-#      LUT1                        : 190
-#      LUT2                        : 182
-#      LUT2_D                      : 1
-#      LUT3                        : 152
-#      LUT4                        : 329
+#      INV                         : 22
+#      LUT1                        : 188
+#      LUT2                        : 168
+#      LUT3                        : 147
+#      LUT3_L                      : 3
+#      LUT4                        : 250
 #      LUT4_D                      : 6
-#      LUT4_L                      : 10
-#      MUXCY                       : 259
-#      MUXF5                       : 145
+#      LUT4_L                      : 4
+#      MUXCY                       : 219
+#      MUXF5                       : 125
 #      MUXF6                       : 63
 #      MUXF7                       : 32
 #      MUXF8                       : 16
 #      VCC                         : 2
-#      XORCY                       : 257
-# FlipFlops/Latches                : 448
-#      FDC                         : 121
+#      XORCY                       : 213
+# FlipFlops/Latches                : 409
+#      FDC                         : 112
 #      FDC_1                       : 10
-#      FDCE                        : 229
+#      FDCE                        : 199
 #      FDE                         : 30
 #      FDP                         : 1
 #      FDPE                        : 32
@@ -833,9 +812,9 @@ Device utilization summary:
 
 Selected Device : 3s1200efg320-4 
 
- Number of Slices:                      581  out of   8672     6%  
- Number of Slice Flip Flops:            448  out of  17344     2%  
- Number of 4 input LUTs:                900  out of  17344     5%  
+ Number of Slices:                      522  out of   8672     6%  
+ Number of Slice Flip Flops:            409  out of  17344     2%  
+ Number of 4 input LUTs:                788  out of  17344     4%  
  Number of IOs:                          91
  Number of bonded IOBs:                  56  out of    250    22%  
  Number of BRAMs:                        19  out of     28    67%  
@@ -863,7 +842,7 @@ Clock Information:
 -----------------------------------+------------------------+-------+
 Clock Signal                       | Clock buffer(FF name)  | Load  |
 -----------------------------------+------------------------+-------+
-cc41                               | BUFG                   | 108   |
+cc41                               | BUFG                   | 69    |
 ov7670_pclk1                       | DCM_pclk1:CLK0         | 61    |
 clkcam                             | IBUFG+BUFG             | 181   |
 clkcam                             | DCM_vga:CLKDV          | 136   |
@@ -874,14 +853,14 @@ Asynchronous Control Signals Information:
 --------------------------------------------+--------------------------+-------+
 Control Signal                              | Buffer(FF name)          | Load  |
 --------------------------------------------+--------------------------+-------+
-inst_debounce/output(inst_debounce/output:Q)| NONE(Registers/cmd_reg_0)| 393   |
+inst_debounce/output(inst_debounce/output:Q)| NONE(Registers/cmd_reg_0)| 354   |
 --------------------------------------------+--------------------------+-------+
 
 Timing Summary:
 ---------------
 Speed Grade: -4
 
-   Minimum period: 12.953ns (Maximum Frequency: 77.202MHz)
+   Minimum period: 7.960ns (Maximum Frequency: 125.628MHz)
    Minimum input arrival time before clock: 4.707ns
    Maximum output required time after clock: 10.782ns
    Maximum combinational path delay: 7.535ns
@@ -892,16 +871,16 @@ All values displayed in nanoseconds (ns)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'cc41'
-  Clock period: 12.953ns (frequency: 77.202MHz)
-  Total number of paths / destination ports: 54504 / 394
+  Clock period: 5.584ns (frequency: 179.083MHz)
+  Total number of paths / destination ports: 1325 / 325
 -------------------------------------------------------------------------
-Delay:               12.953ns (Levels of Logic = 22)
+Delay:               5.584ns (Levels of Logic = 16)
   Source:            inst_addrgen1/ta1_1 (FF)
-  Destination:       inst_addrgen1/address_14 (FF)
+  Destination:       inst_addrgen1/ta1_14 (FF)
   Source Clock:      cc41 rising
   Destination Clock: cc41 rising
 
-  Data Path: inst_addrgen1/ta1_1 to inst_addrgen1/address_14
+  Data Path: inst_addrgen1/ta1_1 to inst_addrgen1/ta1_14
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
@@ -911,27 +890,21 @@ Delay:               12.953ns (Levels of Logic = 22)
      MUXCY:CI->O           1   0.059   0.000  inst_addrgen1/Madd_ta1_addsub0000_cy<2> (inst_addrgen1/Madd_ta1_addsub0000_cy<2>)
      MUXCY:CI->O           1   0.059   0.000  inst_addrgen1/Madd_ta1_addsub0000_cy<3> (inst_addrgen1/Madd_ta1_addsub0000_cy<3>)
      MUXCY:CI->O           1   0.059   0.000  inst_addrgen1/Madd_ta1_addsub0000_cy<4> (inst_addrgen1/Madd_ta1_addsub0000_cy<4>)
-     XORCY:CI->O           5   0.804   0.808  inst_addrgen1/Madd_ta1_addsub0000_xor<5> (inst_addrgen1/ta1_addsub0000<5>)
-     LUT2:I0->O            1   0.704   0.000  inst_addrgen1/ta1_mux0000<5>11 (inst_addrgen1/ta1_mux0000<5>1)
-     MUXCY:S->O            1   0.464   0.000  inst_addrgen1/Msub_n0003_sub0000_cy<5> (inst_addrgen1/Msub_n0003_sub0000_cy<5>)
-     XORCY:CI->O           2   0.804   0.451  inst_addrgen1/Msub_n0003_sub0000_xor<6> (inst_addrgen1/n0003_sub0000<6>)
-     LUT4:I3->O            1   0.704   0.000  inst_addrgen1/Madd_ta0_addsub0000_lut<6> (inst_addrgen1/Madd_ta0_addsub0000_lut<6>)
-     MUXCY:S->O            1   0.464   0.000  inst_addrgen1/Madd_ta0_addsub0000_cy<6> (inst_addrgen1/Madd_ta0_addsub0000_cy<6>)
-     XORCY:CI->O           1   0.804   0.595  inst_addrgen1/Madd_ta0_addsub0000_xor<7> (inst_addrgen1/ta0_addsub0000<7>)
-     LUT1:I0->O            1   0.704   0.000  inst_addrgen1/Msub_ta0_sub0000_cy<7>_rt (inst_addrgen1/Msub_ta0_sub0000_cy<7>_rt)
-     MUXCY:S->O            1   0.464   0.000  inst_addrgen1/Msub_ta0_sub0000_cy<7> (inst_addrgen1/Msub_ta0_sub0000_cy<7>)
-     MUXCY:CI->O           1   0.059   0.000  inst_addrgen1/Msub_ta0_sub0000_cy<8> (inst_addrgen1/Msub_ta0_sub0000_cy<8>)
-     MUXCY:CI->O           1   0.059   0.000  inst_addrgen1/Msub_ta0_sub0000_cy<9> (inst_addrgen1/Msub_ta0_sub0000_cy<9>)
-     MUXCY:CI->O           1   0.059   0.000  inst_addrgen1/Msub_ta0_sub0000_cy<10> (inst_addrgen1/Msub_ta0_sub0000_cy<10>)
-     MUXCY:CI->O           1   0.059   0.000  inst_addrgen1/Msub_ta0_sub0000_cy<11> (inst_addrgen1/Msub_ta0_sub0000_cy<11>)
-     MUXCY:CI->O           1   0.059   0.000  inst_addrgen1/Msub_ta0_sub0000_cy<12> (inst_addrgen1/Msub_ta0_sub0000_cy<12>)
-     MUXCY:CI->O           0   0.059   0.000  inst_addrgen1/Msub_ta0_sub0000_cy<13> (inst_addrgen1/Msub_ta0_sub0000_cy<13>)
-     XORCY:CI->O           2   0.804   0.482  inst_addrgen1/Msub_ta0_sub0000_xor<14> (inst_addrgen1/ta0_sub0000<14>)
-     LUT3:I2->O            1   0.704   0.000  inst_addrgen1/address_mux0000<14> (inst_addrgen1/address_mux0000<14>)
-     FDE:D                     0.308          inst_addrgen1/address_14
+     MUXCY:CI->O           1   0.059   0.000  inst_addrgen1/Madd_ta1_addsub0000_cy<5> (inst_addrgen1/Madd_ta1_addsub0000_cy<5>)
+     MUXCY:CI->O           1   0.059   0.000  inst_addrgen1/Madd_ta1_addsub0000_cy<6> (inst_addrgen1/Madd_ta1_addsub0000_cy<6>)
+     MUXCY:CI->O           1   0.059   0.000  inst_addrgen1/Madd_ta1_addsub0000_cy<7> (inst_addrgen1/Madd_ta1_addsub0000_cy<7>)
+     MUXCY:CI->O           1   0.059   0.000  inst_addrgen1/Madd_ta1_addsub0000_cy<8> (inst_addrgen1/Madd_ta1_addsub0000_cy<8>)
+     MUXCY:CI->O           1   0.059   0.000  inst_addrgen1/Madd_ta1_addsub0000_cy<9> (inst_addrgen1/Madd_ta1_addsub0000_cy<9>)
+     MUXCY:CI->O           1   0.059   0.000  inst_addrgen1/Madd_ta1_addsub0000_cy<10> (inst_addrgen1/Madd_ta1_addsub0000_cy<10>)
+     MUXCY:CI->O           1   0.059   0.000  inst_addrgen1/Madd_ta1_addsub0000_cy<11> (inst_addrgen1/Madd_ta1_addsub0000_cy<11>)
+     MUXCY:CI->O           1   0.059   0.000  inst_addrgen1/Madd_ta1_addsub0000_cy<12> (inst_addrgen1/Madd_ta1_addsub0000_cy<12>)
+     MUXCY:CI->O           0   0.059   0.000  inst_addrgen1/Madd_ta1_addsub0000_cy<13> (inst_addrgen1/Madd_ta1_addsub0000_cy<13>)
+     XORCY:CI->O           3   0.804   0.706  inst_addrgen1/Madd_ta1_addsub0000_xor<14> (inst_addrgen1/ta1_addsub0000<14>)
+     LUT2:I0->O            1   0.704   0.000  inst_addrgen1/ta1_mux0000<14>1 (inst_addrgen1/ta1_mux0000<14>)
+     FDCE:D                    0.308          inst_addrgen1/ta1_14
     ----------------------------------------
-    Total                     12.953ns (10.022ns logic, 2.931ns route)
-                                       (77.4% logic, 22.6% route)
+    Total                      5.584ns (4.283ns logic, 1.301ns route)
+                                       (76.7% logic, 23.3% route)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'ov7670_pclk1'
@@ -957,29 +930,32 @@ Delay:               3.980ns (Levels of Logic = 1)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'clkcam'
-  Clock period: 7.697ns (frequency: 129.921MHz)
-  Total number of paths / destination ports: 8542 / 537
+  Clock period: 6.618ns (frequency: 151.103MHz)
+  Total number of paths / destination ports: 8536 / 537
 -------------------------------------------------------------------------
-Delay:               7.697ns (Levels of Logic = 5)
-  Source:            counter_5 (FF)
-  Destination:       counter_0 (FF)
+Delay:               6.618ns (Levels of Logic = 8)
+  Source:            w4dcmcnt_7 (FF)
+  Destination:       w4dcmcnt_1 (FF)
   Source Clock:      clkcam rising
   Destination Clock: clkcam rising
 
-  Data Path: counter_5 to counter_0
+  Data Path: w4dcmcnt_7 to w4dcmcnt_1
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDC:C->Q              3   0.591   0.706  counter_5 (counter_5)
-     LUT4:I0->O            1   0.704   0.455  state_cmp_eq000112 (state_cmp_eq000112)
-     LUT4:I2->O            1   0.704   0.424  state_cmp_eq000127_SW0 (N116)
-     LUT4:I3->O            3   0.704   0.706  state_cmp_eq000127 (state_cmp_eq0001)
-     LUT4:I0->O           13   0.704   0.987  counter_mux0000<0>21 (N3)
-     LUT4:I3->O            1   0.704   0.000  counter_mux0000<9>1 (counter_mux0000<9>)
-     FDC:D                     0.308          counter_3
+     FDC:C->Q              3   0.591   0.706  w4dcmcnt_7 (w4dcmcnt_7)
+     LUT4:I0->O            1   0.704   0.000  state_cmp_eq0000_wg_lut<0> (state_cmp_eq0000_wg_lut<0>)
+     MUXCY:S->O            1   0.464   0.000  state_cmp_eq0000_wg_cy<0> (state_cmp_eq0000_wg_cy<0>)
+     MUXCY:CI->O           1   0.059   0.000  state_cmp_eq0000_wg_cy<1> (state_cmp_eq0000_wg_cy<1>)
+     MUXCY:CI->O           1   0.059   0.000  state_cmp_eq0000_wg_cy<2> (state_cmp_eq0000_wg_cy<2>)
+     MUXCY:CI->O           1   0.059   0.000  state_cmp_eq0000_wg_cy<3> (state_cmp_eq0000_wg_cy<3>)
+     MUXCY:CI->O           7   0.459   0.712  state_cmp_eq0000_wg_cy<4> (state_cmp_eq0000)
+     LUT4_D:I3->O         19   0.704   1.089  w4dcmcnt_mux0000<0>41 (N6)
+     LUT4:I3->O            1   0.704   0.000  w4dcmcnt_mux0000<18>1 (w4dcmcnt_mux0000<18>)
+     FDC:D                     0.308          w4dcmcnt_1
     ----------------------------------------
-    Total                      7.697ns (4.419ns logic, 3.278ns route)
-                                       (57.4% logic, 42.6% route)
+    Total                      6.618ns (4.111ns logic, 2.507ns route)
+                                       (62.1% logic, 37.9% route)
 
 =========================================================================
 Timing constraint: Default OFFSET IN BEFORE for Clock 'clkcam'
@@ -1024,7 +1000,7 @@ Offset:              2.057ns (Levels of Logic = 1)
 Timing constraint: Default OFFSET OUT AFTER for Clock 'clkcam'
   Total number of paths / destination ports: 30 / 14
 -------------------------------------------------------------------------
-Offset:              8.198ns (Levels of Logic = 5)
+Offset:              8.186ns (Levels of Logic = 5)
   Source:            inst_debounce/output (FF)
   Destination:       ov7670_siod1 (PAD)
   Source Clock:      clkcam rising
@@ -1033,15 +1009,15 @@ Offset:              8.198ns (Levels of Logic = 5)
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDR:C->Q            402   0.591   1.383  inst_debounce/output (inst_debounce/output)
+     FDR:C->Q            363   0.591   1.371  inst_debounce/output (inst_debounce/output)
      LUT4:I3->O            1   0.704   0.000  ov7670_siod1121 (ov7670_siod1121)
      MUXF5:I0->O           2   0.321   0.482  ov7670_siod112_f5 (ov7670_siod112)
      LUT3:I2->O            1   0.704   0.000  ov7670_siod1262 (ov7670_siod1261)
      MUXF5:I0->O           1   0.321   0.420  ov7670_siod126_f5 (ov7670_siod1_OBUF)
      OBUF:I->O                 3.272          ov7670_siod1_OBUF (ov7670_siod1)
     ----------------------------------------
-    Total                      8.198ns (5.913ns logic, 2.285ns route)
-                                       (72.1% logic, 27.9% route)
+    Total                      8.186ns (5.913ns logic, 2.273ns route)
+                                       (72.2% logic, 27.8% route)
 
 =========================================================================
 Timing constraint: Default OFFSET OUT AFTER for Clock 'ov7670_pclk1'
@@ -1113,15 +1089,15 @@ Delay:               7.535ns (Levels of Logic = 4)
 =========================================================================
 
 
-Total REAL time to Xst completion: 18.00 secs
-Total CPU time to Xst completion: 17.75 secs
+Total REAL time to Xst completion: 16.00 secs
+Total CPU time to Xst completion: 16.08 secs
  
 --> 
 
 
-Total memory usage is 545860 kilobytes
+Total memory usage is 544200 kilobytes
 
 Number of errors   :    0 (   0 filtered)
 Number of warnings :   75 (   0 filtered)
-Number of infos    :   14 (   0 filtered)
+Number of infos    :   15 (   0 filtered)
 
