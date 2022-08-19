@@ -279,7 +279,7 @@ debug(4) <= ov7670_data1(7);
 		clkA => ov7670_pclk1buf1,
 		addrA => wr_a1,
 		dinA => wr_d1,
-		clkB => clk25,
+		clkB => cc4,
 		addrB => rd_a1,
 		doutB => rd_d1);
 --	inst_framebuffer2 : frame_buffer port map(
@@ -310,8 +310,8 @@ debug(4) <= ov7670_data1(7);
 	inst_addrgen1 : address_generator port map(
 		reset => resend,
 		clk25 => cc4,
---		enable => activeRender1,
-		enable => active1,
+		enable => activeRender1,
+--		enable => active1,
 		vsync => vga_vsync_sig,
 		address => rd_a1);
 --	inst_addrgen2 : address_generator port map(
@@ -589,10 +589,9 @@ ov7670_pwdn4 <= '0';
 --ov7670_pwdn3 <= '1' when resetdcm = '1' else '0';
 --ov7670_pwdn4 <= '1' when resetdcm = '1' else '0';
 
---cc <= clkcambuf when sw = '1' else clk25;
-
 p0 : process (resend,clk25) is
 	constant CMAX : integer := 2;
+--	constant CMAX : integer := 4;
 	variable vmax : integer range 0 to CMAX-1;
 begin
 	if (resend = '1') then
