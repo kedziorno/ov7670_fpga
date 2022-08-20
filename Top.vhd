@@ -20,8 +20,7 @@ G_PB_BITS : integer := 24;
 G_WAIT1 : integer := 20; -- wait for reset dcm and cameras
 G_FE_WAIT_BITS : integer := 20 -- sccb wait for cameras
 );
-	Port	(	clk50	: in STD_LOGIC; -- Crystal Oscilator 50MHz  --B8
-	clkcam	: in STD_LOGIC; -- Crystal Oscilator 23.9616 MHz  --U9
+	Port	(clkcam	: in STD_LOGIC; -- Crystal Oscilator 23.9616 MHz  --U9
 				pb		: in STD_LOGIC; -- Push Button --B18
 				sw		: in STD_LOGIC_VECTOR(3 downto 0); -- Push Button --G18
 				led1 : out STD_LOGIC; -- Indicates configuration has been done --J14
@@ -30,8 +29,8 @@ G_FE_WAIT_BITS : integer := 20 -- sccb wait for cameras
 				led4 : out STD_LOGIC; -- Indicates configuration has been done --J14
 			  anode : out std_logic_vector(3 downto 0);
 				-- OV7670
-				ov7670_reset1,ov7670_reset2,ov7670_reset3,ov7670_reset4  : out  STD_LOGIC;
-				ov7670_pwdn1,ov7670_pwdn2,ov7670_pwdn3,ov7670_pwdn4: out  STD_LOGIC;
+--				ov7670_reset1,ov7670_reset2,ov7670_reset3,ov7670_reset4  : out  STD_LOGIC;
+--				ov7670_pwdn1,ov7670_pwdn2,ov7670_pwdn3,ov7670_pwdn4: out  STD_LOGIC;
 				ov7670_pclk1,ov7670_pclk2,ov7670_pclk3,ov7670_pclk4  : in  STD_LOGIC; -- Pmod JB8 --R16
 				ov7670_xclk1,ov7670_xclk2,ov7670_xclk3,ov7670_xclk4  : out STD_LOGIC; -- Pmod JB2 --R18
 				ov7670_vsync1,ov7670_vsync2,ov7670_vsync3,ov7670_vsync4 : in  STD_LOGIC; -- Pmod JB9 --T18
@@ -46,15 +45,45 @@ G_FE_WAIT_BITS : integer := 20 -- sccb wait for cameras
 				--VGA
 				vga_hsync : out STD_LOGIC; --T4
 				vga_vsync : out STD_LOGIC; --U3
-				vga_rgb	: out STD_LOGIC_VECTOR(7 downto 0);
+				vga_rgb	: out STD_LOGIC_VECTOR(7 downto 0)
 				-- R : R9(MSB), T8, R8
 				-- G : N8, P8, P6
 				-- Bc: U5, U4(LSB)
-				debug : out std_logic_vector(4 downto 0)
 			 );
 end Top;
 
 architecture Structural of Top is
+
+COMPONENT clockmux_old is port (
+	areset           : in std_logic;        -- Asynch Reset
+	clk1             : in std_logic;        -- Clock 1
+	clk2             : in std_logic;        -- Clock 2
+	clk3             : in std_logic;        -- Clock 3
+	clk4             : in std_logic;        -- Clock 4
+	clk0             : in std_logic;        -- clk main
+	sel1             : in std_logic;        -- Clock Select 1
+	sel2             : in std_logic;        -- Clock Select 2
+	sel3             : in std_logic;        -- Clock Select 3
+	sel4             : in std_logic;        -- Clock Select 4
+	sel0             : in std_logic;        -- no select
+	rxclk            : out std_logic);      -- RX Clock
+END COMPONENT clockmux_old;
+
+COMPONENT arbiter is port(
+		 txclk:                 in std_logic;   -- TX_CLK
+		 areset:                in std_logic;   -- Asynch Reset
+		 activity1:             in std_logic;   -- Port Activity 1       
+		 activity2:             in std_logic;   -- Port ACtivity 2
+		 activity3:             in std_logic;   -- Port ACtivity 3
+		 activity4:             in std_logic;   -- Port Activity 4       
+		 sel1:                  buffer std_logic;  -- Port Select 1
+		 sel2:                  buffer std_logic;  -- Port Select 2
+		 sel3:                  buffer std_logic;  -- Port Select 3
+		 sel4:                  buffer std_logic;  -- Port Select 4
+		 nosel:                 buffer std_logic;  -- No Port Selected
+		 carrier:               buffer std_logic;  -- Carrier Detected
+		 collision:             buffer std_logic); -- Collision Detected
+END COMPONENT arbiter;
 
 constant ADDRESS : integer := 15;
 constant BITS : integer := 16;
@@ -193,6 +222,12 @@ signal cc4 : std_logic;
 signal activeRender1 : std_logic;
 signal activehaaddrgen : std_logic;
 
+signal a1,a2,a3,a4 : std_logic;
+signal ov7670_pclkbufmux,ov7670_vsyncmux,ov7670_hrefmux : std_logic;
+signal ov7670_datamux : std_logic_vector(7 downto 0);
+
+signal sel1, sel2, sel3, sel4, nosel, carrier, collision : std_logic;
+
 begin
 
 --debug(0) <= ov7670_pclk1buf1;
@@ -229,87 +264,99 @@ begin
 --		reset => resend,
 --		clk50 => clk50buf,
 --		clk25 => clk25);
+
+p0mux : process (sw(0),sw(1),sw(2),sw(3),
+--ov7670_pclk1buf1,ov7670_pclk2buf1,ov7670_pclk3buf1,ov7670_pclk4buf1,
+ov7670_vsync1,ov7670_vsync2,ov7670_vsync3,ov7670_vsync4,
+ov7670_href1,ov7670_href2,ov7670_href3,ov7670_href4,
+ov7670_data1,ov7670_data2,ov7670_data3,ov7670_data4
+) is
+begin
+	if (sw(0) = '1' and sw(1) = '0' and sw(2) = '0' and sw(3) = '0') then
+--	if (sw(0) = '1' and sw(1) = '0' and sw(2) = '0') then
+--		ov7670_pclkbufmux <= ov7670_pclk1buf1;
+		ov7670_vsyncmux <= ov7670_vsync1;
+		ov7670_hrefmux <= ov7670_href1;
+		ov7670_datamux <= ov7670_data1;
+	elsif (sw(0) = '0' and sw(1) = '1' and sw(2) = '0' and sw(3) = '0') then
+--	elsif (sw(0) = '0' and sw(1) = '1' and sw(2) = '0') then
+--		ov7670_pclkbufmux <= ov7670_pclk2buf1;
+		ov7670_vsyncmux <= ov7670_vsync2;
+		ov7670_hrefmux <= ov7670_href2;
+		ov7670_datamux <= ov7670_data2;
+	elsif (sw(0) = '0' and sw(1) = '0' and sw(2) = '1' and sw(3) = '0') then
+--	elsif (sw(0) = '0' and sw(1) = '0' and sw(2) = '1') then
+--		ov7670_pclkbufmux <= ov7670_pclk3buf1;
+		ov7670_vsyncmux <= ov7670_vsync3;
+		ov7670_hrefmux <= ov7670_href3;
+		ov7670_datamux <= ov7670_data3;
+	elsif (sw(0) = '0' and sw(1) = '0' and sw(2) = '0' and sw(3) = '1') then
+--	elsif (sw(0) = '0' and sw(1) = '0' and sw(2) = '0') then
+--		ov7670_pclkbufmux <= ov7670_pclk4buf1;
+		ov7670_vsyncmux <= ov7670_vsync4;
+		ov7670_hrefmux <= ov7670_href4;
+		ov7670_datamux <= ov7670_data4;
+	else
+--		ov7670_pclkbufmux <= '0';
+		ov7670_vsyncmux <= '0';
+		ov7670_hrefmux <= '0';
+		ov7670_datamux <= (others => '0');
+	end if;
+end process p0mux;
+
+----p0cmpclk : process (resend,ov7670_pclk1buf1,ov7670_pclk2buf1,ov7670_pclk3buf1,ov7670_pclk4buf1) is
+--p0cmpclk : process (resend,ov7670_pclk1,ov7670_pclk2,ov7670_pclk3,ov7670_pclk4) is
+--begin
+--	if (resend = '1') then
+--		aaa <= (others => '0');
+--	else
+----		aaa <= ov7670_pclk1buf1&ov7670_pclk2buf1&ov7670_pclk3buf1&ov7670_pclk4buf1;
+--		aaa <= ov7670_pclk1&ov7670_pclk2&ov7670_pclk3&ov7670_pclk4;
+--	end if;
+--end process;
+
+--aaa <= ov7670_pclk1&ov7670_pclk2&ov7670_pclk3&ov7670_pclk4;
+--aaa <= ov7670_pclk1buf1&ov7670_pclk2buf1&ov7670_pclk3buf1;
+--bbb <= ov7670_href1&ov7670_href2&ov7670_href3;
+--ccc <= ov7670_vsync1&ov7670_vsync2&ov7670_vsync3;
+--ddd <= sw(0)&sw(1)&sw(2);
+
+u1: clockmux_old port map
+	(resend, 
+	ov7670_pclk1buf1, ov7670_pclk2buf1, ov7670_pclk3buf1, ov7670_pclk4buf1, clkcambuf,
+	sel1, sel2, sel3, sel4, nosel,
+	ov7670_pclkbufmux);
+
+u2: arbiter port map
+	(clkcambuf, resend, 
+	sw(0), sw(1), sw(2), sw(3),
+	sel1, sel2, sel3, sel4,
+	nosel, carrier, collision);
 	
 	inst_debounce: debounce_circuit port map(
 		clk => clkcambuf,
 		input => pb,
 		output => resend);
 
---	ov7670_pclk1buf1 <= ov7670_pclk1buf;
---	ov7670_pclk2buf1 <= ov7670_pclk2buf;
---	ov7670_pclk3buf1 <= ov7670_pclk3buf;
---	ov7670_pclk4buf1 <= ov7670_pclk4buf;
-
 	inst_ov7670capt1: ov7670_capture port map(
 		reset => resend,
-		pclk => ov7670_pclk1buf1,
-		vsync => ov7670_vsync1,
-		href => ov7670_href1,
-		d => ov7670_data1,
+		pclk => ov7670_pclkbufmux,
+		vsync => ov7670_vsyncmux,
+		href => ov7670_hrefmux,
+		d => ov7670_datamux,
 		addr => wr_a1,
 		dout => wr_d1,
 		we => wren1);
---	inst_ov7670capt2: ov7670_capture port map(
---		reset => resend,
---		pclk => ov7670_pclk2buf1,
---		vsync => ov7670_vsync2,
---		href => ov7670_href2,
---		d => ov7670_data2,
---		addr => wr_a2,
---		dout => wr_d2,
---		we => wren2);
---	inst_ov7670capt3: ov7670_capture port map(
---		reset => resend,
---		pclk => ov7670_pclk3buf1,
---		vsync => ov7670_vsync3,
---		href => ov7670_href3,
---		d => ov7670_data3,
---		addr => wr_a3,
---		dout => wr_d3,
---		we => wren3);
---	inst_ov7670capt4: ov7670_capture port map(
---		reset => resend,
---		pclk => ov7670_pclk4buf1,
---		vsync => ov7670_vsync4,
---		href => ov7670_href4,
---		d => ov7670_data4,
---		addr => wr_a4,
---		dout => wr_d4,
---		we => wren4);
 	
 	inst_framebuffer1 : frame_buffer port map(
 		weA => wren1,
-		clkA => ov7670_pclk1buf1,
+		clkA => ov7670_pclkbufmux,
 		addrA => wr_a1,
 		dinA => wr_d1,
 --		clkB => clk25,
 		clkB => cc4,
 		addrB => rd_a1,
 		doutB => rd_d1);
---	inst_framebuffer2 : frame_buffer port map(
---		weA => wren2,
---		clkA => ov7670_pclk2buf1,
---		addrA => wr_a2,
---		dinA => wr_d2,
---		clkB => clk25,
---		addrB => rd_a2,
---		doutB => rd_d2);
---	inst_framebuffer3 : frame_buffer port map(
---		weA => wren3,
---		clkA => ov7670_pclk3buf1,
---		addrA => wr_a3,
---		dinA => wr_d3,
---		clkB => clk25,
---		addrB => rd_a3,
---		doutB => rd_d3);
---	inst_framebuffer4 : frame_buffer port map(
---		weA => wren4,
---		clkA => ov7670_pclk4buf1,
---		addrA => wr_a4,
---		dinA => wr_d4,
---		clkB => clk25,
---		addrB => rd_a4,
---		doutB => rd_d4);
 	
 	inst_addrgen1 : address_generator port map(
 		reset => resend,
@@ -321,24 +368,6 @@ begin
 --		vsync => not ov7670_vsync1,
 		address => rd_a1,
 		activeh => activehaaddrgen);
---	inst_addrgen2 : address_generator port map(
---		reset => resend,
---		clk25 => clk25,
---		enable => active2,
---		vsync => vga_vsync_sig,
---		address => rd_a2);
---	inst_addrgen3 : address_generator port map(
---		reset => resend,
---		clk25 => clk25,
---		enable => active3,
---		vsync => vga_vsync_sig,
---		address => rd_a3);
---	inst_addrgen4 : address_generator port map(
---		reset => resend,
---		clk25 => clk25,
---		enable => active4,
---		vsync => vga_vsync_sig,
---		address => rd_a4);
 
 	inst_imagegen : vga_imagegenerator port map(
 		reset => resend,
@@ -451,7 +480,6 @@ begin
 				camera4 <= '0';
 			when sa1 =>
 				if (counter = C_MAX-1) then
---					state := sb;
 					state := wait4dcmpclk ;
 					counter := 0;
 					resend2 <= '1';
@@ -464,7 +492,7 @@ begin
 				if (w4dcmcnt = C_W4DCM-1) then
 					resetdcm1 <= '0';
 					w4dcmcnt := 0;
-					state := se;
+					state := sb;
 					send <= '0';
 					resend2 <= '1';
 				else
@@ -560,39 +588,24 @@ end process p0initcam;
 
 ov7670_sioc1 <= sioc when camera1 = '1' else '1';
 ov7670_siod1 <= siod when camera1 = '1' else '1';
-ov7670_sioc2 <= '0';
-ov7670_siod2 <= '0';
-ov7670_sioc3 <= '0';
-ov7670_siod3 <= '0';
-ov7670_sioc4 <= '0';
-ov7670_siod4 <= '0';
---ov7670_sioc2 <= sioc when camera2 = '1' else '1';
---ov7670_siod2 <= siod when camera2 = '1' else '1';
---ov7670_sioc3 <= sioc when camera3 = '1' else '1';
---ov7670_siod3 <= siod when camera3 = '1' else '1';
---ov7670_sioc4 <= sioc when camera4 = '1' else '1';
---ov7670_siod4 <= siod when camera4 = '1' else '1';
+ov7670_sioc2 <= sioc when camera2 = '1' else '1';
+ov7670_siod2 <= siod when camera2 = '1' else '1';
+ov7670_sioc3 <= sioc when camera3 = '1' else '1';
+ov7670_siod3 <= siod when camera3 = '1' else '1';
+ov7670_sioc4 <= sioc when camera4 = '1' else '1';
+ov7670_siod4 <= siod when camera4 = '1' else '1';
 
 OBUF_xclk1 : OBUF port map (O => ov7670_xclk1, I => cc);
-OBUF_xclk2 : ov7670_xclk2 <= '0';
-OBUF_xclk3 : ov7670_xclk3 <= '0';
-OBUF_xclk4 : ov7670_xclk4 <= '0';
---OBUF_xclk2 : OBUF port map (O => ov7670_xclk2, I => cc);
---OBUF_xclk3 : OBUF port map (O => ov7670_xclk3, I => cc);
---OBUF_xclk4 : OBUF port map (O => ov7670_xclk4, I => cc);
+OBUF_xclk2 : OBUF port map (O => ov7670_xclk2, I => cc);
+OBUF_xclk3 : OBUF port map (O => ov7670_xclk3, I => cc);
+OBUF_xclk4 : OBUF port map (O => ov7670_xclk4, I => cc);
 
-ov7670_reset1 <= '0' when resetdcm = '1' else '1';
-ov7670_reset2 <= '1';
-ov7670_reset3 <= '1';
-ov7670_reset4 <= '1';
+--ov7670_reset1 <= '0' when resetdcm = '1' else '1';
 --ov7670_reset2 <= '0' when resetdcm = '1' else '1';
 --ov7670_reset3 <= '0' when resetdcm = '1' else '1';
 --ov7670_reset4 <= '0' when resetdcm = '1' else '1';
 
-ov7670_pwdn1 <= '1' when resetdcm = '1' else '0';
-ov7670_pwdn2 <= '0';
-ov7670_pwdn3 <= '0';
-ov7670_pwdn4 <= '0';
+--ov7670_pwdn1 <= '1' when resetdcm = '1' else '0';
 --ov7670_pwdn2 <= '1' when resetdcm = '1' else '0';
 --ov7670_pwdn3 <= '1' when resetdcm = '1' else '0';
 --ov7670_pwdn4 <= '1' when resetdcm = '1' else '0';
@@ -699,46 +712,55 @@ RST => resetdcm -- DCM asynchronous reset input
 cam_bufa : BUFG port map (O => clk50buf, I => clkcambuf);
 cam_bufb : BUFG port map (O => clock2b, I => clock2a);
 
-DCM_pclk1 : DCM
-generic map (
-CLKDV_DIVIDE => 2.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
-CLKFX_DIVIDE => 2, -- Can be any interger from 1 to 32
-CLKFX_MULTIPLY => 2, -- Can be any integer from 1 to 32
-CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
-CLKIN_PERIOD => 41.667, -- Specify period of input clock
-CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of NONE, FIXED or VARIABLE
-CLK_FEEDBACK => "1X", -- Specify clock feedback of NONE, 1X or 2X
-DESKEW_ADJUST => "SYSTEM_SYNCHRONOUS", -- SOURCE_SYNCHRONOUS, SYSTEM_SYNCHRONOUS or an integer from 0 to 15
-DFS_FREQUENCY_MODE => "LOW", -- HIGH or LOW frequency mode for frequency synthesis
-DLL_FREQUENCY_MODE => "LOW", -- HIGH or LOW frequency mode for DLL
-DUTY_CYCLE_CORRECTION => TRUE, -- Duty cycle correction, TRUE or FALSE
-FACTORY_JF => X"C080", -- FACTORY JF Values
-PHASE_SHIFT => 0, -- Amount of fixed phase shift from -255 to 255
-SIM_MODE => "SAFE", -- Simulation: "SAFE" vs "FAST", see "Synthesis and Simulation
-STARTUP_WAIT => TRUE) -- Delay configuration DONE until DCM LOCK, TRUE/FALSE
-port map (
-CLK0 => clock3a, -- 0 degree DCM CLK ouptput
-CLK180 => open, -- 180 degree DCM CLK output
-CLK270 => open, -- 270 degree DCM CLK output
-CLK2X => open, -- 2X DCM CLK output
-CLK2X180 => open, -- 2X, 180 degree DCM CLK out
-CLK90 => open, -- 90 degree DCM CLK output
-CLKDV => open, -- Divided DCM CLK out (CLKDV_DIVIDE)
-CLKFX => open, -- DCM CLK synthesis out (M/D)
-CLKFX180 => open, -- 180 degree CLK synthesis out
-LOCKED => open, -- DCM LOCK status output
-PSDONE => open, -- Dynamic phase adjust done output
-STATUS => open, -- 8-bit DCM status bits output
-CLKFB => clock3b, -- DCM clock feedback
-CLKIN => ov7670_pclk1buf, -- Clock input (from IBUFG, BUFG or DCM)
-PSCLK => '0', -- Dynamic phase adjust clock input
-PSEN => '0', -- Dynamic phase adjust enable input
-PSINCDEC => '0', -- Dynamic phase adjust increment/decrement
-RST => resetdcm1 -- DCM asynchronous reset input
-);
-pclk1_bufa : IBUFG generic map (IOSTANDARD => "DEFAULT") port map (O => ov7670_pclk1buf, I => ov7670_pclk1);
-pclk1_buf : BUFG port map (O => clock3b, I => clock3a);
-ov7670_pclk1buf1 <= clock3b;
+cam_buf1a : IBUFG generic map (IOSTANDARD => "DEFAULT") port map (O => a1, I => ov7670_pclk1);
+cam_buf1b : BUFG port map (O => ov7670_pclk1buf1, I => a1);
+cam_buf2a : IBUFG generic map (IOSTANDARD => "DEFAULT") port map (O => a2, I => ov7670_pclk2);
+cam_buf2b : BUFG port map (O => ov7670_pclk2buf1, I => a2);
+cam_buf3a : IBUFG generic map (IOSTANDARD => "DEFAULT") port map (O => a3, I => ov7670_pclk3);
+cam_buf3b : BUFG port map (O => ov7670_pclk3buf1, I => a3);
+cam_buf4a : IBUFG generic map (IOSTANDARD => "DEFAULT") port map (O => a4, I => ov7670_pclk4);
+cam_buf4b : BUFG port map (O => ov7670_pclk4buf1, I => a4);
+
+--DCM_pclk1 : DCM
+--generic map (
+--CLKDV_DIVIDE => 2.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
+--CLKFX_DIVIDE => 2, -- Can be any interger from 1 to 32
+--CLKFX_MULTIPLY => 2, -- Can be any integer from 1 to 32
+--CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
+--CLKIN_PERIOD => 41.667, -- Specify period of input clock
+--CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of NONE, FIXED or VARIABLE
+--CLK_FEEDBACK => "1X", -- Specify clock feedback of NONE, 1X or 2X
+--DESKEW_ADJUST => "SYSTEM_SYNCHRONOUS", -- SOURCE_SYNCHRONOUS, SYSTEM_SYNCHRONOUS or an integer from 0 to 15
+--DFS_FREQUENCY_MODE => "LOW", -- HIGH or LOW frequency mode for frequency synthesis
+--DLL_FREQUENCY_MODE => "LOW", -- HIGH or LOW frequency mode for DLL
+--DUTY_CYCLE_CORRECTION => TRUE, -- Duty cycle correction, TRUE or FALSE
+--FACTORY_JF => X"C080", -- FACTORY JF Values
+--PHASE_SHIFT => 0, -- Amount of fixed phase shift from -255 to 255
+--SIM_MODE => "SAFE", -- Simulation: "SAFE" vs "FAST", see "Synthesis and Simulation
+--STARTUP_WAIT => TRUE) -- Delay configuration DONE until DCM LOCK, TRUE/FALSE
+--port map (
+--CLK0 => clock3a, -- 0 degree DCM CLK ouptput
+--CLK180 => open, -- 180 degree DCM CLK output
+--CLK270 => open, -- 270 degree DCM CLK output
+--CLK2X => open, -- 2X DCM CLK output
+--CLK2X180 => open, -- 2X, 180 degree DCM CLK out
+--CLK90 => open, -- 90 degree DCM CLK output
+--CLKDV => open, -- Divided DCM CLK out (CLKDV_DIVIDE)
+--CLKFX => open, -- DCM CLK synthesis out (M/D)
+--CLKFX180 => open, -- 180 degree CLK synthesis out
+--LOCKED => open, -- DCM LOCK status output
+--PSDONE => open, -- Dynamic phase adjust done output
+--STATUS => open, -- 8-bit DCM status bits output
+--CLKFB => clock3b, -- DCM clock feedback
+--CLKIN => ov7670_pclk1buf, -- Clock input (from IBUFG, BUFG or DCM)
+--PSCLK => '0', -- Dynamic phase adjust clock input
+--PSEN => '0', -- Dynamic phase adjust enable input
+--PSINCDEC => '0', -- Dynamic phase adjust increment/decrement
+--RST => resetdcm1 -- DCM asynchronous reset input
+--);
+--pclk1_bufa : IBUFG generic map (IOSTANDARD => "DEFAULT") port map (O => ov7670_pclk1buf, I => ov7670_pclk1);
+--pclk1_buf : BUFG port map (O => clock3b, I => clock3a);
+--ov7670_pclk1buf1 <= clock3b;
 --	
 --DCM_pclk2 : DCM
 --generic map (
