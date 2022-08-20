@@ -35,7 +35,7 @@ constant commandrom : cmd_rom :=(
 	7  => x"fffe",
 
 	8   => x"1204",
-	9   => x"1101",
+	9   => x"1100",
 	10  => x"6b00",
 	11  => x"0c04",
 	12  => x"3e1a",

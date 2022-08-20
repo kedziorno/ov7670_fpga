@@ -12,9 +12,6 @@ entity VGA_timing_synch is
            Hsync : out  STD_LOGIC;
            Vsync : out  STD_LOGIC;
            activeArea1 : out  STD_LOGIC;
-           activeArea2 : out  STD_LOGIC;
-           activeArea3 : out  STD_LOGIC;
-           activeArea4 : out  STD_LOGIC;
 					 activehaaddrgen : out STD_LOGIC;
 					 activeRender1 : out  STD_LOGIC);
 end VGA_timing_synch;
@@ -51,6 +48,7 @@ signal tactiveArea1 : std_logic;
 
 begin
 
+activehaaddrgen <= activeh;
 activeArea1 <= tactiveArea1;
 
 clkdv_vga <= clk25;
@@ -155,9 +153,6 @@ count1 := 0;
 counter2 := 0;
 ph <= '0';
 tactiveArea1 <= '0';
-activeArea2 <= '0';
-activeArea3 <= '0';
-activeArea4 <= '0';
 elsif (rising_edge(clkdv_vga)) then
 	ph <= h;
 		case (state) is
@@ -174,9 +169,6 @@ elsif (rising_edge(clkdv_vga)) then
 					state := idle;
 				end if;
 				tactiveArea1 <= '0';
-				activeArea2 <= '0';
-				activeArea3 <= '0';
-				activeArea4 <= '0';
 				count1 := 0;
 			when idle1a =>
 				if (counter2 = HBP-1) then
@@ -197,10 +189,6 @@ elsif (rising_edge(clkdv_vga)) then
 						state := p0a;
 					end if;
 					tactiveArea1 <= '1';
---					tactiveArea1 <= not tactiveArea1;
-					activeArea2 <= '0';
-					activeArea3 <= '0';
-					activeArea4 <= '0';
 --				end if;
 			when p0b =>
 --				if (v120 = '1') then
@@ -212,9 +200,6 @@ elsif (rising_edge(clkdv_vga)) then
 						state := p0b;
 					end if;
 					tactiveArea1 <= '0';
-					activeArea2 <= '1';
-					activeArea3 <= '0';
-					activeArea4 <= '0';
 --				end if;
 			when p0c =>
 --				if (v120 = '1') then
@@ -226,9 +211,6 @@ elsif (rising_edge(clkdv_vga)) then
 						state := p0c;
 					end if;
 					tactiveArea1 <= '0';
-					activeArea2 <= '0';
-					activeArea3 <= '1';
-					activeArea4 <= '0';
 --				end if;
 			when p0d =>
 --				if (v120 = '1') then
@@ -241,9 +223,6 @@ elsif (rising_edge(clkdv_vga)) then
 						state := p0d;
 					end if;
 					tactiveArea1 <= '0';
-					activeArea2 <= '0';
-					activeArea3 <= '0';
-					activeArea4 <= '1';
 --				end if;
 			when p0e =>
 --				if (v120 = '1') then
@@ -255,9 +234,6 @@ elsif (rising_edge(clkdv_vga)) then
 						state := p0e;
 					end if;
 					tactiveArea1 <= '0';
-					activeArea2 <= '0';
-					activeArea3 <= '0';
-					activeArea4 <= '0';
 --				end if;
 		end case;
 	end if;
