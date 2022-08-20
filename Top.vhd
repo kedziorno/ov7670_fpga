@@ -23,7 +23,7 @@ G_FE_WAIT_BITS : integer := 20 -- sccb wait for cameras
 	Port	(	clk50	: in STD_LOGIC; -- Crystal Oscilator 50MHz  --B8
 	clkcam	: in STD_LOGIC; -- Crystal Oscilator 23.9616 MHz  --U9
 				pb		: in STD_LOGIC; -- Push Button --B18
-				sw		: in STD_LOGIC; -- Push Button --G18
+				sw		: in STD_LOGIC_VECTOR(3 downto 0); -- Push Button --G18
 				led1 : out STD_LOGIC; -- Indicates configuration has been done --J14
 				led2 : out STD_LOGIC; -- Indicates configuration has been done --J14
 				led3 : out STD_LOGIC; -- Indicates configuration has been done --J14
@@ -195,11 +195,11 @@ signal activehaaddrgen : std_logic;
 
 begin
 
-debug(0) <= ov7670_pclk1buf1;
-debug(1) <= ov7670_vsync1;
-debug(2) <= ov7670_href1;
-debug(3) <= ov7670_data1(0);
-debug(4) <= ov7670_data1(7);
+--debug(0) <= ov7670_pclk1buf1;
+--debug(1) <= ov7670_vsync1;
+--debug(2) <= ov7670_href1;
+--debug(3) <= ov7670_data1(0);
+--debug(4) <= ov7670_data1(7);
 
 --	vga_rgb <= (others => '0');
 --	vga_hsync <= '0';
@@ -215,10 +215,10 @@ debug(4) <= ov7670_data1(7);
 
 	anode <= "1111";
 
-	led1 <= ov7670_data1(0) or ov7670_data1(1) or ov7670_data1(2) or ov7670_data1(3) or ov7670_data1(4) or ov7670_data1(5) or ov7670_data1(6) or ov7670_data1(7);
-	led2 <= wr_a1(14) or wr_a1(13) or wr_a1(12) or wr_a1(11) or wr_a1(10) or wr_a1(9) or wr_a1(8) or wr_a1(7) or wr_a1(6) or wr_a1(5) or wr_a1(4) or wr_a1(3) or wr_a1(2) or wr_a1(1) or wr_a1(0);
-	led3 <= wr_d1(0);
-	led4 <= wren1(0);
+	led1 <= ov7670_data1(0) and ov7670_data1(1) and ov7670_data1(2) and ov7670_data1(3) and ov7670_data1(4) and ov7670_data1(5) and ov7670_data1(6) and ov7670_data1(7);
+	led2 <= ov7670_data2(0) and ov7670_data2(1) and ov7670_data2(2) and ov7670_data2(3) and ov7670_data2(4) and ov7670_data2(5) and ov7670_data2(6) and ov7670_data2(7);
+	led3 <= ov7670_data3(0) and ov7670_data3(1) and ov7670_data3(2) and ov7670_data3(3) and ov7670_data3(4) and ov7670_data3(5) and ov7670_data3(6) and ov7670_data3(7);
+	led4 <= ov7670_data4(0) and ov7670_data4(1) and ov7670_data4(2) and ov7670_data4(3) and ov7670_data4(4) and ov7670_data4(5) and ov7670_data4(6) and ov7670_data4(7);
 
 --	led1 <= '0';
 --	led2 <= '0';
