@@ -5,14 +5,14 @@ Parameter TMPDIR set to xst/projnav.tmp
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.07 secs
+Total CPU time to Xst completion: 0.05 secs
  
 --> 
 Parameter xsthdpdir set to xst
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.07 secs
+Total CPU time to Xst completion: 0.05 secs
  
 --> 
 Reading design: Top.prj
@@ -129,14 +129,14 @@ Architecture behavioral of Entity ov7670_capture is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/ipcore_dir/frame_buffer.vhd" in Library work.
 Architecture frame_buffer_a of Entity frame_buffer is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/address_generator.vhd" in Library work.
-Entity <address_generator> compiled.
-Entity <address_generator> (Architecture <behavioral>) compiled.
+Architecture behavioral of Entity address_generator is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/vga_imagegenerator.vhd" in Library work.
 Architecture behavioral of Entity vga_imagegenerator is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/vga_timing.vhd" in Library work.
 Architecture behavioral of Entity vga_timing_synch is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/ov7670_registers.vhd" in Library work.
-Architecture behavioral of Entity ov7670_registers is up to date.
+Entity <ov7670_registers> compiled.
+Entity <ov7670_registers> (Architecture <behavioral>) compiled.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/ov7670_SCCB.vhd" in Library work.
 Architecture behavioral of Entity ov7670_sccb is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/Top.vhd" in Library work.
@@ -841,22 +841,22 @@ Design Statistics
 # IOs                              : 104
 
 Cell Usage :
-# BELS                             : 1660
+# BELS                             : 1659
 #      AND2                        : 5
 #      GND                         : 2
 #      INV                         : 33
 #      LUT1                        : 189
-#      LUT2                        : 182
+#      LUT2                        : 181
 #      LUT2_L                      : 3
-#      LUT3                        : 171
+#      LUT3                        : 175
 #      LUT3_D                      : 5
 #      LUT3_L                      : 1
-#      LUT4                        : 305
+#      LUT4                        : 302
 #      LUT4_D                      : 16
 #      LUT4_L                      : 20
 #      MULT_AND                    : 7
 #      MUXCY                       : 241
-#      MUXF5                       : 131
+#      MUXF5                       : 130
 #      MUXF6                       : 62
 #      MUXF7                       : 32
 #      MUXF8                       : 16
@@ -887,7 +887,7 @@ Device utilization summary:
 
 Selected Device : 3s1200efg320-4 
 
- Number of Slices:                      593  out of   8672     6%  
+ Number of Slices:                      594  out of   8672     6%  
  Number of Slice Flip Flops:            445  out of  17344     2%  
  Number of 4 input LUTs:                925  out of  17344     5%  
  Number of IOs:                         104
@@ -943,7 +943,7 @@ Timing Summary:
 Speed Grade: -4
 
    Minimum period: 7.960ns (Maximum Frequency: 125.628MHz)
-   Minimum input arrival time before clock: 5.724ns
+   Minimum input arrival time before clock: 5.584ns
    Maximum output required time after clock: 10.809ns
    Maximum combinational path delay: 7.535ns
 
@@ -1010,7 +1010,7 @@ Delay:               3.980ns (Levels of Logic = 1)
 =========================================================================
 Timing constraint: Default period analysis for Clock 'clkcam'
   Clock period: 6.649ns (frequency: 150.399MHz)
-  Total number of paths / destination ports: 6272 / 327
+  Total number of paths / destination ports: 6269 / 327
 -------------------------------------------------------------------------
 Delay:               6.649ns (Levels of Logic = 8)
   Source:            w4dcmcnt_7 (FF)
@@ -1053,7 +1053,7 @@ Delay:               6.247ns (Levels of Logic = 4)
     ----------------------------------------  ------------
      FDCE:C->Q             2   0.591   0.622  inst_vgatiming/fpv_9 (inst_vgatiming/fpv_9)
      LUT4:I0->O            1   0.704   0.424  inst_vgatiming/statev_cmp_eq000321 (inst_vgatiming/statev_cmp_eq000321)
-     LUT4:I3->O            1   0.704   0.424  inst_vgatiming/statev_cmp_eq000332_SW0 (N77)
+     LUT4:I3->O            1   0.704   0.424  inst_vgatiming/statev_cmp_eq000332_SW0 (N79)
      LUT4_D:I3->O         13   0.704   1.062  inst_vgatiming/statev_cmp_eq000332 (inst_vgatiming/statev_cmp_eq0003)
      LUT2:I1->O            1   0.704   0.000  inst_vgatiming/Mcount_fpv_eqn_13 (inst_vgatiming/Mcount_fpv_eqn_1)
      FDCE:D                    0.308          inst_vgatiming/fpv_1
@@ -1085,7 +1085,7 @@ Offset:              5.280ns (Levels of Logic = 2)
 Timing constraint: Default OFFSET IN BEFORE for Clock 'ov7670_pclkbufmux1'
   Total number of paths / destination ports: 130 / 10
 -------------------------------------------------------------------------
-Offset:              5.724ns (Levels of Logic = 4)
+Offset:              5.584ns (Levels of Logic = 4)
   Source:            sw<1> (PAD)
   Destination:       inst_ov7670capt1/latched_href (FF)
   Destination Clock: ov7670_pclkbufmux1 falling
@@ -1095,13 +1095,13 @@ Offset:              5.724ns (Levels of Logic = 4)
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
      IBUF:I->O            15   1.218   1.192  sw_1_IBUF (sw_1_IBUF)
-     LUT2:I0->O           20   0.704   1.277  ov7670_vsyncmux21 (ov7670_datamux<0>21)
-     LUT3:I0->O            1   0.704   0.000  ov7670_vsyncmux66_G (N100)
+     LUT2:I0->O           20   0.704   1.137  ov7670_vsyncmux21 (ov7670_datamux<0>21)
+     LUT3:I2->O            1   0.704   0.000  ov7670_vsyncmux66_G (N102)
      MUXF5:I1->O           1   0.321   0.000  ov7670_vsyncmux66 (ov7670_vsyncmux)
      FDC_1:D                   0.308          inst_ov7670capt1/latched_vsync
     ----------------------------------------
-    Total                      5.724ns (3.255ns logic, 2.469ns route)
-                                       (56.9% logic, 43.1% route)
+    Total                      5.584ns (3.255ns logic, 2.329ns route)
+                                       (58.3% logic, 41.7% route)
 
 =========================================================================
 Timing constraint: Default OFFSET OUT AFTER for Clock 'clkcam'
@@ -1116,7 +1116,7 @@ Offset:              7.741ns (Levels of Logic = 3)
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDR:C->Q            406   0.591   1.384  inst_debounce/output (inst_debounce/output)
+     FDR:C->Q            405   0.591   1.384  inst_debounce/output (inst_debounce/output)
      LUT4:I3->O            4   0.704   0.666  SCCB/siodLogicTrst7 (SCCB/siodLogicTrst7)
      LUT3:I1->O            1   0.704   0.420  ov7670_siod41 (ov7670_siod4_OBUF)
      OBUF:I->O                 3.272          ov7670_siod4_OBUF (ov7670_siod4)
@@ -1194,12 +1194,12 @@ Delay:               7.535ns (Levels of Logic = 4)
 
 
 Total REAL time to Xst completion: 20.00 secs
-Total CPU time to Xst completion: 20.02 secs
+Total CPU time to Xst completion: 19.89 secs
  
 --> 
 
 
-Total memory usage is 551492 kilobytes
+Total memory usage is 551508 kilobytes
 
 Number of errors   :    0 (   0 filtered)
 Number of warnings :   46 (   0 filtered)
