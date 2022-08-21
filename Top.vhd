@@ -38,9 +38,14 @@ G_FE_WAIT_BITS : integer := 20 -- sccb wait for cameras
 				ov7670_data1,ov7670_data2,ov7670_data3,ov7670_data4  : in  STD_LOGIC_vector(7 downto 0);
 				ov7670_sioc1,ov7670_sioc2,ov7670_sioc3,ov7670_sioc4  : out STD_LOGIC;
 				ov7670_siod1,ov7670_siod2,ov7670_siod3,ov7670_siod4  : inout STD_LOGIC;
+				vga_blankn : out STD_LOGIC;
+				vga_clk25 : out STD_LOGIC;
+				vga_rgb	: out STD_LOGIC_VECTOR(15 downto 0);
 				vga_hsync : out STD_LOGIC;
 				vga_vsync : out STD_LOGIC;
-				vga_rgb	: out STD_LOGIC_VECTOR(7 downto 0);
+				o_rgb	: out STD_LOGIC_VECTOR(7 downto 0);
+				o_hsync : out STD_LOGIC;
+				o_vsync : out STD_LOGIC;
 				debug : out std_logic_vector(3 downto 0)
 			 );
 end Top;
@@ -138,7 +143,7 @@ COMPONENT vga_imagegenerator
 Generic (BITS : integer := BITS);
 	Port ( reset : in std_logic; clk : std_logic; Data_in1 : in  STD_LOGIC_VECTOR (BITS-1 downto 0);
 						active_area1 : in  STD_LOGIC;
-           RGB_out : out  STD_LOGIC_VECTOR (7 downto 0));
+           RGB_out : out  STD_LOGIC_VECTOR (15 downto 0));
 END COMPONENT;
 
 COMPONENT address_generator
@@ -207,12 +212,27 @@ signal ov7670_datamux : std_logic_vector(7 downto 0);
 
 signal sel1, sel2, sel3, sel4, nosel, carrier, collision : std_logic;
 
+signal hs,vs : std_logic;
+signal rgb : std_logic_vector(15 downto 0);
+
 begin
 
-debug(0) <= ov7670_pclkbufmux;
-debug(1) <= ov7670_vsyncmux;
-debug(2) <= ov7670_hrefmux;
-debug(3) <= ov7670_datamux(0);
+vga_rgb	<= rgb;
+vga_hsync	<= hs;
+vga_vsync	<= vs;
+o_rgb	<= rgb(7 downto 0);
+o_hsync	<= hs;
+o_vsync	<= vs;
+
+vga_blankn <= '1';
+--vga_syncn <= '1';
+vga_clk25 <= clk25;
+
+--debug(0) <= ov7670_pclkbufmux;
+--debug(1) <= ov7670_vsyncmux;
+--debug(2) <= ov7670_hrefmux;
+--debug(3) <= ov7670_datamux(0);
+debug(3 downto 0) <= "0000";
 
 --	vga_rgb <= (others => '0');
 --	vga_hsync <= '0';
@@ -331,8 +351,8 @@ u2: arbiter port map
 		clkA => ov7670_pclkbufmux,
 		addrA => wr_a1,
 		dinA => wr_d1,
-		clkB => clk25,
---		clkB => cc4,
+--		clkB => clk25,
+		clkB => cc4,
 		addrB => rd_a1,
 		doutB => rd_d1);
 	
@@ -342,7 +362,7 @@ u2: arbiter port map
 		clk25 => cc4,
 		enable => activeRender1, -- slide
 --		enable => active1, -- dont slide
-		vsync => vga_vsync_sig,
+		vsync => vs,
 --		vsync => not ov7670_vsync1,
 		address => rd_a1,
 		activeh => activehaaddrgen);
@@ -352,18 +372,18 @@ u2: arbiter port map
 		clk => clk25,
 		Data_in1 => rd_d1,
 		active_area1 => active1,
-		RGB_out => vga_rgb);
+		RGB_out => rgb);
 	
 	inst_vgatiming : VGA_timing_synch port map(
 		reset => resend,
 		clk25 => clk25,
-		Hsync => vga_hsync,
-		Vsync => vga_vsync_sig,
+		Hsync => hs,
+		Vsync => vs,
 		activeArea1 => active1,
 		activehaaddrgen => activehaaddrgen,
 		activeRender1 => activeRender1);
 
-vga_vsync <= vga_vsync_sig;
+vga_vsync <= vs;
 
 Registers: ov7670_registers port map(
 	reset => resend,
@@ -579,21 +599,18 @@ OBUF_xclk4 : OBUF port map (O => ov7670_xclk4, I => cc);
 --ov7670_pwdn3 <= '1' when resetdcm = '1' else '0';
 --ov7670_pwdn4 <= '1' when resetdcm = '1' else '0';
 
-p0 : process (resend,clk25) is
-	constant CMAX : integer := 2;
---	constant CMAX : integer := 4;
+p0 : process (resend,clkcambuf) is
+	constant CMAX : integer := 8;
 	variable vmax : integer range 0 to CMAX-1;
 begin
 	if (resend = '1') then
 		cc4 <= '0';
 		vmax := 0;
-	elsif (rising_edge(clk25)) then
+	elsif (rising_edge(clkcambuf)) then
 		if (vmax = CMAX-1) then
---			cc4 <= '1';
 			cc4 <= not cc4;
 			vmax := 0;
 		else
---			cc4 <= '0';
 			cc4 <= cc4;
 			vmax := vmax + 1;
 		end if;
@@ -604,23 +621,21 @@ vga_bufg : IBUFG generic map (IOSTANDARD => "DEFAULT") port map (O => clkcambuf,
 cam_bufg : BUFG port map (O => clk50buf, I => clkcambuf);
 
 pcamdiv : process (clkcambuf,resend) is
-	constant CMAX : integer := 4;
---	constant CMAX : integer := 4;
+	constant CMAX : integer := 2;
 	variable vmax : integer range 0 to CMAX-1;
 begin
 	if (resend = '1') then
 		clk25 <= '0';
+		cc <= '0';
 		vmax := 0;
 	elsif (rising_edge(clkcambuf)) then
 		if (vmax = CMAX-1) then
-			clk25 <= '1';
-			cc <= '1';
---			clk25 <= not cc4;
+			clk25 <= not clk25;
+			cc <= not cc;
 			vmax := 0;
 		else
-			clk25 <= '0';
-			cc <= '0';
---			clk25 <= cc4;
+			clk25 <= clk25;
+			cc <= cc;
 			vmax := vmax + 1;
 		end if;
 	end if;
