@@ -44,35 +44,33 @@ G_WAIT1 : integer := 7; -- wait for reset dcm and cameras
 G_FE_WAIT_BITS : integer := 9 -- sccb wait for cameras
 );
 Port	(
-clkcam	: in STD_LOGIC; -- Crystal Oscilator 23.9616 MHz  --U9
-pb		: in STD_LOGIC; -- Push Button --B18
-sw		: in STD_LOGIC_VECTOR(3 downto 0); -- Push Button --G18
-led1 : out STD_LOGIC; -- Indicates configuration has been done --J14
-led2 : out STD_LOGIC; -- Indicates configuration has been done --J14
-led3 : out STD_LOGIC; -- Indicates configuration has been done --J14
-led4 : out STD_LOGIC; -- Indicates configuration has been done --J14
-anode : out std_logic_vector(3 downto 0);
--- OV7670
---				ov7670_reset1,ov7670_reset2,ov7670_reset3,ov7670_reset4  : out  STD_LOGIC;
---				ov7670_pwdn1,ov7670_pwdn2,ov7670_pwdn3,ov7670_pwdn4: out  STD_LOGIC;
-ov7670_pclk1,ov7670_pclk2,ov7670_pclk3,ov7670_pclk4  : in  STD_LOGIC; -- Pmod JB8 --R16
-ov7670_xclk1,ov7670_xclk2,ov7670_xclk3,ov7670_xclk4  : out STD_LOGIC; -- Pmod JB2 --R18
-ov7670_vsync1,ov7670_vsync2,ov7670_vsync3,ov7670_vsync4 : in  STD_LOGIC; -- Pmod JB9 --T18
-ov7670_href1,ov7670_href2,ov7670_href3,ov7670_href4  : in  STD_LOGIC; -- Pmod JB3 --R15
-ov7670_data1,ov7670_data2,ov7670_data3,ov7670_data4  : in  STD_LOGIC_vector(7 downto 0);
--- D0 : Pmod JA2 --K12 			-- D4 : Pmod JA4  --M15
--- D1 : Pmod JA8 --L16			-- D5 : Pmod JA10 --M16
--- D2 : Pmod JA3 --L17			-- D6 : Pmod JB1  --M13
--- D3 : Pmod JA9 --M14			-- D7 : Pmod JB7  --P17
-ov7670_sioc1,ov7670_sioc2,ov7670_sioc3,ov7670_sioc4  : out STD_LOGIC; -- Pmod JB10 --J12
-ov7670_siod1,ov7670_siod2,ov7670_siod3,ov7670_siod4  : inout STD_LOGIC; -- Pmod JB4 --H16
---VGA
-vga_hsync : out STD_LOGIC; --T4
-vga_vsync : out STD_LOGIC; --U3
-vga_rgb	: out STD_LOGIC_VECTOR(7 downto 0)
--- R : R9(MSB), T8, R8
--- G : N8, P8, P6
--- Bc: U5, U4(LSB)
+				clkcam	: in STD_LOGIC;
+				pb		: in STD_LOGIC;
+				sw		: in STD_LOGIC_VECTOR(3 downto 0);
+--				led1 : out STD_LOGIC;
+--				led2 : out STD_LOGIC;
+--				led3 : out STD_LOGIC;
+--				led4 : out STD_LOGIC;
+--			  anode : out std_logic_vector(3 downto 0);
+--				ov7670_reset1,ov7670_reset2,ov7670_reset3,ov7670_reset4 : out  STD_LOGIC;
+--				ov7670_pwdn1,ov7670_pwdn2,ov7670_pwdn3,ov7670_pwdn4 : out  STD_LOGIC;
+				ov7670_pclk1,ov7670_pclk2,ov7670_pclk3,ov7670_pclk4  : in  STD_LOGIC;
+				ov7670_xclk1,ov7670_xclk2,ov7670_xclk3,ov7670_xclk4  : out STD_LOGIC;
+				ov7670_vsync1,ov7670_vsync2,ov7670_vsync3,ov7670_vsync4 : in  STD_LOGIC;
+				ov7670_href1,ov7670_href2,ov7670_href3,ov7670_href4  : in  STD_LOGIC;
+				ov7670_data1,ov7670_data2,ov7670_data3,ov7670_data4  : in  STD_LOGIC_vector(7 downto 0);
+				ov7670_sioc1,ov7670_sioc2,ov7670_sioc3,ov7670_sioc4  : out STD_LOGIC;
+				ov7670_siod1,ov7670_siod2,ov7670_siod3,ov7670_siod4  : inout STD_LOGIC;
+				vga_o_blankn : out STD_LOGIC;
+				vga_o_syncn : out STD_LOGIC;
+				vga_o_psave : out STD_LOGIC;
+				vga_o_clk25 : out STD_LOGIC;
+				vga_o_hsync : out STD_LOGIC;
+				vga_o_vsync : out STD_LOGIC;
+				o_r	: out STD_LOGIC_VECTOR(7 downto 0);
+				o_g	: out STD_LOGIC_VECTOR(7 downto 0);
+				o_b	: out STD_LOGIC_VECTOR(7 downto 0);
+				debug : out std_logic_vector(3 downto 0)
 );
 end component Top;
 
@@ -147,6 +145,17 @@ signal camera_o_pclk1,camera_o_pclk2,camera_o_pclk3,camera_o_pclk4 : std_logic;
 signal camera_o_d1,camera_o_d2,camera_o_d3,camera_o_d4 : std_logic_vector(7 downto 0);
 
 signal anode : std_logic_vector (3 downto 0);
+
+signal vga_o_blankn : STD_LOGIC;
+signal vga_o_syncn : STD_LOGIC;
+signal vga_o_psave : STD_LOGIC;
+signal vga_o_clk25 : STD_LOGIC;
+signal vga_o_hsync : STD_LOGIC;
+signal vga_o_vsync : STD_LOGIC;
+signal o_r	: STD_LOGIC_VECTOR(7 downto 0);
+signal o_g	: STD_LOGIC_VECTOR(7 downto 0);
+signal o_b	: STD_LOGIC_VECTOR(7 downto 0);
+signal debug : std_logic_vector(3 downto 0);
 
 BEGIN
 
@@ -227,11 +236,11 @@ uut: Top PORT MAP (
 clkcam => clkcam,
 pb => pb,
 sw => sw,
-led1 => led1,
-led2 => led2,
-led3 => led3,
-led4 => led4,
-anode => anode,
+--led1 => led1,
+--led2 => led2,
+--led3 => led3,
+--led4 => led4,
+--anode => anode,
 --ov7670_reset1 => camera_i_rst1,
 --ov7670_reset2 => camera_i_rst2,
 --ov7670_reset3 => camera_i_rst3,
@@ -263,7 +272,17 @@ ov7670_sioc4 => ov7670_sioc4,
 ov7670_siod1 => ov7670_siod1,
 ov7670_siod2 => ov7670_siod2,
 ov7670_siod3 => ov7670_siod3,
-ov7670_siod4 => ov7670_siod4
+ov7670_siod4 => ov7670_siod4,
+vga_o_blankn => vga_o_blankn,
+vga_o_syncn => vga_o_syncn,
+vga_o_psave => vga_o_psave,
+vga_o_clk25 => vga_o_clk25,
+vga_o_hsync => vga_o_hsync,
+vga_o_vsync => vga_o_vsync,
+o_r => o_r,
+o_g => o_g,
+o_b => o_b,
+debug => debug
 );
 
 camera_xclk_process :process

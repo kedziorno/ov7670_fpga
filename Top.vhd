@@ -24,11 +24,11 @@ G_FE_WAIT_BITS : integer := 20 -- sccb wait for cameras
 				clkcam	: in STD_LOGIC;
 				pb		: in STD_LOGIC;
 				sw		: in STD_LOGIC_VECTOR(3 downto 0);
-				led1 : out STD_LOGIC;
-				led2 : out STD_LOGIC;
-				led3 : out STD_LOGIC;
-				led4 : out STD_LOGIC;
-			  anode : out std_logic_vector(3 downto 0);
+--				led1 : out STD_LOGIC;
+--				led2 : out STD_LOGIC;
+--				led3 : out STD_LOGIC;
+--				led4 : out STD_LOGIC;
+--			  anode : out std_logic_vector(3 downto 0);
 --				ov7670_reset1,ov7670_reset2,ov7670_reset3,ov7670_reset4 : out  STD_LOGIC;
 --				ov7670_pwdn1,ov7670_pwdn2,ov7670_pwdn3,ov7670_pwdn4 : out  STD_LOGIC;
 				ov7670_pclk1,ov7670_pclk2,ov7670_pclk3,ov7670_pclk4  : in  STD_LOGIC;
@@ -38,14 +38,15 @@ G_FE_WAIT_BITS : integer := 20 -- sccb wait for cameras
 				ov7670_data1,ov7670_data2,ov7670_data3,ov7670_data4  : in  STD_LOGIC_vector(7 downto 0);
 				ov7670_sioc1,ov7670_sioc2,ov7670_sioc3,ov7670_sioc4  : out STD_LOGIC;
 				ov7670_siod1,ov7670_siod2,ov7670_siod3,ov7670_siod4  : inout STD_LOGIC;
-				vga_blankn : out STD_LOGIC;
-				vga_clk25 : out STD_LOGIC;
-				vga_rgb	: out STD_LOGIC_VECTOR(15 downto 0);
-				vga_hsync : out STD_LOGIC;
-				vga_vsync : out STD_LOGIC;
-				o_rgb	: out STD_LOGIC_VECTOR(7 downto 0);
-				o_hsync : out STD_LOGIC;
-				o_vsync : out STD_LOGIC;
+				vga_o_blankn : out STD_LOGIC;
+				vga_o_syncn : out STD_LOGIC;
+				vga_o_psave : out STD_LOGIC;
+				vga_o_clk25 : out STD_LOGIC;
+				vga_o_hsync : out STD_LOGIC;
+				vga_o_vsync : out STD_LOGIC;
+				o_r	: out STD_LOGIC_VECTOR(7 downto 0);
+				o_g	: out STD_LOGIC_VECTOR(7 downto 0);
+				o_b	: out STD_LOGIC_VECTOR(7 downto 0);
 				debug : out std_logic_vector(3 downto 0)
 			 );
 end Top;
@@ -217,16 +218,39 @@ signal rgb : std_logic_vector(15 downto 0);
 
 begin
 
-vga_rgb	<= rgb;
-vga_hsync	<= hs;
-vga_vsync	<= vs;
-o_rgb	<= rgb(7 downto 0);
-o_hsync	<= hs;
-o_vsync	<= vs;
+vga_o_clk25 <= clk25;
+vga_o_hsync	<= hs;
+vga_o_vsync	<= vs;
+vga_o_syncn <= '1';
+vga_o_blankn <= '1';
+vga_o_psave <= '1';
 
-vga_blankn <= '1';
---vga_syncn <= '1';
-vga_clk25 <= clk25;
+o_r(7) <= rgb(11);
+o_r(6) <= rgb(10);
+o_r(5) <= rgb(9);
+o_r(4) <= rgb(8);
+o_r(3) <= rgb(8);
+o_r(2) <= rgb(8);
+o_r(1) <= rgb(8);
+o_r(0) <= rgb(8);
+
+o_g(7) <= rgb(7);
+o_g(6) <= rgb(6);
+o_g(5) <= rgb(5);
+o_g(4) <= rgb(4);
+o_g(3) <= rgb(4);
+o_g(2) <= rgb(4);
+o_g(1) <= rgb(4);
+o_g(0) <= rgb(4);
+
+o_b(7) <= rgb(3);
+o_b(6) <= rgb(2);
+o_b(5) <= rgb(1);
+o_b(4) <= rgb(0);
+o_b(3) <= rgb(0);
+o_b(2) <= rgb(0);
+o_b(1) <= rgb(0);
+o_b(0) <= rgb(0);
 
 --debug(0) <= ov7670_pclkbufmux;
 --debug(1) <= ov7670_vsyncmux;
@@ -246,12 +270,12 @@ debug(3 downto 0) <= "0000";
 --	pclk3buf : ov7670_pclk3buf <= ov7670_pclk3;
 --	pclk4buf : ov7670_pclk4buf <= ov7670_pclk4;
 
-	anode <= "1111";
+--	anode <= "1111";
 
-	led1 <= ov7670_data1(0) and ov7670_data1(1) and ov7670_data1(2) and ov7670_data1(3) and ov7670_data1(4) and ov7670_data1(5) and ov7670_data1(6) and ov7670_data1(7);
-	led2 <= ov7670_data2(0) and ov7670_data2(1) and ov7670_data2(2) and ov7670_data2(3) and ov7670_data2(4) and ov7670_data2(5) and ov7670_data2(6) and ov7670_data2(7);
-	led3 <= ov7670_data3(0) and ov7670_data3(1) and ov7670_data3(2) and ov7670_data3(3) and ov7670_data3(4) and ov7670_data3(5) and ov7670_data3(6) and ov7670_data3(7);
-	led4 <= ov7670_data4(0) and ov7670_data4(1) and ov7670_data4(2) and ov7670_data4(3) and ov7670_data4(4) and ov7670_data4(5) and ov7670_data4(6) and ov7670_data4(7);
+--	led1 <= ov7670_data1(0) and ov7670_data1(1) and ov7670_data1(2) and ov7670_data1(3) and ov7670_data1(4) and ov7670_data1(5) and ov7670_data1(6) and ov7670_data1(7);
+--	led2 <= ov7670_data2(0) and ov7670_data2(1) and ov7670_data2(2) and ov7670_data2(3) and ov7670_data2(4) and ov7670_data2(5) and ov7670_data2(6) and ov7670_data2(7);
+--	led3 <= ov7670_data3(0) and ov7670_data3(1) and ov7670_data3(2) and ov7670_data3(3) and ov7670_data3(4) and ov7670_data3(5) and ov7670_data3(6) and ov7670_data3(7);
+--	led4 <= ov7670_data4(0) and ov7670_data4(1) and ov7670_data4(2) and ov7670_data4(3) and ov7670_data4(4) and ov7670_data4(5) and ov7670_data4(6) and ov7670_data4(7);
 
 --	led1 <= '0';
 --	led2 <= '0';
@@ -363,7 +387,6 @@ u2: arbiter port map
 		enable => activeRender1, -- slide
 --		enable => active1, -- dont slide
 		vsync => vs,
---		vsync => not ov7670_vsync1,
 		address => rd_a1,
 		activeh => activehaaddrgen);
 
@@ -383,7 +406,7 @@ u2: arbiter port map
 		activehaaddrgen => activehaaddrgen,
 		activeRender1 => activeRender1);
 
-vga_vsync <= vs;
+vga_o_vsync <= vs;
 
 Registers: ov7670_registers port map(
 	reset => resend,

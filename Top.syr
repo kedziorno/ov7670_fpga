@@ -5,14 +5,14 @@ Parameter TMPDIR set to xst/projnav.tmp
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.05 secs
+Total CPU time to Xst completion: 0.06 secs
  
 --> 
 Parameter xsthdpdir set to xst
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.05 secs
+Total CPU time to Xst completion: 0.06 secs
  
 --> 
 Reading design: Top.prj
@@ -45,7 +45,7 @@ Ignore Synthesis Constraint File   : NO
 ---- Target Parameters
 Output File Name                   : "Top"
 Output Format                      : NGC
-Target Device                      : xc3s1200e-4-fg320
+Target Device                      : xc4vsx35-10-ff668
 
 ---- Source Options
 Top Module Name                    : Top
@@ -66,25 +66,27 @@ ROM Style                          : Auto
 Mux Extraction                     : Yes
 Resource Sharing                   : YES
 Asynchronous To Synchronous        : NO
-Multiplier Style                   : Auto
+Use DSP Block                      : Auto
 Automatic Register Balancing       : No
 
 ---- Target Options
 Add IO Buffers                     : YES
 Global Maximum Fanout              : 500
-Add Generic Clock Buffer(BUFG)     : 24
+Add Generic Clock Buffer(BUFG)     : 32
+Number of Regional Clock Buffers   : 24
 Register Duplication               : YES
 Slice Packing                      : YES
 Optimize Instantiated Primitives   : NO
-Use Clock Enable                   : Yes
-Use Synchronous Set                : Yes
-Use Synchronous Reset              : Yes
+Use Clock Enable                   : Auto
+Use Synchronous Set                : Auto
+Use Synchronous Reset              : Auto
 Pack IO Registers into IOBs        : Auto
 Equivalent register Removal        : YES
 
 ---- General Options
 Optimization Goal                  : Speed
 Optimization Effort                : 1
+Power Reduction                    : NO
 Keep Hierarchy                     : No
 Netlist Hierarchy                  : As_Optimized
 RTL Output                         : Yes
@@ -97,6 +99,7 @@ Bus Delimiter                      : <>
 Case Specifier                     : Maintain
 Slice Utilization Ratio            : 100
 BRAM Utilization Ratio             : 100
+DSP48 Utilization Ratio            : 100
 Verilog 2001                       : YES
 Auto BRAM Packing                  : NO
 Slice Utilization Ratio Delta      : 5
@@ -140,7 +143,8 @@ Entity <ov7670_registers> (Architecture <behavioral>) compiled.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/ov7670_SCCB.vhd" in Library work.
 Architecture behavioral of Entity ov7670_sccb is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/Top.vhd" in Library work.
-Architecture structural of Entity top is up to date.
+Entity <top> compiled.
+Entity <top> (Architecture <structural>) compiled.
 
 =========================================================================
 *                     Design Hierarchy Analysis                         *
@@ -197,7 +201,7 @@ INFO:Xst:1739 - HDL ADVISOR - "/home/user/workspace/ov7670_vga_Nexys2/Top.vhd" l
 INFO:Xst:1739 - HDL ADVISOR - "/home/user/workspace/ov7670_vga_Nexys2/Top.vhd" line 53: declaration of a buffer port will make it difficult for you to validate this design by simulation. It is preferable to declare it as output.
 INFO:Xst:1739 - HDL ADVISOR - "/home/user/workspace/ov7670_vga_Nexys2/Top.vhd" line 54: declaration of a buffer port will make it difficult for you to validate this design by simulation. It is preferable to declare it as output.
 INFO:Xst:1739 - HDL ADVISOR - "/home/user/workspace/ov7670_vga_Nexys2/Top.vhd" line 55: declaration of a buffer port will make it difficult for you to validate this design by simulation. It is preferable to declare it as output.
-WARNING:Xst:2211 - "/home/user/workspace/ov7670_vga_Nexys2/Top.vhd" line 349: Instantiating black box module <frame_buffer>.
+WARNING:Xst:2211 - "/home/user/workspace/ov7670_vga_Nexys2/Top.vhd" line 373: Instantiating black box module <frame_buffer>.
     Set user-defined property "CAPACITANCE =  DONT_CARE" for instance <OBUF_xclk1> in unit <Top>.
     Set user-defined property "DRIVE =  12" for instance <OBUF_xclk1> in unit <Top>.
     Set user-defined property "IOSTANDARD =  DEFAULT" for instance <OBUF_xclk1> in unit <Top>.
@@ -545,6 +549,7 @@ Unit <arbiter> synthesized.
 Synthesizing Unit <Top>.
     Related source file is "/home/user/workspace/ov7670_vga_Nexys2/Top.vhd".
 WARNING:Xst:1780 - Signal <vga_vsync_sig> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <rgb<15:12>> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:646 - Signal <resetdcm1> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:646 - Signal <resetdcm> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <ov7670_pclk4buf> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -781,6 +786,25 @@ Macro Statistics
 *                         Low Level Synthesis                           *
 =========================================================================
 WARNING:Xst:1293 - FF/Latch <data_sr_0> has a constant value of 1 in block <ov7670_SCCB>. This FF/Latch will be trimmed during the optimization process.
+INFO:Xst:1901 - Instance U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/s3_init.ram/dpram.dp1x1.ram in unit inst_framebuffer1 of type RAMB16_S1_S1 has been replaced by RAMB16
+INFO:Xst:1901 - Instance U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[3].ram.r/s3_init.ram/dpram.dp1x1.ram in unit inst_framebuffer1 of type RAMB16_S1_S1 has been replaced by RAMB16
+INFO:Xst:1901 - Instance U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[4].ram.r/s3_init.ram/dpram.dp1x1.ram in unit inst_framebuffer1 of type RAMB16_S1_S1 has been replaced by RAMB16
+INFO:Xst:1901 - Instance U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[5].ram.r/s3_init.ram/dpram.dp1x1.ram in unit inst_framebuffer1 of type RAMB16_S1_S1 has been replaced by RAMB16
+INFO:Xst:1901 - Instance U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[6].ram.r/s3_init.ram/dpram.dp1x1.ram in unit inst_framebuffer1 of type RAMB16_S1_S1 has been replaced by RAMB16
+INFO:Xst:1901 - Instance U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[7].ram.r/s3_init.ram/dpram.dp1x1.ram in unit inst_framebuffer1 of type RAMB16_S1_S1 has been replaced by RAMB16
+INFO:Xst:1901 - Instance U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[8].ram.r/s3_init.ram/dpram.dp1x1.ram in unit inst_framebuffer1 of type RAMB16_S1_S1 has been replaced by RAMB16
+INFO:Xst:1901 - Instance U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[9].ram.r/s3_init.ram/dpram.dp1x1.ram in unit inst_framebuffer1 of type RAMB16_S1_S1 has been replaced by RAMB16
+INFO:Xst:1901 - Instance U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[10].ram.r/s3_init.ram/dpram.dp1x1.ram in unit inst_framebuffer1 of type RAMB16_S1_S1 has been replaced by RAMB16
+INFO:Xst:1901 - Instance U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[12].ram.r/s3_init.ram/dpram.dp1x1.ram in unit inst_framebuffer1 of type RAMB16_S1_S1 has been replaced by RAMB16
+INFO:Xst:1901 - Instance U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[13].ram.r/s3_init.ram/dpram.dp1x1.ram in unit inst_framebuffer1 of type RAMB16_S1_S1 has been replaced by RAMB16
+INFO:Xst:1901 - Instance U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[14].ram.r/s3_init.ram/dpram.dp1x1.ram in unit inst_framebuffer1 of type RAMB16_S1_S1 has been replaced by RAMB16
+INFO:Xst:1901 - Instance U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[15].ram.r/s3_init.ram/dpram.dp1x1.ram in unit inst_framebuffer1 of type RAMB16_S1_S1 has been replaced by RAMB16
+INFO:Xst:1901 - Instance U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[16].ram.r/s3_init.ram/dpram.dp1x1.ram in unit inst_framebuffer1 of type RAMB16_S1_S1 has been replaced by RAMB16
+INFO:Xst:1901 - Instance U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[17].ram.r/s3_init.ram/dpram.dp1x1.ram in unit inst_framebuffer1 of type RAMB16_S1_S1 has been replaced by RAMB16
+INFO:Xst:1901 - Instance U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[18].ram.r/s3_init.ram/dpram.dp1x1.ram in unit inst_framebuffer1 of type RAMB16_S1_S1 has been replaced by RAMB16
+INFO:Xst:1901 - Instance U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[11].ram.r/s3_init.ram/dpram.dp9x9.ram in unit inst_framebuffer1 of type RAMB16_S9_S9 has been replaced by RAMB16
+INFO:Xst:1901 - Instance U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram in unit inst_framebuffer1 of type RAMB16_S18_S18 has been replaced by RAMB16
+INFO:Xst:1901 - Instance U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[1].ram.r/s3_init.ram/dpram.dp9x9.ram in unit inst_framebuffer1 of type RAMB16_S9_S9 has been replaced by RAMB16
 WARNING:Xst:2041 - Unit ov7670_SCCB: 1 internal tristate is replaced by logic (pull-up yes): siod.
 
 Optimizing unit <Top> ...
@@ -803,7 +827,8 @@ WARNING:Xst:2677 - Node <u2/u11/q> of sequential type is unconnected in block <T
 
 Mapping all equations...
 Building and optimizing final netlist ...
-Found area constraint ratio of 100 (+ 5) on block Top, actual ratio is 7.
+Found area constraint ratio of 100 (+ 5) on block Top, actual ratio is 3.
+FlipFlop SCCB/busy_sr_31 has been replicated 1 time(s)
 
 Final Macro Processing ...
 
@@ -811,8 +836,8 @@ Final Macro Processing ...
 Final Register Report
 
 Macro Statistics
-# Registers                                            : 440
- Flip-Flops                                            : 440
+# Registers                                            : 441
+ Flip-Flops                                            : 441
 
 =========================================================================
 
@@ -838,62 +863,63 @@ Optimization Goal                  : Speed
 Keep Hierarchy                     : No
 
 Design Statistics
-# IOs                              : 104
+# IOs                              : 96
 
 Cell Usage :
-# BELS                             : 1659
+# BELS                             : 1617
 #      AND2                        : 5
 #      GND                         : 2
-#      INV                         : 33
-#      LUT1                        : 189
-#      LUT2                        : 181
-#      LUT2_L                      : 3
-#      LUT3                        : 175
-#      LUT3_D                      : 5
-#      LUT3_L                      : 1
-#      LUT4                        : 302
-#      LUT4_D                      : 16
-#      LUT4_L                      : 20
+#      INV                         : 24
+#      LUT1                        : 160
+#      LUT2                        : 184
+#      LUT2_D                      : 2
+#      LUT2_L                      : 4
+#      LUT3                        : 195
+#      LUT3_D                      : 8
+#      LUT3_L                      : 6
+#      LUT4                        : 315
+#      LUT4_D                      : 17
+#      LUT4_L                      : 26
 #      MULT_AND                    : 7
-#      MUXCY                       : 241
-#      MUXF5                       : 130
+#      MUXCY                       : 214
+#      MUXF5                       : 129
 #      MUXF6                       : 62
 #      MUXF7                       : 32
 #      MUXF8                       : 16
 #      VCC                         : 2
-#      XORCY                       : 237
-# FlipFlops/Latches                : 445
+#      XORCY                       : 207
+# FlipFlops/Latches                : 446
+#      FD                          : 23
 #      FDC                         : 160
 #      FDC_1                       : 10
-#      FDCE                        : 186
+#      FDCE                        : 187
 #      FDE                         : 24
 #      FDP                         : 8
 #      FDPE                        : 32
-#      FDR                         : 25
+#      FDR                         : 2
 # RAMS                             : 19
-#      RAMB16_S18_S18              : 1
-#      RAMB16_S1_S1                : 16
-#      RAMB16_S9_S9                : 2
+#      RAMB16                      : 19
 # Clock Buffers                    : 9
 #      BUFG                        : 9
-# IO Buffers                       : 104
+# IO Buffers                       : 96
 #      IBUF                        : 45
 #      IBUFG                       : 5
-#      OBUF                        : 54
+#      OBUF                        : 46
 =========================================================================
 
 Device utilization summary:
 ---------------------------
 
-Selected Device : 3s1200efg320-4 
+Selected Device : 4vsx35ff668-10 
 
- Number of Slices:                      594  out of   8672     6%  
- Number of Slice Flip Flops:            445  out of  17344     2%  
- Number of 4 input LUTs:                925  out of  17344     5%  
- Number of IOs:                         104
- Number of bonded IOBs:                 104  out of    250    41%  
- Number of BRAMs:                        19  out of     28    67%  
- Number of GCLKs:                         9  out of     24    37%  
+ Number of Slices:                      600  out of  15360     3%  
+ Number of Slice Flip Flops:            446  out of  30720     1%  
+ Number of 4 input LUTs:                941  out of  30720     3%  
+ Number of IOs:                          96
+ Number of bonded IOBs:                  96  out of    448    21%  
+ Number of FIFO16/RAMB16s:               19  out of    192     9%  
+    Number used as RAMB16s:              19
+ Number of GCLKs:                         9  out of     32    28%  
 
 ---------------------------
 Partition Resource Summary:
@@ -918,7 +944,7 @@ Clock Signal                       | Clock buffer(FF name)                      
 -----------------------------------+------------------------------------------------------------------------------------------------------------------------------------------+-------+
 cc41                               | BUFG                                                                                                                                     | 71    |
 ov7670_pclkbufmux1(u1/rxclk:O)     | BUFG(*)(inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/s3_init.ram/dpram.dp1x1.ram)| 61    |
-clkcam                             | IBUFG+BUFG                                                                                                                               | 209   |
+clkcam                             | IBUFG+BUFG                                                                                                                               | 210   |
 clk251                             | BUFG                                                                                                                                     | 134   |
 u1/clockp_0                        | NONE(u1/g0[0].u0/qb)                                                                                                                     | 2     |
 u1/clockp_1                        | NONE(u1/g0[1].u0/qb)                                                                                                                     | 2     |
@@ -935,17 +961,17 @@ Asynchronous Control Signals Information:
 --------------------------------------------+--------------------------+-------+
 Control Signal                              | Buffer(FF name)          | Load  |
 --------------------------------------------+--------------------------+-------+
-inst_debounce/output(inst_debounce/output:Q)| NONE(Registers/cmd_reg_0)| 396   |
+inst_debounce/output(inst_debounce/output:Q)| NONE(Registers/cmd_reg_0)| 397   |
 --------------------------------------------+--------------------------+-------+
 
 Timing Summary:
 ---------------
-Speed Grade: -4
+Speed Grade: -10
 
-   Minimum period: 7.960ns (Maximum Frequency: 125.628MHz)
-   Minimum input arrival time before clock: 5.584ns
-   Maximum output required time after clock: 10.809ns
-   Maximum combinational path delay: 7.535ns
+   Minimum period: 4.839ns (Maximum Frequency: 206.644MHz)
+   Minimum input arrival time before clock: 3.640ns
+   Maximum output required time after clock: 9.483ns
+   Maximum combinational path delay: No path found
 
 Timing Detail:
 --------------
@@ -953,44 +979,48 @@ All values displayed in nanoseconds (ns)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'cc41'
-  Clock period: 7.228ns (frequency: 138.351MHz)
-  Total number of paths / destination ports: 1565 / 327
+  Clock period: 4.239ns (frequency: 235.932MHz)
+  Total number of paths / destination ports: 1568 / 327
 -------------------------------------------------------------------------
-Delay:               7.228ns (Levels of Logic = 13)
-  Source:            inst_addrgen1/addr_5 (FF)
-  Destination:       inst_addrgen1/va_14 (FF)
+Delay:               4.239ns (Levels of Logic = 17)
+  Source:            inst_addrgen1/addr_1 (FF)
+  Destination:       inst_addrgen1/addr_14 (FF)
   Source Clock:      cc41 rising
   Destination Clock: cc41 rising
 
-  Data Path: inst_addrgen1/addr_5 to inst_addrgen1/va_14
+  Data Path: inst_addrgen1/addr_1 to inst_addrgen1/addr_14
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDC:C->Q             23   0.591   1.377  inst_addrgen1/addr_5 (inst_addrgen1/addr_5)
-     LUT1:I0->O            1   0.704   0.000  inst_addrgen1/Msub_va_addsub0000_cy<5>_rt (inst_addrgen1/Msub_va_addsub0000_cy<5>_rt)
-     MUXCY:S->O            1   0.464   0.000  inst_addrgen1/Msub_va_addsub0000_cy<5> (inst_addrgen1/Msub_va_addsub0000_cy<5>)
-     MUXCY:CI->O           1   0.059   0.000  inst_addrgen1/Msub_va_addsub0000_cy<6> (inst_addrgen1/Msub_va_addsub0000_cy<6>)
-     MUXCY:CI->O           1   0.059   0.000  inst_addrgen1/Msub_va_addsub0000_cy<7> (inst_addrgen1/Msub_va_addsub0000_cy<7>)
-     MUXCY:CI->O           1   0.059   0.000  inst_addrgen1/Msub_va_addsub0000_cy<8> (inst_addrgen1/Msub_va_addsub0000_cy<8>)
-     MUXCY:CI->O           1   0.059   0.000  inst_addrgen1/Msub_va_addsub0000_cy<9> (inst_addrgen1/Msub_va_addsub0000_cy<9>)
-     MUXCY:CI->O           1   0.059   0.000  inst_addrgen1/Msub_va_addsub0000_cy<10> (inst_addrgen1/Msub_va_addsub0000_cy<10>)
-     MUXCY:CI->O           1   0.059   0.000  inst_addrgen1/Msub_va_addsub0000_cy<11> (inst_addrgen1/Msub_va_addsub0000_cy<11>)
-     MUXCY:CI->O           1   0.059   0.000  inst_addrgen1/Msub_va_addsub0000_cy<12> (inst_addrgen1/Msub_va_addsub0000_cy<12>)
-     XORCY:CI->O           1   0.804   0.595  inst_addrgen1/Msub_va_addsub0000_xor<13> (inst_addrgen1/va_addsub0000<13>)
-     LUT1:I0->O            1   0.704   0.000  inst_addrgen1/Madd_va_add0000_cy<13>_rt (inst_addrgen1/Madd_va_add0000_cy<13>_rt)
-     MUXCY:S->O            0   0.464   0.000  inst_addrgen1/Madd_va_add0000_cy<13> (inst_addrgen1/Madd_va_add0000_cy<13>)
-     XORCY:CI->O           1   0.804   0.000  inst_addrgen1/Madd_va_add0000_xor<14> (inst_addrgen1/va_add0000<14>)
-     FDCE:D                    0.308          inst_addrgen1/va_14
+     FDC:C->Q             23   0.360   0.904  inst_addrgen1/addr_1 (inst_addrgen1/addr_1)
+     LUT3:I2->O            1   0.195   0.523  inst_addrgen1/addr_mux0003<1>1 (inst_addrgen1/addr_mux0003<1>)
+     LUT3:I2->O            1   0.195   0.000  inst_addrgen1/Madd_addr_share0000_lut<1> (inst_addrgen1/Madd_addr_share0000_lut<1>)
+     MUXCY:S->O            1   0.366   0.000  inst_addrgen1/Madd_addr_share0000_cy<1> (inst_addrgen1/Madd_addr_share0000_cy<1>)
+     MUXCY:CI->O           1   0.044   0.000  inst_addrgen1/Madd_addr_share0000_cy<2> (inst_addrgen1/Madd_addr_share0000_cy<2>)
+     MUXCY:CI->O           1   0.044   0.000  inst_addrgen1/Madd_addr_share0000_cy<3> (inst_addrgen1/Madd_addr_share0000_cy<3>)
+     MUXCY:CI->O           1   0.044   0.000  inst_addrgen1/Madd_addr_share0000_cy<4> (inst_addrgen1/Madd_addr_share0000_cy<4>)
+     MUXCY:CI->O           1   0.044   0.000  inst_addrgen1/Madd_addr_share0000_cy<5> (inst_addrgen1/Madd_addr_share0000_cy<5>)
+     MUXCY:CI->O           1   0.044   0.000  inst_addrgen1/Madd_addr_share0000_cy<6> (inst_addrgen1/Madd_addr_share0000_cy<6>)
+     MUXCY:CI->O           1   0.044   0.000  inst_addrgen1/Madd_addr_share0000_cy<7> (inst_addrgen1/Madd_addr_share0000_cy<7>)
+     MUXCY:CI->O           1   0.044   0.000  inst_addrgen1/Madd_addr_share0000_cy<8> (inst_addrgen1/Madd_addr_share0000_cy<8>)
+     MUXCY:CI->O           1   0.044   0.000  inst_addrgen1/Madd_addr_share0000_cy<9> (inst_addrgen1/Madd_addr_share0000_cy<9>)
+     MUXCY:CI->O           1   0.044   0.000  inst_addrgen1/Madd_addr_share0000_cy<10> (inst_addrgen1/Madd_addr_share0000_cy<10>)
+     MUXCY:CI->O           1   0.044   0.000  inst_addrgen1/Madd_addr_share0000_cy<11> (inst_addrgen1/Madd_addr_share0000_cy<11>)
+     MUXCY:CI->O           1   0.044   0.000  inst_addrgen1/Madd_addr_share0000_cy<12> (inst_addrgen1/Madd_addr_share0000_cy<12>)
+     MUXCY:CI->O           0   0.044   0.000  inst_addrgen1/Madd_addr_share0000_cy<13> (inst_addrgen1/Madd_addr_share0000_cy<13>)
+     XORCY:CI->O           1   0.360   0.585  inst_addrgen1/Madd_addr_share0000_xor<14> (inst_addrgen1/addr_share0000<14>)
+     LUT4:I2->O            1   0.195   0.000  inst_addrgen1/addr_mux0001<0>1 (inst_addrgen1/addr_mux0001<0>)
+     FDC:D                     0.022          inst_addrgen1/addr_14
     ----------------------------------------
-    Total                      7.228ns (5.256ns logic, 1.972ns route)
-                                       (72.7% logic, 27.3% route)
+    Total                      4.239ns (2.227ns logic, 2.011ns route)
+                                       (52.5% logic, 47.5% route)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'ov7670_pclkbufmux1'
-  Clock period: 7.960ns (frequency: 125.628MHz)
-  Total number of paths / destination ports: 776 / 389
+  Clock period: 4.347ns (frequency: 230.065MHz)
+  Total number of paths / destination ports: 833 / 446
 -------------------------------------------------------------------------
-Delay:               3.980ns (Levels of Logic = 1)
+Delay:               2.173ns (Levels of Logic = 1)
   Source:            inst_ov7670capt1/latched_vsync (FF)
   Destination:       inst_ov7670capt1/address_14 (FF)
   Source Clock:      ov7670_pclkbufmux1 falling
@@ -1000,114 +1030,115 @@ Delay:               3.980ns (Levels of Logic = 1)
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDC_1:C->Q           16   0.591   1.113  inst_ov7670capt1/latched_vsync (inst_ov7670capt1/latched_vsync)
-     LUT2:I1->O           15   0.704   1.017  inst_ov7670capt1/address_not00011 (inst_ov7670capt1/address_not0001)
-     FDCE:CE                   0.555          inst_ov7670capt1/address_0
+     FDC_1:C->Q            2   0.307   0.540  inst_ov7670capt1/latched_vsync (inst_ov7670capt1/latched_vsync)
+     LUT2:I1->O           15   0.195   0.591  inst_ov7670capt1/address_not00011 (inst_ov7670capt1/address_not0001)
+     FDCE:CE                   0.540          inst_ov7670capt1/address_0
     ----------------------------------------
-    Total                      3.980ns (1.850ns logic, 2.130ns route)
-                                       (46.5% logic, 53.5% route)
+    Total                      2.173ns (1.042ns logic, 1.131ns route)
+                                       (47.9% logic, 52.1% route)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'clkcam'
-  Clock period: 6.649ns (frequency: 150.399MHz)
-  Total number of paths / destination ports: 6269 / 327
+  Clock period: 4.839ns (frequency: 206.644MHz)
+  Total number of paths / destination ports: 6306 / 307
 -------------------------------------------------------------------------
-Delay:               6.649ns (Levels of Logic = 8)
-  Source:            w4dcmcnt_7 (FF)
-  Destination:       w4dcmcnt_1 (FF)
+Delay:               4.839ns (Levels of Logic = 8)
+  Source:            inst_debounce/counter_8 (FF)
+  Destination:       inst_debounce/counter_22 (FF)
   Source Clock:      clkcam rising
   Destination Clock: clkcam rising
 
-  Data Path: w4dcmcnt_7 to w4dcmcnt_1
+  Data Path: inst_debounce/counter_8 to inst_debounce/counter_22
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDC:C->Q              3   0.591   0.706  w4dcmcnt_7 (w4dcmcnt_7)
-     LUT4:I0->O            1   0.704   0.000  state_cmp_eq0000_wg_lut<0> (state_cmp_eq0000_wg_lut<0>)
-     MUXCY:S->O            1   0.464   0.000  state_cmp_eq0000_wg_cy<0> (state_cmp_eq0000_wg_cy<0>)
-     MUXCY:CI->O           1   0.059   0.000  state_cmp_eq0000_wg_cy<1> (state_cmp_eq0000_wg_cy<1>)
-     MUXCY:CI->O           1   0.059   0.000  state_cmp_eq0000_wg_cy<2> (state_cmp_eq0000_wg_cy<2>)
-     MUXCY:CI->O           1   0.059   0.000  state_cmp_eq0000_wg_cy<3> (state_cmp_eq0000_wg_cy<3>)
-     MUXCY:CI->O           7   0.459   0.743  state_cmp_eq0000_wg_cy<4> (state_cmp_eq0000)
-     LUT3_D:I2->O         19   0.704   1.089  w4dcmcnt_mux0000<0>31 (N8)
-     LUT4:I3->O            1   0.704   0.000  w4dcmcnt_mux0000<18>1 (w4dcmcnt_mux0000<18>)
-     FDC:D                     0.308          w4dcmcnt_1
+     FD:C->Q               2   0.360   0.758  inst_debounce/counter_8 (inst_debounce/counter_8)
+     LUT4:I0->O            1   0.195   0.000  inst_debounce/counter_cmp_eq0000_wg_lut<0> (inst_debounce/counter_cmp_eq0000_wg_lut<0>)
+     MUXCY:S->O            1   0.366   0.000  inst_debounce/counter_cmp_eq0000_wg_cy<0> (inst_debounce/counter_cmp_eq0000_wg_cy<0>)
+     MUXCY:CI->O           1   0.045   0.000  inst_debounce/counter_cmp_eq0000_wg_cy<1> (inst_debounce/counter_cmp_eq0000_wg_cy<1>)
+     MUXCY:CI->O           1   0.045   0.000  inst_debounce/counter_cmp_eq0000_wg_cy<2> (inst_debounce/counter_cmp_eq0000_wg_cy<2>)
+     MUXCY:CI->O           1   0.045   0.000  inst_debounce/counter_cmp_eq0000_wg_cy<3> (inst_debounce/counter_cmp_eq0000_wg_cy<3>)
+     MUXCY:CI->O           1   0.045   0.000  inst_debounce/counter_cmp_eq0000_wg_cy<4> (inst_debounce/counter_cmp_eq0000_wg_cy<4>)
+     MUXCY:CI->O          24   0.369   0.978  inst_debounce/counter_cmp_eq0000_wg_cy<5> (inst_debounce/counter_cmp_eq0000)
+     LUT2:I1->O            2   0.195   0.377  inst_debounce/counter_or00001 (inst_debounce/counter_or0000)
+     FDR:R                     1.062          inst_debounce/counter_22
     ----------------------------------------
-    Total                      6.649ns (4.111ns logic, 2.538ns route)
-                                       (61.8% logic, 38.2% route)
+    Total                      4.839ns (2.725ns logic, 2.114ns route)
+                                       (56.3% logic, 43.7% route)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'clk251'
-  Clock period: 6.247ns (frequency: 160.077MHz)
-  Total number of paths / destination ports: 2545 / 229
+  Clock period: 4.282ns (frequency: 233.525MHz)
+  Total number of paths / destination ports: 2705 / 229
 -------------------------------------------------------------------------
-Delay:               6.247ns (Levels of Logic = 4)
-  Source:            inst_vgatiming/fpv_9 (FF)
-  Destination:       inst_vgatiming/fpv_12 (FF)
+Delay:               4.282ns (Levels of Logic = 5)
+  Source:            inst_vgatiming/count1_9 (FF)
+  Destination:       inst_vgatiming/count1_2 (FF)
   Source Clock:      clk251 rising
   Destination Clock: clk251 rising
 
-  Data Path: inst_vgatiming/fpv_9 to inst_vgatiming/fpv_12
+  Data Path: inst_vgatiming/count1_9 to inst_vgatiming/count1_2
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDCE:C->Q             2   0.591   0.622  inst_vgatiming/fpv_9 (inst_vgatiming/fpv_9)
-     LUT4:I0->O            1   0.704   0.424  inst_vgatiming/statev_cmp_eq000321 (inst_vgatiming/statev_cmp_eq000321)
-     LUT4:I3->O            1   0.704   0.424  inst_vgatiming/statev_cmp_eq000332_SW0 (N79)
-     LUT4_D:I3->O         13   0.704   1.062  inst_vgatiming/statev_cmp_eq000332 (inst_vgatiming/statev_cmp_eq0003)
-     LUT2:I1->O            1   0.704   0.000  inst_vgatiming/Mcount_fpv_eqn_13 (inst_vgatiming/Mcount_fpv_eqn_1)
-     FDCE:D                    0.308          inst_vgatiming/fpv_1
+     FDC:C->Q              3   0.360   0.756  inst_vgatiming/count1_9 (inst_vgatiming/count1_9)
+     LUT4:I0->O            1   0.195   0.585  inst_vgatiming/state0_cmp_eq0003_SW0 (N64)
+     LUT4:I2->O            8   0.195   0.608  inst_vgatiming/state0_cmp_eq0003 (inst_vgatiming/state0_cmp_eq0003)
+     LUT4:I3->O            7   0.195   0.797  inst_vgatiming/count1_mux0000<0>11 (inst_vgatiming/N01)
+     LUT4:I0->O            1   0.195   0.000  inst_vgatiming/count1_mux0000<7>291 (inst_vgatiming/count1_mux0000<7>29)
+     MUXF5:I1->O           1   0.374   0.000  inst_vgatiming/count1_mux0000<7>29_f5 (inst_vgatiming/count1_mux0000<7>)
+     FDC:D                     0.022          inst_vgatiming/count1_2
     ----------------------------------------
-    Total                      6.247ns (3.715ns logic, 2.532ns route)
-                                       (59.5% logic, 40.5% route)
+    Total                      4.282ns (1.536ns logic, 2.746ns route)
+                                       (35.9% logic, 64.1% route)
 
 =========================================================================
 Timing constraint: Default OFFSET IN BEFORE for Clock 'clkcam'
-  Total number of paths / destination ports: 43 / 34
+  Total number of paths / destination ports: 39 / 30
 -------------------------------------------------------------------------
-Offset:              5.280ns (Levels of Logic = 2)
-  Source:            ov7670_pclk3 (PAD)
-  Destination:       u1/clockp_2 (FF)
+Offset:              3.640ns (Levels of Logic = 2)
+  Source:            pb (PAD)
+  Destination:       inst_debounce/counter_22 (FF)
   Destination Clock: clkcam rising
 
-  Data Path: ov7670_pclk3 to u1/clockp_2
+  Data Path: pb to inst_debounce/counter_22
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     IBUFG:I->O            1   2.675   0.420  cam_buf3a (a3)
-     BUFG:I->O             1   1.457   0.420  cam_buf3b (ov7670_pclk3buf1)
-     FDC:D                     0.308          u1/clockp_2
+     IBUF:I->O            24   0.965   1.040  pb_IBUF (pb_IBUF)
+     LUT2:I0->O            2   0.195   0.377  inst_debounce/counter_or00001 (inst_debounce/counter_or0000)
+     FDR:R                     1.062          inst_debounce/counter_22
     ----------------------------------------
-    Total                      5.280ns (4.440ns logic, 0.840ns route)
-                                       (84.1% logic, 15.9% route)
+    Total                      3.640ns (2.222ns logic, 1.418ns route)
+                                       (61.1% logic, 38.9% route)
 
 =========================================================================
 Timing constraint: Default OFFSET IN BEFORE for Clock 'ov7670_pclkbufmux1'
   Total number of paths / destination ports: 130 / 10
 -------------------------------------------------------------------------
-Offset:              5.584ns (Levels of Logic = 4)
-  Source:            sw<1> (PAD)
+Offset:              3.421ns (Levels of Logic = 4)
+  Source:            sw<0> (PAD)
   Destination:       inst_ov7670capt1/latched_href (FF)
   Destination Clock: ov7670_pclkbufmux1 falling
 
-  Data Path: sw<1> to inst_ov7670capt1/latched_href
+  Data Path: sw<0> to inst_ov7670capt1/latched_href
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     IBUF:I->O            15   1.218   1.192  sw_1_IBUF (sw_1_IBUF)
-     LUT2:I0->O           20   0.704   1.137  ov7670_vsyncmux21 (ov7670_datamux<0>21)
-     LUT3:I2->O            1   0.704   0.000  ov7670_vsyncmux66_G (N102)
-     MUXF5:I1->O           1   0.321   0.000  ov7670_vsyncmux66 (ov7670_vsyncmux)
-     FDC_1:D                   0.308          inst_ov7670capt1/latched_vsync
+     IBUF:I->O            16   0.965   0.974  sw_0_IBUF (sw_0_IBUF)
+     LUT4:I0->O            1   0.195   0.688  ov7670_vsyncmux49 (ov7670_vsyncmux49)
+     LUT4:I1->O            1   0.195   0.000  ov7670_vsyncmux66_F (N148)
+     MUXF5:I0->O           1   0.382   0.000  ov7670_vsyncmux66 (ov7670_vsyncmux)
+     FDC_1:D                   0.022          inst_ov7670capt1/latched_vsync
     ----------------------------------------
-    Total                      5.584ns (3.255ns logic, 2.329ns route)
-                                       (58.3% logic, 41.7% route)
+    Total                      3.421ns (1.759ns logic, 1.662ns route)
+                                       (51.4% logic, 48.6% route)
 
 =========================================================================
 Timing constraint: Default OFFSET OUT AFTER for Clock 'clkcam'
   Total number of paths / destination ports: 49 / 13
 -------------------------------------------------------------------------
-Offset:              7.741ns (Levels of Logic = 3)
+Offset:              8.219ns (Levels of Logic = 3)
   Source:            inst_debounce/output (FF)
   Destination:       ov7670_siod1 (PAD)
   Source Clock:      clkcam rising
@@ -1116,92 +1147,72 @@ Offset:              7.741ns (Levels of Logic = 3)
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDR:C->Q            405   0.591   1.384  inst_debounce/output (inst_debounce/output)
-     LUT4:I3->O            4   0.704   0.666  SCCB/siodLogicTrst7 (SCCB/siodLogicTrst7)
-     LUT3:I1->O            1   0.704   0.420  ov7670_siod41 (ov7670_siod4_OBUF)
-     OBUF:I->O                 3.272          ov7670_siod4_OBUF (ov7670_siod4)
+     FD:C->Q             406   0.360   2.553  inst_debounce/output (inst_debounce/output)
+     LUT4:I3->O            4   0.195   0.599  SCCB/siodLogicTrst7 (SCCB/siodLogicTrst7)
+     LUT3:I1->O            1   0.195   0.360  ov7670_siod41 (ov7670_siod4_OBUF)
+     OBUF:I->O                 3.957          ov7670_siod4_OBUF (ov7670_siod4)
     ----------------------------------------
-    Total                      7.741ns (5.271ns logic, 2.470ns route)
-                                       (68.1% logic, 31.9% route)
+    Total                      8.219ns (4.707ns logic, 3.512ns route)
+                                       (57.3% logic, 42.7% route)
 
 =========================================================================
 Timing constraint: Default OFFSET OUT AFTER for Clock 'clk251'
-  Total number of paths / destination ports: 28 / 28
+  Total number of paths / destination ports: 26 / 26
 -------------------------------------------------------------------------
-Offset:              6.240ns (Levels of Logic = 2)
+Offset:              5.647ns (Levels of Logic = 2)
   Source:            inst_vgatiming/tactiveArea1 (FF)
-  Destination:       o_rgb<7> (PAD)
+  Destination:       o_b<4> (PAD)
   Source Clock:      clk251 rising
 
-  Data Path: inst_vgatiming/tactiveArea1 to o_rgb<7>
+  Data Path: inst_vgatiming/tactiveArea1 to o_b<4>
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDC:C->Q             17   0.591   1.226  inst_vgatiming/tactiveArea1 (inst_vgatiming/tactiveArea1)
-     LUT2:I0->O            2   0.704   0.447  inst_imagegen/RGB_out<7>1 (vga_rgb_7_OBUF)
-     OBUF:I->O                 3.272          o_rgb_7_OBUF (o_rgb<7>)
+     FDC:C->Q             13   0.360   0.752  inst_vgatiming/tactiveArea1 (inst_vgatiming/tactiveArea1)
+     LUT2:I0->O            5   0.195   0.383  inst_imagegen/RGB_out<8>1 (o_r_0_OBUF)
+     OBUF:I->O                 3.957          o_r_4_OBUF (o_r<4>)
     ----------------------------------------
-    Total                      6.240ns (4.567ns logic, 1.673ns route)
-                                       (73.2% logic, 26.8% route)
+    Total                      5.647ns (4.512ns logic, 1.135ns route)
+                                       (79.9% logic, 20.1% route)
 
 =========================================================================
 Timing constraint: Default OFFSET OUT AFTER for Clock 'cc41'
   Total number of paths / destination ports: 528 / 24
 -------------------------------------------------------------------------
-Offset:              10.809ns (Levels of Logic = 8)
+Offset:              9.483ns (Levels of Logic = 8)
   Source:            inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram (RAM)
-  Destination:       o_rgb<7> (PAD)
+  Destination:       o_b<4> (PAD)
   Source Clock:      cc41 rising
 
-  Data Path: inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram to o_rgb<7>
+  Data Path: inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram to o_b<4>
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     RAMB16_S18_S18:CLKB->DOB7    1   2.800   0.499  U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram (U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[2].ram.ram_doutb<7>)
-     LUT3:I1->O            1   0.704   0.000  U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/has_mux_b.B/Mmux_dout_mux_880 (U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/has_mux_b.B/Mmux_dout_mux_880)
-     MUXF5:I1->O           1   0.321   0.000  U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/has_mux_b.B/Mmux_dout_mux_7_f5_38 (U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/has_mux_b.B/Mmux_dout_mux_7_f539)
-     MUXF6:I0->O           1   0.521   0.000  U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/has_mux_b.B/Mmux_dout_mux_5_f6_25 (U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/has_mux_b.B/Mmux_dout_mux_5_f626)
-     MUXF7:I0->O           1   0.521   0.000  U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/has_mux_b.B/Mmux_dout_mux_3_f7_12 (U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/has_mux_b.B/Mmux_dout_mux_3_f713)
-     MUXF8:I1->O           1   0.521   0.499  U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/has_mux_b.B/Mmux_dout_mux_2_f8_12 (doutb<7>)
+     RAMB16:CLKB->DOB0     1   2.100   0.585  U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram (U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[2].ram.ram_doutb<0>)
+     LUT3:I1->O            1   0.195   0.000  U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/has_mux_b.B/Mmux_dout_mux_82 (U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/has_mux_b.B/Mmux_dout_mux_82)
+     MUXF5:I1->O           1   0.374   0.000  U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/has_mux_b.B/Mmux_dout_mux_7_f5 (U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/has_mux_b.B/Mmux_dout_mux_7_f5)
+     MUXF6:I0->O           1   0.388   0.000  U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/has_mux_b.B/Mmux_dout_mux_5_f6 (U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/has_mux_b.B/Mmux_dout_mux_5_f6)
+     MUXF7:I0->O           1   0.388   0.000  U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/has_mux_b.B/Mmux_dout_mux_3_f7 (U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/has_mux_b.B/Mmux_dout_mux_3_f7)
+     MUXF8:I1->O           1   0.395   0.523  U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/has_mux_b.B/Mmux_dout_mux_2_f8 (doutb<0>)
      end scope: 'inst_framebuffer1'
-     LUT2:I1->O            2   0.704   0.447  inst_imagegen/RGB_out<7>1 (vga_rgb_7_OBUF)
-     OBUF:I->O                 3.272          o_rgb_7_OBUF (o_rgb<7>)
+     LUT2:I1->O            5   0.195   0.383  inst_imagegen/RGB_out<0>1 (o_b_0_OBUF)
+     OBUF:I->O                 3.957          o_b_4_OBUF (o_b<4>)
     ----------------------------------------
-    Total                     10.809ns (9.364ns logic, 1.445ns route)
-                                       (86.6% logic, 13.4% route)
-
-=========================================================================
-Timing constraint: Default path analysis
-  Total number of paths / destination ports: 32 / 4
--------------------------------------------------------------------------
-Delay:               7.535ns (Levels of Logic = 4)
-  Source:            ov7670_data1<3> (PAD)
-  Destination:       led1 (PAD)
-
-  Data Path: ov7670_data1<3> to led1
-                                Gate     Net
-    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
-    ----------------------------------------  ------------
-     IBUF:I->O             2   1.218   0.622  ov7670_data1_3_IBUF (ov7670_data1_3_IBUF)
-     LUT4:I0->O            1   0.704   0.595  led14 (led14)
-     LUT2:I0->O            1   0.704   0.420  led110 (led1_OBUF)
-     OBUF:I->O                 3.272          led1_OBUF (led1)
-    ----------------------------------------
-    Total                      7.535ns (5.898ns logic, 1.637ns route)
-                                       (78.3% logic, 21.7% route)
+    Total                      9.483ns (7.992ns logic, 1.491ns route)
+                                       (84.3% logic, 15.7% route)
 
 =========================================================================
 
 
-Total REAL time to Xst completion: 20.00 secs
-Total CPU time to Xst completion: 19.89 secs
+Total REAL time to Xst completion: 27.00 secs
+Total CPU time to Xst completion: 26.37 secs
  
 --> 
 
 
-Total memory usage is 551508 kilobytes
+Total memory usage is 580620 kilobytes
 
 Number of errors   :    0 (   0 filtered)
-Number of warnings :   46 (   0 filtered)
-Number of infos    :   20 (   0 filtered)
+Number of warnings :   47 (   0 filtered)
+Number of infos    :   39 (   0 filtered)
 
