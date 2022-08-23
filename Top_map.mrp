@@ -3,42 +3,43 @@ Xilinx Mapping Report File for Design 'Top'
 
 Design Information
 ------------------
-Command Line   : map -intstyle ise -p xc3s1200e-fg320-4 -cm area -ir off -pr off
--c 100 -o Top_map.ncd Top.ngd Top.pcf 
-Target Device  : xc3s1200e
-Target Package : fg320
-Target Speed   : -4
-Mapper Version : spartan3e -- $Revision: 1.55 $
-Mapped Date    : Sun Aug 21 19:23:36 2022
+Command Line   : map -intstyle ise -p xc4vsx35-ff668-10 -global_opt off -cm area
+-ir off -pr off -c 100 -o Top_map.ncd Top.ngd Top.pcf 
+Target Device  : xc4vsx35
+Target Package : ff668
+Target Speed   : -10
+Mapper Version : virtex4 -- $Revision: 1.55 $
+Mapped Date    : Tue Aug 23 12:24:05 2022
 
 Design Summary
 --------------
 Number of errors:      0
 Number of warnings:    4
 Logic Utilization:
-  Number of Slice Flip Flops:           445 out of  17,344    2%
-  Number of 4 input LUTs:               779 out of  17,344    4%
+  Number of Slice Flip Flops:           446 out of  30,720    1%
+  Number of 4 input LUTs:               811 out of  30,720    2%
 Logic Distribution:
-  Number of occupied Slices:            632 out of   8,672    7%
-    Number of Slices containing only related logic:     632 out of     632 100%
-    Number of Slices containing unrelated logic:          0 out of     632   0%
+  Number of occupied Slices:            602 out of  15,360    3%
+    Number of Slices containing only related logic:     602 out of     602 100%
+    Number of Slices containing unrelated logic:          0 out of     602   0%
       *See NOTES below for an explanation of the effects of unrelated logic.
-  Total Number of 4 input LUTs:       1,114 out of  17,344    6%
-    Number used as logic:               779
-    Number used as a route-thru:        335
+  Total Number of 4 input LUTs:       1,079 out of  30,720    3%
+    Number used as logic:               811
+    Number used as a route-thru:        268
 
   The Slice Logic Distribution report is not meaningful if the design is
   over-mapped for a non-slice resource or if Placement fails.
+  Number of bonded IOBs:                 96 out of     448   21%
+  Number of BUFG/BUFGCTRLs:               8 out of      32   25%
+    Number used as BUFGs:                 8
+  Number of FIFO16/RAMB16s:              15 out of     192    7%
+    Number used as RAMB16s:              15
 
-  Number of bonded IOBs:                104 out of     250   41%
-  Number of RAMB16s:                     19 out of      28   67%
-  Number of BUFGMUXs:                     8 out of      24   33%
+Average Fanout of Non-Clock Nets:                3.49
 
-Average Fanout of Non-Clock Nets:                3.44
-
-Peak Memory Usage:  591 MB
-Total REAL time to MAP completion:  4 secs 
-Total CPU time to MAP completion:   4 secs 
+Peak Memory Usage:  664 MB
+Total REAL time to MAP completion:  6 secs 
+Total CPU time to MAP completion:   6 secs 
 
 NOTES:
 
@@ -79,43 +80,55 @@ Section 1 - Errors
 
 Section 2 - Warnings
 --------------------
-WARNING:LIT:178 - Clock buffer BUFGMUX symbol
-   "physical_group_ov7670_pclk1buf1/cam_buf1b" (output signal=ov7670_pclk1buf1)
-   does not drive clock loads. Driving only non-clock loads with a clock buffer
-   will cause ALL of the dedicated clock routing resources for this buffer to be
-   wasted. The non-clock loads are:
+WARNING:LIT:178 - Clock buffer BUFG symbol "cam_buf1b" (output
+   signal=ov7670_pclk1buf1) does not drive clock loads. Driving only non-clock
+   loads with a clock buffer will cause ALL of the dedicated clock routing
+   resources for this buffer to be wasted. The non-clock loads are:
    Pin D of u1/clockp_0
-WARNING:LIT:178 - Clock buffer BUFGMUX symbol
-   "physical_group_ov7670_pclk2buf1/cam_buf2b" (output signal=ov7670_pclk2buf1)
-   does not drive clock loads. Driving only non-clock loads with a clock buffer
-   will cause ALL of the dedicated clock routing resources for this buffer to be
-   wasted. The non-clock loads are:
+WARNING:LIT:178 - Clock buffer BUFG symbol "cam_buf2b" (output
+   signal=ov7670_pclk2buf1) does not drive clock loads. Driving only non-clock
+   loads with a clock buffer will cause ALL of the dedicated clock routing
+   resources for this buffer to be wasted. The non-clock loads are:
    Pin D of u1/clockp_1
-WARNING:LIT:178 - Clock buffer BUFGMUX symbol
-   "physical_group_ov7670_pclk3buf1/cam_buf3b" (output signal=ov7670_pclk3buf1)
-   does not drive clock loads. Driving only non-clock loads with a clock buffer
-   will cause ALL of the dedicated clock routing resources for this buffer to be
-   wasted. The non-clock loads are:
+WARNING:LIT:178 - Clock buffer BUFG symbol "cam_buf3b" (output
+   signal=ov7670_pclk3buf1) does not drive clock loads. Driving only non-clock
+   loads with a clock buffer will cause ALL of the dedicated clock routing
+   resources for this buffer to be wasted. The non-clock loads are:
    Pin D of u1/clockp_2
-WARNING:LIT:178 - Clock buffer BUFGMUX symbol
-   "physical_group_ov7670_pclk4buf1/cam_buf4b" (output signal=ov7670_pclk4buf1)
-   does not drive clock loads. Driving only non-clock loads with a clock buffer
-   will cause ALL of the dedicated clock routing resources for this buffer to be
-   wasted. The non-clock loads are:
+WARNING:LIT:178 - Clock buffer BUFG symbol "cam_buf4b" (output
+   signal=ov7670_pclk4buf1) does not drive clock loads. Driving only non-clock
+   loads with a clock buffer will cause ALL of the dedicated clock routing
+   resources for this buffer to be wasted. The non-clock loads are:
    Pin D of u1/clockp_3
 
 Section 3 - Informational
 -------------------------
+INFO:LIT:243 - Logical network inst_framebuffer1/doutb<15> has no load.
+INFO:LIT:395 - The above info message is repeated 59 more times for the
+   following (max. 5 shown):
+   inst_framebuffer1/doutb<14>,
+   inst_framebuffer1/doutb<13>,
+   inst_framebuffer1/doutb<12>,
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[0].ram.r/s3_init.ram/dpram.dp1x1.ram/DOA<0>,
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[3].ram.r/s3_init.ram/dpram.dp1x1.ram/DOA<0>
+   To see the details of these info messages, please use the -detail switch.
 INFO:MapLib:562 - No environment variables are currently set.
+INFO:MapLib:797 - Your design is targeting LX/SX Production Step 0/1/ES devices.
+   Please note that there are new specifications for the DCMs to guarantee
+   maximum frequency performance. If the DCM input clock might stop or if the
+   DCM reset might be asserted for an extended time, then use of the dcm_standby
+   macro may be required. Please see Answer Record 21127.
 INFO:LIT:244 - All of the single ended outputs in this design are using slew
    rate limited output drivers. The delay on speed critical single ended outputs
    can be dramatically reduced by designating them as fast outputs.
 
 Section 4 - Removed Logic Summary
 ---------------------------------
-   1 block(s) removed
-   4 block(s) optimized away
-   1 signal(s) removed
+  57 block(s) removed
+  19 block(s) optimized away
+ 121 signal(s) removed
 
 Section 5 - Removed Logic
 -------------------------
@@ -131,7 +144,587 @@ above the place where that logic is listed in the trimming report, then locate
 the lines that are least indented (begin at the leftmost edge).
 
 Loadless block "cam_bufg" (CKBUF) removed.
+The signal "inst_framebuffer1/doutb<15>" is sourceless and has been removed.
+The signal "inst_framebuffer1/doutb<14>" is sourceless and has been removed.
+The signal "inst_framebuffer1/doutb<13>" is sourceless and has been removed.
+The signal "inst_framebuffer1/doutb<12>" is sourceless and has been removed.
 The signal "inst_framebuffer1/N0" is sourceless and has been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[2].ram.ram_doutb<12>" is sourceless and has been removed.
+ Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_820" (ROM) removed.
+  The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_820" is sourceless and has been removed.
+   Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_7_f5_8" (MUX) removed.
+    The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_7_f59" is sourceless and has been removed.
+     Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_5_f6_5" (MUX) removed.
+      The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_5_f66" is sourceless and has been removed.
+       Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_3_f7_2" (MUX) removed.
+        The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_3_f73" is sourceless and has been removed.
+         Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_2_f8_2" (MUX) removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_912" is sourceless and has been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_103" is sourceless and has been removed.
+ Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_6_f5_10" (MUX) removed.
+  The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_6_f511" is sourceless and has been removed.
+   Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_5_f6_6" (MUX) removed.
+    The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_5_f67" is sourceless and has been removed.
+     Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_4_f7_2" (MUX) removed.
+      The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_4_f73" is sourceless and has been removed.
+ Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_7_f5_9" (MUX) removed.
+  The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_7_f510" is sourceless and has been removed.
+ Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_7_f5_10" (MUX) removed.
+  The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_7_f511" is sourceless and has been removed.
+   Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_6_f6_2" (MUX) removed.
+    The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_6_f63" is sourceless and has been removed.
+ Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_8_f5_2" (MUX) removed.
+  The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_8_f53" is sourceless and has been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[2].ram.ram_doutb<13>" is sourceless and has been removed.
+ Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_826" (ROM) removed.
+  The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_826" is sourceless and has been removed.
+   Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_7_f5_11" (MUX) removed.
+    The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_7_f512" is sourceless and has been removed.
+     Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_5_f6_7" (MUX) removed.
+      The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_5_f68" is sourceless and has been removed.
+       Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_3_f7_3" (MUX) removed.
+        The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_3_f74" is sourceless and has been removed.
+         Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_2_f8_3" (MUX) removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_916" is sourceless and has been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_104" is sourceless and has been removed.
+ Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_6_f5_13" (MUX) removed.
+  The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_6_f514" is sourceless and has been removed.
+   Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_5_f6_8" (MUX) removed.
+    The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_5_f69" is sourceless and has been removed.
+     Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_4_f7_3" (MUX) removed.
+      The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_4_f74" is sourceless and has been removed.
+ Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_7_f5_12" (MUX) removed.
+  The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_7_f513" is sourceless and has been removed.
+ Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_7_f5_13" (MUX) removed.
+  The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_7_f514" is sourceless and has been removed.
+   Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_6_f6_3" (MUX) removed.
+    The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_6_f64" is sourceless and has been removed.
+ Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_8_f5_3" (MUX) removed.
+  The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_8_f54" is sourceless and has been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[2].ram.ram_doutb<14>" is sourceless and has been removed.
+ Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_832" (ROM) removed.
+  The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_832" is sourceless and has been removed.
+   Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_7_f5_14" (MUX) removed.
+    The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_7_f515" is sourceless and has been removed.
+     Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_5_f6_9" (MUX) removed.
+      The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_5_f610" is sourceless and has been removed.
+       Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_3_f7_4" (MUX) removed.
+        The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_3_f75" is sourceless and has been removed.
+         Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_2_f8_4" (MUX) removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_920" is sourceless and has been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_105" is sourceless and has been removed.
+ Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_6_f5_16" (MUX) removed.
+  The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_6_f517" is sourceless and has been removed.
+   Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_5_f6_10" (MUX) removed.
+    The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_5_f611" is sourceless and has been removed.
+     Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_4_f7_4" (MUX) removed.
+      The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_4_f75" is sourceless and has been removed.
+ Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_7_f5_15" (MUX) removed.
+  The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_7_f516" is sourceless and has been removed.
+ Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_7_f5_16" (MUX) removed.
+  The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_7_f517" is sourceless and has been removed.
+   Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_6_f6_4" (MUX) removed.
+    The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_6_f65" is sourceless and has been removed.
+ Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_8_f5_4" (MUX) removed.
+  The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_8_f55" is sourceless and has been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[2].ram.ram_doutb<15>" is sourceless and has been removed.
+ Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_838" (ROM) removed.
+  The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_838" is sourceless and has been removed.
+   Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_7_f5_17" (MUX) removed.
+    The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_7_f518" is sourceless and has been removed.
+     Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_5_f6_11" (MUX) removed.
+      The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_5_f612" is sourceless and has been removed.
+       Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_3_f7_5" (MUX) removed.
+        The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_3_f76" is sourceless and has been removed.
+         Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_2_f8_5" (MUX) removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_924" is sourceless and has been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_106" is sourceless and has been removed.
+ Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_6_f5_19" (MUX) removed.
+  The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_6_f520" is sourceless and has been removed.
+   Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_5_f6_12" (MUX) removed.
+    The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_5_f613" is sourceless and has been removed.
+     Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_4_f7_5" (MUX) removed.
+      The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_4_f76" is sourceless and has been removed.
+ Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_7_f5_18" (MUX) removed.
+  The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_7_f519" is sourceless and has been removed.
+ Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_7_f5_19" (MUX) removed.
+  The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_7_f520" is sourceless and has been removed.
+   Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_6_f6_5" (MUX) removed.
+    The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_6_f66" is sourceless and has been removed.
+ Sourceless block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_8_f5_5" (MUX) removed.
+  The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/has_mux_b.B/Mmux_dout_mux_8_f56" is sourceless and has been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[0].ram.r/s3_init.ram/dpram.dp1x1.ram/DOA<0>" is sourceless and has
+been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[3].ram.r/s3_init.ram/dpram.dp1x1.ram/DOA<0>" is sourceless and has
+been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[4].ram.r/s3_init.ram/dpram.dp1x1.ram/DOA<0>" is sourceless and has
+been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[5].ram.r/s3_init.ram/dpram.dp1x1.ram/DOA<0>" is sourceless and has
+been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[6].ram.r/s3_init.ram/dpram.dp1x1.ram/DOA<0>" is sourceless and has
+been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[7].ram.r/s3_init.ram/dpram.dp1x1.ram/DOA<0>" is sourceless and has
+been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[8].ram.r/s3_init.ram/dpram.dp1x1.ram/DOA<0>" is sourceless and has
+been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[9].ram.r/s3_init.ram/dpram.dp1x1.ram/DOA<0>" is sourceless and has
+been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[10].ram.r/s3_init.ram/dpram.dp1x1.ram/DOA<0>" is sourceless and has
+been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[12].ram.r/s3_init.ram/dpram.dp1x1.ram/DOA<0>" is sourceless and has
+been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[13].ram.r/s3_init.ram/dpram.dp1x1.ram/DOA<0>" is sourceless and has
+been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[14].ram.r/s3_init.ram/dpram.dp1x1.ram/DOA<0>" is sourceless and has
+been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[15].ram.r/s3_init.ram/dpram.dp1x1.ram/DOA<0>" is sourceless and has
+been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[15].ram.r/s3_init.ram/dpram.dp1x1.ram/GND" is sourceless and has
+been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[16].ram.r/s3_init.ram/dpram.dp1x1.ram/DOA<0>" is sourceless and has
+been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[16].ram.r/s3_init.ram/dpram.dp1x1.ram/GND" is sourceless and has
+been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[17].ram.r/s3_init.ram/dpram.dp1x1.ram/DOA<0>" is sourceless and has
+been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[17].ram.r/s3_init.ram/dpram.dp1x1.ram/GND" is sourceless and has
+been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[18].ram.r/s3_init.ram/dpram.dp1x1.ram/DOA<0>" is sourceless and has
+been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[18].ram.r/s3_init.ram/dpram.dp1x1.ram/GND" is sourceless and has
+been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[11].ram.r/s3_init.ram/dpram.dp9x9.ram/DOA<7>" is sourceless and has
+been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[11].ram.r/s3_init.ram/dpram.dp9x9.ram/DOA<6>" is sourceless and has
+been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[11].ram.r/s3_init.ram/dpram.dp9x9.ram/DOA<5>" is sourceless and has
+been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[11].ram.r/s3_init.ram/dpram.dp9x9.ram/DOA<4>" is sourceless and has
+been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[11].ram.r/s3_init.ram/dpram.dp9x9.ram/DOA<3>" is sourceless and has
+been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[11].ram.r/s3_init.ram/dpram.dp9x9.ram/DOA<2>" is sourceless and has
+been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[11].ram.r/s3_init.ram/dpram.dp9x9.ram/DOA<1>" is sourceless and has
+been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[11].ram.r/s3_init.ram/dpram.dp9x9.ram/DOA<0>" is sourceless and has
+been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[11].ram.r/s3_init.ram/dpram.dp9x9.ram/DOPA<0>" is sourceless and
+has been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[11].ram.r/s3_init.ram/dpram.dp9x9.ram/DOPB<0>" is sourceless and
+has been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOA<15>" is sourceless and
+has been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOA<14>" is sourceless and
+has been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOA<13>" is sourceless and
+has been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOA<12>" is sourceless and
+has been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOA<11>" is sourceless and
+has been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOA<10>" is sourceless and
+has been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOA<9>" is sourceless and
+has been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOA<8>" is sourceless and
+has been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOA<7>" is sourceless and
+has been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOA<6>" is sourceless and
+has been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOA<5>" is sourceless and
+has been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOA<4>" is sourceless and
+has been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOA<3>" is sourceless and
+has been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOA<2>" is sourceless and
+has been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOA<1>" is sourceless and
+has been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOA<0>" is sourceless and
+has been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOPA<1>" is sourceless and
+has been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOPA<0>" is sourceless and
+has been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOPB<1>" is sourceless and
+has been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOPB<0>" is sourceless and
+has been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[1].ram.r/s3_init.ram/dpram.dp9x9.ram/DOA<7>" is sourceless and has
+been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[1].ram.r/s3_init.ram/dpram.dp9x9.ram/DOA<6>" is sourceless and has
+been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[1].ram.r/s3_init.ram/dpram.dp9x9.ram/DOA<5>" is sourceless and has
+been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[1].ram.r/s3_init.ram/dpram.dp9x9.ram/DOA<4>" is sourceless and has
+been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[1].ram.r/s3_init.ram/dpram.dp9x9.ram/DOA<3>" is sourceless and has
+been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[1].ram.r/s3_init.ram/dpram.dp9x9.ram/DOA<2>" is sourceless and has
+been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[1].ram.r/s3_init.ram/dpram.dp9x9.ram/DOA<1>" is sourceless and has
+been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[1].ram.r/s3_init.ram/dpram.dp9x9.ram/DOA<0>" is sourceless and has
+been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[1].ram.r/s3_init.ram/dpram.dp9x9.ram/DOPA<0>" is sourceless and has
+been removed.
+The signal
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[1].ram.r/s3_init.ram/dpram.dp9x9.ram/DOPB<0>" is sourceless and has
+been removed.
+Unused block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[15].ram.r/s3_init.ram/dpram.dp1x1.ram/RAMB16" (RAMB16) removed.
+Unused block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[16].ram.r/s3_init.ram/dpram.dp1x1.ram/RAMB16" (RAMB16) removed.
+Unused block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[17].ram.r/s3_init.ram/dpram.dp1x1.ram/RAMB16" (RAMB16) removed.
+Unused block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[18].ram.r/s3_init.ram/dpram.dp1x1.ram/RAMB16" (RAMB16) removed.
+Unused block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[15].ram.r/s3_init.ram/dpram.dp1x1.ram/GND" (ZERO) removed.
+Unused block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[16].ram.r/s3_init.ram/dpram.dp1x1.ram/GND" (ZERO) removed.
+Unused block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[17].ram.r/s3_init.ram/dpram.dp1x1.ram/GND" (ZERO) removed.
+Unused block
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[18].ram.r/s3_init.ram/dpram.dp1x1.ram/GND" (ZERO) removed.
 
 Optimized Block(s):
 TYPE 		BLOCK
@@ -150,110 +743,102 @@ Section 6 - IOB Properties
 | IOB Name                           | Type             | Direction | IO Standard          | Diff  | Drive    | Slew | Reg (s)      | Resistor | IOB      |
 |                                    |                  |           |                      | Term  | Strength | Rate |              |          | Delay    |
 +---------------------------------------------------------------------------------------------------------------------------------------------------------+
-| anode<0>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| anode<1>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| anode<2>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| anode<3>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| clkcam                             | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| debug<0>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| debug<1>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| debug<2>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| debug<3>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| led1                               | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| led2                               | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| led3                               | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| led4                               | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| o_hsync                            | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| o_rgb<0>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| o_rgb<1>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| o_rgb<2>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| o_rgb<3>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| o_rgb<4>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| o_rgb<5>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| o_rgb<6>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| o_rgb<7>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| o_vsync                            | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| ov7670_data1<0>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_data1<1>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_data1<2>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_data1<3>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_data1<4>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_data1<5>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_data1<6>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_data1<7>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_data2<0>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_data2<1>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_data2<2>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_data2<3>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_data2<4>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_data2<5>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_data2<6>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_data2<7>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_data3<0>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_data3<1>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_data3<2>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_data3<3>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_data3<4>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_data3<5>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_data3<6>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_data3<7>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_data4<0>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_data4<1>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_data4<2>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_data4<3>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_data4<4>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_data4<5>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_data4<6>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_data4<7>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_href1                       | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_href2                       | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_href3                       | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_href4                       | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_pclk1                       | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_pclk2                       | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_pclk3                       | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_pclk4                       | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_sioc1                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| ov7670_sioc2                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| ov7670_sioc3                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| ov7670_sioc4                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| ov7670_siod1                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| ov7670_siod2                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| ov7670_siod3                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| ov7670_siod4                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| ov7670_vsync1                      | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_vsync2                      | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_vsync3                      | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_vsync4                      | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| ov7670_xclk1                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| ov7670_xclk2                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| ov7670_xclk3                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| ov7670_xclk4                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| pb                                 | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| sw<0>                              | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| sw<1>                              | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| sw<2>                              | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| sw<3>                              | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
-| vga_blankn                         | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| vga_clk25                          | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| vga_hsync                          | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| vga_rgb<0>                         | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| vga_rgb<1>                         | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| vga_rgb<2>                         | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| vga_rgb<3>                         | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| vga_rgb<4>                         | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| vga_rgb<5>                         | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| vga_rgb<6>                         | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| vga_rgb<7>                         | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| vga_rgb<8>                         | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| vga_rgb<9>                         | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| vga_rgb<10>                        | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| vga_rgb<11>                        | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| vga_rgb<12>                        | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| vga_rgb<13>                        | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| vga_rgb<14>                        | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| vga_rgb<15>                        | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| vga_vsync                          | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| clkcam                             | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| debug<0>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| debug<1>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| debug<2>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| debug<3>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| o_b<0>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| o_b<1>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| o_b<2>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| o_b<3>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| o_b<4>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| o_b<5>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| o_b<6>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| o_b<7>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| o_g<0>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| o_g<1>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| o_g<2>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| o_g<3>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| o_g<4>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| o_g<5>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| o_g<6>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| o_g<7>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| o_r<0>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| o_r<1>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| o_r<2>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| o_r<3>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| o_r<4>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| o_r<5>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| o_r<6>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| o_r<7>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| ov7670_data1<0>                    | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_data1<1>                    | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_data1<2>                    | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_data1<3>                    | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_data1<4>                    | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_data1<5>                    | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_data1<6>                    | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_data1<7>                    | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_data2<0>                    | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_data2<1>                    | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_data2<2>                    | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_data2<3>                    | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_data2<4>                    | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_data2<5>                    | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_data2<6>                    | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_data2<7>                    | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_data3<0>                    | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_data3<1>                    | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_data3<2>                    | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_data3<3>                    | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_data3<4>                    | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_data3<5>                    | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_data3<6>                    | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_data3<7>                    | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_data4<0>                    | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_data4<1>                    | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_data4<2>                    | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_data4<3>                    | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_data4<4>                    | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_data4<5>                    | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_data4<6>                    | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_data4<7>                    | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_href1                       | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_href2                       | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_href3                       | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_href4                       | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_pclk1                       | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_pclk2                       | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_pclk3                       | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_pclk4                       | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_sioc1                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| ov7670_sioc2                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| ov7670_sioc3                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| ov7670_sioc4                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| ov7670_siod1                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| ov7670_siod2                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| ov7670_siod3                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| ov7670_siod4                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| ov7670_vsync1                      | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_vsync2                      | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_vsync3                      | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_vsync4                      | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| ov7670_xclk1                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| ov7670_xclk2                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| ov7670_xclk3                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| ov7670_xclk4                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| pb                                 | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| sw<0>                              | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| sw<1>                              | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| sw<2>                              | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| sw<3>                              | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
+| vga_o_blankn                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| vga_o_clk25                        | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| vga_o_hsync                        | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| vga_o_psave                        | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| vga_o_syncn                        | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| vga_o_vsync                        | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
 +---------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 Section 7 - RPMs
