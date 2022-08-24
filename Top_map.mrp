@@ -4,19 +4,19 @@ Xilinx Mapping Report File for Design 'Top'
 Design Information
 ------------------
 Command Line   : map -intstyle ise -p xc4vsx35-ff668-10 -global_opt off -cm area
--ir off -pr off -c 100 -o Top_map.ncd Top.ngd Top.pcf 
+-ir off -pr off -detail -c 100 -o Top_map.ncd Top.ngd Top.pcf 
 Target Device  : xc4vsx35
 Target Package : ff668
 Target Speed   : -10
 Mapper Version : virtex4 -- $Revision: 1.55 $
-Mapped Date    : Tue Aug 23 12:24:05 2022
+Mapped Date    : Wed Aug 24 13:03:02 2022
 
 Design Summary
 --------------
 Number of errors:      0
 Number of warnings:    4
 Logic Utilization:
-  Number of Slice Flip Flops:           446 out of  30,720    1%
+  Number of Slice Flip Flops:           458 out of  30,720    1%
   Number of 4 input LUTs:               811 out of  30,720    2%
 Logic Distribution:
   Number of occupied Slices:            602 out of  15,360    3%
@@ -29,13 +29,14 @@ Logic Distribution:
 
   The Slice Logic Distribution report is not meaningful if the design is
   over-mapped for a non-slice resource or if Placement fails.
-  Number of bonded IOBs:                 96 out of     448   21%
+  Number of bonded IOBs:                100 out of     448   22%
+    IOB Flip Flops:                      12
   Number of BUFG/BUFGCTRLs:               8 out of      32   25%
     Number used as BUFGs:                 8
   Number of FIFO16/RAMB16s:              15 out of     192    7%
     Number used as RAMB16s:              15
 
-Average Fanout of Non-Clock Nets:                3.49
+Average Fanout of Non-Clock Nets:                3.47
 
 Peak Memory Usage:  664 MB
 Total REAL time to MAP completion:  6 secs 
@@ -80,10 +81,9 @@ Section 1 - Errors
 
 Section 2 - Warnings
 --------------------
-WARNING:LIT:178 - Clock buffer BUFG symbol "cam_buf1b" (output
-   signal=ov7670_pclk1buf1) does not drive clock loads. Driving only non-clock
-   loads with a clock buffer will cause ALL of the dedicated clock routing
-   resources for this buffer to be wasted. The non-clock loads are:
+WARNING:LIT:176 - Clock buffer is designated to drive clock loads. BUFG symbol
+   "cam_buf1b" (output signal=o_debug_0_OBUF) has a mix of clock and non-clock
+   loads. The non-clock loads are:
    Pin D of u1/clockp_0
 WARNING:LIT:178 - Clock buffer BUFG symbol "cam_buf2b" (output
    signal=ov7670_pclk2buf1) does not drive clock loads. Driving only non-clock
@@ -104,16 +104,177 @@ WARNING:LIT:178 - Clock buffer BUFG symbol "cam_buf4b" (output
 Section 3 - Informational
 -------------------------
 INFO:LIT:243 - Logical network inst_framebuffer1/doutb<15> has no load.
-INFO:LIT:395 - The above info message is repeated 59 more times for the
-   following (max. 5 shown):
-   inst_framebuffer1/doutb<14>,
-   inst_framebuffer1/doutb<13>,
-   inst_framebuffer1/doutb<12>,
+INFO:LIT:243 - Logical network inst_framebuffer1/doutb<14> has no load.
+INFO:LIT:243 - Logical network inst_framebuffer1/doutb<13> has no load.
+INFO:LIT:243 - Logical network inst_framebuffer1/doutb<12> has no load.
+INFO:LIT:243 - Logical network
    inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
-   d.cstr/ramloop[0].ram.r/s3_init.ram/dpram.dp1x1.ram/DOA<0>,
+   d.cstr/ramloop[0].ram.r/s3_init.ram/dpram.dp1x1.ram/DOA<0> has no load.
+INFO:LIT:243 - Logical network
    inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
-   d.cstr/ramloop[3].ram.r/s3_init.ram/dpram.dp1x1.ram/DOA<0>
-   To see the details of these info messages, please use the -detail switch.
+   d.cstr/ramloop[3].ram.r/s3_init.ram/dpram.dp1x1.ram/DOA<0> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[4].ram.r/s3_init.ram/dpram.dp1x1.ram/DOA<0> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[5].ram.r/s3_init.ram/dpram.dp1x1.ram/DOA<0> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[6].ram.r/s3_init.ram/dpram.dp1x1.ram/DOA<0> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[7].ram.r/s3_init.ram/dpram.dp1x1.ram/DOA<0> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[8].ram.r/s3_init.ram/dpram.dp1x1.ram/DOA<0> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[9].ram.r/s3_init.ram/dpram.dp1x1.ram/DOA<0> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[10].ram.r/s3_init.ram/dpram.dp1x1.ram/DOA<0> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[12].ram.r/s3_init.ram/dpram.dp1x1.ram/DOA<0> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[13].ram.r/s3_init.ram/dpram.dp1x1.ram/DOA<0> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[14].ram.r/s3_init.ram/dpram.dp1x1.ram/DOA<0> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[15].ram.r/s3_init.ram/dpram.dp1x1.ram/DOA<0> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[16].ram.r/s3_init.ram/dpram.dp1x1.ram/DOA<0> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[17].ram.r/s3_init.ram/dpram.dp1x1.ram/DOA<0> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[18].ram.r/s3_init.ram/dpram.dp1x1.ram/DOA<0> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[11].ram.r/s3_init.ram/dpram.dp9x9.ram/DOA<7> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[11].ram.r/s3_init.ram/dpram.dp9x9.ram/DOA<6> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[11].ram.r/s3_init.ram/dpram.dp9x9.ram/DOA<5> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[11].ram.r/s3_init.ram/dpram.dp9x9.ram/DOA<4> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[11].ram.r/s3_init.ram/dpram.dp9x9.ram/DOA<3> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[11].ram.r/s3_init.ram/dpram.dp9x9.ram/DOA<2> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[11].ram.r/s3_init.ram/dpram.dp9x9.ram/DOA<1> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[11].ram.r/s3_init.ram/dpram.dp9x9.ram/DOA<0> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[11].ram.r/s3_init.ram/dpram.dp9x9.ram/DOPA<0> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[11].ram.r/s3_init.ram/dpram.dp9x9.ram/DOPB<0> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOA<15> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOA<14> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOA<13> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOA<12> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOA<11> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOA<10> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOA<9> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOA<8> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOA<7> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOA<6> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOA<5> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOA<4> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOA<3> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOA<2> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOA<1> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOA<0> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOPA<1> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOPA<0> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOPB<1> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram/DOPB<0> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[1].ram.r/s3_init.ram/dpram.dp9x9.ram/DOA<7> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[1].ram.r/s3_init.ram/dpram.dp9x9.ram/DOA<6> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[1].ram.r/s3_init.ram/dpram.dp9x9.ram/DOA<5> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[1].ram.r/s3_init.ram/dpram.dp9x9.ram/DOA<4> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[1].ram.r/s3_init.ram/dpram.dp9x9.ram/DOA<3> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[1].ram.r/s3_init.ram/dpram.dp9x9.ram/DOA<2> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[1].ram.r/s3_init.ram/dpram.dp9x9.ram/DOA<1> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[1].ram.r/s3_init.ram/dpram.dp9x9.ram/DOA<0> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[1].ram.r/s3_init.ram/dpram.dp9x9.ram/DOPA<0> has no load.
+INFO:LIT:243 - Logical network
+   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/vali
+   d.cstr/ramloop[1].ram.r/s3_init.ram/dpram.dp9x9.ram/DOPB<0> has no load.
 INFO:MapLib:562 - No environment variables are currently set.
 INFO:MapLib:797 - Your design is targeting LX/SX Production Step 0/1/ES devices.
    Please note that there are new specifications for the DCMs to guarantee
@@ -129,6 +290,7 @@ Section 4 - Removed Logic Summary
   57 block(s) removed
   19 block(s) optimized away
  121 signal(s) removed
+ 232 Block(s) redundant
 
 Section 5 - Removed Logic
 -------------------------
@@ -733,8 +895,244 @@ VCC 		XST_VCC
 GND 		inst_framebuffer1/XST_GND
 VCC 		inst_framebuffer1/XST_VCC
 
-To enable printing of redundant blocks removed and signals merged, set the
-detailed map report option and rerun map.
+Redundant Block(s):
+TYPE 		BLOCK
+LOCALBUF 		SCCB/sioc_mux000245/LUT4_L_BUF
+LOCALBUF 		resend11/LUT2_D_BUF
+LOCALBUF 		inst_vgatiming/hPos_mux0001<7>11/LUT2_D_BUF
+LOCALBUF 		inst_addrgen1/addr_mux0001<0>21/LUT3_D_BUF
+LOCALBUF 		inst_vgatiming/counter2_mux0000<2>21/LUT3_L_BUF
+LOCALBUF 		inst_vgatiming/stateh_cmp_eq000215/LUT4_L_BUF
+LOCALBUF 		inst_vgatiming/statev_cmp_eq00002/LUT3_D_BUF
+LOCALBUF 		inst_vgatiming/statev_cmp_eq00007/LUT4_D_BUF
+LOCALBUF 		inst_vgatiming/statev_cmp_eq000025/LUT4_D_BUF
+LOCALBUF 		inst_vgatiming/statev_cmp_eq000312/LUT4_L_BUF
+LOCALBUF 		inst_vgatiming/statev_cmp_eq000150/LUT4_D_BUF
+LOCALBUF 		SCCB/scaler_not00014/LUT4_L_BUF
+LOCALBUF 		inst_addrgen1/count2_mux0000<2>111/LUT3_D_BUF
+LOCALBUF 		inst_addrgen1/count2_or00001/LUT3_D_BUF
+LOCALBUF 		resend2_mux000011/LUT4_D_BUF
+LOCALBUF 		inst_addrgen1/count1_mux0000<4>_SW0/LUT4_L_BUF
+LOCALBUF 		inst_addrgen1/count1_mux0000<3>_SW1/LUT2_L_BUF
+LOCALBUF 		inst_addrgen1/state_FSM_FFd2-In4/LUT2_L_BUF
+LOCALBUF 		inst_ov7670capt1/address_mux0001<0>150/LUT4_L_BUF
+LOCALBUF 		Registers/done_cmp_eq00004/LUT4_L_BUF
+LOCALBUF 		inst_vgatiming/videoOn_and00001/LUT2_L_BUF
+LOCALBUF 		inst_vgatiming/videoOn_and000049/LUT4_L_BUF
+LOCALBUF 		SCCB/scaler_and00008/LUT3_L_BUF
+LOCALBUF 		SCCB/counter_not0001136/LUT4_L_BUF
+LOCALBUF 		w4dcmcnt_mux0000<0>31/LUT3_D_BUF
+LOCALBUF 		inst_vgatiming/Madd_hPos_addsub0000_xor<6>111/LUT3_D_BUF
+LOCALBUF 		inst_addrgen1/count1_mux0000<0>11/LUT3_D_BUF
+LOCALBUF 		inst_vgatiming/counter2_mux0000<0>21/LUT4_D_BUF
+LOCALBUF 		send_mux000011_SW0/LUT2_L_BUF
+LOCALBUF 		inst_addrgen1/count1_mux0000<0>5/LUT4_D_BUF
+LOCALBUF 		inst_addrgen1/count1_mux0000<2>_SW0/LUT4_L_BUF
+LOCALBUF 		inst_addrgen1/state_cmp_eq000115/LUT4_L_BUF
+LOCALBUF 		state_cmp_eq000112/LUT4_L_BUF
+LOCALBUF 		SCCB/counter_not0001240/LUT4_D_BUF
+LOCALBUF 		inst_vgatiming/hPos_mux0001<5>21/LUT4_D_BUF
+LOCALBUF 		inst_addrgen1/addr_mux0001<0>350/LUT4_L_BUF
+LOCALBUF 		inst_addrgen1/Msub_va_addsub0000_xor<14>111/LUT3_D_BUF
+LOCALBUF 		inst_vgatiming/count1_mux0000<5>_SW0/LUT3_L_BUF
+LOCALBUF 		inst_vgatiming/count1_mux0000<3>_SW0/LUT4_L_BUF
+LOCALBUF 		inst_vgatiming/count1_mux0000<6>_SW1/LUT4_L_BUF
+LOCALBUF 		inst_vgatiming/count1_mux0000<5>11/LUT4_D_BUF
+LOCALBUF 		inst_vgatiming/count1_mux0000<2>15/LUT4_D_BUF
+LOCALBUF 		inst_vgatiming/state0_FSM_FFd2-In11/LUT4_D_BUF
+LOCALBUF 		inst_vgatiming/count1_mux0000<2>15_SW1/LUT3_L_BUF
+LOCALBUF 		inst_vgatiming/count1_mux0000<2>15_SW3/LUT4_D_BUF
+LOCALBUF 		inst_ov7670capt1/address_mux0001<0>180/LUT4_D_BUF
+LOCALBUF 		inst_vgatiming/count1_mux0000<4>28_SW0/LUT3_L_BUF
+LOCALBUF 		resend2_mux00004_SW0/LUT4_L_BUF
+LOCALBUF 		inst_vgatiming/count1_mux0000<0>57_SW0/LUT4_L_BUF
+LOCALBUF 		inst_vgatiming/state0_FSM_FFd1-In17_SW0/LUT4_L_BUF
+LOCALBUF 		inst_vgatiming/videoOn_and0000117_SW0/LUT4_L_BUF
+LOCALBUF 		SCCB/scaler_and000015/LUT4_D_BUF
+LOCALBUF 		inst_addrgen1/addr_mux0001<0>3110/LUT4_D_BUF
+LOCALBUF 		state_cmp_eq000127/LUT4_D_BUF
+LOCALBUF 		SCCB/sioc_mux000260/LUT4_L_BUF
+LOCALBUF 		inst_vgatiming/statev_cmp_eq000332/LUT4_D_BUF
+LOCALBUF 		inst_addrgen1/state_FSM_FFd2-In16/LUT4_L_BUF
+LOCALBUF 		inst_addrgen1/count1_mux0000<1>29/LUT4_L_BUF
+LOCALBUF 		inst_addrgen1/count1_mux0000<0>49/LUT4_L_BUF
+LOCALBUF 		inst_vgatiming/hPos_mux0001<4>41_SW0/LUT4_L_BUF
+LOCALBUF 		inst_addrgen1/count1_mux0000<0>49_SW0_SW0/LUT4_L_BUF
+LOCALBUF 		SCCB/counter_not0001240_1/LUT4_L_BUF
+LUT1 		inst_debounce/Mcount_counter_cy<1>_rt
+LUT1 		inst_debounce/Mcount_counter_cy<2>_rt
+LUT1 		inst_debounce/Mcount_counter_cy<3>_rt
+LUT1 		inst_debounce/Mcount_counter_cy<4>_rt
+LUT1 		inst_debounce/Mcount_counter_cy<5>_rt
+LUT1 		inst_debounce/Mcount_counter_cy<6>_rt
+LUT1 		inst_debounce/Mcount_counter_cy<7>_rt
+LUT1 		inst_debounce/Mcount_counter_cy<8>_rt
+LUT1 		inst_debounce/Mcount_counter_cy<9>_rt
+LUT1 		inst_debounce/Mcount_counter_cy<10>_rt
+LUT1 		inst_debounce/Mcount_counter_cy<11>_rt
+LUT1 		inst_debounce/Mcount_counter_cy<12>_rt
+LUT1 		inst_debounce/Mcount_counter_cy<13>_rt
+LUT1 		inst_debounce/Mcount_counter_cy<14>_rt
+LUT1 		inst_debounce/Mcount_counter_cy<15>_rt
+LUT1 		inst_debounce/Mcount_counter_cy<16>_rt
+LUT1 		inst_debounce/Mcount_counter_cy<17>_rt
+LUT1 		inst_debounce/Mcount_counter_cy<18>_rt
+LUT1 		inst_debounce/Mcount_counter_cy<19>_rt
+LUT1 		inst_debounce/Mcount_counter_cy<20>_rt
+LUT1 		inst_debounce/Mcount_counter_cy<21>_rt
+LUT1 		inst_debounce/Mcount_counter_cy<22>_rt
+LUT1 		Madd_counter_addsub0000_cy<1>_rt
+LUT1 		Madd_counter_addsub0000_cy<2>_rt
+LUT1 		Madd_counter_addsub0000_cy<3>_rt
+LUT1 		Madd_counter_addsub0000_cy<4>_rt
+LUT1 		Madd_counter_addsub0000_cy<5>_rt
+LUT1 		Madd_counter_addsub0000_cy<6>_rt
+LUT1 		Madd_counter_addsub0000_cy<7>_rt
+LUT1 		Madd_counter_addsub0000_cy<8>_rt
+LUT1 		Madd_counter_addsub0000_cy<9>_rt
+LUT1 		Madd_counter_addsub0000_cy<10>_rt
+LUT1 		Madd_counter_addsub0000_cy<11>_rt
+LUT1 		Madd_w4dcmcnt_addsub0000_cy<1>_rt
+LUT1 		Madd_w4dcmcnt_addsub0000_cy<2>_rt
+LUT1 		Madd_w4dcmcnt_addsub0000_cy<3>_rt
+LUT1 		Madd_w4dcmcnt_addsub0000_cy<4>_rt
+LUT1 		Madd_w4dcmcnt_addsub0000_cy<5>_rt
+LUT1 		Madd_w4dcmcnt_addsub0000_cy<6>_rt
+LUT1 		Madd_w4dcmcnt_addsub0000_cy<7>_rt
+LUT1 		Madd_w4dcmcnt_addsub0000_cy<8>_rt
+LUT1 		Madd_w4dcmcnt_addsub0000_cy<9>_rt
+LUT1 		Madd_w4dcmcnt_addsub0000_cy<10>_rt
+LUT1 		Madd_w4dcmcnt_addsub0000_cy<11>_rt
+LUT1 		Madd_w4dcmcnt_addsub0000_cy<12>_rt
+LUT1 		Madd_w4dcmcnt_addsub0000_cy<13>_rt
+LUT1 		Madd_w4dcmcnt_addsub0000_cy<14>_rt
+LUT1 		Madd_w4dcmcnt_addsub0000_cy<15>_rt
+LUT1 		Madd_w4dcmcnt_addsub0000_cy<16>_rt
+LUT1 		Madd_w4dcmcnt_addsub0000_cy<17>_rt
+LUT1 		Madd_w4dcmcnt_addsub0000_cy<18>_rt
+LUT1 		inst_ov7670capt1/Madd_address_addsub0000_cy<13>_rt
+LUT1 		inst_ov7670capt1/Madd_address_addsub0000_cy<12>_rt
+LUT1 		inst_ov7670capt1/Madd_address_addsub0000_cy<11>_rt
+LUT1 		inst_ov7670capt1/Madd_address_addsub0000_cy<10>_rt
+LUT1 		inst_ov7670capt1/Madd_address_addsub0000_cy<9>_rt
+LUT1 		inst_ov7670capt1/Madd_address_addsub0000_cy<8>_rt
+LUT1 		inst_ov7670capt1/Madd_address_addsub0000_cy<7>_rt
+LUT1 		inst_ov7670capt1/Madd_address_addsub0000_cy<6>_rt
+LUT1 		inst_ov7670capt1/Madd_address_addsub0000_cy<5>_rt
+LUT1 		inst_ov7670capt1/Madd_address_addsub0000_cy<4>_rt
+LUT1 		inst_ov7670capt1/Madd_address_addsub0000_cy<3>_rt
+LUT1 		inst_ov7670capt1/Madd_address_addsub0000_cy<2>_rt
+LUT1 		inst_ov7670capt1/Madd_address_addsub0000_cy<1>_rt
+LUT1 		inst_addrgen1/Madd_va_add0000_cy<4>_rt
+LUT1 		inst_addrgen1/Madd_va_add0000_cy<3>_rt
+LUT1 		inst_addrgen1/Madd_va_add0000_cy<2>_rt
+LUT1 		inst_vgatiming/Mcount_dispv_cy<17>_rt
+LUT1 		inst_vgatiming/Mcount_dispv_cy<16>_rt
+LUT1 		inst_vgatiming/Mcount_dispv_cy<15>_rt
+LUT1 		inst_vgatiming/Mcount_dispv_cy<14>_rt
+LUT1 		inst_vgatiming/Mcount_dispv_cy<13>_rt
+LUT1 		inst_vgatiming/Mcount_dispv_cy<12>_rt
+LUT1 		inst_vgatiming/Mcount_dispv_cy<11>_rt
+LUT1 		inst_vgatiming/Mcount_dispv_cy<10>_rt
+LUT1 		inst_vgatiming/Mcount_dispv_cy<9>_rt
+LUT1 		inst_vgatiming/Mcount_dispv_cy<8>_rt
+LUT1 		inst_vgatiming/Mcount_dispv_cy<7>_rt
+LUT1 		inst_vgatiming/Mcount_dispv_cy<6>_rt
+LUT1 		inst_vgatiming/Mcount_dispv_cy<5>_rt
+LUT1 		inst_vgatiming/Mcount_dispv_cy<4>_rt
+LUT1 		inst_vgatiming/Mcount_dispv_cy<3>_rt
+LUT1 		inst_vgatiming/Mcount_dispv_cy<2>_rt
+LUT1 		inst_vgatiming/Mcount_dispv_cy<1>_rt
+LUT1 		inst_vgatiming/Mcount_bpv_cy<13>_rt
+LUT1 		inst_vgatiming/Mcount_bpv_cy<12>_rt
+LUT1 		inst_vgatiming/Mcount_bpv_cy<11>_rt
+LUT1 		inst_vgatiming/Mcount_bpv_cy<10>_rt
+LUT1 		inst_vgatiming/Mcount_bpv_cy<9>_rt
+LUT1 		inst_vgatiming/Mcount_bpv_cy<8>_rt
+LUT1 		inst_vgatiming/Mcount_bpv_cy<7>_rt
+LUT1 		inst_vgatiming/Mcount_bpv_cy<6>_rt
+LUT1 		inst_vgatiming/Mcount_bpv_cy<5>_rt
+LUT1 		inst_vgatiming/Mcount_bpv_cy<4>_rt
+LUT1 		inst_vgatiming/Mcount_bpv_cy<3>_rt
+LUT1 		inst_vgatiming/Mcount_bpv_cy<2>_rt
+LUT1 		inst_vgatiming/Mcount_bpv_cy<1>_rt
+LUT1 		inst_vgatiming/Mcount_fpv_cy<11>_rt
+LUT1 		inst_vgatiming/Mcount_fpv_cy<10>_rt
+LUT1 		inst_vgatiming/Mcount_fpv_cy<9>_rt
+LUT1 		inst_vgatiming/Mcount_fpv_cy<8>_rt
+LUT1 		inst_vgatiming/Mcount_fpv_cy<7>_rt
+LUT1 		inst_vgatiming/Mcount_fpv_cy<6>_rt
+LUT1 		inst_vgatiming/Mcount_fpv_cy<5>_rt
+LUT1 		inst_vgatiming/Mcount_fpv_cy<4>_rt
+LUT1 		inst_vgatiming/Mcount_fpv_cy<3>_rt
+LUT1 		inst_vgatiming/Mcount_fpv_cy<2>_rt
+LUT1 		inst_vgatiming/Mcount_fpv_cy<1>_rt
+LUT1 		inst_vgatiming/Mcount_pwv_cy<9>_rt
+LUT1 		inst_vgatiming/Mcount_pwv_cy<8>_rt
+LUT1 		inst_vgatiming/Mcount_pwv_cy<7>_rt
+LUT1 		inst_vgatiming/Mcount_pwv_cy<6>_rt
+LUT1 		inst_vgatiming/Mcount_pwv_cy<5>_rt
+LUT1 		inst_vgatiming/Mcount_pwv_cy<4>_rt
+LUT1 		inst_vgatiming/Mcount_pwv_cy<3>_rt
+LUT1 		inst_vgatiming/Mcount_pwv_cy<2>_rt
+LUT1 		inst_vgatiming/Mcount_pwv_cy<1>_rt
+LUT1 		inst_vgatiming/Mcount_disph_cy<8>_rt
+LUT1 		inst_vgatiming/Mcount_disph_cy<7>_rt
+LUT1 		inst_vgatiming/Mcount_disph_cy<6>_rt
+LUT1 		inst_vgatiming/Mcount_disph_cy<5>_rt
+LUT1 		inst_vgatiming/Mcount_disph_cy<4>_rt
+LUT1 		inst_vgatiming/Mcount_disph_cy<3>_rt
+LUT1 		inst_vgatiming/Mcount_disph_cy<2>_rt
+LUT1 		inst_vgatiming/Mcount_disph_cy<1>_rt
+LUT1 		SCCB/Mcount_scaler_cy<6>_rt
+LUT1 		SCCB/Mcount_scaler_cy<5>_rt
+LUT1 		SCCB/Mcount_scaler_cy<4>_rt
+LUT1 		SCCB/Mcount_scaler_cy<3>_rt
+LUT1 		SCCB/Mcount_scaler_cy<2>_rt
+LUT1 		SCCB/Mcount_scaler_cy<1>_rt
+LUT1 		SCCB/Mcount_counter_cy<18>_rt
+LUT1 		SCCB/Mcount_counter_cy<17>_rt
+LUT1 		SCCB/Mcount_counter_cy<16>_rt
+LUT1 		SCCB/Mcount_counter_cy<15>_rt
+LUT1 		SCCB/Mcount_counter_cy<14>_rt
+LUT1 		SCCB/Mcount_counter_cy<13>_rt
+LUT1 		SCCB/Mcount_counter_cy<12>_rt
+LUT1 		SCCB/Mcount_counter_cy<11>_rt
+LUT1 		SCCB/Mcount_counter_cy<10>_rt
+LUT1 		SCCB/Mcount_counter_cy<9>_rt
+LUT1 		SCCB/Mcount_counter_cy<8>_rt
+LUT1 		SCCB/Mcount_counter_cy<7>_rt
+LUT1 		SCCB/Mcount_counter_cy<6>_rt
+LUT1 		SCCB/Mcount_counter_cy<5>_rt
+LUT1 		SCCB/Mcount_counter_cy<4>_rt
+LUT1 		SCCB/Mcount_counter_cy<3>_rt
+LUT1 		SCCB/Mcount_counter_cy<2>_rt
+LUT1 		SCCB/Mcount_counter_cy<1>_rt
+LUT1 		inst_debounce/Mcount_counter_xor<23>_rt
+LUT1 		Madd_counter_addsub0000_xor<12>_rt
+LUT1 		Madd_w4dcmcnt_addsub0000_xor<19>_rt
+LUT1 		inst_ov7670capt1/Madd_address_addsub0000_xor<14>_rt
+INV
+		inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid
+.cstr/out21_INV_0
+LUT1 		inst_vgatiming/Mcount_dispv_xor<18>_rt
+LUT1 		inst_vgatiming/Mcount_bpv_xor<14>_rt
+LUT1 		inst_vgatiming/Mcount_fpv_xor<12>_rt
+LUT1 		inst_vgatiming/Mcount_pwv_xor<10>_rt
+LUT1 		inst_vgatiming/Mcount_disph_xor<9>_rt
+LUT1 		SCCB/Mcount_scaler_xor<7>_rt
+LUT1 		SCCB/Mcount_counter_xor<19>_rt
+INV 		inst_vgatiming/reset_inv1_INV_0
+INV 		vmax0_0_mux00001_INV_0
+INV 		inst_vgatiming/Mcount_fph_xor<0>11_INV_0
+INV 		inst_vgatiming/Mcount_bph_xor<0>11_INV_0
+INV 		clk25_not00011_INV_0
+INV 		cc_not00011_INV_0
+INV 		cc4_not00011_INV_0
+INV 		Mcount_vmax_xor<0>11_INV_0
+INV
+		inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid
+.cstr/out41_INV_0
 
 Section 6 - IOB Properties
 --------------------------
@@ -744,30 +1142,34 @@ Section 6 - IOB Properties
 |                                    |                  |           |                      | Term  | Strength | Rate |              |          | Delay    |
 +---------------------------------------------------------------------------------------------------------------------------------------------------------+
 | clkcam                             | IOB              | INPUT     | LVCMOS25             |       |          |      |              |          |          |
-| debug<0>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
-| debug<1>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
-| debug<2>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
-| debug<3>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
-| o_b<0>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
-| o_b<1>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
-| o_b<2>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
-| o_b<3>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| o_b<0>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW | OFF1         |          |          |
+| o_b<1>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW | OFF1         |          |          |
+| o_b<2>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW | OFF1         |          |          |
+| o_b<3>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW | OFF1         |          |          |
 | o_b<4>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
 | o_b<5>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
 | o_b<6>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
 | o_b<7>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
-| o_g<0>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
-| o_g<1>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
-| o_g<2>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
-| o_g<3>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| o_debug<0>                         | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| o_debug<1>                         | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| o_debug<2>                         | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| o_debug<3>                         | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| o_debug<4>                         | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| o_debug<5>                         | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| o_debug<6>                         | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| o_debug<7>                         | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| o_g<0>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW | OFF1         |          |          |
+| o_g<1>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW | OFF1         |          |          |
+| o_g<2>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW | OFF1         |          |          |
+| o_g<3>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW | OFF1         |          |          |
 | o_g<4>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
 | o_g<5>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
 | o_g<6>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
 | o_g<7>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
-| o_r<0>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
-| o_r<1>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
-| o_r<2>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
-| o_r<3>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
+| o_r<0>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW | OFF1         |          |          |
+| o_r<1>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW | OFF1         |          |          |
+| o_r<2>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW | OFF1         |          |          |
+| o_r<3>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW | OFF1         |          |          |
 | o_r<4>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
 | o_r<5>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
 | o_r<6>                             | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          |          |
@@ -871,7 +1273,1918 @@ This design was not run using timing mode.
 
 Section 11 - Configuration String Details
 -----------------------------------------
-Use the "-detail" map option to print out Configuration Strings
+DCM_ADV "XIL_ML_UNUSED_DCM_1":
+BGM_CONFIG_REF_SEL:CLKIN
+BGM_DIVIDE:16
+BGM_LDLY:5
+BGM_MODE:BG_SNAPSHOT
+BGM_MULTIPLY:16
+BGM_SAMPLE_LEN:2
+BGM_SDLY:3
+BGM_VADJ:5
+BGM_VLDLY:7
+BGM_VSDLY:0
+CLKDV_DIVIDE:2.0
+CLKFX_DIVIDE:1
+CLKFX_MULTIPLY:4
+CLKIN_DIVIDE_BY_2:TRUE
+CLKOUT_PHASE_SHIFT:FIXED
+CLK_FEEDBACK:1X
+DCM_CLKDV_CLKFX_ALIGNMENT:TRUE
+DCM_EXT_FB_EN:FALSE
+DCM_LOCK_HIGH:FALSE
+DCM_PERFORMANCE_MODE:MAX_SPEED
+DCM_UNUSED_TAPS_POWERDOWN:FALSE
+DCM_VREF_SOURCE:VBG_DLL
+DCM_VREG_ENABLE:FALSE
+DESKEW_ADJUST:17
+DFS_AVE_FREQ_ADJ_INTERVAL:3
+DFS_AVE_FREQ_GAIN:2.0
+DFS_AVE_FREQ_SAMPLE_INTERVAL:2
+DFS_COARSE_SEL:LEGACY
+DFS_EARLY_LOCK:FALSE
+DFS_EN_RELRST:TRUE
+DFS_EXTEND_FLUSH_TIME:FALSE
+DFS_EXTEND_HALT_TIME:FALSE
+DFS_EXTEND_RUN_TIME:FALSE
+DFS_FINE_SEL:LEGACY
+DFS_FREQUENCY_MODE:LOW
+DFS_NON_STOP:FALSE
+DFS_OSCILLATOR_MODE:PHASE_FREQ_LOCK
+DFS_SKIP_FINE:FALSE
+DFS_TP_SEL:LEVEL
+DFS_TRACKMODE:1
+DLL_CONTROL_CLOCK_SPEED:HALF
+DLL_CTL_SEL_CLKIN_DIV2:FALSE
+DLL_DESKEW_LOCK_BY1:FALSE
+DLL_FREQUENCY_MODE:LOW
+DLL_PD_DLY_SEL:0
+DLL_PERIOD_LOCK_BY1:FALSE
+DLL_PHASE_DETECTOR_AUTO_RESET:TRUE
+DLL_PHASE_DETECTOR_MODE:ENHANCED
+DLL_PHASE_SHIFT_CALIBRATION:AUTO_DPS
+DLL_PHASE_SHIFT_LOCK_BY1:FALSE
+DUTY_CYCLE_CORRECTION:TRUE
+PMCD_SYNC:FALSE
+STARTUP_WAIT:FALSE
+CLKIN_PERIOD = 10.0
+FACTORY_JF = F0F0
+PHASE_SHIFT = 0
+
+
+DCM_ADV "XIL_ML_UNUSED_DCM_2":
+BGM_CONFIG_REF_SEL:CLKIN
+BGM_DIVIDE:16
+BGM_LDLY:5
+BGM_MODE:BG_SNAPSHOT
+BGM_MULTIPLY:16
+BGM_SAMPLE_LEN:2
+BGM_SDLY:3
+BGM_VADJ:5
+BGM_VLDLY:7
+BGM_VSDLY:0
+CLKDV_DIVIDE:2.0
+CLKFX_DIVIDE:1
+CLKFX_MULTIPLY:4
+CLKIN_DIVIDE_BY_2:TRUE
+CLKOUT_PHASE_SHIFT:FIXED
+CLK_FEEDBACK:1X
+DCM_CLKDV_CLKFX_ALIGNMENT:TRUE
+DCM_EXT_FB_EN:FALSE
+DCM_LOCK_HIGH:FALSE
+DCM_PERFORMANCE_MODE:MAX_SPEED
+DCM_UNUSED_TAPS_POWERDOWN:FALSE
+DCM_VREF_SOURCE:VBG_DLL
+DCM_VREG_ENABLE:FALSE
+DESKEW_ADJUST:17
+DFS_AVE_FREQ_ADJ_INTERVAL:3
+DFS_AVE_FREQ_GAIN:2.0
+DFS_AVE_FREQ_SAMPLE_INTERVAL:2
+DFS_COARSE_SEL:LEGACY
+DFS_EARLY_LOCK:FALSE
+DFS_EN_RELRST:TRUE
+DFS_EXTEND_FLUSH_TIME:FALSE
+DFS_EXTEND_HALT_TIME:FALSE
+DFS_EXTEND_RUN_TIME:FALSE
+DFS_FINE_SEL:LEGACY
+DFS_FREQUENCY_MODE:LOW
+DFS_NON_STOP:FALSE
+DFS_OSCILLATOR_MODE:PHASE_FREQ_LOCK
+DFS_SKIP_FINE:FALSE
+DFS_TP_SEL:LEVEL
+DFS_TRACKMODE:1
+DLL_CONTROL_CLOCK_SPEED:HALF
+DLL_CTL_SEL_CLKIN_DIV2:FALSE
+DLL_DESKEW_LOCK_BY1:FALSE
+DLL_FREQUENCY_MODE:LOW
+DLL_PD_DLY_SEL:0
+DLL_PERIOD_LOCK_BY1:FALSE
+DLL_PHASE_DETECTOR_AUTO_RESET:TRUE
+DLL_PHASE_DETECTOR_MODE:ENHANCED
+DLL_PHASE_SHIFT_CALIBRATION:AUTO_DPS
+DLL_PHASE_SHIFT_LOCK_BY1:FALSE
+DUTY_CYCLE_CORRECTION:TRUE
+PMCD_SYNC:FALSE
+STARTUP_WAIT:FALSE
+CLKIN_PERIOD = 10.0
+FACTORY_JF = F0F0
+PHASE_SHIFT = 0
+
+
+DCM_ADV "XIL_ML_UNUSED_DCM_3":
+BGM_CONFIG_REF_SEL:CLKIN
+BGM_DIVIDE:16
+BGM_LDLY:5
+BGM_MODE:BG_SNAPSHOT
+BGM_MULTIPLY:16
+BGM_SAMPLE_LEN:2
+BGM_SDLY:3
+BGM_VADJ:5
+BGM_VLDLY:7
+BGM_VSDLY:0
+CLKDV_DIVIDE:2.0
+CLKFX_DIVIDE:1
+CLKFX_MULTIPLY:4
+CLKIN_DIVIDE_BY_2:TRUE
+CLKOUT_PHASE_SHIFT:FIXED
+CLK_FEEDBACK:1X
+DCM_CLKDV_CLKFX_ALIGNMENT:TRUE
+DCM_EXT_FB_EN:FALSE
+DCM_LOCK_HIGH:FALSE
+DCM_PERFORMANCE_MODE:MAX_SPEED
+DCM_UNUSED_TAPS_POWERDOWN:FALSE
+DCM_VREF_SOURCE:VBG_DLL
+DCM_VREG_ENABLE:FALSE
+DESKEW_ADJUST:17
+DFS_AVE_FREQ_ADJ_INTERVAL:3
+DFS_AVE_FREQ_GAIN:2.0
+DFS_AVE_FREQ_SAMPLE_INTERVAL:2
+DFS_COARSE_SEL:LEGACY
+DFS_EARLY_LOCK:FALSE
+DFS_EN_RELRST:TRUE
+DFS_EXTEND_FLUSH_TIME:FALSE
+DFS_EXTEND_HALT_TIME:FALSE
+DFS_EXTEND_RUN_TIME:FALSE
+DFS_FINE_SEL:LEGACY
+DFS_FREQUENCY_MODE:LOW
+DFS_NON_STOP:FALSE
+DFS_OSCILLATOR_MODE:PHASE_FREQ_LOCK
+DFS_SKIP_FINE:FALSE
+DFS_TP_SEL:LEVEL
+DFS_TRACKMODE:1
+DLL_CONTROL_CLOCK_SPEED:HALF
+DLL_CTL_SEL_CLKIN_DIV2:FALSE
+DLL_DESKEW_LOCK_BY1:FALSE
+DLL_FREQUENCY_MODE:LOW
+DLL_PD_DLY_SEL:0
+DLL_PERIOD_LOCK_BY1:FALSE
+DLL_PHASE_DETECTOR_AUTO_RESET:TRUE
+DLL_PHASE_DETECTOR_MODE:ENHANCED
+DLL_PHASE_SHIFT_CALIBRATION:AUTO_DPS
+DLL_PHASE_SHIFT_LOCK_BY1:FALSE
+DUTY_CYCLE_CORRECTION:TRUE
+PMCD_SYNC:FALSE
+STARTUP_WAIT:FALSE
+CLKIN_PERIOD = 10.0
+FACTORY_JF = F0F0
+PHASE_SHIFT = 0
+
+
+DCM_ADV "XIL_ML_UNUSED_DCM_4":
+BGM_CONFIG_REF_SEL:CLKIN
+BGM_DIVIDE:16
+BGM_LDLY:5
+BGM_MODE:BG_SNAPSHOT
+BGM_MULTIPLY:16
+BGM_SAMPLE_LEN:2
+BGM_SDLY:3
+BGM_VADJ:5
+BGM_VLDLY:7
+BGM_VSDLY:0
+CLKDV_DIVIDE:2.0
+CLKFX_DIVIDE:1
+CLKFX_MULTIPLY:4
+CLKIN_DIVIDE_BY_2:TRUE
+CLKOUT_PHASE_SHIFT:FIXED
+CLK_FEEDBACK:1X
+DCM_CLKDV_CLKFX_ALIGNMENT:TRUE
+DCM_EXT_FB_EN:FALSE
+DCM_LOCK_HIGH:FALSE
+DCM_PERFORMANCE_MODE:MAX_SPEED
+DCM_UNUSED_TAPS_POWERDOWN:FALSE
+DCM_VREF_SOURCE:VBG_DLL
+DCM_VREG_ENABLE:FALSE
+DESKEW_ADJUST:17
+DFS_AVE_FREQ_ADJ_INTERVAL:3
+DFS_AVE_FREQ_GAIN:2.0
+DFS_AVE_FREQ_SAMPLE_INTERVAL:2
+DFS_COARSE_SEL:LEGACY
+DFS_EARLY_LOCK:FALSE
+DFS_EN_RELRST:TRUE
+DFS_EXTEND_FLUSH_TIME:FALSE
+DFS_EXTEND_HALT_TIME:FALSE
+DFS_EXTEND_RUN_TIME:FALSE
+DFS_FINE_SEL:LEGACY
+DFS_FREQUENCY_MODE:LOW
+DFS_NON_STOP:FALSE
+DFS_OSCILLATOR_MODE:PHASE_FREQ_LOCK
+DFS_SKIP_FINE:FALSE
+DFS_TP_SEL:LEVEL
+DFS_TRACKMODE:1
+DLL_CONTROL_CLOCK_SPEED:HALF
+DLL_CTL_SEL_CLKIN_DIV2:FALSE
+DLL_DESKEW_LOCK_BY1:FALSE
+DLL_FREQUENCY_MODE:LOW
+DLL_PD_DLY_SEL:0
+DLL_PERIOD_LOCK_BY1:FALSE
+DLL_PHASE_DETECTOR_AUTO_RESET:TRUE
+DLL_PHASE_DETECTOR_MODE:ENHANCED
+DLL_PHASE_SHIFT_CALIBRATION:AUTO_DPS
+DLL_PHASE_SHIFT_LOCK_BY1:FALSE
+DUTY_CYCLE_CORRECTION:TRUE
+PMCD_SYNC:FALSE
+STARTUP_WAIT:FALSE
+CLKIN_PERIOD = 10.0
+FACTORY_JF = F0F0
+PHASE_SHIFT = 0
+
+
+DCM_ADV "XIL_ML_UNUSED_DCM_5":
+BGM_CONFIG_REF_SEL:CLKIN
+BGM_DIVIDE:16
+BGM_LDLY:5
+BGM_MODE:BG_SNAPSHOT
+BGM_MULTIPLY:16
+BGM_SAMPLE_LEN:2
+BGM_SDLY:3
+BGM_VADJ:5
+BGM_VLDLY:7
+BGM_VSDLY:0
+CLKDV_DIVIDE:2.0
+CLKFX_DIVIDE:1
+CLKFX_MULTIPLY:4
+CLKIN_DIVIDE_BY_2:TRUE
+CLKOUT_PHASE_SHIFT:FIXED
+CLK_FEEDBACK:1X
+DCM_CLKDV_CLKFX_ALIGNMENT:TRUE
+DCM_EXT_FB_EN:FALSE
+DCM_LOCK_HIGH:FALSE
+DCM_PERFORMANCE_MODE:MAX_SPEED
+DCM_UNUSED_TAPS_POWERDOWN:FALSE
+DCM_VREF_SOURCE:VBG_DLL
+DCM_VREG_ENABLE:FALSE
+DESKEW_ADJUST:17
+DFS_AVE_FREQ_ADJ_INTERVAL:3
+DFS_AVE_FREQ_GAIN:2.0
+DFS_AVE_FREQ_SAMPLE_INTERVAL:2
+DFS_COARSE_SEL:LEGACY
+DFS_EARLY_LOCK:FALSE
+DFS_EN_RELRST:TRUE
+DFS_EXTEND_FLUSH_TIME:FALSE
+DFS_EXTEND_HALT_TIME:FALSE
+DFS_EXTEND_RUN_TIME:FALSE
+DFS_FINE_SEL:LEGACY
+DFS_FREQUENCY_MODE:LOW
+DFS_NON_STOP:FALSE
+DFS_OSCILLATOR_MODE:PHASE_FREQ_LOCK
+DFS_SKIP_FINE:FALSE
+DFS_TP_SEL:LEVEL
+DFS_TRACKMODE:1
+DLL_CONTROL_CLOCK_SPEED:HALF
+DLL_CTL_SEL_CLKIN_DIV2:FALSE
+DLL_DESKEW_LOCK_BY1:FALSE
+DLL_FREQUENCY_MODE:LOW
+DLL_PD_DLY_SEL:0
+DLL_PERIOD_LOCK_BY1:FALSE
+DLL_PHASE_DETECTOR_AUTO_RESET:TRUE
+DLL_PHASE_DETECTOR_MODE:ENHANCED
+DLL_PHASE_SHIFT_CALIBRATION:AUTO_DPS
+DLL_PHASE_SHIFT_LOCK_BY1:FALSE
+DUTY_CYCLE_CORRECTION:TRUE
+PMCD_SYNC:FALSE
+STARTUP_WAIT:FALSE
+CLKIN_PERIOD = 10.0
+FACTORY_JF = F0F0
+PHASE_SHIFT = 0
+
+
+DCM_ADV "XIL_ML_UNUSED_DCM_6":
+BGM_CONFIG_REF_SEL:CLKIN
+BGM_DIVIDE:16
+BGM_LDLY:5
+BGM_MODE:BG_SNAPSHOT
+BGM_MULTIPLY:16
+BGM_SAMPLE_LEN:2
+BGM_SDLY:3
+BGM_VADJ:5
+BGM_VLDLY:7
+BGM_VSDLY:0
+CLKDV_DIVIDE:2.0
+CLKFX_DIVIDE:1
+CLKFX_MULTIPLY:4
+CLKIN_DIVIDE_BY_2:TRUE
+CLKOUT_PHASE_SHIFT:FIXED
+CLK_FEEDBACK:1X
+DCM_CLKDV_CLKFX_ALIGNMENT:TRUE
+DCM_EXT_FB_EN:FALSE
+DCM_LOCK_HIGH:FALSE
+DCM_PERFORMANCE_MODE:MAX_SPEED
+DCM_UNUSED_TAPS_POWERDOWN:FALSE
+DCM_VREF_SOURCE:VBG_DLL
+DCM_VREG_ENABLE:FALSE
+DESKEW_ADJUST:17
+DFS_AVE_FREQ_ADJ_INTERVAL:3
+DFS_AVE_FREQ_GAIN:2.0
+DFS_AVE_FREQ_SAMPLE_INTERVAL:2
+DFS_COARSE_SEL:LEGACY
+DFS_EARLY_LOCK:FALSE
+DFS_EN_RELRST:TRUE
+DFS_EXTEND_FLUSH_TIME:FALSE
+DFS_EXTEND_HALT_TIME:FALSE
+DFS_EXTEND_RUN_TIME:FALSE
+DFS_FINE_SEL:LEGACY
+DFS_FREQUENCY_MODE:LOW
+DFS_NON_STOP:FALSE
+DFS_OSCILLATOR_MODE:PHASE_FREQ_LOCK
+DFS_SKIP_FINE:FALSE
+DFS_TP_SEL:LEVEL
+DFS_TRACKMODE:1
+DLL_CONTROL_CLOCK_SPEED:HALF
+DLL_CTL_SEL_CLKIN_DIV2:FALSE
+DLL_DESKEW_LOCK_BY1:FALSE
+DLL_FREQUENCY_MODE:LOW
+DLL_PD_DLY_SEL:0
+DLL_PERIOD_LOCK_BY1:FALSE
+DLL_PHASE_DETECTOR_AUTO_RESET:TRUE
+DLL_PHASE_DETECTOR_MODE:ENHANCED
+DLL_PHASE_SHIFT_CALIBRATION:AUTO_DPS
+DLL_PHASE_SHIFT_LOCK_BY1:FALSE
+DUTY_CYCLE_CORRECTION:TRUE
+PMCD_SYNC:FALSE
+STARTUP_WAIT:FALSE
+CLKIN_PERIOD = 10.0
+FACTORY_JF = F0F0
+PHASE_SHIFT = 0
+
+
+DCM_ADV "XIL_ML_UNUSED_DCM_7":
+BGM_CONFIG_REF_SEL:CLKIN
+BGM_DIVIDE:16
+BGM_LDLY:5
+BGM_MODE:BG_SNAPSHOT
+BGM_MULTIPLY:16
+BGM_SAMPLE_LEN:2
+BGM_SDLY:3
+BGM_VADJ:5
+BGM_VLDLY:7
+BGM_VSDLY:0
+CLKDV_DIVIDE:2.0
+CLKFX_DIVIDE:1
+CLKFX_MULTIPLY:4
+CLKIN_DIVIDE_BY_2:TRUE
+CLKOUT_PHASE_SHIFT:FIXED
+CLK_FEEDBACK:1X
+DCM_CLKDV_CLKFX_ALIGNMENT:TRUE
+DCM_EXT_FB_EN:FALSE
+DCM_LOCK_HIGH:FALSE
+DCM_PERFORMANCE_MODE:MAX_SPEED
+DCM_UNUSED_TAPS_POWERDOWN:FALSE
+DCM_VREF_SOURCE:VBG_DLL
+DCM_VREG_ENABLE:FALSE
+DESKEW_ADJUST:17
+DFS_AVE_FREQ_ADJ_INTERVAL:3
+DFS_AVE_FREQ_GAIN:2.0
+DFS_AVE_FREQ_SAMPLE_INTERVAL:2
+DFS_COARSE_SEL:LEGACY
+DFS_EARLY_LOCK:FALSE
+DFS_EN_RELRST:TRUE
+DFS_EXTEND_FLUSH_TIME:FALSE
+DFS_EXTEND_HALT_TIME:FALSE
+DFS_EXTEND_RUN_TIME:FALSE
+DFS_FINE_SEL:LEGACY
+DFS_FREQUENCY_MODE:LOW
+DFS_NON_STOP:FALSE
+DFS_OSCILLATOR_MODE:PHASE_FREQ_LOCK
+DFS_SKIP_FINE:FALSE
+DFS_TP_SEL:LEVEL
+DFS_TRACKMODE:1
+DLL_CONTROL_CLOCK_SPEED:HALF
+DLL_CTL_SEL_CLKIN_DIV2:FALSE
+DLL_DESKEW_LOCK_BY1:FALSE
+DLL_FREQUENCY_MODE:LOW
+DLL_PD_DLY_SEL:0
+DLL_PERIOD_LOCK_BY1:FALSE
+DLL_PHASE_DETECTOR_AUTO_RESET:TRUE
+DLL_PHASE_DETECTOR_MODE:ENHANCED
+DLL_PHASE_SHIFT_CALIBRATION:AUTO_DPS
+DLL_PHASE_SHIFT_LOCK_BY1:FALSE
+DUTY_CYCLE_CORRECTION:TRUE
+PMCD_SYNC:FALSE
+STARTUP_WAIT:FALSE
+CLKIN_PERIOD = 10.0
+FACTORY_JF = F0F0
+PHASE_SHIFT = 0
+
+
+DCM_ADV "XIL_ML_UNUSED_DCM_8":
+BGM_CONFIG_REF_SEL:CLKIN
+BGM_DIVIDE:16
+BGM_LDLY:5
+BGM_MODE:BG_SNAPSHOT
+BGM_MULTIPLY:16
+BGM_SAMPLE_LEN:2
+BGM_SDLY:3
+BGM_VADJ:5
+BGM_VLDLY:7
+BGM_VSDLY:0
+CLKDV_DIVIDE:2.0
+CLKFX_DIVIDE:1
+CLKFX_MULTIPLY:4
+CLKIN_DIVIDE_BY_2:TRUE
+CLKOUT_PHASE_SHIFT:FIXED
+CLK_FEEDBACK:1X
+DCM_CLKDV_CLKFX_ALIGNMENT:TRUE
+DCM_EXT_FB_EN:FALSE
+DCM_LOCK_HIGH:FALSE
+DCM_PERFORMANCE_MODE:MAX_SPEED
+DCM_UNUSED_TAPS_POWERDOWN:FALSE
+DCM_VREF_SOURCE:VBG_DLL
+DCM_VREG_ENABLE:FALSE
+DESKEW_ADJUST:17
+DFS_AVE_FREQ_ADJ_INTERVAL:3
+DFS_AVE_FREQ_GAIN:2.0
+DFS_AVE_FREQ_SAMPLE_INTERVAL:2
+DFS_COARSE_SEL:LEGACY
+DFS_EARLY_LOCK:FALSE
+DFS_EN_RELRST:TRUE
+DFS_EXTEND_FLUSH_TIME:FALSE
+DFS_EXTEND_HALT_TIME:FALSE
+DFS_EXTEND_RUN_TIME:FALSE
+DFS_FINE_SEL:LEGACY
+DFS_FREQUENCY_MODE:LOW
+DFS_NON_STOP:FALSE
+DFS_OSCILLATOR_MODE:PHASE_FREQ_LOCK
+DFS_SKIP_FINE:FALSE
+DFS_TP_SEL:LEVEL
+DFS_TRACKMODE:1
+DLL_CONTROL_CLOCK_SPEED:HALF
+DLL_CTL_SEL_CLKIN_DIV2:FALSE
+DLL_DESKEW_LOCK_BY1:FALSE
+DLL_FREQUENCY_MODE:LOW
+DLL_PD_DLY_SEL:0
+DLL_PERIOD_LOCK_BY1:FALSE
+DLL_PHASE_DETECTOR_AUTO_RESET:TRUE
+DLL_PHASE_DETECTOR_MODE:ENHANCED
+DLL_PHASE_SHIFT_CALIBRATION:AUTO_DPS
+DLL_PHASE_SHIFT_LOCK_BY1:FALSE
+DUTY_CYCLE_CORRECTION:TRUE
+PMCD_SYNC:FALSE
+STARTUP_WAIT:FALSE
+CLKIN_PERIOD = 10.0
+FACTORY_JF = F0F0
+PHASE_SHIFT = 0
+
+
+RAMB16
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[0].ram.r/s3_init.ram/dpram.dp1x1.ram":
+DOA_REG:0
+DOB_REG:0
+EN_ECC_READ:FALSE
+EN_ECC_WRITE:FALSE
+INVERT_CLK_DOA_REG:FALSE
+INVERT_CLK_DOB_REG:FALSE
+RAM_EXTENSION_A:NONE
+RAM_EXTENSION_B:NONE
+READ_WIDTH_A:1
+READ_WIDTH_B:1
+SAVEDATA:FALSE
+WRITE_MODE_A:NO_CHANGE
+WRITE_MODE_B:NO_CHANGE
+WRITE_WIDTH_A:1
+WRITE_WIDTH_B:1
+INITP_00 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_01 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_02 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_03 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_04 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_05 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_06 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_07 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_00 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_01 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_02 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_03 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_04 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_05 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_06 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_07 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_08 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_09 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_10 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_11 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_12 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_13 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_14 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_15 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_16 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_17 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_18 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_19 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_20 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_21 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_22 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_23 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_24 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_25 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_26 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_27 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_28 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_29 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_30 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_31 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_32 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_33 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_34 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_35 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_36 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_37 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_38 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_39 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_A = 000000000
+INIT_B = 000000000
+SRVAL_A = 000000000
+SRVAL_B = 000000000
+
+
+RAMB16
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[10].ram.r/s3_init.ram/dpram.dp1x1.ram":
+DOA_REG:0
+DOB_REG:0
+EN_ECC_READ:FALSE
+EN_ECC_WRITE:FALSE
+INVERT_CLK_DOA_REG:FALSE
+INVERT_CLK_DOB_REG:FALSE
+RAM_EXTENSION_A:NONE
+RAM_EXTENSION_B:NONE
+READ_WIDTH_A:1
+READ_WIDTH_B:1
+SAVEDATA:FALSE
+WRITE_MODE_A:NO_CHANGE
+WRITE_MODE_B:NO_CHANGE
+WRITE_WIDTH_A:1
+WRITE_WIDTH_B:1
+INITP_00 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_01 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_02 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_03 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_04 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_05 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_06 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_07 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_00 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_01 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_02 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_03 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_04 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_05 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_06 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_07 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_08 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_09 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_10 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_11 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_12 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_13 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_14 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_15 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_16 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_17 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_18 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_19 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_20 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_21 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_22 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_23 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_24 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_25 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_26 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_27 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_28 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_29 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_30 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_31 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_32 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_33 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_34 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_35 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_36 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_37 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_38 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_39 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_A = 000000000
+INIT_B = 000000000
+SRVAL_A = 000000000
+SRVAL_B = 000000000
+
+
+RAMB16
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[11].ram.r/s3_init.ram/dpram.dp9x9.ram":
+DOA_REG:0
+DOB_REG:0
+EN_ECC_READ:FALSE
+EN_ECC_WRITE:FALSE
+INVERT_CLK_DOA_REG:FALSE
+INVERT_CLK_DOB_REG:FALSE
+RAM_EXTENSION_A:NONE
+RAM_EXTENSION_B:NONE
+READ_WIDTH_A:9
+READ_WIDTH_B:9
+SAVEDATA:FALSE
+WRITE_MODE_A:NO_CHANGE
+WRITE_MODE_B:NO_CHANGE
+WRITE_WIDTH_A:9
+WRITE_WIDTH_B:9
+INITP_00 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_01 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_02 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_03 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_04 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_05 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_06 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_07 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_00 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_01 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_02 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_03 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_04 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_05 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_06 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_07 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_08 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_09 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_10 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_11 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_12 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_13 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_14 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_15 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_16 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_17 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_18 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_19 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_20 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_21 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_22 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_23 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_24 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_25 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_26 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_27 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_28 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_29 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_30 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_31 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_32 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_33 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_34 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_35 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_36 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_37 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_38 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_39 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_A = 000000000
+INIT_B = 000000000
+SRVAL_A = 000000000
+SRVAL_B = 000000000
+
+
+RAMB16
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[12].ram.r/s3_init.ram/dpram.dp1x1.ram":
+DOA_REG:0
+DOB_REG:0
+EN_ECC_READ:FALSE
+EN_ECC_WRITE:FALSE
+INVERT_CLK_DOA_REG:FALSE
+INVERT_CLK_DOB_REG:FALSE
+RAM_EXTENSION_A:NONE
+RAM_EXTENSION_B:NONE
+READ_WIDTH_A:1
+READ_WIDTH_B:1
+SAVEDATA:FALSE
+WRITE_MODE_A:NO_CHANGE
+WRITE_MODE_B:NO_CHANGE
+WRITE_WIDTH_A:1
+WRITE_WIDTH_B:1
+INITP_00 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_01 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_02 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_03 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_04 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_05 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_06 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_07 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_00 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_01 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_02 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_03 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_04 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_05 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_06 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_07 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_08 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_09 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_10 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_11 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_12 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_13 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_14 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_15 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_16 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_17 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_18 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_19 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_20 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_21 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_22 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_23 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_24 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_25 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_26 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_27 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_28 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_29 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_30 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_31 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_32 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_33 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_34 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_35 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_36 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_37 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_38 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_39 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_A = 000000000
+INIT_B = 000000000
+SRVAL_A = 000000000
+SRVAL_B = 000000000
+
+
+RAMB16
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[13].ram.r/s3_init.ram/dpram.dp1x1.ram":
+DOA_REG:0
+DOB_REG:0
+EN_ECC_READ:FALSE
+EN_ECC_WRITE:FALSE
+INVERT_CLK_DOA_REG:FALSE
+INVERT_CLK_DOB_REG:FALSE
+RAM_EXTENSION_A:NONE
+RAM_EXTENSION_B:NONE
+READ_WIDTH_A:1
+READ_WIDTH_B:1
+SAVEDATA:FALSE
+WRITE_MODE_A:NO_CHANGE
+WRITE_MODE_B:NO_CHANGE
+WRITE_WIDTH_A:1
+WRITE_WIDTH_B:1
+INITP_00 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_01 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_02 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_03 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_04 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_05 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_06 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_07 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_00 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_01 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_02 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_03 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_04 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_05 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_06 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_07 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_08 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_09 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_10 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_11 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_12 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_13 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_14 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_15 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_16 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_17 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_18 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_19 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_20 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_21 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_22 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_23 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_24 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_25 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_26 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_27 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_28 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_29 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_30 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_31 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_32 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_33 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_34 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_35 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_36 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_37 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_38 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_39 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_A = 000000000
+INIT_B = 000000000
+SRVAL_A = 000000000
+SRVAL_B = 000000000
+
+
+RAMB16
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[14].ram.r/s3_init.ram/dpram.dp1x1.ram":
+DOA_REG:0
+DOB_REG:0
+EN_ECC_READ:FALSE
+EN_ECC_WRITE:FALSE
+INVERT_CLK_DOA_REG:FALSE
+INVERT_CLK_DOB_REG:FALSE
+RAM_EXTENSION_A:NONE
+RAM_EXTENSION_B:NONE
+READ_WIDTH_A:1
+READ_WIDTH_B:1
+SAVEDATA:FALSE
+WRITE_MODE_A:NO_CHANGE
+WRITE_MODE_B:NO_CHANGE
+WRITE_WIDTH_A:1
+WRITE_WIDTH_B:1
+INITP_00 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_01 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_02 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_03 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_04 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_05 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_06 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_07 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_00 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_01 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_02 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_03 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_04 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_05 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_06 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_07 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_08 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_09 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_10 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_11 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_12 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_13 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_14 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_15 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_16 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_17 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_18 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_19 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_20 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_21 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_22 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_23 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_24 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_25 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_26 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_27 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_28 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_29 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_30 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_31 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_32 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_33 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_34 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_35 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_36 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_37 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_38 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_39 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_A = 000000000
+INIT_B = 000000000
+SRVAL_A = 000000000
+SRVAL_B = 000000000
+
+
+RAMB16
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[1].ram.r/s3_init.ram/dpram.dp9x9.ram":
+DOA_REG:0
+DOB_REG:0
+EN_ECC_READ:FALSE
+EN_ECC_WRITE:FALSE
+INVERT_CLK_DOA_REG:FALSE
+INVERT_CLK_DOB_REG:FALSE
+RAM_EXTENSION_A:NONE
+RAM_EXTENSION_B:NONE
+READ_WIDTH_A:9
+READ_WIDTH_B:9
+SAVEDATA:FALSE
+WRITE_MODE_A:NO_CHANGE
+WRITE_MODE_B:NO_CHANGE
+WRITE_WIDTH_A:9
+WRITE_WIDTH_B:9
+INITP_00 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_01 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_02 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_03 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_04 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_05 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_06 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_07 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_00 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_01 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_02 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_03 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_04 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_05 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_06 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_07 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_08 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_09 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_10 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_11 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_12 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_13 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_14 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_15 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_16 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_17 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_18 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_19 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_20 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_21 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_22 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_23 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_24 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_25 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_26 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_27 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_28 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_29 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_30 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_31 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_32 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_33 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_34 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_35 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_36 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_37 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_38 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_39 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_A = 000000000
+INIT_B = 000000000
+SRVAL_A = 000000000
+SRVAL_B = 000000000
+
+
+RAMB16
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[2].ram.r/s3_init.ram/dpram.dp18x18.ram":
+DOA_REG:0
+DOB_REG:0
+EN_ECC_READ:FALSE
+EN_ECC_WRITE:FALSE
+INVERT_CLK_DOA_REG:FALSE
+INVERT_CLK_DOB_REG:FALSE
+RAM_EXTENSION_A:NONE
+RAM_EXTENSION_B:NONE
+READ_WIDTH_A:18
+READ_WIDTH_B:18
+SAVEDATA:FALSE
+WRITE_MODE_A:NO_CHANGE
+WRITE_MODE_B:NO_CHANGE
+WRITE_WIDTH_A:18
+WRITE_WIDTH_B:18
+INITP_00 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_01 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_02 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_03 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_04 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_05 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_06 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_07 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_00 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_01 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_02 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_03 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_04 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_05 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_06 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_07 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_08 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_09 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_10 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_11 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_12 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_13 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_14 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_15 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_16 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_17 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_18 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_19 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_20 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_21 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_22 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_23 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_24 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_25 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_26 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_27 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_28 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_29 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_30 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_31 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_32 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_33 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_34 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_35 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_36 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_37 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_38 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_39 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_A = 000000000
+INIT_B = 000000000
+SRVAL_A = 000000000
+SRVAL_B = 000000000
+
+
+RAMB16
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[3].ram.r/s3_init.ram/dpram.dp1x1.ram":
+DOA_REG:0
+DOB_REG:0
+EN_ECC_READ:FALSE
+EN_ECC_WRITE:FALSE
+INVERT_CLK_DOA_REG:FALSE
+INVERT_CLK_DOB_REG:FALSE
+RAM_EXTENSION_A:NONE
+RAM_EXTENSION_B:NONE
+READ_WIDTH_A:1
+READ_WIDTH_B:1
+SAVEDATA:FALSE
+WRITE_MODE_A:NO_CHANGE
+WRITE_MODE_B:NO_CHANGE
+WRITE_WIDTH_A:1
+WRITE_WIDTH_B:1
+INITP_00 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_01 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_02 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_03 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_04 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_05 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_06 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_07 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_00 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_01 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_02 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_03 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_04 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_05 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_06 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_07 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_08 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_09 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_10 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_11 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_12 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_13 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_14 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_15 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_16 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_17 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_18 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_19 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_20 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_21 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_22 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_23 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_24 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_25 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_26 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_27 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_28 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_29 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_30 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_31 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_32 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_33 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_34 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_35 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_36 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_37 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_38 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_39 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_A = 000000000
+INIT_B = 000000000
+SRVAL_A = 000000000
+SRVAL_B = 000000000
+
+
+RAMB16
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[4].ram.r/s3_init.ram/dpram.dp1x1.ram":
+DOA_REG:0
+DOB_REG:0
+EN_ECC_READ:FALSE
+EN_ECC_WRITE:FALSE
+INVERT_CLK_DOA_REG:FALSE
+INVERT_CLK_DOB_REG:FALSE
+RAM_EXTENSION_A:NONE
+RAM_EXTENSION_B:NONE
+READ_WIDTH_A:1
+READ_WIDTH_B:1
+SAVEDATA:FALSE
+WRITE_MODE_A:NO_CHANGE
+WRITE_MODE_B:NO_CHANGE
+WRITE_WIDTH_A:1
+WRITE_WIDTH_B:1
+INITP_00 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_01 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_02 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_03 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_04 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_05 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_06 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_07 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_00 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_01 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_02 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_03 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_04 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_05 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_06 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_07 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_08 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_09 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_10 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_11 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_12 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_13 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_14 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_15 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_16 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_17 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_18 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_19 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_20 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_21 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_22 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_23 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_24 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_25 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_26 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_27 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_28 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_29 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_30 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_31 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_32 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_33 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_34 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_35 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_36 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_37 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_38 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_39 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_A = 000000000
+INIT_B = 000000000
+SRVAL_A = 000000000
+SRVAL_B = 000000000
+
+
+RAMB16
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[5].ram.r/s3_init.ram/dpram.dp1x1.ram":
+DOA_REG:0
+DOB_REG:0
+EN_ECC_READ:FALSE
+EN_ECC_WRITE:FALSE
+INVERT_CLK_DOA_REG:FALSE
+INVERT_CLK_DOB_REG:FALSE
+RAM_EXTENSION_A:NONE
+RAM_EXTENSION_B:NONE
+READ_WIDTH_A:1
+READ_WIDTH_B:1
+SAVEDATA:FALSE
+WRITE_MODE_A:NO_CHANGE
+WRITE_MODE_B:NO_CHANGE
+WRITE_WIDTH_A:1
+WRITE_WIDTH_B:1
+INITP_00 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_01 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_02 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_03 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_04 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_05 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_06 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_07 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_00 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_01 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_02 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_03 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_04 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_05 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_06 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_07 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_08 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_09 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_10 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_11 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_12 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_13 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_14 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_15 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_16 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_17 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_18 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_19 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_20 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_21 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_22 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_23 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_24 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_25 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_26 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_27 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_28 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_29 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_30 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_31 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_32 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_33 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_34 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_35 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_36 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_37 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_38 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_39 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_A = 000000000
+INIT_B = 000000000
+SRVAL_A = 000000000
+SRVAL_B = 000000000
+
+
+RAMB16
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[6].ram.r/s3_init.ram/dpram.dp1x1.ram":
+DOA_REG:0
+DOB_REG:0
+EN_ECC_READ:FALSE
+EN_ECC_WRITE:FALSE
+INVERT_CLK_DOA_REG:FALSE
+INVERT_CLK_DOB_REG:FALSE
+RAM_EXTENSION_A:NONE
+RAM_EXTENSION_B:NONE
+READ_WIDTH_A:1
+READ_WIDTH_B:1
+SAVEDATA:FALSE
+WRITE_MODE_A:NO_CHANGE
+WRITE_MODE_B:NO_CHANGE
+WRITE_WIDTH_A:1
+WRITE_WIDTH_B:1
+INITP_00 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_01 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_02 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_03 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_04 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_05 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_06 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_07 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_00 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_01 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_02 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_03 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_04 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_05 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_06 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_07 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_08 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_09 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_10 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_11 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_12 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_13 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_14 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_15 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_16 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_17 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_18 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_19 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_20 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_21 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_22 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_23 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_24 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_25 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_26 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_27 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_28 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_29 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_30 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_31 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_32 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_33 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_34 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_35 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_36 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_37 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_38 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_39 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_A = 000000000
+INIT_B = 000000000
+SRVAL_A = 000000000
+SRVAL_B = 000000000
+
+
+RAMB16
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[7].ram.r/s3_init.ram/dpram.dp1x1.ram":
+DOA_REG:0
+DOB_REG:0
+EN_ECC_READ:FALSE
+EN_ECC_WRITE:FALSE
+INVERT_CLK_DOA_REG:FALSE
+INVERT_CLK_DOB_REG:FALSE
+RAM_EXTENSION_A:NONE
+RAM_EXTENSION_B:NONE
+READ_WIDTH_A:1
+READ_WIDTH_B:1
+SAVEDATA:FALSE
+WRITE_MODE_A:NO_CHANGE
+WRITE_MODE_B:NO_CHANGE
+WRITE_WIDTH_A:1
+WRITE_WIDTH_B:1
+INITP_00 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_01 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_02 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_03 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_04 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_05 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_06 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_07 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_00 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_01 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_02 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_03 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_04 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_05 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_06 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_07 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_08 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_09 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_10 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_11 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_12 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_13 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_14 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_15 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_16 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_17 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_18 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_19 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_20 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_21 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_22 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_23 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_24 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_25 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_26 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_27 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_28 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_29 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_30 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_31 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_32 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_33 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_34 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_35 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_36 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_37 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_38 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_39 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_A = 000000000
+INIT_B = 000000000
+SRVAL_A = 000000000
+SRVAL_B = 000000000
+
+
+RAMB16
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[8].ram.r/s3_init.ram/dpram.dp1x1.ram":
+DOA_REG:0
+DOB_REG:0
+EN_ECC_READ:FALSE
+EN_ECC_WRITE:FALSE
+INVERT_CLK_DOA_REG:FALSE
+INVERT_CLK_DOB_REG:FALSE
+RAM_EXTENSION_A:NONE
+RAM_EXTENSION_B:NONE
+READ_WIDTH_A:1
+READ_WIDTH_B:1
+SAVEDATA:FALSE
+WRITE_MODE_A:NO_CHANGE
+WRITE_MODE_B:NO_CHANGE
+WRITE_WIDTH_A:1
+WRITE_WIDTH_B:1
+INITP_00 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_01 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_02 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_03 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_04 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_05 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_06 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_07 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_00 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_01 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_02 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_03 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_04 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_05 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_06 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_07 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_08 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_09 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_10 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_11 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_12 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_13 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_14 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_15 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_16 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_17 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_18 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_19 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_20 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_21 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_22 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_23 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_24 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_25 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_26 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_27 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_28 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_29 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_30 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_31 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_32 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_33 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_34 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_35 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_36 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_37 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_38 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_39 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_A = 000000000
+INIT_B = 000000000
+SRVAL_A = 000000000
+SRVAL_B = 000000000
+
+
+RAMB16
+"inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
+cstr/ramloop[9].ram.r/s3_init.ram/dpram.dp1x1.ram":
+DOA_REG:0
+DOB_REG:0
+EN_ECC_READ:FALSE
+EN_ECC_WRITE:FALSE
+INVERT_CLK_DOA_REG:FALSE
+INVERT_CLK_DOB_REG:FALSE
+RAM_EXTENSION_A:NONE
+RAM_EXTENSION_B:NONE
+READ_WIDTH_A:1
+READ_WIDTH_B:1
+SAVEDATA:FALSE
+WRITE_MODE_A:NO_CHANGE
+WRITE_MODE_B:NO_CHANGE
+WRITE_WIDTH_A:1
+WRITE_WIDTH_B:1
+INITP_00 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_01 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_02 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_03 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_04 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_05 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_06 = 0000000000000000000000000000000000000000000000000000000000000000
+INITP_07 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_00 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_01 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_02 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_03 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_04 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_05 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_06 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_07 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_08 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_09 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_0F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_10 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_11 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_12 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_13 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_14 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_15 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_16 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_17 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_18 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_19 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_1F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_20 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_21 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_22 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_23 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_24 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_25 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_26 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_27 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_28 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_29 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_2F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_30 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_31 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_32 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_33 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_34 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_35 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_36 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_37 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_38 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_39 = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3A = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3B = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3C = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3D = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3E = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_3F = 0000000000000000000000000000000000000000000000000000000000000000
+INIT_A = 000000000
+INIT_B = 000000000
+SRVAL_A = 000000000
+SRVAL_B = 000000000
+
+
 
 Section 12 - Control Set Information
 ------------------------------------
@@ -879,4 +3192,74 @@ No control set information for this architecture.
 
 Section 13 - Utilization by Hierarchy
 -------------------------------------
-Use the "-detail" map option to print out the Utilization by Hierarchy section.
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Module                            | Partition | Slices        | Slice Reg     | LUTs          | LUTRAM        | BRAM/FIFO | DSP48   | BUFG  | BUFIO | BUFR  | DCM_ADV   | Full Hierarchical Name                                                                                                 |
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Top/                              |           | 90/634        | 70/458        | 149/1038      | 0/0           | 0/15      | 0/0     | 8/8   | 0/0   | 0/0   | 0/0       | Top                                                                                                                    |
+| +Registers                        |           | 41/41         | 22/22         | 63/63         | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/Registers                                                                                                          |
+| +SCCB                             |           | 77/77         | 94/94         | 148/148       | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/SCCB                                                                                                               |
+| +inst_addrgen1                    |           | 62/62         | 47/47         | 115/115       | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_addrgen1                                                                                                      |
+| +inst_debounce                    |           | 27/27         | 25/25         | 54/54         | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_debounce                                                                                                      |
+| +inst_framebuffer1                |           | 0/103         | 0/5           | 0/124         | 0/0           | 0/15      | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1                                                                                                  |
+| ++U0                              |           | 0/103         | 0/5           | 0/124         | 0/0           | 0/15      | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0                                                                                               |
+| +++xst_blk_mem_generator          |           | 0/103         | 0/5           | 0/124         | 0/0           | 0/15      | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator                                                                         |
+| ++++gnativebmg.native_blk_mem_gen |           | 0/103         | 0/5           | 0/124         | 0/0           | 0/15      | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen                                           |
+| +++++valid.cstr                   |           | 2/103         | 0/5           | 2/124         | 0/0           | 0/15      | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr                                |
+| ++++++bindec_a.bindec_inst_a      |           | 1/1           | 0/0           | 1/1           | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/bindec_a.bindec_inst_a         |
+| ++++++bindec_b.bindec_inst_b      |           | 1/1           | 0/0           | 1/1           | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/bindec_b.bindec_inst_b         |
+| ++++++has_mux_b.B                 |           | 99/99         | 5/5           | 120/120       | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/has_mux_b.B                    |
+| ++++++ramloop[0].ram.r            |           | 0/0           | 0/0           | 0/0           | 0/0           | 0/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r               |
+| +++++++s3_init.ram                |           | 0/0           | 0/0           | 0/0           | 0/0           | 1/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/s3_init.ram   |
+| ++++++ramloop[10].ram.r           |           | 0/0           | 0/0           | 0/0           | 0/0           | 0/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[10].ram.r              |
+| +++++++s3_init.ram                |           | 0/0           | 0/0           | 0/0           | 0/0           | 1/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[10].ram.r/s3_init.ram  |
+| ++++++ramloop[11].ram.r           |           | 0/0           | 0/0           | 0/0           | 0/0           | 0/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[11].ram.r              |
+| +++++++s3_init.ram                |           | 0/0           | 0/0           | 0/0           | 0/0           | 1/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[11].ram.r/s3_init.ram  |
+| ++++++ramloop[12].ram.r           |           | 0/0           | 0/0           | 0/0           | 0/0           | 0/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[12].ram.r              |
+| +++++++s3_init.ram                |           | 0/0           | 0/0           | 0/0           | 0/0           | 1/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[12].ram.r/s3_init.ram  |
+| ++++++ramloop[13].ram.r           |           | 0/0           | 0/0           | 0/0           | 0/0           | 0/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[13].ram.r              |
+| +++++++s3_init.ram                |           | 0/0           | 0/0           | 0/0           | 0/0           | 1/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[13].ram.r/s3_init.ram  |
+| ++++++ramloop[14].ram.r           |           | 0/0           | 0/0           | 0/0           | 0/0           | 0/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[14].ram.r              |
+| +++++++s3_init.ram                |           | 0/0           | 0/0           | 0/0           | 0/0           | 1/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[14].ram.r/s3_init.ram  |
+| ++++++ramloop[1].ram.r            |           | 0/0           | 0/0           | 0/0           | 0/0           | 0/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[1].ram.r               |
+| +++++++s3_init.ram                |           | 0/0           | 0/0           | 0/0           | 0/0           | 1/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[1].ram.r/s3_init.ram   |
+| ++++++ramloop[2].ram.r            |           | 0/0           | 0/0           | 0/0           | 0/0           | 0/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[2].ram.r               |
+| +++++++s3_init.ram                |           | 0/0           | 0/0           | 0/0           | 0/0           | 1/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[2].ram.r/s3_init.ram   |
+| ++++++ramloop[3].ram.r            |           | 0/0           | 0/0           | 0/0           | 0/0           | 0/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[3].ram.r               |
+| +++++++s3_init.ram                |           | 0/0           | 0/0           | 0/0           | 0/0           | 1/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[3].ram.r/s3_init.ram   |
+| ++++++ramloop[4].ram.r            |           | 0/0           | 0/0           | 0/0           | 0/0           | 0/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[4].ram.r               |
+| +++++++s3_init.ram                |           | 0/0           | 0/0           | 0/0           | 0/0           | 1/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[4].ram.r/s3_init.ram   |
+| ++++++ramloop[5].ram.r            |           | 0/0           | 0/0           | 0/0           | 0/0           | 0/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[5].ram.r               |
+| +++++++s3_init.ram                |           | 0/0           | 0/0           | 0/0           | 0/0           | 1/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[5].ram.r/s3_init.ram   |
+| ++++++ramloop[6].ram.r            |           | 0/0           | 0/0           | 0/0           | 0/0           | 0/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[6].ram.r               |
+| +++++++s3_init.ram                |           | 0/0           | 0/0           | 0/0           | 0/0           | 1/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[6].ram.r/s3_init.ram   |
+| ++++++ramloop[7].ram.r            |           | 0/0           | 0/0           | 0/0           | 0/0           | 0/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[7].ram.r               |
+| +++++++s3_init.ram                |           | 0/0           | 0/0           | 0/0           | 0/0           | 1/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[7].ram.r/s3_init.ram   |
+| ++++++ramloop[8].ram.r            |           | 0/0           | 0/0           | 0/0           | 0/0           | 0/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[8].ram.r               |
+| +++++++s3_init.ram                |           | 0/0           | 0/0           | 0/0           | 0/0           | 1/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[8].ram.r/s3_init.ram   |
+| ++++++ramloop[9].ram.r            |           | 0/0           | 0/0           | 0/0           | 0/0           | 0/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[9].ram.r               |
+| +++++++s3_init.ram                |           | 0/0           | 0/0           | 0/0           | 0/0           | 1/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[9].ram.r/s3_init.ram   |
+| +inst_imagegen                    |           | 6/6           | 0/0           | 12/12         | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_imagegen                                                                                                      |
+| +inst_ov7670capt1                 |           | 39/39         | 42/42         | 54/54         | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_ov7670capt1                                                                                                   |
+| +inst_vgatiming                   |           | 161/161       | 134/134       | 296/296       | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_vgatiming                                                                                                     |
+| +u1                               |           | 12/20         | 4/14          | 14/19         | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/u1                                                                                                                 |
+| ++g0[0].u0                        |           | 1/1           | 2/2           | 1/1           | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/u1/g0[0].u0                                                                                                        |
+| ++g0[1].u0                        |           | 2/2           | 2/2           | 1/1           | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/u1/g0[1].u0                                                                                                        |
+| ++g0[2].u0                        |           | 2/2           | 2/2           | 1/1           | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/u1/g0[2].u0                                                                                                        |
+| ++g0[3].u0                        |           | 2/2           | 2/2           | 1/1           | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/u1/g0[3].u0                                                                                                        |
+| ++g0[4].u0                        |           | 1/1           | 2/2           | 1/1           | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/u1/g0[4].u0                                                                                                        |
+| +u2                               |           | 3/8           | 0/5           | 4/4           | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/u2                                                                                                                 |
+| ++u1                              |           | 1/1           | 1/1           | 0/0           | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/u2/u1                                                                                                              |
+| ++u2                              |           | 1/1           | 1/1           | 0/0           | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/u2/u2                                                                                                              |
+| ++u3                              |           | 1/1           | 1/1           | 0/0           | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/u2/u3                                                                                                              |
+| ++u4                              |           | 1/1           | 1/1           | 0/0           | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/u2/u4                                                                                                              |
+| ++u9                              |           | 1/1           | 1/1           | 0/0           | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/u2/u9                                                                                                              |
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+* Slices can be packed with basic elements from multiple hierarchies.
+  Therefore, a slice will be counted in every hierarchical module
+  that each of its packed basic elements belong to.
+** For each column, there are two numbers reported <A>/<B>.
+   <A> is the number of elements that belong to that specific hierarchical module.
+   <B> is the total number of elements from that hierarchical module and any lower level
+   hierarchical modules below.
+*** The LUTRAM column counts all LUTs used as memory including RAM, ROM, and shift registers.

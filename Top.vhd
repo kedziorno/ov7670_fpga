@@ -47,7 +47,7 @@ G_FE_WAIT_BITS : integer := 20 -- sccb wait for cameras
 				o_r	: out STD_LOGIC_VECTOR(7 downto 0);
 				o_g	: out STD_LOGIC_VECTOR(7 downto 0);
 				o_b	: out STD_LOGIC_VECTOR(7 downto 0);
-				debug : out std_logic_vector(3 downto 0)
+				o_debug : out std_logic_vector(7 downto 0)
 			 );
 end Top;
 
@@ -165,7 +165,8 @@ COMPONENT VGA_timing_synch
            Vsync : out  STD_LOGIC;
            activeArea1 : out  STD_LOGIC;
 					 activehaaddrgen : out STD_LOGIC;
-					 activeRender1 : out  STD_LOGIC);
+					 activeRender1 : out  STD_LOGIC;
+						blank : out STD_LOGIC);
 END COMPONENT;
 
 signal clk25 : STD_LOGIC;
@@ -219,44 +220,88 @@ signal rgb : std_logic_vector(15 downto 0);
 begin
 
 vga_o_clk25 <= clk25;
+--vga_o_clk25 <= clkcambuf;
 vga_o_hsync	<= hs;
 vga_o_vsync	<= vs;
 vga_o_syncn <= '1';
-vga_o_blankn <= '1';
+--vga_o_blankn <= '1';
 vga_o_psave <= '1';
+
+o_debug(0) <= ov7670_pclk1buf1;
+o_debug(1) <= ov7670_href1;
+o_debug(2) <= ov7670_vsync1;
+o_debug(3) <= ov7670_data1(0);
+o_debug(4) <= clk25;
+o_debug(5) <= hs;
+o_debug(6) <= vs;
+o_debug(7) <= rgb(0);
+--o_debug(7 downto 0) <= "0000";
+
+pvgalatch : process(clk25,resend) is
+--pvgalatch : process(clkcambuf,resend) is
+begin
+if (resend = '1') then
+o_r <= (others => '0');
+o_g <= (others => '0');
+o_b <= (others => '0');
+elsif(rising_edge(clk25)) then
+--elsif(rising_edge(clkcambuf)) then
+--o_r(7) <= rgb(14);
+--o_r(6) <= rgb(13);
+--o_r(5) <= rgb(12);
+--o_r(4) <= rgb(11);
+--o_r(3) <= rgb(10);
+--o_r(2) <= '0';
+--o_r(1) <= '0';
+--o_r(0) <= '0';
+--
+--o_g(7) <= rgb(9);
+--o_g(6) <= rgb(8);
+--o_g(5) <= rgb(7);
+--o_g(4) <= rgb(6);
+--o_g(3) <= rgb(5);
+--o_g(2) <= '0';
+--o_g(1) <= '0';
+--o_g(0) <= '0';
+--
+--o_b(7) <= rgb(4);
+--o_b(6) <= rgb(3);
+--o_b(5) <= rgb(2);
+--o_b(4) <= rgb(1);
+--o_b(3) <= rgb(0);
+--o_b(2) <= '0';
+--o_b(1) <= '0';
+--o_b(0) <= '0';
 
 o_r(7) <= rgb(11);
 o_r(6) <= rgb(10);
 o_r(5) <= rgb(9);
 o_r(4) <= rgb(8);
-o_r(3) <= rgb(8);
-o_r(2) <= rgb(8);
-o_r(1) <= rgb(8);
-o_r(0) <= rgb(8);
+o_r(3) <= '1';
+o_r(2) <= '1';
+o_r(1) <= '1';
+o_r(0) <= '1';
 
 o_g(7) <= rgb(7);
 o_g(6) <= rgb(6);
 o_g(5) <= rgb(5);
 o_g(4) <= rgb(4);
-o_g(3) <= rgb(4);
-o_g(2) <= rgb(4);
-o_g(1) <= rgb(4);
-o_g(0) <= rgb(4);
+o_g(3) <= '1';
+o_g(2) <= '1';
+o_g(1) <= '1';
+o_g(0) <= '1';
 
 o_b(7) <= rgb(3);
 o_b(6) <= rgb(2);
 o_b(5) <= rgb(1);
 o_b(4) <= rgb(0);
-o_b(3) <= rgb(0);
-o_b(2) <= rgb(0);
-o_b(1) <= rgb(0);
-o_b(0) <= rgb(0);
+o_b(3) <= '1';
+o_b(2) <= '1';
+o_b(1) <= '1';
+o_b(0) <= '1';
 
---debug(0) <= ov7670_pclkbufmux;
---debug(1) <= ov7670_vsyncmux;
---debug(2) <= ov7670_hrefmux;
---debug(3) <= ov7670_datamux(0);
-debug(3 downto 0) <= "0000";
+end if;
+end process pvgalatch;
 
 --	vga_rgb <= (others => '0');
 --	vga_hsync <= '0';
@@ -404,7 +449,8 @@ u2: arbiter port map
 		Vsync => vs,
 		activeArea1 => active1,
 		activehaaddrgen => activehaaddrgen,
-		activeRender1 => activeRender1);
+		activeRender1 => activeRender1,
+		blank => vga_o_blankn);
 
 vga_o_vsync <= vs;
 
@@ -705,7 +751,7 @@ end process pcamdiv;
 
 --DCM_cam : DCM
 --generic map (
---CLKDV_DIVIDE => 2.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
+--CLKDV_DIVIDE => 4.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
 --CLKFX_DIVIDE => 25, -- Can be any interger from 1 to 32
 ----CLKFX_MULTIPLY => 6, -- Can be any integer from 1 to 32 -- 24mhz
 --CLKFX_MULTIPLY => 12, -- Can be any integer from 1 to 32 -- 48mhz
@@ -717,7 +763,8 @@ end process pcamdiv;
 --DFS_FREQUENCY_MODE => "LOW", -- HIGH or LOW frequency mode for frequency synthesis
 --DLL_FREQUENCY_MODE => "LOW", -- HIGH or LOW frequency mode for DLL
 --DUTY_CYCLE_CORRECTION => TRUE, -- Duty cycle correction, TRUE or FALSE
---FACTORY_JF => X"C080", -- FACTORY JF Values
+----FACTORY_JF => X"C080", -- FACTORY JF Values
+--FACTORY_JF => X"F0F0", -- FACTORY JF Values
 --PHASE_SHIFT => 0, -- Amount of fixed phase shift from -255 to 255
 --SIM_MODE => "SAFE", -- Simulation: "SAFE" vs "FAST", see "Synthesis and Simulation
 --STARTUP_WAIT => FALSE) -- Delay configuration DONE until DCM LOCK, TRUE/FALSE
@@ -728,8 +775,8 @@ end process pcamdiv;
 --CLK2X => open, -- 2X DCM CLK output
 --CLK2X180 => open, -- 2X, 180 degree DCM CLK out
 --CLK90 => open, -- 90 degree DCM CLK output
---CLKDV => open, -- Divided DCM CLK out (CLKDV_DIVIDE)
---CLKFX => cc, -- DCM CLK synthesis out (M/D)
+--CLKDV => cc, -- Divided DCM CLK out (CLKDV_DIVIDE)
+--CLKFX => open, -- DCM CLK synthesis out (M/D)
 --CLKFX180 => open, -- 180 degree CLK synthesis out
 --LOCKED => open, -- DCM LOCK status output
 --PSDONE => open, -- Dynamic phase adjust done output
