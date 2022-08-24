@@ -3,29 +3,30 @@ Xilinx Mapping Report File for Design 'Top'
 
 Design Information
 ------------------
-Command Line   : map -intstyle ise -p xc4vsx35-ff668-10 -global_opt off -cm area
--ir off -pr off -detail -c 100 -o Top_map.ncd Top.ngd Top.pcf 
+Command Line   : map -intstyle ise -p xc4vsx35-ff668-10 -timing -logic_opt off
+-ol std -t 1 -register_duplication off -global_opt off -cm area -ir off -pr off
+-detail -power off -o Top_map.ncd Top.ngd Top.pcf 
 Target Device  : xc4vsx35
 Target Package : ff668
 Target Speed   : -10
 Mapper Version : virtex4 -- $Revision: 1.55 $
-Mapped Date    : Wed Aug 24 17:28:34 2022
+Mapped Date    : Wed Aug 24 17:32:08 2022
 
 Design Summary
 --------------
 Number of errors:      0
 Number of warnings:    4
 Logic Utilization:
-  Number of Slice Flip Flops:           459 out of  30,720    1%
-  Number of 4 input LUTs:               791 out of  30,720    2%
+  Number of Slice Flip Flops:           467 out of  30,720    1%
+  Number of 4 input LUTs:               802 out of  30,720    2%
 Logic Distribution:
-  Number of occupied Slices:            593 out of  15,360    3%
-    Number of Slices containing only related logic:     593 out of     593 100%
-    Number of Slices containing unrelated logic:          0 out of     593   0%
+  Number of occupied Slices:            656 out of  15,360    4%
+    Number of Slices containing only related logic:     656 out of     656 100%
+    Number of Slices containing unrelated logic:          0 out of     656   0%
       *See NOTES below for an explanation of the effects of unrelated logic.
-  Total Number of 4 input LUTs:       1,059 out of  30,720    3%
-    Number used as logic:               791
-    Number used as a route-thru:        268
+  Total Number of 4 input LUTs:       1,081 out of  30,720    3%
+    Number used as logic:               802
+    Number used as a route-thru:        279
 
   The Slice Logic Distribution report is not meaningful if the design is
   over-mapped for a non-slice resource or if Placement fails.
@@ -36,29 +37,11 @@ Logic Distribution:
   Number of FIFO16/RAMB16s:              15 out of     192    7%
     Number used as RAMB16s:              15
 
-Average Fanout of Non-Clock Nets:                3.50
+Average Fanout of Non-Clock Nets:                3.48
 
-Peak Memory Usage:  664 MB
-Total REAL time to MAP completion:  6 secs 
-Total CPU time to MAP completion:   6 secs 
-
-NOTES:
-
-   Related logic is defined as being logic that shares connectivity - e.g. two
-   LUTs are "related" if they share common inputs.  When assembling slices,
-   Map gives priority to combine logic that is related.  Doing so results in
-   the best timing performance.
-
-   Unrelated logic shares no connectivity.  Map will only begin packing
-   unrelated logic into a slice once 99% of the slices are occupied through
-   related logic packing.
-
-   Note that once logic distribution reaches the 99% level through related
-   logic packing, this does not mean the device is completely utilized.
-   Unrelated logic packing will then begin, continuing until all usable LUTs
-   and FFs are occupied.  Depending on your timing budget, increased levels of
-   unrelated logic packing may adversely affect the overall timing performance
-   of your design.
+Peak Memory Usage:  828 MB
+Total REAL time to MAP completion:  18 secs 
+Total CPU time to MAP completion:   18 secs 
 
 Table of Contents
 -----------------
@@ -284,13 +267,21 @@ INFO:MapLib:797 - Your design is targeting LX/SX Production Step 0/1/ES devices.
 INFO:LIT:244 - All of the single ended outputs in this design are using slew
    rate limited output drivers. The delay on speed critical single ended outputs
    can be dramatically reduced by designating them as fast outputs.
+INFO:Pack:1716 - Initializing temperature to 85.000 Celsius. (default - Range:
+   0.000 to 85.000 Celsius)
+INFO:Pack:1720 - Initializing voltage to 1.140 Volts. (default - Range: 1.140 to
+   1.260 Volts)
+INFO:Place:834 - Only a subset of IOs are locked. Out of 108 IOs, 60 are locked
+   and 48 are not locked. If you would like to print the names of these IOs,
+   please set the environment variable XIL_PAR_DESIGN_CHECK_VERBOSE to 1. 
+INFO:Pack:1650 - Map created a placed design.
 
 Section 4 - Removed Logic Summary
 ---------------------------------
   57 block(s) removed
   19 block(s) optimized away
  121 signal(s) removed
- 232 Block(s) redundant
+ 242 Block(s) redundant
 
 Section 5 - Removed Logic
 -------------------------
@@ -910,18 +901,19 @@ LOCALBUF 		inst_vgatiming/statev_cmp_eq000312/LUT4_L_BUF
 LOCALBUF 		inst_vgatiming/statev_cmp_eq000150/LUT4_D_BUF
 LOCALBUF 		SCCB/scaler_not00014/LUT4_L_BUF
 LOCALBUF 		inst_addrgen1/count2_mux0000<2>111/LUT3_D_BUF
+LOCALBUF 		inst_addrgen1/state_FSM_FFd2-In4/LUT2_L_BUF
 LOCALBUF 		inst_addrgen1/count2_or00001/LUT3_D_BUF
 LOCALBUF 		resend2_mux000011/LUT4_D_BUF
 LOCALBUF 		inst_addrgen1/count1_mux0000<4>_SW0/LUT4_L_BUF
 LOCALBUF 		inst_addrgen1/count1_mux0000<3>_SW1/LUT2_L_BUF
-LOCALBUF 		inst_addrgen1/state_FSM_FFd2-In4/LUT2_L_BUF
+LOCALBUF 		inst_addrgen1/count2_mux0000<2>_SW0/LUT4_L_BUF
+LOCALBUF 		inst_addrgen1/count2_mux0000<0>34/LUT3_L_BUF
 LOCALBUF 		inst_ov7670capt1/address_mux0001<0>150/LUT4_L_BUF
 LOCALBUF 		Registers/done_cmp_eq00004/LUT4_L_BUF
 LOCALBUF 		inst_vgatiming/videoOn_and00001/LUT2_L_BUF
 LOCALBUF 		inst_vgatiming/videoOn_and000049/LUT4_L_BUF
 LOCALBUF 		SCCB/scaler_and00008/LUT3_L_BUF
 LOCALBUF 		SCCB/counter_not0001136/LUT4_L_BUF
-LOCALBUF 		w4dcmcnt_mux0000<0>31/LUT3_D_BUF
 LOCALBUF 		inst_vgatiming/Madd_hPos_addsub0000_xor<6>111/LUT3_D_BUF
 LOCALBUF 		inst_addrgen1/count1_mux0000<0>11/LUT3_D_BUF
 LOCALBUF 		inst_vgatiming/counter2_mux0000<0>21/LUT4_D_BUF
@@ -929,8 +921,9 @@ LOCALBUF 		send_mux000011_SW0/LUT2_L_BUF
 LOCALBUF 		inst_addrgen1/count1_mux0000<0>5/LUT4_D_BUF
 LOCALBUF 		inst_addrgen1/count1_mux0000<2>_SW0/LUT4_L_BUF
 LOCALBUF 		inst_addrgen1/state_cmp_eq000115/LUT4_L_BUF
-LOCALBUF 		state_cmp_eq000112/LUT4_L_BUF
+LOCALBUF 		resend2_mux00008/LUT2_L_BUF
 LOCALBUF 		SCCB/counter_not0001240/LUT4_D_BUF
+LOCALBUF 		w4dcmcnt_mux0000<0>31/LUT3_D_BUF
 LOCALBUF 		inst_vgatiming/hPos_mux0001<5>21/LUT4_D_BUF
 LOCALBUF 		inst_addrgen1/addr_mux0001<0>350/LUT4_L_BUF
 LOCALBUF 		inst_addrgen1/Msub_va_addsub0000_xor<14>111/LUT3_D_BUF
@@ -942,15 +935,15 @@ LOCALBUF 		inst_vgatiming/count1_mux0000<2>15/LUT4_D_BUF
 LOCALBUF 		inst_vgatiming/state0_FSM_FFd2-In11/LUT4_D_BUF
 LOCALBUF 		inst_vgatiming/count1_mux0000<2>15_SW1/LUT3_L_BUF
 LOCALBUF 		inst_vgatiming/count1_mux0000<2>15_SW3/LUT4_D_BUF
+LOCALBUF 		resend2_mux00003/LUT4_L_BUF
 LOCALBUF 		inst_ov7670capt1/address_mux0001<0>180/LUT4_D_BUF
 LOCALBUF 		inst_vgatiming/count1_mux0000<4>28_SW0/LUT3_L_BUF
-LOCALBUF 		resend2_mux00004_SW0/LUT4_L_BUF
+LOCALBUF 		state_cmp_eq000127/LUT4_D_BUF
 LOCALBUF 		inst_vgatiming/count1_mux0000<0>57_SW0/LUT4_L_BUF
 LOCALBUF 		inst_vgatiming/state0_FSM_FFd1-In17_SW0/LUT4_L_BUF
 LOCALBUF 		inst_vgatiming/videoOn_and0000117_SW0/LUT4_L_BUF
 LOCALBUF 		SCCB/scaler_and000015/LUT4_D_BUF
 LOCALBUF 		inst_addrgen1/addr_mux0001<0>3110/LUT4_D_BUF
-LOCALBUF 		state_cmp_eq000127/LUT4_D_BUF
 LOCALBUF 		SCCB/sioc_mux000260/LUT4_L_BUF
 LOCALBUF 		inst_vgatiming/statev_cmp_eq000332/LUT4_D_BUF
 LOCALBUF 		inst_addrgen1/state_FSM_FFd2-In16/LUT4_L_BUF
@@ -1010,6 +1003,10 @@ LUT1 		Madd_w4dcmcnt_addsub0000_cy<15>_rt
 LUT1 		Madd_w4dcmcnt_addsub0000_cy<16>_rt
 LUT1 		Madd_w4dcmcnt_addsub0000_cy<17>_rt
 LUT1 		Madd_w4dcmcnt_addsub0000_cy<18>_rt
+LUT1 		Madd_w4dcmcnt_addsub0000_cy<19>_rt
+LUT1 		Madd_w4dcmcnt_addsub0000_cy<20>_rt
+LUT1 		Madd_w4dcmcnt_addsub0000_cy<21>_rt
+LUT1 		Madd_w4dcmcnt_addsub0000_cy<22>_rt
 LUT1 		inst_ov7670capt1/Madd_address_addsub0000_cy<13>_rt
 LUT1 		inst_ov7670capt1/Madd_address_addsub0000_cy<12>_rt
 LUT1 		inst_ov7670capt1/Madd_address_addsub0000_cy<11>_rt
@@ -1090,6 +1087,10 @@ LUT1 		SCCB/Mcount_scaler_cy<4>_rt
 LUT1 		SCCB/Mcount_scaler_cy<3>_rt
 LUT1 		SCCB/Mcount_scaler_cy<2>_rt
 LUT1 		SCCB/Mcount_scaler_cy<1>_rt
+LUT1 		SCCB/Mcount_counter_cy<22>_rt
+LUT1 		SCCB/Mcount_counter_cy<21>_rt
+LUT1 		SCCB/Mcount_counter_cy<20>_rt
+LUT1 		SCCB/Mcount_counter_cy<19>_rt
 LUT1 		SCCB/Mcount_counter_cy<18>_rt
 LUT1 		SCCB/Mcount_counter_cy<17>_rt
 LUT1 		SCCB/Mcount_counter_cy<16>_rt
@@ -1110,7 +1111,7 @@ LUT1 		SCCB/Mcount_counter_cy<2>_rt
 LUT1 		SCCB/Mcount_counter_cy<1>_rt
 LUT1 		inst_debounce/Mcount_counter_xor<23>_rt
 LUT1 		Madd_counter_addsub0000_xor<12>_rt
-LUT1 		Madd_w4dcmcnt_addsub0000_xor<19>_rt
+LUT1 		Madd_w4dcmcnt_addsub0000_xor<23>_rt
 LUT1 		inst_ov7670capt1/Madd_address_addsub0000_xor<14>_rt
 INV
 		inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid
@@ -1121,7 +1122,7 @@ LUT1 		inst_vgatiming/Mcount_fpv_xor<12>_rt
 LUT1 		inst_vgatiming/Mcount_pwv_xor<10>_rt
 LUT1 		inst_vgatiming/Mcount_disph_xor<9>_rt
 LUT1 		SCCB/Mcount_scaler_xor<7>_rt
-LUT1 		SCCB/Mcount_counter_xor<19>_rt
+LUT1 		SCCB/Mcount_counter_xor<23>_rt
 INV 		inst_vgatiming/reset_inv1_INV_0
 INV 		vmax0_0_mux00001_INV_0
 INV 		inst_vgatiming/Mcount_fph_xor<0>11_INV_0
@@ -1277,7 +1278,15 @@ Area Group Information
 
 Section 10 - Timing Report
 --------------------------
-This design was not run using timing mode.
+A logic-level (pre-route) timing report can be generated by using Xilinx static
+timing analysis tools, Timing Analyzer (GUI) or TRCE (command line), with the
+mapped NCD and PCF files. Please note that this timing report will be generated
+using estimated delay information. For accurate numbers, please generate a
+timing report with the post Place and Route NCD file.
+
+For more information about the Timing Analyzer, consult the Xilinx Timing
+Analyzer Reference Manual; for more information about TRCE, consult the Xilinx
+Command Line Tools User Guide "TRACE" chapter.
 
 Section 11 - Configuration String Details
 -----------------------------------------
@@ -3203,19 +3212,19 @@ Section 13 - Utilization by Hierarchy
 +--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | Module                            | Partition | Slices        | Slice Reg     | LUTs          | LUTRAM        | BRAM/FIFO | DSP48   | BUFG  | BUFIO | BUFR  | DCM_ADV   | Full Hierarchical Name                                                                                                 |
 +--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Top/                              |           | 91/625        | 71/459        | 151/1018      | 0/0           | 0/15      | 0/0     | 8/8   | 0/0   | 0/0   | 0/0       | Top                                                                                                                    |
-| +Registers                        |           | 41/41         | 22/22         | 63/63         | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/Registers                                                                                                          |
-| +SCCB                             |           | 77/77         | 94/94         | 148/148       | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/SCCB                                                                                                               |
-| +inst_addrgen1                    |           | 62/62         | 47/47         | 115/115       | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_addrgen1                                                                                                      |
-| +inst_debounce                    |           | 17/17         | 25/25         | 32/32         | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_debounce                                                                                                      |
-| +inst_framebuffer1                |           | 0/103         | 0/5           | 0/124         | 0/0           | 0/15      | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1                                                                                                  |
-| ++U0                              |           | 0/103         | 0/5           | 0/124         | 0/0           | 0/15      | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0                                                                                               |
-| +++xst_blk_mem_generator          |           | 0/103         | 0/5           | 0/124         | 0/0           | 0/15      | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator                                                                         |
-| ++++gnativebmg.native_blk_mem_gen |           | 0/103         | 0/5           | 0/124         | 0/0           | 0/15      | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen                                           |
-| +++++valid.cstr                   |           | 2/103         | 0/5           | 2/124         | 0/0           | 0/15      | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr                                |
+| Top/                              |           | 116/696       | 75/467        | 161/1041      | 0/0           | 0/15      | 0/0     | 8/8   | 0/0   | 0/0   | 0/0       | Top                                                                                                                    |
+| +Registers                        |           | 42/42         | 22/22         | 63/63         | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/Registers                                                                                                          |
+| +SCCB                             |           | 102/102       | 98/98         | 157/157       | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/SCCB                                                                                                               |
+| +inst_addrgen1                    |           | 63/63         | 47/47         | 116/116       | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_addrgen1                                                                                                      |
+| +inst_debounce                    |           | 16/16         | 25/25         | 32/32         | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_debounce                                                                                                      |
+| +inst_framebuffer1                |           | 0/100         | 0/5           | 0/127         | 0/0           | 0/15      | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1                                                                                                  |
+| ++U0                              |           | 0/100         | 0/5           | 0/127         | 0/0           | 0/15      | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0                                                                                               |
+| +++xst_blk_mem_generator          |           | 0/100         | 0/5           | 0/127         | 0/0           | 0/15      | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator                                                                         |
+| ++++gnativebmg.native_blk_mem_gen |           | 0/100         | 0/5           | 0/127         | 0/0           | 0/15      | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen                                           |
+| +++++valid.cstr                   |           | 2/100         | 0/5           | 2/127         | 0/0           | 0/15      | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr                                |
 | ++++++bindec_a.bindec_inst_a      |           | 1/1           | 0/0           | 1/1           | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/bindec_a.bindec_inst_a         |
 | ++++++bindec_b.bindec_inst_b      |           | 1/1           | 0/0           | 1/1           | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/bindec_b.bindec_inst_b         |
-| ++++++has_mux_b.B                 |           | 99/99         | 5/5           | 120/120       | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/has_mux_b.B                    |
+| ++++++has_mux_b.B                 |           | 96/96         | 5/5           | 123/123       | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/has_mux_b.B                    |
 | ++++++ramloop[0].ram.r            |           | 0/0           | 0/0           | 0/0           | 0/0           | 0/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r               |
 | +++++++s3_init.ram                |           | 0/0           | 0/0           | 0/0           | 0/0           | 1/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/s3_init.ram   |
 | ++++++ramloop[10].ram.r           |           | 0/0           | 0/0           | 0/0           | 0/0           | 0/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[10].ram.r              |
@@ -3246,16 +3255,16 @@ Section 13 - Utilization by Hierarchy
 | +++++++s3_init.ram                |           | 0/0           | 0/0           | 0/0           | 0/0           | 1/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[8].ram.r/s3_init.ram   |
 | ++++++ramloop[9].ram.r            |           | 0/0           | 0/0           | 0/0           | 0/0           | 0/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[9].ram.r               |
 | +++++++s3_init.ram                |           | 0/0           | 0/0           | 0/0           | 0/0           | 1/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[9].ram.r/s3_init.ram   |
-| +inst_imagegen                    |           | 6/6           | 0/0           | 12/12         | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_imagegen                                                                                                      |
-| +inst_ov7670capt1                 |           | 39/39         | 42/42         | 54/54         | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_ov7670capt1                                                                                                   |
-| +inst_vgatiming                   |           | 161/161       | 134/134       | 296/296       | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_vgatiming                                                                                                     |
-| +u1                               |           | 12/20         | 4/14          | 14/19         | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/u1                                                                                                                 |
-| ++g0[0].u0                        |           | 1/1           | 2/2           | 1/1           | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/u1/g0[0].u0                                                                                                        |
+| +inst_imagegen                    |           | 11/11         | 0/0           | 12/12         | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_imagegen                                                                                                      |
+| +inst_ov7670capt1                 |           | 43/43         | 42/42         | 54/54         | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_ov7670capt1                                                                                                   |
+| +inst_vgatiming                   |           | 170/170       | 134/134       | 296/296       | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_vgatiming                                                                                                     |
+| +u1                               |           | 14/24         | 4/14          | 14/19         | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/u1                                                                                                                 |
+| ++g0[0].u0                        |           | 2/2           | 2/2           | 1/1           | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/u1/g0[0].u0                                                                                                        |
 | ++g0[1].u0                        |           | 2/2           | 2/2           | 1/1           | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/u1/g0[1].u0                                                                                                        |
 | ++g0[2].u0                        |           | 2/2           | 2/2           | 1/1           | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/u1/g0[2].u0                                                                                                        |
 | ++g0[3].u0                        |           | 2/2           | 2/2           | 1/1           | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/u1/g0[3].u0                                                                                                        |
-| ++g0[4].u0                        |           | 1/1           | 2/2           | 1/1           | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/u1/g0[4].u0                                                                                                        |
-| +u2                               |           | 3/8           | 0/5           | 4/4           | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/u2                                                                                                                 |
+| ++g0[4].u0                        |           | 2/2           | 2/2           | 1/1           | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/u1/g0[4].u0                                                                                                        |
+| +u2                               |           | 4/9           | 0/5           | 4/4           | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/u2                                                                                                                 |
 | ++u1                              |           | 1/1           | 1/1           | 0/0           | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/u2/u1                                                                                                              |
 | ++u2                              |           | 1/1           | 1/1           | 0/0           | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/u2/u2                                                                                                              |
 | ++u3                              |           | 1/1           | 1/1           | 0/0           | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/u2/u3                                                                                                              |
