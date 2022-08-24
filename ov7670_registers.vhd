@@ -18,8 +18,7 @@ end ov7670_registers;
 architecture Behavioral of ov7670_registers is
 
 --constant MAX : integer := 63;
-constant MAX : integer := 47;
-
+constant MAX : integer := 48;
 signal cmd_reg : STD_LOGIC_VECTOR (15 downto 0);
 signal sequence : INTEGER range 0 to MAX-1 := 0;
 
@@ -72,7 +71,8 @@ constant commandrom : cmd_rom :=(
 	43  => x"7222",
 	44  => x"73f2",
 	45  => x"a202",
-	46  => x"ffff");
+	46  => x"1502",
+	47  => x"ffff");
 
 --	13  => x"8c00",
 --	14  => x"0800",
