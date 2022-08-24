@@ -3,44 +3,44 @@ Xilinx Mapping Report File for Design 'Top'
 
 Design Information
 ------------------
-Command Line   : map -intstyle ise -p xc4vsx35-ff668-10 -timing -logic_opt off -ol std -t 1 -register_duplication off
--global_opt off -cm area -ir off -pr off -detail -power off -o Top_map.ncd Top.ngd Top.pcf 
+Command Line   : map -intstyle ise -p xc4vsx35-ff668-10 -timing -logic_opt off
+-ol std -t 1 -register_duplication off -global_opt off -cm area -ir off -pr off
+-detail -power off -o Top_map.ncd Top.ngd Top.pcf 
 Target Device  : xc4vsx35
 Target Package : ff668
 Target Speed   : -10
 Mapper Version : virtex4 -- $Revision: 1.55 $
-Mapped Date    : Wed Aug 24 22:17:54 2022
+Mapped Date    : Wed Aug 24 22:25:00 2022
 
 Design Summary
 --------------
 Number of errors:      0
 Number of warnings:    4
 Logic Utilization:
-  Number of Slice Flip Flops:           471 out of  30,720    1%
-  Number of 4 input LUTs:               887 out of  30,720    2%
+  Number of Slice Flip Flops:           473 out of  30,720    1%
+  Number of 4 input LUTs:               892 out of  30,720    2%
 Logic Distribution:
-  Number of occupied Slices:            770 out of  15,360    5%
-    Number of Slices containing only related logic:     770 out of     770 100%
-    Number of Slices containing unrelated logic:          0 out of     770   0%
+  Number of occupied Slices:            705 out of  15,360    4%
+    Number of Slices containing only related logic:     705 out of     705 100%
+    Number of Slices containing unrelated logic:          0 out of     705   0%
       *See NOTES below for an explanation of the effects of unrelated logic.
-  Total Number of 4 input LUTs:       1,199 out of  30,720    3%
-    Number used as logic:               887
+  Total Number of 4 input LUTs:       1,204 out of  30,720    3%
+    Number used as logic:               892
     Number used as a route-thru:        312
 
   The Slice Logic Distribution report is not meaningful if the design is
   over-mapped for a non-slice resource or if Placement fails.
   Number of bonded IOBs:                108 out of     448   24%
-  Number of BUFG/BUFGCTRLs:              10 out of      32   31%
-    Number used as BUFGs:                10
+  Number of BUFG/BUFGCTRLs:               8 out of      32   25%
+    Number used as BUFGs:                 8
   Number of FIFO16/RAMB16s:              19 out of     192    9%
     Number used as RAMB16s:              19
-  Number of DCM_ADVs:                     1 out of       8   12%
 
-Average Fanout of Non-Clock Nets:                3.54
+Average Fanout of Non-Clock Nets:                3.57
 
-Peak Memory Usage:  840 MB
-Total REAL time to MAP completion:  20 secs 
-Total CPU time to MAP completion:   20 secs 
+Peak Memory Usage:  829 MB
+Total REAL time to MAP completion:  18 secs 
+Total CPU time to MAP completion:   18 secs 
 
 Table of Contents
 -----------------
@@ -273,9 +273,10 @@ INFO:Pack:1650 - Map created a placed design.
 
 Section 4 - Removed Logic Summary
 ---------------------------------
+   1 block(s) removed
   23 block(s) optimized away
   57 signal(s) removed
- 244 Block(s) redundant
+ 255 Block(s) redundant
 
 Section 5 - Removed Logic
 -------------------------
@@ -290,6 +291,7 @@ To quickly locate the original cause for the removal of a chain of logic, look
 above the place where that logic is listed in the trimming report, then locate
 the lines that are least indented (begin at the leftmost edge).
 
+Loadless block "cam_bufg" (CKBUF) removed.
 The signal "inst_framebuffer1/N0" is sourceless and has been removed.
 The signal
 "inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.
@@ -561,36 +563,46 @@ LOCALBUF 		SCCB/counter_not0001240/LUT4_D_BUF
 LOCALBUF 		w4dcmcnt_mux0000<0>31/LUT3_D_BUF
 LOCALBUF 		inst_vgatiming/hPos_mux0001<5>21/LUT4_D_BUF
 LOCALBUF 		inst_addrgen1/addr_mux0001<0>350/LUT4_L_BUF
-LOCALBUF 		Registers/sequence<6>211/LUT4_D_BUF
+LOCALBUF 		Registers/Mrom_cmd_reg_rom00006721/LUT2_L_BUF
+LOCALBUF 		Registers/Mrom_cmd_reg_rom00006111/LUT2_D_BUF
+LOCALBUF 		Registers/sequence<6>15_SW0/LUT4_L_BUF
 LOCALBUF 		inst_addrgen1/Msub_va_addsub0000_xor<14>111/LUT3_D_BUF
 LOCALBUF 		inst_vgatiming/count1_mux0000<5>_SW0/LUT3_L_BUF
-LOCALBUF 		inst_vgatiming/count1_mux0000<3>_SW0/LUT4_L_BUF
 LOCALBUF 		inst_vgatiming/count1_mux0000<6>_SW1/LUT4_L_BUF
+LOCALBUF 		Registers/sequence<6>_SW0/LUT4_L_BUF
+LOCALBUF 		Registers/Mrom_cmd_reg_rom0000831/LUT2_L_BUF
 LOCALBUF 		inst_vgatiming/count1_mux0000<5>11/LUT4_D_BUF
 LOCALBUF 		inst_vgatiming/count1_mux0000<2>15/LUT4_D_BUF
-LOCALBUF 		Registers/Mrom_cmd_reg_rom00004411/LUT3_L_BUF
+LOCALBUF 		inst_vgatiming/count1_mux0000<7>11/LUT4_L_BUF
+LOCALBUF 		Registers/Mrom_cmd_reg_rom00006911/LUT3_D_BUF
+LOCALBUF 		Registers/Mrom_cmd_reg_rom00002111/LUT3_L_BUF
+LOCALBUF 		Registers/Mcount_sequence_xor<4>111/LUT4_D_BUF
 LOCALBUF 		inst_vgatiming/state0_FSM_FFd2-In11/LUT4_D_BUF
-LOCALBUF 		inst_vgatiming/count1_mux0000<2>15_SW1/LUT3_L_BUF
-LOCALBUF 		inst_vgatiming/count1_mux0000<2>15_SW3/LUT4_D_BUF
+LOCALBUF 		inst_vgatiming/count1_mux0000<0>41/LUT4_L_BUF
+LOCALBUF 		inst_vgatiming/count1_mux0000<2>15_SW2/LUT4_L_BUF
 LOCALBUF 		resend2_mux00003/LUT4_L_BUF
-LOCALBUF 		inst_vgatiming/count1_mux0000<4>28_SW0/LUT3_L_BUF
 LOCALBUF 		state_cmp_eq000127/LUT4_D_BUF
-LOCALBUF 		inst_vgatiming/count1_mux0000<0>57_SW0/LUT4_L_BUF
+LOCALBUF 		Registers/Mrom_cmd_reg_rom0000801/LUT4_L_BUF
+LOCALBUF 		Registers/sequence<6>61_SW0/LUT4_L_BUF
+LOCALBUF 		Registers/Mrom_cmd_reg_rom0000651_5_f5_SW1/LUT4_L_BUF
+LOCALBUF 		inst_vgatiming/count1_mux0000<0>411_SW0/LUT4_L_BUF
 LOCALBUF 		inst_ov7670capt1/address_mux0001<0>153_SW0/LUT4_L_BUF
 LOCALBUF 		inst_vgatiming/videoOn_and0000117_SW0/LUT4_L_BUF
 LOCALBUF 		SCCB/scaler_and000015/LUT4_D_BUF
+LOCALBUF 		Registers/Mrom_cmd_reg_rom0000381/LUT4_L_BUF
 LOCALBUF 		inst_addrgen1/addr_mux0001<0>3110/LUT4_D_BUF
+LOCALBUF 		Registers/sequence<6>933/LUT4_L_BUF
+LOCALBUF 		Registers/sequence<6>16_SW0/LUT3_L_BUF
+LOCALBUF 		Registers/sequence<6>31_SW2/LUT3_L_BUF
 LOCALBUF 		SCCB/sioc_mux000260/LUT4_L_BUF
+LOCALBUF 		Registers/sequence<6>11_SW1/LUT3_L_BUF
 LOCALBUF 		inst_vgatiming/statev_cmp_eq000332/LUT4_D_BUF
-LOCALBUF 		Registers/sequence<6>15_SW0/LUT4_L_BUF
-LOCALBUF 		Registers/sequence<6>13_SW0/LUT4_L_BUF
-LOCALBUF 		Registers/sequence<6>3_SW0/LUT4_D_BUF
 LOCALBUF 		inst_addrgen1/state_FSM_FFd2-In16/LUT4_L_BUF
 LOCALBUF 		inst_addrgen1/count1_mux0000<1>29/LUT4_L_BUF
 LOCALBUF 		inst_addrgen1/count1_mux0000<0>49/LUT4_L_BUF
 LOCALBUF 		inst_vgatiming/hPos_mux0001<4>41_SW0/LUT4_L_BUF
 LOCALBUF 		inst_addrgen1/count1_mux0000<0>49_SW0_SW0/LUT4_L_BUF
-LOCALBUF 		Registers/sequence<6>920/LUT4_L_BUF
+LOCALBUF 		Registers/sequence<6>211/LUT4_D_BUF
 LOCALBUF 		SCCB/counter_not0001240_1/LUT4_L_BUF
 LUT1 		inst_debounce/Mcount_counter_cy<1>_rt
 LUT1 		inst_debounce/Mcount_counter_cy<2>_rt
@@ -768,6 +780,7 @@ INV 		vmax0_0_mux00001_INV_0
 INV 		inst_vgatiming/Mcount_fph_xor<0>11_INV_0
 INV 		inst_vgatiming/Mcount_bph_xor<0>11_INV_0
 INV 		clk25_not00011_INV_0
+INV 		cc_not00011_INV_0
 INV 		cc4_not00011_INV_0
 INV 		Mcount_vmax_xor<0>11_INV_0
 INV
@@ -929,65 +942,6 @@ Command Line Tools User Guide "TRACE" chapter.
 
 Section 11 - Configuration String Details
 -----------------------------------------
-DCM_ADV "DCM_cam":
-BGM_CONFIG_REF_SEL:CLKIN
-BGM_DIVIDE:16
-BGM_LDLY:5
-BGM_MODE:BG_SNAPSHOT
-BGM_MULTIPLY:16
-BGM_SAMPLE_LEN:2
-BGM_SDLY:3
-BGM_VADJ:5
-BGM_VLDLY:7
-BGM_VSDLY:0
-CLKDV_DIVIDE:4.0
-CLKFX_DIVIDE:25
-CLKFX_MULTIPLY:6
-CLKIN_DIVIDE_BY_2:FALSE
-CLKOUT_PHASE_SHIFT:FIXED
-CLK_FEEDBACK:1X
-DCM_CLKDV_CLKFX_ALIGNMENT:TRUE
-DCM_EXT_FB_EN:FALSE
-DCM_LOCK_HIGH:FALSE
-DCM_PERFORMANCE_MODE:MAX_SPEED
-DCM_UNUSED_TAPS_POWERDOWN:TRUE
-DCM_VREF_SOURCE:VBG_DLL
-DCM_VREG_ENABLE:TRUE
-DESKEW_ADJUST:17
-DFS_AVE_FREQ_ADJ_INTERVAL:3
-DFS_AVE_FREQ_GAIN:2.0
-DFS_AVE_FREQ_SAMPLE_INTERVAL:2
-DFS_COARSE_SEL:LEGACY
-DFS_EARLY_LOCK:FALSE
-DFS_EN_RELRST:TRUE
-DFS_EXTEND_FLUSH_TIME:FALSE
-DFS_EXTEND_HALT_TIME:FALSE
-DFS_EXTEND_RUN_TIME:FALSE
-DFS_FINE_SEL:LEGACY
-DFS_FREQUENCY_MODE:LOW
-DFS_NON_STOP:FALSE
-DFS_OSCILLATOR_MODE:PHASE_FREQ_LOCK
-DFS_SKIP_FINE:FALSE
-DFS_TP_SEL:LEVEL
-DFS_TRACKMODE:1
-DLL_CONTROL_CLOCK_SPEED:HALF
-DLL_CTL_SEL_CLKIN_DIV2:FALSE
-DLL_DESKEW_LOCK_BY1:FALSE
-DLL_FREQUENCY_MODE:LOW
-DLL_PD_DLY_SEL:0
-DLL_PERIOD_LOCK_BY1:FALSE
-DLL_PHASE_DETECTOR_AUTO_RESET:TRUE
-DLL_PHASE_DETECTOR_MODE:ENHANCED
-DLL_PHASE_SHIFT_CALIBRATION:AUTO_DPS
-DLL_PHASE_SHIFT_LOCK_BY1:FALSE
-DUTY_CYCLE_CORRECTION:TRUE
-PMCD_SYNC:FALSE
-STARTUP_WAIT:FALSE
-CLKIN_PERIOD = 10.0000000000000000
-FACTORY_JF = F0F0
-PHASE_SHIFT = 0
-
-
 DCM_ADV "XIL_ML_UNUSED_DCM_1":
 BGM_CONFIG_REF_SEL:CLKIN
 BGM_DIVIDE:16
@@ -1343,6 +1297,65 @@ PHASE_SHIFT = 0
 
 
 DCM_ADV "XIL_ML_UNUSED_DCM_7":
+BGM_CONFIG_REF_SEL:CLKIN
+BGM_DIVIDE:16
+BGM_LDLY:5
+BGM_MODE:BG_SNAPSHOT
+BGM_MULTIPLY:16
+BGM_SAMPLE_LEN:2
+BGM_SDLY:3
+BGM_VADJ:5
+BGM_VLDLY:7
+BGM_VSDLY:0
+CLKDV_DIVIDE:2.0
+CLKFX_DIVIDE:1
+CLKFX_MULTIPLY:4
+CLKIN_DIVIDE_BY_2:TRUE
+CLKOUT_PHASE_SHIFT:FIXED
+CLK_FEEDBACK:1X
+DCM_CLKDV_CLKFX_ALIGNMENT:TRUE
+DCM_EXT_FB_EN:FALSE
+DCM_LOCK_HIGH:FALSE
+DCM_PERFORMANCE_MODE:MAX_SPEED
+DCM_UNUSED_TAPS_POWERDOWN:FALSE
+DCM_VREF_SOURCE:VBG_DLL
+DCM_VREG_ENABLE:FALSE
+DESKEW_ADJUST:17
+DFS_AVE_FREQ_ADJ_INTERVAL:3
+DFS_AVE_FREQ_GAIN:2.0
+DFS_AVE_FREQ_SAMPLE_INTERVAL:2
+DFS_COARSE_SEL:LEGACY
+DFS_EARLY_LOCK:FALSE
+DFS_EN_RELRST:TRUE
+DFS_EXTEND_FLUSH_TIME:FALSE
+DFS_EXTEND_HALT_TIME:FALSE
+DFS_EXTEND_RUN_TIME:FALSE
+DFS_FINE_SEL:LEGACY
+DFS_FREQUENCY_MODE:LOW
+DFS_NON_STOP:FALSE
+DFS_OSCILLATOR_MODE:PHASE_FREQ_LOCK
+DFS_SKIP_FINE:FALSE
+DFS_TP_SEL:LEVEL
+DFS_TRACKMODE:1
+DLL_CONTROL_CLOCK_SPEED:HALF
+DLL_CTL_SEL_CLKIN_DIV2:FALSE
+DLL_DESKEW_LOCK_BY1:FALSE
+DLL_FREQUENCY_MODE:LOW
+DLL_PD_DLY_SEL:0
+DLL_PERIOD_LOCK_BY1:FALSE
+DLL_PHASE_DETECTOR_AUTO_RESET:TRUE
+DLL_PHASE_DETECTOR_MODE:ENHANCED
+DLL_PHASE_SHIFT_CALIBRATION:AUTO_DPS
+DLL_PHASE_SHIFT_LOCK_BY1:FALSE
+DUTY_CYCLE_CORRECTION:TRUE
+PMCD_SYNC:FALSE
+STARTUP_WAIT:FALSE
+CLKIN_PERIOD = 10.0
+FACTORY_JF = F0F0
+PHASE_SHIFT = 0
+
+
+DCM_ADV "XIL_ML_UNUSED_DCM_8":
 BGM_CONFIG_REF_SEL:CLKIN
 BGM_DIVIDE:16
 BGM_LDLY:5
@@ -3235,19 +3248,19 @@ Section 13 - Utilization by Hierarchy
 +--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | Module                            | Partition | Slices        | Slice Reg     | LUTs          | LUTRAM        | BRAM/FIFO | DSP48   | BUFG  | BUFIO | BUFR  | DCM_ADV   | Full Hierarchical Name                                                                                                 |
 +--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Top/                              |           | 119/813       | 78/471        | 161/1162      | 0/0           | 0/19      | 0/0     | 10/10 | 0/0   | 0/0   | 1/1       | Top                                                                                                                    |
-| +Registers                        |           | 92/92         | 23/23         | 145/145       | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/Registers                                                                                                          |
-| +SCCB                             |           | 115/115       | 98/98         | 157/157       | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/SCCB                                                                                                               |
-| +inst_addrgen1                    |           | 69/69         | 47/47         | 115/115       | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_addrgen1                                                                                                      |
-| +inst_debounce                    |           | 16/16         | 25/25         | 32/32         | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_debounce                                                                                                      |
-| +inst_framebuffer1                |           | 0/136         | 0/5           | 0/165         | 0/0           | 0/19      | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1                                                                                                  |
-| ++U0                              |           | 0/136         | 0/5           | 0/165         | 0/0           | 0/19      | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0                                                                                               |
-| +++xst_blk_mem_generator          |           | 0/136         | 0/5           | 0/165         | 0/0           | 0/19      | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator                                                                         |
-| ++++gnativebmg.native_blk_mem_gen |           | 0/136         | 0/5           | 0/165         | 0/0           | 0/19      | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen                                           |
-| +++++valid.cstr                   |           | 2/136         | 0/5           | 2/165         | 0/0           | 0/19      | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr                                |
+| Top/                              |           | 115/755       | 79/473        | 161/1167      | 0/0           | 0/19      | 0/0     | 8/8   | 0/0   | 0/0   | 0/0       | Top                                                                                                                    |
+| +Registers                        |           | 78/78         | 23/23         | 149/149       | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/Registers                                                                                                          |
+| +SCCB                             |           | 90/90         | 98/98         | 157/157       | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/SCCB                                                                                                               |
+| +inst_addrgen1                    |           | 65/65         | 47/47         | 115/115       | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_addrgen1                                                                                                      |
+| +inst_debounce                    |           | 19/19         | 26/26         | 32/32         | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_debounce                                                                                                      |
+| +inst_framebuffer1                |           | 0/136         | 0/5           | 0/164         | 0/0           | 0/19      | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1                                                                                                  |
+| ++U0                              |           | 0/136         | 0/5           | 0/164         | 0/0           | 0/19      | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0                                                                                               |
+| +++xst_blk_mem_generator          |           | 0/136         | 0/5           | 0/164         | 0/0           | 0/19      | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator                                                                         |
+| ++++gnativebmg.native_blk_mem_gen |           | 0/136         | 0/5           | 0/164         | 0/0           | 0/19      | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen                                           |
+| +++++valid.cstr                   |           | 2/136         | 0/5           | 2/164         | 0/0           | 0/19      | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr                                |
 | ++++++bindec_a.bindec_inst_a      |           | 1/1           | 0/0           | 1/1           | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/bindec_a.bindec_inst_a         |
 | ++++++bindec_b.bindec_inst_b      |           | 1/1           | 0/0           | 1/1           | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/bindec_b.bindec_inst_b         |
-| ++++++has_mux_b.B                 |           | 132/132       | 5/5           | 161/161       | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/has_mux_b.B                    |
+| ++++++has_mux_b.B                 |           | 132/132       | 5/5           | 160/160       | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/has_mux_b.B                    |
 | ++++++ramloop[0].ram.r            |           | 0/0           | 0/0           | 0/0           | 0/0           | 0/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r               |
 | +++++++s3_init.ram                |           | 0/0           | 0/0           | 0/0           | 0/0           | 1/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/s3_init.ram   |
 | ++++++ramloop[10].ram.r           |           | 0/0           | 0/0           | 0/0           | 0/0           | 0/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[10].ram.r              |
@@ -3286,9 +3299,9 @@ Section 13 - Utilization by Hierarchy
 | +++++++s3_init.ram                |           | 0/0           | 0/0           | 0/0           | 0/0           | 1/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[8].ram.r/s3_init.ram   |
 | ++++++ramloop[9].ram.r            |           | 0/0           | 0/0           | 0/0           | 0/0           | 0/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[9].ram.r               |
 | +++++++s3_init.ram                |           | 0/0           | 0/0           | 0/0           | 0/0           | 1/1       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[9].ram.r/s3_init.ram   |
-| +inst_imagegen                    |           | 14/14         | 0/0           | 16/16         | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_imagegen                                                                                                      |
-| +inst_ov7670capt1                 |           | 48/48         | 42/42         | 52/52         | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_ov7670capt1                                                                                                   |
-| +inst_vgatiming                   |           | 172/172       | 134/134       | 296/296       | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_vgatiming                                                                                                     |
+| +inst_imagegen                    |           | 15/15         | 0/0           | 16/16         | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_imagegen                                                                                                      |
+| +inst_ov7670capt1                 |           | 45/45         | 42/42         | 53/53         | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_ov7670capt1                                                                                                   |
+| +inst_vgatiming                   |           | 160/160       | 134/134       | 297/297       | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/inst_vgatiming                                                                                                     |
 | +u1                               |           | 13/23         | 4/14          | 14/19         | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/u1                                                                                                                 |
 | ++g0[0].u0                        |           | 2/2           | 2/2           | 1/1           | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/u1/g0[0].u0                                                                                                        |
 | ++g0[1].u0                        |           | 2/2           | 2/2           | 1/1           | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0       | Top/u1/g0[1].u0                                                                                                        |
