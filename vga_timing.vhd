@@ -13,7 +13,8 @@ entity VGA_timing_synch is
            Vsync : out  STD_LOGIC;
            activeArea1 : out  STD_LOGIC;
 					 activehaaddrgen : out STD_LOGIC;
-					 activeRender1 : out  STD_LOGIC);
+					 activeRender1 : out  STD_LOGIC;
+					 blank : out STD_LOGIC);
 end VGA_timing_synch;
 
 architecture Behavioral of VGA_timing_synch is
@@ -529,5 +530,7 @@ begin
 	end if;
 end process;
 activeRender1 <= videoOn;
+--blank <= '1' when hPos >= HD or vPos >= VD else '0';
+blank <= '1';
 
 end Behavioral;
