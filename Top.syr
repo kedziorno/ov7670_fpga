@@ -4,15 +4,15 @@ Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
 Parameter TMPDIR set to xst/projnav.tmp
 
 
-Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.04 secs
+Total REAL time to Xst completion: 1.00 secs
+Total CPU time to Xst completion: 0.06 secs
  
 --> 
 Parameter xsthdpdir set to xst
 
 
-Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.05 secs
+Total REAL time to Xst completion: 1.00 secs
+Total CPU time to Xst completion: 0.06 secs
  
 --> 
 Reading design: Top.prj
@@ -77,9 +77,9 @@ Number of Regional Clock Buffers   : 24
 Register Duplication               : YES
 Slice Packing                      : YES
 Optimize Instantiated Primitives   : NO
-Use Clock Enable                   : Auto
-Use Synchronous Set                : Auto
-Use Synchronous Reset              : Auto
+Use Clock Enable                   : Yes
+Use Synchronous Set                : Yes
+Use Synchronous Reset              : Yes
 Pack IO Registers into IOBs        : Auto
 Equivalent register Removal        : YES
 
@@ -142,8 +142,7 @@ Architecture behavioral of Entity ov7670_registers is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/ov7670_SCCB.vhd" in Library work.
 Architecture behavioral of Entity ov7670_sccb is up to date.
 Compiling vhdl file "/home/user/workspace/ov7670_vga_Nexys2/Top.vhd" in Library work.
-Entity <top> compiled.
-Entity <top> (Architecture <structural>) compiled.
+Architecture structural of Entity top is up to date.
 
 =========================================================================
 *                     Design Hierarchy Analysis                         *
@@ -550,7 +549,6 @@ Synthesizing Unit <Top>.
 WARNING:Xst:1780 - Signal <vga_vsync_sig> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:646 - Signal <rgb<15:12>> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:646 - Signal <resetdcm1> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
-WARNING:Xst:646 - Signal <resetdcm> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <ov7670_pclk4buf> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <ov7670_pclk3buf> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <ov7670_pclk2buf> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -609,6 +607,7 @@ WARNING:Xst:646 - Signal <carrier> is assigned but never used. This unconnected 
     Found 13-bit register for signal <counter>.
     Found 13-bit adder for signal <counter$addsub0000>.
     Found 1-bit register for signal <resend2>.
+    Found 1-bit register for signal <resetdcm>.
     Found 1-bit register for signal <send>.
     Found 3-bit up counter for signal <vmax>.
     Found 1-bit register for signal <vmax0<0>>.
@@ -617,7 +616,7 @@ WARNING:Xst:646 - Signal <carrier> is assigned but never used. This unconnected 
     Summary:
 	inferred   1 Finite State Machine(s).
 	inferred   1 Counter(s).
-	inferred  56 D-type flip-flop(s).
+	inferred  57 D-type flip-flop(s).
 	inferred   2 Adder/Subtractor(s).
 Unit <Top> synthesized.
 
@@ -651,8 +650,8 @@ Macro Statistics
  6-bit up counter                                      : 2
  7-bit up counter                                      : 1
  8-bit up counter                                      : 1
-# Registers                                            : 73
- 1-bit register                                        : 57
+# Registers                                            : 74
+ 1-bit register                                        : 58
  10-bit register                                       : 2
  13-bit register                                       : 1
  15-bit register                                       : 3
@@ -786,8 +785,8 @@ Macro Statistics
  6-bit up counter                                      : 2
  7-bit up counter                                      : 1
  8-bit up counter                                      : 1
-# Registers                                            : 278
- Flip-Flops                                            : 278
+# Registers                                            : 279
+ Flip-Flops                                            : 279
 # Comparators                                          : 3
  10-bit comparator greatequal                          : 1
  10-bit comparator less                                : 2
@@ -851,8 +850,8 @@ Final Macro Processing ...
 Final Register Report
 
 Macro Statistics
-# Registers                                            : 465
- Flip-Flops                                            : 465
+# Registers                                            : 466
+ Flip-Flops                                            : 466
 
 =========================================================================
 
@@ -878,21 +877,21 @@ Optimization Goal                  : Speed
 Keep Hierarchy                     : No
 
 Design Statistics
-# IOs                              : 100
+# IOs                              : 108
 
 Cell Usage :
-# BELS                             : 1617
+# BELS                             : 1598
 #      AND2                        : 5
 #      GND                         : 2
-#      INV                         : 24
+#      INV                         : 25
 #      LUT1                        : 160
-#      LUT2                        : 184
+#      LUT2                        : 185
 #      LUT2_D                      : 2
 #      LUT2_L                      : 4
-#      LUT3                        : 193
+#      LUT3                        : 171
 #      LUT3_D                      : 8
 #      LUT3_L                      : 5
-#      LUT4                        : 317
+#      LUT4                        : 318
 #      LUT4_D                      : 17
 #      LUT4_L                      : 26
 #      MULT_AND                    : 7
@@ -903,23 +902,22 @@ Cell Usage :
 #      MUXF8                       : 16
 #      VCC                         : 2
 #      XORCY                       : 207
-# FlipFlops/Latches                : 470
-#      FD                          : 23
-#      FDC                         : 184
+# FlipFlops/Latches                : 471
+#      FDC                         : 185
 #      FDC_1                       : 10
 #      FDCE                        : 187
 #      FDE                         : 24
 #      FDP                         : 8
 #      FDPE                        : 32
-#      FDR                         : 2
+#      FDR                         : 25
 # RAMS                             : 19
 #      RAMB16                      : 19
 # Clock Buffers                    : 9
 #      BUFG                        : 9
-# IO Buffers                       : 100
+# IO Buffers                       : 108
 #      IBUF                        : 45
 #      IBUFG                       : 5
-#      OBUF                        : 50
+#      OBUF                        : 58
 =========================================================================
 
 Device utilization summary:
@@ -927,11 +925,11 @@ Device utilization summary:
 
 Selected Device : 4vsx35ff668-10 
 
- Number of Slices:                      600  out of  15360     3%  
- Number of Slice Flip Flops:            458  out of  30720     1%  
- Number of 4 input LUTs:                940  out of  30720     3%  
- Number of IOs:                         100
- Number of bonded IOBs:                 100  out of    448    22%  
+ Number of Slices:                      589  out of  15360     3%  
+ Number of Slice Flip Flops:            459  out of  30720     1%  
+ Number of 4 input LUTs:                921  out of  30720     2%  
+ Number of IOs:                         108
+ Number of bonded IOBs:                 108  out of    448    24%  
     IOB Flip Flops:                      12
  Number of FIFO16/RAMB16s:               19  out of    192     9%  
     Number used as RAMB16s:              19
@@ -960,7 +958,7 @@ Clock Signal                       | Clock buffer(FF name)                      
 -----------------------------------+------------------------------------------------------------------------------------------------------------------------------------------+-------+
 cc41                               | BUFG                                                                                                                                     | 71    |
 ov7670_pclkbufmux1(u1/rxclk:O)     | BUFG(*)(inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/s3_init.ram/dpram.dp1x1.ram)| 61    |
-clkcam                             | IBUFG+BUFG                                                                                                                               | 210   |
+clkcam                             | IBUFG+BUFG                                                                                                                               | 211   |
 clk251                             | BUFG                                                                                                                                     | 158   |
 u1/clockp_0                        | NONE(u1/g0[0].u0/qb)                                                                                                                     | 2     |
 u1/clockp_1                        | NONE(u1/g0[1].u0/qb)                                                                                                                     | 2     |
@@ -977,7 +975,7 @@ Asynchronous Control Signals Information:
 --------------------------------------------+--------------------------+-------+
 Control Signal                              | Buffer(FF name)          | Load  |
 --------------------------------------------+--------------------------+-------+
-inst_debounce/output(inst_debounce/output:Q)| NONE(Registers/cmd_reg_0)| 421   |
+inst_debounce/output(inst_debounce/output:Q)| NONE(Registers/cmd_reg_0)| 422   |
 --------------------------------------------+--------------------------+-------+
 
 Timing Summary:
@@ -1056,28 +1054,28 @@ Delay:               2.173ns (Levels of Logic = 1)
 =========================================================================
 Timing constraint: Default period analysis for Clock 'clkcam'
   Clock period: 4.839ns (frequency: 206.644MHz)
-  Total number of paths / destination ports: 6306 / 307
+  Total number of paths / destination ports: 6330 / 330
 -------------------------------------------------------------------------
 Delay:               4.839ns (Levels of Logic = 8)
   Source:            inst_debounce/counter_8 (FF)
-  Destination:       inst_debounce/counter_22 (FF)
+  Destination:       inst_debounce/counter_0 (FF)
   Source Clock:      clkcam rising
   Destination Clock: clkcam rising
 
-  Data Path: inst_debounce/counter_8 to inst_debounce/counter_22
+  Data Path: inst_debounce/counter_8 to inst_debounce/counter_0
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FD:C->Q               2   0.360   0.758  inst_debounce/counter_8 (inst_debounce/counter_8)
+     FDR:C->Q              2   0.360   0.758  inst_debounce/counter_8 (inst_debounce/counter_8)
      LUT4:I0->O            1   0.195   0.000  inst_debounce/counter_cmp_eq0000_wg_lut<0> (inst_debounce/counter_cmp_eq0000_wg_lut<0>)
      MUXCY:S->O            1   0.366   0.000  inst_debounce/counter_cmp_eq0000_wg_cy<0> (inst_debounce/counter_cmp_eq0000_wg_cy<0>)
      MUXCY:CI->O           1   0.045   0.000  inst_debounce/counter_cmp_eq0000_wg_cy<1> (inst_debounce/counter_cmp_eq0000_wg_cy<1>)
      MUXCY:CI->O           1   0.045   0.000  inst_debounce/counter_cmp_eq0000_wg_cy<2> (inst_debounce/counter_cmp_eq0000_wg_cy<2>)
      MUXCY:CI->O           1   0.045   0.000  inst_debounce/counter_cmp_eq0000_wg_cy<3> (inst_debounce/counter_cmp_eq0000_wg_cy<3>)
      MUXCY:CI->O           1   0.045   0.000  inst_debounce/counter_cmp_eq0000_wg_cy<4> (inst_debounce/counter_cmp_eq0000_wg_cy<4>)
-     MUXCY:CI->O          24   0.369   0.978  inst_debounce/counter_cmp_eq0000_wg_cy<5> (inst_debounce/counter_cmp_eq0000)
-     LUT2:I1->O            2   0.195   0.377  inst_debounce/counter_or00001 (inst_debounce/counter_or0000)
-     FDR:R                     1.062          inst_debounce/counter_22
+     MUXCY:CI->O           2   0.369   0.540  inst_debounce/counter_cmp_eq0000_wg_cy<5> (inst_debounce/counter_cmp_eq0000)
+     LUT2:I1->O           24   0.195   0.815  inst_debounce/counter_or00001 (inst_debounce/counter_or0000)
+     FDR:R                     1.062          inst_debounce/counter_0
     ----------------------------------------
     Total                      4.839ns (2.725ns logic, 2.114ns route)
                                        (56.3% logic, 43.7% route)
@@ -1098,7 +1096,7 @@ Delay:               4.282ns (Levels of Logic = 5)
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
      FDC:C->Q              3   0.360   0.756  inst_vgatiming/count1_9 (inst_vgatiming/count1_9)
-     LUT4:I0->O            1   0.195   0.585  inst_vgatiming/state0_cmp_eq0003_SW0 (N68)
+     LUT4:I0->O            1   0.195   0.585  inst_vgatiming/state0_cmp_eq0003_SW0 (N70)
      LUT4:I2->O            8   0.195   0.608  inst_vgatiming/state0_cmp_eq0003 (inst_vgatiming/state0_cmp_eq0003)
      LUT4:I3->O            7   0.195   0.797  inst_vgatiming/count1_mux0000<0>11 (inst_vgatiming/N01)
      LUT4:I0->O            1   0.195   0.000  inst_vgatiming/count1_mux0000<7>291 (inst_vgatiming/count1_mux0000<7>29)
@@ -1114,16 +1112,16 @@ Timing constraint: Default OFFSET IN BEFORE for Clock 'clkcam'
 -------------------------------------------------------------------------
 Offset:              3.640ns (Levels of Logic = 2)
   Source:            pb (PAD)
-  Destination:       inst_debounce/counter_22 (FF)
+  Destination:       inst_debounce/counter_0 (FF)
   Destination Clock: clkcam rising
 
-  Data Path: pb to inst_debounce/counter_22
+  Data Path: pb to inst_debounce/counter_0
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     IBUF:I->O            24   0.965   1.040  pb_IBUF (pb_IBUF)
-     LUT2:I0->O            2   0.195   0.377  inst_debounce/counter_or00001 (inst_debounce/counter_or0000)
-     FDR:R                     1.062          inst_debounce/counter_22
+     IBUF:I->O             2   0.965   0.602  pb_IBUF (pb_IBUF)
+     LUT2:I0->O           24   0.195   0.815  inst_debounce/counter_or00001 (inst_debounce/counter_or0000)
+     FDR:R                     1.062          inst_debounce/counter_0
     ----------------------------------------
     Total                      3.640ns (2.222ns logic, 1.418ns route)
                                        (61.1% logic, 38.9% route)
@@ -1143,7 +1141,7 @@ Offset:              3.421ns (Levels of Logic = 4)
     ----------------------------------------  ------------
      IBUF:I->O            16   0.965   0.974  sw_0_IBUF (sw_0_IBUF)
      LUT4:I0->O            1   0.195   0.688  ov7670_vsyncmux49 (ov7670_vsyncmux49)
-     LUT4:I1->O            1   0.195   0.000  ov7670_vsyncmux66_F (N154)
+     LUT4:I1->O            1   0.195   0.000  ov7670_vsyncmux66_F (N156)
      MUXF5:I0->O           1   0.382   0.000  ov7670_vsyncmux66 (ov7670_vsyncmux)
      FDC_1:D                   0.022          inst_ov7670capt1/latched_vsync
     ----------------------------------------
@@ -1152,9 +1150,9 @@ Offset:              3.421ns (Levels of Logic = 4)
 
 =========================================================================
 Timing constraint: Default OFFSET OUT AFTER for Clock 'clkcam'
-  Total number of paths / destination ports: 50 / 14
+  Total number of paths / destination ports: 58 / 22
 -------------------------------------------------------------------------
-Offset:              8.313ns (Levels of Logic = 3)
+Offset:              8.317ns (Levels of Logic = 3)
   Source:            inst_debounce/output (FF)
   Destination:       ov7670_siod1 (PAD)
   Source Clock:      clkcam rising
@@ -1163,12 +1161,12 @@ Offset:              8.313ns (Levels of Logic = 3)
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FD:C->Q             430   0.360   2.647  inst_debounce/output (inst_debounce/output)
+     FDR:C->Q            431   0.360   2.651  inst_debounce/output (inst_debounce/output)
      LUT4:I3->O            4   0.195   0.599  SCCB/siodLogicTrst7 (SCCB/siodLogicTrst7)
      LUT3:I1->O            1   0.195   0.360  ov7670_siod41 (ov7670_siod4_OBUF)
      OBUF:I->O                 3.957          ov7670_siod4_OBUF (ov7670_siod4)
     ----------------------------------------
-    Total                      8.313ns (4.707ns logic, 3.606ns route)
+    Total                      8.317ns (4.707ns logic, 3.610ns route)
                                        (56.6% logic, 43.4% route)
 
 =========================================================================
@@ -1238,15 +1236,15 @@ Delay:               5.299ns (Levels of Logic = 2)
 =========================================================================
 
 
-Total REAL time to Xst completion: 23.00 secs
-Total CPU time to Xst completion: 22.50 secs
+Total REAL time to Xst completion: 25.00 secs
+Total CPU time to Xst completion: 24.61 secs
  
 --> 
 
 
-Total memory usage is 580656 kilobytes
+Total memory usage is 580712 kilobytes
 
 Number of errors   :    0 (   0 filtered)
-Number of warnings :   47 (   0 filtered)
+Number of warnings :   46 (   0 filtered)
 Number of infos    :   39 (   0 filtered)
 

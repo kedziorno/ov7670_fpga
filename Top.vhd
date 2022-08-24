@@ -17,8 +17,8 @@ use UNISIM.vcomponents.all;
 entity Top is
 Generic (
 G_PB_BITS : integer := 24;
-G_WAIT1 : integer := 20; -- wait for reset dcm and cameras
-G_FE_WAIT_BITS : integer := 20 -- sccb wait for cameras
+G_WAIT1 : integer := 24; -- wait for reset dcm and cameras
+G_FE_WAIT_BITS : integer := 24 -- sccb wait for cameras
 );
 	Port	(
 				clkcam	: in STD_LOGIC;
@@ -29,8 +29,8 @@ G_FE_WAIT_BITS : integer := 20 -- sccb wait for cameras
 --				led3 : out STD_LOGIC;
 --				led4 : out STD_LOGIC;
 --			  anode : out std_logic_vector(3 downto 0);
---				ov7670_reset1,ov7670_reset2,ov7670_reset3,ov7670_reset4 : out  STD_LOGIC;
---				ov7670_pwdn1,ov7670_pwdn2,ov7670_pwdn3,ov7670_pwdn4 : out  STD_LOGIC;
+				ov7670_reset1,ov7670_reset2,ov7670_reset3,ov7670_reset4 : out  STD_LOGIC;
+				ov7670_pwdn1,ov7670_pwdn2,ov7670_pwdn3,ov7670_pwdn4 : out  STD_LOGIC;
 				ov7670_pclk1,ov7670_pclk2,ov7670_pclk3,ov7670_pclk4  : in  STD_LOGIC;
 				ov7670_xclk1,ov7670_xclk2,ov7670_xclk3,ov7670_xclk4  : out STD_LOGIC;
 				ov7670_vsync1,ov7670_vsync2,ov7670_vsync3,ov7670_vsync4 : in  STD_LOGIC;
@@ -658,15 +658,15 @@ OBUF_xclk2 : OBUF port map (O => ov7670_xclk2, I => cc);
 OBUF_xclk3 : OBUF port map (O => ov7670_xclk3, I => cc);
 OBUF_xclk4 : OBUF port map (O => ov7670_xclk4, I => cc);
 
---ov7670_reset1 <= '0' when resetdcm = '1' else '1';
---ov7670_reset2 <= '0' when resetdcm = '1' else '1';
---ov7670_reset3 <= '0' when resetdcm = '1' else '1';
---ov7670_reset4 <= '0' when resetdcm = '1' else '1';
+ov7670_reset1 <= '0' when resetdcm = '1' else '1';
+ov7670_reset2 <= '0' when resetdcm = '1' else '1';
+ov7670_reset3 <= '0' when resetdcm = '1' else '1';
+ov7670_reset4 <= '0' when resetdcm = '1' else '1';
 
---ov7670_pwdn1 <= '1' when resetdcm = '1' else '0';
---ov7670_pwdn2 <= '1' when resetdcm = '1' else '0';
---ov7670_pwdn3 <= '1' when resetdcm = '1' else '0';
---ov7670_pwdn4 <= '1' when resetdcm = '1' else '0';
+ov7670_pwdn1 <= '1' when resetdcm = '1' else '0';
+ov7670_pwdn2 <= '1' when resetdcm = '1' else '0';
+ov7670_pwdn3 <= '1' when resetdcm = '1' else '0';
+ov7670_pwdn4 <= '1' when resetdcm = '1' else '0';
 
 p0 : process (resend,clkcambuf) is
 	constant CMAX : integer := 8;
