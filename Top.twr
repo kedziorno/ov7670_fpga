@@ -3,12 +3,11 @@ Release 14.7 Trace  (lin64)
 Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
 
 /home/user/.local/Xilinx/14.7/ISE_DS/ISE/bin/lin64/unwrapped/trce -intstyle ise
--v 3 -s 10 -n 3 -fastpaths -xml Top.twx Top.ncd -o Top.twr Top.pcf -ucf
-Top1.ucf
+-v 3 -s 4 -n 3 -fastpaths -xml Top.twx Top.ncd -o Top.twr Top.pcf -ucf Top1.ucf
 
 Design file:              Top.ncd
 Physical constraint file: Top.pcf
-Device,package,speed:     xc4vsx35,ff668,-10 (PRODUCTION 1.71 2013-10-13, STEPPING level 1)
+Device,package,speed:     xc3s1200e,fg320,-4 (PRODUCTION 1.27 2013-10-13)
 Report level:             verbose report
 
 Environment Variable      Effect 
@@ -16,7 +15,6 @@ Environment Variable      Effect
 NONE                      No environment variables were set
 --------------------------------------------------------------------------------
 
-INFO:Timing:2698 - No timing constraints found, doing default enumeration.
 INFO:Timing:3412 - To improve timing, see the Timing Closure User Guide (UG612).
 INFO:Timing:2752 - To get complete path coverage, use the unconstrained paths 
    option. All paths that are not constrained will be reported in the 
@@ -25,129 +23,693 @@ INFO:Timing:3339 - The clock-to-out numbers in this timing report are based on
    a 50 Ohm transmission line loading model.  For the details of this model, 
    and for more information on accounting for different loading conditions, 
    please see the device datasheet.
+INFO:Timing:3390 - This architecture does not support a default System Jitter 
+   value, please add SYSTEM_JITTER constraint to the UCF to modify the Clock 
+   Uncertainty calculation.
+INFO:Timing:3389 - This architecture does not support 'Discrete Jitter' and 
+   'Phase Error' calculations, these terms will be zero in the Clock 
+   Uncertainty calculation.  Please make appropriate modification to 
+   SYSTEM_JITTER to account for the unsupported Discrete Jitter and Phase 
+   Error.
 
+================================================================================
+Timing constraint: TS_clkcam = PERIOD TIMEGRP "clkcam" 10 ns HIGH 50% 
+INPUT_JITTER 0.08 ns;
+For more information, see Period Analysis in the Timing Closure User Guide (UG612).
+
+ 8034 paths analyzed, 1196 endpoints analyzed, 0 failing endpoints
+ 0 timing errors detected. (0 setup errors, 0 hold errors, 0 component switching limit errors)
+ Minimum period is   9.490ns.
+--------------------------------------------------------------------------------
+
+Paths for end point inst_ov7670capt1/address_8 (SLICE_X53Y71.G1), 16 paths
+--------------------------------------------------------------------------------
+Slack (setup path):     0.255ns (requirement - (data path - clock path skew + uncertainty))
+  Source:               inst_ov7670capt1/latched_vsync (FF)
+  Destination:          inst_ov7670capt1/address_8 (FF)
+  Requirement:          5.000ns
+  Data Path Delay:      4.705ns (Levels of Logic = 2)
+  Clock Path Skew:      0.000ns
+  Source Clock:         ov7670_pclkbufmux falling at 5.000ns
+  Destination Clock:    ov7670_pclkbufmux rising at 10.000ns
+  Clock Uncertainty:    0.040ns
+
+  Clock Uncertainty:          0.040ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter (TSJ):  0.000ns
+    Total Input Jitter (TIJ):   0.080ns
+    Discrete Jitter (DJ):       0.000ns
+    Phase Error (PE):           0.000ns
+
+  Maximum Data Path: inst_ov7670capt1/latched_vsync to inst_ov7670capt1/address_8
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X52Y78.XQ      Tcko                  0.592   inst_ov7670capt1/latched_vsync
+                                                       inst_ov7670capt1/latched_vsync
+    SLICE_X53Y68.G2      net (fanout=2)        1.317   inst_ov7670capt1/latched_vsync
+    SLICE_X53Y68.Y       Tilo                  0.704   inst_ov7670capt1/address<5>
+                                                       inst_ov7670capt1/address_mux0001<0>178
+    SLICE_X53Y71.G1      net (fanout=15)       1.255   inst_ov7670capt1/N01
+    SLICE_X53Y71.CLK     Tgck                  0.837   inst_ov7670capt1/address<2>
+                                                       inst_ov7670capt1/address_mux0001<6>1
+                                                       inst_ov7670capt1/address_8
+    -------------------------------------------------  ---------------------------
+    Total                                      4.705ns (2.133ns logic, 2.572ns route)
+                                                       (45.3% logic, 54.7% route)
+
+--------------------------------------------------------------------------------
+Slack (setup path):     3.869ns (requirement - (data path - clock path skew + uncertainty))
+  Source:               inst_ov7670capt1/address_3 (FF)
+  Destination:          inst_ov7670capt1/address_8 (FF)
+  Requirement:          10.000ns
+  Data Path Delay:      6.090ns (Levels of Logic = 4)
+  Clock Path Skew:      -0.001ns (0.048 - 0.049)
+  Source Clock:         ov7670_pclkbufmux rising at 0.000ns
+  Destination Clock:    ov7670_pclkbufmux rising at 10.000ns
+  Clock Uncertainty:    0.040ns
+
+  Clock Uncertainty:          0.040ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter (TSJ):  0.000ns
+    Total Input Jitter (TIJ):   0.080ns
+    Discrete Jitter (DJ):       0.000ns
+    Phase Error (PE):           0.000ns
+
+  Maximum Data Path: inst_ov7670capt1/address_3 to inst_ov7670capt1/address_8
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X54Y67.XQ      Tcko                  0.592   inst_ov7670capt1/address<3>
+                                                       inst_ov7670capt1/address_3
+    SLICE_X52Y70.G2      net (fanout=21)       0.818   inst_ov7670capt1/address<3>
+    SLICE_X52Y70.Y       Tilo                  0.759   inst_ov7670capt1/address_mux0001<0>151
+                                                       inst_ov7670capt1/address_mux0001<0>137
+    SLICE_X52Y70.F4      net (fanout=1)        0.023   inst_ov7670capt1/address_mux0001<0>137/O
+    SLICE_X52Y70.X       Tilo                  0.759   inst_ov7670capt1/address_mux0001<0>151
+                                                       inst_ov7670capt1/address_mux0001<0>151
+    SLICE_X53Y68.G3      net (fanout=1)        0.343   inst_ov7670capt1/address_mux0001<0>151
+    SLICE_X53Y68.Y       Tilo                  0.704   inst_ov7670capt1/address<5>
+                                                       inst_ov7670capt1/address_mux0001<0>178
+    SLICE_X53Y71.G1      net (fanout=15)       1.255   inst_ov7670capt1/N01
+    SLICE_X53Y71.CLK     Tgck                  0.837   inst_ov7670capt1/address<2>
+                                                       inst_ov7670capt1/address_mux0001<6>1
+                                                       inst_ov7670capt1/address_8
+    -------------------------------------------------  ---------------------------
+    Total                                      6.090ns (3.651ns logic, 2.439ns route)
+                                                       (60.0% logic, 40.0% route)
+
+--------------------------------------------------------------------------------
+Slack (setup path):     3.923ns (requirement - (data path - clock path skew + uncertainty))
+  Source:               inst_ov7670capt1/address_4 (FF)
+  Destination:          inst_ov7670capt1/address_8 (FF)
+  Requirement:          10.000ns
+  Data Path Delay:      6.036ns (Levels of Logic = 4)
+  Clock Path Skew:      -0.001ns (0.048 - 0.049)
+  Source Clock:         ov7670_pclkbufmux rising at 0.000ns
+  Destination Clock:    ov7670_pclkbufmux rising at 10.000ns
+  Clock Uncertainty:    0.040ns
+
+  Clock Uncertainty:          0.040ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter (TSJ):  0.000ns
+    Total Input Jitter (TIJ):   0.080ns
+    Discrete Jitter (DJ):       0.000ns
+    Phase Error (PE):           0.000ns
+
+  Maximum Data Path: inst_ov7670capt1/address_4 to inst_ov7670capt1/address_8
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X54Y67.YQ      Tcko                  0.652   inst_ov7670capt1/address<3>
+                                                       inst_ov7670capt1/address_4
+    SLICE_X53Y70.F2      net (fanout=21)       0.759   inst_ov7670capt1/address<4>
+    SLICE_X53Y70.X       Tilo                  0.704   inst_ov7670capt1/address_mux0001<0>150
+                                                       inst_ov7670capt1/address_mux0001<0>150
+    SLICE_X52Y70.F3      net (fanout=1)        0.023   inst_ov7670capt1/address_mux0001<0>150
+    SLICE_X52Y70.X       Tilo                  0.759   inst_ov7670capt1/address_mux0001<0>151
+                                                       inst_ov7670capt1/address_mux0001<0>151
+    SLICE_X53Y68.G3      net (fanout=1)        0.343   inst_ov7670capt1/address_mux0001<0>151
+    SLICE_X53Y68.Y       Tilo                  0.704   inst_ov7670capt1/address<5>
+                                                       inst_ov7670capt1/address_mux0001<0>178
+    SLICE_X53Y71.G1      net (fanout=15)       1.255   inst_ov7670capt1/N01
+    SLICE_X53Y71.CLK     Tgck                  0.837   inst_ov7670capt1/address<2>
+                                                       inst_ov7670capt1/address_mux0001<6>1
+                                                       inst_ov7670capt1/address_8
+    -------------------------------------------------  ---------------------------
+    Total                                      6.036ns (3.656ns logic, 2.380ns route)
+                                                       (60.6% logic, 39.4% route)
+
+--------------------------------------------------------------------------------
+
+Paths for end point inst_ov7670capt1/address_12 (SLICE_X54Y70.G1), 16 paths
+--------------------------------------------------------------------------------
+Slack (setup path):     0.287ns (requirement - (data path - clock path skew + uncertainty))
+  Source:               inst_ov7670capt1/latched_vsync (FF)
+  Destination:          inst_ov7670capt1/address_12 (FF)
+  Requirement:          5.000ns
+  Data Path Delay:      4.671ns (Levels of Logic = 2)
+  Clock Path Skew:      -0.002ns (0.043 - 0.045)
+  Source Clock:         ov7670_pclkbufmux falling at 5.000ns
+  Destination Clock:    ov7670_pclkbufmux rising at 10.000ns
+  Clock Uncertainty:    0.040ns
+
+  Clock Uncertainty:          0.040ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter (TSJ):  0.000ns
+    Total Input Jitter (TIJ):   0.080ns
+    Discrete Jitter (DJ):       0.000ns
+    Phase Error (PE):           0.000ns
+
+  Maximum Data Path: inst_ov7670capt1/latched_vsync to inst_ov7670capt1/address_12
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X52Y78.XQ      Tcko                  0.592   inst_ov7670capt1/latched_vsync
+                                                       inst_ov7670capt1/latched_vsync
+    SLICE_X53Y68.G2      net (fanout=2)        1.317   inst_ov7670capt1/latched_vsync
+    SLICE_X53Y68.Y       Tilo                  0.704   inst_ov7670capt1/address<5>
+                                                       inst_ov7670capt1/address_mux0001<0>178
+    SLICE_X54Y70.G1      net (fanout=15)       1.166   inst_ov7670capt1/N01
+    SLICE_X54Y70.CLK     Tgck                  0.892   inst_ov7670capt1/address<10>
+                                                       inst_ov7670capt1/address_mux0001<2>1
+                                                       inst_ov7670capt1/address_12
+    -------------------------------------------------  ---------------------------
+    Total                                      4.671ns (2.188ns logic, 2.483ns route)
+                                                       (46.8% logic, 53.2% route)
+
+--------------------------------------------------------------------------------
+Slack (setup path):     3.898ns (requirement - (data path - clock path skew + uncertainty))
+  Source:               inst_ov7670capt1/address_3 (FF)
+  Destination:          inst_ov7670capt1/address_12 (FF)
+  Requirement:          10.000ns
+  Data Path Delay:      6.056ns (Levels of Logic = 4)
+  Clock Path Skew:      -0.006ns (0.008 - 0.014)
+  Source Clock:         ov7670_pclkbufmux rising at 0.000ns
+  Destination Clock:    ov7670_pclkbufmux rising at 10.000ns
+  Clock Uncertainty:    0.040ns
+
+  Clock Uncertainty:          0.040ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter (TSJ):  0.000ns
+    Total Input Jitter (TIJ):   0.080ns
+    Discrete Jitter (DJ):       0.000ns
+    Phase Error (PE):           0.000ns
+
+  Maximum Data Path: inst_ov7670capt1/address_3 to inst_ov7670capt1/address_12
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X54Y67.XQ      Tcko                  0.592   inst_ov7670capt1/address<3>
+                                                       inst_ov7670capt1/address_3
+    SLICE_X52Y70.G2      net (fanout=21)       0.818   inst_ov7670capt1/address<3>
+    SLICE_X52Y70.Y       Tilo                  0.759   inst_ov7670capt1/address_mux0001<0>151
+                                                       inst_ov7670capt1/address_mux0001<0>137
+    SLICE_X52Y70.F4      net (fanout=1)        0.023   inst_ov7670capt1/address_mux0001<0>137/O
+    SLICE_X52Y70.X       Tilo                  0.759   inst_ov7670capt1/address_mux0001<0>151
+                                                       inst_ov7670capt1/address_mux0001<0>151
+    SLICE_X53Y68.G3      net (fanout=1)        0.343   inst_ov7670capt1/address_mux0001<0>151
+    SLICE_X53Y68.Y       Tilo                  0.704   inst_ov7670capt1/address<5>
+                                                       inst_ov7670capt1/address_mux0001<0>178
+    SLICE_X54Y70.G1      net (fanout=15)       1.166   inst_ov7670capt1/N01
+    SLICE_X54Y70.CLK     Tgck                  0.892   inst_ov7670capt1/address<10>
+                                                       inst_ov7670capt1/address_mux0001<2>1
+                                                       inst_ov7670capt1/address_12
+    -------------------------------------------------  ---------------------------
+    Total                                      6.056ns (3.706ns logic, 2.350ns route)
+                                                       (61.2% logic, 38.8% route)
+
+--------------------------------------------------------------------------------
+Slack (setup path):     3.952ns (requirement - (data path - clock path skew + uncertainty))
+  Source:               inst_ov7670capt1/address_4 (FF)
+  Destination:          inst_ov7670capt1/address_12 (FF)
+  Requirement:          10.000ns
+  Data Path Delay:      6.002ns (Levels of Logic = 4)
+  Clock Path Skew:      -0.006ns (0.008 - 0.014)
+  Source Clock:         ov7670_pclkbufmux rising at 0.000ns
+  Destination Clock:    ov7670_pclkbufmux rising at 10.000ns
+  Clock Uncertainty:    0.040ns
+
+  Clock Uncertainty:          0.040ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter (TSJ):  0.000ns
+    Total Input Jitter (TIJ):   0.080ns
+    Discrete Jitter (DJ):       0.000ns
+    Phase Error (PE):           0.000ns
+
+  Maximum Data Path: inst_ov7670capt1/address_4 to inst_ov7670capt1/address_12
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X54Y67.YQ      Tcko                  0.652   inst_ov7670capt1/address<3>
+                                                       inst_ov7670capt1/address_4
+    SLICE_X53Y70.F2      net (fanout=21)       0.759   inst_ov7670capt1/address<4>
+    SLICE_X53Y70.X       Tilo                  0.704   inst_ov7670capt1/address_mux0001<0>150
+                                                       inst_ov7670capt1/address_mux0001<0>150
+    SLICE_X52Y70.F3      net (fanout=1)        0.023   inst_ov7670capt1/address_mux0001<0>150
+    SLICE_X52Y70.X       Tilo                  0.759   inst_ov7670capt1/address_mux0001<0>151
+                                                       inst_ov7670capt1/address_mux0001<0>151
+    SLICE_X53Y68.G3      net (fanout=1)        0.343   inst_ov7670capt1/address_mux0001<0>151
+    SLICE_X53Y68.Y       Tilo                  0.704   inst_ov7670capt1/address<5>
+                                                       inst_ov7670capt1/address_mux0001<0>178
+    SLICE_X54Y70.G1      net (fanout=15)       1.166   inst_ov7670capt1/N01
+    SLICE_X54Y70.CLK     Tgck                  0.892   inst_ov7670capt1/address<10>
+                                                       inst_ov7670capt1/address_mux0001<2>1
+                                                       inst_ov7670capt1/address_12
+    -------------------------------------------------  ---------------------------
+    Total                                      6.002ns (3.711ns logic, 2.291ns route)
+                                                       (61.8% logic, 38.2% route)
+
+--------------------------------------------------------------------------------
+
+Paths for end point inst_ov7670capt1/address_13 (SLICE_X54Y71.G1), 16 paths
+--------------------------------------------------------------------------------
+Slack (setup path):     0.287ns (requirement - (data path - clock path skew + uncertainty))
+  Source:               inst_ov7670capt1/latched_vsync (FF)
+  Destination:          inst_ov7670capt1/address_13 (FF)
+  Requirement:          5.000ns
+  Data Path Delay:      4.671ns (Levels of Logic = 2)
+  Clock Path Skew:      -0.002ns (0.043 - 0.045)
+  Source Clock:         ov7670_pclkbufmux falling at 5.000ns
+  Destination Clock:    ov7670_pclkbufmux rising at 10.000ns
+  Clock Uncertainty:    0.040ns
+
+  Clock Uncertainty:          0.040ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter (TSJ):  0.000ns
+    Total Input Jitter (TIJ):   0.080ns
+    Discrete Jitter (DJ):       0.000ns
+    Phase Error (PE):           0.000ns
+
+  Maximum Data Path: inst_ov7670capt1/latched_vsync to inst_ov7670capt1/address_13
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X52Y78.XQ      Tcko                  0.592   inst_ov7670capt1/latched_vsync
+                                                       inst_ov7670capt1/latched_vsync
+    SLICE_X53Y68.G2      net (fanout=2)        1.317   inst_ov7670capt1/latched_vsync
+    SLICE_X53Y68.Y       Tilo                  0.704   inst_ov7670capt1/address<5>
+                                                       inst_ov7670capt1/address_mux0001<0>178
+    SLICE_X54Y71.G1      net (fanout=15)       1.166   inst_ov7670capt1/N01
+    SLICE_X54Y71.CLK     Tgck                  0.892   inst_ov7670capt1/address<11>
+                                                       inst_ov7670capt1/address_mux0001<1>1
+                                                       inst_ov7670capt1/address_13
+    -------------------------------------------------  ---------------------------
+    Total                                      4.671ns (2.188ns logic, 2.483ns route)
+                                                       (46.8% logic, 53.2% route)
+
+--------------------------------------------------------------------------------
+Slack (setup path):     3.898ns (requirement - (data path - clock path skew + uncertainty))
+  Source:               inst_ov7670capt1/address_3 (FF)
+  Destination:          inst_ov7670capt1/address_13 (FF)
+  Requirement:          10.000ns
+  Data Path Delay:      6.056ns (Levels of Logic = 4)
+  Clock Path Skew:      -0.006ns (0.008 - 0.014)
+  Source Clock:         ov7670_pclkbufmux rising at 0.000ns
+  Destination Clock:    ov7670_pclkbufmux rising at 10.000ns
+  Clock Uncertainty:    0.040ns
+
+  Clock Uncertainty:          0.040ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter (TSJ):  0.000ns
+    Total Input Jitter (TIJ):   0.080ns
+    Discrete Jitter (DJ):       0.000ns
+    Phase Error (PE):           0.000ns
+
+  Maximum Data Path: inst_ov7670capt1/address_3 to inst_ov7670capt1/address_13
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X54Y67.XQ      Tcko                  0.592   inst_ov7670capt1/address<3>
+                                                       inst_ov7670capt1/address_3
+    SLICE_X52Y70.G2      net (fanout=21)       0.818   inst_ov7670capt1/address<3>
+    SLICE_X52Y70.Y       Tilo                  0.759   inst_ov7670capt1/address_mux0001<0>151
+                                                       inst_ov7670capt1/address_mux0001<0>137
+    SLICE_X52Y70.F4      net (fanout=1)        0.023   inst_ov7670capt1/address_mux0001<0>137/O
+    SLICE_X52Y70.X       Tilo                  0.759   inst_ov7670capt1/address_mux0001<0>151
+                                                       inst_ov7670capt1/address_mux0001<0>151
+    SLICE_X53Y68.G3      net (fanout=1)        0.343   inst_ov7670capt1/address_mux0001<0>151
+    SLICE_X53Y68.Y       Tilo                  0.704   inst_ov7670capt1/address<5>
+                                                       inst_ov7670capt1/address_mux0001<0>178
+    SLICE_X54Y71.G1      net (fanout=15)       1.166   inst_ov7670capt1/N01
+    SLICE_X54Y71.CLK     Tgck                  0.892   inst_ov7670capt1/address<11>
+                                                       inst_ov7670capt1/address_mux0001<1>1
+                                                       inst_ov7670capt1/address_13
+    -------------------------------------------------  ---------------------------
+    Total                                      6.056ns (3.706ns logic, 2.350ns route)
+                                                       (61.2% logic, 38.8% route)
+
+--------------------------------------------------------------------------------
+Slack (setup path):     3.952ns (requirement - (data path - clock path skew + uncertainty))
+  Source:               inst_ov7670capt1/address_4 (FF)
+  Destination:          inst_ov7670capt1/address_13 (FF)
+  Requirement:          10.000ns
+  Data Path Delay:      6.002ns (Levels of Logic = 4)
+  Clock Path Skew:      -0.006ns (0.008 - 0.014)
+  Source Clock:         ov7670_pclkbufmux rising at 0.000ns
+  Destination Clock:    ov7670_pclkbufmux rising at 10.000ns
+  Clock Uncertainty:    0.040ns
+
+  Clock Uncertainty:          0.040ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter (TSJ):  0.000ns
+    Total Input Jitter (TIJ):   0.080ns
+    Discrete Jitter (DJ):       0.000ns
+    Phase Error (PE):           0.000ns
+
+  Maximum Data Path: inst_ov7670capt1/address_4 to inst_ov7670capt1/address_13
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X54Y67.YQ      Tcko                  0.652   inst_ov7670capt1/address<3>
+                                                       inst_ov7670capt1/address_4
+    SLICE_X53Y70.F2      net (fanout=21)       0.759   inst_ov7670capt1/address<4>
+    SLICE_X53Y70.X       Tilo                  0.704   inst_ov7670capt1/address_mux0001<0>150
+                                                       inst_ov7670capt1/address_mux0001<0>150
+    SLICE_X52Y70.F3      net (fanout=1)        0.023   inst_ov7670capt1/address_mux0001<0>150
+    SLICE_X52Y70.X       Tilo                  0.759   inst_ov7670capt1/address_mux0001<0>151
+                                                       inst_ov7670capt1/address_mux0001<0>151
+    SLICE_X53Y68.G3      net (fanout=1)        0.343   inst_ov7670capt1/address_mux0001<0>151
+    SLICE_X53Y68.Y       Tilo                  0.704   inst_ov7670capt1/address<5>
+                                                       inst_ov7670capt1/address_mux0001<0>178
+    SLICE_X54Y71.G1      net (fanout=15)       1.166   inst_ov7670capt1/N01
+    SLICE_X54Y71.CLK     Tgck                  0.892   inst_ov7670capt1/address<11>
+                                                       inst_ov7670capt1/address_mux0001<1>1
+                                                       inst_ov7670capt1/address_13
+    -------------------------------------------------  ---------------------------
+    Total                                      6.002ns (3.711ns logic, 2.291ns route)
+                                                       (61.8% logic, 38.2% route)
+
+--------------------------------------------------------------------------------
+
+Hold Paths: TS_clkcam = PERIOD TIMEGRP "clkcam" 10 ns HIGH 50% INPUT_JITTER 0.08 ns;
+--------------------------------------------------------------------------------
+
+Paths for end point inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[14].ram.r/s3_init.ram/dpram.dp1x1.ram.A (RAMB16_X1Y9.DIA0), 1 path
+--------------------------------------------------------------------------------
+Slack (hold path):      0.901ns (requirement - (clock path skew + uncertainty - data path))
+  Source:               inst_ov7670capt1/d_latch_11 (FF)
+  Destination:          inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[14].ram.r/s3_init.ram/dpram.dp1x1.ram.A (RAM)
+  Requirement:          0.000ns
+  Data Path Delay:      0.935ns (Levels of Logic = 0)
+  Clock Path Skew:      0.034ns (0.104 - 0.070)
+  Source Clock:         ov7670_pclkbufmux rising at 10.000ns
+  Destination Clock:    ov7670_pclkbufmux rising at 10.000ns
+  Clock Uncertainty:    0.000ns
+
+  Minimum Data Path: inst_ov7670capt1/d_latch_11 to inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[14].ram.r/s3_init.ram/dpram.dp1x1.ram.A
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X74Y78.YQ      Tcko                  0.522   inst_ov7670capt1/d_latch<11>
+                                                       inst_ov7670capt1/d_latch_11
+    RAMB16_X1Y9.DIA0     net (fanout=3)        0.539   inst_ov7670capt1/d_latch<11>
+    RAMB16_X1Y9.CLKA     Tbckd       (-Th)     0.126   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[14].ram.r/s3_init.ram/dpram.dp1x1.ram
+                                                       inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[14].ram.r/s3_init.ram/dpram.dp1x1.ram.A
+    -------------------------------------------------  ---------------------------
+    Total                                      0.935ns (0.396ns logic, 0.539ns route)
+                                                       (42.4% logic, 57.6% route)
+
+--------------------------------------------------------------------------------
+
+Paths for end point inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[16].ram.r/s3_init.ram/dpram.dp1x1.ram.A (RAMB16_X1Y8.DIA0), 1 path
+--------------------------------------------------------------------------------
+Slack (hold path):      1.059ns (requirement - (clock path skew + uncertainty - data path))
+  Source:               inst_ov7670capt1/d_latch_13 (FF)
+  Destination:          inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[16].ram.r/s3_init.ram/dpram.dp1x1.ram.A (RAM)
+  Requirement:          0.000ns
+  Data Path Delay:      1.076ns (Levels of Logic = 0)
+  Clock Path Skew:      0.017ns (0.108 - 0.091)
+  Source Clock:         ov7670_pclkbufmux rising at 10.000ns
+  Destination Clock:    ov7670_pclkbufmux rising at 10.000ns
+  Clock Uncertainty:    0.000ns
+
+  Minimum Data Path: inst_ov7670capt1/d_latch_13 to inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[16].ram.r/s3_init.ram/dpram.dp1x1.ram.A
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X79Y77.YQ      Tcko                  0.470   inst_ov7670capt1/d_latch<13>
+                                                       inst_ov7670capt1/d_latch_13
+    RAMB16_X1Y8.DIA0     net (fanout=3)        0.732   inst_ov7670capt1/d_latch<13>
+    RAMB16_X1Y8.CLKA     Tbckd       (-Th)     0.126   inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[16].ram.r/s3_init.ram/dpram.dp1x1.ram
+                                                       inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[16].ram.r/s3_init.ram/dpram.dp1x1.ram.A
+    -------------------------------------------------  ---------------------------
+    Total                                      1.076ns (0.344ns logic, 0.732ns route)
+                                                       (32.0% logic, 68.0% route)
+
+--------------------------------------------------------------------------------
+
+Paths for end point cc (SLICE_X55Y83.BY), 1 path
+--------------------------------------------------------------------------------
+Slack (hold path):      1.067ns (requirement - (clock path skew + uncertainty - data path))
+  Source:               cc (FF)
+  Destination:          cc (FF)
+  Requirement:          0.000ns
+  Data Path Delay:      1.067ns (Levels of Logic = 0)
+  Clock Path Skew:      0.000ns
+  Source Clock:         clkcambuf rising at 10.000ns
+  Destination Clock:    clkcambuf rising at 10.000ns
+  Clock Uncertainty:    0.000ns
+
+  Minimum Data Path: cc to cc
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X55Y83.YQ      Tcko                  0.470   cc
+                                                       cc
+    SLICE_X55Y83.BY      net (fanout=5)        0.462   cc
+    SLICE_X55Y83.CLK     Tckdi       (-Th)    -0.135   cc
+                                                       cc
+    -------------------------------------------------  ---------------------------
+    Total                                      1.067ns (0.605ns logic, 0.462ns route)
+                                                       (56.7% logic, 43.3% route)
+
+--------------------------------------------------------------------------------
+
+Component Switching Limit Checks: TS_clkcam = PERIOD TIMEGRP "clkcam" 10 ns HIGH 50% INPUT_JITTER 0.08 ns;
+--------------------------------------------------------------------------------
+Slack: 6.808ns (period - (min low pulse limit / (low pulse / period)))
+  Period: 10.000ns
+  Low pulse: 5.000ns
+  Low pulse limit: 1.596ns (Trpw)
+  Physical resource: inst_ov7670capt1/latched_d<0>/SR
+  Logical resource: inst_ov7670capt1/latched_d_0/SR
+  Location pin: SLICE_X63Y87.SR
+  Clock network: inst_debounce/output
+--------------------------------------------------------------------------------
+Slack: 6.808ns (period - (min high pulse limit / (high pulse / period)))
+  Period: 10.000ns
+  High pulse: 5.000ns
+  High pulse limit: 1.596ns (Trpw)
+  Physical resource: inst_ov7670capt1/latched_d<0>/SR
+  Logical resource: inst_ov7670capt1/latched_d_0/SR
+  Location pin: SLICE_X63Y87.SR
+  Clock network: inst_debounce/output
+--------------------------------------------------------------------------------
+Slack: 6.808ns (period - (min low pulse limit / (low pulse / period)))
+  Period: 10.000ns
+  Low pulse: 5.000ns
+  Low pulse limit: 1.596ns (Trpw)
+  Physical resource: inst_ov7670capt1/latched_d<1>/SR
+  Logical resource: inst_ov7670capt1/latched_d_1/SR
+  Location pin: SLICE_X64Y81.SR
+  Clock network: inst_debounce/output
+--------------------------------------------------------------------------------
+
+================================================================================
+Timing constraint: TS_ov7670_pclk1 = PERIOD TIMEGRP "ov7670_pclk1" 333 ns HIGH 
+50% INPUT_JITTER         0.1 ns;
+For more information, see Period Analysis in the Timing Closure User Guide (UG612).
+
+ 0 paths analyzed, 0 endpoints analyzed, 0 failing endpoints
+ 0 timing errors detected. (0 component switching limit errors)
+ Minimum period is   3.192ns.
+--------------------------------------------------------------------------------
+
+Component Switching Limit Checks: TS_ov7670_pclk1 = PERIOD TIMEGRP "ov7670_pclk1" 333 ns HIGH 50% INPUT_JITTER
+        0.1 ns;
+--------------------------------------------------------------------------------
+Slack: 329.808ns (period - (min low pulse limit / (low pulse / period)))
+  Period: 333.000ns
+  Low pulse: 166.500ns
+  Low pulse limit: 1.596ns (Trpw)
+  Physical resource: u1/clockp<0>/SR
+  Logical resource: u1/clockp_0/SR
+  Location pin: SLICE_X59Y56.SR
+  Clock network: inst_debounce/output
+--------------------------------------------------------------------------------
+Slack: 329.808ns (period - (min high pulse limit / (high pulse / period)))
+  Period: 333.000ns
+  High pulse: 166.500ns
+  High pulse limit: 1.596ns (Trpw)
+  Physical resource: u1/clockp<0>/SR
+  Logical resource: u1/clockp_0/SR
+  Location pin: SLICE_X59Y56.SR
+  Clock network: inst_debounce/output
+--------------------------------------------------------------------------------
+Slack: 331.404ns (period - (min low pulse limit / (low pulse / period)))
+  Period: 333.000ns
+  Low pulse: 166.500ns
+  Low pulse limit: 0.798ns (Tcl)
+  Physical resource: u1/clockp<0>/CLK
+  Logical resource: u1/clockp_0/CK
+  Location pin: SLICE_X59Y56.CLK
+  Clock network: clkcambuf
+--------------------------------------------------------------------------------
+
+================================================================================
+Timing constraint: TS_ov7670_pclk2 = PERIOD TIMEGRP "ov7670_pclk2" 333 ns HIGH 
+50% INPUT_JITTER         0.1 ns;
+For more information, see Period Analysis in the Timing Closure User Guide (UG612).
+
+ 0 paths analyzed, 0 endpoints analyzed, 0 failing endpoints
+ 0 timing errors detected. (0 component switching limit errors)
+ Minimum period is   3.192ns.
+--------------------------------------------------------------------------------
+
+Component Switching Limit Checks: TS_ov7670_pclk2 = PERIOD TIMEGRP "ov7670_pclk2" 333 ns HIGH 50% INPUT_JITTER
+        0.1 ns;
+--------------------------------------------------------------------------------
+Slack: 329.808ns (period - (min low pulse limit / (low pulse / period)))
+  Period: 333.000ns
+  Low pulse: 166.500ns
+  Low pulse limit: 1.596ns (Trpw)
+  Physical resource: u1/clockp<1>/SR
+  Logical resource: u1/clockp_1/SR
+  Location pin: SLICE_X55Y63.SR
+  Clock network: inst_debounce/output
+--------------------------------------------------------------------------------
+Slack: 329.808ns (period - (min high pulse limit / (high pulse / period)))
+  Period: 333.000ns
+  High pulse: 166.500ns
+  High pulse limit: 1.596ns (Trpw)
+  Physical resource: u1/clockp<1>/SR
+  Logical resource: u1/clockp_1/SR
+  Location pin: SLICE_X55Y63.SR
+  Clock network: inst_debounce/output
+--------------------------------------------------------------------------------
+Slack: 331.404ns (period - (min low pulse limit / (low pulse / period)))
+  Period: 333.000ns
+  Low pulse: 166.500ns
+  Low pulse limit: 0.798ns (Tcl)
+  Physical resource: u1/clockp<1>/CLK
+  Logical resource: u1/clockp_1/CK
+  Location pin: SLICE_X55Y63.CLK
+  Clock network: clkcambuf
+--------------------------------------------------------------------------------
+
+================================================================================
+Timing constraint: TS_ov7670_pclk3 = PERIOD TIMEGRP "ov7670_pclk3" 333 ns HIGH 
+50% INPUT_JITTER         0.1 ns;
+For more information, see Period Analysis in the Timing Closure User Guide (UG612).
+
+ 0 paths analyzed, 0 endpoints analyzed, 0 failing endpoints
+ 0 timing errors detected. (0 component switching limit errors)
+ Minimum period is   3.192ns.
+--------------------------------------------------------------------------------
+
+Component Switching Limit Checks: TS_ov7670_pclk3 = PERIOD TIMEGRP "ov7670_pclk3" 333 ns HIGH 50% INPUT_JITTER
+        0.1 ns;
+--------------------------------------------------------------------------------
+Slack: 329.808ns (period - (min low pulse limit / (low pulse / period)))
+  Period: 333.000ns
+  Low pulse: 166.500ns
+  Low pulse limit: 1.596ns (Trpw)
+  Physical resource: u1/clockp<2>/SR
+  Logical resource: u1/clockp_2/SR
+  Location pin: SLICE_X56Y61.SR
+  Clock network: inst_debounce/output
+--------------------------------------------------------------------------------
+Slack: 329.808ns (period - (min high pulse limit / (high pulse / period)))
+  Period: 333.000ns
+  High pulse: 166.500ns
+  High pulse limit: 1.596ns (Trpw)
+  Physical resource: u1/clockp<2>/SR
+  Logical resource: u1/clockp_2/SR
+  Location pin: SLICE_X56Y61.SR
+  Clock network: inst_debounce/output
+--------------------------------------------------------------------------------
+Slack: 331.348ns (period - (min low pulse limit / (low pulse / period)))
+  Period: 333.000ns
+  Low pulse: 166.500ns
+  Low pulse limit: 0.826ns (Tcl)
+  Physical resource: u1/clockp<2>/CLK
+  Logical resource: u1/clockp_2/CK
+  Location pin: SLICE_X56Y61.CLK
+  Clock network: clkcambuf
+--------------------------------------------------------------------------------
+
+================================================================================
+Timing constraint: TS_ov7670_pclk4 = PERIOD TIMEGRP "ov7670_pclk4" 333 ns HIGH 
+50% INPUT_JITTER         0.1 ns;
+For more information, see Period Analysis in the Timing Closure User Guide (UG612).
+
+ 0 paths analyzed, 0 endpoints analyzed, 0 failing endpoints
+ 0 timing errors detected. (0 component switching limit errors)
+ Minimum period is   3.192ns.
+--------------------------------------------------------------------------------
+
+Component Switching Limit Checks: TS_ov7670_pclk4 = PERIOD TIMEGRP "ov7670_pclk4" 333 ns HIGH 50% INPUT_JITTER
+        0.1 ns;
+--------------------------------------------------------------------------------
+Slack: 329.808ns (period - (min low pulse limit / (low pulse / period)))
+  Period: 333.000ns
+  Low pulse: 166.500ns
+  Low pulse limit: 1.596ns (Trpw)
+  Physical resource: u1/clockp<3>/SR
+  Logical resource: u1/clockp_3/SR
+  Location pin: SLICE_X58Y66.SR
+  Clock network: inst_debounce/output
+--------------------------------------------------------------------------------
+Slack: 329.808ns (period - (min high pulse limit / (high pulse / period)))
+  Period: 333.000ns
+  High pulse: 166.500ns
+  High pulse limit: 1.596ns (Trpw)
+  Physical resource: u1/clockp<3>/SR
+  Logical resource: u1/clockp_3/SR
+  Location pin: SLICE_X58Y66.SR
+  Clock network: inst_debounce/output
+--------------------------------------------------------------------------------
+Slack: 331.348ns (period - (min low pulse limit / (low pulse / period)))
+  Period: 333.000ns
+  Low pulse: 166.500ns
+  Low pulse limit: 0.826ns (Tcl)
+  Physical resource: u1/clockp<3>/CLK
+  Logical resource: u1/clockp_3/CK
+  Location pin: SLICE_X58Y66.CLK
+  Clock network: clkcambuf
+--------------------------------------------------------------------------------
+
+
+All constraints were met.
 
 
 Data Sheet report:
 -----------------
 All values displayed in nanoseconds (ns)
 
-Setup/Hold to clock clkcam
----------------+------------+------------+------------------+--------+
-               |Max Setup to|Max Hold to |                  | Clock  |
-Source         | clk (edge) | clk (edge) |Internal Clock(s) | Phase  |
----------------+------------+------------+------------------+--------+
-ov7670_data1<0>|   -1.298(F)|    3.293(F)|ov7670_pclkbufmux |   0.000|
-ov7670_data1<1>|   -2.331(F)|    4.248(F)|ov7670_pclkbufmux |   0.000|
-ov7670_data1<2>|   -2.315(F)|    4.229(F)|ov7670_pclkbufmux |   0.000|
-ov7670_data1<3>|   -2.617(F)|    4.508(F)|ov7670_pclkbufmux |   0.000|
-ov7670_data1<4>|   -3.011(F)|    4.876(F)|ov7670_pclkbufmux |   0.000|
-ov7670_data1<5>|   -2.735(F)|    4.619(F)|ov7670_pclkbufmux |   0.000|
-ov7670_data1<6>|   -2.384(F)|    4.294(F)|ov7670_pclkbufmux |   0.000|
-ov7670_data1<7>|   -2.716(F)|    4.601(F)|ov7670_pclkbufmux |   0.000|
-ov7670_data2<0>|   -2.871(F)|    4.740(F)|ov7670_pclkbufmux |   0.000|
-ov7670_data2<1>|   -3.198(F)|    5.045(F)|ov7670_pclkbufmux |   0.000|
-ov7670_data2<2>|   -2.630(F)|    4.516(F)|ov7670_pclkbufmux |   0.000|
-ov7670_data2<3>|   -3.465(F)|    5.285(F)|ov7670_pclkbufmux |   0.000|
-ov7670_data2<4>|   -3.547(F)|    5.367(F)|ov7670_pclkbufmux |   0.000|
-ov7670_data2<5>|   -3.307(F)|    5.142(F)|ov7670_pclkbufmux |   0.000|
-ov7670_data2<6>|   -3.647(F)|    5.454(F)|ov7670_pclkbufmux |   0.000|
-ov7670_data2<7>|   -3.393(F)|    5.222(F)|ov7670_pclkbufmux |   0.000|
-ov7670_data3<0>|   -4.719(F)|    6.440(F)|ov7670_pclkbufmux |   0.000|
-ov7670_data3<1>|   -4.763(F)|    6.483(F)|ov7670_pclkbufmux |   0.000|
-ov7670_data3<2>|   -4.284(F)|    6.037(F)|ov7670_pclkbufmux |   0.000|
-ov7670_data3<3>|   -4.552(F)|    6.286(F)|ov7670_pclkbufmux |   0.000|
-ov7670_data3<4>|   -4.549(F)|    6.289(F)|ov7670_pclkbufmux |   0.000|
-ov7670_data3<5>|   -4.711(F)|    6.436(F)|ov7670_pclkbufmux |   0.000|
-ov7670_data3<6>|   -4.510(F)|    6.248(F)|ov7670_pclkbufmux |   0.000|
-ov7670_data3<7>|   -4.921(F)|    6.629(F)|ov7670_pclkbufmux |   0.000|
-ov7670_data4<0>|   -4.571(F)|    6.305(F)|ov7670_pclkbufmux |   0.000|
-ov7670_data4<1>|   -4.579(F)|    6.312(F)|ov7670_pclkbufmux |   0.000|
-ov7670_data4<2>|   -4.317(F)|    6.068(F)|ov7670_pclkbufmux |   0.000|
-ov7670_data4<3>|   -4.764(F)|    6.481(F)|ov7670_pclkbufmux |   0.000|
-ov7670_data4<4>|   -4.447(F)|    6.195(F)|ov7670_pclkbufmux |   0.000|
-ov7670_data4<5>|   -4.708(F)|    6.432(F)|ov7670_pclkbufmux |   0.000|
-ov7670_data4<6>|   -4.290(F)|    6.047(F)|ov7670_pclkbufmux |   0.000|
-ov7670_data4<7>|   -4.525(F)|    6.266(F)|ov7670_pclkbufmux |   0.000|
-ov7670_href1   |   -2.842(F)|    4.718(F)|ov7670_pclkbufmux |   0.000|
-ov7670_href2   |   -3.299(F)|    5.135(F)|ov7670_pclkbufmux |   0.000|
-ov7670_href3   |   -4.332(F)|    6.085(F)|ov7670_pclkbufmux |   0.000|
-ov7670_href4   |   -4.672(F)|    6.398(F)|ov7670_pclkbufmux |   0.000|
-ov7670_pclk1   |    3.713(R)|   -1.452(R)|clkcambuf         |   0.000|
-ov7670_pclk2   |    1.344(R)|    0.728(R)|clkcambuf         |   0.000|
-ov7670_pclk3   |    1.204(R)|    0.854(R)|clkcambuf         |   0.000|
-ov7670_pclk4   |    1.531(R)|    0.584(R)|clkcambuf         |   0.000|
-ov7670_vsync1  |   -2.561(F)|    4.463(F)|ov7670_pclkbufmux |   0.000|
-ov7670_vsync2  |   -3.568(F)|    5.388(F)|ov7670_pclkbufmux |   0.000|
-ov7670_vsync3  |   -4.394(F)|    6.148(F)|ov7670_pclkbufmux |   0.000|
-ov7670_vsync4  |   -4.234(F)|    6.000(F)|ov7670_pclkbufmux |   0.000|
-pb             |   -1.110(R)|    3.066(R)|clkcambuf         |   0.000|
-sw<0>          |   -1.244(R)|    3.225(R)|clkcambuf         |   0.000|
-               |   -2.491(F)|    5.356(F)|ov7670_pclkbufmux |   0.000|
-sw<1>          |   -1.462(R)|    3.201(R)|clkcambuf         |   0.000|
-               |   -2.257(F)|    5.472(F)|ov7670_pclkbufmux |   0.000|
-sw<2>          |   -0.592(R)|    2.291(R)|clkcambuf         |   0.000|
-               |   -3.228(F)|    5.867(F)|ov7670_pclkbufmux |   0.000|
-sw<3>          |   -0.767(R)|    2.561(R)|clkcambuf         |   0.000|
-               |   -3.116(F)|    5.801(F)|ov7670_pclkbufmux |   0.000|
----------------+------------+------------+------------------+--------+
-
-Clock clkcam to Pad
--------------+------------+------------------+--------+
-             | clk (edge) |                  | Clock  |
-Destination  |   to PAD   |Internal Clock(s) | Phase  |
--------------+------------+------------------+--------+
-o_debug<4>   |   12.578(R)|clkcambuf         |   0.000|
-ov7670_pwdn1 |   12.170(R)|clkcambuf         |   0.000|
-ov7670_pwdn2 |   11.661(R)|clkcambuf         |   0.000|
-ov7670_pwdn3 |   11.862(R)|clkcambuf         |   0.000|
-ov7670_pwdn4 |   11.914(R)|clkcambuf         |   0.000|
-ov7670_reset1|   11.953(R)|clkcambuf         |   0.000|
-ov7670_reset2|   12.124(R)|clkcambuf         |   0.000|
-ov7670_reset3|   11.750(R)|clkcambuf         |   0.000|
-ov7670_reset4|   11.193(R)|clkcambuf         |   0.000|
-ov7670_sioc1 |   11.874(R)|clkcambuf         |   0.000|
-ov7670_sioc2 |   11.699(R)|clkcambuf         |   0.000|
-ov7670_sioc3 |   12.367(R)|clkcambuf         |   0.000|
-ov7670_sioc4 |   11.832(R)|clkcambuf         |   0.000|
-ov7670_siod1 |   15.281(R)|clkcambuf         |   0.000|
-ov7670_siod2 |   14.372(R)|clkcambuf         |   0.000|
-ov7670_siod3 |   15.090(R)|clkcambuf         |   0.000|
-ov7670_siod4 |   14.214(R)|clkcambuf         |   0.000|
-ov7670_xclk1 |   11.423(R)|clkcambuf         |   0.000|
-ov7670_xclk2 |   11.164(R)|clkcambuf         |   0.000|
-ov7670_xclk3 |   11.275(R)|clkcambuf         |   0.000|
-ov7670_xclk4 |   11.495(R)|clkcambuf         |   0.000|
-vga_o_clk25  |   13.025(R)|clkcambuf         |   0.000|
--------------+------------+------------------+--------+
-
 Clock to Setup on destination clock clkcam
 ---------------+---------+---------+---------+---------+
                | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
 Source Clock   |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
 ---------------+---------+---------+---------+---------+
-clkcam         |    4.681|    4.043|         |         |
+clkcam         |    9.447|    4.745|         |         |
 ---------------+---------+---------+---------+---------+
 
-Pad to Pad
----------------+---------------+---------+
-Source Pad     |Destination Pad|  Delay  |
----------------+---------------+---------+
-ov7670_data1<0>|o_debug<3>     |    6.814|
-ov7670_href1   |o_debug<1>     |    6.596|
-ov7670_pclk1   |o_debug<0>     |   12.691|
-ov7670_vsync1  |o_debug<2>     |    7.099|
----------------+---------------+---------+
+
+Timing summary:
+---------------
+
+Timing errors: 0  Score: 0  (Setup/Max: 0, Hold: 0)
+
+Constraints cover 8034 paths, 0 nets, and 2196 connections
+
+Design statistics:
+   Minimum period:   9.490ns{1}   (Maximum frequency: 105.374MHz)
 
 
-Analysis completed Wed Aug 24 22:44:13 2022 
+------------------------------------Footnotes-----------------------------------
+1)  The minimum period statistic assumes all single cycle delays.
+
+Analysis completed Thu Aug 25 13:22:39 2022 
 --------------------------------------------------------------------------------
 
 Trace Settings:
 -------------------------
 Trace Settings 
 
-Peak Memory Usage: 496 MB
+Peak Memory Usage: 378 MB
 
 
 
