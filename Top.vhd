@@ -24,11 +24,11 @@ G_FE_WAIT_BITS : integer := 24 -- sccb wait for cameras
 				clkcam	: in STD_LOGIC;
 				pb		: in STD_LOGIC;
 				sw		: in STD_LOGIC_VECTOR(3 downto 0);
---				led1 : out STD_LOGIC;
---				led2 : out STD_LOGIC;
---				led3 : out STD_LOGIC;
---				led4 : out STD_LOGIC;
---			  anode : out std_logic_vector(3 downto 0);
+				led1 : out STD_LOGIC;
+				led2 : out STD_LOGIC;
+				led3 : out STD_LOGIC;
+				led4 : out STD_LOGIC;
+			  anode : out std_logic_vector(3 downto 0);
 				ov7670_reset1,ov7670_reset2,ov7670_reset3,ov7670_reset4 : out  STD_LOGIC;
 				ov7670_pwdn1,ov7670_pwdn2,ov7670_pwdn3,ov7670_pwdn4 : out  STD_LOGIC;
 				ov7670_pclk1,ov7670_pclk2,ov7670_pclk3,ov7670_pclk4  : in  STD_LOGIC;
@@ -44,9 +44,10 @@ G_FE_WAIT_BITS : integer := 24 -- sccb wait for cameras
 				vga_o_clk25 : out STD_LOGIC;
 				vga_o_hsync : out STD_LOGIC;
 				vga_o_vsync : out STD_LOGIC;
-				o_r	: out STD_LOGIC_VECTOR(7 downto 0);
-				o_g	: out STD_LOGIC_VECTOR(7 downto 0);
-				o_b	: out STD_LOGIC_VECTOR(7 downto 0);
+				vga_o_rgb : out STD_LOGIC_VECTOR(15 downto 0);
+				vga_rgb : out STD_LOGIC_VECTOR(7 downto 0);
+				vga_hsync : out STD_LOGIC;
+				vga_vsync : out STD_LOGIC;
 				o_debug : out std_logic_vector(7 downto 0)
 			 );
 end Top;
@@ -217,95 +218,60 @@ signal sel1, sel2, sel3, sel4, nosel, carrier, collision : std_logic;
 signal hs,vs : std_logic;
 signal rgb : std_logic_vector(15 downto 0);
 
+attribute IOB : string;
+attribute IOB of vga_o_rgb,vga_o_hsync,vga_o_vsync,vga_o_clk25 : signal is "TRUE";
+
 begin
 
 vga_o_clk25 <= clk25;
 --vga_o_clk25 <= clkcambuf;
-vga_o_hsync	<= hs;
-vga_o_vsync	<= vs;
 vga_o_syncn <= '1';
 --vga_o_blankn <= '1';
 vga_o_psave <= '1';
 
-o_debug(0) <= ov7670_pclk1buf1;
-o_debug(1) <= ov7670_href1;
-o_debug(2) <= ov7670_vsync1;
-o_debug(3) <= ov7670_data1(0);
-o_debug(4) <= clk25;
-o_debug(5) <= hs;
-o_debug(6) <= vs;
-o_debug(7) <= rgb(0);
---o_debug(7 downto 0) <= "0000";
+vga_hsync <= hs;
+vga_vsync <= vs;
+vga_rgb <= rgb(7 downto 0);
 
-pvgalatch : process(clk25,resend) is
---pvgalatch : process(clkcambuf,resend) is
+--o_debug(0) <= ov7670_pclk1buf1;
+--o_debug(1) <= ov7670_href1;
+--o_debug(2) <= ov7670_vsync1;
+--o_debug(3) <= ov7670_data1(0);
+--o_debug(4) <= clk25;
+--o_debug(5) <= hs;
+--o_debug(6) <= vs;
+--o_debug(7) <= rgb(0);
+o_debug(7 downto 0) <= (others => '0');
+
+p0vgaout : process (clk25,resend) is
 begin
 if (resend = '1') then
-o_r <= (others => '0');
-o_g <= (others => '0');
-o_b <= (others => '0');
-elsif(rising_edge(clk25)) then
---elsif(rising_edge(clkcambuf)) then
---o_r(7) <= rgb(14);
---o_r(6) <= rgb(13);
---o_r(5) <= rgb(12);
---o_r(4) <= rgb(11);
---o_r(3) <= rgb(10);
---o_r(2) <= '0';
---o_r(1) <= '0';
---o_r(0) <= '0';
---
---o_g(7) <= rgb(9);
---o_g(6) <= rgb(8);
---o_g(5) <= rgb(7);
---o_g(4) <= rgb(6);
---o_g(3) <= rgb(5);
---o_g(2) <= '0';
---o_g(1) <= '0';
---o_g(0) <= '0';
---
---o_b(7) <= rgb(4);
---o_b(6) <= rgb(3);
---o_b(5) <= rgb(2);
---o_b(4) <= rgb(1);
---o_b(3) <= rgb(0);
---o_b(2) <= '0';
---o_b(1) <= '0';
---o_b(0) <= '0';
-
-o_r(7) <= rgb(15);
-o_r(6) <= rgb(14);
-o_r(5) <= rgb(13);
-o_r(4) <= rgb(12);
-o_r(3) <= rgb(11);
-o_r(2) <= '0';
-o_r(1) <= '0';
-o_r(0) <= '0';
-
-o_g(7) <= rgb(10);
-o_g(6) <= rgb(9);
-o_g(5) <= rgb(8);
-o_g(4) <= rgb(7);
-o_g(3) <= rgb(6);
-o_g(2) <= rgb(5);
-o_g(1) <= '0';
-o_g(0) <= '0';
-
-o_b(7) <= rgb(4);
-o_b(6) <= rgb(3);
-o_b(5) <= rgb(2);
-o_b(4) <= rgb(1);
-o_b(3) <= rgb(0);
-o_b(2) <= '0';
-o_b(1) <= '0';
-o_b(0) <= '0';
+vga_o_rgb <= (others => '0');
+vga_o_hsync <= '0';
+vga_o_vsync <= '0';
+elsif (rising_edge(clk25)) then
+vga_o_hsync	<= hs;
+vga_o_vsync	<= vs;
+vga_o_rgb(15) <= rgb(15);
+vga_o_rgb(14) <= rgb(14);
+vga_o_rgb(13) <= rgb(13);
+vga_o_rgb(12) <= rgb(12);
+vga_o_rgb(11) <= rgb(11);
+vga_o_rgb(10) <= rgb(10);
+vga_o_rgb(9) <= rgb(9);
+vga_o_rgb(8) <= rgb(8);
+vga_o_rgb(7) <= rgb(7);
+vga_o_rgb(6) <= rgb(6);
+vga_o_rgb(5) <= rgb(5);
+vga_o_rgb(4) <= rgb(4);
+vga_o_rgb(3) <= rgb(3);
+vga_o_rgb(2) <= rgb(2);
+vga_o_rgb(1) <= rgb(1);
+vga_o_rgb(0) <= rgb(0);
 
 end if;
-end process pvgalatch;
+end process p0vgaout;
 
---	vga_rgb <= (others => '0');
---	vga_hsync <= '0';
---	vga_vsync <= '0';
 --	pclk1buf : IBUFG port map (O => ov7670_pclk1buf, I => ov7670_pclk1);
 --	pclk2buf : IBUFG port map (O => ov7670_pclk2buf, I => ov7670_pclk2);
 --	pclk3buf : IBUFG port map (O => ov7670_pclk3buf, I => ov7670_pclk3);
@@ -315,12 +281,12 @@ end process pvgalatch;
 --	pclk3buf : ov7670_pclk3buf <= ov7670_pclk3;
 --	pclk4buf : ov7670_pclk4buf <= ov7670_pclk4;
 
---	anode <= "1111";
+	anode <= "1111";
 
---	led1 <= ov7670_data1(0) and ov7670_data1(1) and ov7670_data1(2) and ov7670_data1(3) and ov7670_data1(4) and ov7670_data1(5) and ov7670_data1(6) and ov7670_data1(7);
---	led2 <= ov7670_data2(0) and ov7670_data2(1) and ov7670_data2(2) and ov7670_data2(3) and ov7670_data2(4) and ov7670_data2(5) and ov7670_data2(6) and ov7670_data2(7);
---	led3 <= ov7670_data3(0) and ov7670_data3(1) and ov7670_data3(2) and ov7670_data3(3) and ov7670_data3(4) and ov7670_data3(5) and ov7670_data3(6) and ov7670_data3(7);
---	led4 <= ov7670_data4(0) and ov7670_data4(1) and ov7670_data4(2) and ov7670_data4(3) and ov7670_data4(4) and ov7670_data4(5) and ov7670_data4(6) and ov7670_data4(7);
+	led1 <= ov7670_data1(0) and ov7670_data1(1) and ov7670_data1(2) and ov7670_data1(3) and ov7670_data1(4) and ov7670_data1(5) and ov7670_data1(6) and ov7670_data1(7);
+	led2 <= ov7670_data2(0) and ov7670_data2(1) and ov7670_data2(2) and ov7670_data2(3) and ov7670_data2(4) and ov7670_data2(5) and ov7670_data2(6) and ov7670_data2(7);
+	led3 <= ov7670_data3(0) and ov7670_data3(1) and ov7670_data3(2) and ov7670_data3(3) and ov7670_data3(4) and ov7670_data3(5) and ov7670_data3(6) and ov7670_data3(7);
+	led4 <= ov7670_data4(0) and ov7670_data4(1) and ov7670_data4(2) and ov7670_data4(3) and ov7670_data4(4) and ov7670_data4(5) and ov7670_data4(6) and ov7670_data4(7);
 
 --	led1 <= '0';
 --	led2 <= '0';
@@ -451,8 +417,6 @@ u2: arbiter port map
 		activehaaddrgen => activehaaddrgen,
 		activeRender1 => activeRender1,
 		blank => vga_o_blankn);
-
-vga_o_vsync <= vs;
 
 Registers: ov7670_registers port map(
 	reset => resend,

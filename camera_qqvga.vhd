@@ -147,7 +147,7 @@ begin
 						count := count + 1;
 					end if;
 			end case;
-			camera_o_vs <= not vvsync;
+			camera_o_vs <= vvsync; -- XXX polarization VSYNC 0x15 0x02
 		end if;
 	end process p1;
 

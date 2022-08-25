@@ -43,17 +43,17 @@ G_PB_BITS : integer := 6;
 G_WAIT1 : integer := 7; -- wait for reset dcm and cameras
 G_FE_WAIT_BITS : integer := 9 -- sccb wait for cameras
 );
-Port	(
+	Port	(
 				clkcam	: in STD_LOGIC;
 				pb		: in STD_LOGIC;
 				sw		: in STD_LOGIC_VECTOR(3 downto 0);
---				led1 : out STD_LOGIC;
---				led2 : out STD_LOGIC;
---				led3 : out STD_LOGIC;
---				led4 : out STD_LOGIC;
---			  anode : out std_logic_vector(3 downto 0);
---				ov7670_reset1,ov7670_reset2,ov7670_reset3,ov7670_reset4 : out  STD_LOGIC;
---				ov7670_pwdn1,ov7670_pwdn2,ov7670_pwdn3,ov7670_pwdn4 : out  STD_LOGIC;
+				led1 : out STD_LOGIC;
+				led2 : out STD_LOGIC;
+				led3 : out STD_LOGIC;
+				led4 : out STD_LOGIC;
+			  anode : out std_logic_vector(3 downto 0);
+				ov7670_reset1,ov7670_reset2,ov7670_reset3,ov7670_reset4 : out  STD_LOGIC;
+				ov7670_pwdn1,ov7670_pwdn2,ov7670_pwdn3,ov7670_pwdn4 : out  STD_LOGIC;
 				ov7670_pclk1,ov7670_pclk2,ov7670_pclk3,ov7670_pclk4  : in  STD_LOGIC;
 				ov7670_xclk1,ov7670_xclk2,ov7670_xclk3,ov7670_xclk4  : out STD_LOGIC;
 				ov7670_vsync1,ov7670_vsync2,ov7670_vsync3,ov7670_vsync4 : in  STD_LOGIC;
@@ -67,11 +67,12 @@ Port	(
 				vga_o_clk25 : out STD_LOGIC;
 				vga_o_hsync : out STD_LOGIC;
 				vga_o_vsync : out STD_LOGIC;
-				o_r	: out STD_LOGIC_VECTOR(7 downto 0);
-				o_g	: out STD_LOGIC_VECTOR(7 downto 0);
-				o_b	: out STD_LOGIC_VECTOR(7 downto 0);
-				debug : out std_logic_vector(3 downto 0)
-);
+				vga_o_rgb : out STD_LOGIC_VECTOR(15 downto 0);
+				vga_rgb : out STD_LOGIC_VECTOR(7 downto 0);
+				vga_hsync : out STD_LOGIC;
+				vga_vsync : out STD_LOGIC;
+				o_debug : out std_logic_vector(7 downto 0)
+			 );
 end component Top;
 
 --Inputs
@@ -155,7 +156,7 @@ signal vga_o_vsync : STD_LOGIC;
 signal o_r	: STD_LOGIC_VECTOR(7 downto 0);
 signal o_g	: STD_LOGIC_VECTOR(7 downto 0);
 signal o_b	: STD_LOGIC_VECTOR(7 downto 0);
-signal debug : std_logic_vector(3 downto 0);
+signal o_debug : std_logic_vector(7 downto 0);
 
 BEGIN
 
@@ -236,15 +237,15 @@ uut: Top PORT MAP (
 clkcam => clkcam,
 pb => pb,
 sw => sw,
---led1 => led1,
---led2 => led2,
---led3 => led3,
---led4 => led4,
---anode => anode,
---ov7670_reset1 => camera_i_rst1,
---ov7670_reset2 => camera_i_rst2,
---ov7670_reset3 => camera_i_rst3,
---ov7670_reset4 => camera_i_rst4,
+led1 => led1,
+led2 => led2,
+led3 => led3,
+led4 => led4,
+anode => anode,
+ov7670_reset1 => camera_i_rst1,
+ov7670_reset2 => camera_i_rst2,
+ov7670_reset3 => camera_i_rst3,
+ov7670_reset4 => camera_i_rst4,
 ov7670_pclk1 => ov7670_pclk1,
 ov7670_pclk2 => ov7670_pclk2,
 ov7670_pclk3 => ov7670_pclk3,
@@ -279,10 +280,7 @@ vga_o_psave => vga_o_psave,
 vga_o_clk25 => vga_o_clk25,
 vga_o_hsync => vga_o_hsync,
 vga_o_vsync => vga_o_vsync,
-o_r => o_r,
-o_g => o_g,
-o_b => o_b,
-debug => debug
+o_debug => o_debug
 );
 
 camera_xclk_process :process
