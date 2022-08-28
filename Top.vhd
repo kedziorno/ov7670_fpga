@@ -50,7 +50,8 @@ G_FE_WAIT_BITS : integer := 24 -- sccb wait for cameras
 				vga_vsync : out STD_LOGIC;
 				o_debug : out std_logic_vector(7 downto 0);
 				o_hdmin,o_hdmip : out std_logic_vector(2 downto 0);
-				o_hdmin_clock,o_hdmip_clock : out std_logic
+				o_hdmin_clock,o_hdmip_clock : out std_logic;
+				o_reset : out std_logic
 			 );
 end Top;
 
@@ -384,6 +385,7 @@ o_hdmin <= hdmi_TMDSn;
 o_hdmip <= hdmi_TMDSp;
 o_hdmin_clock <= hdmi_TMDSn_clock;
 o_hdmip_clock <= hdmi_TMDSp_clock;
+o_reset <= resend;
 
 u1: clockmux_old port map
 	(resend, 
