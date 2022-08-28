@@ -48,7 +48,9 @@ G_FE_WAIT_BITS : integer := 24 -- sccb wait for cameras
 				vga_rgb : out STD_LOGIC_VECTOR(7 downto 0);
 				vga_hsync : out STD_LOGIC;
 				vga_vsync : out STD_LOGIC;
-				o_debug : out std_logic_vector(7 downto 0)
+				o_debug : out std_logic_vector(7 downto 0);
+				o_hdmin,o_hdmip : out std_logic_vector(2 downto 0);
+				o_hdmin_clock,o_hdmip_clock : out std_logic
 			 );
 end Top;
 
@@ -169,6 +171,19 @@ COMPONENT VGA_timing_synch
 					 activeRender1 : out  STD_LOGIC;
 						blank : out STD_LOGIC);
 END COMPONENT;
+
+COMPONENT HDMI_test
+Port (
+	reset : in std_logic;
+	pixclk : in std_logic;  -- 25MHz
+	data : in std_logic_vector(15 downto 0);
+	TMDSp,TMDSn : out std_logic_vector(2 downto 0);
+	TMDSp_clock,TMDSn_clock : out std_logic);
+END COMPONENT HDMI_test;
+signal hdmi_pixclk : std_logic;
+signal hdmi_data : std_logic_vector(15 downto 0);
+signal hdmi_TMDSp,hdmi_TMDSn : std_logic_vector(2 downto 0);
+signal hdmi_TMDSp_clock,hdmi_TMDSn_clock : std_logic;
 
 signal clk25 : STD_LOGIC;
 signal resend : STD_LOGIC;
@@ -353,6 +368,22 @@ end process p0mux;
 --bbb <= ov7670_href1&ov7670_href2&ov7670_href3;
 --ccc <= ov7670_vsync1&ov7670_vsync2&ov7670_vsync3;
 --ddd <= sw(0)&sw(1)&sw(2);
+
+h1 : HDMI_test port map (
+	reset => resend,
+	pixclk => hdmi_pixclk,
+	data => hdmi_data,
+	TMDSp => hdmi_TMDSp,
+	TMDSn => hdmi_TMDSn,
+	TMDSp_clock => hdmi_TMDSp_clock,
+	TMDSn_clock => hdmi_TMDSn_clock);
+
+hdmi_pixclk <= clk25;
+hdmi_data <= rgb;
+o_hdmin <= hdmi_TMDSn;
+o_hdmip <= hdmi_TMDSp;
+o_hdmin_clock <= hdmi_TMDSn_clock;
+o_hdmip_clock <= hdmi_TMDSp_clock;
 
 u1: clockmux_old port map
 	(resend, 

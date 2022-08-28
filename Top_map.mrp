@@ -10,36 +10,39 @@ Target Device  : xc3s1200e
 Target Package : fg320
 Target Speed   : -4
 Mapper Version : spartan3e -- $Revision: 1.55 $
-Mapped Date    : Thu Aug 25 14:49:25 2022
+Mapped Date    : Sun Aug 28 13:56:06 2022
 
 Design Summary
 --------------
 Number of errors:      0
-Number of warnings:    8
+Number of warnings:    9
 Logic Utilization:
-  Number of Slice Flip Flops:           455 out of  17,344    2%
-  Number of 4 input LUTs:               864 out of  17,344    4%
+  Number of Slice Flip Flops:           564 out of  17,344    3%
+  Number of 4 input LUTs:             1,086 out of  17,344    6%
 Logic Distribution:
-  Number of occupied Slices:            765 out of   8,672    8%
-    Number of Slices containing only related logic:     765 out of     765 100%
-    Number of Slices containing unrelated logic:          0 out of     765   0%
+  Number of occupied Slices:            925 out of   8,672   10%
+    Number of Slices containing only related logic:     925 out of     925 100%
+    Number of Slices containing unrelated logic:          0 out of     925   0%
       *See NOTES below for an explanation of the effects of unrelated logic.
-  Total Number of 4 input LUTs:       1,207 out of  17,344    6%
-    Number used as logic:               864
-    Number used as a route-thru:        343
+  Total Number of 4 input LUTs:       1,446 out of  17,344    8%
+    Number used as logic:             1,086
+    Number used as a route-thru:        360
 
   The Slice Logic Distribution report is not meaningful if the design is
   over-mapped for a non-slice resource or if Placement fails.
 
-  Number of bonded IOBs:                118 out of     250   47%
+  Number of bonded IOBs:                126 out of     250   50%
     IOB Flip Flops:                      18
+    IOB Master Pads:                      4
+    IOB Slave Pads:                       4
   Number of RAMB16s:                     19 out of      28   67%
-  Number of BUFGMUXs:                     8 out of      24   33%
+  Number of BUFGMUXs:                    10 out of      24   41%
+  Number of DCMs:                         1 out of       8   12%
 
 Average Fanout of Non-Clock Nets:                3.43
 
-Peak Memory Usage:  700 MB
-Total REAL time to MAP completion:  13 secs 
+Peak Memory Usage:  703 MB
+Total REAL time to MAP completion:  14 secs 
 Total CPU time to MAP completion:   13 secs 
 
 Table of Contents
@@ -91,9 +94,13 @@ WARNING:Pack:1542 - The register clk25 has the property IOB=TRUE, but was not
    packed into the output side of an I/O component. The output register symbol
    "clk25" has loads outside the I/O component.
    The output register symbol "clk25" has loads outside the I/O component.
+WARNING:Pack:1542 - The register clk25 has the property IOB=TRUE, but was not
+   packed into the output side of an I/O component. The output register symbol
+   "clk25" has loads outside the I/O component.
+   The output register symbol "clk25" has loads outside the I/O component.
 WARNING:Place:1019 - A clock IOB / clock component pair have been found that are
    not placed at an optimal clock IOB / clock site pair. The clock component
-   <cam_buf1b> is placed at site <BUFGMUX_X2Y1>. The IO component <ov7670_pclk1>
+   <cam_buf1b> is placed at site <BUFGMUX_X3Y2>. The IO component <ov7670_pclk1>
    is placed at site <L16>.  This will not allow the use of the fast path
    between the IO and the Clock buffer. This is normally an ERROR but the
    CLOCK_DEDICATED_ROUTE constraint was applied on COMP.PIN <ov7670_pclk1.PAD>
@@ -103,14 +110,14 @@ WARNING:Place:1019 - A clock IOB / clock component pair have been found that are
    that this error condition be corrected in the design.
 WARNING:Place:1019 - A clock IOB / clock component pair have been found that are
    not placed at an optimal clock IOB / clock site pair. The clock component
-   <cam_buf2b> is placed at site <BUFGMUX_X2Y10>. The IO component
-   <ov7670_pclk2> is placed at site <F14>.  This will not allow the use of the
-   fast path between the IO and the Clock buffer. This is normally an ERROR but
-   the CLOCK_DEDICATED_ROUTE constraint was applied on COMP.PIN
-   <ov7670_pclk2.PAD> allowing your design to continue. This constraint disables
-   all clock placer rules related to the specified COMP.PIN. The use of this
-   override is highly discouraged as it may lead to very poor timing results. It
-   is recommended that this error condition be corrected in the design.
+   <cam_buf2b> is placed at site <BUFGMUX_X3Y9>. The IO component <ov7670_pclk2>
+   is placed at site <F14>.  This will not allow the use of the fast path
+   between the IO and the Clock buffer. This is normally an ERROR but the
+   CLOCK_DEDICATED_ROUTE constraint was applied on COMP.PIN <ov7670_pclk2.PAD>
+   allowing your design to continue. This constraint disables all clock placer
+   rules related to the specified COMP.PIN. The use of this override is highly
+   discouraged as it may lead to very poor timing results. It is recommended
+   that this error condition be corrected in the design.
 WARNING:Place:1019 - A clock IOB / clock component pair have been found that are
    not placed at an optimal clock IOB / clock site pair. The clock component
    <cam_buf3b> is placed at site <BUFGMUX_X1Y10>. The IO component
@@ -132,17 +139,20 @@ INFO:Pack:1716 - Initializing temperature to 85.000 Celsius. (default - Range:
    -40.000 to 100.000 Celsius)
 INFO:Pack:1720 - Initializing voltage to 1.140 Volts. (default - Range: 1.140 to
    1.320 Volts)
-INFO:Place:834 - Only a subset of IOs are locked. Out of 68 IOs, 52 are locked
-   and 16 are not locked. If you would like to print the names of these IOs,
+INFO:Place:834 - Only a subset of IOs are locked. Out of 68 IOs, 33 are locked
+   and 35 are not locked. If you would like to print the names of these IOs,
    please set the environment variable XIL_PAR_DESIGN_CHECK_VERBOSE to 1. 
 INFO:Pack:1650 - Map created a placed design.
+INFO:PhysDesignRules:772 - To achieve optimal frequency synthesis performance
+   with the CLKFX and CLKFX180 outputs of the DCM comp h1/DCM_TMDS_inst, consult
+   the device Interactive Data Sheet.
 
 Section 4 - Removed Logic Summary
 ---------------------------------
    1 block(s) removed
    4 block(s) optimized away
    1 signal(s) removed
- 265 Block(s) redundant
+ 228 Block(s) redundant
 
 Section 5 - Removed Logic
 -------------------------
@@ -169,63 +179,6 @@ VCC 		inst_framebuffer1/XST_VCC
 
 Redundant Block(s):
 TYPE 		BLOCK
-LOCALBUF 		inst_vgatiming/Mcount_pwh_xor<5>111/LUT4_D_BUF
-LOCALBUF 		inst_vgatiming/Mcount_bph_xor<3>111/LUT3_D_BUF
-LOCALBUF 		SCCB/sioc_mux000245/LUT4_L_BUF
-LOCALBUF 		inst_vgatiming/stateh_FSM_FFd2-In43/LUT4_L_BUF
-LOCALBUF 		inst_addrgen1/addr_mux0001<0>21/LUT3_D_BUF
-LOCALBUF 		inst_vgatiming/stateh_cmp_eq00027/LUT4_L_BUF
-LOCALBUF 		inst_vgatiming/statev_cmp_eq000028/LUT4_D_BUF
-LOCALBUF 		inst_vgatiming/statev_cmp_eq000312/LUT4_L_BUF
-LOCALBUF 		inst_vgatiming/statev_cmp_eq000150/LUT4_D_BUF
-LOCALBUF 		SCCB/counter_not0001115/LUT4_L_BUF
-LOCALBUF 		inst_addrgen1/count2_mux0000<2>111/LUT3_D_BUF
-LOCALBUF 		inst_addrgen1/count2_or00001/LUT3_D_BUF
-LOCALBUF 		resend2_mux000011/LUT4_D_BUF
-LOCALBUF 		inst_addrgen1/count1_mux0000<4>_SW0/LUT4_L_BUF
-LOCALBUF 		inst_addrgen1/count2_mux0000<2>_SW1/LUT4_L_BUF
-LOCALBUF 		inst_addrgen1/state_FSM_FFd2-In4/LUT2_L_BUF
-LOCALBUF 		inst_vgatiming/videoOn_and00001/LUT2_L_BUF
-LOCALBUF 		inst_vgatiming/videoOn_and000049/LUT4_L_BUF
-LOCALBUF 		inst_vgatiming/videoOn_and0000106/LUT4_L_BUF
-LOCALBUF 		Registers/done_cmp_eq000026/LUT4_D_BUF
-LOCALBUF 		w4dcmcnt_mux0000<0>31/LUT3_D_BUF
-LOCALBUF 		Registers/sequence<6>811/LUT3_D_BUF
-LOCALBUF 		inst_addrgen1/count1_mux0000<0>11/LUT3_D_BUF
-LOCALBUF 		inst_vgatiming/counter2_mux0000<0>21/LUT4_D_BUF
-LOCALBUF 		inst_vgatiming/count1_mux0000<0>21/LUT4_D_BUF
-LOCALBUF 		send_mux000011_SW0/LUT2_L_BUF
-LOCALBUF 		inst_addrgen1/count1_mux0000<0>5/LUT4_D_BUF
-LOCALBUF 		inst_addrgen1/count1_mux0000<2>_SW0/LUT4_L_BUF
-LOCALBUF 		inst_addrgen1/state_cmp_eq00017/LUT4_D_BUF
-LOCALBUF 		inst_addrgen1/state_cmp_eq000115/LUT4_D_BUF
-LOCALBUF 		inst_vgatiming/state0_cmp_eq000317/LUT4_L_BUF
-LOCALBUF 		inst_vgatiming/state0_cmp_eq00019/LUT4_L_BUF
-LOCALBUF 		state_cmp_eq000127/LUT4_D_BUF
-LOCALBUF 		SCCB/counter_not0001240/LUT4_D_BUF
-LOCALBUF 		inst_ov7670capt1/address_mux0001<0>137/LUT4_L_BUF
-LOCALBUF 		Registers/sequence<6>14_SW0/LUT3_L_BUF
-LOCALBUF 		inst_addrgen1/addr_mux0001<0>337/LUT4_L_BUF
-LOCALBUF 		Registers/sequence<6>10_SW0/LUT4_L_BUF
-LOCALBUF 		inst_ov7670capt1/address_mux0001<0>178/LUT4_D_BUF
-LOCALBUF 		Registers/Mcount_sequence_xor<4>1211/LUT4_D_BUF
-LOCALBUF 		resend2_mux000018_SW0/LUT2_L_BUF
-LOCALBUF 		inst_addrgen1/count1_mux0000<0>66/LUT4_L_BUF
-LOCALBUF 		inst_vgatiming/state0_FSM_FFd1-In18/LUT4_L_BUF
-LOCALBUF 		inst_addrgen1/addr_mux0001<0>3110/LUT4_D_BUF
-LOCALBUF 		SCCB/scaler_and000014/LUT4_D_BUF
-LOCALBUF 		SCCB/sioc_mux000260/LUT4_L_BUF
-LOCALBUF 		inst_vgatiming/statev_cmp_eq000332/LUT4_D_BUF
-LOCALBUF 		inst_vgatiming/counter2_mux0000<3>21/LUT4_D_BUF
-LOCALBUF 		Registers/sequence<6>13_SW0/LUT4_L_BUF
-LOCALBUF 		Registers/sequence<6>15_SW0/LUT4_L_BUF
-LOCALBUF 		Registers/sequence<6>3_SW0/LUT4_D_BUF
-LOCALBUF 		Registers/sequence<6>923/LUT4_D_BUF
-LOCALBUF 		Registers/sequence<6>1114_SW0/LUT4_L_BUF
-LOCALBUF 		inst_addrgen1/state_FSM_FFd2-In16/LUT4_L_BUF
-LOCALBUF 		inst_addrgen1/count1_mux0000<0>66_SW0_SW0/LUT4_L_BUF
-LOCALBUF 		inst_addrgen1/count2_mux0000<0>_SW2/LUT4_L_BUF
-LOCALBUF 		Registers/sequence<6>932/LUT4_L_BUF
 LUT1 		inst_debounce/Mcount_counter_cy<1>_rt
 LUT1 		inst_debounce/Mcount_counter_cy<2>_rt
 LUT1 		inst_debounce/Mcount_counter_cy<3>_rt
@@ -410,6 +363,22 @@ LUT1 		SCCB/Mcount_counter_cy<4>_rt
 LUT1 		SCCB/Mcount_counter_cy<3>_rt
 LUT1 		SCCB/Mcount_counter_cy<2>_rt
 LUT1 		SCCB/Mcount_counter_cy<1>_rt
+LUT1 		h1/Mcount_CounterY_cy<8>_rt
+LUT1 		h1/Mcount_CounterY_cy<7>_rt
+LUT1 		h1/Mcount_CounterY_cy<6>_rt
+LUT1 		h1/Mcount_CounterY_cy<5>_rt
+LUT1 		h1/Mcount_CounterY_cy<4>_rt
+LUT1 		h1/Mcount_CounterY_cy<3>_rt
+LUT1 		h1/Mcount_CounterY_cy<2>_rt
+LUT1 		h1/Mcount_CounterY_cy<1>_rt
+LUT1 		h1/Mcount_CounterX_cy<8>_rt
+LUT1 		h1/Mcount_CounterX_cy<7>_rt
+LUT1 		h1/Mcount_CounterX_cy<6>_rt
+LUT1 		h1/Mcount_CounterX_cy<5>_rt
+LUT1 		h1/Mcount_CounterX_cy<4>_rt
+LUT1 		h1/Mcount_CounterX_cy<3>_rt
+LUT1 		h1/Mcount_CounterX_cy<2>_rt
+LUT1 		h1/Mcount_CounterX_cy<1>_rt
 LUT1 		inst_debounce/Mcount_counter_xor<23>_rt
 LUT1 		Madd_counter_addsub0000_xor<12>_rt
 LUT1 		Madd_w4dcmcnt_addsub0000_xor<23>_rt
@@ -426,6 +395,8 @@ LUT1 		inst_vgatiming/Madd_hPos_addsub0000_xor<9>_rt
 LUT1 		inst_vgatiming/Madd_count1_share0000_xor<9>_rt
 LUT1 		SCCB/Mcount_scaler_xor<7>_rt
 LUT1 		SCCB/Mcount_counter_xor<23>_rt
+LUT1 		h1/Mcount_CounterY_xor<9>_rt
+LUT1 		h1/Mcount_CounterX_xor<9>_rt
 INV 		inst_vgatiming/reset_inv1_INV_0
 INV 		ov7670_reset21_INV_0
 INV 		vmax0_0_mux00001_INV_0
@@ -435,6 +406,8 @@ INV 		clk25_not00011_INV_0
 INV 		cc_not00011_INV_0
 INV 		cc4_not00011_INV_0
 INV 		Mcount_vmax_xor<0>11_INV_0
+INV 		h1/encode_R/VDE_inv1_INV_0
+INV 		h1/Mcount_TMDS_mod10_xor<0>11_INV_0
 INV
 		inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid
 .cstr/out41_INV_0
@@ -463,6 +436,14 @@ Section 6 - IOB Properties
 | o_debug<5>                         | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | o_debug<6>                         | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | o_debug<7>                         | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| o_hdmin<0>                         | DIFFS            | OUTPUT    | LVDS_25              |       |          |      |              |          | 0 / 0    |
+| o_hdmin<1>                         | DIFFS            | OUTPUT    | LVDS_25              |       |          |      |              |          | 0 / 0    |
+| o_hdmin<2>                         | DIFFS            | OUTPUT    | LVDS_25              |       |          |      |              |          | 0 / 0    |
+| o_hdmin_clock                      | DIFFS            | OUTPUT    | LVDS_25              |       |          |      |              |          | 0 / 0    |
+| o_hdmip<0>                         | DIFFM            | OUTPUT    | LVDS_25              |       |          |      |              |          | 0 / 0    |
+| o_hdmip<1>                         | DIFFM            | OUTPUT    | LVDS_25              |       |          |      |              |          | 0 / 0    |
+| o_hdmip<2>                         | DIFFM            | OUTPUT    | LVDS_25              |       |          |      |              |          | 0 / 0    |
+| o_hdmip_clock                      | DIFFM            | OUTPUT    | LVDS_25              |       |          |      |              |          | 0 / 0    |
 | ov7670_data1<0>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
 | ov7670_data1<1>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
 | ov7670_data1<2>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
@@ -637,6 +618,32 @@ DISABLE_ATTR:LOW
 BUFGMUX "clkcambuf_BUFG":
 DISABLE_ATTR:LOW
 
+
+
+BUFGMUX "h1/BUFG_TMDSp":
+DISABLE_ATTR:LOW
+
+
+
+BUFGMUX "h1/BUFG_ab":
+DISABLE_ATTR:LOW
+
+
+
+DCM "h1/DCM_TMDS_inst":
+CLKDV_DIVIDE:2
+CLKOUT_PHASE_SHIFT:NONE
+CLK_FEEDBACK:1X
+DESKEW_ADJUST:7
+DFS_FREQUENCY_MODE:LOW
+DLL_FREQUENCY_MODE:LOW
+DUTY_CYCLE_CORRECTION:TRUE
+FACTORY_JF1:0XC0
+FACTORY_JF2:0X80
+CLKFX_DIVIDE = 1
+CLKFX_MULTIPLY = 10
+PHASE_SHIFT = 0
+X_CLKIN_PERIOD = 10.000000
 
 
 RAMB16
@@ -2141,19 +2148,23 @@ Section 13 - Utilization by Hierarchy
 +--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | Module                            | Partition | Slices        | Slice Reg     | LUTs          | LUTRAM        | BRAM      | MULT18X18 | BUFG  | DCM   | Full Hierarchical Name                                                                                                 |
 +--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Top/                              |           | 113/798       | 63/455        | 174/1170      | 0/0           | 0/19      | 0/0       | 8/8   | 0/0   | Top                                                                                                                    |
-| +Registers                        |           | 97/97         | 23/23         | 146/146       | 0/0           | 0/0       | 0/0       | 0/0   | 0/0   | Top/Registers                                                                                                          |
-| +SCCB                             |           | 103/103       | 97/97         | 155/155       | 0/0           | 0/0       | 0/0       | 0/0   | 0/0   | Top/SCCB                                                                                                               |
-| +inst_addrgen1                    |           | 66/66         | 47/47         | 118/118       | 0/0           | 0/0       | 0/0       | 0/0   | 0/0   | Top/inst_addrgen1                                                                                                      |
+| Top/                              |           | 117/974       | 63/564        | 172/1405      | 0/0           | 0/19      | 0/0       | 8/10  | 0/1   | Top                                                                                                                    |
+| +Registers                        |           | 89/89         | 23/23         | 144/144       | 0/0           | 0/0       | 0/0       | 0/0   | 0/0   | Top/Registers                                                                                                          |
+| +SCCB                             |           | 114/114       | 97/97         | 154/154       | 0/0           | 0/0       | 0/0       | 0/0   | 0/0   | Top/SCCB                                                                                                               |
+| +h1                               |           | 76/172        | 73/109        | 95/243        | 0/0           | 0/0       | 0/0       | 2/2   | 1/1   | Top/h1                                                                                                                 |
+| ++encode_B                        |           | 32/32         | 12/12         | 50/50         | 0/0           | 0/0       | 0/0       | 0/0   | 0/0   | Top/h1/encode_B                                                                                                        |
+| ++encode_G                        |           | 32/32         | 12/12         | 49/49         | 0/0           | 0/0       | 0/0       | 0/0   | 0/0   | Top/h1/encode_G                                                                                                        |
+| ++encode_R                        |           | 32/32         | 12/12         | 49/49         | 0/0           | 0/0       | 0/0       | 0/0   | 0/0   | Top/h1/encode_R                                                                                                        |
+| +inst_addrgen1                    |           | 65/65         | 47/47         | 117/117       | 0/0           | 0/0       | 0/0       | 0/0   | 0/0   | Top/inst_addrgen1                                                                                                      |
 | +inst_debounce                    |           | 18/18         | 25/25         | 32/32         | 0/0           | 0/0       | 0/0       | 0/0   | 0/0   | Top/inst_debounce                                                                                                      |
-| +inst_framebuffer1                |           | 0/137         | 0/5           | 0/164         | 0/0           | 0/19      | 0/0       | 0/0   | 0/0   | Top/inst_framebuffer1                                                                                                  |
-| ++U0                              |           | 0/137         | 0/5           | 0/164         | 0/0           | 0/19      | 0/0       | 0/0   | 0/0   | Top/inst_framebuffer1/U0                                                                                               |
-| +++xst_blk_mem_generator          |           | 0/137         | 0/5           | 0/164         | 0/0           | 0/19      | 0/0       | 0/0   | 0/0   | Top/inst_framebuffer1/U0/xst_blk_mem_generator                                                                         |
-| ++++gnativebmg.native_blk_mem_gen |           | 0/137         | 0/5           | 0/164         | 0/0           | 0/19      | 0/0       | 0/0   | 0/0   | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen                                           |
-| +++++valid.cstr                   |           | 2/137         | 0/5           | 2/164         | 0/0           | 0/19      | 0/0       | 0/0   | 0/0   | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr                                |
+| +inst_framebuffer1                |           | 0/136         | 0/5           | 0/164         | 0/0           | 0/19      | 0/0       | 0/0   | 0/0   | Top/inst_framebuffer1                                                                                                  |
+| ++U0                              |           | 0/136         | 0/5           | 0/164         | 0/0           | 0/19      | 0/0       | 0/0   | 0/0   | Top/inst_framebuffer1/U0                                                                                               |
+| +++xst_blk_mem_generator          |           | 0/136         | 0/5           | 0/164         | 0/0           | 0/19      | 0/0       | 0/0   | 0/0   | Top/inst_framebuffer1/U0/xst_blk_mem_generator                                                                         |
+| ++++gnativebmg.native_blk_mem_gen |           | 0/136         | 0/5           | 0/164         | 0/0           | 0/19      | 0/0       | 0/0   | 0/0   | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen                                           |
+| +++++valid.cstr                   |           | 2/136         | 0/5           | 2/164         | 0/0           | 0/19      | 0/0       | 0/0   | 0/0   | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr                                |
 | ++++++bindec_a.bindec_inst_a      |           | 1/1           | 0/0           | 1/1           | 0/0           | 0/0       | 0/0       | 0/0   | 0/0   | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/bindec_a.bindec_inst_a         |
 | ++++++bindec_b.bindec_inst_b      |           | 1/1           | 0/0           | 1/1           | 0/0           | 0/0       | 0/0       | 0/0   | 0/0   | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/bindec_b.bindec_inst_b         |
-| ++++++has_mux_b.B                 |           | 133/133       | 5/5           | 160/160       | 0/0           | 0/0       | 0/0       | 0/0   | 0/0   | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/has_mux_b.B                    |
+| ++++++has_mux_b.B                 |           | 132/132       | 5/5           | 160/160       | 0/0           | 0/0       | 0/0       | 0/0   | 0/0   | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/has_mux_b.B                    |
 | ++++++ramloop[0].ram.r            |           | 0/0           | 0/0           | 0/0           | 0/0           | 0/1       | 0/0       | 0/0   | 0/0   | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r               |
 | +++++++s3_init.ram                |           | 0/0           | 0/0           | 0/0           | 0/0           | 1/1       | 0/0       | 0/0   | 0/0   | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/s3_init.ram   |
 | ++++++ramloop[10].ram.r           |           | 0/0           | 0/0           | 0/0           | 0/0           | 0/1       | 0/0       | 0/0   | 0/0   | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[10].ram.r              |
@@ -2193,9 +2204,9 @@ Section 13 - Utilization by Hierarchy
 | ++++++ramloop[9].ram.r            |           | 0/0           | 0/0           | 0/0           | 0/0           | 0/1       | 0/0       | 0/0   | 0/0   | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[9].ram.r               |
 | +++++++s3_init.ram                |           | 0/0           | 0/0           | 0/0           | 0/0           | 1/1       | 0/0       | 0/0   | 0/0   | Top/inst_framebuffer1/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[9].ram.r/s3_init.ram   |
 | +inst_imagegen                    |           | 16/16         | 0/0           | 16/16         | 0/0           | 0/0       | 0/0       | 0/0   | 0/0   | Top/inst_imagegen                                                                                                      |
-| +inst_ov7670capt1                 |           | 51/51         | 42/42         | 54/54         | 0/0           | 0/0       | 0/0       | 0/0   | 0/0   | Top/inst_ov7670capt1                                                                                                   |
-| +inst_vgatiming                   |           | 165/165       | 134/134       | 288/288       | 0/0           | 0/0       | 0/0       | 0/0   | 0/0   | Top/inst_vgatiming                                                                                                     |
-| +u1                               |           | 13/23         | 4/14          | 14/19         | 0/0           | 0/0       | 0/0       | 0/0   | 0/0   | Top/u1                                                                                                                 |
+| +inst_ov7670capt1                 |           | 47/47         | 42/42         | 53/53         | 0/0           | 0/0       | 0/0       | 0/0   | 0/0   | Top/inst_ov7670capt1                                                                                                   |
+| +inst_vgatiming                   |           | 167/167       | 134/134       | 287/287       | 0/0           | 0/0       | 0/0       | 0/0   | 0/0   | Top/inst_vgatiming                                                                                                     |
+| +u1                               |           | 14/24         | 4/14          | 14/19         | 0/0           | 0/0       | 0/0       | 0/0   | 0/0   | Top/u1                                                                                                                 |
 | ++g0[0].u0                        |           | 2/2           | 2/2           | 1/1           | 0/0           | 0/0       | 0/0       | 0/0   | 0/0   | Top/u1/g0[0].u0                                                                                                        |
 | ++g0[1].u0                        |           | 2/2           | 2/2           | 1/1           | 0/0           | 0/0       | 0/0       | 0/0   | 0/0   | Top/u1/g0[1].u0                                                                                                        |
 | ++g0[2].u0                        |           | 2/2           | 2/2           | 1/1           | 0/0           | 0/0       | 0/0       | 0/0   | 0/0   | Top/u1/g0[2].u0                                                                                                        |

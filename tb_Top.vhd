@@ -71,7 +71,9 @@ G_FE_WAIT_BITS : integer := 9 -- sccb wait for cameras
 				vga_rgb : out STD_LOGIC_VECTOR(7 downto 0);
 				vga_hsync : out STD_LOGIC;
 				vga_vsync : out STD_LOGIC;
-				o_debug : out std_logic_vector(7 downto 0)
+				o_debug : out std_logic_vector(7 downto 0);
+				o_hdmi_color : out std_logic_vector(2 downto 0);
+				o_hdmi_clock : out std_logic
 			 );
 end component Top;
 
@@ -157,6 +159,8 @@ signal o_r	: STD_LOGIC_VECTOR(7 downto 0);
 signal o_g	: STD_LOGIC_VECTOR(7 downto 0);
 signal o_b	: STD_LOGIC_VECTOR(7 downto 0);
 signal o_debug : std_logic_vector(7 downto 0);
+signal o_hdmi_color : std_logic_vector(2 downto 0);
+signal o_hdmi_clock : std_logic;
 
 BEGIN
 
@@ -280,7 +284,9 @@ vga_o_psave => vga_o_psave,
 vga_o_clk25 => vga_o_clk25,
 vga_o_hsync => vga_o_hsync,
 vga_o_vsync => vga_o_vsync,
-o_debug => o_debug
+o_debug => o_debug,
+o_hdmi_color => o_hdmi_color,
+o_hdmi_clock => o_hdmi_clock
 );
 
 camera_xclk_process :process
