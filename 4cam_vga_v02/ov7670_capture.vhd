@@ -32,26 +32,33 @@ Library UNISIM;
 use UNISIM.vcomponents.all;
 
 entity ov7670_capture is
-Generic (PIXELS : integer := 0);
+Generic (
+PIXELS : integer := 0;
+ADDRESS1 : integer := 0;
+BITS : integer := 0
+);
     Port ( reset : in std_logic; pclk : in  STD_LOGIC;
            vsync : in  STD_LOGIC;
            href : in  STD_LOGIC;
-           d : in  STD_LOGIC_VECTOR (2 downto 0);
-           addr : out  STD_LOGIC_VECTOR (14 downto 0);
-           dout : out  STD_LOGIC_VECTOR (2 downto 0);
+           d : in  STD_LOGIC_VECTOR (7 downto 0);
+           addr : out  STD_LOGIC_VECTOR (ADDRESS1-1 downto 0);
+           dout : out  STD_LOGIC_VECTOR (BITS-1 downto 0);
            we : out  STD_LOGIC_VECTOR (0 downto 0));
 end ov7670_capture;
 
 architecture Behavioral of ov7670_capture is
-   signal d_latch      : std_logic_vector((d'left+1)*2-1 downto 0) := (others => '0');
+   signal d_latch      : std_logic_vector(d'left*2+1 downto 0) := (others => '0');
    signal address      : STD_LOGIC_VECTOR(addr'range) := (others => '0');
-   signal row         : std_logic_vector(1 downto 0)  := (others => '0');
-   signal href_last    : std_logic_vector(6 downto 0)  := (others => '0');
+--   signal row         : std_logic_vector(1 downto 0)  := (others => '0');
+   signal row         : std_logic_vector(0 downto 0)  := (others => '0');
+--   signal href_last    : std_logic_vector(6 downto 0)  := (others => '0');
+--   signal href_last    : std_logic_vector(0 downto 0)  := (others => '0');
+--   signal href_last    : std_logic_vector(1 downto 0)  := (others => '0');
    signal we_reg       : std_logic := '0';
    signal href_hold    : std_logic := '0';
    signal latched_vsync : STD_LOGIC := '0';
    signal latched_href  : STD_LOGIC := '0';
-   signal latched_d     : STD_LOGIC_VECTOR (7 downto 0) := (others => '0');
+   signal latched_d     : STD_LOGIC_VECTOR (d'range) := (others => '0');
 --	 attribute IOB : string;
 --	 attribute IOB of latched_vsync : signal is "TRUE";
 --	 attribute IOB of latched_href : signal is "TRUE";
@@ -59,20 +66,22 @@ architecture Behavioral of ov7670_capture is
 begin
    addr <= address;
    we(0) <= we_reg;
---	 dout<= d_latch(11 downto 8) & d_latch(7 downto 4) & d_latch(3 downto 0);
+	 dout<= d_latch;
 --   dout<= d_latch(11) & d_latch(7) & d_latch(3);
 --   dout<= d_latch(9) & d_latch(5) & d_latch(1);
-   dout<= d_latch(8) & d_latch(4) & d_latch(0); 
+--   dout<= d_latch(8) & d_latch(4) & d_latch(0); 
+--   dout(0)<= d_latch(8); 
    
 capture_process: process(pclk,reset)
    begin
 	 if (reset = '1') then
 	 address <= (others => '0');
-	 row <= "00";
+--	 row <= "00";
+	 row <= (others => '0');
 	 href_hold <= '0';
 	 d_latch <= (others => '0');
 	 we_reg <= '0';
-	 href_last <= (others => '0');
+--	 href_last <= (others => '0');
       elsif rising_edge(pclk) then
          if we_reg = '1' then
 					if (to_integer(unsigned(address)) = PIXELS-1) then
@@ -85,35 +94,50 @@ capture_process: process(pclk,reset)
          -- detect the rising edge on href - the start of the scan row
          if href_hold = '0' and latched_href = '1' then
             case row is
-               when "00"   => row <= "01";
-               when "01"   => row <= "10";
-               when "10"   => row <= "11";
-               when others => row <= "00";
+--               when "00"   => row <= "01";
+--               when "01"   => row <= "10";
+--               when "10"   => row <= "11";
+--               when others => row <= "00";
+               when "0"   => row <= "1";
+               when "1"   => row <= "0";
+               when others => row <= "0";
             end case;
+--						we_reg <= '1';
+						else
+--						we_reg  <= '0';
          end if;
          href_hold <= latched_href;
          
          -- capturing the data from the camera, 12-bit RGB
          if latched_href = '1' then
-            d_latch(d_latch'range) <= d_latch(d'range) & latched_d;
+            d_latch <= d_latch(7 downto 0) & latched_d;
+						we_reg <= not we_reg;
+--						we_reg <= '1';
+				else
+				we_reg  <= '0';
+				d_latch <= (others => '0');
          end if;
-         we_reg  <= '0';
+         
+--						we_reg  <= '0';
 
          -- Is a new screen about to start (i.e. we have to restart capturing
-         if latched_vsync = '1' then 
+         if latched_vsync = '0' then 
             address      <= (others => '0');
-            href_last    <= (others => '0');
+--            href_last    <= (others => '0');
             row         <= (others => '0');
+--						we_reg <= '0';
          else
             -- If not, set the write enable whenever we need to capture a pixel
-            if href_last(href_last'high) = '1' then
-               if row = "10" then
-                  we_reg <= '1';
-               end if;
-               href_last <= (others => '0');
-            else
-               href_last <= href_last(href_last'high-1 downto 0) & latched_href;
-            end if;
+--            if href_last(href_last'high) = '1' then
+--               if row = "10" then
+--               if row = "0" then
+--                  we_reg <= '1';
+--               end if;
+--               href_last <= (others => '0');
+--            else
+--               href_last <= href_last(href_last'high-1 downto 0) & latched_href;
+--							 we_reg <= '0';
+--            end if;
          end if;
       end if;
 		end process capture_process;

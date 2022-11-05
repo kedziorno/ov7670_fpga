@@ -40,36 +40,45 @@ ARCHITECTURE behavior OF tb_Top IS
 component Top is
 Generic (
 G_PB_BITS : integer := 6;
-G_WAIT1 : integer := 7
+G_WAIT1 : integer := 7; -- wait for reset dcm and cameras
+G_FE_WAIT_BITS : integer := 9 -- sccb wait for cameras
 );
-Port (
-clk50	: in STD_LOGIC; -- Crystal Oscilator 50MHz  --B8
-clkcam	: in STD_LOGIC; -- Crystal Oscilator 23.9616 MHz  --U9
-pb		: in STD_LOGIC; -- Push Button --B18
-sw		: in STD_LOGIC; -- Push Button --G18
-led1 : out STD_LOGIC; -- Indicates configuration has been done --J14
-led2 : out STD_LOGIC; -- Indicates configuration has been done --J14
-led3 : out STD_LOGIC; -- Indicates configuration has been done --J14
-led4 : out STD_LOGIC; -- Indicates configuration has been done --J14
-anode : out std_logic_vector(3 downto 0);
-ov7670_reset1,ov7670_reset2,ov7670_reset3,ov7670_reset4  : out  STD_LOGIC;
-ov7670_pclk1,ov7670_pclk2,ov7670_pclk3,ov7670_pclk4  : in  STD_LOGIC; -- Pmod JB8 --R16
-ov7670_xclk1,ov7670_xclk2,ov7670_xclk3,ov7670_xclk4  : out STD_LOGIC; -- Pmod JB2 --R18
-ov7670_vsync1,ov7670_vsync2,ov7670_vsync3,ov7670_vsync4 : in  STD_LOGIC; -- Pmod JB9 --T18
-ov7670_href1,ov7670_href2,ov7670_href3,ov7670_href4  : in  STD_LOGIC; -- Pmod JB3 --R15
-ov7670_data1,ov7670_data2,ov7670_data3,ov7670_data4  : in  STD_LOGIC_vector(2 downto 0);
-ov7670_sioc1,ov7670_sioc2,ov7670_sioc3,ov7670_sioc4  : out STD_LOGIC; -- Pmod JB10 --J12
-ov7670_siod1,ov7670_siod2,ov7670_siod3,ov7670_siod4  : inout STD_LOGIC; -- Pmod JB4 --H16
-vga_hsync : out STD_LOGIC; --T4
-vga_vsync : out STD_LOGIC; --U3
-vga_rgb	: out STD_LOGIC_VECTOR(7 downto 0)
-);
+	Port	(
+				clkcam	: in STD_LOGIC;
+				pb		: in STD_LOGIC;
+				sw		: in STD_LOGIC_VECTOR(3 downto 0);
+				led1 : out STD_LOGIC;
+				led2 : out STD_LOGIC;
+				led3 : out STD_LOGIC;
+				led4 : out STD_LOGIC;
+			  anode : out std_logic_vector(3 downto 0);
+				ov7670_reset1,ov7670_reset2,ov7670_reset3,ov7670_reset4 : out  STD_LOGIC;
+				ov7670_pwdn1,ov7670_pwdn2,ov7670_pwdn3,ov7670_pwdn4 : out  STD_LOGIC;
+				ov7670_pclk1,ov7670_pclk2,ov7670_pclk3,ov7670_pclk4  : in  STD_LOGIC;
+				ov7670_xclk1,ov7670_xclk2,ov7670_xclk3,ov7670_xclk4  : out STD_LOGIC;
+				ov7670_vsync1,ov7670_vsync2,ov7670_vsync3,ov7670_vsync4 : in  STD_LOGIC;
+				ov7670_href1,ov7670_href2,ov7670_href3,ov7670_href4  : in  STD_LOGIC;
+				ov7670_data1,ov7670_data2,ov7670_data3,ov7670_data4  : in  STD_LOGIC_vector(7 downto 0);
+				ov7670_sioc1,ov7670_sioc2,ov7670_sioc3,ov7670_sioc4  : out STD_LOGIC;
+				ov7670_siod1,ov7670_siod2,ov7670_siod3,ov7670_siod4  : inout STD_LOGIC;
+				vga_o_blankn : out STD_LOGIC;
+				vga_o_syncn : out STD_LOGIC;
+				vga_o_psave : out STD_LOGIC;
+				vga_o_clk25 : out STD_LOGIC;
+				vga_o_hsync : out STD_LOGIC;
+				vga_o_vsync : out STD_LOGIC;
+				vga_o_rgb : out STD_LOGIC_VECTOR(15 downto 0);
+				vga_rgb : out STD_LOGIC_VECTOR(7 downto 0);
+				vga_hsync : out STD_LOGIC;
+				vga_vsync : out STD_LOGIC;
+				o_debug : out std_logic_vector(7 downto 0)
+			 );
 end component Top;
 
 --Inputs
-signal clk50 : std_logic := '0';
 signal clkcam : std_logic := '0';
 signal pb : std_logic := '0';
+signal sw : std_logic_vector(3 downto 0) := "0000";
 signal ov7670_pclk1,ov7670_pclk2,ov7670_pclk3,ov7670_pclk4 : std_logic := '0';
 signal ov7670_vsync1,ov7670_vsync2,ov7670_vsync3,ov7670_vsync4 : std_logic := '0';
 signal ov7670_href1,ov7670_href2,ov7670_href3,ov7670_href4 : std_logic := '0';
@@ -84,18 +93,27 @@ signal ov7670_xclk1,ov7670_xclk2,ov7670_xclk3,ov7670_xclk4 : std_logic;
 signal ov7670_sioc1,ov7670_sioc2,ov7670_sioc3,ov7670_sioc4 : std_logic;
 signal ov7670_pwdn1,ov7670_pwdn2,ov7670_pwdn3,ov7670_pwdn4 : std_logic;
 signal ov7670_reset1,ov7670_reset2,ov7670_reset3,ov7670_reset4 : std_logic;
-signal vga_hsync : std_logic;
-signal vga_vsync : std_logic;
-signal vga_rgb : std_logic_vector(7 downto 0);
+signal o_cs : STD_LOGIC;
+signal o_do : STD_LOGIC;
+signal o_ck : STD_LOGIC;
+signal o_reset : STD_LOGIC;
+signal o_rs : STD_LOGIC;
 
--- Clock period definitions
+-- Constants and Clock period definitions
 constant clk50_period : time := 20 ns; -- 50mhz
 constant clkcam_period : time := 10 ns; -- 100mhz
 constant vga_25dot175 : time := 39.7219464 ns; -- 25.175mhz
 constant camera_i_xclk_period1 : time := 41.733 ns; -- 23.9616mhz
 constant camera_i_xclk_period2 : time := 41.667 ns; -- 24mhz
+constant camera_i_xclk_period3 : time := 1000.000 ns; -- 1mhz
+constant camera_i_xclk_period4 : time := 625.000 ns; -- 1.6mhz
+constant camera_i_xclk_period5 : time := 666.333 ns; -- 1.5mhz
+constant camera_i_xclk_period6 : time := 333.333 ns; -- 3.0mhz
+constant USE_OUT_CLOCK : std_logic := '1'; -- XXX 1 use outcoming signal clock to camera, 0 going from board(div/dcm)
+signal camera_i_xclk : std_logic := '0';
+constant camera_i_xclk_period : time := camera_i_xclk_period6;
 
-COMPONENT camera
+COMPONENT camera_qqvga
 GENERIC(
 constant CLOCK_PERIOD : integer := 42; -- 21/42/100 ns - 10/24/48 MHZ - Min/Typ/Max Unit
 constant RAW_RGB : integer := 0; -- 0 - RAW / 1 - RGB
@@ -127,16 +145,22 @@ signal camera_o_hs1,camera_o_hs2,camera_o_hs3,camera_o_hs4 : std_logic;
 signal camera_o_pclk1,camera_o_pclk2,camera_o_pclk3,camera_o_pclk4 : std_logic;
 signal camera_o_d1,camera_o_d2,camera_o_d3,camera_o_d4 : std_logic_vector(7 downto 0);
 
-signal xclk : std_logic;
-signal sw : std_logic;
-
 signal anode : std_logic_vector (3 downto 0);
+
+signal vga_o_blankn : STD_LOGIC;
+signal vga_o_syncn : STD_LOGIC;
+signal vga_o_psave : STD_LOGIC;
+signal vga_o_clk25 : STD_LOGIC;
+signal vga_o_hsync : STD_LOGIC;
+signal vga_o_vsync : STD_LOGIC;
+signal o_r	: STD_LOGIC_VECTOR(7 downto 0);
+signal o_g	: STD_LOGIC_VECTOR(7 downto 0);
+signal o_b	: STD_LOGIC_VECTOR(7 downto 0);
+signal o_debug : std_logic_vector(7 downto 0);
 
 BEGIN
 
-sw <= '1';
-
-cam1 : camera PORT MAP (
+cam1 : camera_qqvga PORT MAP (
 camera_io_scl => camera_io_scl1,
 camera_io_sda => camera_io_sda1,
 camera_o_vs => camera_o_vs1,
@@ -148,7 +172,7 @@ camera_i_rst => camera_i_rst1,
 camera_i_pwdn => camera_i_pwdn1
 );
 
-cam2 : camera PORT MAP (
+cam2 : camera_qqvga PORT MAP (
 camera_io_scl => camera_io_scl2,
 camera_io_sda => camera_io_sda2,
 camera_o_vs => camera_o_vs2,
@@ -160,7 +184,7 @@ camera_i_rst => camera_i_rst2,
 camera_i_pwdn => camera_i_pwdn2
 );
 
-cam3 : camera PORT MAP (
+cam3 : camera_qqvga PORT MAP (
 camera_io_scl => camera_io_scl3,
 camera_io_sda => camera_io_sda3,
 camera_o_vs => camera_o_vs3,
@@ -172,7 +196,7 @@ camera_i_rst => camera_i_rst3,
 camera_i_pwdn => camera_i_pwdn3
 );
 
-cam4 : camera PORT MAP (
+cam4 : camera_qqvga PORT MAP (
 camera_io_scl => camera_io_scl4,
 camera_io_sda => camera_io_sda4,
 camera_o_vs => camera_o_vs4,
@@ -184,25 +208,25 @@ camera_i_rst => camera_i_rst4,
 camera_i_pwdn => camera_i_pwdn4
 );
 
-camera_i_xclk1 <= ov7670_xclk1; -- cam <- dev
+camera_i_xclk1 <= ov7670_xclk1 when USE_OUT_CLOCK = '0' else camera_i_xclk; -- cam <- dev
 ov7670_pclk1 <= camera_o_pclk1; -- dev <- cam
 ov7670_data1 <= camera_o_d1(2 downto 0);
 ov7670_vsync1 <= camera_o_vs1;
 ov7670_href1 <= camera_o_hs1;
 
-camera_i_xclk2 <= ov7670_xclk2; -- cam <- dev
+camera_i_xclk2 <= ov7670_xclk2 when USE_OUT_CLOCK = '0' else camera_i_xclk; -- cam <- dev
 ov7670_pclk2 <= camera_o_pclk2; -- dev <- cam
 ov7670_data2 <= camera_o_d2(2 downto 0);
 ov7670_vsync2 <= camera_o_vs2;
 ov7670_href2 <= camera_o_hs2;
 
-camera_i_xclk3 <= ov7670_xclk3; -- cam <- dev
+camera_i_xclk3 <= ov7670_xclk3 when USE_OUT_CLOCK = '0' else camera_i_xclk; -- cam <- dev
 ov7670_pclk3 <= camera_o_pclk3; -- dev <- cam
 ov7670_data3 <= camera_o_d3(2 downto 0);
 ov7670_vsync3 <= camera_o_vs3;
 ov7670_href3 <= camera_o_hs3;
 
-camera_i_xclk4 <= ov7670_xclk4; -- cam <- dev
+camera_i_xclk4 <= ov7670_xclk4 when USE_OUT_CLOCK = '0' else camera_i_xclk; -- cam <- dev
 ov7670_pclk4 <= camera_o_pclk4; -- dev <- cam
 ov7670_data4 <= camera_o_d4(2 downto 0);
 ov7670_vsync4 <= camera_o_vs4;
@@ -210,7 +234,6 @@ ov7670_href4 <= camera_o_hs4;
 
 -- Instantiate the Unit Under Test (UUT)
 uut: Top PORT MAP (
-clk50 => clk50,
 clkcam => clkcam,
 pb => pb,
 sw => sw,
@@ -251,18 +274,28 @@ ov7670_siod1 => ov7670_siod1,
 ov7670_siod2 => ov7670_siod2,
 ov7670_siod3 => ov7670_siod3,
 ov7670_siod4 => ov7670_siod4,
-vga_hsync => vga_hsync,
-vga_vsync => vga_vsync,
-vga_rgb => vga_rgb
+vga_o_blankn => vga_o_blankn,
+vga_o_syncn => vga_o_syncn,
+vga_o_psave => vga_o_psave,
+vga_o_clk25 => vga_o_clk25,
+vga_o_hsync => vga_o_hsync,
+vga_o_vsync => vga_o_vsync,
+o_debug => o_debug
 );
 
--- Clock process definitions
-clk50_process :process
+camera_xclk_process :process
+variable flag : std_logic := '0';
 begin
-clk50 <= '0';
-wait for clk50_period/2;
-clk50 <= '1';
-wait for clk50_period/2;
+if (flag = '0') then
+flag := '1';
+wait for camera_i_xclk_period*15;
+else
+flag := '1';
+camera_i_xclk <= '0';
+wait for camera_i_xclk_period/2;
+camera_i_xclk <= '1';
+wait for camera_i_xclk_period/2;
+end if;
 end process;
 
 clkcam_process :process
@@ -273,24 +306,78 @@ clkcam <= '1';
 wait for clkcam_period/2;
 end process;
 
---camera_i_xclkp :process
---begin
---xclk <= '0';
---wait for camera_i_xclk_period/2;
---xclk <= '1';
---wait for camera_i_xclk_period/2;
---end process;
-
 -- Stimulus process
 stim_proc : process
+	constant C_W1 : time := 1 ms;
+	constant C_W2 : time := 140 ms;
 begin
 -- hold reset state for 100 ns.
 pb <= '1';
+camera_i_rst1 <= '0';
+camera_i_rst2 <= '0';
+camera_i_rst3 <= '0';
+camera_i_rst4 <= '0';
 wait for 2500 ns;
 --wait for 500 ns;
 pb <= '0';
-wait for clk50_period*10;
+camera_i_rst1 <= '1';
+camera_i_rst2 <= '1';
+camera_i_rst3 <= '1';
+camera_i_rst4 <= '1';
+wait for clkcam_period*10;
+sw(0) <= '0';
+sw(1) <= '0';
+sw(2) <= '0';
+sw(3) <= '0';
+--wait for 14.8 ms;
+wait for clkcam_period*10;
+sw(0) <= '1';
+sw(1) <= '0';
+sw(2) <= '0';
+sw(3) <= '0';
+wait for C_W2;
+sw(0) <= '0';
+sw(1) <= '0';
+sw(2) <= '0';
+sw(3) <= '0';
+wait for C_W1;
+sw(0) <= '0';
+sw(1) <= '1';
+sw(2) <= '0';
+sw(3) <= '0';
+wait for C_W2;
+sw(0) <= '0';
+sw(1) <= '0';
+sw(2) <= '0';
+sw(3) <= '0';
+wait for C_W1;
+sw(0) <= '0';
+sw(1) <= '0';
+sw(2) <= '1';
+sw(3) <= '0';
+wait for C_W2;
+sw(0) <= '1';
+sw(1) <= '1';
+sw(2) <= '0';
+sw(3) <= '0';
+wait for C_W1;
+sw(0) <= '0';
+sw(1) <= '0';
+sw(2) <= '0';
+sw(3) <= '1';
+wait for C_W2;
+sw(0) <= '0';
+sw(1) <= '0';
+sw(2) <= '1';
+sw(3) <= '1';
+wait for C_W1;
+sw(0) <= 'U';
+sw(1) <= 'U';
+sw(2) <= 'U';
+sw(3) <= 'U';
+
 -- insert stimulus here
+report "done" severity failure;
 wait;
 end process;
 
