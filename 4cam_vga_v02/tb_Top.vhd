@@ -38,7 +38,10 @@ END tb_Top;
 ARCHITECTURE behavior OF tb_Top IS 
 
 component Top is
-Generic (G_PB_BITS : integer := 5); -- pushbutton debounce, 1 for simulation, default 24=300ms
+Generic (
+G_PB_BITS : integer := 6;
+G_WAIT1 : integer := 7
+);
 Port (
 clk50	: in STD_LOGIC; -- Crystal Oscilator 50MHz  --B8
 clkcam	: in STD_LOGIC; -- Crystal Oscilator 23.9616 MHz  --U9
@@ -49,6 +52,7 @@ led2 : out STD_LOGIC; -- Indicates configuration has been done --J14
 led3 : out STD_LOGIC; -- Indicates configuration has been done --J14
 led4 : out STD_LOGIC; -- Indicates configuration has been done --J14
 anode : out std_logic_vector(3 downto 0);
+ov7670_reset1,ov7670_reset2,ov7670_reset3,ov7670_reset4  : out  STD_LOGIC;
 ov7670_pclk1,ov7670_pclk2,ov7670_pclk3,ov7670_pclk4  : in  STD_LOGIC; -- Pmod JB8 --R16
 ov7670_xclk1,ov7670_xclk2,ov7670_xclk3,ov7670_xclk4  : out STD_LOGIC; -- Pmod JB2 --R18
 ov7670_vsync1,ov7670_vsync2,ov7670_vsync3,ov7670_vsync4 : in  STD_LOGIC; -- Pmod JB9 --T18
@@ -56,8 +60,6 @@ ov7670_href1,ov7670_href2,ov7670_href3,ov7670_href4  : in  STD_LOGIC; -- Pmod JB
 ov7670_data1,ov7670_data2,ov7670_data3,ov7670_data4  : in  STD_LOGIC_vector(2 downto 0);
 ov7670_sioc1,ov7670_sioc2,ov7670_sioc3,ov7670_sioc4  : out STD_LOGIC; -- Pmod JB10 --J12
 ov7670_siod1,ov7670_siod2,ov7670_siod3,ov7670_siod4  : inout STD_LOGIC; -- Pmod JB4 --H16
-ov7670_pwdn1,ov7670_pwdn2,ov7670_pwdn3,ov7670_pwdn4  : out STD_LOGIC; -- Pmod JA1 --L15
-ov7670_reset1,ov7670_reset2,ov7670_reset3,ov7670_reset4 : out STD_LOGIC; -- Pmod JA7 --K13
 vga_hsync : out STD_LOGIC; --T4
 vga_vsync : out STD_LOGIC; --U3
 vga_rgb	: out STD_LOGIC_VECTOR(7 downto 0)
@@ -87,7 +89,11 @@ signal vga_vsync : std_logic;
 signal vga_rgb : std_logic_vector(7 downto 0);
 
 -- Clock period definitions
-constant clk50_period : time := 20 ns;
+constant clk50_period : time := 20 ns; -- 50mhz
+constant clkcam_period : time := 10 ns; -- 100mhz
+constant vga_25dot175 : time := 39.7219464 ns; -- 25.175mhz
+constant camera_i_xclk_period1 : time := 41.733 ns; -- 23.9616mhz
+constant camera_i_xclk_period2 : time := 41.667 ns; -- 24mhz
 
 COMPONENT camera
 GENERIC(
@@ -120,7 +126,6 @@ signal camera_o_vs1,camera_o_vs2,camera_o_vs3,camera_o_vs4 : std_logic;
 signal camera_o_hs1,camera_o_hs2,camera_o_hs3,camera_o_hs4 : std_logic;
 signal camera_o_pclk1,camera_o_pclk2,camera_o_pclk3,camera_o_pclk4 : std_logic;
 signal camera_o_d1,camera_o_d2,camera_o_d3,camera_o_d4 : std_logic_vector(7 downto 0);
-constant camera_i_xclk_period : time := 41.733 ns;
 
 signal xclk : std_logic;
 signal sw : std_logic;
@@ -214,6 +219,10 @@ led2 => led2,
 led3 => led3,
 led4 => led4,
 anode => anode,
+ov7670_reset1 => camera_i_rst1,
+ov7670_reset2 => camera_i_rst2,
+ov7670_reset3 => camera_i_rst3,
+ov7670_reset4 => camera_i_rst4,
 ov7670_pclk1 => ov7670_pclk1,
 ov7670_pclk2 => ov7670_pclk2,
 ov7670_pclk3 => ov7670_pclk3,
@@ -242,19 +251,10 @@ ov7670_siod1 => ov7670_siod1,
 ov7670_siod2 => ov7670_siod2,
 ov7670_siod3 => ov7670_siod3,
 ov7670_siod4 => ov7670_siod4,
-ov7670_pwdn1 => ov7670_pwdn1,
-ov7670_pwdn2 => ov7670_pwdn2,
-ov7670_pwdn3 => ov7670_pwdn3,
-ov7670_pwdn4 => ov7670_pwdn4,
-ov7670_reset1 => ov7670_reset1,
-ov7670_reset2 => ov7670_reset2,
-ov7670_reset3 => ov7670_reset3,
-ov7670_reset4 => ov7670_reset4,
 vga_hsync => vga_hsync,
 vga_vsync => vga_vsync,
 vga_rgb => vga_rgb
 );
-clkcam <= xclk;
 
 -- Clock process definitions
 clk50_process :process
@@ -265,30 +265,29 @@ clk50 <= '1';
 wait for clk50_period/2;
 end process;
 
-camera_i_xclkp :process
+clkcam_process :process
 begin
-xclk <= '0';
-wait for camera_i_xclk_period/2;
-xclk <= '1';
-wait for camera_i_xclk_period/2;
+clkcam <= '0';
+wait for clkcam_period/2;
+clkcam <= '1';
+wait for clkcam_period/2;
 end process;
+
+--camera_i_xclkp :process
+--begin
+--xclk <= '0';
+--wait for camera_i_xclk_period/2;
+--xclk <= '1';
+--wait for camera_i_xclk_period/2;
+--end process;
 
 -- Stimulus process
 stim_proc : process
 begin
 -- hold reset state for 100 ns.
---i_reset <= '1';
-camera_i_rst1 <= '0';
-camera_i_rst2 <= '0';
-camera_i_rst3 <= '0';
-camera_i_rst4 <= '0';
 pb <= '1';
-wait for 1000 ns;
---i_reset <= '0';
-camera_i_rst1 <= '1';
-camera_i_rst2 <= '1';
-camera_i_rst3 <= '1';
-camera_i_rst4 <= '1';
+wait for 2500 ns;
+--wait for 500 ns;
 pb <= '0';
 wait for clk50_period*10;
 -- insert stimulus here

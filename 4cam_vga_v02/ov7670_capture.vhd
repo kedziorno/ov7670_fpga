@@ -51,29 +51,29 @@ architecture Behavioral of ov7670_capture is
    signal href_hold    : std_logic := '0';
    signal latched_vsync : STD_LOGIC := '0';
    signal latched_href  : STD_LOGIC := '0';
-   signal latched_d     : STD_LOGIC_VECTOR (d'range) := (others => '0');
+   signal latched_d     : STD_LOGIC_VECTOR (7 downto 0) := (others => '0');
+--	 attribute IOB : string;
+--	 attribute IOB of latched_vsync : signal is "TRUE";
+--	 attribute IOB of latched_href : signal is "TRUE";
+--	 attribute IOB of latched_d : signal is "TRUE";
 begin
    addr <= address;
    we(0) <= we_reg;
 --	 dout<= d_latch(11 downto 8) & d_latch(7 downto 4) & d_latch(3 downto 0);
 --   dout<= d_latch(11) & d_latch(7) & d_latch(3);
-   dout<= d_latch(2 downto 0);
-	 p1 : KEEPER port map (O => d_latch(3));
-	 p2 : KEEPER port map (O => d_latch(4));
-	 p3 : KEEPER port map (O => d_latch(5));
 --   dout<= d_latch(9) & d_latch(5) & d_latch(1);
---   dout<= d_latch(8) & d_latch(4) & d_latch(0); 
+   dout<= d_latch(8) & d_latch(4) & d_latch(0); 
    
 capture_process: process(pclk,reset)
    begin
 	 if (reset = '1') then
-      we_reg <= '0';
-			address <= (others => '0');
-			href_hold <= '0';
-			row <= "00";
-			d_latch <= (others => '0');
-			href_last <= (others => '0');
-			elsif rising_edge(pclk) then
+	 address <= (others => '0');
+	 row <= "00";
+	 href_hold <= '0';
+	 d_latch <= (others => '0');
+	 we_reg <= '0';
+	 href_last <= (others => '0');
+      elsif rising_edge(pclk) then
          if we_reg = '1' then
 					if (to_integer(unsigned(address)) = PIXELS-1) then
 						address <= (others => '0');
@@ -117,18 +117,17 @@ capture_process: process(pclk,reset)
          end if;
       end if;
 		end process capture_process;
-		
-		latched_process : process(pclk,reset) is
+
+		latch_process : process (pclk,reset) is
 		begin
-			if (reset = '1') then
-			latched_href <= '0';
-			latched_d <= (others => '0');
-			latched_vsync <= '0';
-			elsif falling_edge(pclk) then
+		if (reset = '1') then
+		latched_d <= (others => '0');
+		latched_href <= '0';
+		latched_vsync <= '0';
+      elsif falling_edge(pclk) then
          latched_d     <= d;
          latched_href  <= href;
          latched_vsync <= vsync;
       end if;
-   end process latched_process;
-	 
+   end process latch_process;
 end Behavioral;
