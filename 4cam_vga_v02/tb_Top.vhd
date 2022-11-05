@@ -27,6 +27,7 @@
 --------------------------------------------------------------------------------
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
+USE WORK.st7735r_p_package.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -41,44 +42,39 @@ component Top is
 Generic (
 G_PB_BITS : integer := 6;
 G_WAIT1 : integer := 7; -- wait for reset dcm and cameras
-G_FE_WAIT_BITS : integer := 9 -- sccb wait for cameras
+G_FE_WAIT_BITS : integer := 9; -- sccb wait for cameras
+SPI_SPEED_MODE : integer := C_CLOCK_COUNTER_MF
 );
-	Port	(
-				clkcam	: in STD_LOGIC;
-				pb		: in STD_LOGIC;
-				sw		: in STD_LOGIC_VECTOR(3 downto 0);
-				led1 : out STD_LOGIC;
-				led2 : out STD_LOGIC;
-				led3 : out STD_LOGIC;
-				led4 : out STD_LOGIC;
-			  anode : out std_logic_vector(3 downto 0);
-				ov7670_reset1,ov7670_reset2,ov7670_reset3,ov7670_reset4 : out  STD_LOGIC;
-				ov7670_pwdn1,ov7670_pwdn2,ov7670_pwdn3,ov7670_pwdn4 : out  STD_LOGIC;
-				ov7670_pclk1,ov7670_pclk2,ov7670_pclk3,ov7670_pclk4  : in  STD_LOGIC;
-				ov7670_xclk1,ov7670_xclk2,ov7670_xclk3,ov7670_xclk4  : out STD_LOGIC;
-				ov7670_vsync1,ov7670_vsync2,ov7670_vsync3,ov7670_vsync4 : in  STD_LOGIC;
-				ov7670_href1,ov7670_href2,ov7670_href3,ov7670_href4  : in  STD_LOGIC;
-				ov7670_data1,ov7670_data2,ov7670_data3,ov7670_data4  : in  STD_LOGIC_vector(7 downto 0);
-				ov7670_sioc1,ov7670_sioc2,ov7670_sioc3,ov7670_sioc4  : out STD_LOGIC;
-				ov7670_siod1,ov7670_siod2,ov7670_siod3,ov7670_siod4  : inout STD_LOGIC;
-				vga_o_blankn : out STD_LOGIC;
-				vga_o_syncn : out STD_LOGIC;
-				vga_o_psave : out STD_LOGIC;
-				vga_o_clk25 : out STD_LOGIC;
-				vga_o_hsync : out STD_LOGIC;
-				vga_o_vsync : out STD_LOGIC;
-				vga_o_rgb : out STD_LOGIC_VECTOR(15 downto 0);
-				vga_rgb : out STD_LOGIC_VECTOR(7 downto 0);
-				vga_hsync : out STD_LOGIC;
-				vga_vsync : out STD_LOGIC;
-				o_debug : out std_logic_vector(7 downto 0)
-			 );
+Port (
+clk50	: in STD_LOGIC; -- Crystal Oscilator 50MHz  --B8
+clkcam	: in STD_LOGIC; -- Crystal Oscilator 23.9616 MHz  --U9
+pb		: in STD_LOGIC; -- Push Button --B18
+sw		: in STD_LOGIC_VECTOR(3 downto 0); -- Push Button --G18
+led1 : out STD_LOGIC; -- Indicates configuration has been done --J14
+led2 : out STD_LOGIC; -- Indicates configuration has been done --J14
+led3 : out STD_LOGIC; -- Indicates configuration has been done --J14
+led4 : out STD_LOGIC; -- Indicates configuration has been done --J14
+anode : out std_logic_vector(3 downto 0);
+ov7670_reset1,ov7670_reset2,ov7670_reset3,ov7670_reset4  : out  STD_LOGIC;
+ov7670_pclk1,ov7670_pclk2,ov7670_pclk3,ov7670_pclk4  : in  STD_LOGIC; -- Pmod JB8 --R16
+ov7670_xclk1,ov7670_xclk2,ov7670_xclk3,ov7670_xclk4  : out STD_LOGIC; -- Pmod JB2 --R18
+ov7670_vsync1,ov7670_vsync2,ov7670_vsync3,ov7670_vsync4 : in  STD_LOGIC; -- Pmod JB9 --T18
+ov7670_href1,ov7670_href2,ov7670_href3,ov7670_href4  : in  STD_LOGIC; -- Pmod JB3 --R15
+ov7670_data1,ov7670_data2,ov7670_data3,ov7670_data4  : in  STD_LOGIC_vector(7 downto 0);
+ov7670_sioc1,ov7670_sioc2,ov7670_sioc3,ov7670_sioc4  : out STD_LOGIC; -- Pmod JB10 --J12
+ov7670_siod1,ov7670_siod2,ov7670_siod3,ov7670_siod4  : inout STD_LOGIC; -- Pmod JB4 --H16
+o_cs : out STD_LOGIC;
+o_do : out STD_LOGIC;
+o_ck : out STD_LOGIC;
+o_reset : out STD_LOGIC;
+o_rs : out STD_LOGIC
+);
 end component Top;
 
 --Inputs
 signal clkcam : std_logic := '0';
 signal pb : std_logic := '0';
-signal sw : std_logic_vector(3 downto 0) := "0000";
+signal sw : std_logic_vector(3 downto 0) := (others => '0');
 signal ov7670_pclk1,ov7670_pclk2,ov7670_pclk3,ov7670_pclk4 : std_logic := '0';
 signal ov7670_vsync1,ov7670_vsync2,ov7670_vsync3,ov7670_vsync4 : std_logic := '0';
 signal ov7670_href1,ov7670_href2,ov7670_href3,ov7670_href4 : std_logic := '0';
@@ -108,7 +104,7 @@ constant camera_i_xclk_period2 : time := 41.667 ns; -- 24mhz
 constant camera_i_xclk_period3 : time := 1000.000 ns; -- 1mhz
 constant camera_i_xclk_period4 : time := 625.000 ns; -- 1.6mhz
 constant camera_i_xclk_period5 : time := 666.333 ns; -- 1.5mhz
-constant camera_i_xclk_period6 : time := 333.333 ns; -- 3.0mhz
+constant camera_i_xclk_period6 : time := 334.079 ns; -- 2.99mhz
 constant USE_OUT_CLOCK : std_logic := '1'; -- XXX 1 use outcoming signal clock to camera, 0 going from board(div/dcm)
 signal camera_i_xclk : std_logic := '0';
 constant camera_i_xclk_period : time := camera_i_xclk_period6;
@@ -234,6 +230,7 @@ ov7670_href4 <= camera_o_hs4;
 
 -- Instantiate the Unit Under Test (UUT)
 uut: Top PORT MAP (
+clk50 => '0',
 clkcam => clkcam,
 pb => pb,
 sw => sw,
@@ -274,13 +271,11 @@ ov7670_siod1 => ov7670_siod1,
 ov7670_siod2 => ov7670_siod2,
 ov7670_siod3 => ov7670_siod3,
 ov7670_siod4 => ov7670_siod4,
-vga_o_blankn => vga_o_blankn,
-vga_o_syncn => vga_o_syncn,
-vga_o_psave => vga_o_psave,
-vga_o_clk25 => vga_o_clk25,
-vga_o_hsync => vga_o_hsync,
-vga_o_vsync => vga_o_vsync,
-o_debug => o_debug
+o_cs => o_cs,
+o_do => o_do,
+o_ck => o_ck,
+o_reset => o_reset,
+o_rs => o_rs
 );
 
 camera_xclk_process :process
@@ -309,7 +304,7 @@ end process;
 -- Stimulus process
 stim_proc : process
 	constant C_W1 : time := 1 ms;
-	constant C_W2 : time := 140 ms;
+	constant C_W2 : time := 400 ms;
 begin
 -- hold reset state for 100 ns.
 pb <= '1';
@@ -320,17 +315,12 @@ camera_i_rst4 <= '0';
 wait for 2500 ns;
 --wait for 500 ns;
 pb <= '0';
-camera_i_rst1 <= '1';
-camera_i_rst2 <= '1';
-camera_i_rst3 <= '1';
-camera_i_rst4 <= '1';
 wait for clkcam_period*10;
-sw(0) <= '0';
-sw(1) <= '0';
-sw(2) <= '0';
-sw(3) <= '0';
---wait for 14.8 ms;
-wait for clkcam_period*10;
+sw(0) <= 'U';
+sw(1) <= 'U';
+sw(2) <= 'U';
+sw(3) <= 'U';
+wait for clkcam_period;
 sw(0) <= '1';
 sw(1) <= '0';
 sw(2) <= '0';
@@ -356,8 +346,8 @@ sw(1) <= '0';
 sw(2) <= '1';
 sw(3) <= '0';
 wait for C_W2;
-sw(0) <= '1';
-sw(1) <= '1';
+sw(0) <= '0';
+sw(1) <= '0';
 sw(2) <= '0';
 sw(3) <= '0';
 wait for C_W1;
@@ -368,8 +358,8 @@ sw(3) <= '1';
 wait for C_W2;
 sw(0) <= '0';
 sw(1) <= '0';
-sw(2) <= '1';
-sw(3) <= '1';
+sw(2) <= '0';
+sw(3) <= '0';
 wait for C_W1;
 sw(0) <= 'U';
 sw(1) <= 'U';

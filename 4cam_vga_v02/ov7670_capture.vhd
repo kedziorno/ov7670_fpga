@@ -32,17 +32,13 @@ Library UNISIM;
 use UNISIM.vcomponents.all;
 
 entity ov7670_capture is
-Generic (
-PIXELS : integer := 0;
-ADDRESS1 : integer := 0;
-BITS : integer := 0
-);
+Generic (PIXELS : integer := 0);
     Port ( reset : in std_logic; pclk : in  STD_LOGIC;
            vsync : in  STD_LOGIC;
            href : in  STD_LOGIC;
            d : in  STD_LOGIC_VECTOR (7 downto 0);
-           addr : out  STD_LOGIC_VECTOR (ADDRESS1-1 downto 0);
-           dout : out  STD_LOGIC_VECTOR (BITS-1 downto 0);
+           addr : out  STD_LOGIC_VECTOR (14 downto 0);
+           dout : out  STD_LOGIC_VECTOR (15 downto 0);
            we : out  STD_LOGIC_VECTOR (0 downto 0));
 end ov7670_capture;
 
@@ -66,11 +62,15 @@ architecture Behavioral of ov7670_capture is
 begin
    addr <= address;
    we(0) <= we_reg;
-	 dout<= d_latch;
+	dout <= d_latch;
+--	 dout<= d_latch(11 downto 8) & d_latch(7 downto 4) & d_latch(3 downto 0);
+--	 dout<= "00000000000"&d_latch(0);
+--	 dout<= d_latch(11 downto 9) & d_latch(7 downto 5) & d_latch(3 downto 2);
+--	 dout<= d_latch(10 downto 8) & d_latch(6 downto 4) & d_latch(3 downto 2);
 --   dout<= d_latch(11) & d_latch(7) & d_latch(3);
 --   dout<= d_latch(9) & d_latch(5) & d_latch(1);
 --   dout<= d_latch(8) & d_latch(4) & d_latch(0); 
---   dout(0)<= d_latch(8); 
+--   dout<= d_latch(7 downto 0); 
    
 capture_process: process(pclk,reset)
    begin
@@ -118,7 +118,7 @@ capture_process: process(pclk,reset)
 				d_latch <= (others => '0');
          end if;
          
---						we_reg  <= '0';
+--						we_reg  <= '1';
 
          -- Is a new screen about to start (i.e. we have to restart capturing
          if latched_vsync = '0' then 
