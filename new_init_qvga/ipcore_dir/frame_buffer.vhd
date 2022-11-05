@@ -44,19 +44,11 @@ ENTITY frame_buffer IS
   PORT (
     clka : IN STD_LOGIC;
     wea : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
-<<<<<<<< HEAD:new_init_qqvga_st7735/ipcore_dir/frame_buffer.vhd
-    addra : IN STD_LOGIC_VECTOR(14 DOWNTO 0);
-    dina : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
-    clkb : IN STD_LOGIC;
-    addrb : IN STD_LOGIC_VECTOR(14 DOWNTO 0);
-    doutb : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
-========
     addra : IN STD_LOGIC_VECTOR(16 DOWNTO 0);
     dina : IN STD_LOGIC_VECTOR(4 DOWNTO 0);
     clkb : IN STD_LOGIC;
     addrb : IN STD_LOGIC_VECTOR(16 DOWNTO 0);
     doutb : OUT STD_LOGIC_VECTOR(4 DOWNTO 0)
->>>>>>>> r1/new_init_qvga:new_init_qvga/ipcore_dir/frame_buffer.vhd
   );
 END frame_buffer;
 
@@ -66,19 +58,11 @@ COMPONENT wrapped_frame_buffer
   PORT (
     clka : IN STD_LOGIC;
     wea : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
-<<<<<<<< HEAD:new_init_qqvga_st7735/ipcore_dir/frame_buffer.vhd
-    addra : IN STD_LOGIC_VECTOR(14 DOWNTO 0);
-    dina : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
-    clkb : IN STD_LOGIC;
-    addrb : IN STD_LOGIC_VECTOR(14 DOWNTO 0);
-    doutb : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
-========
     addra : IN STD_LOGIC_VECTOR(16 DOWNTO 0);
     dina : IN STD_LOGIC_VECTOR(4 DOWNTO 0);
     clkb : IN STD_LOGIC;
     addrb : IN STD_LOGIC_VECTOR(16 DOWNTO 0);
     doutb : OUT STD_LOGIC_VECTOR(4 DOWNTO 0)
->>>>>>>> r1/new_init_qvga:new_init_qvga/ipcore_dir/frame_buffer.vhd
   );
 END COMPONENT;
 
@@ -121,17 +105,10 @@ END COMPONENT;
       c_mem_type => 1,
       c_mux_pipeline_stages => 0,
       c_prim_type => 1,
-<<<<<<<< HEAD:new_init_qqvga_st7735/ipcore_dir/frame_buffer.vhd
-      c_read_depth_a => 19200,
-      c_read_depth_b => 19200,
-      c_read_width_a => 16,
-      c_read_width_b => 16,
-========
       c_read_depth_a => 76800,
       c_read_depth_b => 76800,
       c_read_width_a => 5,
       c_read_width_b => 5,
->>>>>>>> r1/new_init_qvga:new_init_qvga/ipcore_dir/frame_buffer.vhd
       c_rst_priority_a => "CE",
       c_rst_priority_b => "CE",
       c_rst_type => "SYNC",
@@ -150,13 +127,8 @@ END COMPONENT;
       c_write_depth_b => 76800,
       c_write_mode_a => "NO_CHANGE",
       c_write_mode_b => "NO_CHANGE",
-<<<<<<<< HEAD:new_init_qqvga_st7735/ipcore_dir/frame_buffer.vhd
-      c_write_width_a => 16,
-      c_write_width_b => 16,
-========
       c_write_width_a => 5,
       c_write_width_b => 5,
->>>>>>>> r1/new_init_qvga:new_init_qvga/ipcore_dir/frame_buffer.vhd
       c_xdevicefamily => "spartan3e"
     );
 -- synthesis translate_on

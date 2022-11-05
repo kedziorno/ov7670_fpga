@@ -32,18 +32,6 @@ Library UNISIM;
 use UNISIM.vcomponents.all;
 
 entity ov7670_capture is
-<<<<<<<< HEAD:4cam_vga_v02/ov7670_capture.vhd
-Generic (PIXELS : integer := 0);
-    Port ( reset : in std_logic; pclk : in  STD_LOGIC;
-           vsync : in  STD_LOGIC;
-           href : in  STD_LOGIC;
-           d : in  STD_LOGIC_VECTOR (7 downto 0);
-           addr : out  STD_LOGIC_VECTOR (14 downto 0);
-           dout : out  STD_LOGIC_VECTOR (15 downto 0);
-           we : out  STD_LOGIC_VECTOR (0 downto 0));
-end ov7670_capture;
-
-========
 Generic (PIXELS : integer := 0);
     Port ( reset : in std_logic; pclk : in  STD_LOGIC;
            vsync : in  STD_LOGIC;
@@ -54,7 +42,6 @@ Generic (PIXELS : integer := 0);
            we : out  STD_LOGIC_VECTOR (0 downto 0));
 end ov7670_capture;
 
->>>>>>>> r1/new_init_qvga:new_init_qvga/ov7670_capture.vhd
 architecture Behavioral of ov7670_capture is
    signal d_latch      : std_logic_vector(d'left*2+1 downto 0) := (others => '0');
    signal address      : STD_LOGIC_VECTOR(addr'range) := (others => '0');
@@ -80,10 +67,7 @@ begin
 --	 dout<= "00000000000"&d_latch(0);
 --	 dout<= d_latch(11 downto 9) & d_latch(7 downto 5) & d_latch(3 downto 2);
 --	 dout<= d_latch(10 downto 8) & d_latch(6 downto 4) & d_latch(3 downto 2);
-<<<<<<<< HEAD:4cam_vga_v02/ov7670_capture.vhd
-========
 	 dout<= d_latch(4 downto 3) & d_latch(2 downto 1) & d_latch(0);
->>>>>>>> r1/new_init_qvga:new_init_qvga/ov7670_capture.vhd
 --   dout<= d_latch(11) & d_latch(7) & d_latch(3);
 --   dout<= d_latch(9) & d_latch(5) & d_latch(1);
 --   dout<= d_latch(8) & d_latch(4) & d_latch(0); 
