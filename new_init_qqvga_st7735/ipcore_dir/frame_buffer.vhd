@@ -69,8 +69,8 @@ END COMPONENT;
 -- Configuration specification
   FOR ALL : wrapped_frame_buffer USE ENTITY XilinxCoreLib.blk_mem_gen_v7_3(behavioral)
     GENERIC MAP (
-      c_addra_width => 15,
-      c_addrb_width => 15,
+      c_addra_width => 17,
+      c_addrb_width => 17,
       c_algorithm => 1,
       c_axi_id_width => 4,
       c_axi_slave_type => 0,
@@ -123,8 +123,8 @@ END COMPONENT;
       c_use_softecc => 0,
       c_wea_width => 1,
       c_web_width => 1,
-      c_write_depth_a => 19200,
-      c_write_depth_b => 19200,
+      c_write_depth_a => 76800,
+      c_write_depth_b => 76800,
       c_write_mode_a => "NO_CHANGE",
       c_write_mode_b => "NO_CHANGE",
       c_write_width_a => 16,
