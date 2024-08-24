@@ -12,34 +12,38 @@ entity VGA_timing_synch is
            Hsync : out  STD_LOGIC;
            Vsync : out  STD_LOGIC;
            activeArea1 : out  STD_LOGIC;
-           activeArea2 : out  STD_LOGIC;
-           activeArea3 : out  STD_LOGIC;
-           activeArea4 : out  STD_LOGIC);
+					 activehaaddrgen : out STD_LOGIC;
+					 activeRender1 : out  STD_LOGIC;
+					 blank : out STD_LOGIC);
 end VGA_timing_synch;
 
 architecture Behavioral of VGA_timing_synch is
 
-constant HD : INTEGER := 639;
+constant HD : INTEGER := 640;
 constant HFP : INTEGER := 16;
 constant HSP : INTEGER := 96;
 constant HBP : INTEGER := 48;
 
-constant VD : INTEGER := 479;
+constant VD : INTEGER := 480;
 constant VFP : INTEGER := 10;
 constant VSP : INTEGER := 2;
 constant VBP : INTEGER := 33;
 
-signal clkdv_vga : STD_LOGIC;
 signal clk_vga : STD_LOGIC;
 signal hcnt,vcnt : INTEGER range 0 to 1023 := 0;
+signal hPos,vPos : integer range 0 to 1023 := 0;
+signal thPos,tvPos : std_logic_vector(9 downto 0);
+signal videoOn : std_logic;
+signal thsync,tvsync : std_logic;
 
 signal h,v : std_logic;
-
 signal ph,pv : std_logic;
 
 signal v120 : std_logic;
 
 signal display_flag,activeh : std_logic;
+
+signal tactiveArea1 : std_logic;
 
 begin
 
@@ -454,3 +458,4 @@ activeArea4 <= '0';
 --Vsync <= v;
 
 end Behavioral;
+
