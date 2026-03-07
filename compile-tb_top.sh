@@ -15,11 +15,14 @@
 #!/bin/bash
 source /home/user/.local/Xilinx/14.7/ISE_DS/settings64.sh
 top=$1
+time_period=$2
+time_scale=$3
 rm -rf isim_output.txt
 rm -rf isim_gui.cmd
 echo "onerror {resume}" > isim_gui.cmd
 grep "wvobject fp_name=\"/" tb_${top}.wcfg | sed -E "s/<wvobject fp_name=\"(.*)\" type=\"(.*)\" db_ref_id=\"(.*)\">/\1/g" | awk -F " " '{printf ("wave add %s\n", $0)}' >> isim_gui.cmd
-echo "run all" >> isim_gui.cmd
+echo "run ${time_period} ${time_scale}" >> isim_gui.cmd
+echo "quit -f" >> isim_gui.cmd
 fuse -v -intstyle ise \
 -o tb_${top}_isim_beh.exe \
 -prj tb_${top}_beh.prj \
