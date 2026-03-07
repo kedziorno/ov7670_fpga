@@ -12,7 +12,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
-entity Top is
+entity Top_camera_monitoring is
 	Port	(	clk50	: in STD_LOGIC; -- Crystal Oscilator 50MHz  --B8
 	clkcam	: in STD_LOGIC; -- Crystal Oscilator 23.9616 MHz  --U9
 				pb		: in STD_LOGIC; -- Push Button --B18
@@ -45,9 +45,9 @@ entity Top is
 				-- G : N8, P8, P6
 				-- Bc: U5, U4(LSB) 
 			 );
-end Top;
+end Top_camera_monitoring;
 
-architecture Structural of Top is
+architecture Structural of Top_camera_monitoring is
 
 COMPONENT debounce_circuit
 	Port ( clk : in STD_LOGIC;
