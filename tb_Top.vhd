@@ -167,6 +167,8 @@ signal mt45w8mw16bgx_We_n_2  : std_logic;
 signal mt45w8mw16bgx_We_n_3  : std_logic;
 signal mt45w8mw16bgx_We_n_4  : std_logic;
 
+signal vga_blank : std_logic;
+signal vga_clock : std_logic;
 signal video_data_1                  : std_logic_vector(c_bits_color_rgb565 - 1 downto 0);
 signal video_data_2                  : std_logic_vector(c_bits_color_rgb565 - 1 downto 0);
 signal video_data_3                  : std_logic_vector(c_bits_color_rgb565 - 1 downto 0);
@@ -204,11 +206,27 @@ ov7670_sioc1,ov7670_sioc2,ov7670_sioc3,ov7670_sioc4  : out STD_LOGIC; -- Pmod JB
 ov7670_siod1,ov7670_siod2,ov7670_siod3,ov7670_siod4  : inout STD_LOGIC; -- Pmod JB4 --H16
 ov7670_pwdn1,ov7670_pwdn2,ov7670_pwdn3,ov7670_pwdn4  : out STD_LOGIC; -- Pmod JA1 --L15
 ov7670_reset1,ov7670_reset2,ov7670_reset3,ov7670_reset4 : out STD_LOGIC; -- Pmod JA7 --K13
+vga_clock : out STD_LOGIC;
+vga_blank : out STD_LOGIC;
 vga_hsync : out STD_LOGIC; --T4
 vga_vsync : out STD_LOGIC; --U3
 vga_rgb	: out STD_LOGIC_VECTOR(7 downto 0)
 );
 end component Top_camera_monitoring;
+
+component vga_bmp_sink is
+generic (
+filename : string
+);
+port (
+clk_i        : in    std_logic;
+rst_i        : in    std_logic;
+active_vid_i : in    std_logic;
+h_sync_i     : in    std_logic;
+v_sync_i     : in    std_logic;
+dat_i        : in    std_logic_vector(23 downto 0)
+);
+end component vga_bmp_sink;
 
 --Inputs
 signal clk50 : std_logic := '0';
@@ -296,6 +314,22 @@ begin
 end process p_isim_cmd_ping;
 
 reset_n <= '0', '1' after 100 ns when mem_done = '1' else '1';
+
+vga_bmp_i1 : component vga_bmp_sink
+generic map (
+filename => "vga.bmp"
+)
+port map (
+clk_i        => vga_clock,
+rst_i        => not reset_n,
+dat_i        =>
+vga_rgb (1 downto 0) &"000000"&
+vga_rgb (4 downto 2) &"00000" &
+vga_rgb (7 downto 5) &"00000",
+active_vid_i => vga_blank,
+h_sync_i     => vga_hsync,
+v_sync_i     => vga_vsync
+);
 
 camera_vga_i1 : camera_vga
 port map (
@@ -662,6 +696,8 @@ ov7670_reset1 => ov7670_reset1,
 ov7670_reset2 => ov7670_reset2,
 ov7670_reset3 => ov7670_reset3,
 ov7670_reset4 => ov7670_reset4,
+vga_blank => vga_blank,
+vga_clock => vga_clock,
 vga_hsync => vga_hsync,
 vga_vsync => vga_vsync,
 vga_rgb => vga_rgb

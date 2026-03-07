@@ -38,6 +38,8 @@ entity Top_camera_monitoring is
 				ov7670_reset1,ov7670_reset2,ov7670_reset3,ov7670_reset4 : out STD_LOGIC; -- Pmod JA7 --K13
 				
 				--VGA
+        vga_clock : out STD_LOGIC;
+        vga_blank : out STD_LOGIC;
 				vga_hsync : out STD_LOGIC; --T4
 				vga_vsync : out STD_LOGIC; --U3
 				vga_rgb	: out STD_LOGIC_VECTOR(7 downto 0)
@@ -115,6 +117,7 @@ COMPONENT VGA_timing_synch
 	Port ( clk25 : in  STD_LOGIC;
            Hsync : out  STD_LOGIC;
            Vsync : out  STD_LOGIC;
+           blank : out  STD_LOGIC;
            activeArea1 : out  STD_LOGIC;
            activeArea2 : out  STD_LOGIC;
            activeArea3 : out  STD_LOGIC;
@@ -292,6 +295,7 @@ begin
 		clk25 => clk25,
 		Hsync => vga_hsync,
 		Vsync => vga_vsync_sig,
+    blank => vga_blank,
 		activeArea1 => active1,
 		activeArea2 => active2,
 		activeArea3 => active3,
@@ -300,5 +304,7 @@ begin
 vga_vsync <= vga_vsync_sig;
 
 cc <= clkcam when sw = '1' else clk25;
+vga_clock <= clk25;
+
 end Structural;
 
