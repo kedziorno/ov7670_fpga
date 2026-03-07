@@ -32,12 +32,159 @@ USE ieee.std_logic_1164.ALL;
 -- arithmetic functions with Signed or Unsigned values
 --USE ieee.numeric_std.ALL;
 
-ENTITY tb_Top IS
-END tb_Top;
+use work.micron_mem_parameters.all;
+use work.p_constants.all;
 
-ARCHITECTURE behavior OF tb_Top IS 
+ENTITY tb_Top_camera_monitoring IS
+END tb_Top_camera_monitoring;
 
-component Top is
+ARCHITECTURE behavior OF tb_Top_camera_monitoring IS 
+
+component camera_vga is
+port (
+sio_d    : inout std_logic;
+sio_c    : in    std_logic;
+vsync    : out   std_logic;
+href     : out   std_logic;
+pclk     : out   std_logic;
+d0       : out   std_logic;
+d1       : out   std_logic;
+d2       : out   std_logic;
+d3       : out   std_logic;
+d4       : out   std_logic;
+d5       : out   std_logic;
+d6       : out   std_logic;
+d7       : out   std_logic;
+xclk     : in    std_logic;
+reset_n  : in    std_logic;
+pwdn     : in    std_logic;
+-- virtual sensor array (as SDCard with RAW images RGB565)
+sd_cs    : out   std_logic;
+sd_sclk  : out   std_logic;
+sd_mosi  : out   std_logic;
+sd_miso  : in    std_logic;
+clk100   : in    std_logic;
+-- RAM module
+Addr     : out   std_logic_vector(c_addr_bits - 1 downto 0);
+Adv_n    : out   std_logic;
+Ce_n     : out   std_logic;
+Clk      : out   std_logic;
+Cre      : out   std_logic;
+Dq       : inout std_logic_vector(c_data_bits - 1 downto 0);
+Lb_n     : out   std_logic;
+Oe_n     : out   std_logic;
+oWait    : in    std_logic; -- Wait is a keyword in HDL
+Ub_n     : out   std_logic;
+We_n     : out   std_logic
+);
+end component camera_vga;
+
+component sdcard_emulator is
+port (
+sd_cs    : in   std_logic;
+sd_clk   : in   std_logic;
+sd_mosi  : in   std_logic;
+sd_miso  : out  std_logic
+);
+end component sdcard_emulator;
+signal sd_cs_1    : std_logic;
+signal sd_cs_2    : std_logic;
+signal sd_cs_3    : std_logic;
+signal sd_cs_4    : std_logic;
+signal sd_sclk_1  : std_logic;
+signal sd_sclk_2  : std_logic;
+signal sd_sclk_3  : std_logic;
+signal sd_sclk_4  : std_logic;
+signal sd_mosi_1  : std_logic;
+signal sd_mosi_2  : std_logic;
+signal sd_mosi_3  : std_logic;
+signal sd_mosi_4  : std_logic;
+signal sd_miso_1  : std_logic;
+signal sd_miso_2  : std_logic;
+signal sd_miso_3  : std_logic;
+signal sd_miso_4  : std_logic;
+
+signal clk100   : std_logic := '0';
+signal mem_done : std_logic;
+
+component mt45w8mw16bgx is
+port (
+Addr  : in    std_logic_vector(c_addr_bits - 1 downto 0);
+Adv_n : in    std_logic;
+Ce_n  : in    std_logic;
+Clk   : in    std_logic;
+Cre   : in    std_logic;
+Dq    : inout std_logic_vector(c_data_bits - 1 downto 0);
+Lb_n  : in    std_logic;
+Oe_n  : in    std_logic;
+oWait : out   std_logic; -- Wait is a keyword in HDL
+Ub_n  : in    std_logic;
+We_n  : in    std_logic
+);
+end component mt45w8mw16bgx;
+signal mt45w8mw16bgx_Addr_1  : std_logic_vector(c_addr_bits - 1 downto 0);
+signal mt45w8mw16bgx_Addr_2  : std_logic_vector(c_addr_bits - 1 downto 0);
+signal mt45w8mw16bgx_Addr_3  : std_logic_vector(c_addr_bits - 1 downto 0);
+signal mt45w8mw16bgx_Addr_4  : std_logic_vector(c_addr_bits - 1 downto 0);
+signal mt45w8mw16bgx_Adv_n_1 : std_logic;
+signal mt45w8mw16bgx_Adv_n_2 : std_logic;
+signal mt45w8mw16bgx_Adv_n_3 : std_logic;
+signal mt45w8mw16bgx_Adv_n_4 : std_logic;
+signal mt45w8mw16bgx_Ce_n_1  : std_logic;
+signal mt45w8mw16bgx_Ce_n_2  : std_logic;
+signal mt45w8mw16bgx_Ce_n_3  : std_logic;
+signal mt45w8mw16bgx_Ce_n_4  : std_logic;
+signal mt45w8mw16bgx_Clk_1   : std_logic;
+signal mt45w8mw16bgx_Clk_2   : std_logic;
+signal mt45w8mw16bgx_Clk_3   : std_logic;
+signal mt45w8mw16bgx_Clk_4   : std_logic;
+signal mt45w8mw16bgx_Cre_1   : std_logic;
+signal mt45w8mw16bgx_Cre_2   : std_logic;
+signal mt45w8mw16bgx_Cre_3   : std_logic;
+signal mt45w8mw16bgx_Cre_4   : std_logic;
+signal mt45w8mw16bgx_Dq_1    : std_logic_vector(c_data_bits - 1 downto 0);
+signal mt45w8mw16bgx_Dq_2    : std_logic_vector(c_data_bits - 1 downto 0);
+signal mt45w8mw16bgx_Dq_3    : std_logic_vector(c_data_bits - 1 downto 0);
+signal mt45w8mw16bgx_Dq_4    : std_logic_vector(c_data_bits - 1 downto 0);
+signal mt45w8mw16bgx_Lb_n_1  : std_logic;
+signal mt45w8mw16bgx_Lb_n_2  : std_logic;
+signal mt45w8mw16bgx_Lb_n_3  : std_logic;
+signal mt45w8mw16bgx_Lb_n_4  : std_logic;
+signal mt45w8mw16bgx_Oe_n_1  : std_logic;
+signal mt45w8mw16bgx_Oe_n_2  : std_logic;
+signal mt45w8mw16bgx_Oe_n_3  : std_logic;
+signal mt45w8mw16bgx_Oe_n_4  : std_logic;
+signal mt45w8mw16bgx_oWait_1 : std_logic; -- Wait is a keyword in HDL
+signal mt45w8mw16bgx_oWait_2 : std_logic; -- Wait is a keyword in HDL
+signal mt45w8mw16bgx_oWait_3 : std_logic; -- Wait is a keyword in HDL
+signal mt45w8mw16bgx_oWait_4 : std_logic; -- Wait is a keyword in HDL
+signal mt45w8mw16bgx_Ub_n_1  : std_logic;
+signal mt45w8mw16bgx_Ub_n_2  : std_logic;
+signal mt45w8mw16bgx_Ub_n_3  : std_logic;
+signal mt45w8mw16bgx_Ub_n_4  : std_logic;
+signal mt45w8mw16bgx_We_n_1  : std_logic;
+signal mt45w8mw16bgx_We_n_2  : std_logic;
+signal mt45w8mw16bgx_We_n_3  : std_logic;
+signal mt45w8mw16bgx_We_n_4  : std_logic;
+
+signal video_data_1                  : std_logic_vector(c_bits_color_rgb565 - 1 downto 0);
+signal video_data_2                  : std_logic_vector(c_bits_color_rgb565 - 1 downto 0);
+signal video_data_3                  : std_logic_vector(c_bits_color_rgb565 - 1 downto 0);
+signal video_data_4                  : std_logic_vector(c_bits_color_rgb565 - 1 downto 0);
+signal video_blank_1                 : std_logic := '0';
+signal video_blank_2                 : std_logic := '0';
+signal video_blank_3                 : std_logic := '0';
+signal video_blank_4                 : std_logic := '0';
+signal video_hsync_1                 : std_logic := '0';
+signal video_hsync_2                 : std_logic := '0';
+signal video_hsync_3                 : std_logic := '0';
+signal video_hsync_4                 : std_logic := '0';
+signal video_vsync_1                 : std_logic := '0';
+signal video_vsync_2                 : std_logic := '0';
+signal video_vsync_3                 : std_logic := '0';
+signal video_vsync_4                 : std_logic := '0';
+
+component Top_camera_monitoring is
 Port (
 clk50	: in STD_LOGIC; -- Crystal Oscilator 50MHz  --B8
 clkcam	: in STD_LOGIC; -- Crystal Oscilator 23.9616 MHz  --U9
@@ -61,7 +208,7 @@ vga_hsync : out STD_LOGIC; --T4
 vga_vsync : out STD_LOGIC; --U3
 vga_rgb	: out STD_LOGIC_VECTOR(7 downto 0)
 );
-end component Top;
+end component Top_camera_monitoring;
 
 --Inputs
 signal clk50 : std_logic := '0';
@@ -126,84 +273,347 @@ signal sw : std_logic;
 
 signal anode : std_logic_vector (3 downto 0);
 
+--camera
+signal reset_n : std_logic;
+signal clkcambuf : std_logic;
+signal sioc,siod : std_logic;
+signal ov7670_pclkbuf_mux_1,ov7670_vsync_mux_1,ov7670_href_mux_1 : std_logic;
+signal ov7670_pclkbuf_mux_2,ov7670_vsync_mux_2,ov7670_href_mux_2 : std_logic;
+signal ov7670_pclkbuf_mux_3,ov7670_vsync_mux_3,ov7670_href_mux_3 : std_logic;
+signal ov7670_pclkbuf_mux_4,ov7670_vsync_mux_4,ov7670_href_mux_4 : std_logic;
+signal ov7670_data_mux_1 : std_logic_vector(7 downto 0);
+signal ov7670_data_mux_2 : std_logic_vector(7 downto 0);
+signal ov7670_data_mux_3 : std_logic_vector(7 downto 0);
+signal ov7670_data_mux_4 : std_logic_vector(7 downto 0);
+
 BEGIN
+
+p_isim_cmd_ping : process is
+begin
+  report "ping on isim cmd";
+  wait for 1 ms;
+end process p_isim_cmd_ping;
+
+camera_vga_i1 : camera_vga
+port map (
+sio_d    => sioc,
+sio_c    => siod,
+vsync    => ov7670_vsync_mux_1,
+href     => ov7670_href_mux_1,
+pclk     => ov7670_pclkbuf_mux_1,
+d0       => ov7670_data_mux_1 (0),
+d1       => ov7670_data_mux_1 (1),
+d2       => ov7670_data_mux_1 (2),
+d3       => ov7670_data_mux_1 (3),
+d4       => ov7670_data_mux_1 (4),
+d5       => ov7670_data_mux_1 (5),
+d6       => ov7670_data_mux_1 (6),
+d7       => ov7670_data_mux_1 (7),
+xclk     => xclk,
+reset_n  => reset_n,
+pwdn     => '0',
+-- virtual sensor array (as SDCard with RAW images RGB565)
+sd_cs    => sd_cs_1,
+sd_sclk  => sd_sclk_1,
+sd_mosi  => sd_mosi_1,
+sd_miso  => sd_miso_1,
+clk100   => clkcambuf,
+-- RAM module
+Addr     => mt45w8mw16bgx_Addr_1,
+Adv_n    => mt45w8mw16bgx_Adv_n_1,
+Ce_n     => mt45w8mw16bgx_Ce_n_1,
+Clk      => mt45w8mw16bgx_Clk_1,
+Cre      => mt45w8mw16bgx_Cre_1,
+Dq       => mt45w8mw16bgx_Dq_1,
+Lb_n     => mt45w8mw16bgx_Lb_n_1,
+Oe_n     => mt45w8mw16bgx_Oe_n_1,
+oWait    => mt45w8mw16bgx_oWait_1,
+Ub_n     => mt45w8mw16bgx_Ub_n_1,
+We_n     => mt45w8mw16bgx_We_n_1
+);
+
+camera_vga_i2 : camera_vga
+port map (
+sio_d    => sioc,
+sio_c    => siod,
+vsync    => ov7670_vsync_mux_2,
+href     => ov7670_href_mux_2,
+pclk     => ov7670_pclkbuf_mux_2,
+d0       => ov7670_data_mux_2 (0),
+d1       => ov7670_data_mux_2 (1),
+d2       => ov7670_data_mux_2 (2),
+d3       => ov7670_data_mux_2 (3),
+d4       => ov7670_data_mux_2 (4),
+d5       => ov7670_data_mux_2 (5),
+d6       => ov7670_data_mux_2 (6),
+d7       => ov7670_data_mux_2 (7),
+xclk     => xclk,
+reset_n  => reset_n,
+pwdn     => '0',
+-- virtual sensor array (as SDCard with RAW images RGB565)
+sd_cs    => sd_cs_2,
+sd_sclk  => sd_sclk_2,
+sd_mosi  => sd_mosi_2,
+sd_miso  => sd_miso_2,
+clk100   => clkcambuf,
+-- RAM module
+Addr     => mt45w8mw16bgx_Addr_2,
+Adv_n    => mt45w8mw16bgx_Adv_n_2,
+Ce_n     => mt45w8mw16bgx_Ce_n_2,
+Clk      => mt45w8mw16bgx_Clk_2,
+Cre      => mt45w8mw16bgx_Cre_2,
+Dq       => mt45w8mw16bgx_Dq_2,
+Lb_n     => mt45w8mw16bgx_Lb_n_2,
+Oe_n     => mt45w8mw16bgx_Oe_n_2,
+oWait    => mt45w8mw16bgx_oWait_2,
+Ub_n     => mt45w8mw16bgx_Ub_n_2,
+We_n     => mt45w8mw16bgx_We_n_2
+);
+
+camera_vga_i3 : camera_vga
+port map (
+sio_d    => sioc,
+sio_c    => siod,
+vsync    => ov7670_vsync_mux_3,
+href     => ov7670_href_mux_3,
+pclk     => ov7670_pclkbuf_mux_3,
+d0       => ov7670_data_mux_3 (0),
+d1       => ov7670_data_mux_3 (1),
+d2       => ov7670_data_mux_3 (2),
+d3       => ov7670_data_mux_3 (3),
+d4       => ov7670_data_mux_3 (4),
+d5       => ov7670_data_mux_3 (5),
+d6       => ov7670_data_mux_3 (6),
+d7       => ov7670_data_mux_3 (7),
+xclk     => xclk,
+reset_n  => reset_n,
+pwdn     => '0',
+-- virtual sensor array (as SDCard with RAW images RGB565)
+sd_cs    => sd_cs_3,
+sd_sclk  => sd_sclk_3,
+sd_mosi  => sd_mosi_3,
+sd_miso  => sd_miso_3,
+clk100   => clkcambuf,
+-- RAM module
+Addr     => mt45w8mw16bgx_Addr_3,
+Adv_n    => mt45w8mw16bgx_Adv_n_3,
+Ce_n     => mt45w8mw16bgx_Ce_n_3,
+Clk      => mt45w8mw16bgx_Clk_3,
+Cre      => mt45w8mw16bgx_Cre_3,
+Dq       => mt45w8mw16bgx_Dq_3,
+Lb_n     => mt45w8mw16bgx_Lb_n_3,
+Oe_n     => mt45w8mw16bgx_Oe_n_3,
+oWait    => mt45w8mw16bgx_oWait_3,
+Ub_n     => mt45w8mw16bgx_Ub_n_3,
+We_n     => mt45w8mw16bgx_We_n_3
+);
+
+camera_vga_i4 : camera_vga
+port map (
+sio_d    => sioc,
+sio_c    => siod,
+vsync    => ov7670_vsync_mux_4,
+href     => ov7670_href_mux_4,
+pclk     => ov7670_pclkbuf_mux_4,
+d0       => ov7670_data_mux_4 (0),
+d1       => ov7670_data_mux_4 (1),
+d2       => ov7670_data_mux_4 (2),
+d3       => ov7670_data_mux_4 (3),
+d4       => ov7670_data_mux_4 (4),
+d5       => ov7670_data_mux_4 (5),
+d6       => ov7670_data_mux_4 (6),
+d7       => ov7670_data_mux_4 (7),
+xclk     => xclk,
+reset_n  => reset_n,
+pwdn     => '0',
+-- virtual sensor array (as SDCard with RAW images RGB565)
+sd_cs    => sd_cs_4,
+sd_sclk  => sd_sclk_4,
+sd_mosi  => sd_mosi_4,
+sd_miso  => sd_miso_4,
+clk100   => clkcambuf,
+-- RAM module
+Addr     => mt45w8mw16bgx_Addr_4,
+Adv_n    => mt45w8mw16bgx_Adv_n_4,
+Ce_n     => mt45w8mw16bgx_Ce_n_4,
+Clk      => mt45w8mw16bgx_Clk_4,
+Cre      => mt45w8mw16bgx_Cre_4,
+Dq       => mt45w8mw16bgx_Dq_4,
+Lb_n     => mt45w8mw16bgx_Lb_n_4,
+Oe_n     => mt45w8mw16bgx_Oe_n_4,
+oWait    => mt45w8mw16bgx_oWait_4,
+Ub_n     => mt45w8mw16bgx_Ub_n_4,
+We_n     => mt45w8mw16bgx_We_n_4
+);
+
+ram1_i1 : component mt45w8mw16bgx
+port map (
+Dq    => mt45w8mw16bgx_Dq_1,
+oWait => mt45w8mw16bgx_oWait_1, -- Wait is a keyword in HDL
+Clk   => mt45w8mw16bgx_Clk_1,
+Addr  => mt45w8mw16bgx_Addr_1,
+Ce_n  => mt45w8mw16bgx_Ce_n_1,
+We_n  => mt45w8mw16bgx_We_n_1,
+Adv_n => mt45w8mw16bgx_Adv_n_1,
+Oe_n  => mt45w8mw16bgx_Oe_n_1,
+Cre   => mt45w8mw16bgx_Cre_1,
+Ub_n  => mt45w8mw16bgx_Ub_n_1,
+Lb_n  => mt45w8mw16bgx_Lb_n_1
+);
+
+ram1_i2 : component mt45w8mw16bgx
+port map (
+Dq    => mt45w8mw16bgx_Dq_2,
+oWait => mt45w8mw16bgx_oWait_2, -- Wait is a keyword in HDL
+Clk   => mt45w8mw16bgx_Clk_2,
+Addr  => mt45w8mw16bgx_Addr_2,
+Ce_n  => mt45w8mw16bgx_Ce_n_2,
+We_n  => mt45w8mw16bgx_We_n_2,
+Adv_n => mt45w8mw16bgx_Adv_n_2,
+Oe_n  => mt45w8mw16bgx_Oe_n_2,
+Cre   => mt45w8mw16bgx_Cre_2,
+Ub_n  => mt45w8mw16bgx_Ub_n_2,
+Lb_n  => mt45w8mw16bgx_Lb_n_1
+);
+
+ram1_i3 : component mt45w8mw16bgx
+port map (
+Dq    => mt45w8mw16bgx_Dq_3,
+oWait => mt45w8mw16bgx_oWait_3, -- Wait is a keyword in HDL
+Clk   => mt45w8mw16bgx_Clk_3,
+Addr  => mt45w8mw16bgx_Addr_3,
+Ce_n  => mt45w8mw16bgx_Ce_n_3,
+We_n  => mt45w8mw16bgx_We_n_3,
+Adv_n => mt45w8mw16bgx_Adv_n_3,
+Oe_n  => mt45w8mw16bgx_Oe_n_3,
+Cre   => mt45w8mw16bgx_Cre_3,
+Ub_n  => mt45w8mw16bgx_Ub_n_3,
+Lb_n  => mt45w8mw16bgx_Lb_n_1
+);
+
+ram1_i4 : component mt45w8mw16bgx
+port map (
+Dq    => mt45w8mw16bgx_Dq_4,
+oWait => mt45w8mw16bgx_oWait_4, -- Wait is a keyword in HDL
+Clk   => mt45w8mw16bgx_Clk_4,
+Addr  => mt45w8mw16bgx_Addr_4,
+Ce_n  => mt45w8mw16bgx_Ce_n_4,
+We_n  => mt45w8mw16bgx_We_n_4,
+Adv_n => mt45w8mw16bgx_Adv_n_4,
+Oe_n  => mt45w8mw16bgx_Oe_n_4,
+Cre   => mt45w8mw16bgx_Cre_4,
+Ub_n  => mt45w8mw16bgx_Ub_n_4,
+Lb_n  => mt45w8mw16bgx_Lb_n_1
+);
+
+sdcard_i1 : sdcard_emulator
+port map (
+sd_cs    => sd_cs_1,
+sd_clk   => sd_sclk_1,
+sd_mosi  => sd_mosi_1,
+sd_miso  => sd_miso_1
+);
+
+sdcard_i2 : sdcard_emulator
+port map (
+sd_cs    => sd_cs_2,
+sd_clk   => sd_sclk_2,
+sd_mosi  => sd_mosi_2,
+sd_miso  => sd_miso_2
+);
+
+sdcard_i3 : sdcard_emulator
+port map (
+sd_cs    => sd_cs_3,
+sd_clk   => sd_sclk_3,
+sd_mosi  => sd_mosi_3,
+sd_miso  => sd_miso_3
+);
+
+sdcard_i4 : sdcard_emulator
+port map (
+sd_cs    => sd_cs_4,
+sd_clk   => sd_sclk_4,
+sd_mosi  => sd_mosi_4,
+sd_miso  => sd_miso_4
+);
 
 sw <= '1';
 
-cam1 : camera PORT MAP (
-camera_io_scl => camera_io_scl1,
-camera_io_sda => camera_io_sda1,
-camera_o_vs => camera_o_vs1,
-camera_o_hs => camera_o_hs1,
-camera_o_pclk => camera_o_pclk1,
-camera_i_xclk => camera_i_xclk1,
-camera_o_d => camera_o_d1,
-camera_i_rst => camera_i_rst1,
-camera_i_pwdn => camera_i_pwdn1
-);
-
-cam2 : camera PORT MAP (
-camera_io_scl => camera_io_scl2,
-camera_io_sda => camera_io_sda2,
-camera_o_vs => camera_o_vs2,
-camera_o_hs => camera_o_hs2,
-camera_o_pclk => camera_o_pclk2,
-camera_i_xclk => camera_i_xclk2,
-camera_o_d => camera_o_d2,
-camera_i_rst => camera_i_rst2,
-camera_i_pwdn => camera_i_pwdn2
-);
-
-cam3 : camera PORT MAP (
-camera_io_scl => camera_io_scl3,
-camera_io_sda => camera_io_sda3,
-camera_o_vs => camera_o_vs3,
-camera_o_hs => camera_o_hs3,
-camera_o_pclk => camera_o_pclk3,
-camera_i_xclk => camera_i_xclk3,
-camera_o_d => camera_o_d3,
-camera_i_rst => camera_i_rst3,
-camera_i_pwdn => camera_i_pwdn3
-);
-
-cam4 : camera PORT MAP (
-camera_io_scl => camera_io_scl4,
-camera_io_sda => camera_io_sda4,
-camera_o_vs => camera_o_vs4,
-camera_o_hs => camera_o_hs4,
-camera_o_pclk => camera_o_pclk4,
-camera_i_xclk => camera_i_xclk4,
-camera_o_d => camera_o_d4,
-camera_i_rst => camera_i_rst4,
-camera_i_pwdn => camera_i_pwdn4
-);
+--cam1 : camera PORT MAP (
+--camera_io_scl => camera_io_scl1,
+--camera_io_sda => camera_io_sda1,
+--camera_o_vs => camera_o_vs1,
+--camera_o_hs => camera_o_hs1,
+--camera_o_pclk => camera_o_pclk1,
+--camera_i_xclk => camera_i_xclk1,
+--camera_o_d => camera_o_d1,
+--camera_i_rst => camera_i_rst1,
+--camera_i_pwdn => camera_i_pwdn1
+--);
+--
+--cam2 : camera PORT MAP (
+--camera_io_scl => camera_io_scl2,
+--camera_io_sda => camera_io_sda2,
+--camera_o_vs => camera_o_vs2,
+--camera_o_hs => camera_o_hs2,
+--camera_o_pclk => camera_o_pclk2,
+--camera_i_xclk => camera_i_xclk2,
+--camera_o_d => camera_o_d2,
+--camera_i_rst => camera_i_rst2,
+--camera_i_pwdn => camera_i_pwdn2
+--);
+--
+--cam3 : camera PORT MAP (
+--camera_io_scl => camera_io_scl3,
+--camera_io_sda => camera_io_sda3,
+--camera_o_vs => camera_o_vs3,
+--camera_o_hs => camera_o_hs3,
+--camera_o_pclk => camera_o_pclk3,
+--camera_i_xclk => camera_i_xclk3,
+--camera_o_d => camera_o_d3,
+--camera_i_rst => camera_i_rst3,
+--camera_i_pwdn => camera_i_pwdn3
+--);
+--
+--cam4 : camera PORT MAP (
+--camera_io_scl => camera_io_scl4,
+--camera_io_sda => camera_io_sda4,
+--camera_o_vs => camera_o_vs4,
+--camera_o_hs => camera_o_hs4,
+--camera_o_pclk => camera_o_pclk4,
+--camera_i_xclk => camera_i_xclk4,
+--camera_o_d => camera_o_d4,
+--camera_i_rst => camera_i_rst4,
+--camera_i_pwdn => camera_i_pwdn4
+--);
 
 camera_i_xclk1 <= ov7670_xclk1; -- cam <- dev
 ov7670_pclk1 <= camera_o_pclk1; -- dev <- cam
-ov7670_data1 <= camera_o_d1;
-ov7670_vsync1 <= camera_o_vs1;
-ov7670_href1 <= camera_o_hs1;
+ov7670_data1 <= ov7670_data_mux_1;
+ov7670_vsync1 <= ov7670_vsync_mux_1;
+ov7670_href1 <= ov7670_href_mux_1;
 
 camera_i_xclk2 <= ov7670_xclk2; -- cam <- dev
 ov7670_pclk2 <= camera_o_pclk2; -- dev <- cam
-ov7670_data2 <= camera_o_d2;
-ov7670_vsync2 <= camera_o_vs2;
-ov7670_href2 <= camera_o_hs2;
+ov7670_data2 <= ov7670_data_mux_2;
+ov7670_vsync2 <= ov7670_vsync_mux_2;
+ov7670_href2 <= ov7670_href_mux_2;
 
 camera_i_xclk3 <= ov7670_xclk3; -- cam <- dev
 ov7670_pclk3 <= camera_o_pclk3; -- dev <- cam
-ov7670_data3 <= camera_o_d3;
-ov7670_vsync3 <= camera_o_vs3;
-ov7670_href3 <= camera_o_hs3;
+ov7670_data3 <= ov7670_data_mux_3;
+ov7670_vsync3 <= ov7670_vsync_mux_3;
+ov7670_href3 <= ov7670_href_mux_3;
 
 camera_i_xclk4 <= ov7670_xclk4; -- cam <- dev
 ov7670_pclk4 <= camera_o_pclk4; -- dev <- cam
-ov7670_data4 <= camera_o_d4;
-ov7670_vsync4 <= camera_o_vs4;
-ov7670_href4 <= camera_o_hs4;
+ov7670_data4 <= ov7670_data_mux_4;
+ov7670_vsync4 <= ov7670_vsync_mux_4;
+ov7670_href4 <= ov7670_href_mux_4;
 
 -- Instantiate the Unit Under Test (UUT)
-uut: Top PORT MAP (
+Top_camera_monitoring_uut: Top_camera_monitoring PORT MAP (
 clk50 => clk50,
 clkcam => clkcam,
 pb => pb,
