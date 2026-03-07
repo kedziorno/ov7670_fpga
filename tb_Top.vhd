@@ -35,10 +35,10 @@ USE ieee.std_logic_1164.ALL;
 use work.micron_mem_parameters.all;
 use work.p_constants.all;
 
-ENTITY tb_Top_camera_monitoring IS
-END tb_Top_camera_monitoring;
+ENTITY tb_top_camera_monitoring IS
+END tb_top_camera_monitoring;
 
-ARCHITECTURE behavior OF tb_Top_camera_monitoring IS 
+ARCHITECTURE behavior OF tb_top_camera_monitoring IS 
 
 component camera_vga is
 port (
@@ -234,6 +234,7 @@ signal vga_rgb : std_logic_vector(7 downto 0);
 
 -- Clock period definitions
 constant clk50_period : time := 20 ns;
+constant clkcambuf_period : time := 10 ns;
 
 COMPONENT camera
 GENERIC(
@@ -293,6 +294,8 @@ begin
   report "ping on isim cmd";
   wait for 1 ms;
 end process p_isim_cmd_ping;
+
+reset_n <= '0', '1' after 100 ns when mem_done = '1' else '1';
 
 camera_vga_i1 : camera_vga
 port map (
@@ -674,6 +677,14 @@ clk50 <= '1';
 wait for clk50_period/2;
 end process;
 
+clkcambuf_process :process
+begin
+clkcambuf <= '0';
+wait for clkcambuf_period/2;
+clkcambuf <= '1';
+wait for clkcambuf_period/2;
+end process;
+
 camera_i_xclkp :process
 begin
 xclk <= '0';
@@ -682,9 +693,36 @@ xclk <= '1';
 wait for camera_i_xclk_period/2;
 end process;
 
+load_memory_from_files : process is
+variable start_addr : integer;
+variable file_name  : string (1 to 27+c_hex_rom_files_name_length);
+begin
+-- XXX RC when load
+mem_done <= '0';
+wait for 90 ns;
+for i in 1 to c_hex_rom_files_count - 1 loop
+wait for 100 ns;
+start_addr := c_camera_frame_length * (i - 1);
+if (i < 10) then
+file_name := c_hex_rom_files_name & "0" & integer'image(i) & "." & c_hex_rom_files_ext;
+else
+file_name := c_hex_rom_files_name & integer'image(i) & "." & c_hex_rom_files_ext;
+end if;
+report "readandconvertrom " & file_name;
+readandconvertrom(file_name, start_addr);
+wait for 100 ns;
+end loop;
+wait for 100 ns;
+--readandconvertrom("hex_memory_file_frame01.hex", 0, c1);
+mem_done <= '1';
+report "images loaded";
+wait;
+end process load_memory_from_files;
+
 -- Stimulus process
 stim_proc : process
 begin
+wait until mem_done = '0';
 -- hold reset state for 100 ns.
 --i_reset <= '1';
 camera_i_rst1 <= '0';
