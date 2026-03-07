@@ -11,6 +11,7 @@ entity VGA_timing_synch is
     Port ( clk25 : in  STD_LOGIC;
            Hsync : out  STD_LOGIC;
            Vsync : out  STD_LOGIC;
+           blank : out  STD_LOGIC;
            activeArea1 : out  STD_LOGIC;
            activeArea2 : out  STD_LOGIC;
            activeArea3 : out  STD_LOGIC;
@@ -78,5 +79,6 @@ activeArea4 <= '1' when (hcnt >= 480 and hcnt < 640) and (vcnt < 120) else '0';
 
 Hsync <= h;
 Vsync <= v;
+blank <= '1' when ((hcnt <= HD) and (vcnt <= VD)) else '0';
 
 end Behavioral;
