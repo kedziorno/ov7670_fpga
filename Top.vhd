@@ -36,7 +36,18 @@ entity Top_camera_monitoring is
 				ov7670_siod1,ov7670_siod2,ov7670_siod3,ov7670_siod4  : inout STD_LOGIC; -- Pmod JB4 --H16
 				ov7670_pwdn1,ov7670_pwdn2,ov7670_pwdn3,ov7670_pwdn4  : out STD_LOGIC; -- Pmod JA1 --L15
 				ov7670_reset1,ov7670_reset2,ov7670_reset3,ov7670_reset4 : out STD_LOGIC; -- Pmod JA7 --K13
-				
+        --memory module
+        Dq : inout std_logic_vector (c_data_bits - 1 downto 0);
+        Addr : in std_logic_vector (c_addr_bits - 1 downto 0);
+        Adv_n : in std_logic;
+        Ce_n : in std_logic;
+        Clk : in std_logic;
+        Cre : in std_logic;
+        Lb_n : in std_logic;
+        Oe_n : in std_logic;
+        Ub_n : in std_logic;
+        We_n : in std_logic;
+        oWait : out std_logic;
 				--VGA
         vga_clock : out STD_LOGIC;
         vga_blank : out STD_LOGIC;
@@ -45,7 +56,7 @@ entity Top_camera_monitoring is
 				vga_rgb	: out STD_LOGIC_VECTOR(7 downto 0)
 				-- R : R9(MSB), T8, R8
 				-- G : N8, P8, P6
-				-- Bc: U5, U4(LSB) 
+				-- Bc: U5, U4(LSB)
 			 );
 end Top_camera_monitoring;
 
