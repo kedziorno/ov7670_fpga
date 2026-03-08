@@ -285,7 +285,8 @@ signal camera_o_vs1,camera_o_vs2,camera_o_vs3,camera_o_vs4 : std_logic;
 signal camera_o_hs1,camera_o_hs2,camera_o_hs3,camera_o_hs4 : std_logic;
 signal camera_o_pclk1,camera_o_pclk2,camera_o_pclk3,camera_o_pclk4 : std_logic;
 signal camera_o_d1,camera_o_d2,camera_o_d3,camera_o_d4 : std_logic_vector(7 downto 0);
-constant camera_i_xclk_period : time := 41.733 ns;
+--constant camera_i_xclk_period : time := 41.733 ns;
+constant camera_i_xclk_period : time := 21 ns;
 
 signal xclk : std_logic;
 signal sw : std_logic;
@@ -626,25 +627,25 @@ sw <= '1';
 --);
 
 camera_i_xclk1 <= ov7670_xclk1; -- cam <- dev
-ov7670_pclk1 <= camera_o_pclk1; -- dev <- cam
+ov7670_pclk1 <= ov7670_pclkbuf_mux_1; -- dev <- cam
 ov7670_data1 <= ov7670_data_mux_1;
 ov7670_vsync1 <= ov7670_vsync_mux_1;
 ov7670_href1 <= ov7670_href_mux_1;
 
 camera_i_xclk2 <= ov7670_xclk2; -- cam <- dev
-ov7670_pclk2 <= camera_o_pclk2; -- dev <- cam
+ov7670_pclk2 <= ov7670_pclkbuf_mux_2; -- dev <- cam
 ov7670_data2 <= ov7670_data_mux_2;
 ov7670_vsync2 <= ov7670_vsync_mux_2;
 ov7670_href2 <= ov7670_href_mux_2;
 
 camera_i_xclk3 <= ov7670_xclk3; -- cam <- dev
-ov7670_pclk3 <= camera_o_pclk3; -- dev <- cam
+ov7670_pclk3 <= ov7670_pclkbuf_mux_3; -- dev <- cam
 ov7670_data3 <= ov7670_data_mux_3;
 ov7670_vsync3 <= ov7670_vsync_mux_3;
 ov7670_href3 <= ov7670_href_mux_3;
 
 camera_i_xclk4 <= ov7670_xclk4; -- cam <- dev
-ov7670_pclk4 <= camera_o_pclk4; -- dev <- cam
+ov7670_pclk4 <= ov7670_pclkbuf_mux_4; -- dev <- cam
 ov7670_data4 <= ov7670_data_mux_4;
 ov7670_vsync4 <= ov7670_vsync_mux_4;
 ov7670_href4 <= ov7670_href_mux_4;
