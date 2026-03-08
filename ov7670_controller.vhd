@@ -8,7 +8,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 entity ov7670_controller is
-    Port ( clk : in  STD_LOGIC;
+    Port ( reset1, clk : in  STD_LOGIC;
            resend : in  STD_LOGIC;
            sioc : out  STD_LOGIC;
            siod : inout  STD_LOGIC;
@@ -22,7 +22,7 @@ end ov7670_controller;
 architecture Behavioral of ov7670_controller is
 
 component ov7670_registers
-	Port ( clk : in  STD_LOGIC;
+	Port ( reset : in std_logic; clk : in  STD_LOGIC;
           resend : in  STD_LOGIC;
           advance : in  STD_LOGIC;
           command : out  STD_LOGIC_VECTOR (15 downto 0);
@@ -54,6 +54,7 @@ send <= not done;
 
 Registers: ov7670_registers port map(
 	clk => clk,
+  reset => reset1,
 	resend => resend,
 	advance => taken,
 	command => command,
