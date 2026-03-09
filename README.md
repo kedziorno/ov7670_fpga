@@ -1,3 +1,9 @@
+Update new branch:
+Get one frame from virtual camera emulator IP Core https://gitlab.com/konrad.oblak/ov7670_camera_emulator and fit in 640x480x1-bit framebuffer.
+
+Image output:
+![vga.bmp](vga.bmp)
+
 Update:
 The same approach but tested with camera emulator IP Core from https://gitlab.com/konrad.oblak/ov7670_camera_emulator used four times as input to the original project (camera emulator operate at ~50MHz).
 All stream from four cameras is accomodate on one VGA screen (see image output below), so this can be used as very simple and cheap camera monitoring.

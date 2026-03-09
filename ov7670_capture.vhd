@@ -24,7 +24,7 @@ architecture Behavioral of ov7670_capture is
    signal d_latch      : std_logic_vector(15 downto 0) := (others => '0');
    signal address      : STD_LOGIC_VECTOR(18 downto 0) := (others => '0');
    signal row         : std_logic_vector(1 downto 0)  := (others => '0');
-   signal href_last    : std_logic_vector(6 downto 0)  := (others => '0');
+   signal href_last    : std_logic_vector(0 downto 0)  := (others => '0');
    signal we_reg       : std_logic := '0';
    signal href_hold    : std_logic := '0';
    signal latched_vsync : STD_LOGIC := '0';
@@ -77,7 +77,7 @@ capture_process: process(pclk)
             -- If not, set the write enable whenever we need to capture a pixel
             if href_last(href_last'high) = '1' then
 --               if row = "10" then
-                  we_reg <= '1';
+                  we_reg <= not we_reg;
 --               end if;
                href_last <= (others => '0');
             else

@@ -31,6 +31,8 @@ constant VP : INTEGER := VD + VF + VB + VR - 1;
 signal clk_vga : STD_LOGIC;
 signal hcnt,vcnt : INTEGER range 0 to 1023 := 0;
 
+signal activeArea1_sig : std_logic;
+
 begin
 clk_vga <= clk25;
 count_proc : process(clk_vga,vcnt,hcnt) begin
@@ -68,7 +70,9 @@ vsync_gen : process(clk_vga) begin
 	end if;
 end process vsync_gen;
 		
-activeArea1 <= '1' when (hcnt <= HD) and (vcnt <= VD) else '0';
-blank <= '1' when ((hcnt > HD) or (vcnt > VD)) else '0';
+activeArea1_sig <= '1' when (hcnt < HD) and (vcnt < VD) else '0';
+activeArea1 <= activeArea1_sig;
+blank <= '1' when ((hcnt >= HD) or (vcnt >= VD)) else '0';
+--blank <= not activeArea1_sig;
 
 end Behavioral;
