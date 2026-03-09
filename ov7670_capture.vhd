@@ -15,14 +15,14 @@ entity ov7670_capture is
            vsync : in  STD_LOGIC;
            href : in  STD_LOGIC;
            d : in  STD_LOGIC_VECTOR (7 downto 0);
-           addr : out  STD_LOGIC_VECTOR (14 downto 0);
-           dout : out  STD_LOGIC_VECTOR (2 downto 0);
+           addr : out  STD_LOGIC_VECTOR (18 downto 0);
+           dout : out  STD_LOGIC_VECTOR (0 downto 0);
            we : out  STD_LOGIC_VECTOR (0 downto 0));
 end ov7670_capture;
 
 architecture Behavioral of ov7670_capture is
    signal d_latch      : std_logic_vector(15 downto 0) := (others => '0');
-   signal address      : STD_LOGIC_VECTOR(14 downto 0) := (others => '0');
+   signal address      : STD_LOGIC_VECTOR(18 downto 0) := (others => '0');
    signal row         : std_logic_vector(1 downto 0)  := (others => '0');
    signal href_last    : std_logic_vector(6 downto 0)  := (others => '0');
    signal we_reg       : std_logic := '0';
@@ -33,9 +33,10 @@ architecture Behavioral of ov7670_capture is
 begin
    addr <= address;
    we(0) <= we_reg;
+   dout(0)<=  d_latch(0);
 --	 dout<= d_latch(11 downto 8) & d_latch(7 downto 4) & d_latch(3 downto 0);
 --   dout<= d_latch(11) & d_latch(7) & d_latch(3);
-   dout<= d_latch(10) & d_latch(6) & d_latch(2);
+--   dout<= d_latch(10) & d_latch(6) & d_latch(2);
 --   dout<= d_latch(9) & d_latch(5) & d_latch(1);
 --   dout<= d_latch(8) & d_latch(4) & d_latch(0); 
    
@@ -43,7 +44,7 @@ capture_process: process(pclk)
    begin
       if rising_edge(pclk) then
          if we_reg = '1' then
-					if (to_integer(unsigned(address)) = 19200-1) then
+					if (to_integer(unsigned(address)) = 307200-1) then
 						address <= (others => '0');
 					else
             address <= std_logic_vector(unsigned(address)+1);
@@ -51,14 +52,14 @@ capture_process: process(pclk)
          end if;
 
          -- detect the rising edge on href - the start of the scan row
-         if href_hold = '0' and latched_href = '1' then
-            case row is
-               when "00"   => row <= "01";
-               when "01"   => row <= "10";
-               when "10"   => row <= "11";
-               when others => row <= "00";
-            end case;
-         end if;
+--         if href_hold = '0' and latched_href = '1' then
+--            case row is
+--               when "00"   => row <= "01";
+--               when "01"   => row <= "10";
+--               when "10"   => row <= "11";
+--               when others => row <= "00";
+--            end case;
+--         end if;
          href_hold <= latched_href;
          
          -- capturing the data from the camera, 12-bit RGB
@@ -75,9 +76,9 @@ capture_process: process(pclk)
          else
             -- If not, set the write enable whenever we need to capture a pixel
             if href_last(href_last'high) = '1' then
-               if row = "10" then
+--               if row = "10" then
                   we_reg <= '1';
-               end if;
+--               end if;
                href_last <= (others => '0');
             else
                href_last <= href_last(href_last'high-1 downto 0) & latched_href;

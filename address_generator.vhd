@@ -8,7 +8,7 @@ entity address_generator is
     clk25 : in STD_LOGIC;
     enable : in STD_LOGIC;
     vsync : in STD_LOGIC;
-    address : out STD_LOGIC_VECTOR (14 downto 0)
+    address : out STD_LOGIC_VECTOR (18 downto 0)
   );  
 end address_generator;
 
@@ -24,7 +24,7 @@ begin
 process (clk25) begin
 	if rising_edge (clk25) then
 		if (enable='1') then
-			if (addr < 160*120-1) then
+			if (addr < 307200-1) then
 				addr <= addr + 1 ;
 			else
 			addr <= (others => '0');

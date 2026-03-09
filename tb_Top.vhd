@@ -193,19 +193,27 @@ clkcam	: in STD_LOGIC; -- Crystal Oscilator 23.9616 MHz  --U9
 pb		: in STD_LOGIC; -- Push Button --B18
 sw		: in STD_LOGIC; -- Push Button --G18
 led1 : out STD_LOGIC; -- Indicates configuration has been done --J14
-led2 : out STD_LOGIC; -- Indicates configuration has been done --J14
-led3 : out STD_LOGIC; -- Indicates configuration has been done --J14
-led4 : out STD_LOGIC; -- Indicates configuration has been done --J14
-anode : out std_logic_vector(3 downto 0);
-ov7670_pclk1,ov7670_pclk2,ov7670_pclk3,ov7670_pclk4  : in  STD_LOGIC; -- Pmod JB8 --R16
-ov7670_xclk1,ov7670_xclk2,ov7670_xclk3,ov7670_xclk4  : out STD_LOGIC; -- Pmod JB2 --R18
-ov7670_vsync1,ov7670_vsync2,ov7670_vsync3,ov7670_vsync4 : in  STD_LOGIC; -- Pmod JB9 --T18
-ov7670_href1,ov7670_href2,ov7670_href3,ov7670_href4  : in  STD_LOGIC; -- Pmod JB3 --R15
-ov7670_data1,ov7670_data2,ov7670_data3,ov7670_data4  : in  STD_LOGIC_vector(7 downto 0);
-ov7670_sioc1,ov7670_sioc2,ov7670_sioc3,ov7670_sioc4  : out STD_LOGIC; -- Pmod JB10 --J12
-ov7670_siod1,ov7670_siod2,ov7670_siod3,ov7670_siod4  : inout STD_LOGIC; -- Pmod JB4 --H16
-ov7670_pwdn1,ov7670_pwdn2,ov7670_pwdn3,ov7670_pwdn4  : out STD_LOGIC; -- Pmod JA1 --L15
-ov7670_reset1,ov7670_reset2,ov7670_reset3,ov7670_reset4 : out STD_LOGIC; -- Pmod JA7 --K13
+ov7670_pclk1: in  STD_LOGIC; -- Pmod JB8 --R16
+ov7670_xclk1: out STD_LOGIC; -- Pmod JB2 --R18
+ov7670_vsync1: in  STD_LOGIC; -- Pmod JB9 --T18
+ov7670_href1: in  STD_LOGIC; -- Pmod JB3 --R15
+ov7670_data1: in  STD_LOGIC_vector(7 downto 0);
+ov7670_sioc1: out STD_LOGIC; -- Pmod JB10 --J12
+ov7670_siod1: inout STD_LOGIC; -- Pmod JB4 --H16
+ov7670_pwdn1: out STD_LOGIC; -- Pmod JA1 --L15
+ov7670_reset1: out STD_LOGIC; -- Pmod JA7 --K13
+--memory module
+Dq : inout std_logic_vector (c_data_bits - 1 downto 0);
+Addr : in std_logic_vector (c_addr_bits - 1 downto 0);
+Adv_n : in std_logic;
+Ce_n : in std_logic;
+Clk : in std_logic;
+Cre : in std_logic;
+Lb_n : in std_logic;
+Oe_n : in std_logic;
+Ub_n : in std_logic;
+We_n : in std_logic;
+oWait : out std_logic;
 vga_clock : out STD_LOGIC;
 vga_blank : out STD_LOGIC;
 vga_hsync : out STD_LOGIC; --T4
@@ -232,20 +240,20 @@ end component vga_bmp_sink;
 signal clk50 : std_logic := '0';
 signal clkcam : std_logic := '0';
 signal pb : std_logic := '0';
-signal ov7670_pclk1,ov7670_pclk2,ov7670_pclk3,ov7670_pclk4 : std_logic := '0';
-signal ov7670_vsync1,ov7670_vsync2,ov7670_vsync3,ov7670_vsync4 : std_logic := '0';
-signal ov7670_href1,ov7670_href2,ov7670_href3,ov7670_href4 : std_logic := '0';
-signal ov7670_data1,ov7670_data2,ov7670_data3,ov7670_data4 : std_logic_vector(7 downto 0) := (others => '0');
+signal ov7670_pclk1: std_logic := '0';
+signal ov7670_vsync1: std_logic := '0';
+signal ov7670_href1: std_logic := '0';
+signal ov7670_data1: std_logic_vector(7 downto 0) := (others => '0');
 
 --BiDirs
-signal ov7670_siod1,ov7670_siod2,ov7670_siod3,ov7670_siod4 : std_logic;
+signal ov7670_siod1: std_logic;
 
 --Outputs
-signal led1,led2,led3,led4 : std_logic;
-signal ov7670_xclk1,ov7670_xclk2,ov7670_xclk3,ov7670_xclk4 : std_logic;
-signal ov7670_sioc1,ov7670_sioc2,ov7670_sioc3,ov7670_sioc4 : std_logic;
-signal ov7670_pwdn1,ov7670_pwdn2,ov7670_pwdn3,ov7670_pwdn4 : std_logic;
-signal ov7670_reset1,ov7670_reset2,ov7670_reset3,ov7670_reset4 : std_logic;
+signal led1: std_logic;
+signal ov7670_xclk1: std_logic;
+signal ov7670_sioc1: std_logic;
+signal ov7670_pwdn1: std_logic;
+signal ov7670_reset1: std_logic;
 signal vga_hsync : std_logic;
 signal vga_vsync : std_logic;
 signal vga_rgb : std_logic_vector(7 downto 0);
@@ -306,6 +314,18 @@ signal ov7670_data_mux_2 : std_logic_vector(7 downto 0);
 signal ov7670_data_mux_3 : std_logic_vector(7 downto 0);
 signal ov7670_data_mux_4 : std_logic_vector(7 downto 0);
 
+signal Addr : std_logic_vector(22 downto 0) := (others => '0');
+signal Adv_n : std_logic := '0';
+signal Ce_n : std_logic := '0';
+signal Clk : std_logic := '0';
+signal Cre : std_logic := '0';
+signal Lb_n : std_logic := '0';
+signal Oe_n : std_logic := '0';
+signal Ub_n : std_logic := '0';
+signal We_n : std_logic := '0';
+signal Dq : std_logic_vector(15 downto 0);
+signal oWait : std_logic := '0';
+
 BEGIN
 
 p_isim_cmd_ping : process is
@@ -327,7 +347,7 @@ dat_i        =>
 vga_rgb (1 downto 0) &"000000"&
 vga_rgb (4 downto 2) &"00000" &
 vga_rgb (7 downto 5) &"00000",
-active_vid_i => vga_blank,
+active_vid_i => not vga_blank,
 h_sync_i     => vga_hsync,
 v_sync_i     => vga_vsync
 );
@@ -370,120 +390,6 @@ Ub_n     => mt45w8mw16bgx_Ub_n_1,
 We_n     => mt45w8mw16bgx_We_n_1
 );
 
-camera_vga_i2 : camera_vga
-port map (
-sio_d    => sioc,
-sio_c    => siod,
-vsync    => ov7670_vsync_mux_2,
-href     => ov7670_href_mux_2,
-pclk     => ov7670_pclkbuf_mux_2,
-d0       => ov7670_data_mux_2 (0),
-d1       => ov7670_data_mux_2 (1),
-d2       => ov7670_data_mux_2 (2),
-d3       => ov7670_data_mux_2 (3),
-d4       => ov7670_data_mux_2 (4),
-d5       => ov7670_data_mux_2 (5),
-d6       => ov7670_data_mux_2 (6),
-d7       => ov7670_data_mux_2 (7),
-xclk     => xclk,
-reset_n  => reset_n,
-pwdn     => '0',
--- virtual sensor array (as SDCard with RAW images RGB565)
-sd_cs    => sd_cs_2,
-sd_sclk  => sd_sclk_2,
-sd_mosi  => sd_mosi_2,
-sd_miso  => sd_miso_2,
-clk100   => clkcambuf,
--- RAM module
-Addr     => mt45w8mw16bgx_Addr_2,
-Adv_n    => mt45w8mw16bgx_Adv_n_2,
-Ce_n     => mt45w8mw16bgx_Ce_n_2,
-Clk      => mt45w8mw16bgx_Clk_2,
-Cre      => mt45w8mw16bgx_Cre_2,
-Dq       => mt45w8mw16bgx_Dq_2,
-Lb_n     => mt45w8mw16bgx_Lb_n_2,
-Oe_n     => mt45w8mw16bgx_Oe_n_2,
-oWait    => mt45w8mw16bgx_oWait_2,
-Ub_n     => mt45w8mw16bgx_Ub_n_2,
-We_n     => mt45w8mw16bgx_We_n_2
-);
-
-camera_vga_i3 : camera_vga
-port map (
-sio_d    => sioc,
-sio_c    => siod,
-vsync    => ov7670_vsync_mux_3,
-href     => ov7670_href_mux_3,
-pclk     => ov7670_pclkbuf_mux_3,
-d0       => ov7670_data_mux_3 (0),
-d1       => ov7670_data_mux_3 (1),
-d2       => ov7670_data_mux_3 (2),
-d3       => ov7670_data_mux_3 (3),
-d4       => ov7670_data_mux_3 (4),
-d5       => ov7670_data_mux_3 (5),
-d6       => ov7670_data_mux_3 (6),
-d7       => ov7670_data_mux_3 (7),
-xclk     => xclk,
-reset_n  => reset_n,
-pwdn     => '0',
--- virtual sensor array (as SDCard with RAW images RGB565)
-sd_cs    => sd_cs_3,
-sd_sclk  => sd_sclk_3,
-sd_mosi  => sd_mosi_3,
-sd_miso  => sd_miso_3,
-clk100   => clkcambuf,
--- RAM module
-Addr     => mt45w8mw16bgx_Addr_3,
-Adv_n    => mt45w8mw16bgx_Adv_n_3,
-Ce_n     => mt45w8mw16bgx_Ce_n_3,
-Clk      => mt45w8mw16bgx_Clk_3,
-Cre      => mt45w8mw16bgx_Cre_3,
-Dq       => mt45w8mw16bgx_Dq_3,
-Lb_n     => mt45w8mw16bgx_Lb_n_3,
-Oe_n     => mt45w8mw16bgx_Oe_n_3,
-oWait    => mt45w8mw16bgx_oWait_3,
-Ub_n     => mt45w8mw16bgx_Ub_n_3,
-We_n     => mt45w8mw16bgx_We_n_3
-);
-
-camera_vga_i4 : camera_vga
-port map (
-sio_d    => sioc,
-sio_c    => siod,
-vsync    => ov7670_vsync_mux_4,
-href     => ov7670_href_mux_4,
-pclk     => ov7670_pclkbuf_mux_4,
-d0       => ov7670_data_mux_4 (0),
-d1       => ov7670_data_mux_4 (1),
-d2       => ov7670_data_mux_4 (2),
-d3       => ov7670_data_mux_4 (3),
-d4       => ov7670_data_mux_4 (4),
-d5       => ov7670_data_mux_4 (5),
-d6       => ov7670_data_mux_4 (6),
-d7       => ov7670_data_mux_4 (7),
-xclk     => xclk,
-reset_n  => reset_n,
-pwdn     => '0',
--- virtual sensor array (as SDCard with RAW images RGB565)
-sd_cs    => sd_cs_4,
-sd_sclk  => sd_sclk_4,
-sd_mosi  => sd_mosi_4,
-sd_miso  => sd_miso_4,
-clk100   => clkcambuf,
--- RAM module
-Addr     => mt45w8mw16bgx_Addr_4,
-Adv_n    => mt45w8mw16bgx_Adv_n_4,
-Ce_n     => mt45w8mw16bgx_Ce_n_4,
-Clk      => mt45w8mw16bgx_Clk_4,
-Cre      => mt45w8mw16bgx_Cre_4,
-Dq       => mt45w8mw16bgx_Dq_4,
-Lb_n     => mt45w8mw16bgx_Lb_n_4,
-Oe_n     => mt45w8mw16bgx_Oe_n_4,
-oWait    => mt45w8mw16bgx_oWait_4,
-Ub_n     => mt45w8mw16bgx_Ub_n_4,
-We_n     => mt45w8mw16bgx_We_n_4
-);
-
 ram1_i1 : component mt45w8mw16bgx
 port map (
 Dq    => mt45w8mw16bgx_Dq_1,
@@ -499,51 +405,6 @@ Ub_n  => mt45w8mw16bgx_Ub_n_1,
 Lb_n  => mt45w8mw16bgx_Lb_n_1
 );
 
-ram1_i2 : component mt45w8mw16bgx
-port map (
-Dq    => mt45w8mw16bgx_Dq_2,
-oWait => mt45w8mw16bgx_oWait_2, -- Wait is a keyword in HDL
-Clk   => mt45w8mw16bgx_Clk_2,
-Addr  => mt45w8mw16bgx_Addr_2,
-Ce_n  => mt45w8mw16bgx_Ce_n_2,
-We_n  => mt45w8mw16bgx_We_n_2,
-Adv_n => mt45w8mw16bgx_Adv_n_2,
-Oe_n  => mt45w8mw16bgx_Oe_n_2,
-Cre   => mt45w8mw16bgx_Cre_2,
-Ub_n  => mt45w8mw16bgx_Ub_n_2,
-Lb_n  => mt45w8mw16bgx_Lb_n_1
-);
-
-ram1_i3 : component mt45w8mw16bgx
-port map (
-Dq    => mt45w8mw16bgx_Dq_3,
-oWait => mt45w8mw16bgx_oWait_3, -- Wait is a keyword in HDL
-Clk   => mt45w8mw16bgx_Clk_3,
-Addr  => mt45w8mw16bgx_Addr_3,
-Ce_n  => mt45w8mw16bgx_Ce_n_3,
-We_n  => mt45w8mw16bgx_We_n_3,
-Adv_n => mt45w8mw16bgx_Adv_n_3,
-Oe_n  => mt45w8mw16bgx_Oe_n_3,
-Cre   => mt45w8mw16bgx_Cre_3,
-Ub_n  => mt45w8mw16bgx_Ub_n_3,
-Lb_n  => mt45w8mw16bgx_Lb_n_1
-);
-
-ram1_i4 : component mt45w8mw16bgx
-port map (
-Dq    => mt45w8mw16bgx_Dq_4,
-oWait => mt45w8mw16bgx_oWait_4, -- Wait is a keyword in HDL
-Clk   => mt45w8mw16bgx_Clk_4,
-Addr  => mt45w8mw16bgx_Addr_4,
-Ce_n  => mt45w8mw16bgx_Ce_n_4,
-We_n  => mt45w8mw16bgx_We_n_4,
-Adv_n => mt45w8mw16bgx_Adv_n_4,
-Oe_n  => mt45w8mw16bgx_Oe_n_4,
-Cre   => mt45w8mw16bgx_Cre_4,
-Ub_n  => mt45w8mw16bgx_Ub_n_4,
-Lb_n  => mt45w8mw16bgx_Lb_n_1
-);
-
 sdcard_i1 : sdcard_emulator
 port map (
 sd_cs    => sd_cs_1,
@@ -552,50 +413,6 @@ sd_mosi  => sd_mosi_1,
 sd_miso  => sd_miso_1
 );
 
-sdcard_i2 : sdcard_emulator
-port map (
-sd_cs    => sd_cs_2,
-sd_clk   => sd_sclk_2,
-sd_mosi  => sd_mosi_2,
-sd_miso  => sd_miso_2
-);
-
-sdcard_i3 : sdcard_emulator
-port map (
-sd_cs    => sd_cs_3,
-sd_clk   => sd_sclk_3,
-sd_mosi  => sd_mosi_3,
-sd_miso  => sd_miso_3
-);
-
-sdcard_i4 : sdcard_emulator
-port map (
-sd_cs    => sd_cs_4,
-sd_clk   => sd_sclk_4,
-sd_mosi  => sd_mosi_4,
-sd_miso  => sd_miso_4
-);
-
-sw <= '1';
-
---cam1 : camera PORT MAP (
---camera_io_scl => camera_io_scl1,
---camera_io_sda => camera_io_sda1,
---camera_o_vs => camera_o_vs1,
---camera_o_hs => camera_o_hs1,
---camera_o_pclk => camera_o_pclk1,
---camera_i_xclk => camera_i_xclk1,
---camera_o_d => camera_o_d1,
---camera_i_rst => camera_i_rst1,
---camera_i_pwdn => camera_i_pwdn1
---);
---
---cam2 : camera PORT MAP (
---camera_io_scl => camera_io_scl2,
---camera_io_sda => camera_io_sda2,
---camera_o_vs => camera_o_vs2,
---camera_o_hs => camera_o_hs2,
---camera_o_pclk => camera_o_pclk2,
 --camera_i_xclk => camera_i_xclk2,
 --camera_o_d => camera_o_d2,
 --camera_i_rst => camera_i_rst2,
@@ -632,24 +449,6 @@ ov7670_data1 <= ov7670_data_mux_1;
 ov7670_vsync1 <= ov7670_vsync_mux_1;
 ov7670_href1 <= ov7670_href_mux_1;
 
-camera_i_xclk2 <= ov7670_xclk2; -- cam <- dev
-ov7670_pclk2 <= ov7670_pclkbuf_mux_2; -- dev <- cam
-ov7670_data2 <= ov7670_data_mux_2;
-ov7670_vsync2 <= ov7670_vsync_mux_2;
-ov7670_href2 <= ov7670_href_mux_2;
-
-camera_i_xclk3 <= ov7670_xclk3; -- cam <- dev
-ov7670_pclk3 <= ov7670_pclkbuf_mux_3; -- dev <- cam
-ov7670_data3 <= ov7670_data_mux_3;
-ov7670_vsync3 <= ov7670_vsync_mux_3;
-ov7670_href3 <= ov7670_href_mux_3;
-
-camera_i_xclk4 <= ov7670_xclk4; -- cam <- dev
-ov7670_pclk4 <= ov7670_pclkbuf_mux_4; -- dev <- cam
-ov7670_data4 <= ov7670_data_mux_4;
-ov7670_vsync4 <= ov7670_vsync_mux_4;
-ov7670_href4 <= ov7670_href_mux_4;
-
 -- Instantiate the Unit Under Test (UUT)
 Top_camera_monitoring_uut: Top_camera_monitoring PORT MAP (
 clk50 => clk50,
@@ -657,46 +456,26 @@ clkcam => clkcam,
 pb => pb,
 sw => sw,
 led1 => led1,
-led2 => led2,
-led3 => led3,
-led4 => led4,
-anode => anode,
 ov7670_pclk1 => ov7670_pclk1,
-ov7670_pclk2 => ov7670_pclk2,
-ov7670_pclk3 => ov7670_pclk3,
-ov7670_pclk4 => ov7670_pclk4,
 ov7670_xclk1 => ov7670_xclk1,
-ov7670_xclk2 => ov7670_xclk2,
-ov7670_xclk3 => ov7670_xclk3,
-ov7670_xclk4 => ov7670_xclk4,
 ov7670_vsync1 => ov7670_vsync1,
-ov7670_vsync2 => ov7670_vsync2,
-ov7670_vsync3 => ov7670_vsync3,
-ov7670_vsync4 => ov7670_vsync4,
 ov7670_href1 => ov7670_href1,
-ov7670_href2 => ov7670_href2,
-ov7670_href3 => ov7670_href3,
-ov7670_href4 => ov7670_href4,
 ov7670_data1 => ov7670_data1,
-ov7670_data2 => ov7670_data2,
-ov7670_data3 => ov7670_data3,
-ov7670_data4 => ov7670_data4,
 ov7670_sioc1 => ov7670_sioc1,
-ov7670_sioc2 => ov7670_sioc2,
-ov7670_sioc3 => ov7670_sioc3,
-ov7670_sioc4 => ov7670_sioc4,
 ov7670_siod1 => ov7670_siod1,
-ov7670_siod2 => ov7670_siod2,
-ov7670_siod3 => ov7670_siod3,
-ov7670_siod4 => ov7670_siod4,
 ov7670_pwdn1 => ov7670_pwdn1,
-ov7670_pwdn2 => ov7670_pwdn2,
-ov7670_pwdn3 => ov7670_pwdn3,
-ov7670_pwdn4 => ov7670_pwdn4,
 ov7670_reset1 => ov7670_reset1,
-ov7670_reset2 => ov7670_reset2,
-ov7670_reset3 => ov7670_reset3,
-ov7670_reset4 => ov7670_reset4,
+Dq => Dq,
+Addr => Addr,
+Adv_n => Adv_n,
+Ce_n => Ce_n,
+Clk => Clk,
+Cre => Cre,
+Lb_n => Lb_n,
+Oe_n => Oe_n,
+Ub_n => Ub_n,
+We_n => We_n,
+oWait => oWait,
 vga_blank => vga_blank,
 vga_clock => vga_clock,
 vga_hsync => vga_hsync,
