@@ -12,11 +12,19 @@ end clk25gen;
 architecture Behavioral of clk25gen is
 signal clkbuf : STD_LOGIC := '0';
 begin
-	process (clk50) begin
+	process (clk50) is
+    constant max : integer := 2;
+    variable i : integer range 0 to max-1 := 0;
+  begin
 		if rising_edge(clk50) then
-			clk25 <= not(clkbuf);
+    if (i = max-1) then
+      i := 0;
 			clkbuf <= not (clkbuf);
+    else
+      i := i + 1;
 		end if;
+    end if;
 	end process;
+			clk25 <= not(clkbuf);
 end Behavioral;
 

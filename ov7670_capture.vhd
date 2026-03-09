@@ -16,7 +16,7 @@ entity ov7670_capture is
            href : in  STD_LOGIC;
            d : in  STD_LOGIC_VECTOR (7 downto 0);
            addr : out  STD_LOGIC_VECTOR (18 downto 0);
-           dout : out  STD_LOGIC_VECTOR (0 downto 0);
+           dout : out  STD_LOGIC_VECTOR (15 downto 0);
            we : out  STD_LOGIC_VECTOR (0 downto 0));
 end ov7670_capture;
 
@@ -33,7 +33,8 @@ architecture Behavioral of ov7670_capture is
 begin
    addr <= address;
    we(0) <= we_reg;
-dout (0) <= d_latch(0);
+dout  <= d_latch;
+--dout (0) <= d_latch(0);
 --   dout(0)<=
 --d_latch(15 )  xnor
 --d_latch(14 )  xnor

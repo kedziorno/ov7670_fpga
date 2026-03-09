@@ -7,7 +7,7 @@ use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 entity vga_imagegenerator is
-    Port (	Data_in1 : in  STD_LOGIC_VECTOR (0 downto 0);
+    Port (	Data_in1 : in  STD_LOGIC_VECTOR (15 downto 0);
 						active_area1 : in  STD_LOGIC;
            RGB_out : out  STD_LOGIC_VECTOR (7 downto 0));
 end vga_imagegenerator;

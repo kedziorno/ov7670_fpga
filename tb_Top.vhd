@@ -204,16 +204,16 @@ ov7670_pwdn1: out STD_LOGIC; -- Pmod JA1 --L15
 ov7670_reset1: out STD_LOGIC; -- Pmod JA7 --K13
 --memory module
 Dq : inout std_logic_vector (c_data_bits - 1 downto 0);
-Addr : in std_logic_vector (c_addr_bits - 1 downto 0);
-Adv_n : in std_logic;
-Ce_n : in std_logic;
-Clk : in std_logic;
-Cre : in std_logic;
-Lb_n : in std_logic;
-Oe_n : in std_logic;
-Ub_n : in std_logic;
-We_n : in std_logic;
-oWait : out std_logic;
+Addr : out std_logic_vector (c_addr_bits - 1 downto 0);
+Adv_n : out std_logic;
+Ce_n : out std_logic;
+Clk : out std_logic;
+Cre : out std_logic;
+Lb_n : out std_logic;
+Oe_n : out std_logic;
+Ub_n : out std_logic;
+We_n : out std_logic;
+oWait : in std_logic;
 vga_clock : out STD_LOGIC;
 vga_blank : out STD_LOGIC;
 vga_hsync : out STD_LOGIC; --T4
@@ -259,7 +259,7 @@ signal vga_vsync : std_logic;
 signal vga_rgb : std_logic_vector(7 downto 0);
 
 -- Clock period definitions
-constant clk50_period : time := 20 ns;
+constant clk50_period : time := 10 ns;
 constant clkcambuf_period : time := 10 ns;
 
 COMPONENT camera
@@ -405,6 +405,21 @@ Ub_n  => mt45w8mw16bgx_Ub_n_1,
 Lb_n  => mt45w8mw16bgx_Lb_n_1
 );
 
+ram_board : component mt45w8mw16bgx
+port map (
+Dq    => mt45w8mw16bgx_Dq_2,
+oWait => mt45w8mw16bgx_oWait_2, -- Wait is a keyword in HDL
+Clk   => mt45w8mw16bgx_Clk_2,
+Addr  => mt45w8mw16bgx_Addr_2,
+Ce_n  => mt45w8mw16bgx_Ce_n_2,
+We_n  => mt45w8mw16bgx_We_n_2,
+Adv_n => mt45w8mw16bgx_Adv_n_2,
+Oe_n  => mt45w8mw16bgx_Oe_n_2,
+Cre   => mt45w8mw16bgx_Cre_2,
+Ub_n  => mt45w8mw16bgx_Ub_n_2,
+Lb_n  => mt45w8mw16bgx_Lb_n_2
+);
+
 sdcard_i1 : sdcard_emulator
 port map (
 sd_cs    => sd_cs_1,
@@ -465,17 +480,17 @@ ov7670_sioc1 => ov7670_sioc1,
 ov7670_siod1 => ov7670_siod1,
 ov7670_pwdn1 => ov7670_pwdn1,
 ov7670_reset1 => ov7670_reset1,
-Dq => Dq,
-Addr => Addr,
-Adv_n => Adv_n,
-Ce_n => Ce_n,
-Clk => Clk,
-Cre => Cre,
-Lb_n => Lb_n,
-Oe_n => Oe_n,
-Ub_n => Ub_n,
-We_n => We_n,
-oWait => oWait,
+Dq => mt45w8mw16bgx_Dq_2,
+Addr => mt45w8mw16bgx_Addr_2,
+Adv_n => mt45w8mw16bgx_Adv_n_2,
+Ce_n => mt45w8mw16bgx_Ce_n_2,
+Clk => mt45w8mw16bgx_Clk_2,
+Cre => mt45w8mw16bgx_Cre_2,
+Lb_n => mt45w8mw16bgx_Lb_n_2,
+Oe_n => mt45w8mw16bgx_Oe_n_2,
+Ub_n => mt45w8mw16bgx_Ub_n_2,
+We_n => mt45w8mw16bgx_We_n_2,
+oWait => mt45w8mw16bgx_oWait_2,
 vga_blank => vga_blank,
 vga_clock => vga_clock,
 vga_hsync => vga_hsync,

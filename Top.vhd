@@ -34,16 +34,16 @@ entity Top_camera_monitoring is
 				ov7670_reset1 : out STD_LOGIC;
         --memory module
         Dq : inout std_logic_vector (c_data_bits - 1 downto 0);
-        Addr : in std_logic_vector (c_addr_bits - 1 downto 0);
-        Adv_n : in std_logic;
-        Ce_n : in std_logic;
-        Clk : in std_logic;
-        Cre : in std_logic;
-        Lb_n : in std_logic;
-        Oe_n : in std_logic;
-        Ub_n : in std_logic;
-        We_n : in std_logic;
-        oWait : out std_logic;
+        Addr : out std_logic_vector (c_addr_bits - 1 downto 0);
+        Adv_n : out std_logic;
+        Ce_n : out std_logic;
+        Clk : out std_logic;
+        Cre : out std_logic;
+        Lb_n : out std_logic;
+        Oe_n : out std_logic;
+        Ub_n : out std_logic;
+        We_n : out std_logic;
+        oWait : in std_logic;
 				--VGA
         vga_clock : out STD_LOGIC;
         vga_blank : out STD_LOGIC;
@@ -72,7 +72,7 @@ COMPONENT ov7670_capture
           href : in  STD_LOGIC;
           d : in  STD_LOGIC_VECTOR (7 downto 0);
           addr : out  STD_LOGIC_VECTOR (18 downto 0);
-          dout : out  STD_LOGIC_VECTOR (0 downto 0);
+          dout : out  STD_LOGIC_VECTOR (15 downto 0);
           we : out  STD_LOGIC_VECTOR (0 downto 0));
 END COMPONENT;
 
@@ -100,7 +100,7 @@ COMPONENT frame_buffer
 END COMPONENT;
 
 COMPONENT vga_imagegenerator
-	Port ( Data_in1 : in  STD_LOGIC_VECTOR (0 downto 0);
+	Port ( Data_in1 : in  STD_LOGIC_VECTOR (15 downto 0);
 						active_area1 : in  STD_LOGIC;
            RGB_out : out  STD_LOGIC_VECTOR (7 downto 0));
 END COMPONENT;
@@ -120,14 +120,43 @@ COMPONENT VGA_timing_synch
            activeArea1 : out  STD_LOGIC);
 END COMPONENT;
 
+COMPONENT ram_interface
+PORT( i_clk	:	IN	STD_LOGIC;
+      oe_n	:	OUT	STD_LOGIC;
+      lb_n	:	OUT	STD_LOGIC;
+      dq_out	:	OUT	STD_LOGIC_VECTOR (15 DOWNTO 0);
+      cre	:	OUT	STD_LOGIC;
+      clk	:	OUT	STD_LOGIC;
+      ce_n	:	OUT	STD_LOGIC;
+      adv_n	:	OUT	STD_LOGIC;
+      addr	:	OUT	STD_LOGIC_VECTOR (22 DOWNTO 0);
+      i_rd	:	IN	STD_LOGIC;
+      i_wr	:	IN	STD_LOGIC;
+      i_rst_n	:	IN	STD_LOGIC;
+      addr_rd	:	IN	STD_LOGIC_VECTOR (22 DOWNTO 0);
+      addr_wr	:	IN	STD_LOGIC_VECTOR (22 DOWNTO 0);
+      data_wr	:	IN	STD_LOGIC_VECTOR (15 DOWNTO 0);
+      dq_in	:	IN	STD_LOGIC_VECTOR (15 DOWNTO 0);
+      data_rd	:	OUT	STD_LOGIC_VECTOR (15 DOWNTO 0);
+      ub_n	:	OUT	STD_LOGIC;
+      we_n	:	OUT	STD_LOGIC;
+      owait	:	IN	STD_LOGIC);
+END COMPONENT;
+signal ri_ard : std_logic_vector (22 downto 0);
+signal ri_awr : std_logic_vector (22 downto 0);
+signal ri_drd : std_logic_vector (15 downto 0);
+signal ri_dwr : std_logic_vector (15 downto 0);
+signal dqi, dqo : std_logic_vector (15 downto 0);
+signal ri_rd, ri_wr : std_logic;
+
 signal clk25 : STD_LOGIC;
 signal resend : STD_LOGIC;
 
 -- RAM FB
 signal wren1 : STD_LOGIC_VECTOR(0 downto 0);
-signal wr_d1 : STD_LOGIC_VECTOR(0 downto 0);
+signal wr_d1 : STD_LOGIC_VECTOR(15 downto 0);
 signal wr_a1 : STD_LOGIC_VECTOR(18 downto 0);
-signal rd_d1 : STD_LOGIC_VECTOR(0 downto 0);
+signal rd_d1 : STD_LOGIC_VECTOR(15 downto 0);
 signal rd_a1 : STD_LOGIC_VECTOR(18 downto 0);
 
 --VGA
@@ -145,7 +174,14 @@ attribute KEEP of ov7670_pclk1 : signal is "TRUE";
 attribute DONT_TOUCH : string;
 attribute DONT_TOUCH of ov7670_pclk1 : signal is "TRUE";
 
+signal we_ni, oe_ni : std_logic;
+type mem_switch_states is (a, b, c, d);
+signal mem_switch_state : mem_switch_states := a;
+
 begin
+
+we_n <= we_ni;
+oe_n <= oe_ni;
 
 	inst_clk25: clk25gen port map(
 		clk50 => clk50,
@@ -168,6 +204,10 @@ begin
 		xclk_in => cc,
 		xclk_out => ov7670_xclk1);
 	
+  ri_awr <= "0000" & wr_a1;
+  ri_dwr <= wr_d1;
+  --ri_dwr <= "0000" & wr_d1;
+  --ri_wr <= wren1(0);
 	inst_ov7670capt1: ov7670_capture port map(
 		--pclk => ov7670_pclk1_ibuf,
 		pclk => ov7670_pclk1,
@@ -178,22 +218,70 @@ begin
 		dout => wr_d1,
 		we => wren1);
 	
-	inst_framebuffer1 : frame_buffer port map(
-		weA => wren1,
-		clkA => ov7670_pclk1,
-		--clkA => ov7670_pclk1_ibuf,
-		addrA => wr_a1,
-		dinA => wr_d1,
-		clkB => clk25,
-		addrB => rd_a1,
-		doutB => rd_d1);
+  p_mem_switch : process (clk50, resend) is
+  begin
+    if (resend = '1') then
+      mem_switch_state <= a;
+    elsif (rising_edge (clk50)) then
+      case (mem_switch_state) is
+        when a =>
+          mem_switch_state <= b;
+          ri_wr <= '1'; ri_rd <= '0';
+        when b =>
+          mem_switch_state <= c;
+          ri_wr <= '0'; ri_rd <= '0';
+        when c =>
+          mem_switch_state <= d;
+          ri_wr <= '0'; ri_rd <= '1';
+        when d =>
+          mem_switch_state <= a;
+          ri_wr <= '0'; ri_rd <= '0';
+      end case;
+    end if;
+  end process p_mem_switch;
+  dq  <= dqo   when (we_ni = '0' and oe_ni = '1') else (others => 'Z');
+  dqi <= dq;
+  fb_1 : ram_interface PORT MAP(
+		i_clk => clk50,
+		oe_n => oe_ni,
+	  lb_n => lb_n,
+		dq_out => dqo,
+		cre => cre,
+		clk => clk,
+		ce_n => ce_n,
+		adv_n => adv_n,
+	  addr => addr,
+		i_rd => ri_rd,
+		i_wr => ri_wr,
+		i_rst_n => not pb,
+		addr_rd => ri_ard,
+		addr_wr => ri_awr,
+		data_wr => ri_dwr,
+		dq_in => dqi,
+		data_rd => ri_drd,
+		ub_n => ub_n,
+		we_n => we_ni,
+		owait => owait
+   );
+	--inst_framebuffer1 : frame_buffer port map(
+	--	weA => wren1,
+	--	clkA => ov7670_pclk1,
+	--	--clkA => ov7670_pclk1_ibuf,
+	--	addrA => wr_a1,
+	--	dinA => wr_d1,
+	--	clkB => clk25,
+	--	addrB => rd_a1,
+	--	doutB => rd_d1);
 	
+  --ri_rd <= active1;
+  ri_ard <= "0000" & rd_a1;
 	inst_addrgen1 : address_generator port map(
 		clk25 => clk25,
 		enable => active1,
 		vsync => vga_vsync_sig,
 		address => rd_a1);
 
+  rd_d1 <= ri_drd;
 	inst_imagegen : vga_imagegenerator port map(
 		Data_in1 => rd_d1,
 		active_area1 => active1,
