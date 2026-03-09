@@ -33,7 +33,24 @@ architecture Behavioral of ov7670_capture is
 begin
    addr <= address;
    we(0) <= we_reg;
-   dout(0)<=  d_latch(0);
+dout (0) <= d_latch(0);
+--   dout(0)<=
+--d_latch(15 )  xnor
+--d_latch(14 )  xnor
+--d_latch(13 )  xnor
+--d_latch(12 )  xnor
+--d_latch(11 )  xnor
+--d_latch(10 )  xnor
+--d_latch(9 )  xnor
+--d_latch(8 )  xnor
+--d_latch(7 )  xnor
+--d_latch(6 )  xnor
+--d_latch(5 )  xnor
+--d_latch(4 )  xnor
+--d_latch(3 )  xnor
+--d_latch(2 )  xnor
+--d_latch(1 )  xnor
+--d_latch(0 ); 
 --	 dout<= d_latch(11 downto 8) & d_latch(7 downto 4) & d_latch(3 downto 0);
 --   dout<= d_latch(11) & d_latch(7) & d_latch(3);
 --   dout<= d_latch(10) & d_latch(6) & d_latch(2);

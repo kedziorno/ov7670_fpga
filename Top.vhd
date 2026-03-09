@@ -11,6 +11,8 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+library UNISIM;
+use UNISIM.VCOMPONENTS.ALL;
 
 use work.micron_mem_parameters.all;
 
@@ -133,6 +135,15 @@ signal active1 : STD_LOGIC;
 signal vga_vsync_sig : STD_LOGIC;
 
 signal cc : std_logic;
+signal ov7670_pclk1_ibuf : std_logic;
+signal ov7670_pclk1_inv : std_logic;
+
+attribute IOB : string;
+attribute IOB of ov7670_pclk1 : signal is "TRUE";
+attribute KEEP : string;
+attribute KEEP of ov7670_pclk1 : signal is "TRUE";
+attribute DONT_TOUCH : string;
+attribute DONT_TOUCH of ov7670_pclk1 : signal is "TRUE";
 
 begin
 
@@ -158,6 +169,7 @@ begin
 		xclk_out => ov7670_xclk1);
 	
 	inst_ov7670capt1: ov7670_capture port map(
+		--pclk => ov7670_pclk1_ibuf,
 		pclk => ov7670_pclk1,
 		vsync => ov7670_vsync1,
 		href => ov7670_href1,
@@ -169,6 +181,7 @@ begin
 	inst_framebuffer1 : frame_buffer port map(
 		weA => wren1,
 		clkA => ov7670_pclk1,
+		--clkA => ov7670_pclk1_ibuf,
 		addrA => wr_a1,
 		dinA => wr_d1,
 		clkB => clk25,
@@ -198,5 +211,28 @@ vga_vsync <= vga_vsync_sig;
 cc <= clkcam when sw = '1' else clk25;
 vga_clock <= clk25;
 
-end Structural;
+--ov7670_pclk1_inv <= not clk50; 
 
+--IDDR2_inst : IDDR2
+--port map (
+--Q0 => ov7670_pclk1_ibuf,
+--Q1 => open,
+--C0 => clk50,
+--C1 => ov7670_pclk1_inv,
+--CE => '1',
+--D => ov7670_pclk1,
+--R => '0',
+--S => '0'
+--);
+--IBUF_inst : IBUF
+--   generic map (
+--      IBUF_DELAY_VALUE => "0", -- Specify the amount of added input delay for buffer,
+--                               -- "0"-"12" (Spartan-3E)
+--      IFD_DELAY_VALUE => "AUTO", -- Specify the amount of added delay for input register,
+--                                 -- "AUTO", "0"-"6"
+--      IOSTANDARD => "DEFAULT")
+--   port map (
+--      O => ov7670_pclk1_ibuf,     -- Buffer output
+--      I => ov7670_pclk1      -- Buffer input (connect directly to top-level port)
+--   );
+end Structural;
