@@ -20,7 +20,7 @@ entity Top_camera_monitoring is
 	Port	(	clk50	: in STD_LOGIC; -- Board Crystal Oscilator 50MHz  --B8
 	clkcam	: in STD_LOGIC; -- External Crystal Oscilator 23.9616 MHz  --U9
 				pb		: in STD_LOGIC;
-				sw		: in STD_LOGIC; -- switch camera clock
+				--sw		: in STD_LOGIC; -- switch camera clock
 				led1 : out STD_LOGIC; -- configuration done
 				-- OV7670
 				ov7670_pclk1 : in  STD_LOGIC;
@@ -201,7 +201,7 @@ oe_n <= oe_ni;
 		conf_done => led1,
 		pwdn => ov7670_pwdn1,
 		reset => ov7670_reset1,
-		xclk_in => cc,
+		xclk_in => clk25,
 		xclk_out => ov7670_xclk1);
 	
   ri_awr <= "0000" & wr_a1;
@@ -296,7 +296,7 @@ oe_n <= oe_ni;
     
 vga_vsync <= vga_vsync_sig;
 
-cc <= clkcam when sw = '1' else clk25;
+--cc <= clkcam when sw = '1' else clk25;
 vga_clock <= clk25;
 
 --ov7670_pclk1_inv <= not clk50; 

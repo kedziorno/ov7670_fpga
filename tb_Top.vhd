@@ -191,7 +191,7 @@ Port (
 clk50	: in STD_LOGIC; -- Crystal Oscilator 50MHz  --B8
 clkcam	: in STD_LOGIC; -- Crystal Oscilator 23.9616 MHz  --U9
 pb		: in STD_LOGIC; -- Push Button --B18
-sw		: in STD_LOGIC; -- Push Button --G18
+--sw		: in STD_LOGIC; -- Push Button --G18
 led1 : out STD_LOGIC; -- Indicates configuration has been done --J14
 ov7670_pclk1: in  STD_LOGIC; -- Pmod JB8 --R16
 ov7670_xclk1: out STD_LOGIC; -- Pmod JB2 --R18
@@ -469,7 +469,7 @@ Top_camera_monitoring_uut: Top_camera_monitoring PORT MAP (
 clk50 => clk50,
 clkcam => clkcam,
 pb => pb,
-sw => sw,
+--sw => sw,
 led1 => led1,
 ov7670_pclk1 => ov7670_pclk1,
 ov7670_xclk1 => ov7670_xclk1,
