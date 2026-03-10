@@ -16,9 +16,9 @@ use UNISIM.VCOMPONENTS.ALL;
 
 use work.micron_mem_parameters.all;
 
-entity Top_camera_monitoring is
+entity top_camera_monitoring is
 	Port	(	clk50	: in STD_LOGIC; -- Board Crystal Oscilator 50MHz  --B8
-	clkcam	: in STD_LOGIC; -- External Crystal Oscilator 23.9616 MHz  --U9
+	--clkcam	: in STD_LOGIC; -- External Crystal Oscilator 23.9616 MHz  --U9
 				pb		: in STD_LOGIC;
 				--sw		: in STD_LOGIC; -- switch camera clock
 				led1 : out STD_LOGIC; -- configuration done
@@ -51,9 +51,9 @@ entity Top_camera_monitoring is
 				vga_vsync : out STD_LOGIC;
 				vga_rgb	: out STD_LOGIC_VECTOR(7 downto 0)
 			 );
-end Top_camera_monitoring;
+end top_camera_monitoring;
 
-architecture Structural of Top_camera_monitoring is
+architecture Structural of top_camera_monitoring is
 
 COMPONENT debounce_circuit
 	Port ( clk : in STD_LOGIC;

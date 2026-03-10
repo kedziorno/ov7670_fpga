@@ -189,7 +189,7 @@ signal video_vsync_4                 : std_logic := '0';
 component Top_camera_monitoring is
 Port (
 clk50	: in STD_LOGIC; -- Crystal Oscilator 50MHz  --B8
-clkcam	: in STD_LOGIC; -- Crystal Oscilator 23.9616 MHz  --U9
+--clkcam	: in STD_LOGIC; -- Crystal Oscilator 23.9616 MHz  --U9
 pb		: in STD_LOGIC; -- Push Button --B18
 --sw		: in STD_LOGIC; -- Push Button --G18
 led1 : out STD_LOGIC; -- Indicates configuration has been done --J14
@@ -221,6 +221,7 @@ vga_vsync : out STD_LOGIC; --U3
 vga_rgb	: out STD_LOGIC_VECTOR(7 downto 0)
 );
 end component Top_camera_monitoring;
+
 
 component vga_bmp_sink is
 generic (
@@ -259,7 +260,7 @@ signal vga_vsync : std_logic;
 signal vga_rgb : std_logic_vector(7 downto 0);
 
 -- Clock period definitions
-constant clk50_period : time := 10 ns;
+constant clk50_period : time := 20 ns;
 constant clkcambuf_period : time := 10 ns;
 
 COMPONENT camera
@@ -467,7 +468,7 @@ ov7670_href1 <= ov7670_href_mux_1;
 -- Instantiate the Unit Under Test (UUT)
 Top_camera_monitoring_uut: Top_camera_monitoring PORT MAP (
 clk50 => clk50,
-clkcam => clkcam,
+--clkcam => clkcam,
 pb => pb,
 --sw => sw,
 led1 => led1,
@@ -497,7 +498,7 @@ vga_hsync => vga_hsync,
 vga_vsync => vga_vsync,
 vga_rgb => vga_rgb
 );
-clkcam <= xclk;
+--clkcam <= xclk;
 
 -- Clock process definitions
 clk50_process :process
