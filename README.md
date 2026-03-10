@@ -1,4 +1,10 @@
 Update new branch:
+Run virtual camera emulator IP Core with memory model simulation (mt45w8mw16bgx) at 100MHz board clock.
+
+Image output:
+![vga_memory_module.bmp](vga_memory_module.bmp)
+
+Update new branch:
 Get one frame from virtual camera emulator IP Core https://gitlab.com/konrad.oblak/ov7670_camera_emulator and fit in 640x480x1-bit framebuffer.
 
 Image output:
