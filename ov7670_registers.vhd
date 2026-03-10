@@ -16,16 +16,16 @@ entity ov7670_registers is
 end ov7670_registers;
 
 architecture Behavioral of ov7670_registers is
-
+constant NC : integer := 56;
 signal cmd_reg : STD_LOGIC_VECTOR (15 downto 0);
-signal sequence : INTEGER := 0;
+signal sequence : INTEGER range 0 to NC-1 := 0;
 
-type cmd_rom is array (0 to 55) of STD_LOGIC_VECTOR (15 downto 0);
+type cmd_rom is array (0 to NC-1) of STD_LOGIC_VECTOR (15 downto 0);
 constant commandrom : cmd_rom :=(
 	0  => x"1280", -- COM7 Reset
 	1  => x"1280", -- COM7 Reset
 	2  => x"1100", -- CLKRC Prescaler - F(clkin)/(2), disable double speed pll
-	3  => x"12"&"00000010", -- COM7 QIF image with RGB output - enable bars
+	3  => x"12"&"00000010", -- COM7 QIF image with RGB output
 	4  => x"0C00", -- COM3 enable scaling
 	5  => x"3E00", -- COM14 PCLK scaling off ,3E19 to div by 2
 	6  => x"40"&"00110000", -- COM15 Full 0-255 output, RGB 565
@@ -86,8 +86,8 @@ with cmd_reg select done <= '1' when x"FFFF", '0' when others;
 
 sequence_proc : process (clk, reset) begin
 if (reset = '1') then
-sequence <= 0;
-cmd_reg <= (others => '0');
+  sequence <= 0;
+  cmd_reg <= (others => '0');
 	elsif rising_edge(clk) then
 		if resend = '1' then
 			sequence <= 0;
@@ -96,7 +96,8 @@ cmd_reg <= (others => '0');
 		end if;
 
 		cmd_reg <= commandrom(sequence);
-		if sequence > 55 then
+--		if sequence > 55 then
+		if sequence > NC then
 			cmd_reg <= x"FFFF";
 		end if;
 	end if;
