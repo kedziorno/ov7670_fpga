@@ -13,8 +13,8 @@ architecture Behavioral of clk25gen is
 signal clkbuf : STD_LOGIC := '0';
 begin
 	process (clk50) is
-    constant max : integer := 1; -- 50M
---    constant max : integer := 2; -- 100M
+--    constant max : integer := 1; -- 50M
+    constant max : integer := 2; -- 100M
     variable i : integer range 0 to max-1 := 0;
   begin
 		if rising_edge(clk50) then
