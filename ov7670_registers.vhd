@@ -16,7 +16,7 @@ entity ov7670_registers is
 end ov7670_registers;
 
 architecture Behavioral of ov7670_registers is
-constant NC : integer := 56;
+constant NC : integer := 55;
 signal cmd_reg : STD_LOGIC_VECTOR (15 downto 0);
 signal sequence : INTEGER range 0 to NC-1 := 0;
 
@@ -25,7 +25,8 @@ constant commandrom : cmd_rom :=(
 	0  => x"1280", -- COM7 Reset
 	1  => x"1280", -- COM7 Reset
 	2  => x"1100", -- CLKRC Prescaler - F(clkin)/(2), disable double speed pll
-	3  => x"12"&"00000010", -- COM7 QIF image with RGB output
+	--3  => x"12"&"00000000", -- COM7 QIF image with RGB output
+	3  => x"12"&"00000010", -- COM7 QIF image with RGB output - colorbars
 	4  => x"0C00", -- COM3 enable scaling
 	5  => x"3E00", -- COM14 PCLK scaling off ,3E19 to div by 2
 	6  => x"40"&"00110000", -- COM15 Full 0-255 output, RGB 565
@@ -76,8 +77,7 @@ constant commandrom : cmd_rom :=(
 	51 => x"A8F0", -- TPL Total Prob Low
 	52 => x"A990", -- TPH Total Prob High
 	53 => x"AA94", -- NALG AEC Algo select
-	54 => x"13E5", -- COM8 AGC Settings
-	55 => x"FFFF");-- STOP (using WITH .. SELECT below) 			
+	54 => x"FFFF");-- STOP (using WITH .. SELECT below) 			
 
 begin
 command <= cmd_reg;
@@ -97,7 +97,7 @@ if (reset = '1') then
 
 		cmd_reg <= commandrom(sequence);
 --		if sequence > 55 then
-		if sequence > NC then
+		if sequence > NC-1 then
 			cmd_reg <= x"FFFF";
 		end if;
 	end if;

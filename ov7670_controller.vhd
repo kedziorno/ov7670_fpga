@@ -11,7 +11,8 @@ entity ov7670_controller is
     Port ( reset1, clk : in  STD_LOGIC;
            resend : in  STD_LOGIC;
            sioc : out  STD_LOGIC;
-           siod : inout  STD_LOGIC;
+           siodi : in  STD_LOGIC;
+           siodo : out  STD_LOGIC;
            conf_done : out  STD_LOGIC;
            pwdn : out  STD_LOGIC;
 			  reset: out STD_LOGIC;
@@ -35,7 +36,8 @@ component ov7670_SCCB
           slave_addr : in  STD_LOGIC_VECTOR (7 downto 0);
           addr_reg : in  STD_LOGIC_VECTOR (7 downto 0);
           send : in  STD_LOGIC;
-          siod : inout  STD_LOGIC;
+          siodi : in  STD_LOGIC;
+          siodo : out  STD_LOGIC;
           sioc : out  STD_LOGIC;
           taken : out  STD_LOGIC);
 end component;	
@@ -45,7 +47,7 @@ signal command : std_logic_vector(15 downto 0);
 signal done : std_logic := '0';
 signal taken : std_logic := '0';
 signal send : std_logic;
-constant camera_address : std_logic_vector(7 downto 0) := x"84"; -- Device write ID, see pg.10. (OV datasheet)
+constant camera_address : std_logic_vector(7 downto 0) := x"42"; -- Device write ID, see pg.10. (OV datasheet)
 
 begin
 conf_done <= done; -- overall finish
@@ -67,7 +69,8 @@ SCCB : ov7670_SCCB port map(
 	addr_reg => command (15 downto 8),
 	send => send,
 	sioc => sioc,
-	siod => siod,
+	siodi => siodi,
+	siodo => siodo,
 	taken => taken);
 
 pwdn <= '0';

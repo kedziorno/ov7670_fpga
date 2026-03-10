@@ -81,7 +81,8 @@ COMPONENT ov7670_controller
           reset1 : in  STD_LOGIC;
           resend : in  STD_LOGIC;
           sioc : out  STD_LOGIC;
-          siod : inout  STD_LOGIC;
+          siodi : in  STD_LOGIC;
+          siodo : out  STD_LOGIC;
           conf_done : out  STD_LOGIC;
           pwdn : out  STD_LOGIC;
 			 reset: out  STD_LOGIC;
@@ -167,18 +168,22 @@ signal cc : std_logic;
 signal ov7670_pclk1_ibuf : std_logic;
 signal ov7670_pclk1_inv : std_logic;
 
-attribute IOB : string;
-attribute IOB of ov7670_pclk1 : signal is "TRUE";
-attribute KEEP : string;
-attribute KEEP of ov7670_pclk1 : signal is "TRUE";
-attribute DONT_TOUCH : string;
-attribute DONT_TOUCH of ov7670_pclk1 : signal is "TRUE";
-
 signal we_ni, oe_ni : std_logic;
 type mem_switch_states is (a, b, c, d);
 signal mem_switch_state : mem_switch_states := a;
 
+signal siodo1, siodi1 : std_logic;
+signal siodo1_n : std_logic;
+
 begin
+
+siodo1_n <= not siodi1;
+   ov7670_siod1_tri : IOBUF port map (
+      O => (siodi1),     -- Buffer output
+      IO=> (ov7670_siod1),   -- Buffer inout port (connect directly to top-level port)
+      I=> (siodo1),     -- Buffer input
+      T=> (siodo1_n)      -- 3-state enable input, high=input, low=output
+   );
 
 we_n <= we_ni;
 oe_n <= oe_ni;
@@ -197,7 +202,8 @@ oe_n <= oe_ni;
     reset1 => resend,
 		resend => resend,
 		sioc => ov7670_sioc1,
-		siod => ov7670_siod1,
+		siodi => siodi1,
+		siodo => siodo1,
 		conf_done => led1,
 		pwdn => ov7670_pwdn1,
 		reset => ov7670_reset1,
