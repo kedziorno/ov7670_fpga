@@ -45,7 +45,7 @@ signal command : std_logic_vector(15 downto 0);
 signal done : std_logic := '0';
 signal taken : std_logic := '0';
 signal send : std_logic;
-constant camera_address : std_logic_vector(7 downto 0) := x"42"; -- Device write ID, see pg.10. (OV datasheet)
+constant camera_address : std_logic_vector(7 downto 0) := x"84"; -- Device write ID, see pg.10. (OV datasheet)
 
 begin
 conf_done <= done; -- overall finish
