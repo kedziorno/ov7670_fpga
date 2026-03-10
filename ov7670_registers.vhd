@@ -8,7 +8,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 entity ov7670_registers is
-    Port ( clk : in  STD_LOGIC;
+    Port ( reset, clk : in  STD_LOGIC;
            resend : in  STD_LOGIC;
            advance : in  STD_LOGIC;
            command : out  STD_LOGIC_VECTOR (15 downto 0);
@@ -84,8 +84,11 @@ command <= cmd_reg;
 
 with cmd_reg select done <= '1' when x"FFFF", '0' when others;
 
-sequence_proc : process (clk) begin
-	if rising_edge(clk) then
+sequence_proc : process (clk, reset) begin
+if (reset = '1') then
+sequence <= 0;
+cmd_reg <= (others => '0');
+	elsif rising_edge(clk) then
 		if resend = '1' then
 			sequence <= 0;
 		elsif advance = '1' then
