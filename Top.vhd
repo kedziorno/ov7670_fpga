@@ -415,7 +415,7 @@ DCM_SP_cam : DCM_SP
 generic map (
 CLKDV_DIVIDE => 2.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
 -- 7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
-CLKFX_MULTIPLY => 24, -- Can be any integer from 1 to 32
+CLKFX_MULTIPLY => 2, -- Can be any integer from 1 to 32
 CLKFX_DIVIDE => 25, -- Can be any interger from 1 to 32
 CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
 CLKIN_PERIOD => 20.0, -- Specify period of input clock
