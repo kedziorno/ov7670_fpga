@@ -28,19 +28,19 @@ constant commandrom : cmd_rom :=(
  	2  => x"1280",
  	3  => x"fffe",
  
-	4  => x"12"&"00100000",
-	5  => x"11"&"00011111",
+	4  => x"12"&"00000100", -- COM7 for rgb
+	5  => x"11"&"00000000",
  	6  => x"0c00",
  	7  => x"3e00",
-	8  => x"703a",
-	9  => x"7135",
+	8  => x"70"&"10000000", -- XSC 3a
+	9  => x"71"&"00000000", -- YSC 35
 	10  => x"7211",
 	11  => x"73f0",
 	12  => x"a202",
 
-	13  => x"8c00",
+	13  => x"8c"&"00000000", -- rgb444 enable
 	14  => x"0800",
-	15  => x"40f0",
+	15  => x"40"&"00010000", -- COM15 for rgb444
 	16  => x"3a00",
 	17  => x"1438",
 	18  => x"4f40",
@@ -87,7 +87,7 @@ constant commandrom : cmd_rom :=(
 	59  => x"b20e",
 	60  => x"b382",
 	61  => x"b80a",
-	62  => x"42"&"00001000", -- dsp colorbar enable
+	62  => x"42"&"00001000", -- dsp colorbar enable for testing configuration
 
 	63  => x"ffff");
 begin
