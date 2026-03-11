@@ -176,6 +176,8 @@ signal clk0, clk0_fb, clk50_ib : std_logic;
 signal clk25, clk125 : std_logic;
 signal resend : std_logic;
 
+signal ov7670_pclk, pclk_i1, pclk_i2 : std_logic;
+
 begin
 
 siodo1_n <= not siodi1;
@@ -216,9 +218,21 @@ oe_n <= oe_ni;
   --ri_dwr <= "0000" & wr_d1;
   --ri_wr <= wren1(0);
 
+  process (clk125, resend) is
+  begin
+    if (resend = '1') then
+      pclk_i1 <= '0';
+      pclk_i2 <= '0';
+    elsif (rising_edge (clk125)) then
+      pclk_i1 <= ov7670_pclk1;
+      pclk_i2 <= pclk_i1;
+      ov7670_pclk <= pclk_i2;
+    end if;
+  end process;
+
 	inst_ov7670capt1: ov7670_capture port map(
 		--pclk => ov7670_pclk1_ibuf,
-		pclk => ov7670_pclk1,
+		pclk => ov7670_pclk,
 		vsync => ov7670_vsync1,
 		href => ov7670_href1,
 		d => ov7670_data1,
