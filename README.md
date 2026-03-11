@@ -1,5 +1,5 @@
 Update new branch:
-Run virtual camera emulator IP Core with memory model simulation (mt45w8mw16bgx) at 100MHz board clock.
+Run virtual camera emulator IP Core with memory model simulation (mt45w8mw16bgx) at 100MHz board clock (77b9cdecf574f77139afe932f1ad567cf34251fa).
 
 Image output:
 ![vga_memory_module.bmp](vga_memory_module.bmp)

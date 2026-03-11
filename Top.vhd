@@ -222,19 +222,18 @@ oe_n <= oe_ni;
   --ri_dwr <= "0000" & wr_d1;
   --ri_wr <= wren1(0);
 
---ov7670_pclk <= ov7670_pclk1;
-  process (clk_mc, resend) is
-  begin
-    if (resend = '1') then
-      pclk_i1 <= '0';
-      pclk_i2 <= '0';
-    elsif (rising_edge (clk_mc)) then
+--  process (clk_mc, resend) is
+--  begin
+--    if (resend = '1') then
+--      pclk_i1 <= '0';
+--      pclk_i2 <= '0';
+--    elsif (rising_edge (clk_mc)) then
       ov7670_pclk <= ov7670_pclk1;
       ov7670_hs <= ov7670_href1;
       ov7670_vs <= ov7670_vsync1;
       ov7670_d <= ov7670_data1;
-    end if;
-  end process;
+--    end if;
+--  end process;
 
 	inst_ov7670capt1: ov7670_capture port map(
 		--pclk => ov7670_pclk1_ibuf,
@@ -329,31 +328,6 @@ vga_vsync <= vga_vsync_sig;
 
 vga_clock <= clk_vga;
 
---ov7670_pclk1_inv <= not i_clock; 
-
---IDDR2_inst : IDDR2
---port map (
---Q0 => ov7670_pclk1_ibuf,
---Q1 => open,
---C0 => i_clock,
---C1 => ov7670_pclk1_inv,
---CE => '1',
---D => ov7670_pclk1,
---R => '0',
---S => '0'
---);
---IBUF_inst : IBUF
---   generic map (
---      IBUF_DELAY_VALUE => "0", -- Specify the amount of added input delay for buffer,
---                               -- "0"-"12" (Spartan-3E)
---      IFD_DELAY_VALUE => "AUTO", -- Specify the amount of added delay for input register,
---                                 -- "AUTO", "0"-"6"
---      IOSTANDARD => "DEFAULT")
---   port map (
---      O => ov7670_pclk1_ibuf,     -- Buffer output
---      I => ov7670_pclk1      -- Buffer input (connect directly to top-level port)
---   );
-
 BUFG_mc : BUFG
 port map (
 O => clk0_fb, -- Clock buffer output
@@ -415,7 +389,7 @@ DCM_SP_cam : DCM_SP
 generic map (
 CLKDV_DIVIDE => 2.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
 -- 7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
-CLKFX_MULTIPLY => 12, -- Can be any integer from 1 to 32
+CLKFX_MULTIPLY => 24, -- Can be any integer from 1 to 32
 CLKFX_DIVIDE => 25, -- Can be any interger from 1 to 32
 CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
 CLKIN_PERIOD => 20.0, -- Specify period of input clock
