@@ -177,6 +177,8 @@ signal clk25, clk125 : std_logic;
 signal resend : std_logic;
 
 signal ov7670_pclk, pclk_i1, pclk_i2 : std_logic;
+signal ov7670_d : std_logic_vector (7 downto 0);
+signal ov7670_hs, ov7670_vs : std_logic;
 
 begin
 
@@ -218,25 +220,26 @@ oe_n <= oe_ni;
   --ri_dwr <= "0000" & wr_d1;
   --ri_wr <= wren1(0);
 
-ov7670_pclk <= ov7670_pclk1;
---  process (clk125, resend) is
---  begin
---    if (resend = '1') then
---      pclk_i1 <= '0';
---      pclk_i2 <= '0';
---    elsif (rising_edge (clk125)) then
---      pclk_i1 <= ov7670_pclk1;
---      pclk_i2 <= pclk_i1;
---      ov7670_pclk <= pclk_i2;
---    end if;
---  end process;
+--ov7670_pclk <= ov7670_pclk1;
+  process (clk125, resend) is
+  begin
+    if (resend = '1') then
+      pclk_i1 <= '0';
+      pclk_i2 <= '0';
+    elsif (rising_edge (clk125)) then
+      ov7670_pclk <= ov7670_pclk1;
+      ov7670_hs <= ov7670_href1;
+      ov7670_vs <= ov7670_vsync1;
+      ov7670_d <= ov7670_data1;
+    end if;
+  end process;
 
 	inst_ov7670capt1: ov7670_capture port map(
 		--pclk => ov7670_pclk1_ibuf,
 		pclk => ov7670_pclk,
-		vsync => ov7670_vsync1,
-		href => ov7670_href1,
-		d => ov7670_data1,
+		vsync => ov7670_vs,
+		href => ov7670_hs,
+		d => ov7670_d,
 		addr => wr_a1,
 		dout => wr_d1,
 		we => wren1);
