@@ -199,7 +199,7 @@ oe_n <= oe_ni;
 		output => resend);
 	
 	inst_ov7670contr1: ov7670_controller port map(
-		clk => clk125,
+		clk => clk25,
     reset1 => resend,
 		resend => resend,
 		sioc => ov7670_sioc1,
@@ -226,11 +226,11 @@ oe_n <= oe_ni;
 		dout => wr_d1,
 		we => wren1);
 
-  p_mem_switch : process (clk125, resend) is
+  p_mem_switch : process (clk25, resend) is
   begin
     if (resend = '1') then
       mem_switch_state <= a;
-    elsif (rising_edge (clk125)) then
+    elsif (rising_edge (clk25)) then
       case (mem_switch_state) is
         when a =>
           mem_switch_state <= b;
@@ -252,7 +252,7 @@ oe_n <= oe_ni;
   dqi <= dq;
 
   fb_1 : ram_interface PORT MAP(
-		i_clk => clk125,
+		i_clk => clk25,
 		oe_n => oe_ni,
 	  lb_n => lb_n,
 		dq_out => dqo,
@@ -354,7 +354,7 @@ generic map (
 CLKDV_DIVIDE => 4.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
 -- 7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
 CLKFX_DIVIDE => 4, -- Can be any interger from 1 to 32
-CLKFX_MULTIPLY => 5, -- Can be any integer from 1 to 32
+CLKFX_MULTIPLY => 6, -- Can be any integer from 1 to 32
 CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
 CLKIN_PERIOD => 10.0, -- Specify period of input clock
 CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of "NONE", "FIXED" or "VARIABLE"
