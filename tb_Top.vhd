@@ -188,7 +188,7 @@ signal video_vsync_4                 : std_logic := '0';
 
 component Top_camera_monitoring is
 Port (
-clk50	: in STD_LOGIC; -- Crystal Oscilator 50MHz  --B8
+i_clock	: in STD_LOGIC; -- Crystal Oscilator 50MHz  --B8
 --clkcam	: in STD_LOGIC; -- Crystal Oscilator 23.9616 MHz  --U9
 pb		: in STD_LOGIC; -- Push Button --B18
 --sw		: in STD_LOGIC; -- Push Button --G18
@@ -467,7 +467,7 @@ ov7670_href1 <= ov7670_href_mux_1;
 
 -- Instantiate the Unit Under Test (UUT)
 Top_camera_monitoring_uut: Top_camera_monitoring PORT MAP (
-clk50 => clk50,
+i_clock => clk50,
 --clkcam => clkcam,
 pb => pb,
 --sw => sw,

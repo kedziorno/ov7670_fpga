@@ -32,7 +32,7 @@ constant commandrom : cmd_rom :=(
 	4  => x"12"&"00000010", -- COM7 for rgb, pattern
 	5  => x"11"&"00000000",
  	6  => x"0c00",
- 	7  => x"3e00",
+ 	7  => x"3e"&"00000000", -- COM14 PCLK div
 	--8  => x"70"&"00111010", -- XSC 3a, rgb pattern
 	--9  => x"71"&"00110101", -- YSC 35
 	8  => x"70"&"10000000", -- XSC 3a, rgb pattern
@@ -115,7 +115,7 @@ if (reset = '1') then
 
 		cmd_reg <= commandrom(sequence);
 --		if sequence > 55 then
-		if sequence > NC-1 then
+		if sequence > NC then
 			cmd_reg <= x"FFFF";
 		end if;
 	end if;

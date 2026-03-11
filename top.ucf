@@ -1,7 +1,7 @@
-NET "clk50" LOC="B8";
-NET "clk50" PERIOD = 20 ns;
-#NET "clk50" LOC="U9";
-#NET "clk50" PERIOD = 10 ns;
+NET "i_clock" LOC="B8";
+NET "i_clock" PERIOD = 20 ns;
+#NET "i_clock" LOC="U9";
+#NET "i_clock" PERIOD = 10 ns;
 NET "pb" LOC="B18" | TIG;
 #NET "sw" LOC="G18";
 NET "vga_rgb<7>" LOC="R9" | IOSTANDARD="LVCMOS33";
@@ -32,5 +32,9 @@ NET "ov7670_data1<2>" LOC = "R15" | IOSTANDARD="LVCMOS33";
 NET "ov7670_data1<1>" LOC = "R18" | IOSTANDARD="LVCMOS33";
 NET "ov7670_data1<0>" LOC = "m13" | IOSTANDARD="LVCMOS33";
 
+INST "DCM_SP_mc" LOC="DCM_X1Y3";
+INST "DCM_SP_cam" LOC="DCM_X2Y3";
+
 NET "ov7670_pclk1" CLOCK_DEDICATED_ROUTE = FALSE;
-INST "DCM_SP_inst" LOC="DCM_X1Y3";
+NET "i_clock" CLOCK_DEDICATED_ROUTE = FALSE;
+PIN "DCM_SP_cam.CLKIN" CLOCK_DEDICATED_ROUTE = FALSE;
