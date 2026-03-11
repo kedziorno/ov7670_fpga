@@ -40,7 +40,7 @@ constant commandrom : cmd_rom :=(
 
 	13  => x"8c"&"00000000", -- rgb444 enable
 	14  => x"0800",
-	15  => x"40"&"00010000", -- COM15 for rgb444
+	15  => x"40"&"00000000", -- COM15 for rgb444
 	16  => x"3a00",
 	17  => x"1438",
 	18  => x"4f40",
