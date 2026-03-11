@@ -104,7 +104,7 @@ signal sd_miso_2  : std_logic;
 signal sd_miso_3  : std_logic;
 signal sd_miso_4  : std_logic;
 
-signal clk100   : std_logic := '0';
+signal sdcard_clock   : std_logic := '0';
 signal mem_done : std_logic;
 
 component mt45w8mw16bgx is
@@ -260,8 +260,10 @@ signal vga_vsync : std_logic;
 signal vga_rgb : std_logic_vector(7 downto 0);
 
 -- Clock period definitions
-constant clk50_period : time := 10 ns;
-constant clkcambuf_period : time := 10 ns;
+constant clk50_period : time := 20 ns;
+constant sdcard_clock_period : time := 10 ns;
+--constant camera_i_xclk_period : time := 41.733 ns;
+constant camera_i_xclk_period : time := 21 ns; -- to camera ~50mhz
 
 COMPONENT camera
 GENERIC(
@@ -294,8 +296,6 @@ signal camera_o_vs1,camera_o_vs2,camera_o_vs3,camera_o_vs4 : std_logic;
 signal camera_o_hs1,camera_o_hs2,camera_o_hs3,camera_o_hs4 : std_logic;
 signal camera_o_pclk1,camera_o_pclk2,camera_o_pclk3,camera_o_pclk4 : std_logic;
 signal camera_o_d1,camera_o_d2,camera_o_d3,camera_o_d4 : std_logic_vector(7 downto 0);
---constant camera_i_xclk_period : time := 41.733 ns;
-constant camera_i_xclk_period : time := 21 ns;
 
 signal xclk : std_logic;
 signal sw : std_logic;
@@ -376,7 +376,7 @@ sd_cs    => sd_cs_1,
 sd_sclk  => sd_sclk_1,
 sd_mosi  => sd_mosi_1,
 sd_miso  => sd_miso_1,
-clk100   => clkcambuf,
+clk100   => sdcard_clock,
 -- RAM module
 Addr     => mt45w8mw16bgx_Addr_1,
 Adv_n    => mt45w8mw16bgx_Adv_n_1,
@@ -509,12 +509,12 @@ clk50 <= '1';
 wait for clk50_period/2;
 end process;
 
-clkcambuf_process :process
+sdcard_clock_process :process
 begin
-clkcambuf <= '0';
-wait for clkcambuf_period/2;
-clkcambuf <= '1';
-wait for clkcambuf_period/2;
+sdcard_clock <= '0';
+wait for sdcard_clock_period/2;
+sdcard_clock <= '1';
+wait for sdcard_clock_period/2;
 end process;
 
 camera_i_xclkp :process
