@@ -74,7 +74,8 @@ SCCB : ov7670_SCCB port map(
 	taken => taken);
 
 pwdn <= '0';
-reset <= '1';
+reset <= not resend;
+--reset <= '1';
 xclk_out <= xclk_in;
 
 end Behavioral;

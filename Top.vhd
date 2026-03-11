@@ -241,11 +241,11 @@ ov7670_pclk <= ov7670_pclk1;
 		dout => wr_d1,
 		we => wren1);
 
-  p_mem_switch : process (clk25, resend) is
+  p_mem_switch : process (clk125, resend) is
   begin
     if (resend = '1') then
       mem_switch_state <= a;
-    elsif (rising_edge (clk25)) then
+    elsif (rising_edge (clk125)) then
       case (mem_switch_state) is
         when a =>
           mem_switch_state <= b;
@@ -267,7 +267,7 @@ ov7670_pclk <= ov7670_pclk1;
   dqi <= dq;
 
   fb_1 : ram_interface PORT MAP(
-		i_clk => clk25,
+		i_clk => clk125,
 		oe_n => oe_ni,
 	  lb_n => lb_n,
 		dq_out => dqo,

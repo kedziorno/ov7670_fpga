@@ -28,8 +28,8 @@ constant commandrom : cmd_rom :=(
  	2  => x"1280",
  	3  => x"fffe",
  
-	4  => x"12"&"00000100", -- COM7 for rgb
-	5  => x"11"&"00000000",
+	4  => x"12"&"00000010", -- COM7 for rgb, pattern
+	5  => x"11"&"00011111",
  	6  => x"0c00",
  	7  => x"3e00",
 	8  => x"70"&"10000000", -- XSC 3a, rgb pattern
