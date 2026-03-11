@@ -221,18 +221,18 @@ oe_n <= oe_ni;
   --ri_wr <= wren1(0);
 
 --ov7670_pclk <= ov7670_pclk1;
-  process (clk125, resend) is
-  begin
-    if (resend = '1') then
-      pclk_i1 <= '0';
-      pclk_i2 <= '0';
-    elsif (rising_edge (clk125)) then
+--  process (clk125, resend) is
+--  begin
+--    if (resend = '1') then
+--      pclk_i1 <= '0';
+--      pclk_i2 <= '0';
+--    elsif (rising_edge (clk125)) then
       ov7670_pclk <= ov7670_pclk1;
       ov7670_hs <= ov7670_href1;
       ov7670_vs <= ov7670_vsync1;
       ov7670_d <= ov7670_data1;
-    end if;
-  end process;
+--    end if;
+--  end process;
 
 	inst_ov7670capt1: ov7670_capture port map(
 		--pclk => ov7670_pclk1_ibuf,
@@ -372,7 +372,7 @@ generic map (
 CLKDV_DIVIDE => 4.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
 -- 7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
 CLKFX_DIVIDE => 4, -- Can be any interger from 1 to 32
-CLKFX_MULTIPLY => 16, -- Can be any integer from 1 to 32
+CLKFX_MULTIPLY => 5, -- Can be any integer from 1 to 32
 CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
 CLKIN_PERIOD => 10.0, -- Specify period of input clock
 CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of "NONE", "FIXED" or "VARIABLE"
