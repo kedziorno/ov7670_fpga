@@ -28,9 +28,9 @@ constant commandrom : cmd_rom :=(
  	2  => x"1280",
  	3  => x"fffe",
  
-	4  => x"12"&"00000000", -- COM7 for rgb, pattern
+	4  => x"12"&"00000100", -- COM7 for rgb, pattern
 	--4  => x"12"&"00000010", -- COM7 for rgb, pattern
-	5  => x"11"&"00000000",
+	5  => x"11"&"00000001",
  	6  => x"0c00",
  	7  => x"3e00",
 	8  => x"70"&"00111010", -- XSC 3a, rgb pattern
@@ -43,7 +43,7 @@ constant commandrom : cmd_rom :=(
 
 	13  => x"8c"&"00000000", -- rgb444 enable
 	14  => x"0800",
-	15  => x"40"&"00000000", -- COM15 for rgb444
+	15  => x"40"&"11010000", -- COM15 for rgb444
 	16  => x"3a"&"00000001", -- TSLB auto window
 	17  => x"1438",
 	18  => x"4f40",
@@ -57,7 +57,7 @@ constant commandrom : cmd_rom :=(
 
 	26  => x"1711", -- HSTART, HSTOP
 	27  => x"1861",
-	28  => x"32a4",
+	28  => x"3280",
 
 	29  => x"1903", -- VSTART, VSTOP
 	30  => x"1a7b",
