@@ -16,7 +16,7 @@ entity ov7670_registers is
 end ov7670_registers;
 
 architecture Behavioral of ov7670_registers is
-constant NC : integer := 63;
+constant NC : integer := 64;
 signal cmd_reg : STD_LOGIC_VECTOR (15 downto 0);
 signal sequence : INTEGER range 0 to NC-1 := 0;
 
@@ -87,8 +87,9 @@ constant commandrom : cmd_rom :=(
 	59  => x"b20e",
 	60  => x"b382",
 	61  => x"b80a",
+	62  => x"42"&"00001000", -- dsp colorbar enable
 
-	62  => x"ffff");
+	63  => x"ffff");
 begin
 command <= cmd_reg;
 
