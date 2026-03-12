@@ -30,7 +30,7 @@ constant commandrom : cmd_rom :=(
  
 	4  => x"12"&"00000000", -- COM7 for rgb, pattern
 	--4  => x"12"&"00000010", -- COM7 for rgb, pattern
-	5  => x"11"&"00000001",
+	5  => x"11"&"00000000",
  	6  => x"0c00",
  	7  => x"3e"&"00000000", -- COM14 PCLK div
 	8  => x"70"&"00111010", -- XSC 3a, rgb pattern
@@ -56,8 +56,8 @@ constant commandrom : cmd_rom :=(
 	25  => x"3dc0",
 
 	26  => x"1711", -- HSTART, HSTOP
-	27  => x"1861",
-	28  => x"3280",
+	27  => x"1870",
+	28  => x"32"&"10000000",
 
 	29  => x"1903", -- VSTART, VSTOP
 	30  => x"1a7b",

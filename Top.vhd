@@ -245,53 +245,53 @@ oe_n <= oe_ni;
 		dout => wr_d1,
 		we => wren1);
 
-  p_mem_switch : process (clk_mc, resend) is
-  begin
-    if (resend = '1') then
-      mem_switch_state <= a;
-    elsif (rising_edge (clk_mc)) then
-      case (mem_switch_state) is
-        when a =>
-          mem_switch_state <= b;
-          ri_wr <= '1'; ri_rd <= '0';
-        when b =>
-          mem_switch_state <= c;
-          ri_wr <= '0'; ri_rd <= '0';
-        when c =>
-          mem_switch_state <= d;
-          ri_wr <= '0'; ri_rd <= '1';
-        when d =>
-          mem_switch_state <= a;
-          ri_wr <= '0'; ri_rd <= '0';
-      end case;
-    end if;
-  end process p_mem_switch;
+--  p_mem_switch : process (clk_mc, resend) is
+--  begin
+--    if (resend = '1') then
+--      mem_switch_state <= a;
+--    elsif (rising_edge (clk_mc)) then
+--      case (mem_switch_state) is
+--        when a =>
+--          mem_switch_state <= b;
+--          ri_wr <= '1'; ri_rd <= '0';
+--        when b =>
+--          mem_switch_state <= c;
+--          ri_wr <= '0'; ri_rd <= '0';
+--        when c =>
+--          mem_switch_state <= d;
+--          ri_wr <= '0'; ri_rd <= '1';
+--        when d =>
+--          mem_switch_state <= a;
+--          ri_wr <= '0'; ri_rd <= '0';
+--      end case;
+--    end if;
+--  end process p_mem_switch;
 
-  dq  <= dqo   when (we_ni = '0' and oe_ni = '1') else (others => 'Z');
-  dqi <= dq;
+--  dq  <= dqo   when (we_ni = '0' and oe_ni = '1') else (others => 'Z');
+--  dqi <= dq;
 
-  fb_1 : ram_interface PORT MAP(
-		i_clk => clk_mc,
-		oe_n => oe_ni,
-	  lb_n => lb_n,
-		dq_out => dqo,
-		cre => cre,
-		clk => clk,
-		ce_n => ce_n,
-		adv_n => adv_n,
-	  addr => addr,
-		i_rd => ri_rd,
-		i_wr => ri_wr,
-		i_rst_n => not pb,
-		addr_rd => ri_ard,
-		addr_wr => ri_awr,
-		data_wr => ri_dwr,
-		dq_in => dqi,
-		data_rd => ri_drd,
-		ub_n => ub_n,
-		we_n => we_ni,
-		owait => owait
-   );
+--  fb_1 : ram_interface PORT MAP(
+--		i_clk => clk_mc,
+--		oe_n => oe_ni,
+--	  lb_n => lb_n,
+--		dq_out => dqo,
+--		cre => cre,
+--		clk => clk,
+--		ce_n => ce_n,
+--		adv_n => adv_n,
+--	  addr => addr,
+--		i_rd => ri_rd,
+--		i_wr => ri_wr,
+--		i_rst_n => not pb,
+--		addr_rd => ri_ard,
+--		addr_wr => ri_awr,
+--		data_wr => ri_dwr,
+--		dq_in => dqi,
+--		data_rd => ri_drd,
+--		ub_n => ub_n,
+--		we_n => we_ni,
+--		owait => owait
+--   );
 
 	--inst_framebuffer1 : frame_buffer port map(
 	--	weA => wren1,
@@ -304,29 +304,33 @@ oe_n <= oe_ni;
 	--	doutB => rd_d1);
 
   --ri_rd <= active1;
-  ri_ard <= "0000" & rd_a1;
-	inst_addrgen1 : address_generator port map(
-		clk25 => clk_vga,
-		enable => active1,
-		vsync => vga_vsync_sig,
-		address => rd_a1);
+--  ri_ard <= "0000" & rd_a1;
+--	inst_addrgen1 : address_generator port map(
+--		clk25 => clk_vga,
+--		enable => active1,
+--		vsync => vga_vsync_sig,
+--		address => rd_a1);
 
-  rd_d1 <= ri_drd;
-	inst_imagegen : vga_imagegenerator port map(
-		Data_in1 => rd_d1,
-		active_area1 => active1,
-		RGB_out => vga_rgb);
-	
-	inst_vgatiming : VGA_timing_synch port map(
-		clk25 => clk_vga,
-		Hsync => vga_hsync,
-		Vsync => vga_vsync_sig,
-    blank => vga_blank,
-		activeArea1 => active1);
-    
-vga_vsync <= vga_vsync_sig;
+--  rd_d1 <= ri_drd;
+--	inst_imagegen : vga_imagegenerator port map(
+--		Data_in1 => rd_d1,
+--		active_area1 => active1,
+--		RGB_out => vga_rgb);
+--	
+  vga_hsync <= ov7670_hs;
+  vga_rgb <= wr_d1(7 downto 0);
+--	inst_vgatiming : VGA_timing_synch port map(
+--		clk25 => clk_vga,
+--		Hsync => vga_hsync,
+--		Vsync => vga_vsync_sig,
+--    blank => vga_blank,
+--		activeArea1 => active1);
+--    
+--vga_vsync <= vga_vsync_sig;
+vga_vsync <= not ov7670_vs;
 
-vga_clock <= clk_vga;
+vga_clock <= ov7670_pclk;
+--vga_clock <= clk_vga;
 
 BUFG_mc : BUFG
 port map (
@@ -389,8 +393,8 @@ DCM_SP_cam : DCM_SP
 generic map (
 CLKDV_DIVIDE => 2.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
 -- 7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
-CLKFX_MULTIPLY => 24, -- Can be any integer from 1 to 32
-CLKFX_DIVIDE => 25, -- Can be any interger from 1 to 32
+CLKFX_MULTIPLY => 16, -- Can be any integer from 1 to 32
+CLKFX_DIVIDE => 31, -- Can be any interger from 1 to 32
 CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
 CLKIN_PERIOD => 20.0, -- Specify period of input clock
 CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of "NONE", "FIXED" or "VARIABLE"
