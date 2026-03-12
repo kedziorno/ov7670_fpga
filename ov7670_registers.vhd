@@ -41,7 +41,7 @@ constant commandrom : cmd_rom :=(
 	11  => x"73f0",
 	12  => x"a202",
 
-	13  => x"8c"&"00000010", -- rgb444 enable
+	13  => x"8c"&"00000011", -- rgb444 enable
 	14  => x"0800",
 	15  => x"40"&"11010000", -- COM15 for rgb444
 	16  => x"3a"&"00000001", -- TSLB auto window, 00 have pattern
