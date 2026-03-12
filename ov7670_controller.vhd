@@ -29,6 +29,7 @@ component ov7670_registers
           command : out  STD_LOGIC_VECTOR (15 downto 0);
           done : out  STD_LOGIC);
 end component;
+for all : ov7670_registers use entity work.ov7670_registers (raw_signal);
 
 component ov7670_SCCB
 	Port ( clk : in  STD_LOGIC;
