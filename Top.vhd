@@ -182,6 +182,9 @@ signal ov7670_pclk, pclk_i1, pclk_i2 : std_logic;
 signal ov7670_d : std_logic_vector (7 downto 0);
 signal ov7670_hs, ov7670_vs : std_logic;
 
+signal rgb444 : std_logic_vector (15 downto 0);
+signal rgb565 : std_logic_vector (15 downto 0);
+
 begin
 
 siodo1_n <= not siodi1;
@@ -244,7 +247,8 @@ oe_n <= oe_ni;
 		addr => wr_a1,
 		dout => wr_d1,
 		we => wren1);
-
+  rgb565 <= wr_d1;
+  rgb444 <= wr_d1;
 --  p_mem_switch : process (clk_mc, resend) is
 --  begin
 --    if (resend = '1') then
@@ -312,13 +316,14 @@ oe_n <= oe_ni;
 --		address => rd_a1);
 
 --  rd_d1 <= ri_drd;
---	inst_imagegen : vga_imagegenerator port map(
---		Data_in1 => rd_d1,
---		active_area1 => active1,
---		RGB_out => vga_rgb);
+	inst_imagegen : vga_imagegenerator port map(
+		Data_in1 => rgb444,
+		active_area1 => '1',
+		RGB_out => vga_rgb);
 --	
   vga_hsync <= ov7670_hs;
-  vga_rgb <= wr_d1(7 downto 0);
+  --vga_rgb <= rgb565(7 downto 0);
+  --vga_rgb <= rgb444(7 downto 0);
 --	inst_vgatiming : VGA_timing_synch port map(
 --		clk25 => clk_vga,
 --		Hsync => vga_hsync,
@@ -394,7 +399,7 @@ generic map (
 CLKDV_DIVIDE => 2.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
 -- 7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
 CLKFX_MULTIPLY => 16, -- Can be any integer from 1 to 32
-CLKFX_DIVIDE => 31, -- Can be any interger from 1 to 32
+CLKFX_DIVIDE => 30, -- Can be any interger from 1 to 32
 CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
 CLKIN_PERIOD => 20.0, -- Specify period of input clock
 CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of "NONE", "FIXED" or "VARIABLE"
