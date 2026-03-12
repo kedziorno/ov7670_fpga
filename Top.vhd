@@ -17,41 +17,258 @@ use UNISIM.VCOMPONENTS.ALL;
 use work.micron_mem_parameters.all;
 
 entity top_camera_monitoring is
-	Port	(	i_clock	: in STD_LOGIC; -- Board Crystal Oscilator 50MHz  --B8
-	--clkcam	: in STD_LOGIC; -- External Crystal Oscilator 23.9616 MHz  --U9
-				pb		: in STD_LOGIC;
-				--sw		: in STD_LOGIC; -- switch camera clock
-				led1 : out STD_LOGIC; -- configuration done
-				-- OV7670
-				ov7670_pclk1 : in  STD_LOGIC;
-				ov7670_xclk1 : out STD_LOGIC;
-				ov7670_vsync1 : in  STD_LOGIC;
-				ov7670_href1 : in  STD_LOGIC;
-				ov7670_data1 : in  STD_LOGIC_vector(7 downto 0);
-				ov7670_sioc1 : out STD_LOGIC;
-				ov7670_siod1 : inout STD_LOGIC;
-				ov7670_pwdn1 : out STD_LOGIC;
-				ov7670_reset1 : out STD_LOGIC;
-        --memory module
-        Dq : inout std_logic_vector (c_data_bits - 1 downto 0);
-        Addr : out std_logic_vector (c_addr_bits - 1 downto 0);
-        Adv_n : out std_logic;
-        Ce_n : out std_logic;
-        Clk : out std_logic;
-        Cre : out std_logic;
-        Lb_n : out std_logic;
-        Oe_n : out std_logic;
-        Ub_n : out std_logic;
-        We_n : out std_logic;
-        oWait : in std_logic;
-				--VGA
-        vga_clock : out STD_LOGIC;
-        vga_blank : out STD_LOGIC;
-				vga_hsync : out STD_LOGIC;
-				vga_vsync : out STD_LOGIC;
-				vga_rgb	: out STD_LOGIC_VECTOR(7 downto 0)
-			 );
+Port	(
+  i_clock	: in STD_LOGIC;
+  pb		: in STD_LOGIC;
+  led1 : out STD_LOGIC; -- configuration done
+  -- OV7670
+  ov7670_pclk1 : in  STD_LOGIC;
+  ov7670_xclk1 : out STD_LOGIC;
+  ov7670_vsync1 : in  STD_LOGIC;
+  ov7670_href1 : in  STD_LOGIC;
+  ov7670_data1 : in  STD_LOGIC_vector(7 downto 0);
+  ov7670_sioc1 : out STD_LOGIC;
+  ov7670_siod1 : inout STD_LOGIC;
+  ov7670_pwdn1 : out STD_LOGIC;
+  ov7670_reset1 : out STD_LOGIC;
+  --memory module
+  Dq : inout std_logic_vector (c_data_bits - 1 downto 0);
+  Addr : out std_logic_vector (c_addr_bits - 1 downto 0);
+  Adv_n : out std_logic;
+  Ce_n : out std_logic;
+  Clk : out std_logic;
+  Cre : out std_logic;
+  Lb_n : out std_logic;
+  Oe_n : out std_logic;
+  Ub_n : out std_logic;
+  We_n : out std_logic;
+  oWait : in std_logic;
+  --VGA
+  vga_clock : out STD_LOGIC;
+  vga_blank : out STD_LOGIC;
+  vga_hsync : out STD_LOGIC;
+  vga_vsync : out STD_LOGIC;
+  vga_rgb	: out STD_LOGIC_VECTOR(7 downto 0)
+);
 end top_camera_monitoring;
+
+architecture raw_signal of top_camera_monitoring is
+
+COMPONENT debounce_circuit
+	Port ( clk : in STD_LOGIC;
+			 input : in STD_LOGIC;
+			 output : out STD_LOGIC);
+END COMPONENT;
+
+COMPONENT ov7670_capture
+	Port ( pclk : in  STD_LOGIC;
+          vsync : in  STD_LOGIC;
+          href : in  STD_LOGIC;
+          d : in  STD_LOGIC_VECTOR (7 downto 0);
+          addr : out  STD_LOGIC_VECTOR (18 downto 0);
+          dout : out  STD_LOGIC_VECTOR (15 downto 0);
+          we : out  STD_LOGIC_VECTOR (0 downto 0));
+END COMPONENT;
+
+COMPONENT ov7670_controller
+	Port ( clk : in  STD_LOGIC;
+          reset1 : in  STD_LOGIC;
+          resend : in  STD_LOGIC;
+          sioc : out  STD_LOGIC;
+          siodi : in  STD_LOGIC;
+          siodo : out  STD_LOGIC;
+          conf_done : out  STD_LOGIC;
+          pwdn : out  STD_LOGIC;
+			 reset: out  STD_LOGIC;
+			 xclk_in : in  STD_LOGIC;
+          xclk_out: out  STD_LOGIC);
+END COMPONENT;
+
+COMPONENT vga_imagegenerator
+	Port ( Data_in1 : in  STD_LOGIC_VECTOR (15 downto 0);
+						active_area1 : in  STD_LOGIC;
+           RGB_out : out  STD_LOGIC_VECTOR (7 downto 0));
+END COMPONENT;
+
+signal siodo1, siodi1 : std_logic;
+
+signal clk0, clk0_fb : std_logic;
+signal clk1, clk1_fb : std_logic;
+signal i_clock_ib : std_logic;
+signal clk_cam, clk_vga, clk_mc : std_logic;
+signal resend : std_logic;
+
+signal ov7670_pclki : std_logic;
+signal ov7670_d : std_logic_vector (7 downto 0);
+signal ov7670_hs, ov7670_vs : std_logic;
+
+signal siodi1_n : std_logic;
+
+signal wr_d1 : std_logic_vector (15 downto 0);
+
+begin
+
+  siodi1_n <= not siodi1;
+  ov7670_siod1_tri : IOBUF port map (
+     O  => (siodi1),
+     IO => (ov7670_siod1),
+     I  => (siodo1),
+     T  => (siodi1_n)
+  );
+
+	inst_debounce: debounce_circuit port map(
+		clk => i_clock_ib,
+		input => pb,
+		output => resend
+  );
+
+	inst_ov7670contr1: ov7670_controller port map(
+		clk => i_clock_ib,
+    reset1 => resend,
+		resend => resend,
+		sioc => ov7670_sioc1,
+		siodi => siodi1,
+		siodo => siodo1,
+		conf_done => led1,
+		pwdn => ov7670_pwdn1,
+		reset => ov7670_reset1,
+		xclk_in => clk_cam,
+		xclk_out => ov7670_xclk1
+  );
+
+  --process (clk_mc, resend) is
+  --begin
+  --  if (resend = '1') then
+  --    pclk_i1 <= '0';
+  --    pclk_i2 <= '0';
+  --  elsif (rising_edge (clk_mc)) then
+      ov7670_pclk <= ov7670_pclk1;
+      ov7670_hs <= ov7670_href1;
+      ov7670_vs <= ov7670_vsync1;
+      ov7670_d <= ov7670_data1;
+  --  end if;
+  --end process;
+
+	inst_ov7670capt1: ov7670_capture port map(
+		pclk => ov7670_pclk,
+		vsync => ov7670_vs,
+		href => ov7670_hs,
+		d => ov7670_d,
+		addr => open,
+		dout => wr_d1,
+		we => open
+  );
+
+	inst_imagegen : vga_imagegenerator port map(
+		Data_in1 => wr_d1,
+		active_area1 => '1',
+		RGB_out => vga_rgb
+  );
+
+  vga_hsync <= ov7670_hs;
+  vga_vsync <= not ov7670_vs;
+
+  --vga_clock <= ov7670_pclk;
+  --vga_clock <= clk_vga;
+  vga_clock <= clk_cam; -- debug camera clock
+
+  BUFG_mc : BUFG
+  port map (
+    O => clk0_fb,
+    I => clk0
+  );
+
+  BUFG_cam : BUFG
+  port map (
+    O => clk1_fb,
+    I => clk1
+  );
+
+  IBUFG_global_clock : IBUFG
+  generic map (
+    IOSTANDARD => "DEFAULT")
+  port map (
+    O => i_clock_ib,
+    I => i_clock
+  );
+
+  DCM_SP_mc : DCM_SP
+  generic map (
+    CLKDV_DIVIDE => 2.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
+    -- 7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
+    CLKFX_MULTIPLY => 27, -- Can be any integer from 1 to 32
+    CLKFX_DIVIDE => 4, -- Can be any interger from 1 to 32
+    CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
+    CLKIN_PERIOD => 20.0, -- Specify period of input clock
+    CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of "NONE", "FIXED" or "VARIABLE"
+    CLK_FEEDBACK => "1X", -- Specify clock feedback of "NONE", "1X" or "2X"
+    DESKEW_ADJUST => "SYSTEM_SYNCHRONOUS", -- "SOURCE_SYNCHRONOUS", "SYSTEM_SYNCHRONOUS" or
+    -- an integer from 0 to 15
+    DLL_FREQUENCY_MODE => "LOW", -- "HIGH" or "LOW" frequency mode for DLL
+    DUTY_CYCLE_CORRECTION => TRUE, -- Duty cycle correction, TRUE or FALSE
+    PHASE_SHIFT => 0, -- Amount of fixed phase shift from -255 to 255
+    STARTUP_WAIT => FALSE) -- Delay configuration DONE until DCM_SP LOCK, TRUE/FALSE
+  port map (
+    CLK0 => clk0, -- 0 degree DCM CLK ouptput
+    CLK180 => open, -- 180 degree DCM CLK output
+    CLK270 => open, -- 270 degree DCM CLK output
+    CLK2X => open, -- 2X DCM CLK output
+    CLK2X180 => open, -- 2X, 180 degree DCM CLK out
+    CLK90 => open, -- 90 degree DCM CLK output
+    CLKDV => clk_vga, -- Divided DCM CLK out (CLKDV_DIVIDE)
+    CLKFX => clk_mc, -- DCM CLK synthesis out (M/D)
+    CLKFX180 => open, -- 180 degree CLK synthesis out
+    LOCKED => open, -- DCM LOCK status output
+    PSDONE => open, -- Dynamic phase adjust done output
+    STATUS => open, -- 8-bit DCM status bits output
+    CLKFB => clk0_fb, -- DCM clock feedback
+    CLKIN => i_clock_ib, -- Clock input (from IBUFG, BUFG or DCM)
+    PSCLK => '0', -- Dynamic phase adjust clock input
+    PSEN => '0', -- Dynamic phase adjust enable input
+    PSINCDEC => '0', -- Dynamic phase adjust increment/decrement
+    RST => resend -- DCM asynchronous reset input
+  );
+
+  DCM_SP_cam : DCM_SP
+  generic map (
+    CLKDV_DIVIDE => 2.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
+    -- 7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
+    CLKFX_MULTIPLY => 4, -- Can be any integer from 1 to 32
+    CLKFX_DIVIDE => 25, -- can be any interger from 1 to 32
+    CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
+    CLKIN_PERIOD => 20.0, -- Specify period of input clock
+    CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of "NONE", "FIXED" or "VARIABLE"
+    CLK_FEEDBACK => "1X", -- Specify clock feedback of "NONE", "1X" or "2X"
+    DESKEW_ADJUST => "SYSTEM_SYNCHRONOUS", -- "SOURCE_SYNCHRONOUS", "SYSTEM_SYNCHRONOUS" or
+    -- an integer from 0 to 15
+    DLL_FREQUENCY_MODE => "LOW", -- "HIGH" or "LOW" frequency mode for DLL
+    DUTY_CYCLE_CORRECTION => TRUE, -- Duty cycle correction, TRUE or FALSE
+    PHASE_SHIFT => 0, -- Amount of fixed phase shift from -255 to 255
+    STARTUP_WAIT => FALSE) -- Delay configuration DONE until DCM_SP LOCK, TRUE/FALSE
+  port map (
+    CLK0 => clk1, -- 0 degree DCM CLK ouptput
+    CLK180 => open, -- 180 degree DCM CLK output
+    CLK270 => open, -- 270 degree DCM CLK output
+    CLK2X => open, -- 2X DCM CLK output
+    CLK2X180 => open, -- 2X, 180 degree DCM CLK out
+    CLK90 => open, -- 90 degree DCM CLK output
+    CLKDV => open, -- Divided DCM CLK out (CLKDV_DIVIDE)
+    CLKFX => clk_cam, -- DCM CLK synthesis out (M/D)
+    CLKFX180 => open, -- 180 degree CLK synthesis out
+    LOCKED => open, -- DCM LOCK status output
+    PSDONE => open, -- Dynamic phase adjust done output
+    STATUS => open, -- 8-bit DCM status bits output
+    CLKFB => clk1_fb, -- DCM clock feedback
+    CLKIN => i_clock_ib, -- Clock input (from IBUFG, BUFG or DCM)
+    PSCLK => '0', -- Dynamic phase adjust clock input
+    PSEN => '0', -- Dynamic phase adjust enable input
+    PSINCDEC => '0', -- Dynamic phase adjust increment/decrement
+    RST => resend -- DCM asynchronous reset input
+  );
+
+end architecture raw_signal;
+
+--
 
 architecture Structural of top_camera_monitoring is
 
@@ -225,18 +442,18 @@ oe_n <= oe_ni;
   --ri_dwr <= "0000" & wr_d1;
   --ri_wr <= wren1(0);
 
-  process (clk_mc, resend) is
-  begin
-    if (resend = '1') then
-      pclk_i1 <= '0';
-      pclk_i2 <= '0';
-    elsif (rising_edge (clk_mc)) then
+  --process (clk_mc, resend) is
+  --begin
+  --  if (resend = '1') then
+  --    pclk_i1 <= '0';
+  --    pclk_i2 <= '0';
+  --  elsif (rising_edge (clk_mc)) then
       ov7670_pclk <= ov7670_pclk1;
       ov7670_hs <= ov7670_href1;
       ov7670_vs <= ov7670_vsync1;
       ov7670_d <= ov7670_data1;
-    end if;
-  end process;
+  --  end if;
+  --end process;
 
 	inst_ov7670capt1: ov7670_capture port map(
 		--pclk => ov7670_pclk1_ibuf,
