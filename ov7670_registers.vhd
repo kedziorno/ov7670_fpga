@@ -55,9 +55,9 @@ constant commandrom : cmd_rom :=(
 	24  => x"581e",
 	25  => x"3dc0",
 
-	26  => x"1711", -- HSTART, HSTOP
-	27  => x"1870",
-	28  => x"32"&"10000000",
+	26  => x"1700", -- HSTART, HSTOP
+	27  => x"1800",
+	28  => x"32"&"10111111",
 
 	29  => x"1903", -- VSTART, VSTOP
 	30  => x"1a7b",

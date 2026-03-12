@@ -225,18 +225,18 @@ oe_n <= oe_ni;
   --ri_dwr <= "0000" & wr_d1;
   --ri_wr <= wren1(0);
 
---  process (clk_mc, resend) is
---  begin
---    if (resend = '1') then
---      pclk_i1 <= '0';
---      pclk_i2 <= '0';
---    elsif (rising_edge (clk_mc)) then
+  process (clk_mc, resend) is
+  begin
+    if (resend = '1') then
+      pclk_i1 <= '0';
+      pclk_i2 <= '0';
+    elsif (rising_edge (clk_mc)) then
       ov7670_pclk <= ov7670_pclk1;
       ov7670_hs <= ov7670_href1;
       ov7670_vs <= ov7670_vsync1;
       ov7670_d <= ov7670_data1;
---    end if;
---  end process;
+    end if;
+  end process;
 
 	inst_ov7670capt1: ov7670_capture port map(
 		--pclk => ov7670_pclk1_ibuf,
