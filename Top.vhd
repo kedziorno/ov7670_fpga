@@ -98,7 +98,7 @@ signal i_clock_ib : std_logic;
 signal clk_cam, clk_vga, clk_mc : std_logic;
 signal resend : std_logic;
 
-signal ov7670_pclki : std_logic;
+signal ov7670_pclk : std_logic;
 signal ov7670_d : std_logic_vector (7 downto 0);
 signal ov7670_hs, ov7670_vs : std_logic;
 
@@ -136,18 +136,16 @@ begin
 		xclk_out => ov7670_xclk1
   );
 
-  --process (clk_mc, resend) is
-  --begin
-  --  if (resend = '1') then
-  --    pclk_i1 <= '0';
-  --    pclk_i2 <= '0';
-  --  elsif (rising_edge (clk_mc)) then
+  process (clk_mc, resend) is
+  begin
+    if (resend = '1') then
+    elsif (rising_edge (clk_mc)) then
       ov7670_pclk <= ov7670_pclk1;
       ov7670_hs <= ov7670_href1;
       ov7670_vs <= ov7670_vsync1;
       ov7670_d <= ov7670_data1;
-  --  end if;
-  --end process;
+    end if;
+  end process;
 
 	inst_ov7670capt1: ov7670_capture port map(
 		pclk => ov7670_pclk,

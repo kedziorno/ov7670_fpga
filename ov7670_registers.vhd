@@ -18,7 +18,7 @@ end ov7670_registers;
 
 architecture raw_signal of ov7670_registers is
 
-  constant NC : integer := 3;
+  constant NC : integer := 6+1;
   signal sequence : INTEGER range 0 to NC-1 := 0;
   signal cmd_reg : STD_LOGIC_VECTOR (15 downto 0);
 
@@ -31,8 +31,12 @@ begin
   begin
     case (sequence) is
       when 0 => cmd_reg <= x"1280";
-      when 1 => cmd_reg <= x"11"&"00000000";
-      when 2 => cmd_reg <= x"6b"&"10000000";
+      when 1 => cmd_reg <= x"11"&"00000000"; -- CLKRC - internal p-s 1
+      when 2 => cmd_reg <= x"6b"&"10000000"; -- DBLV - ic x6
+      when 3 => cmd_reg <= x"8c"&"00000011"; -- RGB444 - enable, RGBx
+      when 4 => cmd_reg <= x"12"&"00000100"; -- COM7 - RGB selection
+	    when 5 => cmd_reg <= x"40"&"11010000"; -- COM15 - out ran 255, RGB565
+	    when 6 => cmd_reg <= x"15"&"00000010"; -- COM10 - negate VSYNC
       when others => cmd_reg <= x"ffff";
     end case;
   end process rom_case;
