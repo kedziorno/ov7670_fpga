@@ -137,16 +137,16 @@ begin
 		xclk_out => ov7670_xclk1
   );
 
-  --process (clk_mc, resend) is
-  --begin
-  --  if (resend = '1') then
-  --  elsif (rising_edge (clk_mc)) then
+  process (clk_mc, resend) is
+  begin
+    if (resend = '1') then
+    elsif (rising_edge (clk_mc)) then
       ov7670_pclk <= ov7670_pclk1;
       ov7670_hs <= ov7670_href1;
       ov7670_vs <= ov7670_vsync1;
       ov7670_d <= ov7670_data1;
-  --  end if;
-  --end process;
+    end if;
+  end process;
 
 	inst_ov7670capt1: ov7670_capture port map(
 		pclk => ov7670_pclk,
@@ -232,7 +232,7 @@ begin
   generic map (
     CLKDV_DIVIDE => 2.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
     -- 7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
-    CLKFX_MULTIPLY => 4, -- Can be any integer from 1 to 32
+    CLKFX_MULTIPLY => 24, -- Can be any integer from 1 to 32
     CLKFX_DIVIDE => 25, -- can be any interger from 1 to 32
     CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
     CLKIN_PERIOD => 20.0, -- Specify period of input clock

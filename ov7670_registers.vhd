@@ -18,7 +18,7 @@ end ov7670_registers;
 
 architecture raw_signal of ov7670_registers is
 
-  constant NC : integer := 21+1;
+  constant NC : integer := 22+1;
   signal sequence : INTEGER range 0 to NC-1 := 0;
   constant c_wait_reset : integer := 8193*100; -- to next busy_sr(31), wait ~16.5ms for reset
   signal wait_reset : integer range 0 to c_wait_reset - 1;
@@ -39,7 +39,7 @@ begin
       when 3 => cmd_reg <= x"fffe";
       -- configuration registers
       when 4 => cmd_reg <= x"11"&"01000000"; -- CLKRC - internal p-s 1
-      when 5 => cmd_reg <= x"6b"&"10000000"; -- DBLV - ic x6
+      when 5 => cmd_reg <= x"6b"&"00000000"; -- DBLV - ic x6
       when 6 => cmd_reg <= x"3e"&"00011001"; -- COM14
       when 7 => cmd_reg <= x"12"&"00000100"; -- COM7 - RGB selection
       when 8 => cmd_reg <= x"40"&"11010000"; -- COM15 - out ran 255, RGB565
@@ -51,11 +51,12 @@ begin
       when 14 => cmd_reg <= x"19"&"00000000"; -- VSTART
       when 15 => cmd_reg <= x"1a"&"00000000"; -- VSTOP
       when 16 => cmd_reg <= x"03"&"00000000"; -- VREF
-      when 17 => cmd_reg <= x"70"&"00000000";
-      when 18 => cmd_reg <= x"71"&"00000000";
+      when 17 => cmd_reg <= x"70"&"00111010";
+      when 18 => cmd_reg <= x"71"&"00110101";
       when 19 => cmd_reg <= x"72"&"00000000";
       when 20 => cmd_reg <= x"73"&"00000000";
-      when 21 => cmd_reg <= x"b0"&"00000000";
+      when 21 => cmd_reg <= x"3a"&"00000001"; -- TSLB auto window, 00 have pattern
+      when 22 => cmd_reg <= x"b0"&"10001000";
       when others => cmd_reg <= x"ffff";
     end case;
   end process rom_case;
