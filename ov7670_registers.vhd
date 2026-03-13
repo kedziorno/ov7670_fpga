@@ -38,8 +38,8 @@ begin
       when 2 => cmd_reg <= x"1280";
       when 3 => cmd_reg <= x"fffe";
       -- configuration registers
-      when 4 => cmd_reg <= x"11"&"01000000"; -- CLKRC - internal p-s 1
-      when 5 => cmd_reg <= x"6b"&"00000000"; -- DBLV - ic x6
+      when 4 => cmd_reg <= x"11"&"00000001"; -- CLKRC - internal p-s 1
+      when 5 => cmd_reg <= x"6b"&"11000000"; -- DBLV - ic x6
       when 6 => cmd_reg <= x"3e"&"00011001"; -- COM14
       when 7 => cmd_reg <= x"12"&"00000100"; -- COM7 - RGB selection
       when 8 => cmd_reg <= x"40"&"11010000"; -- COM15 - out ran 255, RGB565

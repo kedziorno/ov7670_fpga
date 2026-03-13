@@ -132,8 +132,8 @@ begin
 		conf_done => led1,
 		pwdn => ov7670_pwdn1,
 		reset => ov7670_reset1,
-		--xclk_in => clk_vga,
-		xclk_in => clk_cam,
+		xclk_in => clk_vga,
+--		xclk_in => clk_cam,
 		xclk_out => ov7670_xclk1
   );
 
