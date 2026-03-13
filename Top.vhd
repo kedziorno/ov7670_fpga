@@ -132,20 +132,21 @@ begin
 		conf_done => led1,
 		pwdn => ov7670_pwdn1,
 		reset => ov7670_reset1,
+		--xclk_in => clk_vga,
 		xclk_in => clk_cam,
 		xclk_out => ov7670_xclk1
   );
 
-  process (clk_mc, resend) is
-  begin
-    if (resend = '1') then
-    elsif (rising_edge (clk_mc)) then
+  --process (clk_mc, resend) is
+  --begin
+  --  if (resend = '1') then
+  --  elsif (rising_edge (clk_mc)) then
       ov7670_pclk <= ov7670_pclk1;
       ov7670_hs <= ov7670_href1;
       ov7670_vs <= ov7670_vsync1;
       ov7670_d <= ov7670_data1;
-    end if;
-  end process;
+  --  end if;
+  --end process;
 
 	inst_ov7670capt1: ov7670_capture port map(
 		pclk => ov7670_pclk,
@@ -164,7 +165,7 @@ begin
   );
 
   vga_hsync <= ov7670_hs;
-  vga_vsync <= not ov7670_vs;
+  vga_vsync <= ov7670_vs;
 
   --vga_clock <= ov7670_pclk;
   --vga_clock <= clk_vga;

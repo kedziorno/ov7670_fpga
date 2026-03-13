@@ -18,8 +18,10 @@ end ov7670_registers;
 
 architecture raw_signal of ov7670_registers is
 
-  constant NC : integer := 6+1;
+  constant NC : integer := 21+1;
   signal sequence : INTEGER range 0 to NC-1 := 0;
+  constant c_wait_reset : integer := 8193*100; -- to next busy_sr(31), wait ~16.5ms for reset
+  signal wait_reset : integer range 0 to c_wait_reset - 1;
   signal cmd_reg : STD_LOGIC_VECTOR (15 downto 0);
 
 begin
@@ -30,13 +32,30 @@ begin
   rom_case : process (sequence) is
   begin
     case (sequence) is
+      -- reset, not ideal but works
       when 0 => cmd_reg <= x"1280";
-      when 1 => cmd_reg <= x"11"&"00000000"; -- CLKRC - internal p-s 1
-      when 2 => cmd_reg <= x"6b"&"10000000"; -- DBLV - ic x6
-      when 3 => cmd_reg <= x"8c"&"00000011"; -- RGB444 - enable, RGBx
-      when 4 => cmd_reg <= x"12"&"00000100"; -- COM7 - RGB selection
-	    when 5 => cmd_reg <= x"40"&"11010000"; -- COM15 - out ran 255, RGB565
-	    when 6 => cmd_reg <= x"15"&"00000010"; -- COM10 - negate VSYNC
+      when 1 => cmd_reg <= x"fffe";
+      when 2 => cmd_reg <= x"1280";
+      when 3 => cmd_reg <= x"fffe";
+      -- configuration registers
+      when 4 => cmd_reg <= x"11"&"01000000"; -- CLKRC - internal p-s 1
+      when 5 => cmd_reg <= x"6b"&"10000000"; -- DBLV - ic x6
+      when 6 => cmd_reg <= x"3e"&"00011001"; -- COM14
+      when 7 => cmd_reg <= x"12"&"00000100"; -- COM7 - RGB selection
+      when 8 => cmd_reg <= x"40"&"11010000"; -- COM15 - out ran 255, RGB565
+      when 9 => cmd_reg <= x"8c"&"00000011"; -- RGB444 - enable, RGBx
+      when 10 => cmd_reg <= x"15"&"00000010"; -- COM10 - negate VSYNC
+      when 11 => cmd_reg <= x"17"&"00000000"; -- HSTART
+      when 12 => cmd_reg <= x"18"&"00000000"; -- HSTOP
+      when 13 => cmd_reg <= x"32"&"00000000"; -- HREF
+      when 14 => cmd_reg <= x"19"&"00000000"; -- VSTART
+      when 15 => cmd_reg <= x"1a"&"00000000"; -- VSTOP
+      when 16 => cmd_reg <= x"03"&"00000000"; -- VREF
+      when 17 => cmd_reg <= x"70"&"00000000";
+      when 18 => cmd_reg <= x"71"&"00000000";
+      when 19 => cmd_reg <= x"72"&"00000000";
+      when 20 => cmd_reg <= x"73"&"00000000";
+      when 21 => cmd_reg <= x"b0"&"00000000";
       when others => cmd_reg <= x"ffff";
     end case;
   end process rom_case;
@@ -44,11 +63,20 @@ begin
   sequence_proc : process (clk, reset) begin
     if (reset = '1') then
       sequence <= 0;
+      wait_reset <= 0;
     elsif rising_edge(clk) then
-      if resend = '1' then
+      if (cmd_reg = x"fffe") then
+        if (wait_reset = c_wait_reset - 1) then
+          wait_reset <= 0;
+          sequence <= sequence + 1;
+        else
+          wait_reset <= wait_reset + 1;
+        end if;
+      elsif resend = '1' then
         sequence <= 0;
       elsif advance = '1' then
         sequence <= sequence + 1;
+      else
       end if;
     end if;
   end process sequence_proc;

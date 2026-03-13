@@ -23,6 +23,7 @@ end ov7670_controller;
 architecture Behavioral of ov7670_controller is
 
 component ov7670_registers
+generic (constant MODE : integer := 0);
 	Port ( reset : in std_logic; clk : in  STD_LOGIC;
           resend : in  STD_LOGIC;
           advance : in  STD_LOGIC;
