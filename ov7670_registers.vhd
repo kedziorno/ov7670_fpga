@@ -51,8 +51,8 @@ begin
       when 14 => cmd_reg <= x"19"&"00000000"; -- VSTART
       when 15 => cmd_reg <= x"1a"&"00000000"; -- VSTOP
       when 16 => cmd_reg <= x"03"&"00000000"; -- VREF
-      when 17 => cmd_reg <= x"70"&"00111010";
-      when 18 => cmd_reg <= x"71"&"00110101";
+      when 17 => cmd_reg <= x"70"&"00000000";
+      when 18 => cmd_reg <= x"71"&"00000000";
       when 19 => cmd_reg <= x"72"&"00000000";
       when 20 => cmd_reg <= x"73"&"00000000";
       when 21 => cmd_reg <= x"3a"&"00000001"; -- TSLB auto window, 00 have pattern
