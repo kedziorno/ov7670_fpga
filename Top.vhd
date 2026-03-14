@@ -46,8 +46,8 @@ Port	(
   --VGA
   vga_clock : out STD_LOGIC;
   vga_blank : out STD_LOGIC;
-  vga_hsync : out STD_LOGIC;
-  vga_vsync : out STD_LOGIC;
+  vga_hsync, vga_hsdbg : out STD_LOGIC;
+  vga_vsync, vga_vsdbg : out STD_LOGIC;
   vga_rgb	: out STD_LOGIC_VECTOR(7 downto 0)
 );
 end top_camera_monitoring;
@@ -90,6 +90,14 @@ COMPONENT vga_imagegenerator
            RGB_out : out  STD_LOGIC_VECTOR (7 downto 0));
 END COMPONENT;
 
+COMPONENT VGA_timing_synch
+	Port ( clk25 : in  STD_LOGIC;
+           Hsync : out  STD_LOGIC;
+           Vsync : out  STD_LOGIC;
+           blank : out  STD_LOGIC;
+           activeArea1 : out  STD_LOGIC);
+END COMPONENT;
+
 signal siodo1, siodi1 : std_logic;
 
 signal clk0, clk0_fb : std_logic;
@@ -108,6 +116,9 @@ signal reset_dcm_n, reset_dcm : std_logic;
 signal siodi1_n : std_logic;
 
 signal wr_d1 : std_logic_vector (15 downto 0);
+
+signal active1 : std_logic;
+signal vga_hsync_i, vga_vsync_i : std_logic;
 
 begin
 
@@ -166,12 +177,24 @@ begin
 
 	inst_imagegen : vga_imagegenerator port map(
 		Data_in1 => wr_d1,
-		active_area1 => '1',
+		active_area1 => ov7670_hs, -- '1'
 		RGB_out => vga_rgb
+  );
+
+  inst_vgatiming : VGA_timing_synch port map(
+    clk25 => clk_vga,
+    Hsync => vga_hsync_i,
+    Vsync => vga_vsync_i,
+    blank => vga_blank,
+    activeArea1 => active1
   );
 
   vga_hsync <= ov7670_hs;
   vga_vsync <= ov7670_vs;
+  --vga_hsync <= vga_hsync_i;
+  --vga_vsync <= vga_vsync_i;
+  vga_hsdbg <= vga_hsync_i;
+  vga_vsdbg <= vga_vsync_i;
 
   --vga_clock <= ov7670_pclk;
   --vga_clock <= clk_vga;
@@ -225,12 +248,12 @@ begin
 
   DCM_SP_mc_fx_vga_dv : DCM_SP
   generic map (
-    --CLKDV_DIVIDE => 2.0, -- 50mhz
-    CLKDV_DIVIDE => 4.0, -- 100mhz
+    CLKDV_DIVIDE => 2.0, -- 50mhz
+    --CLKDV_DIVIDE => 4.0, -- 100mhz
     CLKFX_MULTIPLY => 32, -- Can be any integer from 1 to 32
     CLKFX_DIVIDE => 2, -- Can be any interger from 1 to 32
     CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
-    CLKIN_PERIOD => 10.0, -- Specify period of input clock
+    CLKIN_PERIOD => 20.0, -- Specify period of input clock
     CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of "NONE", "FIXED" or "VARIABLE"
     CLK_FEEDBACK => "1X", -- Specify clock feedback of "NONE", "1X" or "2X"
     DESKEW_ADJUST => "SYSTEM_SYNCHRONOUS", -- "SOURCE_SYNCHRONOUS", "SYSTEM_SYNCHRONOUS" or
@@ -264,10 +287,13 @@ begin
   generic map (
     CLKDV_DIVIDE => 2.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
     -- 7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
-    CLKFX_MULTIPLY => 6, -- Can be any integer from 1 to 32
-    CLKFX_DIVIDE => 25, -- can be any interger from 1 to 32
+    --CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 24, -- 50 -> 25 mhz
+    --CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 25, -- 50 -> 24.0 mhz
+    --CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 27, -- 50 -> 24.07407407407407407400 mhz
+    --CLKFX_MULTIPLY => 14, CLKFX_DIVIDE => 29, -- 50 -> 24.13793103448275862050 mhz
+    CLKFX_MULTIPLY => 15, CLKFX_DIVIDE => 31, -- 50 -> 24.19354838709677419350 mhz
     CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
-    CLKIN_PERIOD => 10.0, -- Specify period of input clock
+    CLKIN_PERIOD => 20.0, -- Specify period of input clock
     CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of "NONE", "FIXED" or "VARIABLE"
     CLK_FEEDBACK => "1X", -- Specify clock feedback of "NONE", "1X" or "2X"
     DESKEW_ADJUST => "SYSTEM_SYNCHRONOUS", -- "SOURCE_SYNCHRONOUS", "SYSTEM_SYNCHRONOUS" or
@@ -299,7 +325,9 @@ begin
 
 end architecture raw_signal;
 
---
+-- ///////////////////////////////////////////////////////////////////////////////
+-- ///////////////////////////////////////////////////////////////////////////////
+-- ///////////////////////////////////////////////////////////////////////////////
 
 architecture Structural of top_camera_monitoring is
 

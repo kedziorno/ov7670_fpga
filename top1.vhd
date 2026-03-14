@@ -61,8 +61,8 @@ oWait : in std_logic;
 --VGA
 vga_clock : out STD_LOGIC;
 vga_blank : out STD_LOGIC;
-vga_hsync : out STD_LOGIC;
-vga_vsync : out STD_LOGIC;
+vga_hsync, vga_hsdbg : out STD_LOGIC;
+vga_vsync, vga_vsdbg : out STD_LOGIC;
 vga_rgb	: out STD_LOGIC_VECTOR(7 downto 0)
 );
 end entity top;
@@ -99,8 +99,8 @@ oWait : in std_logic;
 --VGA
 vga_clock : out STD_LOGIC;
 vga_blank : out STD_LOGIC;
-vga_hsync : out STD_LOGIC;
-vga_vsync : out STD_LOGIC;
+vga_hsync, vga_hsdbg : out STD_LOGIC;
+vga_vsync, vga_vsdbg : out STD_LOGIC;
 vga_rgb	: out STD_LOGIC_VECTOR(7 downto 0)
 );
 end component top_camera_monitoring;
@@ -140,6 +140,8 @@ vga_clock => vga_clock,
 vga_blank => vga_blank,
 vga_hsync => vga_hsync,
 vga_vsync => vga_vsync,
+vga_hsdbg => vga_hsdbg,
+vga_vsdbg => vga_vsdbg,
 vga_rgb	=> vga_rgb
 );
 
