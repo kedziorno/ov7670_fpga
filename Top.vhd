@@ -18,7 +18,7 @@ use work.micron_mem_parameters.all;
 
 entity top_camera_monitoring is
 generic (
-  constant c_synchronisation : boolean := false
+  constant c_synchronisation : boolean := true
 );
 port	(
   i_clock	: in STD_LOGIC;
@@ -178,7 +178,7 @@ begin
   end generate g_input_cam_no_syn;
 
 	inst_ov7670capt1: ov7670_capture port map(
-		pclk => clk_vga,
+		pclk => ov7670_pclk,
 		vsync => ov7670_vs,
 		href => ov7670_hs,
 		d => ov7670_d,
@@ -300,11 +300,11 @@ begin
     CLKDV_DIVIDE => 2.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
     -- 7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
     --CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 24, -- 50 -> 25 mhz
-    --CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 25, -- 50 -> 24.0 mhz
+    CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 25, -- 50 -> 24.0 mhz
     --CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 27, -- 50 -> 24.07407407407407407400 mhz
     --CLKFX_MULTIPLY => 14, CLKFX_DIVIDE => 29, -- 50 -> 24.13793103448275862050 mhz
     --CLKFX_MULTIPLY => 15, CLKFX_DIVIDE => 31, -- 50 -> 24.19354838709677419350 mhz
-    CLKFX_MULTIPLY => 6, CLKFX_DIVIDE => 25, -- 50 -> 12.0 mhz
+    --CLKFX_MULTIPLY => 24, CLKFX_DIVIDE => 25, -- 50 -> 48.0 mhz
     CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
     CLKIN_PERIOD => 20.0, -- Specify period of input clock
     CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of "NONE", "FIXED" or "VARIABLE"

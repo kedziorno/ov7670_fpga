@@ -38,7 +38,7 @@ begin
       when 2 => cmd_reg <= x"1280";
       when 3 => cmd_reg <= x"fffe";
       -- configuration registers
-      when 4 => cmd_reg <= x"11"&"00000000"; -- CLKRC - internal p-s
+      when 4 => cmd_reg <= x"11"&"00000001"; -- CLKRC - internal p-s
       when 5 => cmd_reg <= x"6b"&"11000000"; -- DBLV - ic x8
       when 6 => cmd_reg <= x"3e"&"00000000"; -- COM14, 4,2:0 hsync period
       when 7 => cmd_reg <= x"12"&"00000100"; -- COM7 - RGB selection
@@ -152,7 +152,7 @@ constant commandrom : cmd_rom :=(
 	45  => x"4d40",
 	46  => x"4e20",
 	47  => x"6900",
-	48  => x"6b"&"00000000",
+	48  => x"6b"&"11000000",
 	49  => x"7410",
 	50  => x"8d4f",
 	51  => x"8e00",
@@ -168,7 +168,7 @@ constant commandrom : cmd_rom :=(
 	61  => x"b084",
 	62  => x"42"&"00000000", -- dsp colorbar enable for testing configuration
 	--62  => x"42"&"00001000", -- dsp colorbar enable for testing configuration
-  63  => x"1500", -- vsync polarity
+  63  => x"1502", -- vsync polarity
 
 	64  => x"ffff");
 begin
@@ -188,7 +188,6 @@ if (reset = '1') then
 		end if;
 
 		cmd_reg <= commandrom(sequence);
---		if sequence > 55 then
 		if sequence > NC then
 			cmd_reg <= x"FFFF";
 		end if;
