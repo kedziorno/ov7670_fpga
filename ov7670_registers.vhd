@@ -38,10 +38,10 @@ begin
       when 2 => cmd_reg <= x"1280";
       when 3 => cmd_reg <= x"fffe";
       -- configuration registers
-      when 4 => cmd_reg <= x"11"&"00000001"; -- CLKRC - internal p-s
+      when 4 => cmd_reg <= x"12"&"00000000"; -- CLKRC - internal p-s
       when 5 => cmd_reg <= x"6b"&"11000000"; -- DBLV - ic x8
-      when 6 => cmd_reg <= x"3e"&"00000000"; -- COM14, 4,2:0 hsync period
-      when 7 => cmd_reg <= x"12"&"00000100"; -- COM7 - RGB selection
+      when 6 => cmd_reg <= x"11"&"00000001"; -- COM14, 4,2:0 hsync period
+      when 7 => cmd_reg <= x"3e"&"00000000"; -- COM7 - RGB selection
       when 8 => cmd_reg <= x"3b"&"00000000"; -- COM11 - divide vsync
       when 9 => cmd_reg <= x"40"&"11010000"; -- COM15 - out ran 255, RGB565
       when 10 => cmd_reg <= x"8c"&"00000010"; -- RGB444 - enable, xRGB
@@ -96,22 +96,22 @@ signal sequence : INTEGER range 0 to NC-1 := 0;
 type cmd_rom is array (0 to NC-1) of STD_LOGIC_VECTOR (15 downto 0);
 constant commandrom : cmd_rom :=(
  	0  => x"1280",
- 	1  => x"fffe",
+ 	1  => x"1280",
  
  	2  => x"1280",
- 	3  => x"fffe",
+ 	3  => x"1280",
  
 	4  => x"12"&"00000100", -- COM7 for rgb
 	--4  => x"12"&"00000010", -- pattern
 	5  => x"11"&"00000001",
  	6  => x"0c00",
  	7  => x"3e"&"00000000", -- COM14 PCLK div
-	8  => x"70"&"00111010", -- XSC 3a
-	9  => x"71"&"00110101", -- YSC 35
-	--8  => x"70"&"10000000", -- pattern
-	--9  => x"71"&"00000000", -- pattern
-	10  => x"7211",
-	11  => x"73"&"00001111",
+--	8  => x"70"&"00111010", -- XSC 3a
+--	9  => x"71"&"00110101", -- YSC 35
+	8  => x"70"&"00000000", -- pattern
+	9  => x"71"&"00000000", -- pattern
+	10  => x"7200",
+	11  => x"73"&"00000000",
 	12  => x"a202",
 
 	13  => x"8c"&"00000011", -- rgb444 enable
@@ -128,13 +128,17 @@ constant commandrom : cmd_rom :=(
 	24  => x"581e",
 	25  => x"3dc0",
 
-	26  => x"1711", -- HSTART, HSTOP
-	27  => x"1861",
-	28  => x"32"&"10000000",
+	26  => x"1700", -- HSTART, HSTOP -- image dimes but on all screen
+	27  => x"1800",
+	28  => x"32"&"00000000",
 
-	29  => x"1903", -- VSTART, VSTOP
-	30  => x"1a7b",
-	31  => x"030a",
+--	26  => x"1711", -- HSTART, HSTOP -- image cropped but w/o noise and better colors
+--	27  => x"1861",
+--	28  => x"32"&"00000000",
+
+	29  => x"1900", -- VSTART, VSTOP
+	30  => x"1a00",
+	31  => x"0300",
 
 	32  => x"0761",
 	33  => x"0f4b",
