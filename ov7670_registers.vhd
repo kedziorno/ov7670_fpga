@@ -38,13 +38,13 @@ begin
       when 2 => cmd_reg <= x"1280";
       when 3 => cmd_reg <= x"fffe";
       -- configuration registers
-      when 4 => cmd_reg <= x"11"&"00000001"; -- CLKRC - internal p-s 1
-      when 5 => cmd_reg <= x"6b"&"11000000"; -- DBLV - ic x6
+      when 4 => cmd_reg <= x"11"&"00000000"; -- CLKRC - internal p-s
+      when 5 => cmd_reg <= x"6b"&"11000000"; -- DBLV - ic x8
       when 6 => cmd_reg <= x"3e"&"00000000"; -- COM14, 4,2:0 hsync period
-      when 7 => cmd_reg <= x"12"&"00000000"; -- COM7 - RGB selection
+      when 7 => cmd_reg <= x"12"&"00000100"; -- COM7 - RGB selection
       when 8 => cmd_reg <= x"3b"&"00000000"; -- COM11 - divide vsync
       when 9 => cmd_reg <= x"40"&"11010000"; -- COM15 - out ran 255, RGB565
-      when 10 => cmd_reg <= x"8c"&"00000011"; -- RGB444 - enable, RGBx
+      when 10 => cmd_reg <= x"8c"&"00000010"; -- RGB444 - enable, xRGB
       when 11 => cmd_reg <= x"15"&"00000010"; -- COM10 - negate VSYNC
       when 12 => cmd_reg <= x"17"&"00000000"; -- HSTART
       when 13 => cmd_reg <= x"18"&"00000000"; -- HSTOP

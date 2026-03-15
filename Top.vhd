@@ -17,7 +17,10 @@ use UNISIM.VCOMPONENTS.ALL;
 use work.micron_mem_parameters.all;
 
 entity top_camera_monitoring is
-Port	(
+generic (
+  constant c_synchronisation : boolean := false
+);
+port	(
   i_clock	: in STD_LOGIC;
   pb		: in STD_LOGIC;
   led1 : out STD_LOGIC; -- configuration done
@@ -150,23 +153,32 @@ begin
 		xclk_out => ov7670_xclk1
   );
 
-  process (clk_mc, resend) is
-  begin
-    if (resend = '1') then
-      ov7670_pclk <= '0';
-      ov7670_hs <= '0';
-      ov7670_vs <= '0';
-      ov7670_d <= (others => '0');
-    elsif (rising_edge (clk_mc)) then
-      ov7670_pclk <= ov7670_pclk1;
-      ov7670_hs <= ov7670_href1;
-      ov7670_vs <= ov7670_vsync1;
-      ov7670_d <= ov7670_data1;
-    end if;
-  end process;
+  g_input_cam_syn : if (c_synchronisation = true) generate
+    process (clk_mc, resend) is
+    begin
+      if (resend = '1') then
+        ov7670_pclk <= '0';
+        ov7670_hs <= '0';
+        ov7670_vs <= '0';
+        ov7670_d <= (others => '0');
+      elsif (falling_edge (clk_mc)) then
+        ov7670_pclk <= ov7670_pclk1;
+        ov7670_hs <= ov7670_href1;
+        ov7670_vs <= ov7670_vsync1;
+        ov7670_d <= ov7670_data1;
+      end if;
+    end process;
+  end generate g_input_cam_syn;
+
+  g_input_cam_no_syn : if (c_synchronisation = false) generate
+    ov7670_pclk <= ov7670_pclk1;
+    ov7670_hs <= ov7670_href1;
+    ov7670_vs <= ov7670_vsync1;
+    ov7670_d <= ov7670_data1;
+  end generate g_input_cam_no_syn;
 
 	inst_ov7670capt1: ov7670_capture port map(
-		pclk => ov7670_pclk,
+		pclk => clk_vga,
 		vsync => ov7670_vs,
 		href => ov7670_hs,
 		d => ov7670_d,
@@ -291,7 +303,8 @@ begin
     --CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 25, -- 50 -> 24.0 mhz
     --CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 27, -- 50 -> 24.07407407407407407400 mhz
     --CLKFX_MULTIPLY => 14, CLKFX_DIVIDE => 29, -- 50 -> 24.13793103448275862050 mhz
-    CLKFX_MULTIPLY => 15, CLKFX_DIVIDE => 31, -- 50 -> 24.19354838709677419350 mhz
+    --CLKFX_MULTIPLY => 15, CLKFX_DIVIDE => 31, -- 50 -> 24.19354838709677419350 mhz
+    CLKFX_MULTIPLY => 6, CLKFX_DIVIDE => 25, -- 50 -> 12.0 mhz
     CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
     CLKIN_PERIOD => 20.0, -- Specify period of input clock
     CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of "NONE", "FIXED" or "VARIABLE"
