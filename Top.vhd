@@ -23,6 +23,7 @@ generic (
 port	(
   i_clock	: in STD_LOGIC;
   pb		: in STD_LOGIC;
+  sw : in std_logic_vector (7 downto 0);
   led1 : out STD_LOGIC; -- configuration done
   -- OV7670
   ov7670_pclk1 : in  STD_LOGIC;
@@ -125,6 +126,109 @@ signal vga_hsync_i, vga_vsync_i : std_logic;
 
 begin
 
+  prio_dec_black_wait : process (sw, wr_d1, ov7670_hs) is
+  begin
+    case (sw) is
+      when "1-------" =>
+        if (ov7670_hs = '1') then
+          vga_rgb <=
+            (wr_d1 (15) xor wr_d1 (14)) &
+            (wr_d1 (15) xor wr_d1 (14)) &
+            (wr_d1 (15) xor wr_d1 (14)) &
+            (wr_d1 (15) xor wr_d1 (14)) &
+            (wr_d1 (15) xor wr_d1 (14)) &
+            (wr_d1 (15) xor wr_d1 (14)) &
+            (wr_d1 (15) xor wr_d1 (14)) &
+            (wr_d1 (15) xor wr_d1 (14));
+        end if;
+      when "01------" =>
+        if (ov7670_hs = '1') then
+          vga_rgb <=
+            (wr_d1 (13) xor wr_d1 (12)) &
+            (wr_d1 (13) xor wr_d1 (12)) &
+            (wr_d1 (13) xor wr_d1 (12)) &
+            (wr_d1 (13) xor wr_d1 (12)) &
+            (wr_d1 (13) xor wr_d1 (12)) &
+            (wr_d1 (13) xor wr_d1 (12)) &
+            (wr_d1 (13) xor wr_d1 (12)) &
+            (wr_d1 (13) xor wr_d1 (12));
+        end if;
+      when "001-----" =>
+        if (ov7670_hs = '1') then
+          vga_rgb <=
+            (wr_d1 (11) xor wr_d1 (10)) &
+            (wr_d1 (11) xor wr_d1 (10)) &
+            (wr_d1 (11) xor wr_d1 (10)) &
+            (wr_d1 (11) xor wr_d1 (10)) &
+            (wr_d1 (11) xor wr_d1 (10)) &
+            (wr_d1 (11) xor wr_d1 (10)) &
+            (wr_d1 (11) xor wr_d1 (10)) &
+            (wr_d1 (11) xor wr_d1 (10));
+        end if;
+      when "0001----" =>
+        if (ov7670_hs = '1') then
+          vga_rgb <=
+            (wr_d1 (9) xor wr_d1 (8)) &
+            (wr_d1 (9) xor wr_d1 (8)) &
+            (wr_d1 (9) xor wr_d1 (8)) &
+            (wr_d1 (9) xor wr_d1 (8)) &
+            (wr_d1 (9) xor wr_d1 (8)) &
+            (wr_d1 (9) xor wr_d1 (8)) &
+            (wr_d1 (9) xor wr_d1 (8)) &
+            (wr_d1 (9) xor wr_d1 (8));
+        end if;
+      when "00001---" =>
+        if (ov7670_hs = '1') then
+          vga_rgb <=
+            (wr_d1 (7) xor wr_d1 (6)) &
+            (wr_d1 (7) xor wr_d1 (6)) &
+            (wr_d1 (7) xor wr_d1 (6)) &
+            (wr_d1 (7) xor wr_d1 (6)) &
+            (wr_d1 (7) xor wr_d1 (6)) &
+            (wr_d1 (7) xor wr_d1 (6)) &
+            (wr_d1 (7) xor wr_d1 (6)) &
+            (wr_d1 (7) xor wr_d1 (6));
+        end if;
+      when "000001--" =>
+        if (ov7670_hs = '1') then
+          vga_rgb <=
+            (wr_d1 (5) xor wr_d1 (4)) &
+            (wr_d1 (5) xor wr_d1 (4)) &
+            (wr_d1 (5) xor wr_d1 (4)) &
+            (wr_d1 (5) xor wr_d1 (4)) &
+            (wr_d1 (5) xor wr_d1 (4)) &
+            (wr_d1 (5) xor wr_d1 (4)) &
+            (wr_d1 (5) xor wr_d1 (4)) &
+            (wr_d1 (5) xor wr_d1 (4));
+        end if;
+      when "0000001-" =>
+        if (ov7670_hs = '1') then
+          vga_rgb <=
+            (wr_d1 (3) xor wr_d1 (2)) &
+            (wr_d1 (3) xor wr_d1 (2)) &
+            (wr_d1 (3) xor wr_d1 (2)) &
+            (wr_d1 (3) xor wr_d1 (2)) &
+            (wr_d1 (3) xor wr_d1 (2)) &
+            (wr_d1 (3) xor wr_d1 (2)) &
+            (wr_d1 (3) xor wr_d1 (2)) &
+            (wr_d1 (3) xor wr_d1 (2));
+        end if;
+      when "00000001" =>
+        if (ov7670_hs = '1') then
+          vga_rgb <=
+            (wr_d1 (1) xor wr_d1 (0)) &
+            (wr_d1 (1) xor wr_d1 (0)) &
+            (wr_d1 (1) xor wr_d1 (0)) &
+            (wr_d1 (1) xor wr_d1 (0)) &
+            (wr_d1 (1) xor wr_d1 (0)) &
+            (wr_d1 (1) xor wr_d1 (0)) &
+            (wr_d1 (1) xor wr_d1 (0)) &
+            (wr_d1 (1) xor wr_d1 (0));
+        end if;
+      when others => vga_rgb <= (others => '0');
+    end case;
+  end process prio_dec_black_wait;
+
   siodi1_n <= not siodi1;
   ov7670_siod1_tri : IOBUF port map (
      O  => (siodi1),
@@ -187,11 +291,11 @@ begin
 		we => open
   );
 
-	inst_imagegen : vga_imagegenerator port map(
-		Data_in1 => wr_d1,
-		active_area1 => ov7670_hs, -- '1'
-		RGB_out => vga_rgb
-  );
+	--inst_imagegen : vga_imagegenerator port map(
+	--	Data_in1 => wr_d1,
+	--	active_area1 => ov7670_hs, -- '1'
+	--	RGB_out => vga_rgb
+  --);
 
   inst_vgatiming : VGA_timing_synch port map(
     clk25 => clk_vga,

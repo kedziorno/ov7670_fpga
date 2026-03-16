@@ -35,6 +35,7 @@ entity top is
 Port	(
 i_clock	: in STD_LOGIC;
 pb		: in STD_LOGIC;
+sw : in std_logic_vector (7 downto 0);
 led1 : out STD_LOGIC; -- configuration done
 -- OV7670
 ov7670_pclk1 : in  STD_LOGIC;
@@ -73,6 +74,7 @@ component top_camera_monitoring is
 Port	(
 i_clock	: in STD_LOGIC;
 pb		: in STD_LOGIC;
+sw : in std_logic_vector (7 downto 0);
 led1 : out STD_LOGIC; -- configuration done
 -- OV7670
 ov7670_pclk1 : in  STD_LOGIC;
@@ -112,6 +114,7 @@ inst_top_camera_monitoring : top_camera_monitoring
 Port map (
 i_clock	=> i_clock,
 pb	=> pb,
+sw => sw,
 led1 => led1,
 -- OV7670
 ov7670_pclk1 => ov7670_pclk1,
