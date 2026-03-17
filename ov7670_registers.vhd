@@ -100,21 +100,25 @@ constant commandrom : cmd_rom :=(
  
  	2  => x"1280",
  	3  => x"1280",
- 
+
 	4  => x"12"&"00000100", -- COM7 for rgb
 	--4  => x"12"&"00000010", -- pattern
 	5  => x"11"&"00000001",
  	6  => x"0c00",
  	7  => x"3e"&"00000000", -- COM14 PCLK div
+
+	8  => x"70"&"00000000",
+	9  => x"71"&"00000000",
 --	8  => x"70"&"00111010", -- XSC 3a
 --	9  => x"71"&"00110101", -- YSC 35
-	8  => x"70"&"00000000", -- pattern
-	9  => x"71"&"00000000", -- pattern
+--	8  => x"70"&"10000000", -- pattern
+--	9  => x"71"&"00000000", -- pattern
+
 	10  => x"7200",
 	11  => x"73"&"00000000",
 	12  => x"a202",
 
-	13  => x"8c"&"00000011", -- rgb444 enable
+	13  => x"8c"&"00000011", -- rgb444 enable, RGBx
 	14  => x"0800",
 	15  => x"40"&"11010000", -- COM15 for rgb444
 	16  => x"3a"&"00000001", -- TSLB auto window, 00 have pattern
@@ -128,17 +132,20 @@ constant commandrom : cmd_rom :=(
 	24  => x"581e",
 	25  => x"3dc0",
 
-	26  => x"1700", -- HSTART, HSTOP -- image dimes but on all screen
+	26  => x"1700", -- HSTART, HSTOP -- image dimes but render on all screen
 	27  => x"1800",
 	28  => x"32"&"00000000",
-
---	26  => x"1711", -- HSTART, HSTOP -- image cropped but w/o noise and better colors
---	27  => x"1861",
---	28  => x"32"&"00000000",
-
 	29  => x"1900", -- VSTART, VSTOP
 	30  => x"1a00",
 	31  => x"0300",
+
+-- image cropped but w/o noise and better colors (not dimmed)
+--	26  => x"1711", -- HSTART, HSTOP
+--	27  => x"1861",
+--	28  => x"3280",
+--	29  => x"1903", -- VSTART, VSTOP
+--	30  => x"1a7b",
+--	31  => x"0300",
 
 	32  => x"0761",
 	33  => x"0f4b",

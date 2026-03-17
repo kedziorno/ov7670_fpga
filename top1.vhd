@@ -64,7 +64,9 @@ vga_clock : out STD_LOGIC;
 vga_blank : out STD_LOGIC;
 vga_hsync, vga_hsdbg : out STD_LOGIC;
 vga_vsync, vga_vsdbg : out STD_LOGIC;
-vga_rgb	: out STD_LOGIC_VECTOR(7 downto 0)
+vga_r	: out STD_LOGIC_VECTOR(2 downto 0);
+vga_g	: out STD_LOGIC_VECTOR(2 downto 0);
+vga_b	: out STD_LOGIC_VECTOR(1 downto 0)
 );
 end entity top;
 
@@ -103,7 +105,9 @@ vga_clock : out STD_LOGIC;
 vga_blank : out STD_LOGIC;
 vga_hsync, vga_hsdbg : out STD_LOGIC;
 vga_vsync, vga_vsdbg : out STD_LOGIC;
-vga_rgb	: out STD_LOGIC_VECTOR(7 downto 0)
+vga_r	: out STD_LOGIC_VECTOR(2 downto 0);
+vga_g	: out STD_LOGIC_VECTOR(2 downto 0);
+vga_b	: out STD_LOGIC_VECTOR(1 downto 0)
 );
 end component top_camera_monitoring;
 for all : top_camera_monitoring use entity work.top_camera_monitoring (raw_signal);
@@ -145,7 +149,9 @@ vga_hsync => vga_hsync,
 vga_vsync => vga_vsync,
 vga_hsdbg => vga_hsdbg,
 vga_vsdbg => vga_vsdbg,
-vga_rgb	=> vga_rgb
+vga_r	=> vga_r,
+vga_g	=> vga_g,
+vga_b	=> vga_b
 );
 
 end Behavioral;
