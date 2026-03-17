@@ -7,6 +7,8 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
+use work.p_ov7670_rom.all;
+
 entity ov7670_registers is
 generic (constant MODE : integer := 0);
     Port ( reset, clk : in  STD_LOGIC;
@@ -89,120 +91,26 @@ end architecture raw_signal;
 --
 
 architecture Behavioral of ov7670_registers is
-constant NC : integer := 65;
-signal cmd_reg : STD_LOGIC_VECTOR (15 downto 0);
-signal sequence : INTEGER range 0 to NC-1 := 0;
-
-type cmd_rom is array (0 to NC-1) of STD_LOGIC_VECTOR (15 downto 0);
-constant commandrom : cmd_rom :=(
- 	0  => x"1280",
- 	1  => x"1280",
- 
- 	2  => x"1280",
- 	3  => x"1280",
-
-	4  => x"12"&"00000100", -- COM7 for rgb
-	--4  => x"12"&"00000010", -- pattern
-	5  => x"11"&"00000001", -- CLKRC
- 	6  => x"0c00", -- COM3
- 	7  => x"3e"&"00000000", -- COM14 PCLK div
-
-	8  => x"70"&"00000000", -- XSC 00
-	9  => x"71"&"00000000", -- YSC 00
---	8  => x"70"&"00111010", -- XSC 3a
---	9  => x"71"&"00110101", -- YSC 35
---	8  => x"70"&"10000000", -- pattern
---	9  => x"71"&"00000000", -- pattern
-
-	10  => x"7211", -- SCALING_DCWCTR
-	11  => x"73"&"00000000", -- SCALING_PCLK_DV
-	12  => x"a202", -- SCALING_PCLK_DELAY
-
-	13  => x"8c"&"00000011", -- rgb444 enable, RGBx
-	14  => x"0800", -- RAVE
-	15  => x"40"&"11010000", -- COM15 for rgb444
-	16  => x"3a"&"00000001", -- TSLB auto window, 00 have pattern
-	17  => x"1438", -- COM9
-	18  => x"4f40", -- MTX1
-	19  => x"5034", -- MTX2
-	20  => x"510c", -- MTX3
-	21  => x"5217", -- MTX4
-	22  => x"5329", -- MTX5
-	23  => x"5440", -- MTX6
-	24  => x"581e", -- MTXS
-	25  => x"3dc0", -- COM13
-
-	26  => x"1700", -- HSTART, HSTOP -- image dimes but render on all screen
-	27  => x"1800",
-	28  => x"32"&"00000000",
-	29  => x"1900", -- VSTART, VSTOP
-	30  => x"1a00",
-	31  => x"0300",
-
--- image cropped but w/o noise and better colors (not dimmed)
---	26  => x"1711", -- HSTART, HSTOP
---	27  => x"1861",
---	28  => x"3280",
---	29  => x"1903", -- VSTART, VSTOP
---	30  => x"1a7b",
---	31  => x"0300",
-
-	32  => x"0761", -- AECHH
-	33  => x"0f4b", -- COM6
-	34  => x"1602", -- RSVD
-	35  => x"1e05", -- MVFP
-	36  => x"2102", -- ADCCTR1
-	37  => x"2291", -- ADCCTR2
-	38  => x"2907", -- RSVD
-	39  => x"330b", -- CHLF
-	40  => x"350b", -- RSVD
-	41  => x"371d", -- ADC
-	42  => x"3871", -- ACOM
-	43  => x"392a", -- OFON
-	44  => x"3c80", -- COM12, hs always on
-	45  => x"4d40", -- RSVD
-	46  => x"4e20", -- RSVD
-	47  => x"6900", -- GFIX
-	48  => x"6b"&"11000000",
-	49  => x"7400", -- REG74
-	50  => x"8d4f", -- RSVD
-	51  => x"8e00", -- RSVD
-	52  => x"8f00", -- RSVD
-	53  => x"9000", -- RSVD
-	54  => x"9100", -- RSVD
-	55  => x"9600", -- RSVD
-	56  => x"9a00", -- RSVD
-	57  => x"b10c", -- ABLC1
-	58  => x"b20e", -- RSVD
-	59  => x"b382", -- THL_ST
-	60  => x"b80a", -- RSVD
-	61  => x"1502", -- vsync polarity
-	62  => x"42"&"00000000", -- dsp colorbar enable for testing configuration
-	--62  => x"42"&"00001000", -- dsp colorbar enable for testing configuration
-  63  => x"b084",
-
-	64  => x"ffff");
+  signal cmd_reg : STD_LOGIC_VECTOR (15 downto 0);
+  signal sequence : INTEGER range 0 to NC-1 := 0;
 begin
-command <= cmd_reg;
-
-with cmd_reg select done <= '1' when x"FFFF", '0' when others;
-
-sequence_proc : process (clk, reset) begin
-if (reset = '1') then
-  sequence <= 0;
-  cmd_reg <= (others => '0');
-	elsif rising_edge(clk) then
-		if resend = '1' then
-			sequence <= 0;
-		elsif advance = '1' then
-			sequence <= sequence + 1;
-		end if;
-
-		cmd_reg <= commandrom(sequence);
-		if sequence > NC then
-			cmd_reg <= x"FFFF";
-		end if;
-	end if;
-end process sequence_proc;
+  command <= cmd_reg;
+  with cmd_reg select done <= '1' when x"FFFF", '0' when others;
+  sequence_proc : process (clk, reset) begin
+    if (reset = '1') then
+      sequence <= 0;
+      cmd_reg <= (others => '0');
+    elsif rising_edge(clk) then
+      if resend = '1' then
+        sequence <= 0;
+      elsif advance = '1' then
+        sequence <= sequence + 1;
+      end if;
+      cmd_reg <= ov7670_rom (sequence);
+      if sequence > NC then
+        cmd_reg <= x"FFFF";
+      end if;
+    end if;
+  end process sequence_proc;
 end Behavioral;
 
