@@ -15,8 +15,8 @@ x"1204", -- COM7 00 (d), 04 (rgb), 02 (colorbar)
 x"1101", -- CLKRC
 x"0c00", -- COM3
 x"3e00", -- COM14 PCLK div
-x"703a", -- XSC 3a (d), 80 (pattern)
-x"7135", -- YSC 35 (d), 00 (pattern)
+x"7000", -- XSC 3a (d), 80 (pattern)
+x"7100", -- YSC 35 (d), 00 (pattern)
 x"7211", -- SCALING_DCWCTR
 x"7300", -- SCALING_PCLK_DV
 x"a202", -- SCALING_PCLK_DELAY

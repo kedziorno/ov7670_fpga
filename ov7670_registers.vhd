@@ -93,24 +93,31 @@ end architecture raw_signal;
 architecture Behavioral of ov7670_registers is
   signal cmd_reg : STD_LOGIC_VECTOR (15 downto 0);
   signal sequence : INTEGER range 0 to NC-1 := 0;
+  constant c_wait_reset : integer := 8193*100; -- to next busy_sr(31), wait ~16.5ms for reset
+  signal wait_reset : integer range 0 to c_wait_reset - 1;
 begin
   command <= cmd_reg;
   with cmd_reg select done <= '1' when x"FFFF", '0' when others;
+  cmd_reg <= ov7670_rom (sequence);
   sequence_proc : process (clk, reset) begin
     if (reset = '1') then
       sequence <= 0;
-      cmd_reg <= (others => '0');
+      wait_reset <= 0;
     elsif rising_edge(clk) then
-      if resend = '1' then
+      if (cmd_reg = x"fffe") then
+        if (wait_reset = c_wait_reset - 1) then
+          wait_reset <= 0;
+          sequence <= sequence + 1;
+        else
+          wait_reset <= wait_reset + 1;
+        end if;
+      elsif resend = '1' then
         sequence <= 0;
       elsif advance = '1' then
         sequence <= sequence + 1;
       end if;
-      cmd_reg <= ov7670_rom (sequence);
-      if sequence > NC then
-        cmd_reg <= x"FFFF";
-      end if;
     end if;
   end process sequence_proc;
+
 end Behavioral;
 
