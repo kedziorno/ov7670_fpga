@@ -15,6 +15,7 @@ library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
 
 use work.micron_mem_parameters.all;
+use work.p_constants.all;
 
 entity top_camera_monitoring is
 generic (
@@ -619,7 +620,18 @@ signal ov7670_hs, ov7670_vs : std_logic;
 signal rgb444 : std_logic_vector (15 downto 0);
 signal rgb565 : std_logic_vector (15 downto 0);
 
+signal vga_rgb : std_logic_vector (7 downto 0);
+
+signal reset_dcm_n, reset_dcm : std_logic;
+
+signal rd_counter : integer range 0 to c_memory_operation_wait_rd - 1;
+signal wr_counter : integer range 0 to c_memory_operation_wait_wr - 1;
+
 begin
+
+  vga_r <= vga_rgb (7 downto 5);
+  vga_g <= vga_rgb (4 downto 2);
+  vga_b <= vga_rgb (1 downto 0);
 
 siodo1_n <= not siodi1;
    ov7670_siod1_tri : IOBUF port map (
@@ -683,53 +695,60 @@ oe_n <= oe_ni;
 		we => wren1);
   rgb565 <= wr_d1;
   rgb444 <= wr_d1;
---  p_mem_switch : process (clk_mc, resend) is
---  begin
---    if (resend = '1') then
---      mem_switch_state <= a;
---    elsif (rising_edge (clk_mc)) then
---      case (mem_switch_state) is
---        when a =>
---          mem_switch_state <= b;
---          ri_wr <= '1'; ri_rd <= '0';
---        when b =>
---          mem_switch_state <= c;
---          ri_wr <= '0'; ri_rd <= '0';
---        when c =>
---          mem_switch_state <= d;
---          ri_wr <= '0'; ri_rd <= '1';
---        when d =>
---          mem_switch_state <= a;
---          ri_wr <= '0'; ri_rd <= '0';
---      end case;
---    end if;
---  end process p_mem_switch;
+  p_mem_switch : process (clk_mc, resend) is
+  begin
+    if (resend = '1') then
+      mem_switch_state <= a;
+      rd_counter <= 0;
+      wr_counter <= 0;
+    elsif (rising_edge (clk_mc)) then
+      case (mem_switch_state) is
+        when a =>
+          if (wr_counter = c_memory_operation_wait_wr - 1) then
+            mem_switch_state <= b;
+            wr_counter <= 0;
+          else
+            wr_counter <= wr_counter + 1;
+          end if;
+          ri_wr <= '1'; ri_rd <= '0';
+        when b =>
+          if (rd_counter = c_memory_operation_wait_rd - 1) then
+            mem_switch_state <= a;
+            rd_counter <= 0;
+          else
+            rd_counter <= rd_counter + 1;
+          end if;
+          ri_wr <= '0'; ri_rd <= '1';
+        when others => null;
+      end case;
+    end if;
+  end process p_mem_switch;
 
---  dq  <= dqo   when (we_ni = '0' and oe_ni = '1') else (others => 'Z');
---  dqi <= dq;
+  dq  <= dqo   when (we_ni = '0' and oe_ni = '1') else (others => 'Z');
+  dqi <= dq;
 
---  fb_1 : ram_interface PORT MAP(
---		i_clk => clk_mc,
---		oe_n => oe_ni,
---	  lb_n => lb_n,
---		dq_out => dqo,
---		cre => cre,
---		clk => clk,
---		ce_n => ce_n,
---		adv_n => adv_n,
---	  addr => addr,
---		i_rd => ri_rd,
---		i_wr => ri_wr,
---		i_rst_n => not pb,
---		addr_rd => ri_ard,
---		addr_wr => ri_awr,
---		data_wr => ri_dwr,
---		dq_in => dqi,
---		data_rd => ri_drd,
---		ub_n => ub_n,
---		we_n => we_ni,
---		owait => owait
---   );
+  fb_1 : ram_interface PORT MAP(
+		i_clk => clk_mc,
+		oe_n => oe_ni,
+	  lb_n => lb_n,
+		dq_out => dqo,
+		cre => cre,
+		clk => clk,
+		ce_n => ce_n,
+		adv_n => adv_n,
+	  addr => addr,
+		i_rd => ri_rd,
+		i_wr => ri_wr,
+		i_rst_n => not pb,
+		addr_rd => ri_ard,
+		addr_wr => ri_awr,
+		data_wr => ri_dwr,
+		dq_in => dqi,
+		data_rd => ri_drd,
+		ub_n => ub_n,
+		we_n => we_ni,
+		owait => owait
+   );
 
 	--inst_framebuffer1 : frame_buffer port map(
 	--	weA => wren1,
@@ -741,36 +760,36 @@ oe_n <= oe_ni;
 	--	addrB => rd_a1,
 	--	doutB => rd_d1);
 
-  --ri_rd <= active1;
---  ri_ard <= "0000" & rd_a1;
---	inst_addrgen1 : address_generator port map(
---		clk25 => clk_vga,
---		enable => active1,
---		vsync => vga_vsync_sig,
---		address => rd_a1);
+--  ri_rd <= active1;
+  ri_ard <= "0000" & rd_a1;
+	inst_addrgen1 : address_generator port map(
+		clk25 => clk_vga,
+		enable => active1,
+		vsync => vga_vsync_sig,
+		address => rd_a1);
 
---  rd_d1 <= ri_drd;
---	inst_imagegen : vga_imagegenerator port map(
---		Data_in1 => rgb444,
---		active_area1 => '1',
---		RGB_out => vga_rgb);
---	
-  vga_hsync <= ov7670_hs;
+  rd_d1 <= ri_drd;
+	inst_imagegen : vga_imagegenerator port map(
+		Data_in1 => rgb444,
+		active_area1 => '1',
+		RGB_out => vga_rgb);
+
+  --vga_hsync <= ov7670_hs;
   --vga_rgb <= rgb565(7 downto 0);
   --vga_rgb <= rgb444(7 downto 0);
---	inst_vgatiming : VGA_timing_synch port map(
---		clk25 => clk_vga,
---		Hsync => vga_hsync,
---		Vsync => vga_vsync_sig,
---    blank => vga_blank,
---		activeArea1 => active1);
+	inst_vgatiming : VGA_timing_synch port map(
+		clk25 => clk_vga,
+		Hsync => vga_hsync,
+		Vsync => vga_vsync_sig,
+    blank => vga_blank,
+		activeArea1 => active1);
 --    
---vga_vsync <= vga_vsync_sig;
-vga_vsync <= not ov7670_vs;
+vga_vsync <= vga_vsync_sig;
+--vga_vsync <= not ov7670_vs;
 
 --vga_clock <= ov7670_pclk;
---vga_clock <= clk_vga;
-vga_clock <= clk_cam;
+vga_clock <= clk_vga;
+--vga_clock <= clk_cam;
 
 BUFG_mc : BUFG
 port map (
@@ -792,12 +811,26 @@ O => i_clock_ib, -- Clock buffer output
 I => i_clock -- Clock buffer input (connect directly to top-level port)
 );
 
-DCM_SP_mc : DCM_SP
+reset_dcm_n <= not reset_dcm;
+synchro_reset_i0 : SRLC16E
+port map (
+D => '1', -- insert input signal
+CE => '1', -- insert Clock Enable signal (optional)
+CLK => i_clock_ib, -- insert Clock signal
+A0 => '1', -- insert Address 0 signal
+A1 => '1', -- insert Address 1 signal
+A2 => '1', -- insert Address 2 signal
+A3 => '1', -- insert Address 3 signal
+Q => reset_dcm, -- insert output signal
+Q15 => open -- insert cascadable output signal
+);
+
+DCM_SP_mc_fx_vga_dv : DCM_SP
 generic map (
-CLKDV_DIVIDE => 2.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
--- 7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
-CLKFX_MULTIPLY => 27, -- Can be any integer from 1 to 32
-CLKFX_DIVIDE => 4, -- Can be any interger from 1 to 32
+CLKDV_DIVIDE => 2.0, -- 50mhz
+--CLKDV_DIVIDE => 4.0, -- 100mhz
+CLKFX_MULTIPLY => 16, -- Can be any integer from 1 to 32
+CLKFX_DIVIDE => 2, -- Can be any interger from 1 to 32
 CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
 CLKIN_PERIOD => 20.0, -- Specify period of input clock
 CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of "NONE", "FIXED" or "VARIABLE"
@@ -826,15 +859,25 @@ CLKIN => i_clock_ib, -- Clock input (from IBUFG, BUFG or DCM)
 PSCLK => '0', -- Dynamic phase adjust clock input
 PSEN => '0', -- Dynamic phase adjust enable input
 PSINCDEC => '0', -- Dynamic phase adjust increment/decrement
-RST => resend -- DCM asynchronous reset input
+RST => reset_dcm_n -- DCM asynchronous reset input
 );
 
 DCM_SP_cam : DCM_SP
 generic map (
 CLKDV_DIVIDE => 2.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
 -- 7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
-CLKFX_MULTIPLY => 4, -- Can be any integer from 1 to 32
-CLKFX_DIVIDE => 25, -- can be any interger from 1 to 32
+--CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 24, -- 50 -> 25 mhz
+CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 25, -- 50 -> 24.0 mhz
+--CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 27, -- 50 -> 24.07407407407407407400 mhz
+--CLKFX_MULTIPLY => 14, CLKFX_DIVIDE => 29, -- 50 -> 24.13793103448275862050 mhz
+--CLKFX_MULTIPLY => 15, CLKFX_DIVIDE => 31, -- 50 -> 24.19354838709677419350 mhz
+--CLKFX_MULTIPLY => 24, CLKFX_DIVIDE => 25, -- 50 -> 48.0 mhz
+--CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 24, -- 50 -> 25 mhz
+--CLKFX_MULTIPLY => 6, CLKFX_DIVIDE => 25, -- 100 -> 24.0 mhz
+--CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 27, -- 50 -> 24.07407407407407407400 mhz
+--CLKFX_MULTIPLY => 14, CLKFX_DIVIDE => 29, -- 50 -> 24.13793103448275862050 mhz
+--CLKFX_MULTIPLY => 15, CLKFX_DIVIDE => 31, -- 50 -> 24.19354838709677419350 mhz
+--CLKFX_MULTIPLY => 24, CLKFX_DIVIDE => 25, -- 50 -> 48.0 mhz
 CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
 CLKIN_PERIOD => 20.0, -- Specify period of input clock
 CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of "NONE", "FIXED" or "VARIABLE"
@@ -863,7 +906,7 @@ CLKIN => i_clock_ib, -- Clock input (from IBUFG, BUFG or DCM)
 PSCLK => '0', -- Dynamic phase adjust clock input
 PSEN => '0', -- Dynamic phase adjust enable input
 PSINCDEC => '0', -- Dynamic phase adjust increment/decrement
-RST => resend -- DCM asynchronous reset input
+RST => reset_dcm_n -- DCM asynchronous reset input
 );
 
 end Structural;

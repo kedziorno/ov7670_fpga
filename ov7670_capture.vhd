@@ -87,20 +87,20 @@ capture_process: process(pclk)
          we_reg  <= '0';
 
          -- Is a new screen about to start (i.e. we have to restart capturing
-         if latched_vsync = '0' then 
+         if latched_vsync = '1' then 
             address      <= (others => '0');
             href_last    <= (others => '0');
             row         <= (others => '0');
          else
             -- If not, set the write enable whenever we need to capture a pixel
-            if href_last(href_last'high) = '1' then
+--            if href_last(href_last'high) = '1' then
 --               if row = "10" then
                   we_reg <= not we_reg;
 --               end if;
-               href_last <= (others => '0');
-            else
-               href_last <= href_last(href_last'high-1 downto 0) & latched_href;
-            end if;
+--               href_last <= (others => '0');
+--            else
+--               href_last <= href_last(href_last'high-1 downto 0) & latched_href;
+--            end if;
          end if;
       end if;
       if falling_edge(pclk) then

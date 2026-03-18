@@ -110,7 +110,8 @@ vga_g	: out STD_LOGIC_VECTOR(2 downto 0);
 vga_b	: out STD_LOGIC_VECTOR(1 downto 0)
 );
 end component top_camera_monitoring;
-for all : top_camera_monitoring use entity work.top_camera_monitoring (raw_signal);
+--for all : top_camera_monitoring use entity work.top_camera_monitoring (raw_signal);
+for all : top_camera_monitoring use entity work.top_camera_monitoring (Structural);
 
 begin
 

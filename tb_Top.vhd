@@ -35,49 +35,68 @@ USE ieee.std_logic_1164.ALL;
 use work.micron_mem_parameters.all;
 use work.p_constants.all;
 
-ENTITY tb_top_camera_monitoring IS
-END tb_top_camera_monitoring;
+ENTITY tb_top IS
+END tb_top;
 
-ARCHITECTURE behavior OF tb_top_camera_monitoring IS 
+ARCHITECTURE behavior OF tb_top IS 
 
-component camera_vga is
-port (
-sio_d    : inout std_logic;
-sio_c    : in    std_logic;
-vsync    : out   std_logic;
-href     : out   std_logic;
-pclk     : out   std_logic;
-d0       : out   std_logic;
-d1       : out   std_logic;
-d2       : out   std_logic;
-d3       : out   std_logic;
-d4       : out   std_logic;
-d5       : out   std_logic;
-d6       : out   std_logic;
-d7       : out   std_logic;
-xclk     : in    std_logic;
-reset_n  : in    std_logic;
-pwdn     : in    std_logic;
--- virtual sensor array (as SDCard with RAW images RGB565)
-sd_cs    : out   std_logic;
-sd_sclk  : out   std_logic;
-sd_mosi  : out   std_logic;
-sd_miso  : in    std_logic;
-clk100   : in    std_logic;
--- RAM module
-Addr     : out   std_logic_vector(c_addr_bits - 1 downto 0);
-Adv_n    : out   std_logic;
-Ce_n     : out   std_logic;
-Clk      : out   std_logic;
-Cre      : out   std_logic;
-Dq       : inout std_logic_vector(c_data_bits - 1 downto 0);
-Lb_n     : out   std_logic;
-Oe_n     : out   std_logic;
-oWait    : in    std_logic; -- Wait is a keyword in HDL
-Ub_n     : out   std_logic;
-We_n     : out   std_logic
+--component camera_vga is
+--port (
+--sio_d    : inout std_logic;
+--sio_c    : in    std_logic;
+--vsync    : out   std_logic;
+--href     : out   std_logic;
+--pclk     : out   std_logic;
+--d0       : out   std_logic;
+--d1       : out   std_logic;
+--d2       : out   std_logic;
+--d3       : out   std_logic;
+--d4       : out   std_logic;
+--d5       : out   std_logic;
+--d6       : out   std_logic;
+--d7       : out   std_logic;
+--xclk     : in    std_logic;
+--reset_n  : in    std_logic;
+--pwdn     : in    std_logic;
+---- virtual sensor array (as SDCard with RAW images RGB565)
+--sd_cs    : out   std_logic;
+--sd_sclk  : out   std_logic;
+--sd_mosi  : out   std_logic;
+--sd_miso  : in    std_logic;
+--clk100   : in    std_logic;
+---- RAM module
+--Addr     : out   std_logic_vector(c_addr_bits - 1 downto 0);
+--Adv_n    : out   std_logic;
+--Ce_n     : out   std_logic;
+--Clk      : out   std_logic;
+--Cre      : out   std_logic;
+--Dq       : inout std_logic_vector(c_data_bits - 1 downto 0);
+--Lb_n     : out   std_logic;
+--Oe_n     : out   std_logic;
+--oWait    : in    std_logic; -- Wait is a keyword in HDL
+--Ub_n     : out   std_logic;
+--We_n     : out   std_logic
+--);
+--end component camera_vga;
+
+component camera_colorbar is
+generic (
+constant CLOCK_PERIOD : integer := 42; -- 21/42/100 ns - 10/24/48 MHZ - Min/Typ/Max Unit
+constant RAW_RGB : integer := 0; -- 0 - RAW / 1 - RGB
+constant ZERO : integer := 0
 );
-end component camera_vga;
+port (
+camera_io_scl : inout std_logic;
+camera_io_sda : inout std_logic;
+camera_o_vs : out std_logic;
+camera_o_hs : out std_logic;
+camera_o_pclk : out std_logic;
+camera_i_xclk : in std_logic;
+camera_o_d : out std_logic_vector(7 downto 0);
+camera_i_rst : in std_logic;
+camera_i_pwdn : in std_logic
+);
+end component camera_colorbar;
 
 component sdcard_emulator is
 port (
@@ -186,11 +205,12 @@ signal video_vsync_2                 : std_logic := '0';
 signal video_vsync_3                 : std_logic := '0';
 signal video_vsync_4                 : std_logic := '0';
 
-component Top_camera_monitoring is
+component top is
 Port (
 i_clock	: in STD_LOGIC; -- Crystal Oscilator 50MHz  --B8
 --clkcam	: in STD_LOGIC; -- Crystal Oscilator 23.9616 MHz  --U9
 pb		: in STD_LOGIC; -- Push Button --B18
+sw : in std_logic_vector (7 downto 0);
 --sw		: in STD_LOGIC; -- Push Button --G18
 led1 : out STD_LOGIC; -- Indicates configuration has been done --J14
 ov7670_pclk1: in  STD_LOGIC; -- Pmod JB8 --R16
@@ -218,10 +238,15 @@ vga_clock : out STD_LOGIC;
 vga_blank : out STD_LOGIC;
 vga_hsync : out STD_LOGIC; --T4
 vga_vsync : out STD_LOGIC; --U3
-vga_rgb	: out STD_LOGIC_VECTOR(7 downto 0)
+vga_r	: out STD_LOGIC_VECTOR(2 downto 0);
+vga_g	: out STD_LOGIC_VECTOR(2 downto 0);
+vga_b	: out STD_LOGIC_VECTOR(1 downto 0)
 );
-end component Top_camera_monitoring;
+end component top;
 
+signal vga_r	: STD_LOGIC_VECTOR(2 downto 0);
+signal vga_g	: STD_LOGIC_VECTOR(2 downto 0);
+signal vga_b	: STD_LOGIC_VECTOR(1 downto 0);
 
 component vga_bmp_sink is
 generic (
@@ -261,9 +286,9 @@ signal vga_rgb : std_logic_vector(7 downto 0);
 
 -- Clock period definitions
 constant clk50_period : time := 20 ns;
-constant sdcard_clock_period : time := 10 ns;
---constant camera_i_xclk_period : time := 41.733 ns;
-constant camera_i_xclk_period : time := 21 ns; -- to camera ~50mhz
+--constant sdcard_clock_period : time := 10 ns;
+--constant camera_i_xclk_period : time := 41.733 ns; -- ~24mhz
+--constant camera_i_xclk_period : time := 21 ns; -- to camera ~50mhz
 
 COMPONENT camera
 GENERIC(
@@ -345,66 +370,79 @@ port map (
 clk_i        => vga_clock,
 rst_i        => not reset_n,
 dat_i        =>
-vga_rgb (1 downto 0) &"000000"&
-vga_rgb (4 downto 2) &"00000" &
-vga_rgb (7 downto 5) &"00000",
+vga_r &"00000"&
+vga_g &"00000" &
+vga_b &"000000",
 active_vid_i => not vga_blank,
 h_sync_i     => vga_hsync,
 v_sync_i     => vga_vsync
 );
 
-camera_vga_i1 : camera_vga
+--camera_vga_i1 : camera_vga
+--port map (
+--sio_d    => sioc,
+--sio_c    => siod,
+--vsync    => ov7670_vsync_mux_1,
+--href     => ov7670_href_mux_1,
+--pclk     => ov7670_pclkbuf_mux_1,
+--d0       => ov7670_data_mux_1 (0),
+--d1       => ov7670_data_mux_1 (1),
+--d2       => ov7670_data_mux_1 (2),
+--d3       => ov7670_data_mux_1 (3),
+--d4       => ov7670_data_mux_1 (4),
+--d5       => ov7670_data_mux_1 (5),
+--d6       => ov7670_data_mux_1 (6),
+--d7       => ov7670_data_mux_1 (7),
+--xclk     => xclk,
+--reset_n  => reset_n,
+--pwdn     => '0',
+---- virtual sensor array (as SDCard with RAW images RGB565)
+--sd_cs    => sd_cs_1,
+--sd_sclk  => sd_sclk_1,
+--sd_mosi  => sd_mosi_1,
+--sd_miso  => sd_miso_1,
+--clk100   => sdcard_clock,
+---- RAM module
+--Addr     => mt45w8mw16bgx_Addr_1,
+--Adv_n    => mt45w8mw16bgx_Adv_n_1,
+--Ce_n     => mt45w8mw16bgx_Ce_n_1,
+--Clk      => mt45w8mw16bgx_Clk_1,
+--Cre      => mt45w8mw16bgx_Cre_1,
+--Dq       => mt45w8mw16bgx_Dq_1,
+--Lb_n     => mt45w8mw16bgx_Lb_n_1,
+--Oe_n     => mt45w8mw16bgx_Oe_n_1,
+--oWait    => mt45w8mw16bgx_oWait_1,
+--Ub_n     => mt45w8mw16bgx_Ub_n_1,
+--We_n     => mt45w8mw16bgx_We_n_1
+--);
+
+camera_cb_inst : camera_colorbar
 port map (
-sio_d    => sioc,
-sio_c    => siod,
-vsync    => ov7670_vsync_mux_1,
-href     => ov7670_href_mux_1,
-pclk     => ov7670_pclkbuf_mux_1,
-d0       => ov7670_data_mux_1 (0),
-d1       => ov7670_data_mux_1 (1),
-d2       => ov7670_data_mux_1 (2),
-d3       => ov7670_data_mux_1 (3),
-d4       => ov7670_data_mux_1 (4),
-d5       => ov7670_data_mux_1 (5),
-d6       => ov7670_data_mux_1 (6),
-d7       => ov7670_data_mux_1 (7),
-xclk     => xclk,
-reset_n  => reset_n,
-pwdn     => '0',
--- virtual sensor array (as SDCard with RAW images RGB565)
-sd_cs    => sd_cs_1,
-sd_sclk  => sd_sclk_1,
-sd_mosi  => sd_mosi_1,
-sd_miso  => sd_miso_1,
-clk100   => sdcard_clock,
--- RAM module
-Addr     => mt45w8mw16bgx_Addr_1,
-Adv_n    => mt45w8mw16bgx_Adv_n_1,
-Ce_n     => mt45w8mw16bgx_Ce_n_1,
-Clk      => mt45w8mw16bgx_Clk_1,
-Cre      => mt45w8mw16bgx_Cre_1,
-Dq       => mt45w8mw16bgx_Dq_1,
-Lb_n     => mt45w8mw16bgx_Lb_n_1,
-Oe_n     => mt45w8mw16bgx_Oe_n_1,
-oWait    => mt45w8mw16bgx_oWait_1,
-Ub_n     => mt45w8mw16bgx_Ub_n_1,
-We_n     => mt45w8mw16bgx_We_n_1
+camera_io_scl => open,
+camera_io_sda => open,
+camera_o_vs => ov7670_vsync_mux_1,
+camera_o_hs => ov7670_href_mux_1,
+camera_o_pclk => ov7670_pclk1,
+camera_i_xclk => ov7670_xclk1,
+camera_o_d => ov7670_data_mux_1,
+camera_i_rst => reset_n,
+camera_i_pwdn => '0'
 );
 
-ram1_i1 : component mt45w8mw16bgx
-port map (
-Dq    => mt45w8mw16bgx_Dq_1,
-oWait => mt45w8mw16bgx_oWait_1, -- Wait is a keyword in HDL
-Clk   => mt45w8mw16bgx_Clk_1,
-Addr  => mt45w8mw16bgx_Addr_1,
-Ce_n  => mt45w8mw16bgx_Ce_n_1,
-We_n  => mt45w8mw16bgx_We_n_1,
-Adv_n => mt45w8mw16bgx_Adv_n_1,
-Oe_n  => mt45w8mw16bgx_Oe_n_1,
-Cre   => mt45w8mw16bgx_Cre_1,
-Ub_n  => mt45w8mw16bgx_Ub_n_1,
-Lb_n  => mt45w8mw16bgx_Lb_n_1
-);
+--ram_camera : component mt45w8mw16bgx
+--port map (
+--Dq    => mt45w8mw16bgx_Dq_1,
+--oWait => mt45w8mw16bgx_oWait_1, -- Wait is a keyword in HDL
+--Clk   => mt45w8mw16bgx_Clk_1,
+--Addr  => mt45w8mw16bgx_Addr_1,
+--Ce_n  => mt45w8mw16bgx_Ce_n_1,
+--We_n  => mt45w8mw16bgx_We_n_1,
+--Adv_n => mt45w8mw16bgx_Adv_n_1,
+--Oe_n  => mt45w8mw16bgx_Oe_n_1,
+--Cre   => mt45w8mw16bgx_Cre_1,
+--Ub_n  => mt45w8mw16bgx_Ub_n_1,
+--Lb_n  => mt45w8mw16bgx_Lb_n_1
+--);
 
 ram_board : component mt45w8mw16bgx
 port map (
@@ -421,13 +459,13 @@ Ub_n  => mt45w8mw16bgx_Ub_n_2,
 Lb_n  => mt45w8mw16bgx_Lb_n_2
 );
 
-sdcard_i1 : sdcard_emulator
-port map (
-sd_cs    => sd_cs_1,
-sd_clk   => sd_sclk_1,
-sd_mosi  => sd_mosi_1,
-sd_miso  => sd_miso_1
-);
+--sdcard_i1 : sdcard_emulator
+--port map (
+--sd_cs    => sd_cs_1,
+--sd_clk   => sd_sclk_1,
+--sd_mosi  => sd_mosi_1,
+--sd_miso  => sd_miso_1
+--);
 
 --camera_i_xclk => camera_i_xclk2,
 --camera_o_d => camera_o_d2,
@@ -460,15 +498,17 @@ sd_miso  => sd_miso_1
 --);
 
 camera_i_xclk1 <= ov7670_xclk1; -- cam <- dev
-ov7670_pclk1 <= ov7670_pclkbuf_mux_1; -- dev <- cam
+--ov7670_pclk1 <= ov7670_pclkbuf_mux_1; -- dev <- cam
+--ov7670_pclk1 <= ov7670_pclkbuf_mux_1; -- dev <- cam
 ov7670_data1 <= ov7670_data_mux_1;
 ov7670_vsync1 <= ov7670_vsync_mux_1;
 ov7670_href1 <= ov7670_href_mux_1;
 
 -- Instantiate the Unit Under Test (UUT)
-Top_camera_monitoring_uut: Top_camera_monitoring PORT MAP (
+top_uut : top PORT MAP (
 i_clock => clk50,
 --clkcam => clkcam,
+sw => (others => '0'),
 pb => pb,
 --sw => sw,
 led1 => led1,
@@ -496,7 +536,9 @@ vga_blank => vga_blank,
 vga_clock => vga_clock,
 vga_hsync => vga_hsync,
 vga_vsync => vga_vsync,
-vga_rgb => vga_rgb
+vga_r	=> vga_r,
+vga_g	=> vga_g,
+vga_b	=> vga_b
 );
 --clkcam <= xclk;
 
@@ -509,13 +551,13 @@ clk50 <= '1';
 wait for clk50_period/2;
 end process;
 
-sdcard_clock_process :process
-begin
-sdcard_clock <= '0';
-wait for sdcard_clock_period/2;
-sdcard_clock <= '1';
-wait for sdcard_clock_period/2;
-end process;
+--sdcard_clock_process :process
+--begin
+--sdcard_clock <= '0';
+--wait for sdcard_clock_period/2;
+--sdcard_clock <= '1';
+--wait for sdcard_clock_period/2;
+--end process;
 
 camera_i_xclkp :process
 begin
@@ -541,7 +583,7 @@ else
 file_name := c_hex_rom_files_name & integer'image(i) & "." & c_hex_rom_files_ext;
 end if;
 report "readandconvertrom " & file_name;
-readandconvertrom(file_name, start_addr);
+--readandconvertrom(file_name, start_addr);
 wait for 100 ns;
 end loop;
 wait for 100 ns;
