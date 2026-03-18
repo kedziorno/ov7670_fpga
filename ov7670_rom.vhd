@@ -13,7 +13,7 @@ x"1280",
 x"fffe",
 x"1200", -- COM7 00 (d), 04 (rgb), 02 (colorbar)
 x"1101", -- CLKRC
-x"6bc0", -- DBLV
+x"6b40", -- DBLV
 x"00ff", -- GAIN 00 (d), AGC
 x"01ff", -- BLUE 80 (d), AWB blue gain
 x"02ff", -- RED 80 (d), AWB red gain
