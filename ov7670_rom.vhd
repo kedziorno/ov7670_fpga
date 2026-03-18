@@ -13,7 +13,7 @@ x"1280",
 x"fffe",
 x"1200", -- COM7 00 (d), 04 (rgb), 02 (colorbar)
 x"1101", -- CLKRC
-x"6b40", -- DBLV
+x"6bc0", -- DBLV
 x"00ff", -- GAIN 00 (d), AGC
 x"01ff", -- BLUE 80 (d), AWB blue gain
 x"02ff", -- RED 80 (d), AWB red gain
@@ -43,11 +43,11 @@ x"5329", -- MTX5
 x"5440", -- MTX6
 x"581e", -- MTXS
 x"3dc0", -- COM13
-x"1700", -- HSTART 11 (d), 00 (dim, fs)
-x"1800", -- HSTOP 61 (d), 00 (dim, fs)
-x"3200", -- HREF 80 (d), 00 (dim, fs)
-x"1900", -- VSTART 03 (d), 00 (dim, fs)
-x"1a00", -- VSTOP 7b (d), 00 (dim, fs)
+x"1711", -- HSTART 11 (d), 00 (dim, fs)
+x"1861", -- HSTOP 61 (d), 00 (dim, fs)
+x"3280", -- HREF 80 (d), 00 (dim, fs)
+x"1903", -- VSTART 03 (d), 00 (dim, fs)
+x"1a7b", -- VSTOP 7b (d), 00 (dim, fs)
 x"0300", -- VREF 00 (d), c0 (AGC[9:8]-3), 00 (dim, fs)
 x"0761", -- AECHH
 x"0f4b", -- COM6
