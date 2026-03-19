@@ -408,10 +408,12 @@ begin
   generic map (
     CLKDV_DIVIDE => 2.0, -- 50mhz
     --CLKDV_DIVIDE => 4.0, -- 100mhz
-    CLKFX_MULTIPLY => 32, -- Can be any integer from 1 to 32
-    CLKFX_DIVIDE => 2, -- Can be any interger from 1 to 32
+    CLKFX_MULTIPLY => 31, -- Can be any integer from 1 to 32
+    --CLKFX_DIVIDE => 1, -- dont work
+    --CLKFX_DIVIDE => 2, -- glitches, max
+    CLKFX_DIVIDE => 3, -- stable
     CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
-    CLKIN_PERIOD => 20.0, -- Specify period of input clock
+    CLKIN_PERIOD => 10.0, -- Specify period of input clock
     CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of "NONE", "FIXED" or "VARIABLE"
     CLK_FEEDBACK => "1X", -- Specify clock feedback of "NONE", "1X" or "2X"
     DESKEW_ADJUST => "SYSTEM_SYNCHRONOUS", -- "SOURCE_SYNCHRONOUS", "SYSTEM_SYNCHRONOUS" or
@@ -446,13 +448,14 @@ begin
     CLKDV_DIVIDE => 2.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
     -- 7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
     --CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 24, -- 50 -> 25 mhz
-    CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 25, -- 50 -> 24.0 mhz
+    --CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 25, -- 50 -> 24.0 mhz
+    CLKFX_MULTIPLY => 6, CLKFX_DIVIDE => 25, -- 100 -> 24.0 mhz
     --CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 27, -- 50 -> 24.07407407407407407400 mhz
     --CLKFX_MULTIPLY => 14, CLKFX_DIVIDE => 29, -- 50 -> 24.13793103448275862050 mhz
     --CLKFX_MULTIPLY => 15, CLKFX_DIVIDE => 31, -- 50 -> 24.19354838709677419350 mhz
     --CLKFX_MULTIPLY => 24, CLKFX_DIVIDE => 25, -- 50 -> 48.0 mhz
     CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
-    CLKIN_PERIOD => 20.0, -- Specify period of input clock
+    CLKIN_PERIOD => 10.0, -- Specify period of input clock
     CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of "NONE", "FIXED" or "VARIABLE"
     CLK_FEEDBACK => "1X", -- Specify clock feedback of "NONE", "1X" or "2X"
     DESKEW_ADJUST => "SYSTEM_SYNCHRONOUS", -- "SOURCE_SYNCHRONOUS", "SYSTEM_SYNCHRONOUS" or
@@ -863,7 +866,7 @@ generic map (
 --CLKDV_DIVIDE => 2.0, -- 50mhz
 CLKDV_DIVIDE => 4.0, -- 100mhz
 CLKFX_MULTIPLY => 31, -- Can be any integer from 1 to 32
-CLKFX_DIVIDE => 11, -- Can be any interger from 1 to 32
+CLKFX_DIVIDE => 16, -- Can be any interger from 1 to 32
 CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
 CLKIN_PERIOD => 10.0, -- Specify period of input clock
 CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of "NONE", "FIXED" or "VARIABLE"

@@ -25,8 +25,8 @@ x"138f", -- COM8
 x"1b00", -- PSHFT
 x"0c00", -- COM3
 x"3e00", -- COM14 PCLK div
-x"7080", -- XSC 3a (d), 80 (pattern)
-x"7100", -- YSC 35 (d), 00 (pattern)
+x"70ba", -- XSC 3a (d), 80 (pattern)
+x"7135", -- YSC 35 (d), 00 (pattern)
 x"7211", -- SCALING_DCWCTR
 x"7300", -- SCALING_PCLK_DV
 x"a202", -- SCALING_PCLK_DELAY
