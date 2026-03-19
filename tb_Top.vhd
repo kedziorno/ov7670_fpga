@@ -80,11 +80,6 @@ ARCHITECTURE behavior OF tb_top IS
 --end component camera_vga;
 
 component camera_colorbar is
-generic (
-constant CLOCK_PERIOD : integer := 42; -- 21/42/100 ns - 10/24/48 MHZ - Min/Typ/Max Unit
-constant RAW_RGB : integer := 0; -- 0 - RAW / 1 - RGB
-constant ZERO : integer := 0
-);
 port (
 camera_io_scl : inout std_logic;
 camera_io_sda : inout std_logic;
