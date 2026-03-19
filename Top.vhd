@@ -130,7 +130,7 @@ signal active1 : std_logic;
 signal vga_hsync_i, vga_vsync_i : std_logic;
 
 signal vga_rgb : std_logic_vector (7 downto 0);
-
+  
 begin
 
   vga_r <= vga_rgb (7 downto 5);
@@ -491,15 +491,11 @@ end architecture raw_signal;
 architecture Structural of top_camera_monitoring is
 
 COMPONENT debounce_circuit
+Generic (PB_BITS : integer := 1);
 	Port ( clk : in STD_LOGIC;
 			 input : in STD_LOGIC;
 			 output : out STD_LOGIC);
 END COMPONENT;
-
---COMPONENT clk_vgagen
---	Port ( i_clock : in  STD_LOGIC;
---          clk_vga : out  STD_LOGIC);
---END COMPONENT;
 
 COMPONENT ov7670_capture
 	Port ( pclk : in  STD_LOGIC;
@@ -625,171 +621,208 @@ signal vga_rgb : std_logic_vector (7 downto 0);
 signal reset_dcm_n, reset_dcm : std_logic;
 
 signal rd_counter : integer range 0 to c_memory_operation_wait_rd - 1;
+signal rd_counter1 : integer range 0 to c_memory_operation_wait_rd - 1;
 signal wr_counter : integer range 0 to c_memory_operation_wait_wr - 1;
+signal wr_counter1 : integer range 0 to c_memory_operation_wait_wr - 1;
+
+signal vga_clock_i : std_logic;
+signal vga_clock_p : std_logic;
+signal ov7670_pclk_p : std_logic;
+signal vga_re, cam_re : std_logic;
 
 begin
 
-  vga_r <= vga_rgb (7 downto 5);
-  vga_g <= vga_rgb (4 downto 2);
-  vga_b <= vga_rgb (1 downto 0);
+process (clk_mc, resend) is
+begin
+if (resend = '1') then
+vga_r <= (others => '0');
+vga_g <= (others => '0');
+vga_b <= (others => '0');
+elsif (rising_edge (clk_mc)) then
+if (vga_re = '1') then
+vga_r <= vga_rgb (7 downto 5);
+vga_g <= vga_rgb (4 downto 2);
+vga_b <= vga_rgb (1 downto 0);
+end if;
+end if;
+end process;
 
 siodo1_n <= not siodi1;
-   ov7670_siod1_tri : IOBUF port map (
-      O => (siodi1),     -- Buffer output
-      IO=> (ov7670_siod1),   -- Buffer inout port (connect directly to top-level port)
-      I=> (siodo1),     -- Buffer input
-      T=> (siodo1_n)      -- 3-state enable input, high=input, low=output
-   );
+ov7670_siod1_tri : IOBUF port map (
+O => (siodi1),
+IO=> (ov7670_siod1),
+I=> (siodo1),
+T=> (siodo1_n)
+);
 
 we_n <= we_ni;
 oe_n <= oe_ni;
 
---	inst_clk_vga: clk_vgagen port map(
---		i_clock => i_clock,
---		clk_vga => clk_vga);
-
-	inst_debounce: debounce_circuit port map(
-		clk => i_clock_ib,
-		input => pb,
-		output => resend);
+inst_debounce: debounce_circuit
+generic map (
+PB_BITS => 2
+)
+port map(
+clk => i_clock_ib,
+input => pb,
+output => resend);
 	
-	inst_ov7670contr1: ov7670_controller port map(
-		clk => i_clock_ib,
-    reset1 => resend,
-		resend => resend,
-		sioc => ov7670_sioc1,
-		siodi => siodi1,
-		siodo => siodo1,
-		conf_done => led1,
-		pwdn => ov7670_pwdn1,
-		reset => ov7670_reset1,
-		xclk_in => clk_cam,
-		xclk_out => ov7670_xclk1);
+inst_ov7670contr1: ov7670_controller port map(
+clk => i_clock_ib,
+reset1 => resend,
+resend => resend,
+sioc => ov7670_sioc1,
+siodi => siodi1,
+siodo => siodo1,
+conf_done => led1,
+pwdn => ov7670_pwdn1,
+reset => ov7670_reset1,
+xclk_in => clk_cam,
+xclk_out => ov7670_xclk1);
 
-  ri_awr <= "0000" & wr_a1;
-  ri_dwr <= wr_d1;
-  --ri_dwr <= "0000" & wr_d1;
-  --ri_wr <= wren1(0);
+ri_awr <= "0000" & wr_a1;
+ri_dwr <= wr_d1;
 
-  --process (clk_mc, resend) is
-  --begin
-  --  if (resend = '1') then
-  --    pclk_i1 <= '0';
-  --    pclk_i2 <= '0';
-  --  elsif (rising_edge (clk_mc)) then
-      ov7670_pclk <= ov7670_pclk1;
-      ov7670_hs <= ov7670_href1;
-      ov7670_vs <= ov7670_vsync1;
-      ov7670_d <= ov7670_data1;
-  --  end if;
-  --end process;
+process (clk_mc, resend) is
+begin
+if (resend = '1') then
+elsif (rising_edge (clk_mc)) then
+ov7670_pclk <= ov7670_pclk1;
+ov7670_hs <= ov7670_href1;
+ov7670_vs <= ov7670_vsync1;
+ov7670_d <= ov7670_data1;
+end if;
+end process;
 
-	inst_ov7670capt1: ov7670_capture port map(
-		--pclk => ov7670_pclk1_ibuf,
-		pclk => ov7670_pclk,
-		vsync => ov7670_vs,
-		href => ov7670_hs,
-		d => ov7670_d,
-		addr => wr_a1,
-		dout => wr_d1,
-		we => wren1);
-  rgb565 <= wr_d1;
-  rgb444 <= wr_d1;
-  p_mem_switch : process (clk_mc, resend) is
-  begin
-    if (resend = '1') then
-      mem_switch_state <= a;
-      rd_counter <= 0;
-      wr_counter <= 0;
-    elsif (rising_edge (clk_mc)) then
-      case (mem_switch_state) is
-        when a =>
-          if (wr_counter = c_memory_operation_wait_wr - 1) then
-            mem_switch_state <= b;
-            wr_counter <= 0;
-          else
-            wr_counter <= wr_counter + 1;
-          end if;
-          ri_wr <= '1'; ri_rd <= '0';
-        when b =>
-          if (rd_counter = c_memory_operation_wait_rd - 1) then
-            mem_switch_state <= a;
-            rd_counter <= 0;
-          else
-            rd_counter <= rd_counter + 1;
-          end if;
-          ri_wr <= '0'; ri_rd <= '1';
-        when others => null;
-      end case;
-    end if;
-  end process p_mem_switch;
+inst_ov7670capt1: ov7670_capture port map(
+pclk => ov7670_pclk,
+vsync => ov7670_vs,
+href => ov7670_hs,
+d => ov7670_d,
+addr => wr_a1,
+dout => wr_d1,
+we => wren1);
 
-  dq  <= dqo   when (we_ni = '0' and oe_ni = '1') else (others => 'Z');
-  dqi <= dq;
+p_mem_switch : process (clk_mc, resend) is
+begin
+if (resend = '1') then
+mem_switch_state <= a;
+rd_counter <= 0;
+rd_counter1 <= 0;
+wr_counter <= 0;
+wr_counter1 <= 0;
+elsif (falling_edge (clk_mc)) then
+case (mem_switch_state) is
+when a =>
+if (wr_counter = c_memory_operation_wait_wr/2 - 1) then
+mem_switch_state <= b;
+wr_counter <= 0;
+else
+wr_counter <= wr_counter + 1;
+end if;
+ri_wr <= '1'; ri_rd <= '0';
+when b =>
+if (wr_counter1 = c_memory_operation_wait_wr/2 - 1) then
+mem_switch_state <= c;
+wr_counter1 <= 0;
+else
+wr_counter1 <= wr_counter1 + 1;
+end if;
+ri_wr <= '0'; ri_rd <= '0';
+when c =>
+if (rd_counter = c_memory_operation_wait_rd/2 - 1) then
+mem_switch_state <= d;
+rd_counter <= 0;
+else
+rd_counter <= rd_counter + 1;
+end if;
+ri_wr <= '0'; ri_rd <= '1';
+when d =>
+if (rd_counter1 = c_memory_operation_wait_rd/2 - 1) then
+mem_switch_state <= a;
+rd_counter1 <= 0;
+else
+rd_counter1 <= rd_counter1 + 1;
+end if;
+ri_wr <= '0'; ri_rd <= '0';
+when others => null;
+end case;
+end if;
+end process p_mem_switch;
 
-  fb_1 : ram_interface PORT MAP(
-		i_clk => clk_mc,
-		oe_n => oe_ni,
-	  lb_n => lb_n,
-		dq_out => dqo,
-		cre => cre,
-		clk => clk,
-		ce_n => ce_n,
-		adv_n => adv_n,
-	  addr => addr,
-		i_rd => ri_rd,
-		i_wr => ri_wr,
-		i_rst_n => not pb,
-		addr_rd => ri_ard,
-		addr_wr => ri_awr,
-		data_wr => ri_dwr,
-		dq_in => dqi,
-		data_rd => ri_drd,
-		ub_n => ub_n,
-		we_n => we_ni,
-		owait => owait
-   );
+process (clk_mc) is
+begin
+if (rising_edge (clk_mc)) then
+vga_clock_p <= vga_clock_i;
+ov7670_pclk_p <= ov7670_pclk;
+end if;
+end process;
+vga_re <= '1' when vga_clock_p = '0' and vga_clock_i = '1' else '0';
+cam_re <= '1' when ov7670_pclk_p = '0' and ov7670_pclk = '1' else '0';
 
-	--inst_framebuffer1 : frame_buffer port map(
-	--	weA => wren1,
-	--	clkA => ov7670_pclk1,
-	--	--clkA => ov7670_pclk1_ibuf,
-	--	addrA => wr_a1,
-	--	dinA => wr_d1,
-	--	clkB => clk_vga,
-	--	addrB => rd_a1,
-	--	doutB => rd_d1);
+dq  <= dqo   when (we_ni = '0' and oe_ni = '1') else (others => 'Z');
+dqi <= dq when (we_ni = '1' and oe_ni = '0') else (others => '0');
 
---  ri_rd <= active1;
-  ri_ard <= "0000" & rd_a1;
-	inst_addrgen1 : address_generator port map(
-		clk25 => clk_vga,
-		enable => active1,
-		vsync => vga_vsync_sig,
-		address => rd_a1);
+fb_1 : ram_interface PORT MAP(
+i_clk => clk_mc,
+oe_n => oe_ni,
+lb_n => lb_n,
+dq_out => dqo,
+cre => cre,
+clk => clk,
+ce_n => ce_n,
+adv_n => adv_n,
+addr => addr,
+--i_rd => vga_re,
+--i_wr => cam_re,
+i_rd => vga_re,
+i_wr => cam_re,
+i_rst_n => not pb,
+addr_rd => ri_ard,
+addr_wr => ri_awr,
+data_wr => ri_dwr,
+dq_in => dqi,
+data_rd => ri_drd,
+ub_n => ub_n,
+we_n => we_ni,
+owait => owait
+);
 
-  rd_d1 <= ri_drd;
-	inst_imagegen : vga_imagegenerator port map(
-		Data_in1 => rgb444,
-		active_area1 => '1',
-		RGB_out => vga_rgb);
+--inst_framebuffer1 : frame_buffer port map(
+--	weA => wren1,
+--	clkA => ov7670_pclk1,
+--	--clkA => ov7670_pclk1_ibuf,
+--	addrA => wr_a1,
+--	dinA => wr_d1,
+--	clkB => clk_vga,
+--	addrB => rd_a1,
+--	doutB => rd_d1);
 
-  --vga_hsync <= ov7670_hs;
-  --vga_rgb <= rgb565(7 downto 0);
-  --vga_rgb <= rgb444(7 downto 0);
-	inst_vgatiming : VGA_timing_synch port map(
-		clk25 => clk_vga,
-		Hsync => vga_hsync,
-		Vsync => vga_vsync_sig,
-    blank => vga_blank,
-		activeArea1 => active1);
---    
+ri_ard <= "0000" & rd_a1;
+inst_addrgen1 : address_generator port map(
+clk25 => clk_vga,
+enable => active1,
+vsync => vga_vsync_sig,
+address => rd_a1);
+
+rd_d1 <= ri_drd;
+inst_imagegen : vga_imagegenerator port map(
+Data_in1 => rd_d1,
+--Data_in1 => x"55aa", -- test output bmp
+active_area1 => active1,
+RGB_out => vga_rgb);
+
+inst_vgatiming : VGA_timing_synch port map(
+clk25 => clk_vga,
+Hsync => vga_hsync,
+Vsync => vga_vsync_sig,
+blank => vga_blank,
+activeArea1 => active1);
+
 vga_vsync <= vga_vsync_sig;
---vga_vsync <= not ov7670_vs;
 
---vga_clock <= ov7670_pclk;
-vga_clock <= clk_vga;
---vga_clock <= clk_cam;
+vga_clock_i <= clk_vga;
+vga_clock <= vga_clock_i;
 
 BUFG_mc : BUFG
 port map (
@@ -829,7 +862,7 @@ DCM_SP_mc_fx_vga_dv : DCM_SP
 generic map (
 --CLKDV_DIVIDE => 2.0, -- 50mhz
 CLKDV_DIVIDE => 4.0, -- 100mhz
-CLKFX_MULTIPLY => 32, -- Can be any integer from 1 to 32
+CLKFX_MULTIPLY => 6, -- Can be any integer from 1 to 32
 CLKFX_DIVIDE => 2, -- Can be any interger from 1 to 32
 CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
 CLKIN_PERIOD => 10.0, -- Specify period of input clock

@@ -23,8 +23,8 @@ constant HB : INTEGER := 48;
 constant HR : INTEGER := 96;
 constant HP : INTEGER := HD + HF + HB + HR - 1;
 constant VD : INTEGER := 480;
-constant VF : INTEGER := 10;
-constant VB : INTEGER := 33;
+constant VF : INTEGER := 11;
+constant VB : INTEGER := 31;
 constant VR : INTEGER := 2;
 constant VP : INTEGER := VD + VF + VB + VR - 1;
 

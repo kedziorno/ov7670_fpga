@@ -25,7 +25,7 @@ architecture Behavioral of ov7670_capture is
    signal address      : STD_LOGIC_VECTOR(18 downto 0) := (others => '0');
    signal row         : std_logic_vector(1 downto 0)  := (others => '0');
    signal href_last    : std_logic_vector(0 downto 0)  := (others => '0');
-   signal we_reg       : std_logic := '0';
+   signal we_reg       : std_logic := '1';
    signal href_hold    : std_logic := '0';
    signal latched_vsync : STD_LOGIC := '0';
    signal latched_href  : STD_LOGIC := '0';
@@ -61,7 +61,7 @@ dout  <= d_latch;
 capture_process: process(pclk)
    begin
       if rising_edge(pclk) then
-         if we_reg = '1' then
+         if href_hold = '1' then
 					if (to_integer(unsigned(address)) = 307200-1) then
 						address <= (others => '0');
 					else
