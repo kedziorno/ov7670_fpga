@@ -3,8 +3,6 @@ use IEEE.STD_LOGIC_1164.all;
 
 package p_camera_colorbar is
   constant c_zero : integer := 0;
-  -- p.14 15 COM10 0x00 RW [2] - VSYNC changes on falling edge PCLK
-
   -- ////////////////////////
   -- // MAIN CONFIGURATION //
   -- ////////////////////////

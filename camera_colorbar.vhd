@@ -127,7 +127,7 @@ begin
             count := count + 1;
           end if;
       end case;
-      camera_o_vs <= vvsync;
+      camera_o_vs <= not vvsync; -- p.14 15 COM10 0x00 RW [2] - VSYNC changes on falling edge PCLK
     end if;
   end process p1_vsync;
 
@@ -188,6 +188,7 @@ begin
         when s1 =>
           if (pixel_time = '1') then
             pt_state <= s2;
+            pixel_time_data <= colorbar (count);
           else
             pixel_time_data <= (others => '0');
           end if;

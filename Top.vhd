@@ -776,10 +776,10 @@ clk => clk,
 ce_n => ce_n,
 adv_n => adv_n,
 addr => addr,
+i_rd => ri_rd,
+i_wr => ri_wr,
 --i_rd => vga_re,
 --i_wr => cam_re,
-i_rd => vga_re,
-i_wr => cam_re,
 i_rst_n => not pb,
 addr_rd => ri_ard,
 addr_wr => ri_awr,
@@ -865,8 +865,8 @@ DCM_SP_mc_fx_vga_dv : DCM_SP
 generic map (
 --CLKDV_DIVIDE => 2.0, -- 50mhz
 CLKDV_DIVIDE => 4.0, -- 100mhz
-CLKFX_MULTIPLY => 31, -- Can be any integer from 1 to 32
-CLKFX_DIVIDE => 31, -- Can be any interger from 1 to 32
+CLKFX_MULTIPLY => 32, -- Can be any integer from 1 to 32
+CLKFX_DIVIDE => 2, -- Can be any interger from 1 to 32
 CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
 CLKIN_PERIOD => 10.0, -- Specify period of input clock
 CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of "NONE", "FIXED" or "VARIABLE"
