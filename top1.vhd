@@ -32,6 +32,9 @@ use IEEE.STD_LOGIC_1164.ALL;
 use work.micron_mem_parameters.all;
 
 entity top is
+generic (
+constant c_pb_bits : integer := 25 -- XXX set debounce time
+);
 Port	(
 i_clock	: in STD_LOGIC;
 pb		: in STD_LOGIC;
@@ -73,6 +76,9 @@ end entity top;
 architecture Behavioral of top is
 
 component top_camera_monitoring is
+generic (
+constant c_pb_bits : integer := c_pb_bits
+);
 Port	(
 i_clock	: in STD_LOGIC;
 pb		: in STD_LOGIC;

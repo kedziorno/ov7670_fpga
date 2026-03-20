@@ -201,6 +201,9 @@ signal video_vsync_3                 : std_logic := '0';
 signal video_vsync_4                 : std_logic := '0';
 
 component top is
+generic (
+constant c_pb_bits : integer := 4
+);
 Port (
 i_clock	: in STD_LOGIC; -- Crystal Oscilator 50MHz  --B8
 --clkcam	: in STD_LOGIC; -- Crystal Oscilator 23.9616 MHz  --U9
@@ -599,7 +602,7 @@ camera_i_rst2 <= '0';
 camera_i_rst3 <= '0';
 camera_i_rst4 <= '0';
 pb <= '1';
-wait for 100 ns;
+wait for 200 ns;
 --i_reset <= '0';
 camera_i_rst1 <= '1';
 camera_i_rst2 <= '1';

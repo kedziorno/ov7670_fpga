@@ -21,6 +21,7 @@ entity top_camera_monitoring is
 generic (
   constant c_synchronisation : boolean := true;
   constant c_hs_blanking : boolean := true;
+  constant c_pb_bits : integer := 1;
   constant c_zero : integer := 0
 );
 port	(
@@ -635,20 +636,20 @@ signal vga_re, cam_re : std_logic;
 
 begin
 
-process (clk_mc, resend) is
-begin
-if (resend = '1') then
-vga_r <= (others => '0');
-vga_g <= (others => '0');
-vga_b <= (others => '0');
-elsif (rising_edge (clk_mc)) then
-if (vga_re = '1') then
+--process (clk_mc, resend) is
+--begin
+--if (resend = '1') then
+--vga_r <= (others => '0');
+--vga_g <= (others => '0');
+--vga_b <= (others => '0');
+--elsif (rising_edge (clk_mc)) then
+--if (vga_re = '1') then
 vga_r <= vga_rgb (7 downto 5);
 vga_g <= vga_rgb (4 downto 2);
 vga_b <= vga_rgb (1 downto 0);
-end if;
-end if;
-end process;
+--end if;
+--end if;
+--end process;
 
 siodo1_n <= not siodi1;
 ov7670_siod1_tri : IOBUF port map (
@@ -663,7 +664,7 @@ oe_n <= oe_ni;
 
 inst_debounce: debounce_circuit
 generic map (
-PB_BITS => 2
+PB_BITS => c_pb_bits
 )
 port map(
 clk => i_clock_ib,
@@ -865,8 +866,8 @@ DCM_SP_mc_fx_vga_dv : DCM_SP
 generic map (
 --CLKDV_DIVIDE => 2.0, -- 50mhz
 CLKDV_DIVIDE => 4.0, -- 100mhz
-CLKFX_MULTIPLY => 32, -- Can be any integer from 1 to 32
-CLKFX_DIVIDE => 2, -- Can be any interger from 1 to 32
+CLKFX_MULTIPLY => 2, -- Can be any integer from 1 to 32
+CLKFX_DIVIDE => 32, -- Can be any interger from 1 to 32
 CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
 CLKIN_PERIOD => 10.0, -- Specify period of input clock
 CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of "NONE", "FIXED" or "VARIABLE"
