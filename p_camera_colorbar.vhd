@@ -13,9 +13,12 @@ package p_camera_colorbar is
   -- Change cbp after each frame
   constant c_slide_colorbar_pattern : boolean := true;
   constant c_colorbar_length : integer := 5;
-  type t_colorbar_data is array (0 to c_colorbar_length - 1)
+  type t_colorbar_data is array (0 to c_colorbar_length)
     of std_logic_vector (7 downto 0);
-  constant c_colorbar : t_colorbar_data := (x"FE",x"E1",x"DE",x"CE",x"BE");
+  constant c_colorbar : t_colorbar_data :=
+    (x"FE", x"E1", x"DE", x"CE", x"BE", x"00");
+  -- p.14 15 COM10 0x00 RW [2] - VSYNC changes on falling edge PCLK
+  constant c_com10_02 : boolean := true;
 
   -- ///////////////////////////////////////
   -- // fCLK (datasheet, page 6, table 4) //
