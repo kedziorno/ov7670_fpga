@@ -137,8 +137,8 @@ begin
   pixel_time <= '1' when hs_state = shref1 else '0';
   p2_href : process (camera_i_xclk, camera_i_rst) is
     variable count : integer range 0 to c_vsync3 - 1;
-    variable counth1 : integer range 0 to c_href1 - 1;
-    variable counth0 : integer range 0 to c_href0 - 1;
+    variable counth1 : integer range 0 to c_href1_qq - 1;
+    variable counth0 : integer range 0 to c_href0_qq - 1;
   begin
     if (camera_i_rst = '0') then
       count := 0;
@@ -154,7 +154,7 @@ begin
           end if;
         when shref1 =>
           href_i <= '1';
-          if (counth1 = c_href1 - 1) then
+          if (counth1 = c_href1_qq - 1) then
             hs_state <= shref0;
             counth1 := 0;
           else
@@ -162,7 +162,7 @@ begin
           end if;
         when shref0 =>
           href_i <= '0';
-          if (counth0 = c_href0 - 1) then
+          if (counth0 = c_href0_qq - 1) then
             hs_state <= swait4vsync;
             counth0 := 0;
           else

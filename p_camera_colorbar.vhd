@@ -59,6 +59,18 @@ package p_camera_colorbar is
   constant c_hsync2 : integer := c_hsync2_base * a_tline;
   constant c_hsync3 : integer := c_hsync3_base * a_tline;
   constant c_hsync_all : integer := c_hsync1 + c_hsync2 + c_hsync3;
+
+  -- //////////////////////////////////
+  -- // Values for QQVGA timing (LA) //
+  -- //////////////////////////////////
+  -- Pixel have 4 * 42 ns
+  -- HREF
+  constant c_href1_base_qq : integer := 640; -- 1
+  constant c_href0_base_qq : integer := 2495; -- 0
+  constant c_href1_qq : integer := c_href1_base_qq * c_tp;
+  constant c_href0_qq : integer := c_href0_base_qq * c_tp;
+  constant c_href_qq_all : integer := c_href1_qq + c_href0_qq;
+  constant a_tline_qq : integer := c_href_qq_all;
 end package p_camera_colorbar;
 
 package body p_camera_colorbar is
