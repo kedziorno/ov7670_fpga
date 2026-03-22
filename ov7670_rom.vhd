@@ -19,8 +19,8 @@ x"1204", -- scaling
 x"1101",
 x"6bc0",
 x"8c03",
-x"0c04", -- scaling
-x"3e1a", -- scaling
+x"0c00", -- scaling
+x"3e00", -- scaling
 x"0400",
 x"40d0",
 x"3a04",

@@ -350,6 +350,8 @@ signal We_n : std_logic := '0';
 signal Dq : std_logic_vector(15 downto 0);
 signal oWait : std_logic := '0';
 
+signal test_isimgui_32bit : real;
+
 BEGIN
 
 p_isim_cmd_ping : process is

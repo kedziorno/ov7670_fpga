@@ -1,6 +1,6 @@
 #!/bin/bash
 # Usage script.sh "y|n" [DB WDB] "time" [numeric] "period" [ms|us|ns]
-source /home/user/.local/Xilinx/14.7/ISE_DS/settings64.sh
+source /home/user/.local/Xilinx/14.7/ISE_DS/settings32.sh
 database=$1
 top=$2
 time_period=$3

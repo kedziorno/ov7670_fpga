@@ -58,7 +58,8 @@ port	(
   vga_vsync, vga_vsdbg : out STD_LOGIC;
   vga_r	: out STD_LOGIC_VECTOR(2 downto 0);
   vga_g	: out STD_LOGIC_VECTOR(2 downto 0);
-  vga_b	: out STD_LOGIC_VECTOR(1 downto 0)
+  vga_b	: out STD_LOGIC_VECTOR(1 downto 0);
+  ov7670_data_0, ov7670_data_1, ov7670_data_2, ov7670_data_3 : out std_logic
 );
 end top_camera_monitoring;
 
@@ -635,6 +636,18 @@ signal ov7670_pclk_p : std_logic;
 signal vga_re, cam_re : std_logic;
 
 begin
+
+-- upper half cam data
+ov7670_data_0 <= ov7670_data1 (4);
+ov7670_data_1 <= ov7670_data1 (5);
+ov7670_data_2 <= ov7670_data1 (6);
+ov7670_data_3 <= ov7670_data1 (7);
+
+-- lower half cam data
+--ov7670_data_0 <= ov7670_data1 (0);
+--ov7670_data_1 <= ov7670_data1 (1);
+--ov7670_data_2 <= ov7670_data1 (2);
+--ov7670_data_3 <= ov7670_data1 (3);
 
 --process (clk_mc, resend) is
 --begin

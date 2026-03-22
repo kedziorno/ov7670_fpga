@@ -69,7 +69,8 @@ vga_hsync, vga_hsdbg : out STD_LOGIC;
 vga_vsync, vga_vsdbg : out STD_LOGIC;
 vga_r	: out STD_LOGIC_VECTOR(2 downto 0);
 vga_g	: out STD_LOGIC_VECTOR(2 downto 0);
-vga_b	: out STD_LOGIC_VECTOR(1 downto 0)
+vga_b	: out STD_LOGIC_VECTOR(1 downto 0);
+ov7670_data_0, ov7670_data_1, ov7670_data_2, ov7670_data_3 : out std_logic
 );
 end entity top;
 
@@ -113,7 +114,8 @@ vga_hsync, vga_hsdbg : out STD_LOGIC;
 vga_vsync, vga_vsdbg : out STD_LOGIC;
 vga_r	: out STD_LOGIC_VECTOR(2 downto 0);
 vga_g	: out STD_LOGIC_VECTOR(2 downto 0);
-vga_b	: out STD_LOGIC_VECTOR(1 downto 0)
+vga_b	: out STD_LOGIC_VECTOR(1 downto 0);
+ov7670_data_0, ov7670_data_1, ov7670_data_2, ov7670_data_3 : out std_logic
 );
 end component top_camera_monitoring;
 --for all : top_camera_monitoring use entity work.top_camera_monitoring (raw_signal);
@@ -158,7 +160,11 @@ vga_hsdbg => vga_hsdbg,
 vga_vsdbg => vga_vsdbg,
 vga_r	=> vga_r,
 vga_g	=> vga_g,
-vga_b	=> vga_b
+vga_b	=> vga_b,
+ov7670_data_0 => ov7670_data_0,
+ov7670_data_1 => ov7670_data_1,
+ov7670_data_2 => ov7670_data_2,
+ov7670_data_3 => ov7670_data_3
 );
 
 end Behavioral;

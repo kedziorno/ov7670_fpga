@@ -34,6 +34,7 @@ package p_camera_colorbar is
   -- //////////////////////////////////////////////////////////////////
   -- 1 (RAW DATA) or 2 (YUV/RGB) - pclk for tp
   constant c_tp : integer := 2 ** c_raw_rgb;
+  constant c_pixel_divider : integer := 1 * c_tp;
   -- HREF - tline = 784tp = 640tp + 144tp
   constant c_href1_base : integer := 640; -- 1
   constant c_href0_base : integer := 144; -- 0
@@ -64,6 +65,7 @@ package p_camera_colorbar is
   -- // Values for QQVGA timing (LA) //
   -- //////////////////////////////////
   -- Pixel have 4 * 42 ns
+  constant c_pixel_divider_qq : integer := 4 * c_tp;
   -- HREF
   constant c_href1_base_qq : integer := 640; -- 1
   constant c_href0_base_qq : integer := 2495; -- 0

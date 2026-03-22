@@ -194,7 +194,7 @@ begin
           end if;
         when s2 =>
           pixel_time_data <= colorbar (colorbar_count);
-          if (count1 = c_num_pixels - 2) then -- XXX -2 equal send data
+          if (count1 = c_num_pixels / c_pixel_divider_qq - 2) then -- XXX -2 equal send data
             pt_state <= s3;
             count1 := 0;
             colorbar_count <= colorbar_count + 1;
