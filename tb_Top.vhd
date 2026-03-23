@@ -364,7 +364,7 @@ reset_n <= '0', '1' after 100 ns when mem_done = '1' else '1';
 
 vga_bmp_i1 : component vga_bmp_sink
 generic map (
-filename => "vga_memory_module.bmp"
+filename => "vga_memory_module_1.bmp"
 )
 port map (
 clk_i        => vga_clock,
