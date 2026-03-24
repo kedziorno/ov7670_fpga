@@ -57,9 +57,10 @@ architecture behavioral of camera_colorbar is
   signal href_i : std_logic;
   signal vsync_i : std_logic;
 
-  constant c_all_frame : integer := 256144;
+  constant c_frame_bits : integer := 14;
+  constant c_all_frame : integer := 14496;
   signal all_frame : integer range 0 to c_all_frame - 1;
-  signal addra : std_logic_vector (17 downto 0) := (others => '0');
+  signal addra : std_logic_vector (c_frame_bits - 1 downto 0) := (others => '0');
   signal douta : std_logic_vector (7 downto 0) := (others => '0');
   signal reset_rom : std_logic;
   component frame1
@@ -67,39 +68,45 @@ architecture behavioral of camera_colorbar is
     clka : in std_logic;
     rsta : in std_logic;
     ena : in std_logic;
-    addra : in std_logic_vector (17 downto 0);
+    wea : in std_logic_vector (0 downto 0);
+    addra : in std_logic_vector (13 downto 0);
+    dina : in std_logic_vector (7 downto 0);
     douta : out std_logic_vector (7 downto 0)
   );
   end component frame1;
 
 begin
 
-  reset_rom <= '1', '0' after 1111 ns;
-  frame1_i0 : frame1
-  port map (
-    clka => camera_i_xclk,
-    rsta => reset_rom,
-    ena => href_i,
-    addra => addra,
-    douta => douta
-  );
+  g_source_frames : if (c_source = t_frames) generate
+    reset_rom <= '1', '0' after 1111 ns;
+    frame1_i0 : frame1
+    port map (
+      clka => camera_i_xclk,
+      rsta => reset_rom,
+      ena => href_i,
+      wea => "0",
+      addra => addra,
+      dina => (others => '0'),
+      douta => douta
+    );
 
-  camera_o_d <= douta;
-  p4_frame_out : process (camera_i_xclk) is
-  begin
-    if (rising_edge (camera_i_xclk)) then
-      if (href_i = '1') then
-        if (all_frame = c_all_frame - 1) then
+    camera_o_d <= douta;
+    p4_frame_out : process (camera_i_xclk) is
+    begin
+      if (rising_edge (camera_i_xclk)) then
+        if (href_i = '1') then
+          if (all_frame = c_all_frame - 1) then
+            all_frame <= 0;
+          else
+            all_frame <= all_frame + 1;
+          end if;
+        elsif (vsync_i = '0') then
           all_frame <= 0;
-        else
-          all_frame <= all_frame + 1;
         end if;
-      elsif (vsync_i = '0') then
-        all_frame <= 0;
+        addra <= std_logic_vector (to_unsigned (all_frame, c_frame_bits));
       end if;
-      addra <= std_logic_vector (to_unsigned (all_frame, 18));
-    end if;
-  end process p4_frame_out;
+    end process p4_frame_out;
+  end generate g_source_frames;
 
   g_assert1 : if (c_asserts = true) generate
     p0_assert_1 : process (camera_i_rst) is
@@ -214,46 +221,48 @@ begin
     end if;
   end process p2_href;
 
-  -- Show pattern from virtual camera on VGA display on falling edge pclk
---  camera_o_d <= pixel_time_data when href_i = '1' else (others => '0');
---  p3_pixeltime : process (camera_i_xclk, camera_i_rst) is
---    constant c_num_pixels : integer := c_href1 / c_colorbar_length;
---    variable count1 : integer range 0 to c_num_pixels - 1;
---  begin
---    if (camera_i_rst = '0') then
---      pixel_time_data <= (others => '0');
---      pt_state <= s1;
---      colorbar_count <= 0;
---      count1 := 0;
---    elsif (falling_edge (camera_i_xclk)) then
---      case (pt_state) is
---        when s1 =>
---          if (pixel_time = '1') then
---            pt_state <= s2;
---            pixel_time_data <= colorbar (colorbar_count);
---          else
---            pixel_time_data <= (others => '0');
---          end if;
---        when s2 =>
---          pixel_time_data <= colorbar (colorbar_count);
---          if (count1 = c_num_pixels / c_pixel_divider_qq - 2) then -- XXX -2 equal send data
---            pt_state <= s3;
---            count1 := 0;
---            colorbar_count <= colorbar_count + 1;
---          else
---            count1 := count1 + 1;
---          end if;
---        when s3 =>
---          pixel_time_data <= colorbar (colorbar_count);
---          if (colorbar_count = c_colorbar_length) then
---            pt_state <= s1;
---            colorbar_count <= 0;
---          else
---            pt_state <= s2; -- next color
---          end if;
---        end case;
---    end if;
---  end process p3_pixeltime;
+  g_source_colorbar : if (c_source = t_colorbar) generate
+    -- Show pattern from virtual camera on VGA display on falling edge pclk
+    camera_o_d <= pixel_time_data when href_i = '1' else (others => '0');
+    p3_pixeltime : process (camera_i_xclk, camera_i_rst) is
+      constant c_num_pixels : integer := c_href1 / c_colorbar_length;
+      variable count1 : integer range 0 to c_num_pixels - 1;
+    begin
+      if (camera_i_rst = '0') then
+        pixel_time_data <= (others => '0');
+        pt_state <= s1;
+        colorbar_count <= 0;
+        count1 := 0;
+      elsif (falling_edge (camera_i_xclk)) then
+        case (pt_state) is
+          when s1 =>
+            if (pixel_time = '1') then
+              pt_state <= s2;
+              pixel_time_data <= colorbar (colorbar_count);
+            else
+              pixel_time_data <= (others => '0');
+            end if;
+          when s2 =>
+            pixel_time_data <= colorbar (colorbar_count);
+            if (count1 = c_num_pixels - 2) then -- XXX -2 equal send data
+              pt_state <= s3;
+              count1 := 0;
+              colorbar_count <= colorbar_count + 1;
+            else
+              count1 := count1 + 1;
+            end if;
+          when s3 =>
+            pixel_time_data <= colorbar (colorbar_count);
+            if (colorbar_count = c_colorbar_length) then
+              pt_state <= s1;
+              colorbar_count <= 0;
+            else
+              pt_state <= s2; -- next color
+            end if;
+          end case;
+      end if;
+    end process p3_pixeltime;
+  end generate g_source_colorbar;
 
   -- only flip source clock
   camera_o_pclk <= camera_i_xclk;
