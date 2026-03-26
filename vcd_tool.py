@@ -1,3 +1,8 @@
+# Author   : ko, HomeDL
+# Versions :
+#   1.0 - File created
+#   1.1 - improvments
+#
 # This script will concatenate/merge/stick VCD files generated from
 # Xilinx ChipScope. Tested with ISE 14.7 version and Sigrok Pulseview and this
 # use pyvcd library
@@ -10,8 +15,6 @@
 # and
 #   $upscope $end
 # tags, example from first vcd source file (waveform.1.vcd)
-#
-# ver 0.1 with fixes
 #
 # TODO check counter between files
 # PYVCD use objects (added to list3) where this list must be empty
