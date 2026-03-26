@@ -24,6 +24,8 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.ALL;
+library UNISIM;
+use UNISIM.VCOMPONENTS.ALL;
 use work.p_camera_colorbar.all;
 use work.p_constants.all;
 
@@ -57,44 +59,84 @@ architecture behavioral of camera_colorbar is
   signal href_i : std_logic;
   signal vsync_i : std_logic;
 
-  constant c_frame_bits : integer := 14;
-  constant c_all_frame : integer := 14496;
+  constant c_frame_bits : integer := 19;
+  constant c_all_frame : integer := 388431;
   signal all_frame : integer range 0 to c_all_frame - 1;
-  signal addra : std_logic_vector (c_frame_bits - 1 downto 0) := (others => '0');
+  signal addra : integer range 0 to c_all_frame - 1;
   signal douta : std_logic_vector (7 downto 0) := (others => '0');
   signal reset_rom : std_logic;
-  component frame1
-  port (
-    clka : in std_logic;
-    rsta : in std_logic;
-    ena : in std_logic;
-    wea : in std_logic_vector (0 downto 0);
-    addra : in std_logic_vector (13 downto 0);
-    dina : in std_logic_vector (7 downto 0);
-    douta : out std_logic_vector (7 downto 0)
-  );
-  end component frame1;
+--  component frame1
+--  port (
+--    clka : in std_logic;
+--    rsta : in std_logic;
+--    ena : in std_logic;
+--    wea : in std_logic_vector (0 downto 0);
+--    addra : in std_logic_vector (c_frame_bits - 1 downto 0);
+--    dina : in std_logic_vector (7 downto 0);
+--    douta : out std_logic_vector (7 downto 0)
+--  );
+--  end component frame1;
+component ROM_MUX IS
+PORT (
+  reset   : IN  STD_LOGIC;
+  data    : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
+  address : IN  INTEGER RANGE 0 TO 388431 - 1
+);
+END component ROM_MUX;
+
+--  subtype st is std_logic_vector (7 downto 0);
+--  function to_1 (i : std_logic_vector (7 downto 0))
+--  return st
+--  is
+--    variable a : st;
+--  begin
+--    for j in 0 to 7 loop
+--      if (i(j) = 'X') then
+--        a (j) := '1';
+--      else
+--        a (j) := '0';
+--      end if;
+--    end loop;
+--    return a;
+--  end function;
+
+signal clock_adjust_frame, clk1, clk1_fb, reset_dcm, reset_dcm_n, camera_i_xlkf_ibuf : std_logic;
 
 begin
 
   g_source_frames : if (c_source = t_frames) generate
     reset_rom <= '1', '0' after 1111 ns;
-    frame1_i0 : frame1
+--    frame1_i0 : frame1
+--    port map (
+--      clka => camera_i_xclk,
+--      rsta => reset_rom,
+--      ena => href_i,
+--      wea => "0",
+--      addra => addra,
+--      dina => (others => '0'),
+--      douta => douta
+--    );
+    frame1_i0 : ROM_MUX -- XXX own frame
     port map (
-      clka => camera_i_xclk,
-      rsta => reset_rom,
-      ena => href_i,
-      wea => "0",
-      addra => addra,
-      dina => (others => '0'),
-      douta => douta
+      reset => reset_rom,
+      address => addra,
+      data => douta
     );
 
-    camera_o_d <= douta;
-    p4_frame_out : process (camera_i_xclk) is
+    process (camera_i_xclk) is
     begin
-      if (rising_edge (camera_i_xclk)) then
-        if (href_i = '1') then
+    if (falling_edge (camera_i_xclk)) then
+    if (clock_adjust_frame = '0') then
+    camera_o_d <= douta;
+    end if;
+    end if;
+    end process;
+    
+    p4_frame_out : process (clock_adjust_frame) is
+    begin
+      if (falling_edge (clock_adjust_frame)) then
+--        if (clock_adjust_frame = '1') then
+        if (href_time = '1') then
           if (all_frame = c_all_frame - 1) then
             all_frame <= 0;
           else
@@ -103,8 +145,10 @@ begin
         elsif (vsync_i = '0') then
           all_frame <= 0;
         end if;
-        addra <= std_logic_vector (to_unsigned (all_frame, c_frame_bits));
+--        addra <= std_logic_vector (to_unsigned (all_frame, c_frame_bits));
+        addra <= all_frame;
       end if;
+--      end if;
     end process p4_frame_out;
   end generate g_source_frames;
 
@@ -266,6 +310,62 @@ begin
 
   -- only flip source clock
   camera_o_pclk <= camera_i_xclk;
+
+  g_source_frames_adjust_clock : if (c_source = t_frames) generate
+
+BUFG_cam : BUFG
+port map (
+O => clk1_fb, -- Clock buffer output
+I => clk1 -- Clock buffer input
+);
+
+IBUFG_global_clock : IBUFG
+generic map (
+IOSTANDARD => "DEFAULT")
+port map (
+O => camera_i_xlkf_ibuf, -- Clock buffer output
+I => camera_i_xclk -- Clock buffer input (connect directly to top-level port)
+);
+
+reset_dcm_n <= not reset_dcm;
+synchro_reset_i0 : SRLC16E
+port map (
+D => '1', -- insert input signal
+CE => '1', -- insert Clock Enable signal (optional)
+CLK => camera_i_xlkf_ibuf, -- insert Clock signal
+A0 => '1', -- insert Address 0 signal
+A1 => '1', -- insert Address 1 signal
+A2 => '1', -- insert Address 2 signal
+A3 => '1', -- insert Address 3 signal
+Q => reset_dcm, -- insert output signal
+Q15 => open -- insert cascadable output signal
+);
+
+  DCM_SP_adjust_frame : DCM_SP
+  generic map (
+  CLKFX_MULTIPLY => 2, CLKFX_DIVIDE => 2
+  )
+  port map (
+  CLK0 => clk1, -- 0 degree DCM CLK ouptput
+  CLK180 => open, -- 180 degree DCM CLK output
+  CLK270 => open, -- 270 degree DCM CLK output
+  CLK2X => open, -- 2X DCM CLK output
+  CLK2X180 => open, -- 2X, 180 degree DCM CLK out
+  CLK90 => open, -- 90 degree DCM CLK output
+  CLKDV => open, -- Divided DCM CLK out (CLKDV_DIVIDE)
+  CLKFX => clock_adjust_frame, -- DCM CLK synthesis out (M/D)
+  CLKFX180 => open, -- 180 degree CLK synthesis out
+  LOCKED => open, -- DCM LOCK status output
+  PSDONE => open, -- Dynamic phase adjust done output
+  STATUS => open, -- 8-bit DCM status bits output
+  CLKFB => clk1_fb, -- DCM clock feedback
+  CLKIN => camera_i_xlkf_ibuf, -- Clock input (from IBUFG, BUFG or DCM)
+  PSCLK => '0', -- Dynamic phase adjust clock input
+  PSEN => '0', -- Dynamic phase adjust enable input
+  PSINCDEC => '0', -- Dynamic phase adjust increment/decrement
+  RST => reset_dcm_n -- DCM asynchronous reset input
+  );
+  end generate g_source_frames_adjust_clock;
 
 end architecture behavioral;
 
