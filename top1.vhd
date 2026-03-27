@@ -118,8 +118,8 @@ vga_b	: out STD_LOGIC_VECTOR(1 downto 0);
 ov7670_data_0, ov7670_data_1, ov7670_data_2, ov7670_data_3 : out std_logic
 );
 end component top_camera_monitoring;
---for all : top_camera_monitoring use entity work.top_camera_monitoring (raw_signal);
-for all : top_camera_monitoring use entity work.top_camera_monitoring (Structural);
+for all : top_camera_monitoring use entity work.top_camera_monitoring (raw_signal);
+--for all : top_camera_monitoring use entity work.top_camera_monitoring (Structural);
 
 begin
 

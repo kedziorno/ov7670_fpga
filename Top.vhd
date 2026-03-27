@@ -108,6 +108,8 @@ COMPONENT VGA_timing_synch
            blank : out  STD_LOGIC;
            activeArea1 : out  STD_LOGIC);
 END COMPONENT;
+for all : VGA_timing_synch use entity work.VGA_timing_synch(jc);
+--for all : VGA_timing_synch use entity work.VGA_timing_synch(counter);
 
 signal siodo1, siodi1 : std_logic;
 
@@ -556,6 +558,8 @@ COMPONENT VGA_timing_synch
            blank : out  STD_LOGIC;
            activeArea1 : out  STD_LOGIC);
 END COMPONENT;
+for all : VGA_timing_synch use entity work.VGA_timing_synch(jc);
+--for all : VGA_timing_synch use entity work.VGA_timing_synch(counter);
 
 COMPONENT ram_interface
 PORT( i_clk	:	IN	STD_LOGIC;
@@ -881,6 +885,7 @@ generic map (
 CLKDV_DIVIDE => 4.0, -- 100mhz
 CLKFX_MULTIPLY => 32, -- Can be any integer from 1 to 32
 CLKFX_DIVIDE => 2, -- Can be any interger from 1 to 32
+CLKFX_DIVIDE => 32, -- Can be any interger from 1 to 32
 CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
 CLKIN_PERIOD => 10.0, -- Specify period of input clock
 CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of "NONE", "FIXED" or "VARIABLE"

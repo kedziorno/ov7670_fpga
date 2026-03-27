@@ -15,10 +15,190 @@ entity VGA_timing_synch is
            activeArea1 : out  STD_LOGIC);
 end VGA_timing_synch;
 
-architecture Behavioral of VGA_timing_synch is
+architecture lsfr of VGA_timing_synch is
+
+signal qr1 : std_logic_vector (9 downto 0) := "0000000001";
+signal qr2 : std_logic_vector (9 downto 0) := "0000000001";
+signal lsfr_1 : std_logic_vector (9 downto 0) := "0000000001";
+signal lsfr_2 : std_logic_vector (9 downto 0) := "0000000001";
+signal clk_vga, Hsync1, Vsync1, activeArea1_sig1, blank1 : std_logic := '1';
+
+begin
+
+-- lsfr
+
+lsfr_h : process (clk25) is
+begin
+if (rising_edge (clk25)) then
+QR1(9)  <= QR1(8);
+QR1(8)  <= QR1(7);
+QR1(7)  <= QR1(6) XOR QR1(9);
+QR1(6)  <= QR1(5);
+QR1(5)  <= QR1(4);
+QR1(4)  <= QR1(3);
+QR1(3)  <= QR1(2);
+QR1(2)  <= QR1(1);
+QR1(1)  <= QR1(0);
+QR1(0)  <= QR1(9);
+if QR1 = "0000000000" then
+QR1 <= (others => '1');
+end if;
+end if;
+end process lsfr_h;
+
+lsfr_v : process (clk25) is
+begin
+if (rising_edge (clk25)) then
+if (QR1 = "0000000001") then
+QR2(9)  <= QR2(8);
+QR2(8)  <= QR2(7);
+QR2(7)  <= QR2(6) XOR QR2(9);
+QR2(6)  <= QR2(5);
+QR2(5)  <= QR2(4);
+QR2(4)  <= QR2(3);
+QR2(3)  <= QR2(2);
+QR2(2)  <= QR2(1);
+QR2(1)  <= QR2(0);
+QR2(0)  <= QR2(9);
+if QR2 = "0000000000" then
+QR2 <= (others => '1');
+end if;
+end if;
+end if;
+end process lsfr_v;
+
+--synthesis translate_off
+process (clk25) is
+begin
+  if (falling_edge (clk25)) then
+    assert (QR1 /= "0000000001") report "ping on h 1";
+    assert (QR2 /= "0000000001") report "ping on v 1";
+  end if;
+end process;
+--synthesis translate_on
+
+hsync_gen1 : process(clk25) begin
+	if rising_edge(clk25) then
+		if (QR1 = "0111100000") then
+      Hsync <= '0';
+		else
+			Hsync <= '1';
+		end if;
+	end if;
+end process hsync_gen1;
+
+--vsync_gen1 : process(clk25) begin
+--	if rising_edge(clk25) then
+--    if (jc_2(492) = '0') then
+--      Vsync <= '1';
+--		elsif (jc_2(490) = '0') then
+--			Vsync <= '0';
+--		end if;
+--	end if;
+--end process vsync_gen1;
+
+--active_area_jc : process(clk_vga) begin
+--	if rising_edge(clk_vga) then
+--    if (jc_1(639) = '0') then
+--      activeArea1 <= '0';
+--    elsif (jc_1(799) = '0') then
+--      activeArea1 <= '1';
+--    end if;
+--	end if;
+--end process active_area_jc;
+
+--blank_jc : process(clk_vga) begin
+--	if rising_edge(clk_vga) then
+--    if (jc_1(639) = '0') then
+--      blank <= '1';
+--    elsif (jc_1(799) = '0') then
+--      blank <= '0';
+--    end if;
+--	end if;
+--end process blank_jc;
+
+end architecture lsfr;
+
+---------------------------------------
+architecture jc of VGA_timing_synch is
+
+signal jc_1 : std_logic_vector (799 downto 0) := '0'& (798 downto 0 => '1');
+signal jc_2 : std_logic_vector (524 downto 0) := '0'& (523 downto 0 => '1');
+--signal jc_1 : std_logic_vector (799 downto 0) := (799 downto 1 => '0') & '1';
+--signal jc_2 : std_logic_vector (524 downto 0) := (524 downto 1 => '0') & '1';
+signal clk_vga, Hsync1, Vsync1, activeArea1_sig1, blank1 : std_logic := '1';
+
+begin
+
+-- big JC counting 800/525
+
+jc_sr_h : process (clk25) is
+begin
+  if (rising_edge (clk25)) then
+  for i in 0 to 798 loop
+    jc_1 (i +1) <= jc_1 (i);
+  end loop;
+  jc_1 (0) <= jc_1 (799);
+  end if;
+end process jc_sr_h;
+
+jc_sr_v : process (jc_1(799)) is
+begin
+  if (falling_edge (jc_1(799))) then
+  for i in 0 to 523 loop
+    jc_2 (i +1) <= jc_2 (i);
+  end loop;
+  jc_2 (0) <= jc_2 (524);
+  end if;
+end process jc_sr_v;
+
+hsync_gen1 : process(clk25) begin
+	if rising_edge(clk25) then
+		if (jc_1(752) = '0') then
+      Hsync <= '1';
+		elsif (jc_1(656) = '0') then 
+			Hsync <= '0';
+		end if;
+	end if;
+end process hsync_gen1;
+
+vsync_gen1 : process(clk25) begin
+	if rising_edge(clk25) then
+    if (jc_2(492) = '0') then
+      Vsync <= '1';
+		elsif (jc_2(490) = '0') then 
+			Vsync <= '0';
+		end if;
+	end if;
+end process vsync_gen1;
+
+active_area_jc : process(clk_vga) begin
+	if rising_edge(clk_vga) then
+    if (jc_1(639) = '0') then
+      activeArea1 <= '0';
+    elsif (jc_1(799) = '0') then
+      activeArea1 <= '1';
+    end if;
+	end if;
+end process active_area_jc;
+
+blank_jc : process(clk_vga) begin
+	if rising_edge(clk_vga) then
+    if (jc_1(639) = '0') then
+      blank <= '1';
+    elsif (jc_1(799) = '0') then
+      blank <= '0';
+    end if;
+	end if;
+end process blank_jc;
+
+end architecture jc;
+
+-- normal counting
+architecture counter of VGA_timing_synch is
 
 constant HD : INTEGER := 640;
-constant HF : INTEGER := 16; 
+constant HF : INTEGER := 16;
 constant HB : INTEGER := 48;
 constant HR : INTEGER := 96;
 constant HP : INTEGER := HD + HF + HB + HR - 1;
@@ -34,7 +214,9 @@ signal hcnt,vcnt : INTEGER range 0 to 1023 := 0;
 signal activeArea1_sig : std_logic;
 
 begin
+
 clk_vga <= clk25;
+
 count_proc : process(clk_vga,vcnt,hcnt) begin
 		if rising_edge(clk_vga) then
 			if (hcnt = HP) then
@@ -75,4 +257,4 @@ activeArea1 <= activeArea1_sig;
 blank <= '1' when ((hcnt >= HD) or (vcnt >= VD)) else '0';
 --blank <= not activeArea1_sig;
 
-end Behavioral;
+end architecture counter;

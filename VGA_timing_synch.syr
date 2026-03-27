@@ -1,0 +1,395 @@
+Release 14.7 - xst P.20131013 (lin64)
+Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
+--> 
+Parameter TMPDIR set to xst/projnav.tmp
+
+
+Total REAL time to Xst completion: 0.00 secs
+Total CPU time to Xst completion: 0.03 secs
+ 
+--> 
+Parameter xsthdpdir set to xst
+
+
+Total REAL time to Xst completion: 0.00 secs
+Total CPU time to Xst completion: 0.03 secs
+ 
+--> 
+Reading design: VGA_timing_synch.prj
+
+TABLE OF CONTENTS
+  1) Synthesis Options Summary
+  2) HDL Compilation
+  3) Design Hierarchy Analysis
+  4) HDL Analysis
+  5) HDL Synthesis
+     5.1) HDL Synthesis Report
+  6) Advanced HDL Synthesis
+     6.1) Advanced HDL Synthesis Report
+  7) Low Level Synthesis
+  8) Partition Report
+  9) Final Report
+	9.1) Device utilization summary
+	9.2) Partition Resource Summary
+	9.3) TIMING REPORT
+
+
+=========================================================================
+*                      Synthesis Options Summary                        *
+=========================================================================
+---- Source Parameters
+Input File Name                    : "VGA_timing_synch.prj"
+Input Format                       : mixed
+Ignore Synthesis Constraint File   : NO
+
+---- Target Parameters
+Output File Name                   : "VGA_timing_synch"
+Output Format                      : NGC
+Target Device                      : xc3s1200e-4-fg320
+
+---- Source Options
+Top Module Name                    : VGA_timing_synch
+Automatic FSM Extraction           : YES
+FSM Encoding Algorithm             : Auto
+Safe Implementation                : No
+FSM Style                          : LUT
+RAM Extraction                     : Yes
+RAM Style                          : Auto
+ROM Extraction                     : Yes
+Mux Style                          : Auto
+Decoder Extraction                 : YES
+Priority Encoder Extraction        : Yes
+Shift Register Extraction          : YES
+Logical Shifter Extraction         : YES
+XOR Collapsing                     : YES
+ROM Style                          : Auto
+Mux Extraction                     : Yes
+Resource Sharing                   : NO
+Asynchronous To Synchronous        : NO
+Multiplier Style                   : Auto
+Automatic Register Balancing       : No
+
+---- Target Options
+Add IO Buffers                     : YES
+Global Maximum Fanout              : 100000
+Add Generic Clock Buffer(BUFG)     : 24
+Register Duplication               : YES
+Slice Packing                      : YES
+Optimize Instantiated Primitives   : NO
+Use Clock Enable                   : Yes
+Use Synchronous Set                : Yes
+Use Synchronous Reset              : Yes
+Pack IO Registers into IOBs        : Auto
+Equivalent register Removal        : NO
+
+---- General Options
+Optimization Goal                  : Speed
+Optimization Effort                : 1
+Keep Hierarchy                     : No
+Netlist Hierarchy                  : As_Optimized
+RTL Output                         : Yes
+Global Optimization                : AllClockNets
+Read Cores                         : YES
+Write Timing Constraints           : NO
+Cross Clock Analysis               : NO
+Hierarchy Separator                : /
+Bus Delimiter                      : <>
+Case Specifier                     : Maintain
+Slice Utilization Ratio            : 100
+BRAM Utilization Ratio             : 100
+Verilog 2001                       : YES
+Auto BRAM Packing                  : NO
+Slice Utilization Ratio Delta      : 5
+
+---- Other Options
+Cores Search Directories           : {"ipcore_dir"  }
+
+=========================================================================
+
+
+=========================================================================
+*                          HDL Compilation                              *
+=========================================================================
+Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/vga_timing.vhd" in Library work.
+Entity <VGA_timing_synch> compiled.
+Entity <VGA_timing_synch> (Architecture <jc>) compiled.
+
+=========================================================================
+*                     Design Hierarchy Analysis                         *
+=========================================================================
+Analyzing hierarchy for entity <VGA_timing_synch> in library <work> (architecture <jc>).
+
+
+=========================================================================
+*                            HDL Analysis                               *
+=========================================================================
+Analyzing Entity <VGA_timing_synch> in library <work> (Architecture <jc>).
+Entity <VGA_timing_synch> analyzed. Unit <VGA_timing_synch> generated.
+
+
+=========================================================================
+*                           HDL Synthesis                               *
+=========================================================================
+
+Performing bidirectional port resolution...
+
+Synthesizing Unit <VGA_timing_synch>.
+    Related source file is "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/vga_timing.vhd".
+WARNING:Xst:653 - Signal <clk_vga> is used but never assigned. This sourceless signal will be automatically connected to value 1.
+WARNING:Xst:1780 - Signal <blank1> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:1780 - Signal <activeArea1_sig1> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:1780 - Signal <Vsync1> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:1780 - Signal <Hsync1> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+    Found 1-bit register for signal <Hsync>.
+    Found 1-bit register for signal <Vsync>.
+    Found 1-bit register for signal <blank>.
+    Found 1-bit register for signal <activeArea1>.
+    Found 800-bit register for signal <jc_1>.
+    Found 525-bit register for signal <jc_2>.
+INFO:Xst:738 - HDL ADVISOR - 800 flip-flops were inferred for signal <jc_1>. You may be trying to describe a RAM in a way that is incompatible with block and distributed RAM resources available on Xilinx devices, or with a specific template that is not supported. Please review the Xilinx resources documentation and the XST user manual for coding guidelines. Taking advantage of RAM resources will lead to improved device usage and reduced synthesis time.
+INFO:Xst:738 - HDL ADVISOR - 525 flip-flops were inferred for signal <jc_2>. You may be trying to describe a RAM in a way that is incompatible with block and distributed RAM resources available on Xilinx devices, or with a specific template that is not supported. Please review the Xilinx resources documentation and the XST user manual for coding guidelines. Taking advantage of RAM resources will lead to improved device usage and reduced synthesis time.
+    Summary:
+	inferred 1329 D-type flip-flop(s).
+Unit <VGA_timing_synch> synthesized.
+
+
+=========================================================================
+HDL Synthesis Report
+
+Macro Statistics
+# Registers                                            : 1329
+ 1-bit register                                        : 1329
+
+=========================================================================
+
+=========================================================================
+*                       Advanced HDL Synthesis                          *
+=========================================================================
+
+WARNING:Xst:1710 - FF/Latch <activeArea1> (without init value) has a constant value of 0 in block <VGA_timing_synch>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <blank> (without init value) has a constant value of 1 in block <VGA_timing_synch>. This FF/Latch will be trimmed during the optimization process.
+
+=========================================================================
+Advanced HDL Synthesis Report
+
+Macro Statistics
+# Registers                                            : 1329
+ Flip-Flops                                            : 1329
+
+=========================================================================
+
+=========================================================================
+*                         Low Level Synthesis                           *
+=========================================================================
+WARNING:Xst:1710 - FF/Latch <activeArea1> (without init value) has a constant value of 0 in block <VGA_timing_synch>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <blank> (without init value) has a constant value of 1 in block <VGA_timing_synch>. This FF/Latch will be trimmed during the optimization process.
+
+Optimizing unit <VGA_timing_synch> ...
+
+Mapping all equations...
+Building and optimizing final netlist ...
+Found area constraint ratio of 100 (+ 5) on block VGA_timing_synch, actual ratio is 8.
+
+Final Macro Processing ...
+
+Processing Unit <VGA_timing_synch> :
+	Found 657-bit shift register for signal <jc_1_656>.
+	Found 96-bit shift register for signal <jc_1_752>.
+	Found 47-bit shift register for signal <jc_1_7991>.
+	Found 523-bit shift register for signal <jc_2_490>.
+	Found 2-bit shift register for signal <jc_2_492>.
+Unit <VGA_timing_synch> processed.
+
+=========================================================================
+Final Register Report
+
+Macro Statistics
+# Registers                                            : 2
+ Flip-Flops                                            : 2
+# Shift Registers                                      : 5
+ 2-bit shift register                                  : 1
+ 47-bit shift register                                 : 1
+ 523-bit shift register                                : 1
+ 657-bit shift register                                : 1
+ 96-bit shift register                                 : 1
+
+=========================================================================
+
+=========================================================================
+*                           Partition Report                            *
+=========================================================================
+
+Partition Implementation Status
+-------------------------------
+
+  No Partitions were found in this design.
+
+-------------------------------
+
+=========================================================================
+*                            Final Report                               *
+=========================================================================
+Final Results
+RTL Top Level Output File Name     : VGA_timing_synch.ngr
+Top Level Output File Name         : VGA_timing_synch
+Output Format                      : NGC
+Optimization Goal                  : Speed
+Keep Hierarchy                     : No
+
+Design Statistics
+# IOs                              : 5
+
+Cell Usage :
+# BELS                             : 6
+#      GND                         : 1
+#      INV                         : 4
+#      VCC                         : 1
+# FlipFlops/Latches                : 7
+#      FD                          : 3
+#      FD_1                        : 2
+#      FDSE                        : 2
+# Shift Registers                  : 84
+#      SRL16                       : 3
+#      SRL16_1                     : 2
+#      SRLC16                      : 47
+#      SRLC16_1                    : 32
+# Clock Buffers                    : 2
+#      BUFG                        : 1
+#      BUFGP                       : 1
+# IO Buffers                       : 4
+#      OBUF                        : 4
+=========================================================================
+
+Device utilization summary:
+---------------------------
+
+Selected Device : 3s1200efg320-4 
+
+ Number of Slices:                       45  out of   8672     0%  
+ Number of Slice Flip Flops:              6  out of  17344     0%  
+ Number of 4 input LUTs:                 88  out of  17344     0%  
+    Number used as logic:                 4
+    Number used as Shift registers:      84
+ Number of IOs:                           5
+ Number of bonded IOBs:                   5  out of    250     2%  
+    IOB Flip Flops:                       1
+ Number of GCLKs:                         2  out of     24     8%  
+
+---------------------------
+Partition Resource Summary:
+---------------------------
+
+  No Partitions were found in this design.
+
+---------------------------
+
+
+=========================================================================
+TIMING REPORT
+
+NOTE: THESE TIMING NUMBERS ARE ONLY A SYNTHESIS ESTIMATE.
+      FOR ACCURATE TIMING INFORMATION PLEASE REFER TO THE TRACE REPORT
+      GENERATED AFTER PLACE-and-ROUTE.
+
+Clock Information:
+------------------
+-----------------------------------+------------------------+-------+
+Clock Signal                       | Clock buffer(FF name)  | Load  |
+-----------------------------------+------------------------+-------+
+clk25                              | BUFGP                  | 55    |
+jc_1_7991                          | BUFG                   | 36    |
+-----------------------------------+------------------------+-------+
+
+Asynchronous Control Signals Information:
+----------------------------------------
+No asynchronous control signals found in this design
+
+Timing Summary:
+---------------
+Speed Grade: -4
+
+   Minimum period: 4.127ns (Maximum Frequency: 242.307MHz)
+   Minimum input arrival time before clock: No path found
+   Maximum output required time after clock: 4.283ns
+   Maximum combinational path delay: No path found
+
+Timing Detail:
+--------------
+All values displayed in nanoseconds (ns)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'clk25'
+  Clock period: 4.127ns (frequency: 242.307MHz)
+  Total number of paths / destination ports: 55 / 55
+-------------------------------------------------------------------------
+Delay:               4.127ns (Levels of Logic = 0)
+  Source:            Mshreg_jc_1_752_0 (FF)
+  Destination:       Mshreg_jc_1_752_1 (FF)
+  Source Clock:      clk25 rising
+  Destination Clock: clk25 rising
+
+  Data Path: Mshreg_jc_1_752_0 to Mshreg_jc_1_752_1
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     SRLC16:CLK->Q15       1   3.706   0.000  Mshreg_jc_1_752_0 (Mshreg_jc_1_752_0)
+     SRLC16:D                  0.421          Mshreg_jc_1_752_1
+    ----------------------------------------
+    Total                      4.127ns (4.127ns logic, 0.000ns route)
+                                       (100.0% logic, 0.0% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'jc_1_7991'
+  Clock period: 4.127ns (frequency: 242.307MHz)
+  Total number of paths / destination ports: 36 / 36
+-------------------------------------------------------------------------
+Delay:               4.127ns (Levels of Logic = 0)
+  Source:            Mshreg_jc_2_490_0 (FF)
+  Destination:       Mshreg_jc_2_490_1 (FF)
+  Source Clock:      jc_1_7991 falling
+  Destination Clock: jc_1_7991 falling
+
+  Data Path: Mshreg_jc_2_490_0 to Mshreg_jc_2_490_1
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     SRLC16_1:CLK->Q15     1   3.706   0.000  Mshreg_jc_2_490_0 (Mshreg_jc_2_490_0)
+     SRLC16_1:D                0.421          Mshreg_jc_2_490_1
+    ----------------------------------------
+    Total                      4.127ns (4.127ns logic, 0.000ns route)
+                                       (100.0% logic, 0.0% route)
+
+=========================================================================
+Timing constraint: Default OFFSET OUT AFTER for Clock 'clk25'
+  Total number of paths / destination ports: 2 / 2
+-------------------------------------------------------------------------
+Offset:              4.283ns (Levels of Logic = 1)
+  Source:            Vsync (FF)
+  Destination:       Vsync (PAD)
+  Source Clock:      clk25 rising
+
+  Data Path: Vsync to Vsync
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDSE:C->Q             1   0.591   0.420  Vsync (Vsync_OBUF)
+     OBUF:I->O                 3.272          Vsync_OBUF (Vsync)
+    ----------------------------------------
+    Total                      4.283ns (3.863ns logic, 0.420ns route)
+                                       (90.2% logic, 9.8% route)
+
+=========================================================================
+
+
+Total REAL time to Xst completion: 5.00 secs
+Total CPU time to Xst completion: 4.74 secs
+ 
+--> 
+
+
+Total memory usage is 570744 kilobytes
+
+Number of errors   :    0 (   0 filtered)
+Number of warnings :    9 (   0 filtered)
+Number of infos    :    2 (   0 filtered)
+
