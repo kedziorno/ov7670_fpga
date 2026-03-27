@@ -108,7 +108,8 @@ COMPONENT VGA_timing_synch
            blank : out  STD_LOGIC;
            activeArea1 : out  STD_LOGIC);
 END COMPONENT;
-for all : VGA_timing_synch use entity work.VGA_timing_synch(jc);
+for all : VGA_timing_synch use entity work.VGA_timing_synch(lsfr);
+--for all : VGA_timing_synch use entity work.VGA_timing_synch(jc);
 --for all : VGA_timing_synch use entity work.VGA_timing_synch(counter);
 
 signal siodo1, siodi1 : std_logic;

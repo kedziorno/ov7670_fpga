@@ -2,10 +2,13 @@
 -- This entity synchronize hsync and vsync to vga
 -- Thanks to Pong P. Chu for creating basic things.
 --------------------------------------------------------
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
+library unisim;
+use unisim.vcomponents.all;
 
 entity VGA_timing_synch is
     Port ( clk25 : in  STD_LOGIC;
@@ -15,117 +18,298 @@ entity VGA_timing_synch is
            activeArea1 : out  STD_LOGIC);
 end VGA_timing_synch;
 
-architecture lsfr of VGA_timing_synch is
+-- fastest lsfr
+architecture lsfr_1 of VGA_timing_synch is
 
-signal qr1 : std_logic_vector (9 downto 0) := "0000000001";
-signal qr2 : std_logic_vector (9 downto 0) := "0000000001";
-signal lsfr_1 : std_logic_vector (9 downto 0) := "0000000001";
-signal lsfr_2 : std_logic_vector (9 downto 0) := "0000000001";
-signal clk_vga, Hsync1, Vsync1, activeArea1_sig1, blank1 : std_logic := '1';
+signal QR1 : std_logic_vector (9 downto 0) := "0000000001";
+signal hsync_set, hsync_reset : std_logic := '1';
+
+signal QR2 : std_logic_vector (18 downto 0) := "0000000000000000001";
+signal vsync_set, vsync_reset : std_logic := '1';
+
+constant c_hsync_10 : std_logic_vector (9 downto 0) := "0000110100";
+constant c_hsync_01 : std_logic_vector (9 downto 0) := "0011110000";
+type hs_gen_states is (hs_gen_set, hs_gen_reset);
+signal hs_gen_state : hs_gen_states := hs_gen_set;
+
+constant c_vsync_10 : std_logic_vector (18 downto 0) := "1101110011011000011";
+constant c_vsync_01 : std_logic_vector (18 downto 0) := "0110010010110010110";
+type vs_gen_states is (vs_gen_set, vs_gen_reset);
+signal vs_gen_state : vs_gen_states := vs_gen_set;
 
 begin
 
 -- lsfr
 
+----synthesis translate_off
+--process (clk25) is
+--  variable debug : string (1 to 7) := "DEBUG: ";
+--begin
+--  if (rising_edge (clk25)) then
+--    assert (QR1 /= "0000000001") report debug & "ping on h 1" severity note;
+--    assert (QR2 /= "0000000000000000001") report debug & "ping on v 1" severity note;
+--  end if;
+--end process;
+----synthesis translate_on
+
 lsfr_h : process (clk25) is
 begin
-if (rising_edge (clk25)) then
-QR1(9)  <= QR1(8);
-QR1(8)  <= QR1(7);
-QR1(7)  <= QR1(6) XOR QR1(9);
-QR1(6)  <= QR1(5);
-QR1(5)  <= QR1(4);
-QR1(4)  <= QR1(3);
-QR1(3)  <= QR1(2);
-QR1(2)  <= QR1(1);
-QR1(1)  <= QR1(0);
-QR1(0)  <= QR1(9);
-if QR1 = "0000000000" then
-QR1 <= (others => '1');
-end if;
-end if;
+  if (rising_edge (clk25)) then
+    QR1(9)  <= QR1(8);
+    QR1(8)  <= QR1(7);
+    QR1(7)  <= QR1(6) XOR QR1(9);
+    QR1(6)  <= QR1(5);
+    QR1(5)  <= QR1(4);
+    QR1(4)  <= QR1(3);
+    QR1(3)  <= QR1(2);
+    QR1(2)  <= QR1(1);
+    QR1(1)  <= QR1(0);
+    QR1(0)  <= QR1(9);
+    if (QR1 = c_hsync_01) then
+      QR1 <= "0000000001";
+    end if;
+  end if;
 end process lsfr_h;
 
 lsfr_v : process (clk25) is
 begin
-if (rising_edge (clk25)) then
-if (QR1 = "0000000001") then
-QR2(9)  <= QR2(8);
-QR2(8)  <= QR2(7);
-QR2(7)  <= QR2(6) XOR QR2(9);
-QR2(6)  <= QR2(5);
-QR2(5)  <= QR2(4);
-QR2(4)  <= QR2(3);
-QR2(3)  <= QR2(2);
-QR2(2)  <= QR2(1);
-QR2(1)  <= QR2(0);
-QR2(0)  <= QR2(9);
-if QR2 = "0000000000" then
-QR2 <= (others => '1');
-end if;
-end if;
-end if;
+  if (rising_edge (clk25)) then
+    QR2(18) <= QR2(17) XOR QR2(18);
+    QR2(17) <= QR2(16) XOR QR2(18);
+    QR2(16) <= QR2(15);
+    QR2(15) <= QR2(14);
+    QR2(14) <= QR2(13) XOR QR2(18);
+    QR2(13) <= QR2(12);
+    QR2(12) <= QR2(11);
+    QR2(11) <= QR2(10);
+    QR2(10) <= QR2(9);
+    QR2(9)  <= QR2(8);
+    QR2(8)  <= QR2(7);
+    QR2(7)  <= QR2(6);
+    QR2(6)  <= QR2(5);
+    QR2(5)  <= QR2(4);
+    QR2(4)  <= QR2(3);
+    QR2(3)  <= QR2(2);
+    QR2(2)  <= QR2(1);
+    QR2(1)  <= QR2(0);
+    QR2(0)  <= QR2(18);
+    if (QR2 = c_vsync_10) then
+      QR2 <= "0000000000000000001";
+    end if;
+  end if;
 end process lsfr_v;
 
---synthesis translate_off
-process (clk25) is
+-- better than if/elsif (process) or when/else (latch) in RTL schematic
+-- but slowest in syn reports
+hsync_gen1 : process (clk25) is
 begin
-  if (falling_edge (clk25)) then
-    assert (QR1 /= "0000000001") report "ping on h 1";
-    assert (QR2 /= "0000000001") report "ping on v 1";
+  if (rising_edge (clk25)) then
+  case (hs_gen_state) is
+    when hs_gen_set =>
+      if (QR1 = c_hsync_10) then
+        hs_gen_state <= hs_gen_reset;
+        hsync_set <= '0';
+        hsync_reset <= '1';
+      end if;
+    when hs_gen_reset =>
+      if (QR1 = c_hsync_01) then
+        hs_gen_state <= hs_gen_set;
+        hsync_set <= '1';
+        hsync_reset <= '0';
+      end if;
+    end case;
   end if;
-end process;
---synthesis translate_on
-
-hsync_gen1 : process(clk25) begin
-	if rising_edge(clk25) then
-		if (QR1 = "0111100000") then
-      Hsync <= '0';
-		else
-			Hsync <= '1';
-		end if;
-	end if;
 end process hsync_gen1;
 
---vsync_gen1 : process(clk25) begin
---	if rising_edge(clk25) then
---    if (jc_2(492) = '0') then
---      Vsync <= '1';
---		elsif (jc_2(490) = '0') then
---			Vsync <= '0';
---		end if;
---	end if;
---end process vsync_gen1;
+hsync_gen_fdcpe : FDCPE
+port map (
+  Q   => Hsync,
+  CLR => hsync_reset,
+  PRE => hsync_set,
+  C   => clk25,
+  CE  => '0',
+  D   => '0'
+);
 
---active_area_jc : process(clk_vga) begin
---	if rising_edge(clk_vga) then
---    if (jc_1(639) = '0') then
---      activeArea1 <= '0';
---    elsif (jc_1(799) = '0') then
---      activeArea1 <= '1';
---    end if;
---	end if;
---end process active_area_jc;
+-- better than if/elsif (process) or when/else (latch) in RTL schematic
+-- but slowest in syn reports
+vsync_gen1 : process (clk25) is
+begin
+  if (rising_edge (clk25)) then
+  case (vs_gen_state) is
+    when vs_gen_set =>
+      if (QR2 = c_vsync_10) then
+        vs_gen_state <= vs_gen_reset;
+        vsync_set <= '0';
+        vsync_reset <= '1';
+      end if;
+    when vs_gen_reset =>
+      if (QR2 = c_vsync_01) then
+        vs_gen_state <= vs_gen_set;
+        vsync_set <= '1';
+        vsync_reset <= '0';
+      end if;
+    end case;
+  end if;
+end process vsync_gen1;
 
---blank_jc : process(clk_vga) begin
---	if rising_edge(clk_vga) then
---    if (jc_1(639) = '0') then
---      blank <= '1';
---    elsif (jc_1(799) = '0') then
---      blank <= '0';
---    end if;
---	end if;
---end process blank_jc;
+vsync_gen_fdcpe : FDCPE
+port map (
+  Q   => Vsync,
+  CLR => vsync_reset,
+  PRE => vsync_set,
+  C   => clk25,
+  CE  => '0',
+  D   => '0'
+);
 
-end architecture lsfr;
+end architecture lsfr_1;
 
----------------------------------------
+-- aggregate lsfr
+architecture lsfr_2 of VGA_timing_synch is
+
+signal QR1 : std_logic_vector (9 downto 0) := "0000000001";
+signal hsync_set, hsync_reset : std_logic := '1';
+
+signal QR2 : std_logic_vector (9 downto 0) := "0000000001";
+signal vsync_set, vsync_reset : std_logic := '1';
+
+constant c_hsync_10 : std_logic_vector (9 downto 0) := "0000110100";
+constant c_hsync_01 : std_logic_vector (9 downto 0) := "0011110000";
+type hs_gen_states is (hs_gen_set, hs_gen_reset);
+signal hs_gen_state : hs_gen_states := hs_gen_set;
+
+constant c_vsync_10 : std_logic_vector (9 downto 0) := "1000010000";
+constant c_vsync_01 : std_logic_vector (9 downto 0) := "0101000010";
+type vs_gen_states is (vs_gen_set, vs_gen_reset);
+signal vs_gen_state : vs_gen_states := vs_gen_set;
+
+begin
+
+-- lsfr
+
+----synthesis translate_off
+--process (clk25) is
+--  variable debug : string (1 to 7) := "DEBUG: ";
+--begin
+--  if (rising_edge (clk25)) then
+--    assert (QR1 /= "0000000001") report debug & "ping on h 1" severity note;
+--    assert (QR2 /= "0000000000000000001") report debug & "ping on v 1" severity note;
+--  end if;
+--end process;
+----synthesis translate_on
+
+lsfr_h : process (clk25) is
+begin
+  if (rising_edge (clk25)) then
+    QR1(9)  <= QR1(8);
+    QR1(8)  <= QR1(7);
+    QR1(7)  <= QR1(6) XOR QR1(9);
+    QR1(6)  <= QR1(5);
+    QR1(5)  <= QR1(4);
+    QR1(4)  <= QR1(3);
+    QR1(3)  <= QR1(2);
+    QR1(2)  <= QR1(1);
+    QR1(1)  <= QR1(0);
+    QR1(0)  <= QR1(9);
+    if (QR1 = c_hsync_01) then
+      QR1 <= "0000000001";
+    end if;
+  end if;
+end process lsfr_h;
+
+lsfr_v : process (clk25) is
+begin
+  if (rising_edge (clk25)) then
+    if (QR1 <= "0000000001") then
+      QR2(9)  <= QR2(8);
+      QR2(8)  <= QR2(7);
+      QR2(7)  <= QR2(6) XOR QR2(9);
+      QR2(6)  <= QR2(5);
+      QR2(5)  <= QR2(4);
+      QR2(4)  <= QR2(3);
+      QR2(3)  <= QR2(2);
+      QR2(2)  <= QR2(1);
+      QR2(1)  <= QR2(0);
+      QR2(0)  <= QR2(9);
+      if (QR2 = c_vsync_01) then
+        QR2 <= "0000000001";
+      end if;
+    end if;
+  end if;
+end process lsfr_v;
+
+-- better than if/elsif (process) or when/else (latch) in RTL schematic
+-- but slowest in syn reports
+hsync_gen1 : process (clk25) is
+begin
+  if (rising_edge (clk25)) then
+  case (hs_gen_state) is
+    when hs_gen_set =>
+      if (QR1 = c_hsync_10) then
+        hs_gen_state <= hs_gen_reset;
+        hsync_set <= '0';
+        hsync_reset <= '1';
+      end if;
+    when hs_gen_reset =>
+      if (QR1 = c_hsync_01) then
+        hs_gen_state <= hs_gen_set;
+        hsync_set <= '1';
+        hsync_reset <= '0';
+      end if;
+    end case;
+  end if;
+end process hsync_gen1;
+
+hsync_gen_fdcpe : FDCPE
+port map (
+  Q   => Hsync,
+  CLR => hsync_reset,
+  PRE => hsync_set,
+  C   => clk25,
+  CE  => '0',
+  D   => '0'
+);
+
+-- better than if/elsif (process) or when/else (latch) in RTL schematic
+-- but slowest in syn reports
+vsync_gen1 : process (clk25) is
+begin
+  if (rising_edge (clk25)) then
+  case (vs_gen_state) is
+    when vs_gen_set =>
+      if (QR2 = c_vsync_10) then
+        vs_gen_state <= vs_gen_reset;
+        vsync_set <= '0';
+        vsync_reset <= '1';
+      end if;
+    when vs_gen_reset =>
+      if (QR2 = c_vsync_01) then
+        vs_gen_state <= vs_gen_set;
+        vsync_set <= '1';
+        vsync_reset <= '0';
+      end if;
+    end case;
+  end if;
+end process vsync_gen1;
+
+vsync_gen_fdcpe : FDCPE
+port map (
+  Q   => Vsync,
+  CLR => vsync_reset,
+  PRE => vsync_set,
+  C   => clk25,
+  CE  => '0',
+  D   => '0'
+);
+
+end architecture lsfr_2;
+
+-- johnson counter
 architecture jc of VGA_timing_synch is
 
 signal jc_1 : std_logic_vector (799 downto 0) := '0'& (798 downto 0 => '1');
 signal jc_2 : std_logic_vector (524 downto 0) := '0'& (523 downto 0 => '1');
---signal jc_1 : std_logic_vector (799 downto 0) := (799 downto 1 => '0') & '1';
---signal jc_2 : std_logic_vector (524 downto 0) := (524 downto 1 => '0') & '1';
 signal clk_vga, Hsync1, Vsync1, activeArea1_sig1, blank1 : std_logic := '1';
 
 begin
@@ -156,7 +340,7 @@ hsync_gen1 : process(clk25) begin
 	if rising_edge(clk25) then
 		if (jc_1(752) = '0') then
       Hsync <= '1';
-		elsif (jc_1(656) = '0') then 
+		elsif (jc_1(656) = '0') then
 			Hsync <= '0';
 		end if;
 	end if;
@@ -166,7 +350,7 @@ vsync_gen1 : process(clk25) begin
 	if rising_edge(clk25) then
     if (jc_2(492) = '0') then
       Vsync <= '1';
-		elsif (jc_2(490) = '0') then 
+		elsif (jc_2(490) = '0') then
 			Vsync <= '0';
 		end if;
 	end if;
@@ -234,7 +418,7 @@ end process count_proc;
 
 hsync_gen : process(clk_vga) begin
 	if rising_edge(clk_vga) then
-		if (hcnt >= (HD+HF) and hcnt <= (HD+HF+HR-1)) then 
+		if (hcnt >= (HD+HF) and hcnt <= (HD+HF+HR-1)) then
 			Hsync <= '0';
 		else
 			Hsync <= '1';
@@ -251,7 +435,7 @@ vsync_gen : process(clk_vga) begin
 		end if;
 	end if;
 end process vsync_gen;
-		
+
 activeArea1_sig <= '1' when (hcnt < HD) and (vcnt < VD) else '0';
 activeArea1 <= activeArea1_sig;
 blank <= '1' when ((hcnt >= HD) or (vcnt >= VD)) else '0';

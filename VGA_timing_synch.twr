@@ -40,19 +40,19 @@ Timing constraint: TS_clk = PERIOD TIMEGRP "clk" 10 ns HIGH 50% INPUT_JITTER
 0.1 ns;
 For more information, see Period Analysis in the Timing Closure User Guide (UG612).
 
- 28 paths analyzed, 28 endpoints analyzed, 0 failing endpoints
+ 356 paths analyzed, 60 endpoints analyzed, 0 failing endpoints
  0 timing errors detected. (0 setup errors, 0 hold errors, 0 component switching limit errors)
- Minimum period is   5.060ns.
+ Minimum period is   7.284ns.
 --------------------------------------------------------------------------------
 
-Paths for end point Mshreg_jc_1_656_12/SRLC16E (SLICE_X46Y11.BY), 1 path
+Paths for end point vsync_reset (SLICE_X71Y69.CE), 22 paths
 --------------------------------------------------------------------------------
-Slack (setup path):     4.940ns (requirement - (data path - clock path skew + uncertainty))
-  Source:               Mshreg_jc_1_656_11/SRLC16E (FF)
-  Destination:          Mshreg_jc_1_656_12/SRLC16E (FF)
+Slack (setup path):     2.716ns (requirement - (data path - clock path skew + uncertainty))
+  Source:               QR2_3 (FF)
+  Destination:          vsync_reset (FF)
   Requirement:          10.000ns
-  Data Path Delay:      5.003ns (Levels of Logic = 1)
-  Clock Path Skew:      -0.007ns (0.050 - 0.057)
+  Data Path Delay:      7.234ns (Levels of Logic = 3)
+  Clock Path Skew:      0.000ns
   Source Clock:         clk25_BUFGP rising at 0.000ns
   Destination Clock:    clk25_BUFGP rising at 10.000ns
   Clock Uncertainty:    0.050ns
@@ -63,30 +63,35 @@ Slack (setup path):     4.940ns (requirement - (data path - clock path skew + un
     Discrete Jitter (DJ):       0.000ns
     Phase Error (PE):           0.000ns
 
-  Maximum Data Path: Mshreg_jc_1_656_11/SRLC16E to Mshreg_jc_1_656_12/SRLC16E
+  Maximum Data Path: QR2_3 to vsync_reset
     Location             Delay type         Delay(ns)  Physical Resource
                                                        Logical Resource(s)
     -------------------------------------------------  -------------------
-    SLICE_X46Y16.XB      Tregxb                3.583   Mshreg_jc_1_656_11
-                                                       Mshreg_jc_1_656_11/SRLC16E.CE
-                                                       Mshreg_jc_1_656_11/SRLC16E
-    SLICE_X46Y11.BY      net (fanout=1)        0.978   Mshreg_jc_1_656_11
-    SLICE_X46Y11.CLK     Tds                   0.442   Mshreg_jc_1_656_13
-                                                       Mshreg_jc_1_656_12/SRLC16E
+    SLICE_X66Y59.XQ      Tcko                  0.592   QR2<3>
+                                                       QR2_3
+    SLICE_X66Y58.G1      net (fanout=3)        1.796   QR2<3>
+    SLICE_X66Y58.Y       Tilo                  0.759   QR2_8_cmp_eq000031
+                                                       vsync_set_not000143
+    SLICE_X65Y59.F2      net (fanout=1)        0.428   vsync_set_not000143
+    SLICE_X65Y59.X       Tilo                  0.704   vsync_set_not000145
+                                                       vsync_set_not000145
+    SLICE_X67Y58.F2      net (fanout=1)        0.427   vsync_set_not000145
+    SLICE_X67Y58.X       Tilo                  0.704   vsync_set_not0001
+                                                       vsync_set_not000161
+    SLICE_X71Y69.CE      net (fanout=3)        1.269   vsync_set_not0001
+    SLICE_X71Y69.CLK     Tceck                 0.555   vsync_reset
+                                                       vsync_reset
     -------------------------------------------------  ---------------------------
-    Total                                      5.003ns (4.025ns logic, 0.978ns route)
-                                                       (80.5% logic, 19.5% route)
+    Total                                      7.234ns (3.314ns logic, 3.920ns route)
+                                                       (45.8% logic, 54.2% route)
 
 --------------------------------------------------------------------------------
-
-Paths for end point Mshreg_jc_1_656_40/SRL16E (SLICE_X60Y10.BY), 1 path
---------------------------------------------------------------------------------
-Slack (setup path):     5.170ns (requirement - (data path - clock path skew + uncertainty))
-  Source:               Mshreg_jc_1_656_39/SRLC16E (FF)
-  Destination:          Mshreg_jc_1_656_40/SRL16E (FF)
+Slack (setup path):     3.107ns (requirement - (data path - clock path skew + uncertainty))
+  Source:               vs_gen_state_0 (FF)
+  Destination:          vsync_reset (FF)
   Requirement:          10.000ns
-  Data Path Delay:      4.763ns (Levels of Logic = 1)
-  Clock Path Skew:      -0.017ns (0.015 - 0.032)
+  Data Path Delay:      6.843ns (Levels of Logic = 3)
+  Clock Path Skew:      0.000ns
   Source Clock:         clk25_BUFGP rising at 0.000ns
   Destination Clock:    clk25_BUFGP rising at 10.000ns
   Clock Uncertainty:    0.050ns
@@ -97,30 +102,35 @@ Slack (setup path):     5.170ns (requirement - (data path - clock path skew + un
     Discrete Jitter (DJ):       0.000ns
     Phase Error (PE):           0.000ns
 
-  Maximum Data Path: Mshreg_jc_1_656_39/SRLC16E to Mshreg_jc_1_656_40/SRL16E
+  Maximum Data Path: vs_gen_state_0 to vsync_reset
     Location             Delay type         Delay(ns)  Physical Resource
                                                        Logical Resource(s)
     -------------------------------------------------  -------------------
-    SLICE_X56Y8.XB       Tregxb                3.583   Mshreg_jc_1_656_39
-                                                       Mshreg_jc_1_656_39/SRLC16E.CE
-                                                       Mshreg_jc_1_656_39/SRLC16E
-    SLICE_X60Y10.BY      net (fanout=1)        0.738   Mshreg_jc_1_656_39
-    SLICE_X60Y10.CLK     Tds                   0.442   jc_1<656>
-                                                       Mshreg_jc_1_656_40/SRL16E
+    SLICE_X70Y69.YQ      Tcko                  0.652   vs_gen_state<0>
+                                                       vs_gen_state_0
+    SLICE_X66Y58.G4      net (fanout=5)        1.345   vs_gen_state<0>
+    SLICE_X66Y58.Y       Tilo                  0.759   QR2_8_cmp_eq000031
+                                                       vsync_set_not000143
+    SLICE_X65Y59.F2      net (fanout=1)        0.428   vsync_set_not000143
+    SLICE_X65Y59.X       Tilo                  0.704   vsync_set_not000145
+                                                       vsync_set_not000145
+    SLICE_X67Y58.F2      net (fanout=1)        0.427   vsync_set_not000145
+    SLICE_X67Y58.X       Tilo                  0.704   vsync_set_not0001
+                                                       vsync_set_not000161
+    SLICE_X71Y69.CE      net (fanout=3)        1.269   vsync_set_not0001
+    SLICE_X71Y69.CLK     Tceck                 0.555   vsync_reset
+                                                       vsync_reset
     -------------------------------------------------  ---------------------------
-    Total                                      4.763ns (4.025ns logic, 0.738ns route)
-                                                       (84.5% logic, 15.5% route)
+    Total                                      6.843ns (3.374ns logic, 3.469ns route)
+                                                       (49.3% logic, 50.7% route)
 
 --------------------------------------------------------------------------------
-
-Paths for end point Mshreg_jc_1_656_28/SRLC16E (SLICE_X52Y9.BY), 1 path
---------------------------------------------------------------------------------
-Slack (setup path):     5.183ns (requirement - (data path - clock path skew + uncertainty))
-  Source:               Mshreg_jc_1_656_27/SRLC16E (FF)
-  Destination:          Mshreg_jc_1_656_28/SRLC16E (FF)
+Slack (setup path):     3.481ns (requirement - (data path - clock path skew + uncertainty))
+  Source:               QR2_3 (FF)
+  Destination:          vsync_reset (FF)
   Requirement:          10.000ns
-  Data Path Delay:      4.763ns (Levels of Logic = 1)
-  Clock Path Skew:      -0.004ns (0.044 - 0.048)
+  Data Path Delay:      6.469ns (Levels of Logic = 3)
+  Clock Path Skew:      0.000ns
   Source Clock:         clk25_BUFGP rising at 0.000ns
   Destination Clock:    clk25_BUFGP rising at 10.000ns
   Clock Uncertainty:    0.050ns
@@ -131,103 +141,351 @@ Slack (setup path):     5.183ns (requirement - (data path - clock path skew + un
     Discrete Jitter (DJ):       0.000ns
     Phase Error (PE):           0.000ns
 
-  Maximum Data Path: Mshreg_jc_1_656_27/SRLC16E to Mshreg_jc_1_656_28/SRLC16E
+  Maximum Data Path: QR2_3 to vsync_reset
     Location             Delay type         Delay(ns)  Physical Resource
                                                        Logical Resource(s)
     -------------------------------------------------  -------------------
-    SLICE_X50Y8.XB       Tregxb                3.583   Mshreg_jc_1_656_27
-                                                       Mshreg_jc_1_656_27/SRLC16E.CE
-                                                       Mshreg_jc_1_656_27/SRLC16E
-    SLICE_X52Y9.BY       net (fanout=1)        0.738   Mshreg_jc_1_656_27
-    SLICE_X52Y9.CLK      Tds                   0.442   Mshreg_jc_1_656_29
-                                                       Mshreg_jc_1_656_28/SRLC16E
+    SLICE_X66Y59.XQ      Tcko                  0.592   QR2<3>
+                                                       QR2_3
+    SLICE_X66Y58.F1      net (fanout=3)        1.791   QR2<3>
+    SLICE_X66Y58.X       Tilo                  0.759   QR2_8_cmp_eq000031
+                                                       QR2_8_cmp_eq000031
+    SLICE_X67Y58.G4      net (fanout=2)        0.045   QR2_8_cmp_eq000031
+    SLICE_X67Y58.Y       Tilo                  0.704   vsync_set_not0001
+                                                       QR2_8_cmp_eq000033
+    SLICE_X67Y58.F3      net (fanout=4)        0.050   QR2_8_cmp_eq0000
+    SLICE_X67Y58.X       Tilo                  0.704   vsync_set_not0001
+                                                       vsync_set_not000161
+    SLICE_X71Y69.CE      net (fanout=3)        1.269   vsync_set_not0001
+    SLICE_X71Y69.CLK     Tceck                 0.555   vsync_reset
+                                                       vsync_reset
     -------------------------------------------------  ---------------------------
-    Total                                      4.763ns (4.025ns logic, 0.738ns route)
-                                                       (84.5% logic, 15.5% route)
+    Total                                      6.469ns (3.314ns logic, 3.155ns route)
+                                                       (51.2% logic, 48.8% route)
+
+--------------------------------------------------------------------------------
+
+Paths for end point vsync_set (SLICE_X73Y69.CE), 22 paths
+--------------------------------------------------------------------------------
+Slack (setup path):     2.718ns (requirement - (data path - clock path skew + uncertainty))
+  Source:               QR2_3 (FF)
+  Destination:          vsync_set (FF)
+  Requirement:          10.000ns
+  Data Path Delay:      7.232ns (Levels of Logic = 3)
+  Clock Path Skew:      0.000ns
+  Source Clock:         clk25_BUFGP rising at 0.000ns
+  Destination Clock:    clk25_BUFGP rising at 10.000ns
+  Clock Uncertainty:    0.050ns
+
+  Clock Uncertainty:          0.050ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter (TSJ):  0.000ns
+    Total Input Jitter (TIJ):   0.100ns
+    Discrete Jitter (DJ):       0.000ns
+    Phase Error (PE):           0.000ns
+
+  Maximum Data Path: QR2_3 to vsync_set
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X66Y59.XQ      Tcko                  0.592   QR2<3>
+                                                       QR2_3
+    SLICE_X66Y58.G1      net (fanout=3)        1.796   QR2<3>
+    SLICE_X66Y58.Y       Tilo                  0.759   QR2_8_cmp_eq000031
+                                                       vsync_set_not000143
+    SLICE_X65Y59.F2      net (fanout=1)        0.428   vsync_set_not000143
+    SLICE_X65Y59.X       Tilo                  0.704   vsync_set_not000145
+                                                       vsync_set_not000145
+    SLICE_X67Y58.F2      net (fanout=1)        0.427   vsync_set_not000145
+    SLICE_X67Y58.X       Tilo                  0.704   vsync_set_not0001
+                                                       vsync_set_not000161
+    SLICE_X73Y69.CE      net (fanout=3)        1.267   vsync_set_not0001
+    SLICE_X73Y69.CLK     Tceck                 0.555   vsync_set
+                                                       vsync_set
+    -------------------------------------------------  ---------------------------
+    Total                                      7.232ns (3.314ns logic, 3.918ns route)
+                                                       (45.8% logic, 54.2% route)
+
+--------------------------------------------------------------------------------
+Slack (setup path):     3.109ns (requirement - (data path - clock path skew + uncertainty))
+  Source:               vs_gen_state_0 (FF)
+  Destination:          vsync_set (FF)
+  Requirement:          10.000ns
+  Data Path Delay:      6.841ns (Levels of Logic = 3)
+  Clock Path Skew:      0.000ns
+  Source Clock:         clk25_BUFGP rising at 0.000ns
+  Destination Clock:    clk25_BUFGP rising at 10.000ns
+  Clock Uncertainty:    0.050ns
+
+  Clock Uncertainty:          0.050ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter (TSJ):  0.000ns
+    Total Input Jitter (TIJ):   0.100ns
+    Discrete Jitter (DJ):       0.000ns
+    Phase Error (PE):           0.000ns
+
+  Maximum Data Path: vs_gen_state_0 to vsync_set
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X70Y69.YQ      Tcko                  0.652   vs_gen_state<0>
+                                                       vs_gen_state_0
+    SLICE_X66Y58.G4      net (fanout=5)        1.345   vs_gen_state<0>
+    SLICE_X66Y58.Y       Tilo                  0.759   QR2_8_cmp_eq000031
+                                                       vsync_set_not000143
+    SLICE_X65Y59.F2      net (fanout=1)        0.428   vsync_set_not000143
+    SLICE_X65Y59.X       Tilo                  0.704   vsync_set_not000145
+                                                       vsync_set_not000145
+    SLICE_X67Y58.F2      net (fanout=1)        0.427   vsync_set_not000145
+    SLICE_X67Y58.X       Tilo                  0.704   vsync_set_not0001
+                                                       vsync_set_not000161
+    SLICE_X73Y69.CE      net (fanout=3)        1.267   vsync_set_not0001
+    SLICE_X73Y69.CLK     Tceck                 0.555   vsync_set
+                                                       vsync_set
+    -------------------------------------------------  ---------------------------
+    Total                                      6.841ns (3.374ns logic, 3.467ns route)
+                                                       (49.3% logic, 50.7% route)
+
+--------------------------------------------------------------------------------
+Slack (setup path):     3.483ns (requirement - (data path - clock path skew + uncertainty))
+  Source:               QR2_3 (FF)
+  Destination:          vsync_set (FF)
+  Requirement:          10.000ns
+  Data Path Delay:      6.467ns (Levels of Logic = 3)
+  Clock Path Skew:      0.000ns
+  Source Clock:         clk25_BUFGP rising at 0.000ns
+  Destination Clock:    clk25_BUFGP rising at 10.000ns
+  Clock Uncertainty:    0.050ns
+
+  Clock Uncertainty:          0.050ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter (TSJ):  0.000ns
+    Total Input Jitter (TIJ):   0.100ns
+    Discrete Jitter (DJ):       0.000ns
+    Phase Error (PE):           0.000ns
+
+  Maximum Data Path: QR2_3 to vsync_set
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X66Y59.XQ      Tcko                  0.592   QR2<3>
+                                                       QR2_3
+    SLICE_X66Y58.F1      net (fanout=3)        1.791   QR2<3>
+    SLICE_X66Y58.X       Tilo                  0.759   QR2_8_cmp_eq000031
+                                                       QR2_8_cmp_eq000031
+    SLICE_X67Y58.G4      net (fanout=2)        0.045   QR2_8_cmp_eq000031
+    SLICE_X67Y58.Y       Tilo                  0.704   vsync_set_not0001
+                                                       QR2_8_cmp_eq000033
+    SLICE_X67Y58.F3      net (fanout=4)        0.050   QR2_8_cmp_eq0000
+    SLICE_X67Y58.X       Tilo                  0.704   vsync_set_not0001
+                                                       vsync_set_not000161
+    SLICE_X73Y69.CE      net (fanout=3)        1.267   vsync_set_not0001
+    SLICE_X73Y69.CLK     Tceck                 0.555   vsync_set
+                                                       vsync_set
+    -------------------------------------------------  ---------------------------
+    Total                                      6.467ns (3.314ns logic, 3.153ns route)
+                                                       (51.2% logic, 48.8% route)
+
+--------------------------------------------------------------------------------
+
+Paths for end point vs_gen_state_0 (SLICE_X70Y69.CE), 22 paths
+--------------------------------------------------------------------------------
+Slack (setup path):     2.998ns (requirement - (data path - clock path skew + uncertainty))
+  Source:               QR2_3 (FF)
+  Destination:          vs_gen_state_0 (FF)
+  Requirement:          10.000ns
+  Data Path Delay:      6.952ns (Levels of Logic = 3)
+  Clock Path Skew:      0.000ns
+  Source Clock:         clk25_BUFGP rising at 0.000ns
+  Destination Clock:    clk25_BUFGP rising at 10.000ns
+  Clock Uncertainty:    0.050ns
+
+  Clock Uncertainty:          0.050ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter (TSJ):  0.000ns
+    Total Input Jitter (TIJ):   0.100ns
+    Discrete Jitter (DJ):       0.000ns
+    Phase Error (PE):           0.000ns
+
+  Maximum Data Path: QR2_3 to vs_gen_state_0
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X66Y59.XQ      Tcko                  0.592   QR2<3>
+                                                       QR2_3
+    SLICE_X66Y58.G1      net (fanout=3)        1.796   QR2<3>
+    SLICE_X66Y58.Y       Tilo                  0.759   QR2_8_cmp_eq000031
+                                                       vsync_set_not000143
+    SLICE_X65Y59.F2      net (fanout=1)        0.428   vsync_set_not000143
+    SLICE_X65Y59.X       Tilo                  0.704   vsync_set_not000145
+                                                       vsync_set_not000145
+    SLICE_X67Y58.F2      net (fanout=1)        0.427   vsync_set_not000145
+    SLICE_X67Y58.X       Tilo                  0.704   vsync_set_not0001
+                                                       vsync_set_not000161
+    SLICE_X70Y69.CE      net (fanout=3)        0.987   vsync_set_not0001
+    SLICE_X70Y69.CLK     Tceck                 0.555   vs_gen_state<0>
+                                                       vs_gen_state_0
+    -------------------------------------------------  ---------------------------
+    Total                                      6.952ns (3.314ns logic, 3.638ns route)
+                                                       (47.7% logic, 52.3% route)
+
+--------------------------------------------------------------------------------
+Slack (setup path):     3.389ns (requirement - (data path - clock path skew + uncertainty))
+  Source:               vs_gen_state_0 (FF)
+  Destination:          vs_gen_state_0 (FF)
+  Requirement:          10.000ns
+  Data Path Delay:      6.561ns (Levels of Logic = 3)
+  Clock Path Skew:      0.000ns
+  Source Clock:         clk25_BUFGP rising at 0.000ns
+  Destination Clock:    clk25_BUFGP rising at 10.000ns
+  Clock Uncertainty:    0.050ns
+
+  Clock Uncertainty:          0.050ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter (TSJ):  0.000ns
+    Total Input Jitter (TIJ):   0.100ns
+    Discrete Jitter (DJ):       0.000ns
+    Phase Error (PE):           0.000ns
+
+  Maximum Data Path: vs_gen_state_0 to vs_gen_state_0
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X70Y69.YQ      Tcko                  0.652   vs_gen_state<0>
+                                                       vs_gen_state_0
+    SLICE_X66Y58.G4      net (fanout=5)        1.345   vs_gen_state<0>
+    SLICE_X66Y58.Y       Tilo                  0.759   QR2_8_cmp_eq000031
+                                                       vsync_set_not000143
+    SLICE_X65Y59.F2      net (fanout=1)        0.428   vsync_set_not000143
+    SLICE_X65Y59.X       Tilo                  0.704   vsync_set_not000145
+                                                       vsync_set_not000145
+    SLICE_X67Y58.F2      net (fanout=1)        0.427   vsync_set_not000145
+    SLICE_X67Y58.X       Tilo                  0.704   vsync_set_not0001
+                                                       vsync_set_not000161
+    SLICE_X70Y69.CE      net (fanout=3)        0.987   vsync_set_not0001
+    SLICE_X70Y69.CLK     Tceck                 0.555   vs_gen_state<0>
+                                                       vs_gen_state_0
+    -------------------------------------------------  ---------------------------
+    Total                                      6.561ns (3.374ns logic, 3.187ns route)
+                                                       (51.4% logic, 48.6% route)
+
+--------------------------------------------------------------------------------
+Slack (setup path):     3.763ns (requirement - (data path - clock path skew + uncertainty))
+  Source:               QR2_3 (FF)
+  Destination:          vs_gen_state_0 (FF)
+  Requirement:          10.000ns
+  Data Path Delay:      6.187ns (Levels of Logic = 3)
+  Clock Path Skew:      0.000ns
+  Source Clock:         clk25_BUFGP rising at 0.000ns
+  Destination Clock:    clk25_BUFGP rising at 10.000ns
+  Clock Uncertainty:    0.050ns
+
+  Clock Uncertainty:          0.050ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter (TSJ):  0.000ns
+    Total Input Jitter (TIJ):   0.100ns
+    Discrete Jitter (DJ):       0.000ns
+    Phase Error (PE):           0.000ns
+
+  Maximum Data Path: QR2_3 to vs_gen_state_0
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X66Y59.XQ      Tcko                  0.592   QR2<3>
+                                                       QR2_3
+    SLICE_X66Y58.F1      net (fanout=3)        1.791   QR2<3>
+    SLICE_X66Y58.X       Tilo                  0.759   QR2_8_cmp_eq000031
+                                                       QR2_8_cmp_eq000031
+    SLICE_X67Y58.G4      net (fanout=2)        0.045   QR2_8_cmp_eq000031
+    SLICE_X67Y58.Y       Tilo                  0.704   vsync_set_not0001
+                                                       QR2_8_cmp_eq000033
+    SLICE_X67Y58.F3      net (fanout=4)        0.050   QR2_8_cmp_eq0000
+    SLICE_X67Y58.X       Tilo                  0.704   vsync_set_not0001
+                                                       vsync_set_not000161
+    SLICE_X70Y69.CE      net (fanout=3)        0.987   vsync_set_not0001
+    SLICE_X70Y69.CLK     Tceck                 0.555   vs_gen_state<0>
+                                                       vs_gen_state_0
+    -------------------------------------------------  ---------------------------
+    Total                                      6.187ns (3.314ns logic, 2.873ns route)
+                                                       (53.6% logic, 46.4% route)
 
 --------------------------------------------------------------------------------
 
 Hold Paths: TS_clk = PERIOD TIMEGRP "clk" 10 ns HIGH 50% INPUT_JITTER 0.1 ns;
 --------------------------------------------------------------------------------
 
-Paths for end point Mshreg_jc_1_7991_0/SRLC16E (SLICE_X56Y17.BY), 1 path
+Paths for end point QR1_2 (SLICE_X65Y55.BY), 1 path
 --------------------------------------------------------------------------------
-Slack (hold path):      1.130ns (requirement - (clock path skew + uncertainty - data path))
-  Source:               jc_1_752 (FF)
-  Destination:          Mshreg_jc_1_7991_0/SRLC16E (FF)
+Slack (hold path):      1.028ns (requirement - (clock path skew + uncertainty - data path))
+  Source:               QR1_1 (FF)
+  Destination:          QR1_2 (FF)
   Requirement:          0.000ns
-  Data Path Delay:      1.145ns (Levels of Logic = 1)
-  Clock Path Skew:      0.015ns (0.036 - 0.021)
+  Data Path Delay:      1.026ns (Levels of Logic = 0)
+  Clock Path Skew:      -0.002ns (0.016 - 0.018)
   Source Clock:         clk25_BUFGP rising at 10.000ns
   Destination Clock:    clk25_BUFGP rising at 10.000ns
   Clock Uncertainty:    0.000ns
 
-  Minimum Data Path: jc_1_752 to Mshreg_jc_1_7991_0/SRLC16E
+  Minimum Data Path: QR1_1 to QR1_2
     Location             Delay type         Delay(ns)  Physical Resource
                                                        Logical Resource(s)
     -------------------------------------------------  -------------------
-    SLICE_X60Y16.XQ      Tcko                  0.474   jc_1<752>
-                                                       jc_1_752
-    SLICE_X56Y17.BY      net (fanout=2)        0.798   jc_1<752>
-    SLICE_X56Y17.CLK     Tdh         (-Th)     0.127   Mshreg_jc_1_7991_1
-                                                       Mshreg_jc_1_7991_0/SRLC16E
+    SLICE_X64Y56.XQ      Tcko                  0.474   QR1<1>
+                                                       QR1_1
+    SLICE_X65Y55.BY      net (fanout=2)        0.417   QR1<1>
+    SLICE_X65Y55.CLK     Tckdi       (-Th)    -0.135   QR1<3>
+                                                       QR1_2
     -------------------------------------------------  ---------------------------
-    Total                                      1.145ns (0.347ns logic, 0.798ns route)
-                                                       (30.3% logic, 69.7% route)
+    Total                                      1.026ns (0.609ns logic, 0.417ns route)
+                                                       (59.4% logic, 40.6% route)
 
 --------------------------------------------------------------------------------
 
-Paths for end point Mshreg_jc_1_752_0/SRLC16E (SLICE_X60Y15.BY), 1 path
+Paths for end point QR2_5 (SLICE_X67Y59.BX), 1 path
 --------------------------------------------------------------------------------
-Slack (hold path):      1.192ns (requirement - (clock path skew + uncertainty - data path))
-  Source:               jc_1_656 (FF)
-  Destination:          Mshreg_jc_1_752_0/SRLC16E (FF)
+Slack (hold path):      1.049ns (requirement - (clock path skew + uncertainty - data path))
+  Source:               QR2_4 (FF)
+  Destination:          QR2_5 (FF)
   Requirement:          0.000ns
-  Data Path Delay:      1.195ns (Levels of Logic = 1)
-  Clock Path Skew:      0.003ns (0.018 - 0.015)
+  Data Path Delay:      1.049ns (Levels of Logic = 0)
+  Clock Path Skew:      0.000ns
   Source Clock:         clk25_BUFGP rising at 10.000ns
   Destination Clock:    clk25_BUFGP rising at 10.000ns
   Clock Uncertainty:    0.000ns
 
-  Minimum Data Path: jc_1_656 to Mshreg_jc_1_752_0/SRLC16E
+  Minimum Data Path: QR2_4 to QR2_5
     Location             Delay type         Delay(ns)  Physical Resource
                                                        Logical Resource(s)
     -------------------------------------------------  -------------------
-    SLICE_X60Y10.YQ      Tcko                  0.522   jc_1<656>
-                                                       jc_1_656
-    SLICE_X60Y15.BY      net (fanout=2)        0.800   jc_1<656>
-    SLICE_X60Y15.CLK     Tdh         (-Th)     0.127   Mshreg_jc_1_752_1
-                                                       Mshreg_jc_1_752_0/SRLC16E
+    SLICE_X67Y59.YQ      Tcko                  0.470   QR2<5>
+                                                       QR2_4
+    SLICE_X67Y59.BX      net (fanout=3)        0.486   QR2<4>
+    SLICE_X67Y59.CLK     Tckdi       (-Th)    -0.093   QR2<5>
+                                                       QR2_5
     -------------------------------------------------  ---------------------------
-    Total                                      1.195ns (0.395ns logic, 0.800ns route)
-                                                       (33.1% logic, 66.9% route)
+    Total                                      1.049ns (0.563ns logic, 0.486ns route)
+                                                       (53.7% logic, 46.3% route)
 
 --------------------------------------------------------------------------------
 
-Paths for end point Hsync (SLICE_X60Y12.CE), 1 path
+Paths for end point hs_gen_state_0 (SLICE_X71Y74.BY), 1 path
 --------------------------------------------------------------------------------
-Slack (hold path):      1.304ns (requirement - (clock path skew + uncertainty - data path))
-  Source:               jc_1_656 (FF)
-  Destination:          Hsync (FF)
+Slack (hold path):      1.067ns (requirement - (clock path skew + uncertainty - data path))
+  Source:               hs_gen_state_0 (FF)
+  Destination:          hs_gen_state_0 (FF)
   Requirement:          0.000ns
-  Data Path Delay:      1.305ns (Levels of Logic = 0)
-  Clock Path Skew:      0.001ns (0.016 - 0.015)
+  Data Path Delay:      1.067ns (Levels of Logic = 0)
+  Clock Path Skew:      0.000ns
   Source Clock:         clk25_BUFGP rising at 10.000ns
   Destination Clock:    clk25_BUFGP rising at 10.000ns
   Clock Uncertainty:    0.000ns
 
-  Minimum Data Path: jc_1_656 to Hsync
+  Minimum Data Path: hs_gen_state_0 to hs_gen_state_0
     Location             Delay type         Delay(ns)  Physical Resource
                                                        Logical Resource(s)
     -------------------------------------------------  -------------------
-    SLICE_X60Y10.YQ      Tcko                  0.522   jc_1<656>
-                                                       jc_1_656
-    SLICE_X60Y12.CE      net (fanout=2)        0.714   jc_1<656>
-    SLICE_X60Y12.CLK     Tckce       (-Th)    -0.069   Hsync_OBUF
-                                                       Hsync
+    SLICE_X71Y74.YQ      Tcko                  0.470   hs_gen_state<0>
+                                                       hs_gen_state_0
+    SLICE_X71Y74.BY      net (fanout=4)        0.462   hs_gen_state<0>
+    SLICE_X71Y74.CLK     Tckdi       (-Th)    -0.135   hs_gen_state<0>
+                                                       hs_gen_state_0
     -------------------------------------------------  ---------------------------
-    Total                                      1.305ns (0.591ns logic, 0.714ns route)
-                                                       (45.3% logic, 54.7% route)
+    Total                                      1.067ns (0.605ns logic, 0.462ns route)
+                                                       (56.7% logic, 43.3% route)
 
 --------------------------------------------------------------------------------
 
@@ -237,28 +495,28 @@ Slack: 6.808ns (period - (min low pulse limit / (low pulse / period)))
   Period: 10.000ns
   Low pulse: 5.000ns
   Low pulse limit: 1.596ns (Trpw)
-  Physical resource: Vsync/SR
-  Logical resource: Vsync/SR
-  Location pin: P13.SR
-  Clock network: jc_2<492>
+  Physical resource: Hsync/SR
+  Logical resource: hsync_gen_fdcpe/SR
+  Location pin: G14.SR
+  Clock network: hsync_reset
 --------------------------------------------------------------------------------
 Slack: 6.808ns (period - (min high pulse limit / (high pulse / period)))
   Period: 10.000ns
   High pulse: 5.000ns
   High pulse limit: 1.596ns (Trpw)
-  Physical resource: Vsync/SR
-  Logical resource: Vsync/SR
-  Location pin: P13.SR
-  Clock network: jc_2<492>
+  Physical resource: Hsync/SR
+  Logical resource: hsync_gen_fdcpe/SR
+  Location pin: G14.SR
+  Clock network: hsync_reset
 --------------------------------------------------------------------------------
-Slack: 7.986ns (period - (min low pulse limit / (low pulse / period)))
+Slack: 6.808ns (period - (min low pulse limit / (low pulse / period)))
   Period: 10.000ns
   Low pulse: 5.000ns
-  Low pulse limit: 1.007ns (Twpl)
-  Physical resource: Mshreg_jc_1_656_3/CLK
-  Logical resource: Mshreg_jc_1_656_3/SRLC16E/WS
-  Location pin: SLICE_X46Y20.CLK
-  Clock network: clk25_BUFGP
+  Low pulse limit: 1.596ns (Trpw)
+  Physical resource: Vsync/SR
+  Logical resource: vsync_gen_fdcpe/SR
+  Location pin: J13.SR
+  Clock network: vsync_reset
 --------------------------------------------------------------------------------
 
 
@@ -274,7 +532,7 @@ Clock to Setup on destination clock clk25
                | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
 Source Clock   |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
 ---------------+---------+---------+---------+---------+
-clk25          |    5.060|         |         |         |
+clk25          |    7.284|         |         |         |
 ---------------+---------+---------+---------+---------+
 
 
@@ -283,16 +541,16 @@ Timing summary:
 
 Timing errors: 0  Score: 0  (Setup/Max: 0, Hold: 0)
 
-Constraints cover 28 paths, 0 nets, and 56 connections
+Constraints cover 356 paths, 0 nets, and 125 connections
 
 Design statistics:
-   Minimum period:   5.060ns{1}   (Maximum frequency: 197.628MHz)
+   Minimum period:   7.284ns{1}   (Maximum frequency: 137.287MHz)
 
 
 ------------------------------------Footnotes-----------------------------------
 1)  The minimum period statistic assumes all single cycle delays.
 
-Analysis completed Fri Mar 27 17:11:44 2026 
+Analysis completed Sat Mar 28 21:35:50 2026 
 --------------------------------------------------------------------------------
 
 Trace Settings:

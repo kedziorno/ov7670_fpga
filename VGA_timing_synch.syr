@@ -5,14 +5,14 @@ Parameter TMPDIR set to xst/projnav.tmp
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.03 secs
+Total CPU time to Xst completion: 0.02 secs
  
 --> 
 Parameter xsthdpdir set to xst
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.03 secs
+Total CPU time to Xst completion: 0.02 secs
  
 --> 
 Reading design: VGA_timing_synch.prj
@@ -111,19 +111,23 @@ Cores Search Directories           : {"ipcore_dir"  }
 *                          HDL Compilation                              *
 =========================================================================
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/vga_timing.vhd" in Library work.
-Entity <VGA_timing_synch> compiled.
-Entity <VGA_timing_synch> (Architecture <jc>) compiled.
+Entity <vga_timing_synch> compiled.
+Entity <vga_timing_synch> (Architecture <lsfr>) compiled.
+Entity <vga_timing_synch> (Architecture <jc>) compiled.
+Entity <vga_timing_synch> (Architecture <counter>) compiled.
 
 =========================================================================
 *                     Design Hierarchy Analysis                         *
 =========================================================================
-Analyzing hierarchy for entity <VGA_timing_synch> in library <work> (architecture <jc>).
+Analyzing hierarchy for entity <VGA_timing_synch> in library <work> (architecture <lsfr>).
 
 
 =========================================================================
 *                            HDL Analysis                               *
 =========================================================================
-Analyzing Entity <VGA_timing_synch> in library <work> (Architecture <jc>).
+Analyzing Entity <VGA_timing_synch> in library <work> (Architecture <lsfr>).
+    Set user-defined property "INIT =  0" for instance <hsync_gen_fdcpe> in unit <VGA_timing_synch>.
+    Set user-defined property "INIT =  0" for instance <vsync_gen_fdcpe> in unit <VGA_timing_synch>.
 Entity <VGA_timing_synch> analyzed. Unit <VGA_timing_synch> generated.
 
 
@@ -135,21 +139,22 @@ Performing bidirectional port resolution...
 
 Synthesizing Unit <VGA_timing_synch>.
     Related source file is "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/vga_timing.vhd".
-WARNING:Xst:653 - Signal <clk_vga> is used but never assigned. This sourceless signal will be automatically connected to value 1.
-WARNING:Xst:1780 - Signal <blank1> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
-WARNING:Xst:1780 - Signal <activeArea1_sig1> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
-WARNING:Xst:1780 - Signal <Vsync1> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
-WARNING:Xst:1780 - Signal <Hsync1> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
-    Found 1-bit register for signal <Hsync>.
-    Found 1-bit register for signal <Vsync>.
-    Found 1-bit register for signal <blank>.
-    Found 1-bit register for signal <activeArea1>.
-    Found 800-bit register for signal <jc_1>.
-    Found 525-bit register for signal <jc_2>.
-INFO:Xst:738 - HDL ADVISOR - 800 flip-flops were inferred for signal <jc_1>. You may be trying to describe a RAM in a way that is incompatible with block and distributed RAM resources available on Xilinx devices, or with a specific template that is not supported. Please review the Xilinx resources documentation and the XST user manual for coding guidelines. Taking advantage of RAM resources will lead to improved device usage and reduced synthesis time.
-INFO:Xst:738 - HDL ADVISOR - 525 flip-flops were inferred for signal <jc_2>. You may be trying to describe a RAM in a way that is incompatible with block and distributed RAM resources available on Xilinx devices, or with a specific template that is not supported. Please review the Xilinx resources documentation and the XST user manual for coding guidelines. Taking advantage of RAM resources will lead to improved device usage and reduced synthesis time.
+WARNING:Xst:1306 - Output <blank> is never assigned.
+WARNING:Xst:1306 - Output <activeArea1> is never assigned.
+    Found 1-bit register for signal <hs_gen_state<0>>.
+    Found 1-bit register for signal <hsync_reset>.
+    Found 1-bit register for signal <hsync_set>.
+    Found 10-bit register for signal <QR1>.
+    Found 1-bit xor2 for signal <QR1_7$xor0000> created at line 59.
+    Found 10-bit register for signal <QR2>.
+    Found 1-bit xor2 for signal <QR2_7$xor0000> created at line 79.
+    Found 10-bit comparator lessequal for signal <QR2_8$cmp_le0000> created at line 76.
+    Found 1-bit register for signal <vs_gen_state<0>>.
+    Found 1-bit register for signal <vsync_reset>.
+    Found 1-bit register for signal <vsync_set>.
     Summary:
-	inferred 1329 D-type flip-flop(s).
+	inferred  26 D-type flip-flop(s).
+	inferred   1 Comparator(s).
 Unit <VGA_timing_synch> synthesized.
 
 
@@ -157,8 +162,12 @@ Unit <VGA_timing_synch> synthesized.
 HDL Synthesis Report
 
 Macro Statistics
-# Registers                                            : 1329
- 1-bit register                                        : 1329
+# Registers                                            : 26
+ 1-bit register                                        : 26
+# Comparators                                          : 1
+ 10-bit comparator lessequal                           : 1
+# Xors                                                 : 2
+ 1-bit xor2                                            : 2
 
 =========================================================================
 
@@ -166,52 +175,38 @@ Macro Statistics
 *                       Advanced HDL Synthesis                          *
 =========================================================================
 
-WARNING:Xst:1710 - FF/Latch <activeArea1> (without init value) has a constant value of 0 in block <VGA_timing_synch>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1710 - FF/Latch <blank> (without init value) has a constant value of 1 in block <VGA_timing_synch>. This FF/Latch will be trimmed during the optimization process.
 
 =========================================================================
 Advanced HDL Synthesis Report
 
 Macro Statistics
-# Registers                                            : 1329
- Flip-Flops                                            : 1329
+# Registers                                            : 28
+ Flip-Flops                                            : 28
+# Comparators                                          : 1
+ 10-bit comparator lessequal                           : 1
+# Xors                                                 : 2
+ 1-bit xor2                                            : 2
 
 =========================================================================
 
 =========================================================================
 *                         Low Level Synthesis                           *
 =========================================================================
-WARNING:Xst:1710 - FF/Latch <activeArea1> (without init value) has a constant value of 0 in block <VGA_timing_synch>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1710 - FF/Latch <blank> (without init value) has a constant value of 1 in block <VGA_timing_synch>. This FF/Latch will be trimmed during the optimization process.
 
 Optimizing unit <VGA_timing_synch> ...
 
 Mapping all equations...
 Building and optimizing final netlist ...
-Found area constraint ratio of 100 (+ 5) on block VGA_timing_synch, actual ratio is 8.
+Found area constraint ratio of 100 (+ 5) on block VGA_timing_synch, actual ratio is 0.
 
 Final Macro Processing ...
-
-Processing Unit <VGA_timing_synch> :
-	Found 657-bit shift register for signal <jc_1_656>.
-	Found 96-bit shift register for signal <jc_1_752>.
-	Found 47-bit shift register for signal <jc_1_7991>.
-	Found 523-bit shift register for signal <jc_2_490>.
-	Found 2-bit shift register for signal <jc_2_492>.
-Unit <VGA_timing_synch> processed.
 
 =========================================================================
 Final Register Report
 
 Macro Statistics
-# Registers                                            : 2
- Flip-Flops                                            : 2
-# Shift Registers                                      : 5
- 2-bit shift register                                  : 1
- 47-bit shift register                                 : 1
- 523-bit shift register                                : 1
- 657-bit shift register                                : 1
- 96-bit shift register                                 : 1
+# Registers                                            : 28
+ Flip-Flops                                            : 28
 
 =========================================================================
 
@@ -240,24 +235,23 @@ Design Statistics
 # IOs                              : 5
 
 Cell Usage :
-# BELS                             : 6
+# BELS                             : 24
 #      GND                         : 1
-#      INV                         : 4
-#      VCC                         : 1
-# FlipFlops/Latches                : 7
-#      FD                          : 3
-#      FD_1                        : 2
-#      FDSE                        : 2
-# Shift Registers                  : 84
-#      SRL16                       : 3
-#      SRL16_1                     : 2
-#      SRLC16                      : 47
-#      SRLC16_1                    : 32
-# Clock Buffers                    : 2
-#      BUFG                        : 1
+#      INV                         : 2
+#      LUT2                        : 4
+#      LUT3                        : 5
+#      LUT4                        : 6
+#      LUT4_D                      : 3
+#      LUT4_L                      : 3
+# FlipFlops/Latches                : 28
+#      FDCPE                       : 2
+#      FDE                         : 16
+#      FDR                         : 9
+#      FDS                         : 1
+# Clock Buffers                    : 1
 #      BUFGP                       : 1
-# IO Buffers                       : 4
-#      OBUF                        : 4
+# IO Buffers                       : 2
+#      OBUF                        : 2
 =========================================================================
 
 Device utilization summary:
@@ -265,15 +259,13 @@ Device utilization summary:
 
 Selected Device : 3s1200efg320-4 
 
- Number of Slices:                       45  out of   8672     0%  
- Number of Slice Flip Flops:              6  out of  17344     0%  
- Number of 4 input LUTs:                 88  out of  17344     0%  
-    Number used as logic:                 4
-    Number used as Shift registers:      84
+ Number of Slices:                       20  out of   8672     0%  
+ Number of Slice Flip Flops:             26  out of  17344     0%  
+ Number of 4 input LUTs:                 23  out of  17344     0%  
  Number of IOs:                           5
- Number of bonded IOBs:                   5  out of    250     2%  
-    IOB Flip Flops:                       1
- Number of GCLKs:                         2  out of     24     8%  
+ Number of bonded IOBs:                   3  out of    250     1%  
+    IOB Flip Flops:                       2
+ Number of GCLKs:                         1  out of     24     4%  
 
 ---------------------------
 Partition Resource Summary:
@@ -296,19 +288,25 @@ Clock Information:
 -----------------------------------+------------------------+-------+
 Clock Signal                       | Clock buffer(FF name)  | Load  |
 -----------------------------------+------------------------+-------+
-clk25                              | BUFGP                  | 55    |
-jc_1_7991                          | BUFG                   | 36    |
+clk25                              | BUFGP                  | 28    |
 -----------------------------------+------------------------+-------+
 
 Asynchronous Control Signals Information:
 ----------------------------------------
-No asynchronous control signals found in this design
+-----------------------------------+------------------------+-------+
+Control Signal                     | Buffer(FF name)        | Load  |
+-----------------------------------+------------------------+-------+
+hsync_reset(hsync_reset:Q)         | NONE(hsync_gen_fdcpe)  | 1     |
+hsync_set(hsync_set:Q)             | NONE(hsync_gen_fdcpe)  | 1     |
+vsync_reset(vsync_reset:Q)         | NONE(vsync_gen_fdcpe)  | 1     |
+vsync_set(vsync_set:Q)             | NONE(vsync_gen_fdcpe)  | 1     |
+-----------------------------------+------------------------+-------+
 
 Timing Summary:
 ---------------
 Speed Grade: -4
 
-   Minimum period: 4.127ns (Maximum Frequency: 242.307MHz)
+   Minimum period: 5.493ns (Maximum Frequency: 182.050MHz)
    Minimum input arrival time before clock: No path found
    Maximum output required time after clock: 4.283ns
    Maximum combinational path delay: No path found
@@ -319,60 +317,42 @@ All values displayed in nanoseconds (ns)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'clk25'
-  Clock period: 4.127ns (frequency: 242.307MHz)
-  Total number of paths / destination ports: 55 / 55
+  Clock period: 5.493ns (frequency: 182.050MHz)
+  Total number of paths / destination ports: 356 / 52
 -------------------------------------------------------------------------
-Delay:               4.127ns (Levels of Logic = 0)
-  Source:            Mshreg_jc_1_752_0 (FF)
-  Destination:       Mshreg_jc_1_752_1 (FF)
+Delay:               5.493ns (Levels of Logic = 3)
+  Source:            QR2_8 (FF)
+  Destination:       vs_gen_state_0 (FF)
   Source Clock:      clk25 rising
   Destination Clock: clk25 rising
 
-  Data Path: Mshreg_jc_1_752_0 to Mshreg_jc_1_752_1
+  Data Path: QR2_8 to vs_gen_state_0
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     SRLC16:CLK->Q15       1   3.706   0.000  Mshreg_jc_1_752_0 (Mshreg_jc_1_752_0)
-     SRLC16:D                  0.421          Mshreg_jc_1_752_1
+     FDE:C->Q              3   0.591   0.706  QR2_8 (QR2_8)
+     LUT3:I0->O            1   0.704   0.499  vsync_set_not000120 (vsync_set_not000120)
+     LUT3:I1->O            1   0.704   0.499  vsync_set_not000145 (vsync_set_not000145)
+     LUT3:I1->O            3   0.704   0.531  vsync_set_not000161 (vsync_set_not0001)
+     FDE:CE                    0.555          vs_gen_state_0
     ----------------------------------------
-    Total                      4.127ns (4.127ns logic, 0.000ns route)
-                                       (100.0% logic, 0.0% route)
-
-=========================================================================
-Timing constraint: Default period analysis for Clock 'jc_1_7991'
-  Clock period: 4.127ns (frequency: 242.307MHz)
-  Total number of paths / destination ports: 36 / 36
--------------------------------------------------------------------------
-Delay:               4.127ns (Levels of Logic = 0)
-  Source:            Mshreg_jc_2_490_0 (FF)
-  Destination:       Mshreg_jc_2_490_1 (FF)
-  Source Clock:      jc_1_7991 falling
-  Destination Clock: jc_1_7991 falling
-
-  Data Path: Mshreg_jc_2_490_0 to Mshreg_jc_2_490_1
-                                Gate     Net
-    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
-    ----------------------------------------  ------------
-     SRLC16_1:CLK->Q15     1   3.706   0.000  Mshreg_jc_2_490_0 (Mshreg_jc_2_490_0)
-     SRLC16_1:D                0.421          Mshreg_jc_2_490_1
-    ----------------------------------------
-    Total                      4.127ns (4.127ns logic, 0.000ns route)
-                                       (100.0% logic, 0.0% route)
+    Total                      5.493ns (3.258ns logic, 2.235ns route)
+                                       (59.3% logic, 40.7% route)
 
 =========================================================================
 Timing constraint: Default OFFSET OUT AFTER for Clock 'clk25'
   Total number of paths / destination ports: 2 / 2
 -------------------------------------------------------------------------
 Offset:              4.283ns (Levels of Logic = 1)
-  Source:            Vsync (FF)
+  Source:            vsync_gen_fdcpe (FF)
   Destination:       Vsync (PAD)
   Source Clock:      clk25 rising
 
-  Data Path: Vsync to Vsync
+  Data Path: vsync_gen_fdcpe to Vsync
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDSE:C->Q             1   0.591   0.420  Vsync (Vsync_OBUF)
+     FDCPE:C->Q            1   0.591   0.420  vsync_gen_fdcpe (Vsync_OBUF)
      OBUF:I->O                 3.272          Vsync_OBUF (Vsync)
     ----------------------------------------
     Total                      4.283ns (3.863ns logic, 0.420ns route)
@@ -381,15 +361,15 @@ Offset:              4.283ns (Levels of Logic = 1)
 =========================================================================
 
 
-Total REAL time to Xst completion: 5.00 secs
-Total CPU time to Xst completion: 4.74 secs
+Total REAL time to Xst completion: 2.00 secs
+Total CPU time to Xst completion: 1.97 secs
  
 --> 
 
 
-Total memory usage is 570744 kilobytes
+Total memory usage is 511156 kilobytes
 
 Number of errors   :    0 (   0 filtered)
-Number of warnings :    9 (   0 filtered)
-Number of infos    :    2 (   0 filtered)
+Number of warnings :    2 (   0 filtered)
+Number of infos    :    0 (   0 filtered)
 
