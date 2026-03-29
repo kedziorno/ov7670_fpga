@@ -48,7 +48,7 @@ ARCHITECTURE behavior OF tb_VGA_timing_synch IS
          activeArea1 : OUT  std_logic
         );
     END COMPONENT;
-    for all : VGA_timing_synch use entity work.VGA_timing_synch(lsfr);
+    for all : VGA_timing_synch use entity work.VGA_timing_synch(lsfr_1);
 
    --Inputs
    signal clk25 : std_logic := '0';

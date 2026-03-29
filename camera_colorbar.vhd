@@ -100,6 +100,11 @@ END component ROM_MUX;
 --    return a;
 --  end function;
 
+  --synthesis translate_off
+  constant c_camera_o_pclk_period : time := 43.5 ns;
+  signal camera_o_pclk_i : std_logic := '0';
+  --synthesis translate_on
+
 signal reset_dcm1, reset_dcm1_n, speed_clock, clock_adjust_frame, clk1, clk1_fb, clk2, clk2_fb, reset_dcm, reset_dcm_n, camera_i_xlkf_ibuf : std_logic;
 
 begin
@@ -123,18 +128,21 @@ begin
       data => douta
     );
 
-    process (camera_i_xclk) is
-    begin
-    if (falling_edge (camera_i_xclk)) then
-    if (clock_adjust_frame = '1') then
+--    process (camera_i_xclk) is
+--    begin
+--    if (falling_edge (camera_i_xclk)) then
+--    if (clock_adjust_frame = '1') then
+--      camera_o_d <= douta;
+--    end if;
+--    end if;
+--    end process;
+
     camera_o_d <= douta;
-    end if;
-    end if;
-    end process;
-    
-    p4_frame_out : process (clock_adjust_frame) is
+--    p4_frame_out : process (camera_i_xclk) is
+    p4_frame_out : process (camera_o_pclk_i) is
     begin
-      if (falling_edge (clock_adjust_frame)) then
+--      if (falling_edge (clock_adjust_frame)) then
+      if (falling_edge (camera_o_pclk_i)) then
 --        if (clock_adjust_frame = '1') then
         if (href_time = '1') then
           if (all_frame = c_all_frame - 1) then
@@ -309,109 +317,119 @@ begin
   end generate g_source_colorbar;
 
   -- only flip source clock
-  camera_o_pclk <= camera_i_xclk;
+  --camera_o_pclk <= camera_i_xclk;
+  --synthesis translate_off
+  camera_o_pclk <= camera_o_pclk_i;
+  p0_camera_o_pclk : process is
+  begin
+    camera_o_pclk_i <= '0';
+    wait for c_camera_o_pclk_period / 2;
+    camera_o_pclk_i <= '1';
+    wait for c_camera_o_pclk_period / 2;
+  end process p0_camera_o_pclk;
+  --synthesis translate_on
 
-  g_source_frames_adjust_clock : if (c_source = t_frames) generate
-  BUFG_cam : BUFG
-  port map (
-  O => clk1_fb, -- Clock buffer output
-  I => clk1 -- Clock buffer input
-  );
-
-  IBUFG_global_clock : IBUFG
-  generic map (
-  IOSTANDARD => "DEFAULT")
-  port map (
-  O => camera_i_xlkf_ibuf, -- Clock buffer output
-  I => camera_i_xclk -- Clock buffer input (connect directly to top-level port)
-  );
-
-  reset_dcm_n <= not reset_dcm;
-  synchro_reset_i0 : SRLC16E
-  port map (
-  D => '1', -- insert input signal
-  CE => '1', -- insert Clock Enable signal (optional)
-  CLK => camera_i_xlkf_ibuf, -- insert Clock signal
-  A0 => '1', -- insert Address 0 signal
-  A1 => '1', -- insert Address 1 signal
-  A2 => '1', -- insert Address 2 signal
-  A3 => '1', -- insert Address 3 signal
-  Q => reset_dcm, -- insert output signal
-  Q15 => open -- insert cascadable output signal
-  );
-
-  reset_dcm1_n <= not reset_dcm1;
-  synchro_reset_i1 : SRLC16E
-  port map (
-  D => reset_dcm, -- insert input signal
-  CE => '1', -- insert Clock Enable signal (optional)
-  CLK => camera_i_xlkf_ibuf, -- insert Clock signal
-  A0 => '1', -- insert Address 0 signal
-  A1 => '1', -- insert Address 1 signal
-  A2 => '1', -- insert Address 2 signal
-  A3 => '1', -- insert Address 3 signal
-  Q => reset_dcm1, -- insert output signal
-  Q15 => open -- insert cascadable output signal
-  );
-
-  DCM_SP_adjust_frame : DCM_SP
-  generic map (
-  CLKFX_MULTIPLY => 5, CLKFX_DIVIDE => 28,
-  CLKIN_PERIOD => 7.462
-  )
-  port map (
-  CLK0 => clk1, -- 0 degree DCM CLK ouptput
-  CLK180 => open, -- 180 degree DCM CLK output
-  CLK270 => open, -- 270 degree DCM CLK output
-  CLK2X => open, -- 2X DCM CLK output
-  CLK2X180 => open, -- 2X, 180 degree DCM CLK out
-  CLK90 => open, -- 90 degree DCM CLK output
-  CLKDV => open, -- Divided DCM CLK out (CLKDV_DIVIDE)
-  CLKFX => clock_adjust_frame, -- DCM CLK synthesis out (M/D)
-  CLKFX180 => open, -- 180 degree CLK synthesis out
-  LOCKED => open, -- DCM LOCK status output
-  PSDONE => open, -- Dynamic phase adjust done output
-  STATUS => open, -- 8-bit DCM status bits output
-  CLKFB => clk1_fb, -- DCM clock feedback
-  CLKIN => speed_clock, -- Clock input (from IBUFG, BUFG or DCM)
-  PSCLK => '0', -- Dynamic phase adjust clock input
-  PSEN => '0', -- Dynamic phase adjust enable input
-  PSINCDEC => '0', -- Dynamic phase adjust increment/decrement
-  RST => reset_dcm1_n -- DCM asynchronous reset input
-  );
-
-  BUFG_cam_speed_clock : BUFG
-  port map (
-  O => clk2_fb, -- Clock buffer output
-  I => clk2 -- Clock buffer input
-  );
-
-  DCM_SP_speed_clock : DCM_SP
-  generic map (
-  CLKFX_MULTIPLY => 28, CLKFX_DIVIDE => 5, -- ~133
-  CLKIN_PERIOD => 41.667
-  )
-  port map (
-  CLK0 => clk2, -- 0 degree DCM CLK ouptput
-  CLK180 => open, -- 180 degree DCM CLK output
-  CLK270 => open, -- 270 degree DCM CLK output
-  CLK2X => open, -- 2X DCM CLK output
-  CLK2X180 => open, -- 2X, 180 degree DCM CLK out
-  CLK90 => open, -- 90 degree DCM CLK output
-  CLKDV => open, -- Divided DCM CLK out (CLKDV_DIVIDE)
-  CLKFX => speed_clock, -- DCM CLK synthesis out (M/D)
-  CLKFX180 => open, -- 180 degree CLK synthesis out
-  LOCKED => open, -- DCM LOCK status output
-  PSDONE => open, -- Dynamic phase adjust done output
-  STATUS => open, -- 8-bit DCM status bits output
-  CLKFB => clk2_fb, -- DCM clock feedback
-  CLKIN => camera_i_xlkf_ibuf, -- Clock input (from IBUFG, BUFG or DCM)
-  PSCLK => '0', -- Dynamic phase adjust clock input
-  PSEN => '0', -- Dynamic phase adjust enable input
-  PSINCDEC => '0', -- Dynamic phase adjust increment/decrement
-  RST => reset_dcm_n -- DCM asynchronous reset input
-  );
-  end generate g_source_frames_adjust_clock;
+--  g_source_frames_adjust_clock : if (c_source = t_frames) generate
+--  BUFG_cam : BUFG
+--  port map (
+--  O => clk1_fb, -- Clock buffer output
+--  I => clk1 -- Clock buffer input
+--  );
+--
+--  IBUFG_global_clock : IBUFG
+--  generic map (
+--  IOSTANDARD => "DEFAULT")
+--  port map (
+--  O => camera_i_xlkf_ibuf, -- Clock buffer output
+--  I => camera_i_xclk -- Clock buffer input (connect directly to top-level port)
+--  );
+--
+--  reset_dcm_n <= not reset_dcm;
+--  synchro_reset_i0 : SRLC16E
+--  port map (
+--  D => '1', -- insert input signal
+--  CE => '1', -- insert Clock Enable signal (optional)
+--  CLK => camera_i_xlkf_ibuf, -- insert Clock signal
+--  A0 => '1', -- insert Address 0 signal
+--  A1 => '1', -- insert Address 1 signal
+--  A2 => '1', -- insert Address 2 signal
+--  A3 => '1', -- insert Address 3 signal
+--  Q => reset_dcm, -- insert output signal
+--  Q15 => open -- insert cascadable output signal
+--  );
+--
+--  reset_dcm1_n <= not reset_dcm1;
+--  synchro_reset_i1 : SRLC16E
+--  port map (
+--  D => reset_dcm, -- insert input signal
+--  CE => '1', -- insert Clock Enable signal (optional)
+--  CLK => camera_i_xlkf_ibuf, -- insert Clock signal
+--  A0 => '1', -- insert Address 0 signal
+--  A1 => '1', -- insert Address 1 signal
+--  A2 => '1', -- insert Address 2 signal
+--  A3 => '1', -- insert Address 3 signal
+--  Q => reset_dcm1, -- insert output signal
+--  Q15 => open -- insert cascadable output signal
+--  );
+--
+--  DCM_SP_adjust_frame : DCM_SP
+--  generic map (
+--  CLKFX_MULTIPLY => 5, CLKFX_DIVIDE => 28,
+--  CLKIN_PERIOD => 7.462
+--  )
+--  port map (
+--  CLK0 => clk1, -- 0 degree DCM CLK ouptput
+--  CLK180 => open, -- 180 degree DCM CLK output
+--  CLK270 => open, -- 270 degree DCM CLK output
+--  CLK2X => open, -- 2X DCM CLK output
+--  CLK2X180 => open, -- 2X, 180 degree DCM CLK out
+--  CLK90 => open, -- 90 degree DCM CLK output
+--  CLKDV => open, -- Divided DCM CLK out (CLKDV_DIVIDE)
+--  CLKFX => clock_adjust_frame, -- DCM CLK synthesis out (M/D)
+--  CLKFX180 => open, -- 180 degree CLK synthesis out
+--  LOCKED => open, -- DCM LOCK status output
+--  PSDONE => open, -- Dynamic phase adjust done output
+--  STATUS => open, -- 8-bit DCM status bits output
+--  CLKFB => clk1_fb, -- DCM clock feedback
+--  CLKIN => speed_clock, -- Clock input (from IBUFG, BUFG or DCM)
+--  PSCLK => '0', -- Dynamic phase adjust clock input
+--  PSEN => '0', -- Dynamic phase adjust enable input
+--  PSINCDEC => '0', -- Dynamic phase adjust increment/decrement
+--  RST => reset_dcm1_n -- DCM asynchronous reset input
+--  );
+--
+--  BUFG_cam_speed_clock : BUFG
+--  port map (
+--  O => clk2_fb, -- Clock buffer output
+--  I => clk2 -- Clock buffer input
+--  );
+--
+--  DCM_SP_speed_clock : DCM_SP
+--  generic map (
+--  CLKFX_MULTIPLY => 28, CLKFX_DIVIDE => 5, -- ~133
+--  CLKIN_PERIOD => 41.667
+--  )
+--  port map (
+--  CLK0 => clk2, -- 0 degree DCM CLK ouptput
+--  CLK180 => open, -- 180 degree DCM CLK output
+--  CLK270 => open, -- 270 degree DCM CLK output
+--  CLK2X => open, -- 2X DCM CLK output
+--  CLK2X180 => open, -- 2X, 180 degree DCM CLK out
+--  CLK90 => open, -- 90 degree DCM CLK output
+--  CLKDV => open, -- Divided DCM CLK out (CLKDV_DIVIDE)
+--  CLKFX => speed_clock, -- DCM CLK synthesis out (M/D)
+--  CLKFX180 => open, -- 180 degree CLK synthesis out
+--  LOCKED => open, -- DCM LOCK status output
+--  PSDONE => open, -- Dynamic phase adjust done output
+--  STATUS => open, -- 8-bit DCM status bits output
+--  CLKFB => clk2_fb, -- DCM clock feedback
+--  CLKIN => camera_i_xlkf_ibuf, -- Clock input (from IBUFG, BUFG or DCM)
+--  PSCLK => '0', -- Dynamic phase adjust clock input
+--  PSEN => '0', -- Dynamic phase adjust enable input
+--  PSINCDEC => '0', -- Dynamic phase adjust increment/decrement
+--  RST => reset_dcm_n -- DCM asynchronous reset input
+--  );
+--  end generate g_source_frames_adjust_clock;
 
 end architecture behavioral;
 
