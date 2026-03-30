@@ -101,14 +101,15 @@ END component ROM_MUX;
 --  end function;
 
   --synthesis translate_off
-  constant c_camera_o_pclk_period : time := 42 ns;
+  constant c_camera_o_pclk_period : time := 41.6667 ns;
   signal camera_o_pclk_i : std_logic := '0';
   --synthesis translate_on
 
 signal reset_dcm1, reset_dcm1_n, speed_clock, clock_adjust_frame, clk1, clk1_fb, clk2, clk2_fb, reset_dcm, reset_dcm_n, camera_i_xlkf_ibuf : std_logic;
 
-type states is (a, b, c, d);
+type states is (a, a1, b, c, d);
 signal state : states := a;
+signal count640 : integer range 0 to 639 := 0;
 
 begin
 
@@ -143,16 +144,21 @@ begin
     camera_o_d <= douta;
 --    p4_frame_out : process (camera_i_xclk) is
     p4_frame_out : process (camera_o_pclk_i) is
-      variable count640 : integer range 0 to 639 := 0;
     begin
 --      if (falling_edge (clock_adjust_frame)) then
       if (falling_edge (camera_o_pclk_i)) then
         case (state) is
           when a =>
-            count640 := 0;
-            if (pixel_time = '1' and (douta = x"00" or douta = x"ff")) then
-              state <= b;
+            count640 <= 0;
+            if (pixel_time = '1') then
+              state <= a1;
               all_frame <= all_frame + 1;
+            end if;
+          when a1 =>
+            count640 <= 0;
+            all_frame <= all_frame + 1;
+            if (douta /= x"00" or pixel_time = '1') then
+              state <= b;
             end if;
           when b =>
             all_frame <= all_frame + 1;
@@ -160,16 +166,19 @@ begin
               state <= c;
             end if;
           when c =>
-            all_frame <= all_frame + 1;
-            if (douta /= x"ff") then
+            if (vsync_i = '0') then
+              all_frame <= 0;
+            end if;
+--          all_frame <= all_frame + 1;
+            if ((douta = x"ff" or douta = x"b8" or douta = x"df" or douta = x"78" or douta = x"ce") and pixel_time = '1') then
               state <= d;
             end if;
           when d =>
-            if (count640 = 639 or href_i = '0') then
-              state <= a;
-              count640 := 0;
+            if (count640 = 630 or href_i = '0') then
+              state <= a1;
+              count640 <= 0;
             else
-              count640 := count640 + 1;
+              count640 <= count640 + 1;
             end if;
             if (all_frame = c_all_frame - 1) then
               all_frame <= 0;
