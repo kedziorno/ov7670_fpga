@@ -101,11 +101,14 @@ END component ROM_MUX;
 --  end function;
 
   --synthesis translate_off
-  constant c_camera_o_pclk_period : time := 43.5 ns;
+  constant c_camera_o_pclk_period : time := 42 ns;
   signal camera_o_pclk_i : std_logic := '0';
   --synthesis translate_on
 
 signal reset_dcm1, reset_dcm1_n, speed_clock, clock_adjust_frame, clk1, clk1_fb, clk2, clk2_fb, reset_dcm, reset_dcm_n, camera_i_xlkf_ibuf : std_logic;
+
+type states is (a, b, c, d);
+signal state : states := a;
 
 begin
 
@@ -140,23 +143,45 @@ begin
     camera_o_d <= douta;
 --    p4_frame_out : process (camera_i_xclk) is
     p4_frame_out : process (camera_o_pclk_i) is
+      variable count640 : integer range 0 to 639 := 0;
     begin
 --      if (falling_edge (clock_adjust_frame)) then
       if (falling_edge (camera_o_pclk_i)) then
---        if (clock_adjust_frame = '1') then
-        if (href_time = '1') then
-          if (all_frame = c_all_frame - 1) then
-            all_frame <= 0;
-          else
+        case (state) is
+          when a =>
+            count640 := 0;
+            if (pixel_time = '1' and (douta = x"00" or douta = x"ff")) then
+              state <= b;
+              all_frame <= all_frame + 1;
+            end if;
+          when b =>
             all_frame <= all_frame + 1;
-          end if;
-        elsif (vsync_i = '0') then
-          all_frame <= 0;
-        end if;
---        addra <= std_logic_vector (to_unsigned (all_frame, c_frame_bits));
+            if (douta = x"ff") then
+              state <= c;
+            end if;
+          when c =>
+            all_frame <= all_frame + 1;
+            if (douta /= x"ff") then
+              state <= d;
+            end if;
+          when d =>
+            if (count640 = 639 or href_i = '0') then
+              state <= a;
+              count640 := 0;
+            else
+              count640 := count640 + 1;
+            end if;
+            if (all_frame = c_all_frame - 1) then
+              all_frame <= 0;
+            else
+              all_frame <= all_frame + 1;
+            end if;
+            if (vsync_i = '0') then
+              all_frame <= 0;
+            end if;
+        end case;
         addra <= all_frame;
       end if;
---      end if;
     end process p4_frame_out;
   end generate g_source_frames;
 
