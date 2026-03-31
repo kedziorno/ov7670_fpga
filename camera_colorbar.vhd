@@ -109,7 +109,8 @@ signal reset_dcm1, reset_dcm1_n, speed_clock, clock_adjust_frame, clk1, clk1_fb,
 
 type states is (a, a1, b, c, d);
 signal state : states := a;
-signal count640 : integer range 0 to 639 := 0;
+constant c_count640 : integer := 640;
+signal count640 : integer range 0 to c_count640 - 1;
 
 begin
 
@@ -147,6 +148,7 @@ begin
     begin
 --      if (falling_edge (clock_adjust_frame)) then
       if (falling_edge (camera_o_pclk_i)) then
+--      if (rising_edge (camera_i_xclk)) then 
         case (state) is
           when a =>
             count640 <= 0;
@@ -169,12 +171,16 @@ begin
             if (vsync_i = '0') then
               all_frame <= 0;
             end if;
---          all_frame <= all_frame + 1;
-            if ((douta = x"ff" or douta = x"b8" or douta = x"df" or douta = x"78" or douta = x"ce") and pixel_time = '1') then
+            if ((douta = x"ff" or -- pixels when start hsync
+                  douta = x"b8" or
+                  douta = x"df" or
+                  douta = x"78" or
+                  douta = x"ce")
+              and pixel_time = '1') then
               state <= d;
             end if;
           when d =>
-            if (count640 = 630 or href_i = '0') then
+            if (count640 = c_count640 - 1 or href_i = '0') then
               state <= a1;
               count640 <= 0;
             else
