@@ -643,6 +643,9 @@ signal vga_clock_p : std_logic;
 signal ov7670_pclk_p : std_logic;
 signal vga_re, cam_re : std_logic;
 
+constant CLKFX_MULTIPLY_MC : integer := 32;
+constant CLKFX_DIVIDE_MC : integer := 2;
+
 begin
 
 -- upper half cam data
@@ -883,12 +886,26 @@ Q => reset_dcm, -- insert output signal
 Q15 => open -- insert cascadable output signal
 );
 
+--synthesis translate_off
+p0_assert_1 : process (resend) is
+begin
+  if (resend = '1') then
+    assert (
+      not (CLKFX_MULTIPLY_MC = 32 and CLKFX_DIVIDE_MC = 1)
+    ) report
+      "forbidden mc CLKFX_MULTIPLY " & integer'image (CLKFX_MULTIPLY_MC) &
+      " CLKFX_DIVIDE " & integer'image (CLKFX_DIVIDE_MC)
+      severity failure;
+  end if;
+end process p0_assert_1;
+--synthesis translate_on
+
 DCM_SP_mc_fx_vga_dv : DCM_SP
 generic map (
 --CLKDV_DIVIDE => 2.0, -- 50mhz
 CLKDV_DIVIDE => 4.0, -- 100mhz
-CLKFX_MULTIPLY => 32, -- Can be any integer from 1 to 32
-CLKFX_DIVIDE => 1, -- Can be any interger from 1 to 32
+CLKFX_MULTIPLY => CLKFX_MULTIPLY_MC, -- Can be any integer from 1 to 32
+CLKFX_DIVIDE => CLKFX_DIVIDE_MC, -- Can be any interger from 1 to 32
 CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
 CLKIN_PERIOD => 10.0, -- Specify period of input clock
 CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of "NONE", "FIXED" or "VARIABLE"

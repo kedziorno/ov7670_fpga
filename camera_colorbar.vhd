@@ -84,31 +84,10 @@ PORT (
 );
 END component ROM_MUX;
 
---  subtype st is std_logic_vector (7 downto 0);
---  function to_1 (i : std_logic_vector (7 downto 0))
---  return st
---  is
---    variable a : st;
---  begin
---    for j in 0 to 7 loop
---      if (i(j) = 'X') then
---        a (j) := '1';
---      else
---        a (j) := '0';
---      end if;
---    end loop;
---    return a;
---  end function;
-
-  --synthesis translate_off
-  constant c_camera_o_pclk_period : time := 41.6667 ns;
-  signal camera_o_pclk_i : std_logic := '0';
-  --synthesis translate_on
-
 signal reset_dcm1, reset_dcm1_n, speed_clock, clock_adjust_frame, clk1, clk1_fb, clk2, clk2_fb, reset_dcm, reset_dcm_n, camera_i_xlkf_ibuf : std_logic;
 
-type states is (a, a1, b, c, d);
-signal state : states := a;
+type states is (wait_pt, wait_00_pt, wait_ff, wait_wl, wait_count640);
+signal state : states := wait_pt;
 constant c_count640 : integer := 640;
 signal count640 : integer range 0 to c_count640 - 1;
 
@@ -133,41 +112,29 @@ begin
       data => douta
     );
 
---    process (camera_i_xclk) is
---    begin
---    if (falling_edge (camera_i_xclk)) then
---    if (clock_adjust_frame = '1') then
---      camera_o_d <= douta;
---    end if;
---    end if;
---    end process;
-
     camera_o_d <= douta;
---    p4_frame_out : process (camera_i_xclk) is
-    p4_frame_out : process (camera_o_pclk_i) is
+    p4_frame_out : process (camera_i_xclk) is
     begin
---      if (falling_edge (clock_adjust_frame)) then
-      if (falling_edge (camera_o_pclk_i)) then
---      if (rising_edge (camera_i_xclk)) then 
+      if (falling_edge (camera_i_xclk)) then
         case (state) is
-          when a =>
+          when wait_pt =>
             count640 <= 0;
             if (pixel_time = '1') then
-              state <= a1;
+              state <= wait_00_pt;
               all_frame <= all_frame + 1;
             end if;
-          when a1 =>
+          when wait_00_pt =>
             count640 <= 0;
             all_frame <= all_frame + 1;
             if (douta /= x"00" or pixel_time = '1') then
-              state <= b;
+              state <= wait_ff;
             end if;
-          when b =>
+          when wait_ff =>
             all_frame <= all_frame + 1;
             if (douta = x"ff") then
-              state <= c;
+              state <= wait_wl;
             end if;
-          when c =>
+          when wait_wl =>
             if (vsync_i = '0') then
               all_frame <= 0;
             end if;
@@ -177,11 +144,11 @@ begin
                   douta = x"78" or
                   douta = x"ce")
               and pixel_time = '1') then
-              state <= d;
+              state <= wait_count640;
             end if;
-          when d =>
+          when wait_count640 =>
             if (count640 = c_count640 - 1 or href_i = '0') then
-              state <= a1;
+              state <= wait_00_pt;
               count640 <= 0;
             else
               count640 <= count640 + 1;
@@ -190,9 +157,6 @@ begin
               all_frame <= 0;
             else
               all_frame <= all_frame + 1;
-            end if;
-            if (vsync_i = '0') then
-              all_frame <= 0;
             end if;
         end case;
         addra <= all_frame;
@@ -357,17 +321,7 @@ begin
   end generate g_source_colorbar;
 
   -- only flip source clock
-  --camera_o_pclk <= camera_i_xclk;
-  --synthesis translate_off
-  camera_o_pclk <= camera_o_pclk_i;
-  p0_camera_o_pclk : process is
-  begin
-    camera_o_pclk_i <= '0';
-    wait for c_camera_o_pclk_period / 2;
-    camera_o_pclk_i <= '1';
-    wait for c_camera_o_pclk_period / 2;
-  end process p0_camera_o_pclk;
-  --synthesis translate_on
+  camera_o_pclk <= camera_i_xclk;
 
 --  g_source_frames_adjust_clock : if (c_source = t_frames) generate
 --  BUFG_cam : BUFG
