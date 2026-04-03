@@ -42,14 +42,14 @@ port	(
   --memory module
   Dq : inout std_logic_vector (c_data_bits - 1 downto 0);
   Addr : out std_logic_vector (c_addr_bits - 1 downto 0);
-  Adv_n : out std_logic;
-  Ce_n : out std_logic;
-  Clk : out std_logic;
-  Cre : out std_logic;
-  Lb_n : out std_logic;
-  Oe_n : out std_logic;
-  Ub_n : out std_logic;
-  We_n : out std_logic;
+  Adv_n : out std_logic := '1';
+  Ce_n : out std_logic := '1';
+  Clk : out std_logic := '0';
+  Cre : out std_logic := '0';
+  Lb_n : out std_logic := '0';
+  Oe_n : out std_logic := '1';
+  Ub_n : out std_logic := '0';
+  We_n : out std_logic := '1';
   oWait : in std_logic;
   --VGA
   vga_clock : out STD_LOGIC;
@@ -530,16 +530,6 @@ COMPONENT ov7670_controller
           xclk_out: out  STD_LOGIC);
 END COMPONENT;
 
---COMPONENT frame_buffer
---	Port ( clkA : in STD_LOGIC;
---			 weA	: in STD_LOGIC_VECTOR(0 downto 0);
---			 addrA: in STD_LOGIC_VECTOR(18 downto 0);
---			 dinA	: in STD_LOGIC_VECTOR(0 downto 0);
---			 clkB : in STD_LOGIC;
---			 addrB: in STD_LOGIC_VECTOR(18 downto 0);
---			 doutB: out STD_LOGIC_VECTOR(0 downto 0));
---END COMPONENT;
-
 COMPONENT vga_imagegenerator
 	Port ( Data_in1 : in  STD_LOGIC_VECTOR (15 downto 0);
 						active_area1 : in  STD_LOGIC;
@@ -646,13 +636,103 @@ signal vga_re, cam_re : std_logic;
 constant CLKFX_MULTIPLY_MC : integer := 32;
 constant CLKFX_DIVIDE_MC : integer := 2;
 
+COMPONENT cellular_ram_burst_controller
+PORT(
+busy : OUT  std_logic;
+clk : IN  std_logic;
+writes : IN  std_logic;
+data : IN  std_logic_vector(15 downto 0);
+id : IN  std_logic_vector(15 downto 0);
+
+write_buffer_addr : IN  std_logic_vector(10 downto 0);
+write_buffer_data : IN  std_logic_vector(7 downto 0);
+write_buffer_clk : IN  std_logic;
+write_buffer_we : IN  std_logic;
+
+read_buffer_addr : IN  std_logic_vector(9 downto 0);
+read_buffer_data : OUT  std_logic_vector(15 downto 0);
+read_buffer_clk : IN  std_logic;
+
+lb : OUT  std_logic;
+ub : OUT  std_logic;
+oe : OUT  std_logic;
+we : OUT  std_logic;
+adv : OUT  std_logic;
+ce : OUT  std_logic;
+cre : OUT  std_logic;
+ram_clk : OUT  std_logic;
+o_wait : IN  std_logic;
+a : OUT  std_logic_vector(22 downto 0);
+dq : INOUT  std_logic_vector(15 downto 0)
+);
+END COMPONENT cellular_ram_burst_controller;
+signal busy, wrc : std_logic;
+signal data, id : std_logic_vector(15 downto 0);
+
+type p0_states is (
+a, b, c, d, e
+);
+signal p0_state : p0_states := a;
+constant c_w8_bw : integer := 3235;
+signal w8_bw : integer range 0 to c_w8_bw - 1 := 0;
+
 begin
 
+p0_control_crbc : process (i_clock) is
+begin
+  if (rising_edge (i_clock)) then
+    wrc <= '0';
+    case (p0_state) is
+      when a => p0_state <= b; wrc <= '1'; id <= x"0055"; data <= x"0000";
+      when b => p0_state <= c; wrc <= '1'; id <= x"0054"; data <= x"0000";
+      when c => p0_state <= d; wrc <= '1'; id <= x"0052"; data <= x"0140";
+      when d => p0_state <= e; wrc <= '1'; id <= x"0050"; data <= x"0000";
+      when e =>
+        if (w8_bw = c_w8_bw - 1) then
+          p0_state <= a;
+          w8_bw <= 0;
+        else
+          w8_bw <= w8_bw + 1;
+        end if;
+    end case;
+  end if;
+end process p0_control_crbc;
+
+crbc_i0 : cellular_ram_burst_controller
+PORT MAP (
+busy => busy,
+clk => i_clock,
+writes => wrc,
+data => data,
+id => id,
+
+write_buffer_addr => wr_a1 (10 downto 0),
+write_buffer_data => wr_d1 (7 downto 0),
+write_buffer_clk => ov7670_pclk,
+write_buffer_we => ov7670_hs,
+
+read_buffer_addr => rd_a1 (9 downto 0),
+read_buffer_data => rd_d1,
+read_buffer_clk => clk_vga,
+
+lb => lb_n,
+ub => ub_n,
+oe => oe_n,
+we => we_n,
+adv => adv_n,
+ce => ce_n,
+cre => cre,
+ram_clk => clk,
+o_wait => owait,
+a => addr,
+dq => dq
+);
+
 -- upper half cam data
-ov7670_data_0 <= ov7670_data1 (4);
-ov7670_data_1 <= ov7670_data1 (5);
-ov7670_data_2 <= ov7670_data1 (6);
-ov7670_data_3 <= ov7670_data1 (7);
+--ov7670_data_0 <= ov7670_data1 (4);
+--ov7670_data_1 <= ov7670_data1 (5);
+--ov7670_data_2 <= ov7670_data1 (6);
+--ov7670_data_3 <= ov7670_data1 (7);
 
 -- lower half cam data
 --ov7670_data_0 <= ov7670_data1 (0);
@@ -660,20 +740,9 @@ ov7670_data_3 <= ov7670_data1 (7);
 --ov7670_data_2 <= ov7670_data1 (2);
 --ov7670_data_3 <= ov7670_data1 (3);
 
---process (clk_mc, resend) is
---begin
---if (resend = '1') then
---vga_r <= (others => '0');
---vga_g <= (others => '0');
---vga_b <= (others => '0');
---elsif (rising_edge (clk_mc)) then
---if (vga_re = '1') then
 vga_r <= vga_rgb (7 downto 5);
 vga_g <= vga_rgb (4 downto 2);
 vga_b <= vga_rgb (1 downto 0);
---end if;
---end if;
---end process;
 
 siodo1_n <= not siodi1;
 ov7670_siod1_tri : IOBUF port map (
@@ -682,9 +751,6 @@ IO=> (ov7670_siod1),
 I=> (siodo1),
 T=> (siodo1_n)
 );
-
-we_n <= we_ni;
-oe_n <= oe_ni;
 
 inst_debounce: debounce_circuit
 generic map (
@@ -730,101 +796,6 @@ d => ov7670_d,
 addr => wr_a1,
 dout => wr_d1,
 we => wren1);
-
-p_mem_switch : process (clk_mc, resend) is
-begin
-if (resend = '1') then
-mem_switch_state <= a;
-rd_counter <= 0;
-rd_counter1 <= 0;
-wr_counter <= 0;
-wr_counter1 <= 0;
-elsif (falling_edge (clk_mc)) then
-case (mem_switch_state) is
-when a =>
-if (wr_counter = c_memory_operation_wait_wr/2 - 1) then
-mem_switch_state <= b;
-wr_counter <= 0;
-else
-wr_counter <= wr_counter + 1;
-end if;
-ri_wr <= '1'; ri_rd <= '0';
-when b =>
-if (wr_counter1 = c_memory_operation_wait_wr/2 - 1) then
-mem_switch_state <= c;
-wr_counter1 <= 0;
-else
-wr_counter1 <= wr_counter1 + 1;
-end if;
-ri_wr <= '0'; ri_rd <= '0';
-when c =>
-if (rd_counter = c_memory_operation_wait_rd/2 - 1) then
-mem_switch_state <= d;
-rd_counter <= 0;
-else
-rd_counter <= rd_counter + 1;
-end if;
-ri_wr <= '0'; ri_rd <= '1';
-when d =>
-if (rd_counter1 = c_memory_operation_wait_rd/2 - 1) then
-mem_switch_state <= a;
-rd_counter1 <= 0;
-else
-rd_counter1 <= rd_counter1 + 1;
-end if;
-ri_wr <= '0'; ri_rd <= '0';
-when others => null;
-end case;
-end if;
-end process p_mem_switch;
-
-process (clk_mc) is
-begin
-if (rising_edge (clk_mc)) then
-vga_clock_p <= vga_clock_i;
-ov7670_pclk_p <= ov7670_pclk;
-end if;
-end process;
-vga_re <= '1' when vga_clock_p = '0' and vga_clock_i = '1' else '0';
-cam_re <= '1' when ov7670_pclk_p = '0' and ov7670_pclk = '1' else '0';
-
-dq  <= dqo   when (we_ni = '0' and oe_ni = '1') else (others => 'Z');
-dqi <= dq when (we_ni = '1' and oe_ni = '0') else (others => '0');
-
-fb_1 : ram_interface PORT MAP(
-i_clk => clk_mc,
-oe_n => oe_ni,
-lb_n => lb_n,
-dq_out => dqo,
-cre => cre,
-clk => clk,
-ce_n => ce_n,
-adv_n => adv_n,
-addr => addr,
-i_rd => ri_rd,
-i_wr => ri_wr,
---i_rd => vga_re,
---i_wr => cam_re,
-i_rst_n => not pb,
-addr_rd => ri_ard,
-addr_wr => ri_awr,
-data_wr => ri_dwr,
-dq_in => dqi,
-data_rd => ri_drd,
-ub_n => ub_n,
-we_n => we_ni,
-owait => owait
-);
-
---inst_framebuffer1 : frame_buffer port map(
---	weA => wren1,
---	clkA => ov7670_pclk1,
---	--clkA => ov7670_pclk1_ibuf,
---	addrA => wr_a1,
---	dinA => wr_d1,
---	clkB => clk_vga,
---	addrB => rd_a1,
---	doutB => rd_d1);
 
 ri_ard <= "0000" & rd_a1;
 inst_addrgen1 : address_generator port map(
