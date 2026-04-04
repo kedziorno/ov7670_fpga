@@ -11,6 +11,7 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use ieee.numeric_std.all;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
 
@@ -670,11 +671,16 @@ signal busy, wrc : std_logic;
 signal data, id : std_logic_vector(15 downto 0);
 
 type p0_states is (
-a, b, c, d, e
+a1, a, b, c, d, e
 );
-signal p0_state : p0_states := a;
+signal p0_state : p0_states := a1;
 constant c_w8_bw : integer := 3235;
 signal w8_bw : integer range 0 to c_w8_bw - 1 := 0;
+
+constant c_cntr_wr1 : integer := 307200;
+constant c_step1 : unsigned (15 downto 0) := x"0140";
+signal cntr_wr1 : unsigned (19 downto 0) := (others => '0');
+signal cntr_wr1_slv : std_logic_vector (19 downto 0) := (others => '0');
 
 begin
 
@@ -683,14 +689,26 @@ begin
   if (rising_edge (i_clock)) then
     wrc <= '0';
     case (p0_state) is
-      when a => p0_state <= b; wrc <= '1'; id <= x"0055"; data <= x"0000";
-      when b => p0_state <= c; wrc <= '1'; id <= x"0054"; data <= x"0000";
-      when c => p0_state <= d; wrc <= '1'; id <= x"0052"; data <= x"0140";
+      when a1 =>
+        if (ov7670_vs = '1') then
+          cntr_wr1 <= (others => '0');
+        end if;
+        if (ov7670_hs = '1') then
+          p0_state <= a;
+        end if;
+      when a => p0_state <= b; wrc <= '1'; id <= x"0055"; data <= std_logic_vector (cntr_wr1 (15 downto 0));
+      when b => p0_state <= c; wrc <= '1'; id <= x"0054"; data <= "000000000000" & std_logic_vector (cntr_wr1 (19 downto 16));
+      when c => p0_state <= d; wrc <= '1'; id <= x"0052"; data <= std_logic_vector (c_step1);
       when d => p0_state <= e; wrc <= '1'; id <= x"0050"; data <= x"0000";
       when e =>
         if (w8_bw = c_w8_bw - 1) then
-          p0_state <= a;
+          p0_state <= a1;
           w8_bw <= 0;
+          if (cntr_wr1 = to_unsigned (c_cntr_wr1 - 1, cntr_wr1'left+1)) then
+            cntr_wr1 <= (others => '0');
+          else
+            cntr_wr1 <= cntr_wr1 + c_step1;
+          end if;
         else
           w8_bw <= w8_bw + 1;
         end if;
