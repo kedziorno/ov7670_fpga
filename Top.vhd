@@ -671,16 +671,23 @@ signal busy, wrc : std_logic;
 signal data, id : std_logic_vector(15 downto 0);
 
 type p0_states is (
-a1, a, b, c, d, e
+a1, ar, br, cr, dr, er, aw, bw, cw, dw, ew
 );
 signal p0_state : p0_states := a1;
 constant c_w8_bw : integer := 3235;
 signal w8_bw : integer range 0 to c_w8_bw - 1 := 0;
+constant c_w8_br : integer := 1737;
+signal w8_br : integer range 0 to c_w8_br - 1 := 0;
 
-constant c_cntr_wr1 : integer := 307200;
+constant c_cntr_frame : integer := 307200;
 constant c_step1 : unsigned (15 downto 0) := x"0140";
 signal cntr_wr1 : unsigned (19 downto 0) := (others => '0');
 signal cntr_wr1_slv : std_logic_vector (19 downto 0) := (others => '0');
+signal cntr_rd1 : unsigned (19 downto 0) := (others => '0');
+signal cntr_rd1_slv : std_logic_vector (19 downto 0) := (others => '0');
+signal ov7670_vs_next : std_logic_vector (1 downto 0) := (others => '0');
+signal ov7670_vs_prev : std_logic := '0';
+signal start_read : std_logic := '0';
 
 begin
 
@@ -688,23 +695,61 @@ p0_control_crbc : process (i_clock) is
 begin
   if (rising_edge (i_clock)) then
     wrc <= '0';
+    ov7670_vs_prev <= ov7670_vs;
     case (p0_state) is
       when a1 =>
-        if (ov7670_vs = '1') then
+        if (ov7670_vs_prev = '1' and ov7670_vs = '0') then
           cntr_wr1 <= (others => '0');
+          ov7670_vs_next <= ov7670_vs_next (0) & '1';
         end if;
         if (ov7670_hs = '1') then
-          p0_state <= a;
+          p0_state <= ar;
         end if;
-      when a => p0_state <= b; wrc <= '1'; id <= x"0055"; data <= std_logic_vector (cntr_wr1 (15 downto 0));
-      when b => p0_state <= c; wrc <= '1'; id <= x"0054"; data <= "000000000000" & std_logic_vector (cntr_wr1 (19 downto 16));
-      when c => p0_state <= d; wrc <= '1'; id <= x"0052"; data <= std_logic_vector (c_step1);
-      when d => p0_state <= e; wrc <= '1'; id <= x"0050"; data <= x"0000";
-      when e =>
+        if (ov7670_vs_next = "11") then
+          start_read <= '1';
+        end if;
+
+      when ar => 
+        if (start_read = '1') then
+          p0_state <= br; wrc <= '1'; id <= x"0057"; data <= std_logic_vector (cntr_rd1 (15 downto 0));
+        else
+          p0_state <= aw;
+        end if;
+      when br =>
+        if (start_read = '1') then
+          p0_state <= cr; wrc <= '1'; id <= x"0056"; data <= "000000000000" & std_logic_vector (cntr_rd1 (19 downto 16));
+        end if;
+      when cr =>
+        if (start_read = '1') then
+          p0_state <= dr; wrc <= '1'; id <= x"0053"; data <= std_logic_vector (c_step1);
+        end if;
+      when dr =>
+        if (start_read = '1') then
+          p0_state <= er; wrc <= '1'; id <= x"0051"; data <= x"0000";
+        end if;
+      when er =>
+        if (w8_br = c_w8_br - 1) then
+          p0_state <= aw;
+          w8_br <= 0;
+          if (cntr_rd1 = to_unsigned (c_cntr_frame - 1, cntr_rd1'left+1)) then
+            cntr_rd1 <= (others => '0');
+          else
+            cntr_rd1 <= cntr_rd1 + c_step1;
+          end if;
+        else
+          w8_br <= w8_br + 1;
+        end if;
+
+      when aw => p0_state <= bw; wrc <= '1'; id <= x"0055"; data <= std_logic_vector (cntr_wr1 (15 downto 0));
+      when bw => p0_state <= cw; wrc <= '1'; id <= x"0054"; data <= "000000000000" & std_logic_vector (cntr_wr1 (19 downto 16));
+      when cw => p0_state <= dw; wrc <= '1'; id <= x"0052"; data <= std_logic_vector (c_step1);
+      when dw => p0_state <= ew; wrc <= '1'; id <= x"0050"; data <= x"0000";
+
+      when ew =>
         if (w8_bw = c_w8_bw - 1) then
           p0_state <= a1;
           w8_bw <= 0;
-          if (cntr_wr1 = to_unsigned (c_cntr_wr1 - 1, cntr_wr1'left+1)) then
+          if (cntr_wr1 = to_unsigned (c_cntr_frame - 1, cntr_wr1'left+1)) then
             cntr_wr1 <= (others => '0');
           else
             cntr_wr1 <= cntr_wr1 + c_step1;
@@ -822,7 +867,6 @@ enable => active1,
 vsync => vga_vsync_sig,
 address => rd_a1);
 
-rd_d1 <= ri_drd;
 inst_imagegen : vga_imagegenerator port map(
 Data_in1 => rd_d1,
 --Data_in1 => x"55aa", -- test output bmp

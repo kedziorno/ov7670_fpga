@@ -236,20 +236,14 @@ begin
   end if;
 end process p8_bral;
 
-p9_ska: process (clk) is
-begin
-  if (rising_edge (clk)) then
-    if (id = set_rb_addr and writes = '1' and busy_i = '0') then
-      sink_addr <= unsigned (data (9 downto 0));
-    end if;
-  end if;
-end process p9_ska;
-
-p10_run : process (clk) is
+p9_run : process (clk) is
 begin
   if (rising_edge (clk)) then
     if (id = set_wb_addr and writes = '1' and busy_i = '0') then
       source_addr <= unsigned (data (9 downto 0));
+    end if;
+    if (id = set_rb_addr and writes = '1' and busy_i = '0') then
+      sink_addr <= unsigned (data (9 downto 0));
     end if;
     if (state = config0) then
       clk_enable <= '0';
@@ -385,7 +379,7 @@ begin
       if (o_wait = '0') then
         sink_we <= '1';
       end if;
-      if (read_counter > 0 and o_wait = '0') then
+      if (read_counter = 0 and o_wait = '0') then
         ce <= '1';
         oe <= '1';
       end if;
@@ -418,9 +412,9 @@ begin
       adv <= '0';
     end if;
   end if;
-end process p10_run;
+end process p9_run;
 
-p11_state : process (state, state_cntr) is
+p10_state : process (state, state_cntr, o_wait, write_counter, read_counter) is
 begin
   case (state) is
     when config0     => next_state <= config1;
@@ -504,7 +498,7 @@ begin
     when read_rbc1   => next_state <= read_byte1;
     when others => next_state <= idle;
   end case;
-end process p11_state; 
+end process p10_state;
 
 end architecture crbc;
 
