@@ -283,7 +283,7 @@ signal vga_vsync : std_logic;
 signal vga_rgb : std_logic_vector(7 downto 0);
 
 -- Clock period definitions
-constant clk50_period : time := 10 ns;
+constant clk50_period : time := 20 ns;
 --constant sdcard_clock_period : time := 10 ns;
 --constant camera_i_xclk_period : time := 41.733 ns; -- ~24mhz
 --constant camera_i_xclk_period : time := 21 ns; -- to camera ~50mhz
