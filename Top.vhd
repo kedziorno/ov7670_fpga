@@ -677,11 +677,11 @@ signal p0_state : p_states := a1;
 signal p1_state : p_states := a1;
 constant c_w8_bw : integer := 3235/2;
 signal w8_bw : integer range 0 to c_w8_bw - 1 := 0;
-constant c_w8_br : integer := 900/2;
+constant c_w8_br : integer := 550/2;
 signal w8_br : integer range 0 to c_w8_br - 1 := 0;
 
 constant c_cntr_frame : integer := 307200;
-constant c_step1 : unsigned (15 downto 0) := x"0140";
+constant c_step1 : unsigned (15 downto 0) := x"0118";
 signal cntr_wr1 : unsigned (19 downto 0) := (others => '0');
 signal cntr_wr1_slv : std_logic_vector (19 downto 0) := (others => '0');
 signal cntr_rd1 : unsigned (19 downto 0) := (others => '0');
@@ -765,7 +765,7 @@ begin
 ----          if (vga_hsync_i_prev = '0' and vga_hsync_i = '1') then
 ----          end if;
 --        end if;
-        if (ov7670_vs_next = "11") then
+        if (ov7670_vs_next = "11" and vga_hsync_i = '0') then
           start_read <= '1';
           p1_state <= ar;
         end if;
@@ -1001,7 +1001,7 @@ addr => wr_a1,
 dout => wr_d1,
 we => wren1);
 
-ri_ard <= "0000" & rd_a1;
+--ri_ard <= "0000" & rd_a1;
 inst_addrgen1 : address_generator port map(
 clk25 => clk_vga,
 enable => active1,

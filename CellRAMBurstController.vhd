@@ -115,6 +115,17 @@ signal write_buffer_we1 : std_logic_vector (0 downto 0);
 
 signal busy_i : std_logic;
 
+component sink_read is
+port (
+sink_we : in std_logic;
+sink_addr : in unsigned (9 downto 0);
+dq : in std_logic_vector (15 downto 0);
+read_buffer_addr : in std_logic_vector (9 downto 0);
+read_buffer_data : out std_logic_vector (15 downto 0);
+clk_wr, clk_rd : in std_logic
+);
+end component sink_read;
+
 begin
 
 busy <= busy_i;
@@ -153,21 +164,16 @@ ram_clk <= clk when clk_enable = '1' else '0';
 
 busy_i <= '0' when (state = idle) else '1';
 
-p0_rb : process (clk) is
-begin
-  if (rising_edge (clk)) then
-    if (sink_we = '1') then
-      read_buffer (to_integer (sink_addr)) <= dq;
-    end if;
-  end if;
-end process p0_rb;
-
-p1_rb : process (read_buffer_clk) is
-begin
-  if (rising_edge (read_buffer_clk)) then
-    read_buffer_data <= read_buffer (to_integer (unsigned (read_buffer_addr)));
-  end if;
-end process p1_rb;
+sink_read_i0 : sink_read
+port map (
+  sink_we => sink_we,
+  sink_addr => sink_addr,
+  dq => dq,
+  read_buffer_addr => read_buffer_addr,
+  read_buffer_data => read_buffer_data,
+  clk_wr => clk,
+  clk_rd => read_buffer_clk
+);
 
 p2_next_state : process (clk) is
 begin
