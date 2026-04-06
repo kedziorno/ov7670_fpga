@@ -99,18 +99,28 @@ signal clk_enable : std_logic := '0';
 
 signal data_out_enable : std_logic_vector (15 downto 0) := (others => '0');
 
-component rambuffer
+component asym_ram_sdp_read_wider
 port (
-clka : in std_logic;
-ena : in std_logic;
-wea : in std_logic_vector (0 downto 0);
-addra : in std_logic_vector (10 downto 0);
-dina : in std_logic_vector (7 downto 0);
-clkb : in std_logic;
-addrb : in std_logic_vector (9 downto 0);
-doutb : out std_logic_vector (15 downto 0)
+clkA, clkB, enaA, weA, enaB : in std_logic;
+addrA : in std_logic_vector (10 downto 0);
+addrB: in std_logic_vector (9 downto 0);
+diA : in std_logic_vector (7 downto 0);
+doB : out std_logic_vector (15 downto 0)
 );
-end component rambuffer;
+end component asym_ram_sdp_read_wider;
+
+--component ram_buffer
+--port (
+--clka : in std_logic;
+--ena : in std_logic;
+--wea : in std_logic;
+--addra : in std_logic_vector (10 downto 0);
+--dina : in std_logic_vector (7 downto 0);
+--clkb : in std_logic;
+--addrb : in std_logic_vector (9 downto 0);
+--doutb : out std_logic_vector (15 downto 0)
+--);
+--end component ram_buffer;
 
 signal write_buffer_we1 : std_logic_vector (0 downto 0);
 
@@ -133,16 +143,29 @@ busy <= busy_i;
 
 write_buffer_we1 (0) <= write_buffer_we;
 
-rambuffer_i0 : rambuffer
+--ram_buffer_i0 : ram_buffer
+--port map (
+--  clka => write_buffer_clk,
+--  ena => write_buffer_we,
+--  wea => write_buffer_we,
+--  addra => write_buffer_addr,
+--  dina => write_buffer_data,
+--  clkb => clk,
+--  addrb => std_logic_vector (source_addr),
+--  doutb => source_data
+--);
+
+ram_buffer_i0 : asym_ram_sdp_read_wider
 port map (
-  clka => write_buffer_clk,
-  ena => write_buffer_we,
-  wea => write_buffer_we1,
-  addra => write_buffer_addr,
-  dina => write_buffer_data,
-  clkb => clk,
-  addrb => std_logic_vector (source_addr),
-  doutb => source_data
+clkA => write_buffer_clk,
+clkB => clk,
+enaA => write_buffer_we,
+weA => write_buffer_we,
+enaB => '1',
+addrA => write_buffer_addr,
+addrB => std_logic_vector (source_addr),
+diA => write_buffer_data,
+doB => source_data
 );
 
 dq (0)  <= source_data (0)  when data_out_enable (0)  = '1' else 'Z';
