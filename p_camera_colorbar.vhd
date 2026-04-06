@@ -11,8 +11,8 @@ package p_camera_colorbar is
   -- Enable asserts
   constant c_asserts : boolean := false;
   -- Colorbar / Frames source data
-  type t_source is (t_colorbar, t_frames);
-  constant c_source : t_source := t_colorbar;
+  type t_source is (t_lines, t_colorbar, t_frames);
+  constant c_source : t_source := t_lines;
   -- Change cbp after each frame
   constant c_slide_colorbar_pattern : boolean := true;
   constant c_colorbar_length : integer := 5;

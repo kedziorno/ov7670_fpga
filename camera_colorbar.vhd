@@ -315,10 +315,61 @@ begin
             else
               pt_state <= s2; -- next color
             end if;
-          end case;
+        end case;
       end if;
     end process p3_pixeltime;
   end generate g_source_colorbar;
+
+  g_source_lines : if (c_source = t_lines) generate
+    -- Show indexed lines HREF width from virtual camera on VGA display on falling edge pclk
+    camera_o_d <= pixel_time_data when href_i = '1' else (others => '0');
+    p3_pixeltime : process (camera_i_xclk, camera_i_rst) is
+      variable count1 : integer range 0 to c_href1 - 1;
+      variable count2 : integer range 0 to c_href0 - 1;
+      constant c_vs_index : integer := 256;
+      variable vs_index : integer range 0 to c_vs_index - 1;
+    begin
+      if (camera_i_rst = '0') then
+        pixel_time_data <= (others => '0');
+        pt_state <= s1;
+        count1 := 0;
+        count2 := 0;
+        vs_index := 1;
+      elsif (falling_edge (camera_i_xclk)) then
+        case (pt_state) is
+          when s1 =>
+            if (pixel_time = '1') then
+              pt_state <= s2;
+            else
+              pixel_time_data <= (others => '0');
+            end if;
+          when s2 =>
+            pixel_time_data <= std_logic_vector (to_unsigned (vs_index, pixel_time_data'left + 1));
+            if (count1 = c_href1 - 1) then
+              pt_state <= s3;
+              count1 := 0;
+              colorbar_count <= colorbar_count + 1;
+            else
+              count1 := count1 + 1;
+            end if;
+          when s3 =>
+            if (count2 = c_href0 - 1) then
+              count2 := 0;
+              if (vs_index = c_vs_index - 1) then
+                pt_state <= s1;
+                vs_index := 0;
+              else
+                pt_state <= s2;
+                vs_index := vs_index + 1;
+              end if;
+            else
+              count2 := count2 + 1;
+            end if;
+          when others => pixel_time_data <= (others => '0');
+        end case;
+      end if;
+    end process p3_pixeltime;
+  end generate g_source_lines;
 
   -- only flip source clock
   camera_o_pclk <= camera_i_xclk;

@@ -677,12 +677,12 @@ signal p0_state : p_states := a1;
 signal p1_state : p_states := a1;
 constant c_w8_bw : integer := 3235/2;
 signal w8_bw : integer range 0 to c_w8_bw - 1 := 0;
-constant c_w8_br : integer := 550/2;
+constant c_w8_br : integer := 650/2;
 signal w8_br : integer range 0 to c_w8_br - 1 := 0;
 
 constant c_cntr_frame : integer := 307200;
---constant c_step1 : unsigned (15 downto 0) := x"0118";
-constant c_step1 : unsigned (15 downto 0) := x"0140";
+constant c_step1 : unsigned (15 downto 0) := x"0100";
+--constant c_step1 : unsigned (15 downto 0) := x"0140";
 signal cntr_wr1 : unsigned (19 downto 0) := (others => '0');
 signal cntr_wr1_slv : std_logic_vector (19 downto 0) := (others => '0');
 signal cntr_rd1 : unsigned (19 downto 0) := (others => '0');
@@ -766,7 +766,7 @@ begin
 ----          if (vga_hsync_i_prev = '0' and vga_hsync_i = '1') then
 ----          end if;
 --        end if;
-        if (ov7670_vs_next = "11" and vga_hsync_i = '0') then
+        if (ov7670_vs_next = "11" and vga_hsync_i = '1') then
           start_read <= '1';
           p1_state <= ar;
         end if;
@@ -920,6 +920,7 @@ write_buffer_addr => wr_a1 (10 downto 0),
 write_buffer_data => ov7670_d,
 write_buffer_clk => ov7670_pclk,
 write_buffer_we => ov7670_hs,
+--write_buffer_we => wren1 (0),
 
 read_buffer_addr => rd_a1 (9 downto 0),
 read_buffer_data => rd_d1,
@@ -1085,7 +1086,7 @@ CLKDV_DIVIDE => 2.0, -- 50mhz
 CLKFX_MULTIPLY => CLKFX_MULTIPLY_MC, -- Can be any integer from 1 to 32
 CLKFX_DIVIDE => CLKFX_DIVIDE_MC, -- Can be any interger from 1 to 32
 CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
-CLKIN_PERIOD => 10.0, -- Specify period of input clock
+CLKIN_PERIOD => 20.0, -- Specify period of input clock
 CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of "NONE", "FIXED" or "VARIABLE"
 CLK_FEEDBACK => "1X", -- Specify clock feedback of "NONE", "1X" or "2X"
 DESKEW_ADJUST => "SYSTEM_SYNCHRONOUS", -- "SOURCE_SYNCHRONOUS", "SYSTEM_SYNCHRONOUS" or
@@ -1120,7 +1121,7 @@ generic map (
 CLKDV_DIVIDE => 2.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
 -- 7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
 --CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 24, -- 50 -> 25 mhz
-CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 25, -- 50 -> 24.0 mhz
+--CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 25, -- 50 -> 24.0 mhz
 --CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 27, -- 50 -> 24.07407407407407407400 mhz
 --CLKFX_MULTIPLY => 14, CLKFX_DIVIDE => 29, -- 50 -> 24.13793103448275862050 mhz
 --CLKFX_MULTIPLY => 15, CLKFX_DIVIDE => 31, -- 50 -> 24.19354838709677419350 mhz
@@ -1132,8 +1133,10 @@ CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 25, -- 50 -> 24.0 mhz
 --CLKFX_MULTIPLY => 14, CLKFX_DIVIDE => 29, -- 50 -> 24.13793103448275862050 mhz
 --CLKFX_MULTIPLY => 15, CLKFX_DIVIDE => 31, -- 50 -> 24.19354838709677419350 mhz
 --CLKFX_MULTIPLY => 24, CLKFX_DIVIDE => 25, -- 50 -> 48.0 mhz
+--CLKIN_PERIOD => 20.0, CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 28 (23.21428571428571428550)
+CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 28,
 CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
-CLKIN_PERIOD => 10.0, -- Specify period of input clock
+CLKIN_PERIOD => 20.0, -- Specify period of input clock
 CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of "NONE", "FIXED" or "VARIABLE"
 CLK_FEEDBACK => "1X", -- Specify clock feedback of "NONE", "1X" or "2X"
 DESKEW_ADJUST => "SYSTEM_SYNCHRONOUS", -- "SOURCE_SYNCHRONOUS", "SYSTEM_SYNCHRONOUS" or

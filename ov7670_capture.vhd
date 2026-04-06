@@ -89,7 +89,8 @@ capture_process: process(pclk)
          we_reg  <= '0';
 
          -- Is a new screen about to start (i.e. we have to restart capturing
-         if latched_vsync = '1' then 
+--         if latched_vsync = '1' then 
+         if vsync = '1' then 
             address      <= (others => '0');
             href_last    <= (others => '0');
             row         <= (others => '0');
