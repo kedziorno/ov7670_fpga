@@ -514,7 +514,8 @@ COMPONENT ov7670_capture
           d : in  STD_LOGIC_VECTOR (7 downto 0);
           addr : out  STD_LOGIC_VECTOR (18 downto 0);
           dout : out  STD_LOGIC_VECTOR (15 downto 0);
-          we : out  STD_LOGIC_VECTOR (0 downto 0));
+          we : out  STD_LOGIC_VECTOR (0 downto 0);
+latched_vs, latched_hs : out std_logic);
 END COMPONENT;
 
 COMPONENT ov7670_controller
@@ -681,8 +682,8 @@ constant c_w8_br : integer := 650/2;
 signal w8_br : integer range 0 to c_w8_br - 1 := 0;
 
 constant c_cntr_frame : integer := 307200;
-constant c_step1 : unsigned (15 downto 0) := x"0100";
---constant c_step1 : unsigned (15 downto 0) := x"0140";
+--constant c_step1 : unsigned (15 downto 0) := x"0100";
+constant c_step1 : unsigned (15 downto 0) := to_unsigned (640, 16);
 signal cntr_wr1 : unsigned (19 downto 0) := (others => '0');
 signal cntr_wr1_slv : std_logic_vector (19 downto 0) := (others => '0');
 signal cntr_rd1 : unsigned (19 downto 0) := (others => '0');
@@ -697,15 +698,17 @@ signal data_r, data_w, id_r, id_w : std_logic_vector (15 downto 0) := (others =>
 signal p0_r, p0_w : std_logic;
 signal wrc_r, wrc_w : std_logic;
 
+signal latched_hs, latched_vs : std_logic;
+
 begin
 
 id <= id_w when p0_w = '1' else id_r when p0_r = '1' else (others => '0');
 data <= data_w when p0_w = '1' else data_r when p0_r = '1' else (others => '0');
 wrc <= wrc_w when p0_w = '1' else wrc_r when p0_r = '1' else '0';
 
-p0_control_crbc_write : process (i_clock) is
+p0_control_crbc_write : process (i_clock_ib) is
 begin
-  if (rising_edge (i_clock)) then
+  if (rising_edge (i_clock_ib)) then
     wrc_w <= '0';
     ov7670_vs_prev <= ov7670_vs;
 --    vga_hsync_i_prev <= vga_hsync_i;
@@ -749,9 +752,9 @@ begin
   end if;
 end process p0_control_crbc_write;
 
-p1_control_crbc_read : process (i_clock) is
+p1_control_crbc_read : process (i_clock_ib) is
 begin
-  if (rising_edge (i_clock)) then
+  if (rising_edge (i_clock_ib)) then
     wrc_r <= '0';
     ov7670_vs_prev <= ov7670_vs;
 --    vga_hsync_i_prev <= vga_hsync_i;
@@ -909,7 +912,7 @@ end process p1_control_crbc_read;
 crbc_i0 : cellular_ram_burst_controller
 PORT MAP (
 busy => busy,
-clk => i_clock,
+clk => i_clock_ib,
 writes => wrc,
 data => data,
 id => id,
@@ -919,7 +922,8 @@ write_buffer_addr => wr_a1 (10 downto 0),
 --write_buffer_data => wr_d1 (7 downto 0),
 write_buffer_data => ov7670_d,
 write_buffer_clk => ov7670_pclk,
-write_buffer_we => ov7670_hs,
+--write_buffer_we => ov7670_hs,
+write_buffer_we => latched_hs,
 --write_buffer_we => wren1 (0),
 
 read_buffer_addr => rd_a1 (9 downto 0),
@@ -985,10 +989,12 @@ reset => ov7670_reset1,
 xclk_in => clk_cam,
 xclk_out => ov7670_xclk1);
 
---process (clk_mc, resend) is
+--process (i_clock_ib) is
+----process (clk_mc, resend) is
 --begin
---if (resend = '1') then
---elsif (rising_edge (clk_mc)) then
+----if (resend = '1') then
+----elsif (rising_edge (clk_mc)) then
+--if (falling_edge (i_clock_ib)) then
 ov7670_pclk <= ov7670_pclk1;
 ov7670_hs <= ov7670_href1;
 ov7670_vs <= ov7670_vsync1;
@@ -1003,7 +1009,10 @@ href => ov7670_hs,
 d => ov7670_d,
 addr => wr_a1,
 dout => wr_d1,
-we => wren1);
+we => wren1,
+latched_vs => latched_vs,
+latched_hs => latched_hs
+);
 
 --ri_ard <= "0000" & rd_a1;
 inst_addrgen1 : address_generator port map(

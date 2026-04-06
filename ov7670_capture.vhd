@@ -17,7 +17,8 @@ entity ov7670_capture is
            d : in  STD_LOGIC_VECTOR (7 downto 0);
            addr : out  STD_LOGIC_VECTOR (18 downto 0);
            dout : out  STD_LOGIC_VECTOR (15 downto 0);
-           we : out  STD_LOGIC_VECTOR (0 downto 0));
+           we : out  STD_LOGIC_VECTOR (0 downto 0);
+           latched_vs, latched_hs : out std_logic);
 end ov7670_capture;
 
 architecture Behavioral of ov7670_capture is
@@ -61,14 +62,6 @@ dout  <= d_latch;
 capture_process: process(pclk)
    begin
       if rising_edge(pclk) then
---         if href_hold = '1' then
-         if href = '1' then
-					if (to_integer(unsigned(address)) = 307200-1) then
-						address <= (others => '0');
-					else
-            address <= std_logic_vector(unsigned(address)+1);
-					end if;
-         end if;
 
          -- detect the rising edge on href - the start of the scan row
 --         if href_hold = '0' and latched_href = '1' then
@@ -82,16 +75,15 @@ capture_process: process(pclk)
          href_hold <= latched_href;
          
          -- capturing the data from the camera, 12-bit RGB
---         if latched_href = '1' then
-         if href = '1' then
+         if latched_href = '1' then
+--         if href = '1' then
             d_latch <= d_latch(7 downto 0) & latched_d;
          end if;
          we_reg  <= '0';
 
          -- Is a new screen about to start (i.e. we have to restart capturing
---         if latched_vsync = '1' then 
-         if vsync = '1' then 
-            address      <= (others => '0');
+         if latched_vsync = '1' then 
+--         if vsync = '1' then 
             href_last    <= (others => '0');
             row         <= (others => '0');
          else
@@ -106,7 +98,24 @@ capture_process: process(pclk)
 --            end if;
          end if;
       end if;
+   end process;
+
+   latched_hs <= latched_href;
+   latched_vs <= latched_vsync;
+   latched_process: process (pclk) is
+   begin
       if falling_edge(pclk) then
+         if href_hold = '1' then
+--         if href = '1' then
+					if (to_integer(unsigned(address)) = 307200-1) then
+						address <= (others => '0');
+					else
+            address <= std_logic_vector(unsigned(address)+1);
+					end if;
+         end if;
+         if (latched_vsync = '1') then
+           address      <= (others => '0');
+         end if;
          latched_d     <= d;
          latched_href  <= href;
          latched_vsync <= vsync;
