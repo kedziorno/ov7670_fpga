@@ -681,7 +681,8 @@ constant c_w8_br : integer := 550/2;
 signal w8_br : integer range 0 to c_w8_br - 1 := 0;
 
 constant c_cntr_frame : integer := 307200;
-constant c_step1 : unsigned (15 downto 0) := x"0118";
+--constant c_step1 : unsigned (15 downto 0) := x"0118";
+constant c_step1 : unsigned (15 downto 0) := x"0140";
 signal cntr_wr1 : unsigned (19 downto 0) := (others => '0');
 signal cntr_wr1_slv : std_logic_vector (19 downto 0) := (others => '0');
 signal cntr_rd1 : unsigned (19 downto 0) := (others => '0');
@@ -914,7 +915,9 @@ data => data,
 id => id,
 
 write_buffer_addr => wr_a1 (10 downto 0),
-write_buffer_data => wr_d1 (7 downto 0),
+--write_buffer_data => wr_d1 (15 downto 8),
+--write_buffer_data => wr_d1 (7 downto 0),
+write_buffer_data => ov7670_d,
 write_buffer_clk => ov7670_pclk,
 write_buffer_we => ov7670_hs,
 

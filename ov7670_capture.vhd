@@ -61,7 +61,8 @@ dout  <= d_latch;
 capture_process: process(pclk)
    begin
       if rising_edge(pclk) then
-         if href_hold = '1' then
+--         if href_hold = '1' then
+         if href = '1' then
 					if (to_integer(unsigned(address)) = 307200-1) then
 						address <= (others => '0');
 					else
@@ -81,7 +82,8 @@ capture_process: process(pclk)
          href_hold <= latched_href;
          
          -- capturing the data from the camera, 12-bit RGB
-         if latched_href = '1' then
+--         if latched_href = '1' then
+         if href = '1' then
             d_latch <= d_latch(7 downto 0) & latched_d;
          end if;
          we_reg  <= '0';

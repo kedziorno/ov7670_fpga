@@ -102,6 +102,7 @@ signal data_out_enable : std_logic_vector (15 downto 0) := (others => '0');
 component rambuffer
 port (
 clka : in std_logic;
+ena : in std_logic;
 wea : in std_logic_vector (0 downto 0);
 addra : in std_logic_vector (10 downto 0);
 dina : in std_logic_vector (7 downto 0);
@@ -135,6 +136,7 @@ write_buffer_we1 (0) <= write_buffer_we;
 rambuffer_i0 : rambuffer
 port map (
   clka => write_buffer_clk,
+  ena => write_buffer_we,
   wea => write_buffer_we1,
   addra => write_buffer_addr,
   dina => write_buffer_data,
@@ -190,7 +192,7 @@ end process p2_next_state;
 
 p3_b2w : process (clk) is
 begin
-  if (rising_edge (clk)) then
+  if (falling_edge (clk)) then
     if (id = write_length and writes = '1' and busy_i = '0') then
       bytes_to_write <= unsigned (data (10 downto 0)); 
     end if;
@@ -199,7 +201,7 @@ end process p3_b2w;
 
 p4_b2r: process (clk) is
 begin
-  if (rising_edge (clk)) then
+  if (falling_edge (clk)) then
     if (id = read_length and writes = '1' and busy_i = '0') then
       bytes_to_read <= unsigned (data (10 downto 0)); 
     end if;
@@ -208,7 +210,7 @@ end process p4_b2r;
 
 p5_bwah : process (clk) is
 begin
-  if (rising_edge (clk)) then
+  if (falling_edge (clk)) then
     if (id = write_addr_h and writes = '1' and busy_i = '0') then
       burst_write_addr (22 downto 16) <= unsigned (data (6 downto 0));  
     end if;
@@ -217,7 +219,7 @@ end process p5_bwah;
 
 p6_bwal : process (clk) is
 begin
-  if (rising_edge (clk)) then
+  if (falling_edge (clk)) then
     if (id = write_addr_l and writes = '1' and busy_i = '0') then 
       burst_write_addr (15 downto 0) <= unsigned (data);
     end if;
@@ -226,7 +228,7 @@ end process p6_bwal;
 
 p7_brah : process (clk) is
 begin
-  if (rising_edge (clk)) then
+  if (falling_edge (clk)) then
     if (id = read_addr_h and writes = '1' and busy_i = '0') then
       burst_read_addr (22 downto 16) <= unsigned (data (6 downto 0));
     end if;
@@ -235,7 +237,7 @@ end process p7_brah;
 
 p8_bral : process (clk) is
 begin
-  if (rising_edge (clk)) then
+  if (falling_edge (clk)) then
     if (id = read_addr_l and writes = '1' and busy_i = '0') then
       burst_read_addr (15 downto 0) <= unsigned (data);
     end if;
@@ -244,7 +246,7 @@ end process p8_bral;
 
 p9_run : process (clk) is
 begin
-  if (rising_edge (clk)) then
+  if (falling_edge (clk)) then
     if (id = set_wb_addr and writes = '1' and busy_i = '0') then
       source_addr <= unsigned (data (9 downto 0));
     end if;

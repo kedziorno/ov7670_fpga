@@ -43,6 +43,7 @@ LIBRARY XilinxCoreLib;
 ENTITY RAMBuffer IS
   PORT (
     clka : IN STD_LOGIC;
+    ena : IN STD_LOGIC;
     wea : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
     addra : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
     dina : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
@@ -57,6 +58,7 @@ ARCHITECTURE RAMBuffer_a OF RAMBuffer IS
 COMPONENT wrapped_RAMBuffer
   PORT (
     clka : IN STD_LOGIC;
+    ena : IN STD_LOGIC;
     wea : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
     addra : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
     dina : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
@@ -78,12 +80,12 @@ END COMPONENT;
       c_byte_size => 9,
       c_common_clk => 0,
       c_default_data => "0",
-      c_disable_warn_bhv_coll => 1,
-      c_disable_warn_bhv_range => 1,
+      c_disable_warn_bhv_coll => 0,
+      c_disable_warn_bhv_range => 0,
       c_enable_32bit_address => 0,
       c_family => "spartan3",
       c_has_axi_id => 0,
-      c_has_ena => 0,
+      c_has_ena => 1,
       c_has_enb => 0,
       c_has_injecterr => 0,
       c_has_mem_output_regs_a => 0,
@@ -114,7 +116,7 @@ END COMPONENT;
       c_rst_type => "SYNC",
       c_rstram_a => 0,
       c_rstram_b => 0,
-      c_sim_collision_check => "NONE",
+      c_sim_collision_check => "ALL",
       c_use_bram_block => 0,
       c_use_byte_wea => 0,
       c_use_byte_web => 0,
@@ -137,6 +139,7 @@ BEGIN
 U0 : wrapped_RAMBuffer
   PORT MAP (
     clka => clka,
+    ena => ena,
     wea => wea,
     addra => addra,
     dina => dina,
