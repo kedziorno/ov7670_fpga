@@ -237,45 +237,88 @@ begin
     end if;
   end process p1_vsync;
 
-  -- generate href pulse on falling edge pclk
-  camera_o_hs <= href_i;
-  pixel_time <= '1' when hs_state = shref1 else '0';
-  p2_href : process (camera_i_xclk, camera_i_rst) is
-    variable count : integer range 0 to c_vsync3 - 1;
-    variable counth1 : integer range 0 to c_href1 - 1;
-    variable counth0 : integer range 0 to c_href0 - 1;
-  begin
-    if (camera_i_rst = '0') then
-      count := 0;
-      counth1 := 0;
-      counth0 := 0;
-      hs_state <= swait4vsync;
-      href_i <= '0';
-    elsif (falling_edge (camera_i_xclk)) then
-      case (hs_state) is
-        when swait4vsync =>
-          if (href_time = '1') then
-            hs_state <= shref1;
-          end if;
-        when shref1 =>
-          href_i <= '1';
-          if (counth1 = c_href1 - 1) then
-            hs_state <= shref0;
-            counth1 := 0;
-          else
-            counth1 := counth1 + 1;
-          end if;
-        when shref0 =>
-          href_i <= '0';
-          if (counth0 = c_href0 - 1) then
-            hs_state <= swait4vsync;
-            counth0 := 0;
-          else
-            counth0 := counth0 + 1;
-          end if;
-      end case;
-    end if;
-  end process p2_href;
+  g_source_colorbar_hs : if (c_source = t_colorbar) generate
+    -- generate href pulse on falling edge pclk - t_colorbar
+    camera_o_hs <= href_i;
+    pixel_time <= '1' when hs_state = shref1 else '0';
+    p2_href_colorbar : process (camera_i_xclk, camera_i_rst) is
+      variable count : integer range 0 to c_vsync3 - 1;
+      variable counth1 : integer range 0 to c_href1 - 1;
+      variable counth0 : integer range 0 to c_href0 - 1;
+    begin
+      if (camera_i_rst = '0') then
+        count := 0;
+        counth1 := 0;
+        counth0 := 0;
+        hs_state <= swait4vsync;
+        href_i <= '0';
+      elsif (falling_edge (camera_i_xclk)) then
+        case (hs_state) is
+          when swait4vsync =>
+            if (href_time = '1') then
+              hs_state <= shref1;
+            end if;
+          when shref1 =>
+            href_i <= '1';
+            if (counth1 = c_href1 - 1) then
+              hs_state <= shref0;
+              counth1 := 0;
+            else
+              counth1 := counth1 + 1;
+            end if;
+          when shref0 =>
+            href_i <= '0';
+            if (counth0 = c_href0 - 1) then
+              hs_state <= swait4vsync;
+              counth0 := 0;
+            else
+              counth0 := counth0 + 1;
+            end if;
+        end case;
+      end if;
+    end process p2_href_colorbar;
+  end generate g_source_colorbar_hs;
+
+  g_source_lines_hs : if (c_source = t_lines) generate
+    -- generate href pulse on falling edge pclk - t_lines
+    camera_o_hs <= href_i;
+    pixel_time <= '1' when hs_state = shref1 else '0';
+    p2_href_lines : process (camera_i_xclk, camera_i_rst) is
+      variable count : integer range 0 to c_vsync3 - 1;
+      variable counth1 : integer range 0 to c_href1 - 1;
+      variable counth0 : integer range 0 to c_href0 - 1;
+    begin
+      if (camera_i_rst = '0') then
+        count := 0;
+        counth1 := 0;
+        counth0 := 0;
+        hs_state <= shref1;
+        href_i <= '0';
+      elsif (falling_edge (camera_i_xclk)) then
+        case (hs_state) is
+          when shref1 =>
+            if (href_time = '1') then
+              href_i <= '1';
+              if (counth1 = c_href1 - 1) then
+                hs_state <= shref0;
+                counth1 := 0;
+              else
+                counth1 := counth1 + 1;
+              end if;
+            end if;
+          when shref0 =>
+            href_i <= '0';
+            if (counth0 = c_href0 - 1) then
+              hs_state <= shref1;
+              counth0 := 0;
+            else
+              counth0 := counth0 + 1;
+            end if;
+          when others => null;
+        end case;
+      end if;
+    end process p2_href_lines;
+  end generate g_source_lines_hs;
 
   g_source_colorbar : if (c_source = t_colorbar) generate
     -- Show pattern from virtual camera on VGA display on falling edge pclk
@@ -331,41 +374,38 @@ begin
     begin
       if (camera_i_rst = '0') then
         pixel_time_data <= (others => '0');
-        pt_state <= s1;
+        pt_state <= s2;
         count1 := 0;
         count2 := 0;
         vs_index := 1;
       elsif (falling_edge (camera_i_xclk)) then
         case (pt_state) is
-          when s1 =>
-            if (pixel_time = '1') then
-              pt_state <= s2;
+          when s2 =>
+            if (href_time = '1') then
+              if (count1 = c_href1 - 1) then
+                pt_state <= s3;
+                count1 := 0;
+              else
+                pixel_time_data <= std_logic_vector (to_unsigned (vs_index, pixel_time_data'left + 1));
+                count1 := count1 + 1;
+              end if;
             else
               pixel_time_data <= (others => '0');
             end if;
-          when s2 =>
-            pixel_time_data <= std_logic_vector (to_unsigned (vs_index, pixel_time_data'left + 1));
-            if (count1 = c_href1 - 1) then
-              pt_state <= s3;
-              count1 := 0;
-              colorbar_count <= colorbar_count + 1;
-            else
-              count1 := count1 + 1;
-            end if;
           when s3 =>
             if (count2 = c_href0 - 1) then
-              count2 := 0;
               if (vs_index = c_vs_index - 1) then
                 pt_state <= s1;
                 vs_index := 0;
               else
-                pt_state <= s2;
                 vs_index := vs_index + 1;
               end if;
+              count2 := 0;
+              pt_state <= s2;
             else
               count2 := count2 + 1;
             end if;
-          when others => pixel_time_data <= (others => '0');
+          when others => null;
         end case;
       end if;
     end process p3_pixeltime;
