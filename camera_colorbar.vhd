@@ -237,7 +237,7 @@ begin
     end if;
   end process p1_vsync;
 
-  g_source_colorbar_hs : if (c_source = t_colorbar) generate
+  g_source_colorbar_hs : if (c_source = t_colorbar or c_source = t_frames) generate
     -- generate href pulse on falling edge pclk - t_colorbar
     camera_o_hs <= href_i;
     pixel_time <= '1' when hs_state = shref1 else '0';

@@ -676,14 +676,13 @@ a1, ar, br, cr, dr, er, er1, aw, bw, cw, dw, ew
 );
 signal p0_state : p_states := a1;
 signal p1_state : p_states := a1;
-constant c_w8_bw : integer := 3235/2;
+constant c_w8_bw : integer := 3200;
 signal w8_bw : integer range 0 to c_w8_bw - 1 := 0;
-constant c_w8_br : integer := 650/2;
+constant c_w8_br : integer := 3200;
 signal w8_br : integer range 0 to c_w8_br - 1 := 0;
 
 constant c_cntr_frame : integer := 307200;
---constant c_step1 : unsigned (15 downto 0) := x"0100";
-constant c_step1 : unsigned (15 downto 0) := to_unsigned (640, 16);
+constant c_step1 : unsigned (15 downto 0) := to_unsigned (320, 16);
 signal cntr_wr1 : unsigned (19 downto 0) := (others => '0');
 signal cntr_wr1_slv : std_logic_vector (19 downto 0) := (others => '0');
 signal cntr_rd1 : unsigned (19 downto 0) := (others => '0');
@@ -1090,8 +1089,8 @@ end process p0_assert_1;
 
 DCM_SP_mc_fx_vga_dv : DCM_SP
 generic map (
-CLKDV_DIVIDE => 2.0, -- 50mhz
---CLKDV_DIVIDE => 4.0, -- 100mhz
+--CLKDV_DIVIDE => 2.0, -- 50mhz
+CLKDV_DIVIDE => 4.0, -- 100mhz
 CLKFX_MULTIPLY => CLKFX_MULTIPLY_MC, -- Can be any integer from 1 to 32
 CLKFX_DIVIDE => CLKFX_DIVIDE_MC, -- Can be any interger from 1 to 32
 CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
@@ -1136,14 +1135,14 @@ CLKDV_DIVIDE => 2.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
 --CLKFX_MULTIPLY => 15, CLKFX_DIVIDE => 31, -- 50 -> 24.19354838709677419350 mhz
 --CLKFX_MULTIPLY => 24, CLKFX_DIVIDE => 25, -- 50 -> 48.0 mhz
 --CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 24, -- 50 -> 25 mhz
---CLKFX_MULTIPLY => 6, CLKFX_DIVIDE => 25, -- 100 -> 24.0 mhz
+CLKFX_MULTIPLY => 6, CLKFX_DIVIDE => 25, -- 100 -> 24.0 mhz
 --CLKFX_MULTIPLY => 5, CLKFX_DIVIDE => 21, -- 100 -> 23.8 mhz (sim)
 --CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 27, -- 50 -> 24.07407407407407407400 mhz
 --CLKFX_MULTIPLY => 14, CLKFX_DIVIDE => 29, -- 50 -> 24.13793103448275862050 mhz
 --CLKFX_MULTIPLY => 15, CLKFX_DIVIDE => 31, -- 50 -> 24.19354838709677419350 mhz
 --CLKFX_MULTIPLY => 24, CLKFX_DIVIDE => 25, -- 50 -> 48.0 mhz
 --CLKIN_PERIOD => 20.0, CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 28 (23.21428571428571428550)
-CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 28,
+--CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 28,
 CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
 CLKIN_PERIOD => 20.0, -- Specify period of input clock
 CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of "NONE", "FIXED" or "VARIABLE"
