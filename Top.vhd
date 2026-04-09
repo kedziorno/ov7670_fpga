@@ -701,6 +701,8 @@ signal latched_hs, latched_vs : std_logic;
 
 signal clk2x_1, clk2x_2 : std_logic;
 
+signal ov7670_hs_prev : std_logic;
+
 begin
 
 id <= id_w when p0_w = '1' else id_r when p0_r = '1' else (others => '0');
@@ -711,12 +713,13 @@ p0_control_crbc_write : process (i_clock_ib) is
 begin
   if (rising_edge (i_clock_ib)) then
     wrc_w <= '0';
+    ov7670_hs_prev <= ov7670_hs;
 --    ov7670_vs_prev <= ov7670_vs;
 --    vga_hsync_i_prev <= vga_hsync_i;
     case (p0_state) is
       when a1 =>
         p0_w <= '0';
-        if (ov7670_hs = '1') then
+        if (ov7670_hs_prev = '1' and ov7670_hs = '0') then
 --          if (vga_hsync_i_prev = '0' and vga_hsync_i = '1') then
             p0_state <= aw;
 --          end if;
