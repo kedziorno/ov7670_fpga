@@ -678,11 +678,11 @@ signal p0_state : p_states := a1;
 signal p1_state : p_states := a1;
 constant c_w8_bw : integer := 3200;
 signal w8_bw : integer range 0 to c_w8_bw - 1 := 0;
-constant c_w8_br : integer := 3200;
+constant c_w8_br : integer := 2852;
 signal w8_br : integer range 0 to c_w8_br - 1 := 0;
 
 constant c_cntr_frame : integer := 307200;
-constant c_step1 : unsigned (15 downto 0) := to_unsigned (128*5, 16);
+constant c_step1 : unsigned (15 downto 0) := to_unsigned (128*3-64, 16);
 signal cntr_wr1 : unsigned (19 downto 0) := (others => '0');
 signal cntr_wr1_slv : std_logic_vector (19 downto 0) := (others => '0');
 signal cntr_rd1 : unsigned (19 downto 0) := (others => '0');
@@ -765,13 +765,13 @@ begin
         if (ov7670_vs_prev = '1' and ov7670_vs = '0') then
           --cntr_wr1 <= (others => '0');
           ov7670_vs_next <= ov7670_vs_next (0) & '1';
-          p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0');
+--          p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0');
         end if;
 --        if (ov7670_hs = '1') then
 ----          if (vga_hsync_i_prev = '0' and vga_hsync_i = '1') then
 ----          end if;
 --        end if;
-        if (ov7670_vs_next = "11" and vga_hsync_i = '1') then
+        if (ov7670_vs_next = "11" and vga_hsync_i = '0') then
           start_read <= '1';
           p1_state <= ar;
         end if;
@@ -930,7 +930,8 @@ write_buffer_we => latched_hs,
 
 read_buffer_addr => rd_a1 (9 downto 0),
 read_buffer_data => rd_d1,
-read_buffer_clk => clk_vga,
+--read_buffer_clk => clk_vga,
+read_buffer_clk => clk2x_2,
 
 lb => lb_n,
 ub => ub_n,
@@ -1018,7 +1019,8 @@ latched_hs => latched_hs
 
 --ri_ard <= "0000" & rd_a1;
 inst_addrgen1 : address_generator port map(
-clk25 => clk_vga,
+--clk25 => clk_vga,
+clk25 => clk2x_2,
 enable => active1,
 vsync => vga_vsync_sig,
 address => rd_a1);
@@ -1129,7 +1131,7 @@ RST => reset_dcm_n -- DCM asynchronous reset input
 
 DCM_SP_cam : DCM_SP
 generic map (
-CLKDV_DIVIDE => 2.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
+CLKDV_DIVIDE => 8.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
 -- 7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
 --CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 24, -- 50 -> 25 mhz
 --CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 25, -- 50 -> 24.0 mhz
@@ -1160,10 +1162,10 @@ port map (
 CLK0 => clk1, -- 0 degree DCM CLK ouptput
 CLK180 => open, -- 180 degree DCM CLK output
 CLK270 => open, -- 270 degree DCM CLK output
-CLK2X => clk2x_2, -- 2X DCM CLK output
+CLK2X => open, -- 2X DCM CLK output
 CLK2X180 => open, -- 2X, 180 degree DCM CLK out
 CLK90 => open, -- 90 degree DCM CLK output
-CLKDV => open, -- Divided DCM CLK out (CLKDV_DIVIDE)
+CLKDV => clk2x_2, -- Divided DCM CLK out (CLKDV_DIVIDE)
 CLKFX => clk_cam, -- DCM CLK synthesis out (M/D)
 CLKFX180 => open, -- 180 degree CLK synthesis out
 LOCKED => open, -- DCM LOCK status output

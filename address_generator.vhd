@@ -24,8 +24,8 @@ begin
 process (clk25) begin
 	if rising_edge (clk25) then
 		if (enable='1') then
-			if (addr < 640-1) then
---			if (addr < 307200-1) then
+--			if (addr < 640-1) then
+			if (addr < 307200-1) then
 				addr <= addr + 1 ;
 			else
 			addr <= (others => '0');
