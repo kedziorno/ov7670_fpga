@@ -1,6 +1,8 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+library unisim;
+use unisim.vcomponents.all;
 
 -- based on project https://github.com/nmikstas/cmos-camera.git
 entity cellular_ram_burst_controller is
@@ -86,10 +88,10 @@ signal bytes_to_read    : unsigned (10 downto 0) := (others => '0');
 signal this_read_addr   : unsigned (22 downto 0) := (others => '0');
 signal read_counter     : unsigned (10 downto 0) := (others => '0');
      
-constant ram_width : integer := 16;
-constant ram_addr_bits : integer := 10;
-type ram_t is array (2**ram_addr_bits - 1 downto 0) of std_logic_vector (ram_width - 1 downto 0);
-signal read_buffer : ram_t;
+--constant ram_width : integer := 16;
+--constant ram_addr_bits : integer := 10;
+--type ram_t is array (2**ram_addr_bits - 1 downto 0) of std_logic_vector (ram_width - 1 downto 0);
+--signal read_buffer : ram_t;
 
 type states is (idle, config0, config1, config2, config3, config4, config5, config6, config7, config8, config9, config10, config11, write_byte0, write_byte1, write_byte2, write_byte3, write_byte4, write_rbc0, write_rbc1, read_byte0, read_byte1, read_byte2, read_byte3, read_byte4, read_rbc0, read_rbc1);
 signal state, next_state : states := config0;
@@ -137,6 +139,9 @@ clk_wr, clk_rd : in std_logic
 );
 end component sink_read;
 
+signal clk0, clk0_fb : std_logic;
+signal clk2x, clk2d : std_logic;
+
 begin
 
 busy <= busy_i;
@@ -155,16 +160,74 @@ write_buffer_we1 (0) <= write_buffer_we;
 --  doutb => source_data
 --);
 
+bufg1 : BUFG
+port map (
+O => clk0_fb, -- Clock buffer output
+I => clk0 -- Clock buffer input
+);
+
+dcm1 : DCM_SP
+generic map (
+CLKDV_DIVIDE => 2.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
+-- 7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
+--CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 24, -- 50 -> 25 mhz
+--CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 25, -- 50 -> 24.0 mhz
+--CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 27, -- 50 -> 24.07407407407407407400 mhz
+--CLKFX_MULTIPLY => 14, CLKFX_DIVIDE => 29, -- 50 -> 24.13793103448275862050 mhz
+--CLKFX_MULTIPLY => 15, CLKFX_DIVIDE => 31, -- 50 -> 24.19354838709677419350 mhz
+--CLKFX_MULTIPLY => 24, CLKFX_DIVIDE => 25, -- 50 -> 48.0 mhz
+--CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 24, -- 50 -> 25 mhz
+--CLKFX_MULTIPLY => 6, CLKFX_DIVIDE => 25, -- 100 -> 24.0 mhz
+--CLKFX_MULTIPLY => 5, CLKFX_DIVIDE => 21, -- 100 -> 23.8 mhz (sim)
+--CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 27, -- 50 -> 24.07407407407407407400 mhz
+--CLKFX_MULTIPLY => 14, CLKFX_DIVIDE => 29, -- 50 -> 24.13793103448275862050 mhz
+--CLKFX_MULTIPLY => 15, CLKFX_DIVIDE => 31, -- 50 -> 24.19354838709677419350 mhz
+--CLKFX_MULTIPLY => 24, CLKFX_DIVIDE => 25, -- 50 -> 48.0 mhz
+--CLKIN_PERIOD => 20.0, CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 28 (23.21428571428571428550)
+--CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 28,
+CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
+CLKIN_PERIOD => 10.0, -- Specify period of input clock
+CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of "NONE", "FIXED" or "VARIABLE"
+CLK_FEEDBACK => "1X", -- Specify clock feedback of "NONE", "1X" or "2X"
+DESKEW_ADJUST => "SYSTEM_SYNCHRONOUS", -- "SOURCE_SYNCHRONOUS", "SYSTEM_SYNCHRONOUS" or
+-- an integer from 0 to 15
+DLL_FREQUENCY_MODE => "LOW", -- "HIGH" or "LOW" frequency mode for DLL
+DUTY_CYCLE_CORRECTION => TRUE, -- Duty cycle correction, TRUE or FALSE
+PHASE_SHIFT => 0, -- Amount of fixed phase shift from -255 to 255
+STARTUP_WAIT => FALSE) -- Delay configuration DONE until DCM_SP LOCK, TRUE/FALSE
+port map (
+CLK0 => clk0, -- 0 degree DCM CLK ouptput
+CLK180 => open, -- 180 degree DCM CLK output
+CLK270 => open, -- 270 degree DCM CLK output
+CLK2X => clk2x, -- 2X DCM CLK output
+CLK2X180 => open, -- 2X, 180 degree DCM CLK out
+CLK90 => open, -- 90 degree DCM CLK output
+CLKDV => clk2d, -- Divided DCM CLK out (CLKDV_DIVIDE)
+CLKFX => open, -- DCM CLK synthesis out (M/D)
+CLKFX180 => open, -- 180 degree CLK synthesis out
+LOCKED => open, -- DCM LOCK status output
+PSDONE => open, -- Dynamic phase adjust done output
+STATUS => open, -- 8-bit DCM status bits output
+CLKFB => clk0_fb, -- DCM clock feedback
+--CLKIN => clk, -- Clock input (from IBUFG, BUFG or DCM)
+CLKIN => write_buffer_clk, -- Clock input (from IBUFG, BUFG or DCM)
+PSCLK => '0', -- Dynamic phase adjust clock input
+PSEN => '0', -- Dynamic phase adjust enable input
+PSINCDEC => '0', -- Dynamic phase adjust increment/decrement
+RST => '0' -- DCM asynchronous reset input
+);
+
 ram_buffer_i0 : asym_ram_sdp_read_wider
 port map (
 clkA => write_buffer_clk,
-clkB => clk,
 enaA => write_buffer_we,
 weA => write_buffer_we,
-enaB => '1',
 addrA => write_buffer_addr,
-addrB => std_logic_vector (source_addr),
 diA => write_buffer_data,
+
+clkB => clk,
+enaB => '1',
+addrB => std_logic_vector (source_addr),
 doB => source_data
 );
 
@@ -186,6 +249,8 @@ dq (14) <= source_data (14) when data_out_enable (14) = '1' else 'Z';
 dq (15) <= source_data (15) when data_out_enable (15) = '1' else 'Z';
 
 ram_clk <= clk when clk_enable = '1' else '0';
+--ram_clk <= clk2d when clk_enable = '1' else '0';
+--ram_clk <= clk2x when clk_enable = '1' else '0';
 
 busy_i <= '0' when (state = idle) else '1';
 

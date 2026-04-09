@@ -676,13 +676,13 @@ a1, ar, br, cr, dr, er, er1, aw, bw, cw, dw, ew
 );
 signal p0_state : p_states := a1;
 signal p1_state : p_states := a1;
-constant c_w8_bw : integer := 6400;
+constant c_w8_bw : integer := 3200;
 signal w8_bw : integer range 0 to c_w8_bw - 1 := 0;
-constant c_w8_br : integer := 6016;
+constant c_w8_br : integer := 3200;
 signal w8_br : integer range 0 to c_w8_br - 1 := 0;
 
 constant c_cntr_frame : integer := 307200;
-constant c_step1 : unsigned (15 downto 0) := to_unsigned (320-64, 16);
+constant c_step1 : unsigned (15 downto 0) := to_unsigned (128*5, 16);
 signal cntr_wr1 : unsigned (19 downto 0) := (others => '0');
 signal cntr_wr1_slv : std_logic_vector (19 downto 0) := (others => '0');
 signal cntr_rd1 : unsigned (19 downto 0) := (others => '0');
@@ -698,6 +698,8 @@ signal p0_r, p0_w : std_logic;
 signal wrc_r, wrc_w : std_logic;
 
 signal latched_hs, latched_vs : std_logic;
+
+signal clk2x_1, clk2x_2 : std_logic;
 
 begin
 
@@ -1095,7 +1097,7 @@ CLKDV_DIVIDE => 4.0, -- 100mhz
 CLKFX_MULTIPLY => CLKFX_MULTIPLY_MC, -- Can be any integer from 1 to 32
 CLKFX_DIVIDE => CLKFX_DIVIDE_MC, -- Can be any interger from 1 to 32
 CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
-CLKIN_PERIOD => 20.0, -- Specify period of input clock
+CLKIN_PERIOD => 10.0, -- Specify period of input clock
 CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of "NONE", "FIXED" or "VARIABLE"
 CLK_FEEDBACK => "1X", -- Specify clock feedback of "NONE", "1X" or "2X"
 DESKEW_ADJUST => "SYSTEM_SYNCHRONOUS", -- "SOURCE_SYNCHRONOUS", "SYSTEM_SYNCHRONOUS" or
@@ -1108,7 +1110,7 @@ port map (
 CLK0 => clk0, -- 0 degree DCM CLK ouptput
 CLK180 => open, -- 180 degree DCM CLK output
 CLK270 => open, -- 270 degree DCM CLK output
-CLK2X => open, -- 2X DCM CLK output
+CLK2X => clk2x_1, -- 2X DCM CLK output
 CLK2X180 => open, -- 2X, 180 degree DCM CLK out
 CLK90 => open, -- 90 degree DCM CLK output
 CLKDV => clk_vga, -- Divided DCM CLK out (CLKDV_DIVIDE)
@@ -1145,7 +1147,7 @@ CLKFX_MULTIPLY => 6, CLKFX_DIVIDE => 25, -- 100 -> 24.0 mhz
 --CLKIN_PERIOD => 20.0, CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 28 (23.21428571428571428550)
 --CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 28,
 CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
-CLKIN_PERIOD => 20.0, -- Specify period of input clock
+CLKIN_PERIOD => 10.0, -- Specify period of input clock
 CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of "NONE", "FIXED" or "VARIABLE"
 CLK_FEEDBACK => "1X", -- Specify clock feedback of "NONE", "1X" or "2X"
 DESKEW_ADJUST => "SYSTEM_SYNCHRONOUS", -- "SOURCE_SYNCHRONOUS", "SYSTEM_SYNCHRONOUS" or
@@ -1158,7 +1160,7 @@ port map (
 CLK0 => clk1, -- 0 degree DCM CLK ouptput
 CLK180 => open, -- 180 degree DCM CLK output
 CLK270 => open, -- 270 degree DCM CLK output
-CLK2X => open, -- 2X DCM CLK output
+CLK2X => clk2x_2, -- 2X DCM CLK output
 CLK2X180 => open, -- 2X, 180 degree DCM CLK out
 CLK90 => open, -- 90 degree DCM CLK output
 CLKDV => open, -- Divided DCM CLK out (CLKDV_DIVIDE)
