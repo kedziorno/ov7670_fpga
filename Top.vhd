@@ -676,13 +676,13 @@ a1, ar, br, cr, dr, er, er1, aw, bw, cw, dw, ew
 );
 signal p0_state : p_states := a1;
 signal p1_state : p_states := a1;
-constant c_w8_bw : integer := 3200;
+constant c_w8_bw : integer := 6400;
 signal w8_bw : integer range 0 to c_w8_bw - 1 := 0;
-constant c_w8_br : integer := 3200;
+constant c_w8_br : integer := 6016;
 signal w8_br : integer range 0 to c_w8_br - 1 := 0;
 
 constant c_cntr_frame : integer := 307200;
-constant c_step1 : unsigned (15 downto 0) := to_unsigned (320, 16);
+constant c_step1 : unsigned (15 downto 0) := to_unsigned (320-64, 16);
 signal cntr_wr1 : unsigned (19 downto 0) := (others => '0');
 signal cntr_wr1_slv : std_logic_vector (19 downto 0) := (others => '0');
 signal cntr_rd1 : unsigned (19 downto 0) := (others => '0');
@@ -709,7 +709,7 @@ p0_control_crbc_write : process (i_clock_ib) is
 begin
   if (rising_edge (i_clock_ib)) then
     wrc_w <= '0';
-    ov7670_vs_prev <= ov7670_vs;
+--    ov7670_vs_prev <= ov7670_vs;
 --    vga_hsync_i_prev <= vga_hsync_i;
     case (p0_state) is
       when a1 =>
@@ -763,6 +763,7 @@ begin
         if (ov7670_vs_prev = '1' and ov7670_vs = '0') then
           --cntr_wr1 <= (others => '0');
           ov7670_vs_next <= ov7670_vs_next (0) & '1';
+          p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0');
         end if;
 --        if (ov7670_hs = '1') then
 ----          if (vga_hsync_i_prev = '0' and vga_hsync_i = '1') then
