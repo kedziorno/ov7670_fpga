@@ -679,11 +679,12 @@ signal p0_state : p_states := a0;
 signal p1_state : p_states := a0;
 constant c_w8_bw : integer := 3200;
 signal w8_bw : integer range 0 to c_w8_bw - 1 := 0;
-constant c_w8_br : integer := 2852;
+constant c_w8_br : integer := 2817-64-32-32;
 signal w8_br : integer range 0 to c_w8_br - 1 := 0;
 
 constant c_cntr_frame : integer := 307200;
-constant c_step1 : unsigned (15 downto 0) := to_unsigned (128*3-64, 16);
+constant c_step_w : unsigned (15 downto 0) := to_unsigned (128*3-64, 16);
+constant c_step_r : unsigned (15 downto 0) := to_unsigned (128*3-64, 16);
 signal cntr_wr1 : unsigned (19 downto 0) := (others => '0');
 signal cntr_wr1_slv : std_logic_vector (19 downto 0) := (others => '0');
 signal cntr_rd1 : unsigned (19 downto 0) := (others => '0');
@@ -704,7 +705,12 @@ signal clk2x_1, clk2x_2 : std_logic;
 
 signal ov7670_hs_prev : std_logic;
 
+signal oe_n_i, we_n_i : std_logic;
+
 begin
+
+oe_n <= oe_n_i;
+we_n <= we_n_i;
 
 id <= id_w when p0_w = '1' else id_r when p0_r = '1' else (others => '0');
 data <= data_w when p0_w = '1' else data_r when p0_r = '1' else (others => '0');
@@ -740,13 +746,14 @@ begin
         p0_state <= a1c;
         p0_w <= '1'; wrc_w <= '1'; id_w <= x"0055"; data_w <= (others => '0');
       when a1c =>
-        if (ov7670_hs_prev = '1' and ov7670_hs = '0') then
+--        if (ov7670_hs_prev = '1' and ov7670_hs = '0') then
+        if (ov7670_hs = '1') then
           p0_state <= aw;
         end if;
         p0_w <= '1'; wrc_w <= '1'; id_w <= x"0054"; data_w <= (others => '0');
       when aw => p0_w <= '1'; p0_state <= bw; wrc_w <= '1'; id_w <= x"0055"; data_w <= std_logic_vector (cntr_wr1 (15 downto 0));
       when bw => p0_w <= '1'; p0_state <= cw; wrc_w <= '1'; id_w <= x"0054"; data_w <= "000000000000" & std_logic_vector (cntr_wr1 (19 downto 16));
-      when cw => p0_w <= '1'; p0_state <= dw; wrc_w <= '1'; id_w <= x"0052"; data_w <= std_logic_vector (c_step1);
+      when cw => p0_w <= '1'; p0_state <= dw; wrc_w <= '1'; id_w <= x"0052"; data_w <= std_logic_vector (c_step_w);
       when dw => p0_w <= '1'; p0_state <= ew; wrc_w <= '1'; id_w <= x"0050"; data_w <= x"0000";
 
       when ew =>
@@ -767,10 +774,12 @@ begin
             p0_state <= a1;
           end if;
           w8_bw <= 0;
-          if (cntr_wr1 = to_unsigned (c_cntr_frame, cntr_wr1'left+1)) then
-            cntr_wr1 <= (others => '0');
-          else
-            cntr_wr1 <= cntr_wr1 + c_step1;
+          if (oe_n_i = '1') then
+            if (cntr_wr1 = to_unsigned (c_cntr_frame, cntr_wr1'left+1)) then
+              cntr_wr1 <= (others => '0');
+            else
+              cntr_wr1 <= cntr_wr1 + c_step_w;
+            end if;
           end if;
         else
           w8_bw <= w8_bw + 1;
@@ -813,7 +822,7 @@ begin
         p1_state <= a1;
 --        p0_r <= '1'; wrc_r <= '1'; id_r <= x"0056"; data_r <= (others => '0');
       when a1 =>
-        if (vga_hsync_i = '0') then
+        if (vga_hsync_i_prev = '1' and vga_hsync_i = '0') then
           start_read <= '1';
           p1_state <= ar;
         end if;
@@ -827,7 +836,7 @@ begin
         end if;
       when cr =>
         if (start_read = '1') then
-          p0_r <= '1'; p1_state <= dr; wrc_r <= '1'; id_r <= x"0053"; data_r <= std_logic_vector (c_step1);
+          p0_r <= '1'; p1_state <= dr; wrc_r <= '1'; id_r <= x"0053"; data_r <= std_logic_vector (c_step_r);
         end if;
       when dr =>
         if (start_read = '1') then
@@ -855,10 +864,12 @@ begin
 --            p1_state <= a0a;
           end if;
           w8_br <= 0;
-          if (cntr_rd1 = to_unsigned (c_cntr_frame, cntr_rd1'left+1)) then
-            cntr_rd1 <= (others => '0');
-          else
-            cntr_rd1 <= cntr_rd1 + c_step1;
+          if (we_n_i = '1') then
+            if (cntr_rd1 = to_unsigned (c_cntr_frame, cntr_rd1'left+1)) then
+              cntr_rd1 <= (others => '0');
+            else
+              cntr_rd1 <= cntr_rd1 + c_step_r;
+            end if;
           end if;
         else
           w8_br <= w8_br + 1;
@@ -981,8 +992,8 @@ read_buffer_clk => clk2x_2,
 
 lb => lb_n,
 ub => ub_n,
-oe => oe_n,
-we => we_n,
+oe => oe_n_i,
+we => we_n_i,
 adv => adv_n,
 ce => ce_n,
 cre => cre,
