@@ -45,7 +45,7 @@ end camera_colorbar;
 
 architecture behavioral of camera_colorbar is
 
-  type t_vs_states is (svs1, svs2, svs3, svs4);
+  type t_vs_states is (cold_start, svs1, svs2, svs3, svs4);
   type t_hs_states is (swait4vsync, shref1, shref0);
   type t_pt_states is (s1, s2, s3);
   signal vs_state : t_vs_states;
@@ -182,14 +182,24 @@ begin
   camera_o_vs <= not vsync_i when c_com10_02 = true else vsync_i;
   p1_vsync : process (camera_i_xclk, camera_i_rst) is
     variable count : integer range 0 to c_vsync_all * a_tline - 1;
+    constant c_wait_start : integer := 1234;
+    variable wait_start : integer range 0 to c_wait_start - 1;
   begin
     if (camera_i_rst = '0') then
       count := 0;
-      vsync_i <= '0'; -- XXX check when startup
-      vs_state <= svs1;
+      vsync_i <= '1'; -- XXX check when startup
+      vs_state <= cold_start;
       href_time <= '0';
+      wait_start := 0;
     elsif (falling_edge (camera_i_xclk)) then
       case (vs_state) is
+        when cold_start => -- shift first vs
+          if (wait_start = c_wait_start - 1) then
+            wait_start := 0;
+            vs_state <= svs1;
+          else
+            wait_start := wait_start + 1;
+          end if;
         when svs1 =>
           vsync_i <= '0';
           href_time <= '0';

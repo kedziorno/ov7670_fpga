@@ -335,11 +335,13 @@ end process p8_bral;
 p9_run : process (clk) is
 begin
   if (falling_edge (clk)) then
-    if (id = set_wb_addr and writes = '1' and busy_i = '0') then
+    if (state = idle and id = set_wb_addr and writes = '1' and busy_i = '0') then
       source_addr <= unsigned (data (9 downto 0));
+      report "set wb addr";
     end if;
-    if (id = set_rb_addr and writes = '1' and busy_i = '0') then
+    if (state = idle and id = set_rb_addr and writes = '1' and busy_i = '0') then
       sink_addr <= unsigned (data (9 downto 0));
+      report "set rb addr";
     end if;
     if (state = config0) then
       clk_enable <= '0';
