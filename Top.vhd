@@ -799,19 +799,19 @@ begin
 ----          if (vga_hsync_i_prev = '0' and vga_hsync_i = '1') then
 ----          end if;
 --        end if;
-        if (ov7670_vs_next = "11" and vga_vsync_sig = '0') then
+        if (ov7670_vs_next = "00" and vga_vsync_sig = '0') then
           p1_state <= a0a;
         end if;
       when a0a =>
         cntr_rd1 <= (others => '0');
         p1_state <= a0b;
-        p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0');
+--        p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0');
       when a0b =>
         p1_state <= a0c;
-        p0_r <= '1'; wrc_r <= '1'; id_r <= x"0057"; data_r <= (others => '0');
+--        p0_r <= '1'; wrc_r <= '1'; id_r <= x"0057"; data_r <= (others => '0');
       when a0c =>
         p1_state <= a1;
-        p0_r <= '1'; wrc_r <= '1'; id_r <= x"0056"; data_r <= (others => '0');
+--        p0_r <= '1'; wrc_r <= '1'; id_r <= x"0056"; data_r <= (others => '0');
       when a1 =>
         if (vga_hsync_i = '0') then
           start_read <= '1';
@@ -852,6 +852,7 @@ begin
             p1_state <= a0;
           else
             p1_state <= a1;
+--            p1_state <= a0a;
           end if;
           w8_br <= 0;
           if (cntr_rd1 = to_unsigned (c_cntr_frame, cntr_rd1'left+1)) then
