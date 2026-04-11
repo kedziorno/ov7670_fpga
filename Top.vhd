@@ -716,6 +716,7 @@ id <= id_w when p0_w = '1' else id_r when p0_r = '1' else (others => '0');
 data <= data_w when p0_w = '1' else data_r when p0_r = '1' else (others => '0');
 wrc <= wrc_w when p0_w = '1' else wrc_r when p0_r = '1' else '0';
 
+-- 3 frames write ok
 p0_control_crbc_write : process (i_clock_ib) is
 begin
   if (rising_edge (i_clock_ib)) then
@@ -746,8 +747,8 @@ begin
         p0_state <= a1c;
         p0_w <= '1'; wrc_w <= '1'; id_w <= x"0055"; data_w <= (others => '0');
       when a1c =>
---        if (ov7670_hs_prev = '1' and ov7670_hs = '0') then
-        if (ov7670_hs = '1') then
+        if (ov7670_hs_prev = '1' and ov7670_hs = '0') then
+--        if (ov7670_hs = '1' and oe_n_i = '1') then
           p0_state <= aw;
         end if;
         p0_w <= '1'; wrc_w <= '1'; id_w <= x"0054"; data_w <= (others => '0');
@@ -774,13 +775,13 @@ begin
             p0_state <= a1;
           end if;
           w8_bw <= 0;
-          if (oe_n_i = '1') then
+--          if (vga_hsync_i = '1') then
             if (cntr_wr1 = to_unsigned (c_cntr_frame, cntr_wr1'left+1)) then
               cntr_wr1 <= (others => '0');
             else
               cntr_wr1 <= cntr_wr1 + c_step_w;
             end if;
-          end if;
+--          end if;
         else
           w8_bw <= w8_bw + 1;
         end if;
@@ -790,6 +791,7 @@ begin
 end process p0_control_crbc_write;
 
 p1_control_crbc_read : process (i_clock_ib) is
+  variable flag : boolean := false;
 begin
   if (rising_edge (i_clock_ib)) then
     wrc_r <= '0';
@@ -827,6 +829,9 @@ begin
           p1_state <= ar;
         end if;
       when ar =>
+          if (oe_n_i = '1') then
+            flag := true;
+          end if;
         if (start_read = '1') then
           p0_r <= '1'; p1_state <= br; wrc_r <= '1'; id_r <= x"0057"; data_r <= std_logic_vector (cntr_rd1 (15 downto 0));
         end if;
@@ -864,13 +869,14 @@ begin
 --            p1_state <= a0a;
           end if;
           w8_br <= 0;
-          if (we_n_i = '1') then
+--          if (flag = true) then
+--            flag := false;
             if (cntr_rd1 = to_unsigned (c_cntr_frame, cntr_rd1'left+1)) then
               cntr_rd1 <= (others => '0');
             else
               cntr_rd1 <= cntr_rd1 + c_step_r;
             end if;
-          end if;
+--          end if;
         else
           w8_br <= w8_br + 1;
         end if;
