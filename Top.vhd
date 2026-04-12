@@ -673,7 +673,7 @@ signal busy, wrc : std_logic;
 signal data, id : std_logic_vector(15 downto 0);
 
 type p_states is (
-a0, a0a, a0b, a0c, a1, a1a, a1b, a1c, ar, br, cr, dr, er, er1, aw, bw, cw, dw, ew
+a0, a00, a0a, a0b, a0c, a1, a1a, a1b, a1c, ar, br, cr, dr, er, er1, aw, bw, cw, dw, ew
 );
 signal p0_state : p_states := a0;
 signal p1_state : p_states := a0;
@@ -734,7 +734,8 @@ begin
         if (ov7670_vs = '1') then
           p0_state <= a1a;
         end if;
-        if (ov7670_hs_prev = '1' and ov7670_hs = '0') then
+--        if (ov7670_hs_prev = '1' and ov7670_hs = '0') then -- wr when hs 0
+        if (ov7670_hs_prev = '0' and ov7670_hs = '1') then -- wr when hs 1
 --          if (vga_hsync_i_prev = '0' and vga_hsync_i = '1') then
             p0_state <= aw;
 --          end if;
@@ -801,7 +802,8 @@ begin
     vga_vsync_sig_prev <= vga_vsync_sig;
     case (p1_state) is
       when a0 =>
-        p0_r <= '0';
+--        p0_r <= '0';
+        cntr_rd1 <= (others => '0');
         if (ov7670_vs_prev = '1' and ov7670_vs = '0') then
           --cntr_wr1 <= (others => '0');
           ov7670_vs_next <= ov7670_vs_next (0) & '1';
@@ -812,12 +814,15 @@ begin
 ----          end if;
 --        end if;
 --        if (ov7670_vs_next = "01" and (vga_vsync_sig_prev = '0' and vga_vsync_sig = '1')) then -- from vs vga
-        if (ov7670_vs_next = "11" and ov7670_vs = '0') then -- from vs cam
+        if (ov7670_vs_next = "11") then -- from vs cam
+          p1_state <= a00;
+        end if;
+      when a00 =>
+        if (ov7670_vs = '0') then
           p1_state <= a0a;
         end if;
       when a0a =>
---        cntr_rd1 <= (others => '0');
-          p1_state <= a0b;
+        p1_state <= a0b;
         p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0');
       when a0b =>
         p1_state <= a0c;
@@ -864,11 +869,13 @@ begin
 --          end if;
 --        end if;
         if (w8_br = c_w8_br - 1) then
-          if (vga_vsync_sig = '0') then
+--          if (vga_vsync_sig = '0') then -- vs vga 0
+          if (ov7670_vs = '1') then -- vs cam 1
             p1_state <= a0;
           else
 --            p1_state <= a0c;
-            p1_state <= a0a;
+--            p1_state <= a0a;
+            p1_state <= a00;
           end if;
           w8_br <= 0;
 --          if (flag = true) then
