@@ -15,7 +15,8 @@ entity VGA_timing_synch is
            Hsync : out  STD_LOGIC := '0';
            Vsync : out  STD_LOGIC := '0';
            blank : out  STD_LOGIC;
-           activeArea1 : out  STD_LOGIC);
+           activeArea1 : out  STD_LOGIC;
+           int : out std_logic);
 end VGA_timing_synch;
 
 -- fastest lsfr
@@ -453,5 +454,7 @@ activeArea1_sig <= '1' when (hcnt < HD) and (vcnt < VD) else '0';
 activeArea1 <= activeArea1_sig;
 blank <= '1' when ((hcnt >= HD) or (vcnt >= VD)) else '0';
 --blank <= not activeArea1_sig;
+--int <= '1' when vcnt < VD and ((hcnt = 399) or (hcnt = 0)) else '0';
+int <= '1' when vcnt <= VD and ((hcnt = 0)) else '0';
 
 end architecture counter;
