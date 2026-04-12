@@ -811,8 +811,8 @@ begin
 ----          if (vga_hsync_i_prev = '0' and vga_hsync_i = '1') then
 ----          end if;
 --        end if;
-        if (ov7670_vs_next = "01" and (vga_vsync_sig_prev = '0' and vga_vsync_sig = '1')) then -- from vs vga
---        if (ov7670_vs_next = "11" and ov7670_vs = '0') then -- from vs cam
+--        if (ov7670_vs_next = "01" and (vga_vsync_sig_prev = '0' and vga_vsync_sig = '1')) then -- from vs vga
+        if (ov7670_vs_next = "11" and ov7670_vs = '0') then -- from vs cam
           p1_state <= a0a;
         end if;
       when a0a =>
