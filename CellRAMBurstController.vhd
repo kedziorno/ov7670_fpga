@@ -271,11 +271,11 @@ begin
     state <= next_state;
     if (id = burst_read and writes = '1' and busy_i = '0' and bytes_to_read > 0) then
       state <= read_byte0;
-      report "burst read";
+      --report "burst read";
     end if;
     if (id = burst_write and writes = '1' and busy_i = '0' and bytes_to_write > 0) then
       state <= write_byte0;
-      report "burst write";
+      --report "burst write";
     end if;
   end if;
 end process p2_next_state;
@@ -285,7 +285,7 @@ begin
   if (falling_edge (clk)) then
     if (id = write_length and writes = '1' and busy_i = '0') then
       bytes_to_write <= unsigned (data (10 downto 0));
-      report "write length " & integer'image (to_integer (unsigned (data (10 downto 0))));
+      --report "write length " & integer'image (to_integer (unsigned (data (10 downto 0))));
     end if;
   end if;
 end process p3_b2w;
@@ -295,7 +295,7 @@ begin
   if (falling_edge (clk)) then
     if (id = read_length and writes = '1' and busy_i = '0') then
       bytes_to_read <= unsigned (data (10 downto 0));
-      report "read length " & integer'image (to_integer (unsigned (data (10 downto 0))));
+      --report "read length " & integer'image (to_integer (unsigned (data (10 downto 0))));
     end if;
   end if;
 end process p4_b2r;
@@ -341,11 +341,11 @@ begin
   if (falling_edge (clk)) then
     if (state = idle and id = set_wb_addr and writes = '1' and busy_i = '0') then
       source_addr <= unsigned (data (9 downto 0));
-      report "set wb addr";
+      --report "set wb addr";
     end if;
     if (state = idle and id = set_rb_addr and writes = '1' and busy_i = '0') then
       sink_addr <= unsigned (data (9 downto 0));
-      report "set rb addr";
+      --report "set rb addr";
     end if;
     if (state = config0) then
       clk_enable <= '0';
@@ -416,7 +416,7 @@ begin
     end if;
     if (state = write_byte0) then
       this_write_addr <= burst_write_addr;
-      report "burst write addr " & integer'image (to_integer (unsigned (burst_write_addr)));
+      --report "burst write addr " & integer'image (to_integer (unsigned (burst_write_addr)));
       write_counter <= bytes_to_write;
       data_out_enable <= (others => '1');
       clk_enable <= '1';
@@ -465,7 +465,7 @@ begin
     end if; 
     if (state = read_byte0) then
       this_read_addr <= burst_read_addr;
-      report "burst read addr " & integer'image (to_integer (unsigned (burst_read_addr)));
+      --report "burst read addr " & integer'image (to_integer (unsigned (burst_read_addr)));
       read_counter <= bytes_to_read;
       clk_enable <= '1';
       a <= std_logic_vector (burst_read_addr);

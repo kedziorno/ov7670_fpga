@@ -679,7 +679,7 @@ signal p0_state : p_states := a0;
 signal p1_state : p_states := a0;
 constant c_w8_bw : integer := 3200;
 signal w8_bw : integer range 0 to c_w8_bw - 1 := 0;
-constant c_w8_br : integer := 2817-64-32-32;
+constant c_w8_br : integer := 2816;
 signal w8_br : integer range 0 to c_w8_br - 1 := 0;
 
 constant c_cntr_frame : integer := 307200;
@@ -742,10 +742,10 @@ begin
       when a1a =>
         cntr_wr1 <= (others => '0');
         p0_state <= a1b;
-        p0_w <= '1'; wrc_w <= '1'; id_w <= x"0058"; data_w <= (others => '0');
+--        p0_w <= '1'; wrc_w <= '1'; id_w <= x"0058"; data_w <= (others => '0');
       when a1b =>
         p0_state <= a1c;
-        p0_w <= '1'; wrc_w <= '1'; id_w <= x"0055"; data_w <= (others => '0');
+--        p0_w <= '1'; wrc_w <= '1'; id_w <= x"0055"; data_w <= (others => '0');
       when a1c =>
         if (ov7670_hs_prev = '1' and ov7670_hs = '0') then
 --        if (ov7670_hs = '1' and oe_n_i = '1') then
@@ -815,23 +815,23 @@ begin
         end if;
       when a0a =>
         cntr_rd1 <= (others => '0');
-        p1_state <= a0b;
---        p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0');
+          p1_state <= a0b;
+        p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0');
       when a0b =>
         p1_state <= a0c;
---        p0_r <= '1'; wrc_r <= '1'; id_r <= x"0057"; data_r <= (others => '0');
+        p0_r <= '1'; wrc_r <= '1'; id_r <= x"0057"; data_r <= (others => '0');
       when a0c =>
+--        if (we_n_i = '1') then
+        if (busy = '0') then
         p1_state <= a1;
---        p0_r <= '1'; wrc_r <= '1'; id_r <= x"0056"; data_r <= (others => '0');
+        end if;
+        p0_r <= '1'; wrc_r <= '1'; id_r <= x"0056"; data_r <= (others => '0');
       when a1 =>
-        if (vga_hsync_i_prev = '1' and vga_hsync_i = '0') then
+--        if (vga_hsync_i_prev = '1' and vga_hsync_i = '0') then
           start_read <= '1';
           p1_state <= ar;
-        end if;
+--        end if;
       when ar =>
-          if (oe_n_i = '1') then
-            flag := true;
-          end if;
         if (start_read = '1') then
           p0_r <= '1'; p1_state <= br; wrc_r <= '1'; id_r <= x"0057"; data_r <= std_logic_vector (cntr_rd1 (15 downto 0));
         end if;
@@ -865,7 +865,7 @@ begin
           if (vga_vsync_sig = '0') then
             p1_state <= a0;
           else
-            p1_state <= a1;
+            p1_state <= a0c;
 --            p1_state <= a0a;
           end if;
           w8_br <= 0;
