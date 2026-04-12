@@ -546,7 +546,7 @@ COMPONENT address_generator
 END COMPONENT;
 
 COMPONENT VGA_timing_synch
-	Port ( clk25 : in  STD_LOGIC;
+	Port ( clk25, rst : in  STD_LOGIC;
            Hsync : out  STD_LOGIC;
            Vsync : out  STD_LOGIC;
            blank : out  STD_LOGIC;
@@ -595,8 +595,8 @@ signal rd_a1 : STD_LOGIC_VECTOR(18 downto 0);
 
 --VGA
 signal active1 : STD_LOGIC;
-signal vga_vsync_sig : STD_LOGIC;
-signal vga_vsync_sig_prev : STD_LOGIC;
+signal vga_vsync_sig : STD_LOGIC := '1';
+signal vga_vsync_sig_prev : STD_LOGIC := '1';
 
 signal cc : std_logic;
 signal ov7670_pclk1_ibuf : std_logic;
@@ -679,12 +679,12 @@ signal p0_state : p_states := a0;
 signal p1_state : p_states := a0;
 constant c_w8_bw : integer := 3200;
 signal w8_bw : integer range 0 to c_w8_bw - 1 := 0;
-constant c_w8_br : integer := 2816;
+constant c_w8_br : integer := 2816/2;
 signal w8_br : integer range 0 to c_w8_br - 1 := 0;
 
 constant c_cntr_frame : integer := 307200;
-constant c_step_w : unsigned (15 downto 0) := to_unsigned (128*3-64, 16);
-constant c_step_r : unsigned (15 downto 0) := to_unsigned (128*3-64, 16);
+constant c_step_w : unsigned (15 downto 0) := to_unsigned (320, 16);
+constant c_step_r : unsigned (15 downto 0) := to_unsigned (160, 16);
 signal cntr_wr1 : unsigned (19 downto 0) := (others => '0');
 signal cntr_wr1_slv : std_logic_vector (19 downto 0) := (others => '0');
 signal cntr_rd1 : unsigned (19 downto 0) := (others => '0');
@@ -693,7 +693,7 @@ signal ov7670_vs_next : std_logic_vector (1 downto 0) := (others => '0');
 signal ov7670_vs_prev : std_logic := '0';
 signal start_read : std_logic := '0';
 
-signal vga_hsync_i, vga_hsync_i_prev : std_logic;
+signal vga_hsync_i, vga_hsync_i_prev : std_logic := '1';
 
 signal data_r, data_w, id_r, id_w : std_logic_vector (15 downto 0) := (others => '0');
 signal p0_r, p0_w : std_logic;
@@ -706,6 +706,8 @@ signal clk2x_1, clk2x_2 : std_logic;
 signal ov7670_hs_prev : std_logic;
 
 signal oe_n_i, we_n_i : std_logic;
+
+signal reset_vga_timing : std_logic := '1';
 
 begin
 
@@ -814,16 +816,20 @@ begin
 ----          end if;
 --        end if;
 --        if (ov7670_vs_next = "01" and (vga_vsync_sig_prev = '0' and vga_vsync_sig = '1')) then -- from vs vga
-        if (ov7670_vs_next = "11") then -- from vs cam
+        if (ov7670_vs_next = "01") then -- from vs cam
           p1_state <= a00;
         end if;
       when a00 =>
-        if (ov7670_vs = '0') then
+--        if (ov7670_vs = '0') then -- cam vs 1
+--        if (vga_vsync_sig_prev = '1' and vga_vsync_sig = '0') then -- vga vs 0
+        if (vga_vsync_sig = '1') then -- vga vs /= 0
           p1_state <= a0a;
         end if;
       when a0a =>
-        p1_state <= a0b;
-        p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0');
+--        if (vga_hsync_i_prev = '1' and vga_hsync_i = '0') then
+          p1_state <= a0b;
+--        end if;
+--        p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0'); -- reset sink addr
       when a0b =>
         p1_state <= a0c;
         p0_r <= '1'; wrc_r <= '1'; id_r <= x"0057"; data_r <= (others => '0');
@@ -874,8 +880,8 @@ begin
             p1_state <= a0;
           else
 --            p1_state <= a0c;
---            p1_state <= a0a;
-            p1_state <= a00;
+            p1_state <= a0a;
+--            p1_state <= a00;
           end if;
           w8_br <= 0;
 --          if (flag = true) then
@@ -893,6 +899,22 @@ begin
     end case;
   end if;
 end process p1_control_crbc_read;
+
+p0_reset_vga_timing : process (i_clock_ib) is
+  type states is (a, b);
+  variable state : states := a;
+begin
+  if (rising_edge (i_clock_ib)) then
+    case (state) is
+      when a =>
+        if (ov7670_vs_prev = '1' and ov7670_vs = '0') then
+          state := b;
+        end if;
+      when b =>
+        reset_vga_timing <= not reset_vga_timing;
+    end case;
+  end if;
+end process p0_reset_vga_timing;
 
 --p0_control_crbc : process (i_clock) is
 --begin
@@ -1106,6 +1128,7 @@ RGB_out => vga_rgb);
 vga_hsync <= vga_hsync_i;
 inst_vgatiming : VGA_timing_synch port map(
 clk25 => clk_vga,
+rst => reset_vga_timing,
 Hsync => vga_hsync_i,
 Vsync => vga_vsync_sig,
 blank => vga_blank,

@@ -11,7 +11,7 @@ library unisim;
 use unisim.vcomponents.all;
 
 entity VGA_timing_synch is
-    Port ( clk25 : in  STD_LOGIC;
+    Port ( clk25, rst : in  STD_LOGIC;
            Hsync : out  STD_LOGIC := '0';
            Vsync : out  STD_LOGIC := '0';
            blank : out  STD_LOGIC;
@@ -403,36 +403,49 @@ clk_vga <= clk25;
 
 count_proc : process(clk_vga,vcnt,hcnt) begin
 		if rising_edge(clk_vga) then
-			if (hcnt = HP) then
-				hcnt <= 0;
-				if (vcnt = VP) then
-					vcnt <= 0;
-				else
-					vcnt <= vcnt + 1;
-				end if;
-			else
-				hcnt <= hcnt +1;
-			end if;
+      if (rst = '1') then
+        hcnt <= 0;
+        vcnt <= 0;
+      else
+        if (hcnt = HP) then
+          hcnt <= 0;
+          if (vcnt = VP) then
+            vcnt <= 0;
+          else
+            vcnt <= vcnt + 1;
+          end if;
+        else
+          hcnt <= hcnt +1;
+        end if;
+      end if;
 		end if;
 end process count_proc;
 
 hsync_gen : process(clk_vga) begin
 	if rising_edge(clk_vga) then
-		if (hcnt >= (HD+HF) and hcnt <= (HD+HF+HR-1)) then
-			Hsync <= '0';
-		else
-			Hsync <= '1';
-		end if;
+    if (rst = '1') then
+      Hsync <= '1';
+    else
+      if (hcnt >= (HD+HF) and hcnt <= (HD+HF+HR-1)) then
+        Hsync <= '0';
+      else
+        Hsync <= '1';
+      end if;
+    end if;
 	end if;
 end process hsync_gen;
 
 vsync_gen : process(clk_vga) begin
 	if rising_edge(clk_vga) then
-		if (vcnt >= (VD + VF) and vcnt <= (VD + VF + VR - 1)) then
-			Vsync <= '0';
-		else
-			Vsync <= '1';
-		end if;
+    if (rst = '1') then
+      Vsync <= '1';
+    else
+      if (vcnt >= (VD + VF) and vcnt <= (VD + VF + VR - 1)) then
+        Vsync <= '0';
+      else
+        Vsync <= '1';
+      end if;
+    end if;
 	end if;
 end process vsync_gen;
 
