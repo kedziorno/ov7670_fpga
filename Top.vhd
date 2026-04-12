@@ -744,13 +744,14 @@ begin
         p0_state <= a1b;
 --        p0_w <= '1'; wrc_w <= '1'; id_w <= x"0058"; data_w <= (others => '0');
       when a1b =>
-        p0_state <= a1c;
 --        p0_w <= '1'; wrc_w <= '1'; id_w <= x"0055"; data_w <= (others => '0');
-      when a1c =>
-        if (ov7670_hs_prev = '1' and ov7670_hs = '0') then
+--        if (ov7670_hs_prev = '1' and ov7670_hs = '0') then -- cam hs fe
+        if (ov7670_hs_prev = '1' and ov7670_hs = '0') then -- cam hs re
 --        if (ov7670_hs = '1' and oe_n_i = '1') then
-          p0_state <= aw;
+          p0_state <= a1c;
         end if;
+      when a1c =>
+        p0_state <= aw;
         p0_w <= '1'; wrc_w <= '1'; id_w <= x"0054"; data_w <= (others => '0');
       when aw => p0_w <= '1'; p0_state <= bw; wrc_w <= '1'; id_w <= x"0055"; data_w <= std_logic_vector (cntr_wr1 (15 downto 0));
       when bw => p0_w <= '1'; p0_state <= cw; wrc_w <= '1'; id_w <= x"0054"; data_w <= "000000000000" & std_logic_vector (cntr_wr1 (19 downto 16));
@@ -810,12 +811,12 @@ begin
 ----          if (vga_hsync_i_prev = '0' and vga_hsync_i = '1') then
 ----          end if;
 --        end if;
---        if (ov7670_vs_next = "01" and vga_vsync_sig = '0') then
-        if (ov7670_vs_next = "11" and ov7670_vs = '0') then
+        if (ov7670_vs_next = "01" and (vga_vsync_sig_prev = '0' and vga_vsync_sig = '1')) then -- from vs vga
+--        if (ov7670_vs_next = "11" and ov7670_vs = '0') then -- from vs cam
           p1_state <= a0a;
         end if;
       when a0a =>
-        cntr_rd1 <= (others => '0');
+--        cntr_rd1 <= (others => '0');
           p1_state <= a0b;
         p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0');
       when a0b =>
@@ -824,7 +825,7 @@ begin
       when a0c =>
 --        if (we_n_i = '1') then
         if (busy = '0') then
-        p1_state <= a1;
+          p1_state <= a1;
         end if;
         p0_r <= '1'; wrc_r <= '1'; id_r <= x"0056"; data_r <= (others => '0');
       when a1 =>
@@ -866,8 +867,8 @@ begin
           if (vga_vsync_sig = '0') then
             p1_state <= a0;
           else
-            p1_state <= a0c;
---            p1_state <= a0a;
+--            p1_state <= a0c;
+            p1_state <= a0a;
           end if;
           w8_br <= 0;
 --          if (flag = true) then
