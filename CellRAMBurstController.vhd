@@ -29,7 +29,8 @@ port (
   ram_clk : out std_logic;
   o_wait : in std_logic;
   a : out std_logic_vector (22 downto 0);
-  dq : inout std_logic_vector (15 downto 0)
+  dq : inout std_logic_vector (15 downto 0);
+  vga_int : in std_logic
 );
 end entity cellular_ram_burst_controller;
 
@@ -142,7 +143,16 @@ end component sink_read;
 signal clk0, clk0_fb : std_logic;
 signal clk2x, clk2d : std_logic;
 
+signal vga_int_i : std_logic;
+
 begin
+
+p0_vga_int : process (clk) is
+begin
+  if (falling_edge (clk)) then
+    vga_int_i <= vga_int;
+  end if;
+end process p0_vga_int;
 
 busy <= busy_i;
 
@@ -415,6 +425,9 @@ begin
       oe <= '1';
     end if;
     if (state = write_byte0) then
+--      if (vga_int_i = '1') then
+--        sink_addr <= sink_addr + 320;
+--      end if;
       this_write_addr <= burst_write_addr;
       --report "burst write addr " & integer'image (to_integer (unsigned (burst_write_addr)));
       write_counter <= bytes_to_write;

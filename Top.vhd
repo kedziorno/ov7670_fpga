@@ -671,7 +671,8 @@ cre : OUT  std_logic;
 ram_clk : OUT  std_logic;
 o_wait : IN  std_logic;
 a : OUT  std_logic_vector(22 downto 0);
-dq : INOUT  std_logic_vector(15 downto 0)
+dq : INOUT  std_logic_vector(15 downto 0);
+vga_int : in std_logic
 );
 END COMPONENT cellular_ram_burst_controller;
 signal busy, wrc : std_logic;
@@ -746,7 +747,8 @@ begin
 --        if (ov7670_vs = '1') then
 --          p0_state <= a1a;
 --        end if;
-        if (ov7670_hs_prev = '1' and ov7670_hs = '0') then -- wr when hs fe
+--        if (ov7670_hs_prev = '1' and ov7670_hs = '0') then -- wr when hs fe
+        if (ov7670_hs = '0') then -- wr when hs fe
 --        if (ov7670_hs_prev = '0' and ov7670_hs = '1') then -- wr when hs re
 --          if (vga_hsync_i_prev = '0' and vga_hsync_i = '1') then
 --            p0_state <= aw;
@@ -820,6 +822,9 @@ begin
       when a0 =>
 --        p0_r <= '0';
 --        if (cntr_rd1 > (307200 / 2) - 1) then
+        if (ov7670_vs_prev = '0' and ov7670_vs = '1') then
+          p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0'); -- reset sink addr
+        end if;
         if (ov7670_vs_prev = '1' and ov7670_vs = '0') then
 --        if (vga_vsync_sig_prev = '0' and vga_vsync_sig = '1') then
           --cntr_wr1 <= (others => '0');
@@ -847,7 +852,7 @@ begin
           p1_state <= a0a;
         end if;
       when a0a =>
-        if (cntr_rd1 >= 153600) then
+        if (cntr_rd1 >= 153280) then
           cntr_rd1 <= (others => '0');
         end if;
         if (vga_fint = '1') then
@@ -1081,7 +1086,8 @@ cre => cre,
 ram_clk => clk,
 o_wait => owait,
 a => addr,
-dq => dq
+dq => dq,
+vga_int => vga_int
 );
 
 -- upper half cam data
