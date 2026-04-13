@@ -103,11 +103,12 @@ COMPONENT vga_imagegenerator
 END COMPONENT;
 
 COMPONENT VGA_timing_synch
-	Port ( clk25 : in  STD_LOGIC;
+	Port ( clk25, rst : in  STD_LOGIC;
            Hsync : out  STD_LOGIC;
            Vsync : out  STD_LOGIC;
            blank : out  STD_LOGIC;
-           activeArea1 : out  STD_LOGIC);
+           activeArea1 : out  STD_LOGIC;
+           int, fint : out  STD_LOGIC);
 END COMPONENT;
 --for all : VGA_timing_synch use entity work.VGA_timing_synch(lsfr_2);
 --for all : VGA_timing_synch use entity work.VGA_timing_synch(lsfr_1);
@@ -348,10 +349,13 @@ begin
 
   inst_vgatiming : VGA_timing_synch port map(
     clk25 => clk_vga,
+    rst => resend,
     Hsync => vga_hsync_i,
     Vsync => vga_vsync_i,
     blank => vga_blank,
-    activeArea1 => active1
+    activeArea1 => active1,
+    int => open,
+    fint => open
   );
 
   vga_hsync <= ov7670_hs;
