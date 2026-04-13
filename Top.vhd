@@ -748,7 +748,8 @@ begin
 --          p0_state <= a1a;
 --        end if;
 --        if (ov7670_hs_prev = '1' and ov7670_hs = '0') then -- wr when hs fe
-        if (ov7670_hs = '0') then -- wr when hs fe
+--        if (ov7670_hs = '0') then -- wr when hs fe
+        if (ov7670_hs = '1') then -- wr when hs fe
 --        if (ov7670_hs_prev = '0' and ov7670_hs = '1') then -- wr when hs re
 --          if (vga_hsync_i_prev = '0' and vga_hsync_i = '1') then
 --            p0_state <= aw;
