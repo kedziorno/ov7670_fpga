@@ -719,6 +719,18 @@ signal vga_int, vga_fint : std_logic;
 
 begin
 
+-- STARTUP_SPARTAN3E: Startup primitive for GSR, GTS, startup sequence
+-- control and Multi-Boot Configuration. Spartan-3E
+-- Xilinx HDL Libraries Guide, version 10.1.2
+STARTUP_SPARTAN3E_inst : STARTUP_SPARTAN3E
+port map (
+CLK => i_clock_ib, -- Clock input for start-up sequence
+GSR => resend, -- Global Set/Reset input (GSR cannot be used for the port name)
+GTS => '0', -- Global 3-state input (GTS cannot be used for the port name)
+MBT => '0' -- Multi-Boot Trigger input
+);
+-- End of STARTUP_SPARTAN3E_inst instantiation
+
 oe_n <= oe_n_i;
 we_n <= we_n_i;
 

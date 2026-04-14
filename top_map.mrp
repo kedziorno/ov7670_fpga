@@ -5,42 +5,48 @@ Design Information
 ------------------
 Command Line   : map -filter
 /home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/iseconfig/filter.filter
--intstyle ise -p xc3s1200e-fg320-4 -cm area -ir off -pr off -c 100 -o
-top_map.ncd top.ngd top.pcf 
+-intstyle ise -p xc3s1200e-fg320-4 -cm area -ir off -ignore_keep_hierarchy -pr
+off -c 100 -o top_map.ncd top.ngd top.pcf 
 Target Device  : xc3s1200e
 Target Package : fg320
 Target Speed   : -4
 Mapper Version : spartan3e -- $Revision: 1.55 $
-Mapped Date    : Mon Apr 13 10:55:23 2026
+Mapped Date    : Tue Apr 14 20:52:13 2026
 
 Design Summary
 --------------
 Number of errors:      0
-Number of warnings:    9
+Number of warnings:   12
 Logic Utilization:
-  Number of Slice Flip Flops:           541 out of  17,344    3%
-  Number of 4 input LUTs:               871 out of  17,344    5%
+  Total Number Slice Registers:         812 out of  17,344    4%
+    Number used as Flip Flops:          811
+    Number used as Latches:               1
+  Number of 4 input LUTs:             1,081 out of  17,344    6%
 Logic Distribution:
-  Number of occupied Slices:            597 out of   8,672    6%
-    Number of Slices containing only related logic:     597 out of     597 100%
-    Number of Slices containing unrelated logic:          0 out of     597   0%
+  Number of occupied Slices:            847 out of   8,672    9%
+    Number of Slices containing only related logic:     847 out of     847 100%
+    Number of Slices containing unrelated logic:          0 out of     847   0%
       *See NOTES below for an explanation of the effects of unrelated logic.
-  Total Number of 4 input LUTs:       1,081 out of  17,344    6%
-    Number used as logic:               870
-    Number used as a route-thru:        210
-    Number used as Shift registers:       1
+  Total Number of 4 input LUTs:       1,354 out of  17,344    7%
+    Number used as logic:             1,005
+    Number used as a route-thru:        273
+    Number used as Shift registers:      76
 
   The Slice Logic Distribution report is not meaningful if the design is
   over-mapped for a non-slice resource or if Placement fails.
 
   Number of bonded IOBs:                 93 out of     250   37%
-  Number of RAMB16s:                      3 out of      28   10%
-  Number of BUFGMUXs:                     6 out of      24   25%
+  Number of RAMB16s:                     12 out of      28   42%
+  Number of BUFGMUXs:                     7 out of      24   29%
   Number of DCMs:                         2 out of       8   25%
+  Number of STARTUPs:                     1 out of       1  100%
+  Number of BSCANs:                       1 out of       1  100%
+  Number of STARTUP_SPARTAN3Es:           1 out of       1  100%
 
-Average Fanout of Non-Clock Nets:                3.03
+  Number of RPM macros:           12
+Average Fanout of Non-Clock Nets:                3.06
 
-Peak Memory Usage:  589 MB
+Peak Memory Usage:  594 MB
 Total REAL time to MAP completion:  2 secs 
 Total CPU time to MAP completion:   2 secs 
 
@@ -83,6 +89,18 @@ Section 1 - Errors
 
 Section 2 - Warnings
 --------------------
+WARNING:LIT:176 - Clock buffer is designated to drive clock loads. BUFGMUX
+   symbol
+   "physical_group_inst_top_camera_monitoring/i_clock_ib/inst_top_camera_monitor
+   ing/i_clock_ib_BUFG" (output signal=inst_top_camera_monitoring/i_clock_ib)
+   has a mix of clock and non-clock loads. The non-clock loads are:
+   Pin I1 of inst_top_camera_monitoring/crbc_i0/ram_clk1
+WARNING:PhysDesignRules:372 - Gated clock. Clock net Clk_OBUF is sourced by a
+   combinatorial pin. This is not good design practice. Use the CE pin to
+   control the loading of data into the flip-flop.
+WARNING:PhysDesignRules:372 - Gated clock. Clock net icon_control0<13> is
+   sourced by a combinatorial pin. This is not good design practice. Use the CE
+   pin to control the loading of data into the flip-flop.
 WARNING:PhysDesignRules:367 - The signal <sw<0>_IBUF> is incomplete. The signal
    does not drive any load pins in the design.
 WARNING:PhysDesignRules:367 - The signal <sw<1>_IBUF> is incomplete. The signal
@@ -104,14 +122,14 @@ WARNING:PhysDesignRules:781 - PULLUP on an active net. PULLUP of comp
 
 Section 3 - Informational
 -------------------------
-INFO:LIT:243 - Logical network sw<7>_IBUF has no load.
-INFO:LIT:395 - The above info message is repeated 7 more times for the following
-   (max. 5 shown):
-   sw<6>_IBUF,
-   sw<5>_IBUF,
-   sw<4>_IBUF,
-   sw<3>_IBUF,
-   sw<2>_IBUF
+INFO:LIT:243 - Logical network N21 has no load.
+INFO:LIT:395 - The above info message is repeated 57 more times for the
+   following (max. 5 shown):
+   N22,
+   N23,
+   N24,
+   N25,
+   N26
    To see the details of these info messages, please use the -detail switch.
 INFO:MapLib:562 - No environment variables are currently set.
 INFO:LIT:244 - All of the single ended outputs in this design are using slew
@@ -124,29 +142,207 @@ INFO:PhysDesignRules:772 - To achieve optimal frequency synthesis performance
 
 Section 4 - Removed Logic Summary
 ---------------------------------
-   2 block(s) removed
-   2 block(s) optimized away
-   2 signal(s) removed
+  49 block(s) removed
+  42 block(s) optimized away
+  41 signal(s) removed
 
 Section 5 - Removed Logic
 -------------------------
 
-The trimmed logic reported below is either:
-   1. part of a cycle
-   2. part of disabled logic
-   3. a side-effect of other trimmed logic
+The trimmed logic report below shows the logic removed from your design due to
+sourceless or loadless signals, and VCC or ground connections.  If the removal
+of a signal or symbol results in the subsequent removal of an additional signal
+or symbol, the message explaining that second removal will be indented.  This
+indentation will be repeated as a chain of related logic is removed.
 
-The signal "inst_top_camera_monitoring/crbc_i0/clk0" is unused and has been
+To quickly locate the original cause for the removal of a chain of logic, look
+above the place where that logic is listed in the trimming report, then locate
+the lines that are least indented (begin at the leftmost edge).
+
+Loadless block "U_icon_pro/U0/U_ICON/U_CMD/U_CORE_ID_SEL/I4.FI[10].U_LUT" (ROM)
 removed.
-The signal "inst_top_camera_monitoring/crbc_i0/clk0_fb" is unused and has been
+Loadless block "U_icon_pro/U0/U_ICON/U_CMD/U_CORE_ID_SEL/I4.FI[11].U_LUT" (ROM)
 removed.
- Unused block "inst_top_camera_monitoring/crbc_i0/bufg1" (CKBUF) removed.
+Loadless block "U_icon_pro/U0/U_ICON/U_CMD/U_CORE_ID_SEL/I4.FI[12].U_LUT" (ROM)
+removed.
+Loadless block "U_icon_pro/U0/U_ICON/U_CMD/U_CORE_ID_SEL/I4.FI[13].U_LUT" (ROM)
+removed.
+Loadless block "U_icon_pro/U0/U_ICON/U_CMD/U_CORE_ID_SEL/I4.FI[14].U_LUT" (ROM)
+removed.
+Loadless block "U_icon_pro/U0/U_ICON/U_CMD/U_CORE_ID_SEL/I4.FI[1].U_LUT" (ROM)
+removed.
+Loadless block "U_icon_pro/U0/U_ICON/U_CMD/U_CORE_ID_SEL/I4.FI[2].U_LUT" (ROM)
+removed.
+Loadless block "U_icon_pro/U0/U_ICON/U_CMD/U_CORE_ID_SEL/I4.FI[3].U_LUT" (ROM)
+removed.
+Loadless block "U_icon_pro/U0/U_ICON/U_CMD/U_CORE_ID_SEL/I4.FI[4].U_LUT" (ROM)
+removed.
+Loadless block "U_icon_pro/U0/U_ICON/U_CMD/U_CORE_ID_SEL/I4.FI[5].U_LUT" (ROM)
+removed.
+Loadless block "U_icon_pro/U0/U_ICON/U_CMD/U_CORE_ID_SEL/I4.FI[6].U_LUT" (ROM)
+removed.
+Loadless block "U_icon_pro/U0/U_ICON/U_CMD/U_CORE_ID_SEL/I4.FI[7].U_LUT" (ROM)
+removed.
+Loadless block "U_icon_pro/U0/U_ICON/U_CMD/U_CORE_ID_SEL/I4.FI[8].U_LUT" (ROM)
+removed.
+Loadless block "U_icon_pro/U0/U_ICON/U_CMD/U_CORE_ID_SEL/I4.FI[9].U_LUT" (ROM)
+removed.
+Loadless block "U_ila_pro_0/U0/I_NO_D.U_ILA/U_STAT/U_DSR" (ROM) removed.
+Loadless block "U_ila_pro_0/U0/I_NO_D.U_ILA/U_TRIG/U_TC/I_STORAGE_QUAL.U_CAP_B"
+(ROM) removed.
+The signal "icon_control0<10>" is sourceless and has been removed.
+The signal "icon_control0<11>" is sourceless and has been removed.
+The signal "icon_control0<15>" is sourceless and has been removed.
+The signal "icon_control0<21>" is sourceless and has been removed.
+The signal "icon_control0<16>" is sourceless and has been removed.
+The signal "icon_control0<22>" is sourceless and has been removed.
+The signal "icon_control0<17>" is sourceless and has been removed.
+The signal "icon_control0<23>" is sourceless and has been removed.
+The signal "icon_control0<18>" is sourceless and has been removed.
+The signal "icon_control0<24>" is sourceless and has been removed.
+The signal "icon_control0<19>" is sourceless and has been removed.
+The signal "icon_control0<30>" is sourceless and has been removed.
+The signal "icon_control0<25>" is sourceless and has been removed.
+The signal "icon_control0<31>" is sourceless and has been removed.
+The signal "icon_control0<26>" is sourceless and has been removed.
+The signal "icon_control0<32>" is sourceless and has been removed.
+The signal "icon_control0<7>" is sourceless and has been removed.
+The signal "icon_control0<27>" is sourceless and has been removed.
+The signal "icon_control0<33>" is sourceless and has been removed.
+The signal "icon_control0<28>" is sourceless and has been removed.
+The signal "icon_control0<34>" is sourceless and has been removed.
+The signal "icon_control0<29>" is sourceless and has been removed.
+The signal "icon_control0<35>" is sourceless and has been removed.
+The signal "inst_top_camera_monitoring/rd_d1<0>" is sourceless and has been
+removed.
+The signal "inst_top_camera_monitoring/rd_d1<12>" is sourceless and has been
+removed.
+The signal "inst_top_camera_monitoring/rd_d1<1>" is sourceless and has been
+removed.
+The signal "inst_top_camera_monitoring/rd_d1<2>" is sourceless and has been
+removed.
+The signal "inst_top_camera_monitoring/rd_d1<3>" is sourceless and has been
+removed.
+The signal "inst_top_camera_monitoring/rd_d1<4>" is sourceless and has been
+removed.
+The signal "inst_top_camera_monitoring/rd_d1<5>" is sourceless and has been
+removed.
+The signal "inst_top_camera_monitoring/rd_d1<8>" is sourceless and has been
+removed.
+The signal "inst_top_camera_monitoring/crbc_i0/clk0" is sourceless and has been
+removed.
+ Sourceless block "inst_top_camera_monitoring/crbc_i0/bufg1" (CKBUF) removed.
+  The signal "inst_top_camera_monitoring/crbc_i0/clk0_fb" is sourceless and has
+been removed.
+The signal "U_icon_pro/U0/U_ICON/iCOMMAND_SEL<3>" is sourceless and has been
+removed.
+ Sourceless block "U_icon_pro/U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[3].U_HCE" (ROM)
+removed.
+ Sourceless block "U_icon_pro/U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[3].U_LCE" (ROM)
+removed.
+The signal "U_icon_pro/U0/U_ICON/iCOMMAND_SEL<6>" is sourceless and has been
+removed.
+ Sourceless block "U_icon_pro/U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[6].U_HCE" (ROM)
+removed.
+ Sourceless block "U_icon_pro/U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[6].U_LCE" (ROM)
+removed.
+The signal "U_icon_pro/U0/U_ICON/iCOMMAND_SEL<7>" is sourceless and has been
+removed.
+ Sourceless block "U_icon_pro/U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[7].U_HCE" (ROM)
+removed.
+ Sourceless block "U_icon_pro/U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[7].U_LCE" (ROM)
+removed.
+The signal "U_icon_pro/U0/U_ICON/iCOMMAND_SEL<11>" is sourceless and has been
+removed.
+ Sourceless block "U_icon_pro/U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[11].U_HCE"
+(ROM) removed.
+ Sourceless block "U_icon_pro/U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[11].U_LCE"
+(ROM) removed.
+The signal "U_icon_pro/U0/U_ICON/iCOMMAND_SEL<12>" is sourceless and has been
+removed.
+ Sourceless block "U_icon_pro/U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[12].U_HCE"
+(ROM) removed.
+ Sourceless block "U_icon_pro/U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[12].U_LCE"
+(ROM) removed.
+The signal "U_icon_pro/U0/U_ICON/iCOMMAND_SEL<13>" is sourceless and has been
+removed.
+ Sourceless block "U_icon_pro/U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[13].U_HCE"
+(ROM) removed.
+ Sourceless block "U_icon_pro/U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[13].U_LCE"
+(ROM) removed.
+The signal "U_icon_pro/U0/U_ICON/iCOMMAND_SEL<14>" is sourceless and has been
+removed.
+ Sourceless block "U_icon_pro/U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[14].U_HCE"
+(ROM) removed.
+ Sourceless block "U_icon_pro/U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[14].U_LCE"
+(ROM) removed.
+The signal "U_icon_pro/U0/U_ICON/iCOMMAND_SEL<15>" is sourceless and has been
+removed.
+ Sourceless block "U_icon_pro/U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[15].U_HCE"
+(ROM) removed.
+ Sourceless block "U_icon_pro/U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[15].U_LCE"
+(ROM) removed.
+Unused block "U_icon_pro/U0/U_ICON/U_CMD/U_COMMAND_SEL/I4.FI[11].U_LUT" (ROM)
+removed.
+Unused block "U_icon_pro/U0/U_ICON/U_CMD/U_COMMAND_SEL/I4.FI[12].U_LUT" (ROM)
+removed.
+Unused block "U_icon_pro/U0/U_ICON/U_CMD/U_COMMAND_SEL/I4.FI[13].U_LUT" (ROM)
+removed.
+Unused block "U_icon_pro/U0/U_ICON/U_CMD/U_COMMAND_SEL/I4.FI[14].U_LUT" (ROM)
+removed.
+Unused block "U_icon_pro/U0/U_ICON/U_CMD/U_COMMAND_SEL/I4.FI[15].U_LUT" (ROM)
+removed.
+Unused block "U_icon_pro/U0/U_ICON/U_CMD/U_COMMAND_SEL/I4.FI[3].U_LUT" (ROM)
+removed.
+Unused block "U_icon_pro/U0/U_ICON/U_CMD/U_COMMAND_SEL/I4.FI[6].U_LUT" (ROM)
+removed.
+Unused block "U_icon_pro/U0/U_ICON/U_CMD/U_COMMAND_SEL/I4.FI[7].U_LUT" (ROM)
+removed.
+Unused block "U_icon_pro/U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[10].U_HCE" (ROM)
+removed.
+Unused block "U_icon_pro/U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[1].U_HCE" (ROM)
+removed.
+Unused block "U_icon_pro/U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[2].U_HCE" (ROM)
+removed.
+Unused block "U_icon_pro/U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[4].U_HCE" (ROM)
+removed.
+Unused block "U_icon_pro/U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[5].U_HCE" (ROM)
+removed.
+Unused block "U_icon_pro/U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[8].U_HCE" (ROM)
+removed.
+Unused block "U_icon_pro/U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[9].U_HCE" (ROM)
+removed.
 Unused block "inst_top_camera_monitoring/crbc_i0/dcm1" (DCM_SP) removed.
 
 Optimized Block(s):
 TYPE 		BLOCK
-GND 		XST_GND
-VCC 		XST_VCC
+GND 		U_icon_pro/XST_GND
+VCC 		U_icon_pro/XST_VCC
+LUT4 		U_ila_pro_0/U0/I_NO_D.U_ILA/U_STAT/F_SSTAT[6].I_STAT.U_STAT
+   optimized to 0
+GND 		U_ila_pro_0/XST_GND
+VCC 		U_ila_pro_0/XST_VCC
+GND 		inst_top_camera_monitoring/XST_GND
+VCC 		inst_top_camera_monitoring/XST_VCC
+GND 		inst_top_camera_monitoring/crbc_i0/XST_GND
+VCC 		inst_top_camera_monitoring/crbc_i0/XST_VCC
+GND 		inst_top_camera_monitoring/crbc_i0/ram_buffer_i0/XST_GND
+VCC 		inst_top_camera_monitoring/crbc_i0/ram_buffer_i0/XST_VCC
+GND 		inst_top_camera_monitoring/crbc_i0/sink_read_i0/XST_GND
+VCC 		inst_top_camera_monitoring/crbc_i0/sink_read_i0/XST_VCC
+GND 		inst_top_camera_monitoring/inst_addrgen1/XST_GND
+VCC 		inst_top_camera_monitoring/inst_addrgen1/XST_VCC
+GND 		inst_top_camera_monitoring/inst_debounce/XST_GND
+VCC 		inst_top_camera_monitoring/inst_debounce/XST_VCC
+GND 		inst_top_camera_monitoring/inst_ov7670capt1/XST_GND
+VCC 		inst_top_camera_monitoring/inst_ov7670capt1/XST_VCC
+GND 		inst_top_camera_monitoring/inst_ov7670contr1/Registers/XST_GND
+VCC 		inst_top_camera_monitoring/inst_ov7670contr1/Registers/XST_VCC
+GND 		inst_top_camera_monitoring/inst_ov7670contr1/SCCB/XST_GND
+VCC 		inst_top_camera_monitoring/inst_ov7670contr1/SCCB/XST_VCC
+GND 		inst_top_camera_monitoring/inst_ov7670contr1/XST_GND
+GND 		inst_top_camera_monitoring/inst_vgatiming/XST_GND
+VCC 		inst_top_camera_monitoring/inst_vgatiming/XST_VCC
 
 To enable printing of redundant blocks removed and signals merged, set the
 detailed map report option and rerun map.
@@ -255,6 +451,22 @@ Section 6 - IOB Properties
 
 Section 7 - RPMs
 ----------------
+U_ila_pro_0/U0_I_NO_D.U_ILA/U_G2_SQ.U_CAPCTRL_I_SRLT_NE_1.U_CDONE_MSET
+U_ila_pro_0/U0_I_NO_D.U_ILA/U_G2_SQ.U_CAPCTRL_I_SRLT_NE_1.U_CMPRESET_MSET
+U_ila_pro_0/U0_I_NO_D.U_ILA/U_G2_SQ.U_CAPCTRL_I_SRLT_NE_1.U_NS0_MSET
+U_ila_pro_0/U0_I_NO_D.U_ILA/U_G2_SQ.U_CAPCTRL_I_SRLT_NE_1.U_NS1_MSET
+U_ila_pro_0/U0_I_NO_D.U_ILA/U_G2_SQ.U_CAPCTRL_I_SRLT_NE_1.U_SCMPCE_MSET
+U_ila_pro_0/U0_I_NO_D.U_ILA/U_G2_SQ.U_CAPCTRL_I_SRLT_NE_1.U_SCRST_MSET
+U_ila_pro_0/U0_I_NO_D.U_ILA/U_G2_SQ.U_CAPCTRL_I_SRLT_NE_1.U_WHCMPCE_MSET
+U_ila_pro_0/U0_I_NO_D.U_ILA/U_G2_SQ.U_CAPCTRL_I_SRLT_NE_1.U_WLCMPCE_MSET
+U_ila_pro_0/U0_I_NO_D.U_ILA/U_G2_SQ.U_CAPCTRL_U_CAP_ADDRGEN_U_SCNT_CMP/I_SRL16.U
+_GAND_SRL16_MSET
+U_ila_pro_0/U0_I_NO_D.U_ILA/U_G2_SQ.U_CAPCTRL_U_CAP_ADDRGEN_U_WCNT_HCMP/I_SRL16.
+U_GAND_SRL16_MSET
+U_ila_pro_0/U0_I_NO_D.U_ILA/U_G2_SQ.U_CAPCTRL_U_CAP_ADDRGEN_U_WCNT_LCMP/I_SRL16.
+U_GAND_SRL16_MSET
+U_ila_pro_0/U0_I_NO_D.U_ILA/U_TRIG/U_TM/G_NMU[0].U_M/U_MU/I_MUT_GANDX.U_match/I_
+SRL16.U_GANDX_SRL16_MSET
 
 Section 8 - Guide Report
 ------------------------
