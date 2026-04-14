@@ -380,6 +380,7 @@ begin
       drive_strength_full &
       burst_wrap_no &
       burst_length_cont;
+--      a <= "000"&x"8982a";
       state_cntr <= to_unsigned (2, state_cntr'left+1);
       cre <= '1';
     end if;

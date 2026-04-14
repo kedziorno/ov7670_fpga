@@ -5,42 +5,43 @@ Design Information
 ------------------
 Command Line   : map -filter
 /home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/iseconfig/filter.filter
--intstyle ise -p xc3s1200e-fg320-4 -cm area -ir off -pr off -c 100 -o
-top_map.ncd top.ngd top.pcf 
+-intstyle ise -p xc3s1200e-fg320-4 -cm area -ir off -ignore_keep_hierarchy -pr
+off -c 100 -o top_map.ncd top.ngd top.pcf 
 Target Device  : xc3s1200e
 Target Package : fg320
 Target Speed   : -4
 Mapper Version : spartan3e -- $Revision: 1.55 $
-Mapped Date    : Mon Apr 13 10:55:23 2026
+Mapped Date    : Wed Apr 15 00:00:10 2026
 
 Design Summary
 --------------
 Number of errors:      0
-Number of warnings:    9
+Number of warnings:   10
 Logic Utilization:
-  Number of Slice Flip Flops:           541 out of  17,344    3%
-  Number of 4 input LUTs:               871 out of  17,344    5%
+  Number of Slice Flip Flops:           561 out of  17,344    3%
+  Number of 4 input LUTs:               893 out of  17,344    5%
 Logic Distribution:
-  Number of occupied Slices:            597 out of   8,672    6%
-    Number of Slices containing only related logic:     597 out of     597 100%
-    Number of Slices containing unrelated logic:          0 out of     597   0%
+  Number of occupied Slices:            621 out of   8,672    7%
+    Number of Slices containing only related logic:     621 out of     621 100%
+    Number of Slices containing unrelated logic:          0 out of     621   0%
       *See NOTES below for an explanation of the effects of unrelated logic.
-  Total Number of 4 input LUTs:       1,081 out of  17,344    6%
-    Number used as logic:               870
-    Number used as a route-thru:        210
+  Total Number of 4 input LUTs:       1,107 out of  17,344    6%
+    Number used as logic:               892
+    Number used as a route-thru:        214
     Number used as Shift registers:       1
 
   The Slice Logic Distribution report is not meaningful if the design is
   over-mapped for a non-slice resource or if Placement fails.
 
   Number of bonded IOBs:                 93 out of     250   37%
+    IOB Flip Flops:                       1
   Number of RAMB16s:                      3 out of      28   10%
   Number of BUFGMUXs:                     6 out of      24   25%
   Number of DCMs:                         2 out of       8   25%
 
-Average Fanout of Non-Clock Nets:                3.03
+Average Fanout of Non-Clock Nets:                2.96
 
-Peak Memory Usage:  589 MB
+Peak Memory Usage:  587 MB
 Total REAL time to MAP completion:  2 secs 
 Total CPU time to MAP completion:   2 secs 
 
@@ -83,6 +84,12 @@ Section 1 - Errors
 
 Section 2 - Warnings
 --------------------
+WARNING:LIT:176 - Clock buffer is designated to drive clock loads. BUFGMUX
+   symbol
+   "physical_group_inst_top_camera_monitoring/i_clock_ib/inst_top_camera_monitor
+   ing/i_clock_ib_BUFG" (output signal=inst_top_camera_monitoring/i_clock_ib)
+   has a mix of clock and non-clock loads. The non-clock loads are:
+   Pin I1 of inst_top_camera_monitoring/crbc_i0/ram_clk1
 WARNING:PhysDesignRules:367 - The signal <sw<0>_IBUF> is incomplete. The signal
    does not drive any load pins in the design.
 WARNING:PhysDesignRules:367 - The signal <sw<1>_IBUF> is incomplete. The signal
@@ -104,16 +111,18 @@ WARNING:PhysDesignRules:781 - PULLUP on an active net. PULLUP of comp
 
 Section 3 - Informational
 -------------------------
-INFO:LIT:243 - Logical network sw<7>_IBUF has no load.
-INFO:LIT:395 - The above info message is repeated 7 more times for the following
-   (max. 5 shown):
-   sw<6>_IBUF,
-   sw<5>_IBUF,
-   sw<4>_IBUF,
-   sw<3>_IBUF,
-   sw<2>_IBUF
+INFO:LIT:243 - Logical network N21 has no load.
+INFO:LIT:395 - The above info message is repeated 32 more times for the
+   following (max. 5 shown):
+   N22,
+   N23,
+   N24,
+   N25,
+   N26
    To see the details of these info messages, please use the -detail switch.
 INFO:MapLib:562 - No environment variables are currently set.
+INFO:MapLib:159 - Net Timing constraints on signal i_clock are pushed forward
+   through input buffer.
 INFO:LIT:244 - All of the single ended outputs in this design are using slew
    rate limited output drivers. The delay on speed critical single ended outputs
    can be dramatically reduced by designating them as fast outputs.
@@ -121,32 +130,76 @@ INFO:PhysDesignRules:772 - To achieve optimal frequency synthesis performance
    with the CLKFX and CLKFX180 outputs of the DCM comp
    inst_top_camera_monitoring/DCM_SP_cam, consult the device Interactive Data
    Sheet.
+INFO:PhysDesignRules:772 - To achieve optimal frequency synthesis performance
+   with the CLKFX and CLKFX180 outputs of the DCM comp
+   inst_top_camera_monitoring/DCM_SP_mc_fx_vga_dv, consult the device
+   Interactive Data Sheet.
 
 Section 4 - Removed Logic Summary
 ---------------------------------
    2 block(s) removed
-   2 block(s) optimized away
-   2 signal(s) removed
+  21 block(s) optimized away
+  10 signal(s) removed
 
 Section 5 - Removed Logic
 -------------------------
 
-The trimmed logic reported below is either:
-   1. part of a cycle
-   2. part of disabled logic
-   3. a side-effect of other trimmed logic
+The trimmed logic report below shows the logic removed from your design due to
+sourceless or loadless signals, and VCC or ground connections.  If the removal
+of a signal or symbol results in the subsequent removal of an additional signal
+or symbol, the message explaining that second removal will be indented.  This
+indentation will be repeated as a chain of related logic is removed.
 
-The signal "inst_top_camera_monitoring/crbc_i0/clk0" is unused and has been
+To quickly locate the original cause for the removal of a chain of logic, look
+above the place where that logic is listed in the trimming report, then locate
+the lines that are least indented (begin at the leftmost edge).
+
+The signal "inst_top_camera_monitoring/rd_d1<0>" is sourceless and has been
 removed.
-The signal "inst_top_camera_monitoring/crbc_i0/clk0_fb" is unused and has been
+The signal "inst_top_camera_monitoring/rd_d1<12>" is sourceless and has been
 removed.
- Unused block "inst_top_camera_monitoring/crbc_i0/bufg1" (CKBUF) removed.
+The signal "inst_top_camera_monitoring/rd_d1<1>" is sourceless and has been
+removed.
+The signal "inst_top_camera_monitoring/rd_d1<2>" is sourceless and has been
+removed.
+The signal "inst_top_camera_monitoring/rd_d1<3>" is sourceless and has been
+removed.
+The signal "inst_top_camera_monitoring/rd_d1<4>" is sourceless and has been
+removed.
+The signal "inst_top_camera_monitoring/rd_d1<5>" is sourceless and has been
+removed.
+The signal "inst_top_camera_monitoring/rd_d1<8>" is sourceless and has been
+removed.
+The signal "inst_top_camera_monitoring/crbc_i0/clk0" is sourceless and has been
+removed.
+ Sourceless block "inst_top_camera_monitoring/crbc_i0/bufg1" (CKBUF) removed.
+  The signal "inst_top_camera_monitoring/crbc_i0/clk0_fb" is sourceless and has
+been removed.
 Unused block "inst_top_camera_monitoring/crbc_i0/dcm1" (DCM_SP) removed.
 
 Optimized Block(s):
 TYPE 		BLOCK
-GND 		XST_GND
-VCC 		XST_VCC
+GND 		inst_top_camera_monitoring/XST_GND
+VCC 		inst_top_camera_monitoring/XST_VCC
+GND 		inst_top_camera_monitoring/crbc_i0/XST_GND
+VCC 		inst_top_camera_monitoring/crbc_i0/XST_VCC
+GND 		inst_top_camera_monitoring/crbc_i0/ram_buffer_i0/XST_GND
+VCC 		inst_top_camera_monitoring/crbc_i0/ram_buffer_i0/XST_VCC
+GND 		inst_top_camera_monitoring/crbc_i0/sink_read_i0/XST_GND
+VCC 		inst_top_camera_monitoring/crbc_i0/sink_read_i0/XST_VCC
+GND 		inst_top_camera_monitoring/inst_addrgen1/XST_GND
+VCC 		inst_top_camera_monitoring/inst_addrgen1/XST_VCC
+GND 		inst_top_camera_monitoring/inst_debounce/XST_GND
+VCC 		inst_top_camera_monitoring/inst_debounce/XST_VCC
+GND 		inst_top_camera_monitoring/inst_ov7670capt1/XST_GND
+VCC 		inst_top_camera_monitoring/inst_ov7670capt1/XST_VCC
+GND 		inst_top_camera_monitoring/inst_ov7670contr1/Registers/XST_GND
+VCC 		inst_top_camera_monitoring/inst_ov7670contr1/Registers/XST_VCC
+GND 		inst_top_camera_monitoring/inst_ov7670contr1/SCCB/XST_GND
+VCC 		inst_top_camera_monitoring/inst_ov7670contr1/SCCB/XST_VCC
+GND 		inst_top_camera_monitoring/inst_ov7670contr1/XST_GND
+GND 		inst_top_camera_monitoring/inst_vgatiming/XST_GND
+VCC 		inst_top_camera_monitoring/inst_vgatiming/XST_VCC
 
 To enable printing of redundant blocks removed and signals merged, set the
 detailed map report option and rerun map.
@@ -182,9 +235,9 @@ Section 6 - IOB Properties
 | Addr<21>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | Addr<22>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | Adv_n                              | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| Ce_n                               | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| Ce_n                               | IOB              | OUTPUT    | LVCMOS33             |       | 12       | SLOW |              |          | 0 / 0    |
 | Clk                                | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| Cre                                | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| Cre                                | IOB              | OUTPUT    | LVCMOS33             |       | 12       | SLOW |              |          | 0 / 0    |
 | Dq<0>                              | IOB              | BIDIR     | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | Dq<1>                              | IOB              | BIDIR     | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | Dq<2>                              | IOB              | BIDIR     | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
@@ -204,7 +257,7 @@ Section 6 - IOB Properties
 | Lb_n                               | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | Oe_n                               | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | Ub_n                               | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| We_n                               | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| We_n                               | IOB              | OUTPUT    | LVCMOS33             |       | 12       | SLOW |              |          | 0 / 0    |
 | i_clock                            | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
 | led1                               | IOB              | OUTPUT    | LVCMOS33             |       | 12       | SLOW |              |          | 0 / 0    |
 | oWait                              | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
@@ -221,7 +274,7 @@ Section 6 - IOB Properties
 | ov7670_data_2                      | IOB              | OUTPUT    | LVCMOS33             |       | 12       | SLOW |              |          | 0 / 0    |
 | ov7670_data_3                      | IOB              | OUTPUT    | LVCMOS33             |       | 12       | SLOW |              |          | 0 / 0    |
 | ov7670_href1                       | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_pclk1                       | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
+| ov7670_pclk1                       | IBUF             | INPUT     | LVCMOS33             |       |          |      | IFF1         |          | 0 / 3    |
 | ov7670_pwdn1                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | ov7670_reset1                      | IOB              | OUTPUT    | LVCMOS33             |       | 12       | SLOW |              |          | 0 / 0    |
 | ov7670_sioc1                       | IOB              | OUTPUT    | LVCMOS33             |       | 12       | SLOW |              | PULLUP   | 0 / 0    |

@@ -641,8 +641,8 @@ signal vga_clock_p : std_logic;
 signal ov7670_pclk_p : std_logic;
 signal vga_re, cam_re : std_logic;
 
-constant CLKFX_MULTIPLY_MC : integer := 32;
-constant CLKFX_DIVIDE_MC : integer := 2;
+constant CLKFX_MULTIPLY_MC : integer := 2;
+constant CLKFX_DIVIDE_MC : integer := 1;
 
 COMPONENT cellular_ram_burst_controller
 PORT(
@@ -690,7 +690,7 @@ signal w8_br : integer range 0 to c_w8_br - 1 := 0;
 
 constant c_cntr_frame : integer := 307200;
 constant c_step_w : unsigned (15 downto 0) := to_unsigned (320, 16);
-constant c_step_r : unsigned (15 downto 0) := to_unsigned (320, 16);
+constant c_step_r : unsigned (15 downto 0) := to_unsigned (160, 16);
 signal cntr_wr1 : unsigned (19 downto 0) := (others => '0');
 signal cntr_wr1_slv : std_logic_vector (19 downto 0) := (others => '0');
 signal cntr_rd1 : unsigned (19 downto 0) := (others => '0');
@@ -718,6 +718,18 @@ signal reset_vga_timing : std_logic := '1';
 signal vga_int, vga_fint : std_logic;
 
 begin
+
+-- STARTUP_SPARTAN3E: Startup primitive for GSR, GTS, startup sequence
+-- control and Multi-Boot Configuration. Spartan-3E
+-- Xilinx HDL Libraries Guide, version 10.1.2
+--STARTUP_SPARTAN3E_inst : STARTUP_SPARTAN3E
+--port map (
+--CLK => i_clock_ib, -- Clock input for start-up sequence
+--GSR => resend, -- Global Set/Reset input (GSR cannot be used for the port name)
+--GTS => '0', -- Global 3-state input (GTS cannot be used for the port name)
+--MBT => '0' -- Multi-Boot Trigger input
+--);
+-- End of STARTUP_SPARTAN3E_inst instantiation
 
 oe_n <= oe_n_i;
 we_n <= we_n_i;
@@ -1138,17 +1150,17 @@ xclk_in => clk_cam,
 xclk_out => ov7670_xclk1);
 
 --process (i_clock_ib) is
-----process (clk_mc, resend) is
---begin
-----if (resend = '1') then
-----elsif (rising_edge (clk_mc)) then
+process (clk_mc, resend) is
+begin
+if (resend = '1') then
+elsif (rising_edge (clk_mc)) then
 --if (falling_edge (i_clock_ib)) then
 ov7670_pclk <= ov7670_pclk1;
 ov7670_hs <= ov7670_href1;
 ov7670_vs <= ov7670_vsync1;
 ov7670_d <= ov7670_data1;
---end if;
---end process;
+end if;
+end process;
 
 inst_ov7670capt1: ov7670_capture port map(
 pclk => ov7670_pclk,
@@ -1243,12 +1255,13 @@ end process p0_assert_1;
 
 DCM_SP_mc_fx_vga_dv : DCM_SP
 generic map (
---CLKDV_DIVIDE => 2.0, -- 50mhz
-CLKDV_DIVIDE => 4.0, -- 100mhz
+CLKDV_DIVIDE => 2.0, -- 50mhz
+--CLKDV_DIVIDE => 4.0, -- 100mhz
 CLKFX_MULTIPLY => CLKFX_MULTIPLY_MC, -- Can be any integer from 1 to 32
 CLKFX_DIVIDE => CLKFX_DIVIDE_MC, -- Can be any interger from 1 to 32
 CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
-CLKIN_PERIOD => 10.0, -- Specify period of input clock
+CLKIN_PERIOD => 20.0, -- Specify period of input clock
+--CLKIN_PERIOD => 10.0, -- Specify period of input clock
 CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of "NONE", "FIXED" or "VARIABLE"
 CLK_FEEDBACK => "1X", -- Specify clock feedback of "NONE", "1X" or "2X"
 DESKEW_ADJUST => "SYSTEM_SYNCHRONOUS", -- "SOURCE_SYNCHRONOUS", "SYSTEM_SYNCHRONOUS" or
@@ -1280,16 +1293,21 @@ RST => reset_dcm_n -- DCM asynchronous reset input
 
 DCM_SP_cam : DCM_SP
 generic map (
-CLKDV_DIVIDE => 8.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
+--CLKDV_DIVIDE => 8.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
+CLKDV_DIVIDE => 4.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
 -- 7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
 --CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 24, -- 50 -> 25 mhz
---CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 25, -- 50 -> 24.0 mhz
+
+CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 25, -- 50 -> 24.0 mhz
+
 --CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 27, -- 50 -> 24.07407407407407407400 mhz
 --CLKFX_MULTIPLY => 14, CLKFX_DIVIDE => 29, -- 50 -> 24.13793103448275862050 mhz
 --CLKFX_MULTIPLY => 15, CLKFX_DIVIDE => 31, -- 50 -> 24.19354838709677419350 mhz
 --CLKFX_MULTIPLY => 24, CLKFX_DIVIDE => 25, -- 50 -> 48.0 mhz
 --CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 24, -- 50 -> 25 mhz
-CLKFX_MULTIPLY => 6, CLKFX_DIVIDE => 25, -- 100 -> 24.0 mhz
+
+--CLKFX_MULTIPLY => 6, CLKFX_DIVIDE => 25, -- 100 -> 24.0 mhz
+
 --CLKFX_MULTIPLY => 5, CLKFX_DIVIDE => 21, -- 100 -> 23.8 mhz (sim)
 --CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 27, -- 50 -> 24.07407407407407407400 mhz
 --CLKFX_MULTIPLY => 14, CLKFX_DIVIDE => 29, -- 50 -> 24.13793103448275862050 mhz
@@ -1298,7 +1316,8 @@ CLKFX_MULTIPLY => 6, CLKFX_DIVIDE => 25, -- 100 -> 24.0 mhz
 --CLKIN_PERIOD => 20.0, CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 28 (23.21428571428571428550)
 --CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 28,
 CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
-CLKIN_PERIOD => 10.0, -- Specify period of input clock
+CLKIN_PERIOD => 20.0, -- Specify period of input clock
+--CLKIN_PERIOD => 10.0, -- Specify period of input clock
 CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of "NONE", "FIXED" or "VARIABLE"
 CLK_FEEDBACK => "1X", -- Specify clock feedback of "NONE", "1X" or "2X"
 DESKEW_ADJUST => "SYSTEM_SYNCHRONOUS", -- "SOURCE_SYNCHRONOUS", "SYSTEM_SYNCHRONOUS" or
