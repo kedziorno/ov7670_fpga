@@ -1,8 +1,9 @@
-#NET "i_clock" LOC="B8";
-#NET "i_clock" PERIOD = 20 ns;
-NET "i_clock" LOC="U9";
-NET "i_clock" TNM_NET = clk;
-TIMESPEC TS_clk = PERIOD "i_clock" 10 ns HIGH 50% INPUT_JITTER 100 ps;
+NET "i_clock" LOC="B8";
+NET "i_clock" PERIOD = 20 ns;
+TIMESPEC TS_clk = PERIOD "i_clock" 20 ns HIGH 50% INPUT_JITTER 100 ps;
+#NET "i_clock" LOC="U9";
+#NET "i_clock" TNM_NET = clk;
+#TIMESPEC TS_clk = PERIOD "i_clock" 10 ns HIGH 50% INPUT_JITTER 100 ps;
 NET "pb" LOC="B18" | TIG;
 #NET "sw" LOC="G18";
 NET "vga_r<0>" LOC="R9" | IOSTANDARD="LVCMOS33";
@@ -49,12 +50,14 @@ NET "ov7670_data_3" LOC = "H16" | IOSTANDARD="LVCMOS33"; # JC4
 INST "inst_top_camera_monitoring/DCM_SP_mc_fx_vga_dv" LOC="DCM_X3Y1";
 INST "inst_top_camera_monitoring/DCM_SP_cam" LOC="DCM_X2Y0";
 
-INST "inst_top_camera_monitoring/inst_ov7670contr1/*" TIG;
-PIN "inst_top_camera_monitoring/DCM_SP_mc_fx_vga_dv.CLKDV" CLOCK_DEDICATED_ROUTE = FALSE;
+#INST "inst_top_camera_monitoring/inst_ov7670contr1/*" TIG;
+#PIN "inst_top_camera_monitoring/DCM_SP_mc_fx_vga_dv.CLKDV" CLOCK_DEDICATED_ROUTE = FALSE;
 
 #INST "inst_top_camera_monitoring/BUFG_clk1" LOC="BUFGMUX_X2Y0";
 #INST "inst_top_camera_monitoring/BUFG_clk2" LOC="BUFGMUX_X2Y1";
 NET "i_clock" CLOCK_DEDICATED_ROUTE = FALSE;
+PIN "inst_top_camera_monitoring/DCM_SP_cam.CLKIN" CLOCK_DEDICATED_ROUTE = FALSE;
+PIN "inst_top_camera_monitoring/DCM_SP_mc_fx_vga_dv.CLKIN" CLOCK_DEDICATED_ROUTE = FALSE;
 #PIN "iDCM_SP_mc_fx_vga_dv.CLKDV" CLOCK_DEDICATED_ROUTE = FALSE;
 #NET "ov7670_pclk1" CLOCK_DEDICATED_ROUTE = FALSE;
 #PIN "inst_top_camera_monitoring/DCM_SP_cam.CLKIN" CLOCK_DEDICATED_ROUTE = FALSE;
@@ -70,8 +73,101 @@ NET "sw<7>" LOC = "R17";
 #Created by Constraints Editor (xc3s1200e-fg320-4) - 2026/03/20
 NET "i_clock" TNM_NET = i_clock;
 NET "ov7670_pclk1" TNM_NET = ov7670_pclk1;
-#INST "inst_top_camera_monitoring/ov7670_pclk" IOB = TRUE;
-#NET "inst_top_camera_monitoring/ov7670_pclk" TNM_NET = inst_top_camera_monitoring/ov7670_pclk1;
+INST "inst_top_camera_monitoring/ov7670_pclk" IOB = TRUE;
+NET "inst_top_camera_monitoring/ov7670_pclk" TNM_NET = inst_top_camera_monitoring/ov7670_pclk1;
 #Created by Constraints Editor (xc3s1200e-fg320-4) - 2026/03/20
 #OFFSET = IN 2.5 ns VALID 10 ns BEFORE "i_clock" TIMEGRP "inst_top_camera_monitoring/ov7670_pclk1" FALLING;
 #NET "ov7670_xclk1" OFFSET = OUT 10 ns AFTER "i_clock";
+
+#onBoard Cellular RAM and StrataFlash
+NET "OE_n"     LOC = "T2"; # Bank = 3, Pin name = IO_L24P_3, Type = I/O, Sch name = OE
+NET "WE_n"     LOC = "N7" | IOSTANDARD="LVCMOS33"; # Bank = 2, Pin name = IO_L07P_2, Type = I/O, Sch name = WE
+NET "ADV_n"    LOC = "J4"; # Bank = 3, Pin name = IO_L11N_3/LHCLK1, Type = LHCLK, Sch name = MT-ADV
+NET "CE_n"     LOC = "R6" | IOSTANDARD="LVCMOS33"; # Bank = 2, Pin name = IO_L05P_2, Type = I/O, Sch name = MT-CE
+NET "CLK" LOC = "H5"; # Bank = 3, Pin name = IO_L08N_3, Type = I/O, Sch name = MT-CLK
+NET "CRE"    LOC = "P7" | IOSTANDARD="LVCMOS33"; # Bank = 2, Pin name = IO_L07N_2, Type = I/O, Sch name = MT-CRE
+NET "LB_n"     LOC = "K5"; # Bank = 3, Pin name = IO_L14N_3/LHCLK7, Type = LHCLK, Sch name = MT-LB
+NET "UB_n"     LOC = "K4"; # Bank = 3, Pin name = IO_L13N_3/LHCLK5, Type = LHCLK, Sch name = MT-UB
+NET "OWAIT" LOC = "F5"; # Bank = 3, Pin name = IP, Type = INPUT, Sch name = MT-WAIT
+
+NET "Addr<0>"  LOC = "J1"; # Bank = 3, Pin name = IO_L12P_3/LHCLK2, Type = LHCLK, Sch name = ADR1
+NET "Addr<1>"  LOC = "J2"; # Bank = 3, Pin name = IO_L12N_3/LHCLK3/IRDY2, Type = LHCLK, Sch name = ADR2
+NET "Addr<2>"  LOC = "H4"; # Bank = 3, Pin name = IO_L09P_3, Type = I/O, Sch name = ADR3
+NET "Addr<3>"  LOC = "H1"; # Bank = 3, Pin name = IO_L10N_3, Type = I/O, Sch name = ADR4
+NET "Addr<4>"  LOC = "H2"; # Bank = 3, Pin name = IO_L10P_3, Type = I/O, Sch name = ADR5
+NET "Addr<5>"  LOC = "J5"; # Bank = 3, Pin name = IO_L11P_3/LHCLK0, Type = LHCLK, Sch name = ADR6
+NET "Addr<6>"  LOC = "H3"; # Bank = 3, Pin name = IO_L09N_3, Type = I/O, Sch name = ADR7
+NET "Addr<7>"  LOC = "H6"; # Bank = 3, Pin name = IO_L08P_3, Type = I/O, Sch name = ADR8
+NET "Addr<8>"  LOC = "F1"; # Bank = 3, Pin name = IO_L05P_3, Type = I/O, Sch name = ADR9
+NET "Addr<9>"  LOC = "G3"; # Bank = 3, Pin name = IO_L06P_3, Type = I/O, Sch name = ADR10
+NET "Addr<10>" LOC = "G6"; # Bank = 3, Pin name = IO_L07P_3, Type = I/O, Sch name = ADR11
+NET "Addr<11>" LOC = "G5"; # Bank = 3, Pin name = IO_L07N_3, Type = I/O, Sch name = ADR12
+NET "Addr<12>" LOC = "G4"; # Bank = 3, Pin name = IO_L06N_3/VREF_3, Type = VREF, Sch name = ADR13
+NET "Addr<13>" LOC = "F2"; # Bank = 3, Pin name = IO_L05N_3, Type = I/O, Sch name = ADR14
+NET "Addr<14>" LOC = "E1"; # Bank = 3, Pin name = IO_L03N_3, Type = I/O, Sch name = ADR15
+NET "Addr<15>" LOC = "M5"; # Bank = 3, Pin name = IO_L19P_3, Type = I/O, Sch name = ADR16
+NET "Addr<16>" LOC = "E2"; # Bank = 3, Pin name = IO_L03P_3, Type = I/O, Sch name = ADR17
+NET "Addr<17>" LOC = "C2"; # Bank = 3, Pin name = IO_L01N_3, Type = I/O, Sch name = ADR18
+NET "Addr<18>" LOC = "C1"; # Bank = 3, Pin name = IO_L01P_3, Type = I/O, Sch name = ADR19
+NET "Addr<19>" LOC = "D2"; # Bank = 3, Pin name = IO_L02N_3/VREF_3, Type = VREF, Sch name = ADR20
+NET "Addr<20>" LOC = "K3"; # Bank = 3, Pin name = IO_L13P_3/LHCLK4/TRDY2, Type = LHCLK, Sch name = ADR21
+NET "Addr<21>" LOC = "D1"; # Bank = 3, Pin name = IO_L02P_3, Type = I/O, Sch name = ADR22
+NET "Addr<22>" LOC = "K6"; # Bank = 3, Pin name = IO_L14P_3/LHCLK6, Type = LHCLK, Sch name = ADR23
+
+#NET "Addr<22>"  LOC = "J1"; # Bank = 3, Pin name = IO_L12P_3/LHCLK2, Type = LHCLK, Sch name = ADR1
+#NET "Addr<21>"  LOC = "J2"; # Bank = 3, Pin name = IO_L12N_3/LHCLK3/IRDY2, Type = LHCLK, Sch name = ADR2
+#NET "Addr<20>"  LOC = "H4"; # Bank = 3, Pin name = IO_L09P_3, Type = I/O, Sch name = ADR3
+#NET "Addr<19>"  LOC = "H1"; # Bank = 3, Pin name = IO_L10N_3, Type = I/O, Sch name = ADR4
+#NET "Addr<18>"  LOC = "H2"; # Bank = 3, Pin name = IO_L10P_3, Type = I/O, Sch name = ADR5
+#NET "Addr<17>"  LOC = "J5"; # Bank = 3, Pin name = IO_L11P_3/LHCLK0, Type = LHCLK, Sch name = ADR6
+#NET "Addr<16>"  LOC = "H3"; # Bank = 3, Pin name = IO_L09N_3, Type = I/O, Sch name = ADR7
+#NET "Addr<15>"  LOC = "H6"; # Bank = 3, Pin name = IO_L08P_3, Type = I/O, Sch name = ADR8
+#NET "Addr<14>"  LOC = "F1"; # Bank = 3, Pin name = IO_L05P_3, Type = I/O, Sch name = ADR9
+#NET "Addr<13>"  LOC = "G3"; # Bank = 3, Pin name = IO_L06P_3, Type = I/O, Sch name = ADR10
+#NET "Addr<12>" LOC = "G6"; # Bank = 3, Pin name = IO_L07P_3, Type = I/O, Sch name = ADR11
+#NET "Addr<11>" LOC = "G5"; # Bank = 3, Pin name = IO_L07N_3, Type = I/O, Sch name = ADR12
+#NET "Addr<10>" LOC = "G4"; # Bank = 3, Pin name = IO_L06N_3/VREF_3, Type = VREF, Sch name = ADR13
+#NET "Addr<9>" LOC = "F2"; # Bank = 3, Pin name = IO_L05N_3, Type = I/O, Sch name = ADR14
+#NET "Addr<8>" LOC = "E1"; # Bank = 3, Pin name = IO_L03N_3, Type = I/O, Sch name = ADR15
+#NET "Addr<7>" LOC = "M5"; # Bank = 3, Pin name = IO_L19P_3, Type = I/O, Sch name = ADR16
+#NET "Addr<6>" LOC = "E2"; # Bank = 3, Pin name = IO_L03P_3, Type = I/O, Sch name = ADR17
+#NET "Addr<5>" LOC = "C2"; # Bank = 3, Pin name = IO_L01N_3, Type = I/O, Sch name = ADR18
+#NET "Addr<4>" LOC = "C1"; # Bank = 3, Pin name = IO_L01P_3, Type = I/O, Sch name = ADR19
+#NET "Addr<3>" LOC = "D2"; # Bank = 3, Pin name = IO_L02N_3/VREF_3, Type = VREF, Sch name = ADR20
+#NET "Addr<2>" LOC = "K3"; # Bank = 3, Pin name = IO_L13P_3/LHCLK4/TRDY2, Type = LHCLK, Sch name = ADR21
+#NET "Addr<1>" LOC = "D1"; # Bank = 3, Pin name = IO_L02P_3, Type = I/O, Sch name = ADR22
+#NET "Addr<0>" LOC = "K6"; # Bank = 3, Pin name = IO_L14P_3/LHCLK6, Type = LHCLK, Sch name = ADR23
+
+NET "DQ<0>"  LOC = "L1"; # Bank = 3, Pin name = IO_L15P_3, Type = I/O, Sch name = DB0
+NET "DQ<1>"  LOC = "L4"; # Bank = 3, Pin name = IO_L16N_3, Type = I/O, Sch name = DB1
+NET "DQ<2>"  LOC = "L6"; # Bank = 3, Pin name = IO_L17P_3, Type = I/O, Sch name = DB2
+NET "DQ<3>"  LOC = "M4"; # Bank = 3, Pin name = IO_L18P_3, Type = I/O, Sch name = DB3
+NET "DQ<4>"  LOC = "N5"; # Bank = 3, Pin name = IO_L20N_3, Type = I/O, Sch name = DB4
+NET "DQ<5>"  LOC = "P1"; # Bank = 3, Pin name = IO_L21N_3, Type = I/O, Sch name = DB5
+NET "DQ<6>"  LOC = "P2"; # Bank = 3, Pin name = IO_L21P_3, Type = I/O, Sch name = DB6
+NET "DQ<7>"  LOC = "R2"; # Bank = 3, Pin name = IO_L23N_3, Type = I/O, Sch name = DB7
+NET "DQ<8>"  LOC = "L3"; # Bank = 3, Pin name = IO_L16P_3, Type = I/O, Sch name = DB8
+NET "DQ<9>"  LOC = "L5"; # Bank = 3, Pin name = IO_L17N_3/VREF_3, Type = VREF, Sch name = DB9
+NET "DQ<10>" LOC = "M3"; # Bank = 3, Pin name = IO_L18N_3, Type = I/O, Sch name = DB10
+NET "DQ<11>" LOC = "M6"; # Bank = 3, Pin name = IO_L19N_3, Type = I/O, Sch name = DB11
+NET "DQ<12>" LOC = "L2"; # Bank = 3, Pin name = IO_L15N_3, Type = I/O, Sch name = DB12
+NET "DQ<13>" LOC = "N4"; # Bank = 3, Pin name = IO_L20P_3, Type = I/O, Sch name = DB13
+NET "DQ<14>" LOC = "R3"; # Bank = 3, Pin name = IO_L23P_3, Type = I/O, Sch name = DB14
+NET "DQ<15>" LOC = "T1"; # Bank = 3, Pin name = IO_L24N_3, Type = I/O, Sch name = DB15
+
+#NET "DQ<15>"  LOC = "L1"; # Bank = 3, Pin name = IO_L15P_3, Type = I/O, Sch name = DB0
+#NET "DQ<14>"  LOC = "L4"; # Bank = 3, Pin name = IO_L16N_3, Type = I/O, Sch name = DB1
+#NET "DQ<13>"  LOC = "L6"; # Bank = 3, Pin name = IO_L17P_3, Type = I/O, Sch name = DB2
+#NET "DQ<12>"  LOC = "M4"; # Bank = 3, Pin name = IO_L18P_3, Type = I/O, Sch name = DB3
+#NET "DQ<11>"  LOC = "N5"; # Bank = 3, Pin name = IO_L20N_3, Type = I/O, Sch name = DB4
+#NET "DQ<10>"  LOC = "P1"; # Bank = 3, Pin name = IO_L21N_3, Type = I/O, Sch name = DB5
+#NET "DQ<9>"  LOC = "P2"; # Bank = 3, Pin name = IO_L21P_3, Type = I/O, Sch name = DB6
+#NET "DQ<8>"  LOC = "R2"; # Bank = 3, Pin name = IO_L23N_3, Type = I/O, Sch name = DB7
+#NET "DQ<7>"  LOC = "L3"; # Bank = 3, Pin name = IO_L16P_3, Type = I/O, Sch name = DB8
+#NET "DQ<6>"  LOC = "L5"; # Bank = 3, Pin name = IO_L17N_3/VREF_3, Type = VREF, Sch name = DB9
+#NET "DQ<5>" LOC = "M3"; # Bank = 3, Pin name = IO_L18N_3, Type = I/O, Sch name = DB10
+#NET "DQ<4>" LOC = "M6"; # Bank = 3, Pin name = IO_L19N_3, Type = I/O, Sch name = DB11
+#NET "DQ<3>" LOC = "L2"; # Bank = 3, Pin name = IO_L15N_3, Type = I/O, Sch name = DB12
+#NET "DQ<2>" LOC = "N4"; # Bank = 3, Pin name = IO_L20P_3, Type = I/O, Sch name = DB13
+#NET "DQ<1>" LOC = "R3"; # Bank = 3, Pin name = IO_L23P_3, Type = I/O, Sch name = DB14
+#NET "DQ<0>" LOC = "T1"; # Bank = 3, Pin name = IO_L24N_3, Type = I/O, Sch name = DB15

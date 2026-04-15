@@ -1,5 +1,5 @@
 #ChipScope Core Inserter Project File Version 3.0
-#Tue Apr 14 20:50:20 CEST 2026
+#Tue Apr 14 21:04:19 CEST 2026
 Project.device.designInputFile=/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/top_cs.ngc
 Project.device.designOutputFile=/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/top_cs.ngc
 Project.device.deviceFamily=13
@@ -37,7 +37,7 @@ Project.unit<0>.dataChannel<6>=inst_top_camera_monitoring crbc_i0 source_data<6>
 Project.unit<0>.dataChannel<7>=inst_top_camera_monitoring crbc_i0 source_data<7>
 Project.unit<0>.dataChannel<8>=inst_top_camera_monitoring crbc_i0 source_data<8>
 Project.unit<0>.dataChannel<9>=inst_top_camera_monitoring crbc_i0 source_data<9>
-Project.unit<0>.dataDepth=8192
+Project.unit<0>.dataDepth=16384
 Project.unit<0>.dataEqualsTrigger=true
 Project.unit<0>.dataPortWidth=16
 Project.unit<0>.enableGaps=false
@@ -69,5 +69,5 @@ Project.unit<0>.triggerPortCount=1
 Project.unit<0>.triggerPortIsData<0>=true
 Project.unit<0>.triggerPortWidth<0>=16
 Project.unit<0>.triggerSequencerLevels=1
-Project.unit<0>.triggerSequencerType=0
+Project.unit<0>.triggerSequencerType=1
 Project.unit<0>.type=ilapro
