@@ -519,8 +519,10 @@ COMPONENT ov7670_capture
           addr : out  STD_LOGIC_VECTOR (18 downto 0);
           dout : out  STD_LOGIC_VECTOR (15 downto 0);
           we : out  STD_LOGIC_VECTOR (0 downto 0);
-latched_vs, latched_hs : out std_logic);
+latched_vs, latched_hs : out std_logic;
+int : out std_logic);
 END COMPONENT;
+signal cint : std_logic;
 
 COMPONENT ov7670_controller
 	Port ( clk : in  STD_LOGIC;
@@ -685,13 +687,13 @@ a0, ar1, a00, a0a, a0b, a0c, a1, a1a, a1b, a1c, ar, br, cr, dr, er, er1, aw, bw,
 );
 signal p0_state : p_states := a0;
 signal p1_state : p_states := a0;
-constant c_w8_bw : integer := 3200/2;
+constant c_w8_bw : integer := 3200/2/2/2;
 signal w8_bw : integer range 0 to c_w8_bw - 1 := 0;
 constant c_w8_br : integer := 3200/4/2;
 signal w8_br : integer range 0 to c_w8_br - 1 := 0;
 
 constant c_cntr_frame : integer := 307200;
-constant c_step_w : unsigned (15 downto 0) := to_unsigned (320, 16);
+constant c_step_w : unsigned (15 downto 0) := to_unsigned (160, 16);
 constant c_step_r : unsigned (15 downto 0) := to_unsigned (160, 16);
 signal cntr_wr1 : unsigned (19 downto 0) := (others => '0');
 signal cntr_wr1_slv : std_logic_vector (19 downto 0) := (others => '0');
@@ -761,7 +763,8 @@ begin
 --        if (ov7670_vs = '1') then
 --          p0_state <= a1a;
 --        end if;
-        if (ov7670_hs_prev = '1' and ov7670_hs = '0') then -- wr when hs fe
+--        if (ov7670_hs_prev = '1' and ov7670_hs = '0') then -- wr when hs fe
+        if (cint = '1') then -- wr when hs fe
 --        if (ov7670_hs = '0') then -- wr when hs fe
 --        if (ov7670_hs = '1') then -- wr when hs fe
 --        if (ov7670_hs_prev = '0' and ov7670_hs = '1') then -- wr when hs re
@@ -1087,15 +1090,15 @@ write_buffer_addr => wr_a1 (10 downto 0),
 --write_buffer_data => wr_d1 (7 downto 0),
 write_buffer_data => ov7670_d,
 write_buffer_clk => ov7670_pclk,
---write_buffer_we => ov7670_hs,
-write_buffer_we => latched_hs,
+write_buffer_we => ov7670_hs,
+--write_buffer_we => latched_hs,
 --write_buffer_we => wren1 (0),
 
 --read_buffer_addr => rd_a1 (9 downto 0),
 read_buffer_addr => address1,
 read_buffer_data => rd_d1,
-read_buffer_clk => clk_vga,
---read_buffer_clk => clk2x_2,
+--read_buffer_clk => clk_vga,
+read_buffer_clk => clk2x_2,
 
 lb => lb_n,
 ub => ub_n,
@@ -1158,17 +1161,17 @@ xclk_in => clk_cam,
 xclk_out => ov7670_xclk1);
 
 --process (i_clock_ib) is
-process (clk_mc, resend) is
-begin
-if (resend = '1') then
-elsif (rising_edge (clk_mc)) then
+--process (clk_mc, resend) is
+--begin
+--if (resend = '1') then
+--elsif (rising_edge (clk_mc)) then
 --if (falling_edge (i_clock_ib)) then
 ov7670_pclk <= ov7670_pclk1;
 ov7670_hs <= ov7670_href1;
 ov7670_vs <= ov7670_vsync1;
 ov7670_d <= ov7670_data1;
-end if;
-end process;
+--end if;
+--end process;
 
 inst_ov7670capt1: ov7670_capture port map(
 pclk => ov7670_pclk,
@@ -1179,7 +1182,8 @@ addr => wr_a1,
 dout => wr_d1,
 we => wren1,
 latched_vs => latched_vs,
-latched_hs => latched_hs
+latched_hs => latched_hs,
+int => cint
 );
 
 --ri_ard <= "0000" & rd_a1;

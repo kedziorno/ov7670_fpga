@@ -18,7 +18,8 @@ entity ov7670_capture is
            addr : out  STD_LOGIC_VECTOR (18 downto 0);
            dout : out  STD_LOGIC_VECTOR (15 downto 0);
            we : out  STD_LOGIC_VECTOR (0 downto 0);
-           latched_vs, latched_hs : out std_logic);
+           latched_vs, latched_hs : out std_logic;
+           int : out std_logic := '0');
 end ov7670_capture;
 
 architecture Behavioral of ov7670_capture is
@@ -31,6 +32,7 @@ architecture Behavioral of ov7670_capture is
    signal latched_vsync : STD_LOGIC := '0';
    signal latched_href  : STD_LOGIC := '0';
    signal latched_d     : STD_LOGIC_VECTOR (7 downto 0) := (others => '0');
+   signal addr1 : unsigned (9 downto 0) := (others => '0');
 begin
    addr <= address;
    we(0) <= we_reg;
@@ -58,7 +60,47 @@ dout  <= d_latch;
 --   dout<= d_latch(10) & d_latch(6) & d_latch(2);
 --   dout<= d_latch(9) & d_latch(5) & d_latch(1);
 --   dout<= d_latch(8) & d_latch(4) & d_latch(0); 
-   
+--write_process : process (pclk) is
+--type states is (a, b, c);
+--variable state : states := a;
+--begin
+--  if (falling_edge (pclk)) then
+--    case (state) is
+--      when a =>
+--        addr1 <= (others => '0');
+--        int <= '0';
+--        if (latched_href = '0' and href = '1') then
+--          state := b;
+--        end if;
+--      when b =>
+--         if (addr1 = 319) then
+--            addr1 <= (others => '0');
+--            state := c;
+--            int <= '1';
+--          else
+--            addr1 <= addr1 + 1;
+--            int <= '0';
+--          end if;
+--         if (latched_vsync = '1') then
+--           addr1 <= (others => '0');
+--         end if;
+--       when c =>
+--         if (addr1 = 319) then
+--            addr1 <= (others => '0');
+--            state := a;
+--            int <= '1';
+--          else
+--            addr1 <= addr1 + 1;
+--            int <= '0';
+--          end if;
+--         if (latched_vsync = '1') then
+--           addr1 <= (others => '0');
+--         end if;
+--    end case;
+--  end if;
+--end process write_process;
+
+int <= '1' when (addr1 = 639 or addr1 = 300) else '0';
 capture_process: process(pclk)
    begin
       if rising_edge(pclk) then
@@ -73,10 +115,14 @@ capture_process: process(pclk)
 --            end case;
 --         end if;
          href_hold <= latched_href;
-         
          -- capturing the data from the camera, 12-bit RGB
          if latched_href = '1' then
 --         if href = '1' then
+         if (addr1 = 639) then
+            addr1 <= (others => '0');
+          else
+            addr1 <= addr1 + 1;
+          end if;
             d_latch <= d_latch(7 downto 0) & latched_d;
          end if;
          we_reg  <= '0';
