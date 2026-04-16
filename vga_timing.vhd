@@ -456,7 +456,8 @@ blank <= '1' when ((hcnt >= HD) or (vcnt >= VD)) else '0';
 --blank <= not activeArea1_sig;
 --int <= '1' when vcnt < VD and ((hcnt = 399) or (hcnt = 0)) else '0';
 --int <= '1' when vcnt < VD and ((hcnt = 753) or (hcnt = 352)) else '0';
-int <= '1' when (vcnt < VD-1 or vcnt = 524) and ((hcnt = 657)) else '0';
+int <= '1' when (vcnt < VD-1 or vcnt = 524 or vcnt = 523) and ((hcnt = 257 or hcnt = 657)) else '0';
+--int <= '1' when (vcnt < VD-1 or vcnt = 524) and ((hcnt = 657)) else '0';
 --int <= '1' when vcnt <= VD and ((hcnt = 0)) else '0';
 fint <= '1' when (vcnt = 524 and hcnt = 0) else '0';
 

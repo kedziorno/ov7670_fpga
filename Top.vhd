@@ -641,8 +641,8 @@ signal vga_clock_p : std_logic;
 signal ov7670_pclk_p : std_logic;
 signal vga_re, cam_re : std_logic;
 
-constant CLKFX_MULTIPLY_MC : integer := 2;
-constant CLKFX_DIVIDE_MC : integer := 1;
+constant CLKFX_MULTIPLY_MC : integer := 3;
+constant CLKFX_DIVIDE_MC : integer := 2;
 
 COMPONENT cellular_ram_burst_controller
 PORT(
@@ -683,9 +683,9 @@ a0, ar1, a00, a0a, a0b, a0c, a1, a1a, a1b, a1c, ar, br, cr, dr, er, er1, aw, bw,
 );
 signal p0_state : p_states := a0;
 signal p1_state : p_states := a0;
-constant c_w8_bw : integer := 3200;
+constant c_w8_bw : integer := 3200/2;
 signal w8_bw : integer range 0 to c_w8_bw - 1 := 0;
-constant c_w8_br : integer := 3200/4;
+constant c_w8_br : integer := 3200/4/2;
 signal w8_br : integer range 0 to c_w8_br - 1 := 0;
 
 constant c_cntr_frame : integer := 307200;
@@ -1070,7 +1070,7 @@ end process p0_reset_vga_timing;
 crbc_i0 : cellular_ram_burst_controller
 PORT MAP (
 busy => busy,
-clk => i_clock_ib,
+clk => clk_mc,
 writes => wrc,
 data => data,
 id => id,
