@@ -546,8 +546,10 @@ COMPONENT address_generator
 	Port ( clk25 : in STD_LOGIC;
 			 enable : in STD_LOGIC;
 			 vsync : in STD_LOGIC;
-			 address : out STD_LOGIC_VECTOR (18 downto 0));
+			 address : out STD_LOGIC_VECTOR (18 downto 0);
+			 address1 : out STD_LOGIC_VECTOR (9 downto 0));
 END COMPONENT;
+signal address1 : STD_LOGIC_VECTOR (9 downto 0);
 
 COMPONENT VGA_timing_synch
 	Port ( clk25, rst : in  STD_LOGIC;
@@ -759,9 +761,9 @@ begin
 --        if (ov7670_vs = '1') then
 --          p0_state <= a1a;
 --        end if;
---        if (ov7670_hs_prev = '1' and ov7670_hs = '0') then -- wr when hs fe
+        if (ov7670_hs_prev = '1' and ov7670_hs = '0') then -- wr when hs fe
 --        if (ov7670_hs = '0') then -- wr when hs fe
-        if (ov7670_hs = '1') then -- wr when hs fe
+--        if (ov7670_hs = '1') then -- wr when hs fe
 --        if (ov7670_hs_prev = '0' and ov7670_hs = '1') then -- wr when hs re
 --          if (vga_hsync_i_prev = '0' and vga_hsync_i = '1') then
 --            p0_state <= aw;
@@ -835,10 +837,12 @@ begin
       when a0 =>
 --        p0_r <= '0';
 --        if (cntr_rd1 > (307200 / 2) - 1) then
-        if (ov7670_vs_prev = '0' and ov7670_vs = '1') then
+--        if (ov7670_vs_prev = '0' and ov7670_vs = '1') then
+        if (vga_vsync_sig_prev = '1' and vga_vsync_sig = '0') then
           p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0'); -- reset sink addr
         end if;
-        if (ov7670_vs_prev = '1' and ov7670_vs = '0') then
+        if (vga_vsync_sig_prev = '1' and vga_vsync_sig = '0') then
+--        if (ov7670_vs_prev = '1' and ov7670_vs = '0') then
 --        if (vga_vsync_sig_prev = '0' and vga_vsync_sig = '1') then
           --cntr_wr1 <= (others => '0');
           ov7670_vs_next <= ov7670_vs_next (0) & '1';
@@ -868,7 +872,9 @@ begin
         if (cntr_rd1 >= 153280) then
           cntr_rd1 <= (others => '0');
         end if;
-        if (vga_fint = '1') then
+--                  p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0'); -- reset sink addr
+
+        if (vga_hsync_i_prev = '1' and vga_hsync_i = '0') then
           p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0'); -- reset sink addr
         end if;
 --        if (vga_hsync_i_prev = '1' and vga_hsync_i = '0') then
@@ -1070,7 +1076,8 @@ end process p0_reset_vga_timing;
 crbc_i0 : cellular_ram_burst_controller
 PORT MAP (
 busy => busy,
-clk => clk_mc,
+--clk => clk_mc,
+clk => i_clock_ib,
 writes => wrc,
 data => data,
 id => id,
@@ -1084,10 +1091,11 @@ write_buffer_clk => ov7670_pclk,
 write_buffer_we => latched_hs,
 --write_buffer_we => wren1 (0),
 
-read_buffer_addr => rd_a1 (9 downto 0),
+--read_buffer_addr => rd_a1 (9 downto 0),
+read_buffer_addr => address1,
 read_buffer_data => rd_d1,
---read_buffer_clk => clk_vga,
-read_buffer_clk => clk2x_2,
+read_buffer_clk => clk_vga,
+--read_buffer_clk => clk2x_2,
 
 lb => lb_n,
 ub => ub_n,
@@ -1180,7 +1188,8 @@ inst_addrgen1 : address_generator port map(
 clk25 => clk2x_2,
 enable => active1,
 vsync => vga_vsync_sig,
-address => rd_a1);
+address => rd_a1,
+address1 => address1);
 
 inst_imagegen : vga_imagegenerator port map(
 Data_in1 => rd_d1,

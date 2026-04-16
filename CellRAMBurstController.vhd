@@ -357,6 +357,12 @@ begin
       sink_addr <= unsigned (data (9 downto 0));
       --report "set rb addr";
     end if;
+--    if (state = write_byte0) then
+--    if (state = idle or state = write_byte0 or state = write_byte1 or state = write_byte2 or state = write_byte3) then
+--      if (vga_int = '0' and vga_int_i = '1') then
+--        sink_addr <= sink_addr + 320;
+--      end if;
+--    end if;
     if (state = config0) then
       clk_enable <= '0';
       cre <= '0';
