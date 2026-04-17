@@ -112,19 +112,6 @@ doB : out std_logic_vector (15 downto 0)
 );
 end component asym_ram_sdp_read_wider;
 
---component ram_buffer
---port (
---clka : in std_logic;
---ena : in std_logic;
---wea : in std_logic;
---addra : in std_logic_vector (10 downto 0);
---dina : in std_logic_vector (7 downto 0);
---clkb : in std_logic;
---addrb : in std_logic_vector (9 downto 0);
---doutb : out std_logic_vector (15 downto 0)
---);
---end component ram_buffer;
-
 signal write_buffer_we1 : std_logic_vector (0 downto 0);
 
 signal busy_i : std_logic;
@@ -145,6 +132,8 @@ signal clk2x, clk2d : std_logic;
 
 signal vga_int_i : std_logic;
 
+signal we_i : std_logic;
+
 begin
 
 p0_vga_int : process (clk) is
@@ -157,75 +146,6 @@ end process p0_vga_int;
 busy <= busy_i;
 
 write_buffer_we1 (0) <= write_buffer_we;
-
---ram_buffer_i0 : ram_buffer
---port map (
---  clka => write_buffer_clk,
---  ena => write_buffer_we,
---  wea => write_buffer_we,
---  addra => write_buffer_addr,
---  dina => write_buffer_data,
---  clkb => clk,
---  addrb => std_logic_vector (source_addr),
---  doutb => source_data
---);
-
-bufg1 : BUFG
-port map (
-O => clk0_fb, -- Clock buffer output
-I => clk0 -- Clock buffer input
-);
-
-dcm1 : DCM_SP
-generic map (
-CLKDV_DIVIDE => 2.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
--- 7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
---CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 24, -- 50 -> 25 mhz
---CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 25, -- 50 -> 24.0 mhz
---CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 27, -- 50 -> 24.07407407407407407400 mhz
---CLKFX_MULTIPLY => 14, CLKFX_DIVIDE => 29, -- 50 -> 24.13793103448275862050 mhz
---CLKFX_MULTIPLY => 15, CLKFX_DIVIDE => 31, -- 50 -> 24.19354838709677419350 mhz
---CLKFX_MULTIPLY => 24, CLKFX_DIVIDE => 25, -- 50 -> 48.0 mhz
---CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 24, -- 50 -> 25 mhz
---CLKFX_MULTIPLY => 6, CLKFX_DIVIDE => 25, -- 100 -> 24.0 mhz
---CLKFX_MULTIPLY => 5, CLKFX_DIVIDE => 21, -- 100 -> 23.8 mhz (sim)
---CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 27, -- 50 -> 24.07407407407407407400 mhz
---CLKFX_MULTIPLY => 14, CLKFX_DIVIDE => 29, -- 50 -> 24.13793103448275862050 mhz
---CLKFX_MULTIPLY => 15, CLKFX_DIVIDE => 31, -- 50 -> 24.19354838709677419350 mhz
---CLKFX_MULTIPLY => 24, CLKFX_DIVIDE => 25, -- 50 -> 48.0 mhz
---CLKIN_PERIOD => 20.0, CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 28 (23.21428571428571428550)
---CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 28,
-CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
-CLKIN_PERIOD => 10.0, -- Specify period of input clock
-CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of "NONE", "FIXED" or "VARIABLE"
-CLK_FEEDBACK => "1X", -- Specify clock feedback of "NONE", "1X" or "2X"
-DESKEW_ADJUST => "SYSTEM_SYNCHRONOUS", -- "SOURCE_SYNCHRONOUS", "SYSTEM_SYNCHRONOUS" or
--- an integer from 0 to 15
-DLL_FREQUENCY_MODE => "LOW", -- "HIGH" or "LOW" frequency mode for DLL
-DUTY_CYCLE_CORRECTION => TRUE, -- Duty cycle correction, TRUE or FALSE
-PHASE_SHIFT => 0, -- Amount of fixed phase shift from -255 to 255
-STARTUP_WAIT => FALSE) -- Delay configuration DONE until DCM_SP LOCK, TRUE/FALSE
-port map (
-CLK0 => clk0, -- 0 degree DCM CLK ouptput
-CLK180 => open, -- 180 degree DCM CLK output
-CLK270 => open, -- 270 degree DCM CLK output
-CLK2X => clk2x, -- 2X DCM CLK output
-CLK2X180 => open, -- 2X, 180 degree DCM CLK out
-CLK90 => open, -- 90 degree DCM CLK output
-CLKDV => clk2d, -- Divided DCM CLK out (CLKDV_DIVIDE)
-CLKFX => open, -- DCM CLK synthesis out (M/D)
-CLKFX180 => open, -- 180 degree CLK synthesis out
-LOCKED => open, -- DCM LOCK status output
-PSDONE => open, -- Dynamic phase adjust done output
-STATUS => open, -- 8-bit DCM status bits output
-CLKFB => clk0_fb, -- DCM clock feedback
---CLKIN => clk, -- Clock input (from IBUFG, BUFG or DCM)
-CLKIN => write_buffer_clk, -- Clock input (from IBUFG, BUFG or DCM)
-PSCLK => '0', -- Dynamic phase adjust clock input
-PSEN => '0', -- Dynamic phase adjust enable input
-PSINCDEC => '0', -- Dynamic phase adjust increment/decrement
-RST => '0' -- DCM asynchronous reset input
-);
 
 ram_buffer_i0 : asym_ram_sdp_read_wider
 port map (
@@ -259,8 +179,6 @@ dq (14) <= source_data (14) when data_out_enable (14) = '1' else 'Z';
 dq (15) <= source_data (15) when data_out_enable (15) = '1' else 'Z';
 
 ram_clk <= clk when clk_enable = '1' else '0';
---ram_clk <= clk2d when clk_enable = '1' else '0';
---ram_clk <= clk2x when clk_enable = '1' else '0';
 
 busy_i <= '0' when (state = idle) else '1';
 
@@ -346,6 +264,7 @@ begin
   end if;
 end process p8_bral;
 
+we <= we_i;
 p9_run : process (clk) is
 begin
   if (falling_edge (clk)) then
@@ -357,10 +276,10 @@ begin
       sink_addr <= unsigned (data (9 downto 0));
       --report "set rb addr";
     end if;
---    if (state = write_byte0) then
 --    if (state = idle or state = write_byte0 or state = write_byte1 or state = write_byte2 or state = write_byte3) then
+--    if (we_i = '0') then
 --      if (vga_int = '0' and vga_int_i = '1') then
---        sink_addr <= sink_addr + 320;
+--        sink_addr <= sink_addr + 160;
 --      end if;
 --    end if;
     if (state = config0) then
@@ -369,7 +288,7 @@ begin
       adv <= '1';
       ce <= '1';
       oe <= '1';
-      we <= '1';
+      we_i <= '1';
     end if;
     if (state = config1) then
       a <=
@@ -394,7 +313,7 @@ begin
       state_cntr <= state_cntr - 1;
       adv <= '0';
       ce <= '0';
-      we <= '0';
+      we_i <= '0';
     end if;
     if (state = config3) then
       state_cntr <= to_unsigned (5, state_cntr'left+1);
@@ -408,7 +327,7 @@ begin
     end if;
     if (state = config6) then
       a <= (others => '0');
-      we <= '1';
+      we_i <= '1';
     end if;
     if (state = config7) then
       state_cntr <= to_unsigned (1, state_cntr'left+1);
@@ -443,7 +362,7 @@ begin
       a <= std_logic_vector (burst_write_addr);
       adv <= '0';
       ce <= '0';
-      we <= '0';
+      we_i <= '0';
     end if;
     if (state = write_byte1) then
       adv <= '1';
@@ -460,7 +379,7 @@ begin
         source_addr <= source_addr + 1;
       end if;
       if (write_counter <= 1) then
-        we <= '1'; 
+        we_i <= '1'; 
       end if;        
     end if;
     if (state = write_byte4) then
@@ -468,7 +387,7 @@ begin
         data_out_enable <= (others => '0');
         clk_enable <= '0';
         ce <= '1';
-        we <= '1';
+        we_i <= '1';
       end if;
     end if;
     if (state = write_rbc0) then
@@ -480,7 +399,7 @@ begin
     if (state = write_rbc1) then
       a <= std_logic_vector (this_write_addr);
       ce <= '0';
-      we <= '0';
+      we_i <= '0';
       adv <= '0';
     end if; 
     if (state = read_byte0) then
@@ -491,7 +410,7 @@ begin
       a <= std_logic_vector (burst_read_addr);
       adv <= '0';
       ce <= '0';
-      we <= '1';
+      we_i <= '1';
       oe <= '0';
     end if;
     if (state = read_byte1) then

@@ -9,7 +9,7 @@ entity address_generator is
     enable : in STD_LOGIC;
     vsync : in STD_LOGIC;
     address : out STD_LOGIC_VECTOR (18 downto 0);
-    address1 : out STD_LOGIC_VECTOR (9 downto 0)
+    address1 : out STD_LOGIC_VECTOR (10 downto 0)
   );  
 end address_generator;
 
@@ -32,7 +32,7 @@ process (clk25) begin
 			else
 			addr <= (others => '0');
 			end if;
-			if (addr1 < 640-1) then
+			if (addr1 < 640*2-1) then
 				addr1 <= addr1 + 1 ;
 			else
 			addr1 <= (others => '0');
