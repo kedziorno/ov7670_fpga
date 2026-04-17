@@ -121,10 +121,8 @@ begin
             count640 <= 0;
             if (pixel_time = '1') then
               state <= wait_00_pt;
-              all_frame <= all_frame + 1;
             end if;
           when wait_00_pt =>
-            count640 <= 0;
             all_frame <= all_frame + 1;
             if (douta /= x"00" or pixel_time = '1') then
               state <= wait_ff;
@@ -144,6 +142,7 @@ begin
                   douta = x"78" or
                   douta = x"ce")
               and pixel_time = '1') then
+              all_frame <= all_frame + 1;
               state <= wait_count640;
             end if;
           when wait_count640 =>
