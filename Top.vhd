@@ -549,9 +549,9 @@ COMPONENT address_generator
 			 enable : in STD_LOGIC;
 			 vsync : in STD_LOGIC;
 			 address : out STD_LOGIC_VECTOR (18 downto 0);
-			 address1 : out STD_LOGIC_VECTOR (9 downto 0));
+			 address1 : out STD_LOGIC_VECTOR (10 downto 0));
 END COMPONENT;
-signal address1 : STD_LOGIC_VECTOR (9 downto 0);
+signal address1 : STD_LOGIC_VECTOR (10 downto 0);
 
 COMPONENT VGA_timing_synch
 	Port ( clk25, rst : in  STD_LOGIC;
@@ -689,7 +689,7 @@ signal p0_state : p_states := a0;
 signal p1_state : p_states := a0;
 constant c_w8_bw : integer := 3200/2/2/2;
 signal w8_bw : integer range 0 to c_w8_bw - 1 := 0;
-constant c_w8_br : integer := 3200/4/2;
+constant c_w8_br : integer := 3200/2/2/2/2;
 signal w8_br : integer range 0 to c_w8_br - 1 := 0;
 
 constant c_cntr_frame : integer := 307200;
@@ -721,6 +721,8 @@ signal reset_vga_timing : std_logic := '1';
 
 signal vga_int, vga_fint : std_logic;
 
+signal cints : std_logic;
+
 begin
 
 -- STARTUP_SPARTAN3E: Startup primitive for GSR, GTS, startup sequence
@@ -742,6 +744,14 @@ id <= id_w when p0_w = '1' else id_r when p0_r = '1' else (others => '0');
 data <= data_w when p0_w = '1' else data_r when p0_r = '1' else (others => '0');
 wrc <= wrc_w when p0_w = '1' else wrc_r when p0_r = '1' else '0';
 
+-- synchro int wr cam
+process (i_clock_ib) is
+begin
+if (rising_edge (i_clock_ib)) then
+  cints <= cint;
+end if;
+end process;
+
 -- 3 frames write ok
 p0_control_crbc_write : process (i_clock_ib) is
 begin
@@ -751,20 +761,23 @@ begin
     ov7670_vs_prev <= ov7670_vs;
     case (p0_state) is
       when a0 =>
+        if (cints = '1') then
+        p0_state <= a1;
+        end if;
         if (ov7670_vs = '1') then
           p0_w <= '1'; wrc_w <= '1'; id_w <= x"0058"; data_w <= (others => '0');
           p0_state <= a1;
         end if;
       when a1 =>
         p0_w <= '0';
-        if (cntr_wr1 >= 153280 or ov7670_vs = '1') then
+        if (cntr_wr1 >= 153280+160+160+160 or ov7670_vs = '1') then
           cntr_wr1 <= (others => '0');
         end if;
 --        if (ov7670_vs = '1') then
 --          p0_state <= a1a;
 --        end if;
 --        if (ov7670_hs_prev = '1' and ov7670_hs = '0') then -- wr when hs fe
-        if (cint = '1') then -- wr when hs fe
+        if (cints = '1') then -- wr when hs fe
 --        if (ov7670_hs = '0') then -- wr when hs fe
 --        if (ov7670_hs = '1') then -- wr when hs fe
 --        if (ov7670_hs_prev = '0' and ov7670_hs = '1') then -- wr when hs re
@@ -789,10 +802,10 @@ begin
 --      when a1c =>
 --        p0_state <= aw;
 --        p0_w <= '1'; wrc_w <= '1'; id_w <= x"0054"; data_w <= (others => '0');
-      when aw => p0_w <= '1'; p0_state <= bw; wrc_w <= '1'; id_w <= x"0055"; data_w <= std_logic_vector (cntr_wr1 (15 downto 0));
-      when bw => p0_w <= '1'; p0_state <= cw; wrc_w <= '1'; id_w <= x"0054"; data_w <= "000000000000" & std_logic_vector (cntr_wr1 (19 downto 16));
-      when cw => p0_w <= '1'; p0_state <= dw; wrc_w <= '1'; id_w <= x"0052"; data_w <= std_logic_vector (c_step_w);
-      when dw => p0_w <= '1'; p0_state <= ew; wrc_w <= '1'; id_w <= x"0050"; data_w <= x"0000";
+      when aw => if (busy = '0') then p0_w <= '1'; p0_state <= bw; wrc_w <= '1'; id_w <= x"0055"; data_w <= std_logic_vector (cntr_wr1 (15 downto 0)); end if;
+      when bw => if (busy = '0') then p0_w <= '1'; p0_state <= cw; wrc_w <= '1'; id_w <= x"0054"; data_w <= "000000000000" & std_logic_vector (cntr_wr1 (19 downto 16)); end if;
+      when cw => if (busy = '0') then p0_w <= '1'; p0_state <= dw; wrc_w <= '1'; id_w <= x"0052"; data_w <= std_logic_vector (c_step_w); end if;
+      when dw => if (busy = '0') then p0_w <= '1'; p0_state <= ew; wrc_w <= '1'; id_w <= x"0050"; data_w <= x"0000"; end if;
 
       when ew =>
         p0_w <= '0';
@@ -804,7 +817,7 @@ begin
 --            cntr_wr1 <= cntr_wr1 + c_step1;
 --          end if;
 --        end if;
-        if (w8_bw = c_w8_bw - 1) then
+--        if (w8_bw = c_w8_bw - 1) then
           if (ov7670_vs = '1') then
             p0_w <= '1'; wrc_w <= '1'; id_w <= x"0058"; data_w <= (others => '0');
             p0_state <= a0;
@@ -819,9 +832,9 @@ begin
               cntr_wr1 <= cntr_wr1 + c_step_w;
             end if;
 --          end if;
-        else
-          w8_bw <= w8_bw + 1;
-        end if;
+--        else
+--          w8_bw <= w8_bw + 1;
+--        end if;
       when others => null;
     end case;
   end if;
@@ -841,15 +854,16 @@ begin
 --        p0_r <= '0';
 --        if (cntr_rd1 > (307200 / 2) - 1) then
 --        if (ov7670_vs_prev = '0' and ov7670_vs = '1') then
-        if (vga_vsync_sig_prev = '1' and vga_vsync_sig = '0') then
-          p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0'); -- reset sink addr
-        end if;
-        if (vga_vsync_sig_prev = '1' and vga_vsync_sig = '0') then
+--        if (vga_vsync_sig_prev = '1' and vga_vsync_sig = '0') then
+--          p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0'); -- reset sink addr
+--        end if;
+--        if (vga_vsync_sig_prev = '1' and vga_vsync_sig = '0') then
 --        if (ov7670_vs_prev = '1' and ov7670_vs = '0') then
---        if (vga_vsync_sig_prev = '0' and vga_vsync_sig = '1') then
+--        if (ov7670_vs_prev = '0' and ov7670_vs = '1') then
+        if (vga_vsync_sig_prev = '0' and vga_vsync_sig = '1') then -- XXX here
           --cntr_wr1 <= (others => '0');
           ov7670_vs_next <= ov7670_vs_next (0) & '1';
---          p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0');
+          p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0');
         end if;
 --        if (ov7670_hs = '1') then
 ----          if (vga_hsync_i_prev = '0' and vga_hsync_i = '1') then
@@ -866,19 +880,22 @@ begin
           end if;
         end if;
       when a00 =>
---        if (ov7670_vs = '0') then -- cam vs 1
+        if (ov7670_vs = '0') then -- cam vs 1
 --        if (vga_vsync_sig_prev = '1' and vga_vsync_sig = '0') then -- vga vs 0
-        if (vga_vsync_sig = '1') then -- vga vs /= 0
+--        if (vga_vsync_sig = '1') then -- vga vs /= 0
           p1_state <= a0a;
         end if;
       when a0a =>
-        if (cntr_rd1 >= 153280) then
+        if (ov7670_vs = '1') then
+          p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0');
+        end if;
+        if (cntr_rd1 >= 153280+160+160+160+160) then
           cntr_rd1 <= (others => '0');
         end if;
 --                  p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0'); -- reset sink addr
 
         if (vga_hsync_i_prev = '1' and vga_hsync_i = '0') then
-          p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0'); -- reset sink addr
+--          p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0'); -- reset sink addr
         end if;
 --        if (vga_hsync_i_prev = '1' and vga_hsync_i = '0') then
           if (vga_int = '1') then
@@ -912,21 +929,21 @@ begin
           p1_state <= ar;
 --        end if;
       when ar =>
---        if (start_read = '1') then
+        if (busy = '0') then
           p0_r <= '1'; p1_state <= br; wrc_r <= '1'; id_r <= x"0057"; data_r <= std_logic_vector (cntr_rd1 (15 downto 0));
---        end if;
+        end if;
       when br =>
---        if (start_read = '1') then
+        if (busy = '0') then
           p0_r <= '1'; p1_state <= cr; wrc_r <= '1'; id_r <= x"0056"; data_r <= "000000000000" & std_logic_vector (cntr_rd1 (19 downto 16));
---        end if;
+        end if;
       when cr =>
---        if (start_read = '1') then
+        if (busy = '0') then
           p0_r <= '1'; p1_state <= dr; wrc_r <= '1'; id_r <= x"0053"; data_r <= std_logic_vector (c_step_r);
---        end if;
+        end if;
       when dr =>
---        if (start_read = '1') then
+        if (busy = '0') then
           p0_r <= '1'; p1_state <= er; wrc_r <= '1'; id_r <= x"0051"; data_r <= x"0000";
---        end if;
+        end if;
       when er =>
         if (busy = '0') then
           p1_state <= er1;
@@ -942,7 +959,7 @@ begin
 --            cntr_rd1 <= cntr_rd1 + c_step1;
 --          end if;
 --        end if;
-        if (w8_br = c_w8_br - 1) then
+--        if (w8_br = c_w8_br - 1) then
 --          if (vga_vsync_sig = '0') then -- vs vga 0
 --          if (ov7670_vs = '1') then -- vs cam 1
           if (busy = '0') then -- vs cam 1
@@ -963,9 +980,9 @@ begin
               cntr_rd1 <= cntr_rd1 + c_step_r;
             end if;
 --          end if;
-        else
-          w8_br <= w8_br + 1;
-        end if;
+--        else
+--          w8_br <= w8_br + 1;
+--        end if;
       when others => null;
     end case;
   end if;
@@ -1094,8 +1111,8 @@ write_buffer_we => ov7670_hs,
 --write_buffer_we => latched_hs,
 --write_buffer_we => wren1 (0),
 
---read_buffer_addr => rd_a1 (9 downto 0),
-read_buffer_addr => address1,
+read_buffer_addr => rd_a1 (9 downto 0),
+--read_buffer_addr => address1,
 read_buffer_data => rd_d1,
 --read_buffer_clk => clk_vga,
 read_buffer_clk => clk2x_2,

@@ -100,7 +100,8 @@ dout  <= d_latch;
 --  end if;
 --end process write_process;
 
-int <= '1' when (addr1 = 639 or addr1 = 300) else '0';
+int <= '1' when (addr1 = 639 or addr1 = 318-72) else '0';
+--int <= '1' when (addr1 = 1) else '0';
 capture_process: process(pclk)
    begin
       if rising_edge(pclk) then

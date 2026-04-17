@@ -21,5 +21,6 @@ begin
 --RGB_out <= Data_in1(15 downto 13) & Data_in1(12 downto 10) & Data_in1(9 downto 8) when active_area1 = '1' else (others => '0');
 --RGB_out <= Data_in1(15-2 downto 13-2) & Data_in1(11-2 downto 9-2) & Data_in1(7-2 downto 6-2) when active_area1 = '1' else (others => '0');
 RGB_out <= Data_in1(15 downto 13) & Data_in1(11 downto 9) & Data_in1(7 downto 6) when active_area1 = '1' else (others => '0');
+--RGB_out <= Data_in1(15 downto 13) & Data_in1(11 downto 9) & Data_in1(7 downto 6);
 end Behavioral;
 
