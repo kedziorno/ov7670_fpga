@@ -247,6 +247,7 @@ begin
     end if;
   end process p1_vsync;
 
+  -- VGA mode have 26.666667us/6.0us HS output - then give stable image
   g_source_colorbar_hs : if (c_source = t_colorbar or c_source = t_frames) generate
     -- generate href pulse on falling edge pclk - t_colorbar
     camera_o_hs <= href_i;
@@ -278,7 +279,7 @@ begin
             end if;
           when shref0 =>
             href_i <= '0';
-            if (counth0 = c_href0 - 1) then
+            if (counth0 = c_href0 - 1 - 1) then -- minus one cycle
               hs_state <= swait4vsync;
               counth0 := 0;
             else
@@ -422,7 +423,7 @@ begin
   end generate g_source_lines;
 
   -- only flip source clock
-  camera_o_pclk <= camera_i_xclk;
+  camera_o_pclk <= camera_i_xclk when (vs_state /= cold_start) else '0';
 
 --  g_source_frames_adjust_clock : if (c_source = t_frames) generate
 --  BUFG_cam : BUFG
