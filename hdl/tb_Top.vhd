@@ -355,6 +355,7 @@ signal oWait : std_logic := '0';
 signal test_isimgui_32bit : real;
 
 BEGIN
+--synthesis translate_off
 
 p_isim_cmd_ping : process is
 begin
@@ -618,4 +619,5 @@ wait for clk50_period*10;
 wait;
 end process;
 
+--synthesis translate_on
 END;
