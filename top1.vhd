@@ -28,8 +28,9 @@ use IEEE.STD_LOGIC_1164.ALL;
 -- any Xilinx primitives in this code.
 --library UNISIM;
 --use UNISIM.VComponents.all;
-
+library work;
 use work.micron_mem_parameters.all;
+use work.p_constants.all;
 
 entity top is
 generic (
