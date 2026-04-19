@@ -512,7 +512,7 @@ Generic (PB_BITS : integer := 1);
 END COMPONENT;
 
 COMPONENT ov7670_capture
-	Port ( pclk : in  STD_LOGIC;
+	Port ( pclk,reset : in  STD_LOGIC;
           vsync : in  STD_LOGIC;
           href : in  STD_LOGIC;
           d : in  STD_LOGIC_VECTOR (7 downto 0);
@@ -1210,6 +1210,7 @@ ov7670_d <= ov7670_data1;
 
 inst_ov7670capt1: ov7670_capture port map(
 pclk => ov7670_pclk,
+reset => reset_dcm_n,
 vsync => ov7670_vs,
 href => ov7670_hs,
 d => ov7670_d,

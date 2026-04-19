@@ -65,11 +65,12 @@ begin
     end case;
   end process rom_case;
 
-  sequence_proc : process (clk, reset) begin
+  sequence_proc : process (clk) begin
+    if rising_edge(clk) then
     if (reset = '1') then
       sequence <= 0;
       wait_reset <= 0;
-    elsif rising_edge(clk) then
+    else
       if (cmd_reg = x"fffe") then
         if (wait_reset = c_wait_reset - 1) then
           wait_reset <= 0;
@@ -81,8 +82,8 @@ begin
         sequence <= 0;
       elsif advance = '1' then
         sequence <= sequence + 1;
-      else
       end if;
+    end if;
     end if;
   end process sequence_proc;
 
@@ -99,11 +100,12 @@ begin
   command <= cmd_reg;
   with cmd_reg select done <= '1' when x"FFFF", '0' when others;
   cmd_reg <= ov7670_rom (sequence);
-  sequence_proc : process (clk, reset) begin
+  sequence_proc : process (clk) begin
+    if rising_edge(clk) then
     if (reset = '1') then
       sequence <= 0;
       wait_reset <= 0;
-    elsif rising_edge(clk) then
+      else
       if (cmd_reg = x"fffe") then
         if (wait_reset = c_wait_reset - 1) then
           wait_reset <= 0;
@@ -116,6 +118,7 @@ begin
       elsif advance = '1' then
         sequence <= sequence + 1;
       end if;
+    end if;
     end if;
   end process sequence_proc;
 

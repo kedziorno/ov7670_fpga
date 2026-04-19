@@ -11,7 +11,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 entity ov7670_capture is
-    Port ( pclk : in  STD_LOGIC;
+    Port ( reset,pclk : in  STD_LOGIC;
            vsync : in  STD_LOGIC;
            href : in  STD_LOGIC;
            d : in  STD_LOGIC_VECTOR (7 downto 0);
@@ -105,6 +105,14 @@ int <= '1' when (addr1 = 639 or addr1 = 318-72) else '0';
 capture_process: process(pclk)
    begin
       if rising_edge(pclk) then
+      if (reset = '1') then
+      href_hold <= '0';
+      addr1 <= (others => '0');
+      href_last <= (others => '0');
+      row <= (others => '0');
+      d_latch <= (others => '0');
+      we_reg <= '0';
+      else
 
          -- detect the rising edge on href - the start of the scan row
 --         if href_hold = '0' and latched_href = '1' then
@@ -144,6 +152,7 @@ capture_process: process(pclk)
 --               href_last <= href_last(href_last'high-1 downto 0) & latched_href;
 --            end if;
          end if;
+         end if;
       end if;
    end process;
 
@@ -152,6 +161,12 @@ capture_process: process(pclk)
    latched_process: process (pclk) is
    begin
       if falling_edge(pclk) then
+      if (reset = '1') then
+        address <= (others => '0');
+        latched_d <= (others => '0');
+        latched_href <= '0';
+        latched_vsync <= '0';
+      else
          if href_hold = '1' then
 --         if href = '1' then
 					if (to_integer(unsigned(address)) = 307200-1) then
@@ -166,6 +181,7 @@ capture_process: process(pclk)
          latched_d     <= d;
          latched_href  <= href;
          latched_vsync <= vsync;
+      end if;
       end if;
    end process;
 end Behavioral;
