@@ -27,6 +27,7 @@ generic (
 );
 port	(
   i_clock	: in STD_LOGIC;
+  i_clock100	: in STD_LOGIC;
   pb		: in STD_LOGIC;
   sw : in std_logic_vector (7 downto 0);
   led1 : out STD_LOGIC; -- configuration done
@@ -591,7 +592,8 @@ signal siodo1_n : std_logic;
 
 signal clk0, clk0_fb : std_logic;
 signal clk1, clk1_fb : std_logic;
-signal i_clock_ib : std_logic;
+signal i_clock_ib1 : std_logic;
+signal i_clock_ib2 : std_logic;
 signal clk_cam, clk_vga, clk_mc : std_logic;
 signal resend : std_logic;
 
@@ -1041,11 +1043,17 @@ O => clk1_fb, -- Clock buffer output
 I => clk1 -- Clock buffer input
 );
 
-IBUFG_global_clock : IBUFG
+IBUFG_global_clock1 : IBUF
+port map (
+O => i_clock_ib1, -- Clock buffer output
+I => i_clock100 -- Clock buffer input (connect directly to top-level port)
+);
+
+IBUFG_global_clock2 : IBUFG
 generic map (
 IOSTANDARD => "DEFAULT")
 port map (
-O => i_clock_ib, -- Clock buffer output
+O => i_clock_ib2, -- Clock buffer output
 I => i_clock -- Clock buffer input (connect directly to top-level port)
 );
 
@@ -1054,7 +1062,7 @@ synchro_reset_i0 : SRLC16E
 port map (
 D => '1', -- insert input signal
 CE => '1', -- insert Clock Enable signal (optional)
-CLK => i_clock_ib, -- insert Clock signal
+CLK => i_clock_ib1, -- insert Clock signal
 A0 => '1', -- insert Address 0 signal
 A1 => '1', -- insert Address 1 signal
 A2 => '1', -- insert Address 2 signal
@@ -1079,13 +1087,13 @@ end process p0_assert_1;
 
 DCM_SP_mc_fx_vga_dv : DCM_SP
 generic map (
-CLKDV_DIVIDE => 2.0, -- 50mhz
---CLKDV_DIVIDE => 4.0, -- 100mhz
+--CLKDV_DIVIDE => 2.0, -- 50mhz
+CLKDV_DIVIDE => 4.0, -- 100mhz
 CLKFX_MULTIPLY => CLKFX_MULTIPLY_MC, -- Can be any integer from 1 to 32
 CLKFX_DIVIDE => CLKFX_DIVIDE_MC, -- Can be any interger from 1 to 32
 CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
-CLKIN_PERIOD => 20.0, -- Specify period of input clock
---CLKIN_PERIOD => 10.0, -- Specify period of input clock
+--CLKIN_PERIOD => 20.0, -- Specify period of input clock
+CLKIN_PERIOD => 10.0, -- Specify period of input clock
 CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of "NONE", "FIXED" or "VARIABLE"
 CLK_FEEDBACK => "1X", -- Specify clock feedback of "NONE", "1X" or "2X"
 DESKEW_ADJUST => "SYSTEM_SYNCHRONOUS", -- "SOURCE_SYNCHRONOUS", "SYSTEM_SYNCHRONOUS" or
@@ -1108,7 +1116,7 @@ LOCKED => open, -- DCM LOCK status output
 PSDONE => open, -- Dynamic phase adjust done output
 STATUS => open, -- 8-bit DCM status bits output
 CLKFB => clk0_fb, -- DCM clock feedback
-CLKIN => i_clock_ib, -- Clock input (from IBUFG, BUFG or DCM)
+CLKIN => i_clock_ib1, -- Clock input (from IBUFG, BUFG or DCM)
 PSCLK => '0', -- Dynamic phase adjust clock input
 PSEN => '0', -- Dynamic phase adjust enable input
 PSINCDEC => '0', -- Dynamic phase adjust increment/decrement
@@ -1164,7 +1172,7 @@ LOCKED => open, -- DCM LOCK status output
 PSDONE => open, -- Dynamic phase adjust done output
 STATUS => open, -- 8-bit DCM status bits output
 CLKFB => clk1_fb, -- DCM clock feedback
-CLKIN => i_clock_ib, -- Clock input (from IBUFG, BUFG or DCM)
+CLKIN => i_clock_ib2, -- Clock input (from IBUFG, BUFG or DCM)
 PSCLK => '0', -- Dynamic phase adjust clock input
 PSEN => '0', -- Dynamic phase adjust enable input
 PSINCDEC => '0', -- Dynamic phase adjust increment/decrement
