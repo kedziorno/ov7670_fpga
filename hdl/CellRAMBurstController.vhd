@@ -134,6 +134,8 @@ signal vga_int_i : std_logic;
 
 signal we_i : std_logic;
 
+signal owait1, ramclken : std_logic := '0';
+
 begin
 
 p0_vga_int : process (clk) is
@@ -178,7 +180,35 @@ dq (13) <= source_data (13) when data_out_enable (13) = '1' else 'Z';
 dq (14) <= source_data (14) when data_out_enable (14) = '1' else 'Z';
 dq (15) <= source_data (15) when data_out_enable (15) = '1' else 'Z';
 
-ram_clk <= clk when clk_enable = '1' else '0';
+process (clk) is
+begin
+  if (rising_edge (clk)) then
+    owait1 <= o_wait;
+  end if;
+end process;
+
+start_clock : process (clk) is
+  type states is (a, b);
+  variable state1 : states := a;
+begin
+  if (rising_edge (clk)) then
+    case (state1) is
+      when a =>
+--      if ((owait1 = '0' and o_wait = '1') and (state = write_byte2)) then
+      if ((state = write_byte0)) then
+        state1 := b;
+        ramclken <= '0';
+      end if;
+      when b =>
+        ramclken <= '1';
+    end case;
+  end if;
+end process start_clock;
+
+--ram_clk <= clk when (ramclken = '1') else '0';
+ram_clk <= not clk when (state = write_byte1 or state = write_byte2 or state = write_byte3
+or 
+state = read_byte1 or state = read_byte2 or state = read_byte3) else '0';
 
 busy_i <= '0' when (state = idle) else '1';
 
@@ -195,7 +225,7 @@ port map (
 
 p2_next_state : process (clk) is
 begin
-  if (falling_edge (clk)) then
+  if (rising_edge  (clk)) then
     state <= next_state;
     if (id = burst_read and writes = '1' and busy_i = '0' and bytes_to_read > 0) then
       state <= read_byte0;
@@ -210,7 +240,7 @@ end process p2_next_state;
 
 p3_b2w : process (clk) is
 begin
-  if (falling_edge (clk)) then
+  if (rising_edge (clk)) then
     if (id = write_length and writes = '1' and busy_i = '0') then
       bytes_to_write <= unsigned (data (10 downto 0));
       --report "write length " & integer'image (to_integer (unsigned (data (10 downto 0))));
@@ -220,7 +250,7 @@ end process p3_b2w;
 
 p4_b2r: process (clk) is
 begin
-  if (falling_edge (clk)) then
+  if (rising_edge (clk)) then
     if (id = read_length and writes = '1' and busy_i = '0') then
       bytes_to_read <= unsigned (data (10 downto 0));
       --report "read length " & integer'image (to_integer (unsigned (data (10 downto 0))));
@@ -230,7 +260,7 @@ end process p4_b2r;
 
 p5_bwah : process (clk) is
 begin
-  if (falling_edge (clk)) then
+  if (rising_edge (clk)) then
     if (id = write_addr_h and writes = '1' and busy_i = '0') then
       burst_write_addr (22 downto 16) <= unsigned (data (6 downto 0));
     end if;
@@ -239,7 +269,7 @@ end process p5_bwah;
 
 p6_bwal : process (clk) is
 begin
-  if (falling_edge (clk)) then
+  if (rising_edge (clk)) then
     if (id = write_addr_l and writes = '1' and busy_i = '0') then 
       burst_write_addr (15 downto 0) <= unsigned (data);
     end if;
@@ -248,7 +278,7 @@ end process p6_bwal;
 
 p7_brah : process (clk) is
 begin
-  if (falling_edge (clk)) then
+  if (rising_edge (clk)) then
     if (id = read_addr_h and writes = '1' and busy_i = '0') then
       burst_read_addr (22 downto 16) <= unsigned (data (6 downto 0));
     end if;
@@ -257,7 +287,7 @@ end process p7_brah;
 
 p8_bral : process (clk) is
 begin
-  if (falling_edge (clk)) then
+  if (rising_edge (clk)) then
     if (id = read_addr_l and writes = '1' and busy_i = '0') then
       burst_read_addr (15 downto 0) <= unsigned (data);
     end if;
@@ -267,7 +297,7 @@ end process p8_bral;
 we <= we_i;
 p9_run : process (clk) is
 begin
-  if (falling_edge (clk)) then
+  if (rising_edge (clk)) then
     if (state = idle and id = set_wb_addr and writes = '1' and busy_i = '0') then
       source_addr <= unsigned (data (9 downto 0));
       --report "set wb addr";

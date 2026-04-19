@@ -723,6 +723,8 @@ signal vga_int, vga_fint : std_logic;
 
 signal cints : std_logic;
 
+signal owait1 : std_logic;
+
 begin
 
 -- STARTUP_SPARTAN3E: Startup primitive for GSR, GTS, startup sequence
@@ -736,6 +738,17 @@ begin
 --MBT => '0' -- Multi-Boot Trigger input
 --);
 -- End of STARTUP_SPARTAN3E_inst instantiation
+
+process (i_clock_ib) is
+begin
+  if (rising_edge (i_clock_ib)) then
+    if (owait = '1') then
+    owait1 <= '1';
+    else
+    owait1 <= '0';
+    end if;
+  end if;
+end process;
 
 oe_n <= oe_n_i;
 we_n <= we_n_i;
@@ -1125,7 +1138,8 @@ adv => adv_n,
 ce => ce_n,
 cre => cre,
 ram_clk => clk,
-o_wait => owait,
+--o_wait => owait,
+o_wait => owait1,
 a => addr,
 dq => dq,
 vga_int => vga_int
