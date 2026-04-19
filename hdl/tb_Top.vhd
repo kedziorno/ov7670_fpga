@@ -607,7 +607,7 @@ camera_i_rst2 <= '0';
 camera_i_rst3 <= '0';
 camera_i_rst4 <= '0';
 pb <= '1';
-wait for 200 ns;
+wait for 2000 ns;
 --i_reset <= '0';
 camera_i_rst1 <= '1';
 camera_i_rst2 <= '1';

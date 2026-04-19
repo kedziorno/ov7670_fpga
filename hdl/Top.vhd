@@ -506,7 +506,7 @@ architecture Structural of top_camera_monitoring is
 
 COMPONENT debounce_circuit
 Generic (PB_BITS : integer := 1);
-	Port ( clk : in STD_LOGIC;
+	Port ( clk, reset : in STD_LOGIC;
 			 input : in STD_LOGIC;
 			 output : out STD_LOGIC);
 END COMPONENT;
@@ -565,35 +565,6 @@ END COMPONENT;
 --for all : VGA_timing_synch use entity work.VGA_timing_synch(lsfr_1);
 --for all : VGA_timing_synch use entity work.VGA_timing_synch(jc);
 for all : VGA_timing_synch use entity work.VGA_timing_synch(counter);
-
-COMPONENT ram_interface
-PORT( i_clk	:	IN	STD_LOGIC;
-      oe_n	:	OUT	STD_LOGIC;
-      lb_n	:	OUT	STD_LOGIC;
-      dq_out	:	OUT	STD_LOGIC_VECTOR (15 DOWNTO 0);
-      cre	:	OUT	STD_LOGIC;
-      clk	:	OUT	STD_LOGIC;
-      ce_n	:	OUT	STD_LOGIC;
-      adv_n	:	OUT	STD_LOGIC;
-      addr	:	OUT	STD_LOGIC_VECTOR (22 DOWNTO 0);
-      i_rd	:	IN	STD_LOGIC;
-      i_wr	:	IN	STD_LOGIC;
-      i_rst_n	:	IN	STD_LOGIC;
-      addr_rd	:	IN	STD_LOGIC_VECTOR (22 DOWNTO 0);
-      addr_wr	:	IN	STD_LOGIC_VECTOR (22 DOWNTO 0);
-      data_wr	:	IN	STD_LOGIC_VECTOR (15 DOWNTO 0);
-      dq_in	:	IN	STD_LOGIC_VECTOR (15 DOWNTO 0);
-      data_rd	:	OUT	STD_LOGIC_VECTOR (15 DOWNTO 0);
-      ub_n	:	OUT	STD_LOGIC;
-      we_n	:	OUT	STD_LOGIC;
-      owait	:	IN	STD_LOGIC);
-END COMPONENT;
-signal ri_ard : std_logic_vector (22 downto 0);
-signal ri_awr : std_logic_vector (22 downto 0);
-signal ri_drd : std_logic_vector (15 downto 0);
-signal ri_dwr : std_logic_vector (15 downto 0);
-signal dqi, dqo : std_logic_vector (15 downto 0);
-signal ri_rd, ri_wr : std_logic;
 
 -- RAM FB
 signal wren1 : STD_LOGIC_VECTOR(0 downto 0);
@@ -1207,6 +1178,7 @@ PB_BITS => c_pb_bits
 )
 port map(
 clk => i_clock_ib,
+reset => reset_dcm_n,
 input => pb,
 output => resend);
 	
