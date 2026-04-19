@@ -5,7 +5,7 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 entity address_generator is
   Port ( 
-    clk25 : in STD_LOGIC;
+    clk25,reset : in STD_LOGIC;
     enable : in STD_LOGIC;
     vsync : in STD_LOGIC;
     address : out STD_LOGIC_VECTOR (18 downto 0);
@@ -26,6 +26,10 @@ begin
 
 process (clk25) begin
 	if rising_edge (clk25) then
+  if (reset = '1') then
+    addr <= (others => '0');
+    addr1 <= (others => '0');
+  else
 		if (enable='1') then
 			if (addr < 307200-1) then
 				addr <= addr + 1 ;
@@ -46,6 +50,7 @@ process (clk25) begin
 			addr <= (others => '0');
 			addr1 <= (others => '0');
 		end if;
+	end if;
 	end if;
 end process;    
 end Behavioral;

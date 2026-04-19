@@ -24,7 +24,7 @@
 //asym_ram_sdp_read_wider.v
 // https://docs.amd.com/r/en-US/ug901-vivado-synthesis/Dual-Port-Asymmetric-RAM-When-Read-is-Wider-than-Write-Verilog
 
-module asym_ram_sdp_read_wider (clkA, clkB, enaA, weA, enaB, addrA, addrB, diA, doB);
+module asym_ram_sdp_read_wider (clkA, clkB, enaA, weA, enaB, addrA, addrB, diA, doB, reset);
 parameter WIDTHA = 8;
 parameter SIZEA = 2048;
 parameter ADDRWIDTHA = 11;
@@ -36,6 +36,7 @@ input clkA;
 input clkB;
 input weA;
 input enaA, enaB;
+input reset;
 input [ADDRWIDTHA-1:0] addrA;
 input [ADDRWIDTHB-1:0] addrB;
 input [WIDTHA-1:0] diA;
@@ -70,10 +71,10 @@ localparam log2RATIO = log2(RATIO);
 reg [minWIDTH-1:0] RAM [0:maxSIZE-1];
 reg [WIDTHB-1:0] readB;
 
-integer i;
+integer ir;
 initial begin
-  for (i = 0; i < maxSIZE; i = i + 1) begin
-    RAM [i] = 0;
+  for (ir = 0; ir < maxSIZE; ir = ir + 1) begin
+    RAM [ir] = 0;
   end
 end
 
@@ -86,10 +87,13 @@ end
 end
 
 
-always @(posedge clkB)
-begin : ramread
 integer i;
 reg [log2RATIO-1:0] lsbaddr;
+always @(posedge clkB)
+begin : ramread
+if(reset)
+readB <= 0;
+else
 if (enaB) begin
 for (i = 0; i < RATIO; i = i+1) begin
 lsbaddr = i;
@@ -97,6 +101,7 @@ readB[(i+1)*minWIDTH-1 -: minWIDTH] <= RAM[{addrB, lsbaddr}];
 end
 end
 end
+
 assign doB = readB;
 
 endmodule

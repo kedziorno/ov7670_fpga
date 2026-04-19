@@ -540,12 +540,12 @@ END COMPONENT;
 
 COMPONENT vga_imagegenerator
 	Port ( Data_in1 : in  STD_LOGIC_VECTOR (15 downto 0);
-						active_area1 : in  STD_LOGIC;
+						active_area1,reset : in  STD_LOGIC;
            RGB_out : out  STD_LOGIC_VECTOR (7 downto 0));
 END COMPONENT;
 
 COMPONENT address_generator
-	Port ( clk25 : in STD_LOGIC;
+	Port ( clk25,reset : in STD_LOGIC;
 			 enable : in STD_LOGIC;
 			 vsync : in STD_LOGIC;
 			 address : out STD_LOGIC_VECTOR (18 downto 0);
@@ -623,6 +623,7 @@ COMPONENT cellular_ram_burst_controller
 PORT(
 busy : OUT  std_logic;
 clk : IN  std_logic;
+reset : IN  std_logic;
 writes : IN  std_logic;
 data : IN  std_logic_vector(15 downto 0);
 id : IN  std_logic_vector(15 downto 0);
@@ -1114,6 +1115,7 @@ PORT MAP (
 busy => busy,
 --clk => clk_mc,
 clk => i_clock_ib,
+reset => reset_dcm_n,
 writes => wrc,
 data => data,
 id => id,
@@ -1225,6 +1227,7 @@ int => cint
 --ri_ard <= "0000" & rd_a1;
 inst_addrgen1 : address_generator port map(
 --clk25 => clk_vga,
+reset => reset_dcm_n,
 clk25 => clk2x_2,
 enable => active1,
 vsync => vga_vsync_sig,
@@ -1233,6 +1236,7 @@ address1 => address1);
 
 inst_imagegen : vga_imagegenerator port map(
 Data_in1 => rd_d1,
+reset => reset_dcm_n,
 --Data_in1 => x"55aa", -- test output bmp
 active_area1 => active1,
 RGB_out => vga_rgb);
@@ -1241,7 +1245,7 @@ vga_hsync <= vga_hsync_i;
 inst_vgatiming : VGA_timing_synch port map(
 clk25 => clk_vga,
 --rst => reset_vga_timing,
-rst => resend,
+rst => reset_dcm_n,
 Hsync => vga_hsync_i,
 Vsync => vga_vsync_sig,
 blank => vga_blank,
