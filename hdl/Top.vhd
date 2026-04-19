@@ -654,11 +654,14 @@ END COMPONENT cellular_ram_burst_controller;
 signal busy, wrc : std_logic;
 signal data, id : std_logic_vector(15 downto 0);
 
-type p_states is (
+type p_states0 is (
 a0, ar1, a00, a0a, a0b, a0c, a1, a1a, a1b, a1c, ar, br, cr, dr, er, er1, aw, bw, cw, dw, ew
 );
-signal p0_state : p_states := a0;
-signal p1_state : p_states := a0;
+type p_states1 is (
+a0, ar1, a00, a0a, a0b, a0c, a1, a1a, a1b, a1c, ar, br, cr, dr, er, er1, aw, bw, cw, dw, ew
+);
+signal p0_state : p_states0 := a0;
+signal p1_state : p_states1 := a0;
 constant c_w8_bw : integer := 3200/2/2/2;
 signal w8_bw : integer range 0 to c_w8_bw - 1 := 0;
 constant c_w8_br : integer := 3200/2/2/2/2;
@@ -840,7 +843,7 @@ else
 --        else
 --          w8_bw <= w8_bw + 1;
 --        end if;
-      when others => null;
+      when others => p0_state <= a0;
     end case;
 end if;
   end if;
@@ -999,7 +1002,7 @@ else
 --        else
 --          w8_br <= w8_br + 1;
 --        end if;
-      when others => null;
+      when others => p1_state <= a0;
     end case;
   end if;
   end if;
