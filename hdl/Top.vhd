@@ -704,9 +704,9 @@ signal owait1 : std_logic;
 
 begin
 
-process (clk0) is
+process (clk1) is
 begin
-  if (rising_edge (clk0)) then
+  if (rising_edge (clk1)) then
     if (resend = '1') then
       owait1 <= '0';
     else
@@ -727,9 +727,9 @@ data <= data_w when p0_w = '1' else data_r when p0_r = '1' else (others => '0');
 wrc <= wrc_w when p0_w = '1' else wrc_r when p0_r = '1' else '0';
 
 -- synchro int wr cam
-process (clk0) is
+process (clk1) is
 begin
-if (rising_edge (clk0)) then
+if (rising_edge (clk1)) then
 if (resend = '1') then
   cints <= '0';
 else
@@ -739,9 +739,9 @@ end if;
 end process;
 
 -- 3 frames write ok
-p0_control_crbc_write : process (clk0) is
+p0_control_crbc_write : process (clk1) is
 begin
-  if (rising_edge (clk0)) then
+  if (rising_edge (clk1)) then
 if (resend = '1') then
   wrc_w <= '0';
   ov7670_hs_prev <= '0';
@@ -803,11 +803,11 @@ end if;
   end if;
 end process p0_control_crbc_write;
 
-p1_control_crbc_read : process (clk0) is
+p1_control_crbc_read : process (clk1) is
   variable flag : boolean := false;
   variable w8 : integer range 0 to 1023 := 0;
 begin
-  if (rising_edge (clk0)) then
+  if (rising_edge (clk1)) then
 if (resend = '1') then
   wrc_r <= '0';
   vga_hsync_i_prev <= '0';
@@ -899,7 +899,7 @@ crbc_i0 : cellular_ram_burst_controller
 PORT MAP (
 busy => busy,
 --clk => clk_mc,
-clk => clk0,
+clk => clk1,
 reset => resend,
 writes => wrc,
 data => data,
@@ -952,13 +952,13 @@ generic map (
 PB_BITS => c_pb_bits
 )
 port map(
-clk => clk0,
+clk => clk1,
 reset => reset_dcm_n,
 input => pb,
 output => resend);
 	
 inst_ov7670contr1: ov7670_controller port map(
-clk => clk0,
+clk => clk1,
 reset1 => resend,
 resend => resend,
 sioc => ov7670_sioc1,
@@ -1018,7 +1018,7 @@ vga_hsync <= vga_hsync_i;
 inst_vgatiming : VGA_timing_synch port map(
 clk25 => clk_vga,
 --rst => reset_vga_timing,
-rst => resend,
+rst => reset_dcm_n,
 Hsync => vga_hsync_i,
 Vsync => vga_vsync_sig,
 blank => vga_blank,
@@ -1031,38 +1031,12 @@ vga_vsync <= vga_vsync_sig;
 vga_clock_i <= clk_vga;
 vga_clock <= vga_clock_i;
 
-BUFG_mc : BUFG
-port map (
-O => clk0_fb, -- Clock buffer output
-I => clk0 -- Clock buffer input
-);
-
-BUFG_cam : BUFG
-port map (
-O => clk1_fb, -- Clock buffer output
-I => clk1 -- Clock buffer input
-);
-
-IBUFG_global_clock1 : IBUF
-port map (
-O => i_clock_ib1, -- Clock buffer output
-I => i_clock100 -- Clock buffer input (connect directly to top-level port)
-);
-
-IBUFG_global_clock2 : IBUFG
-generic map (
-IOSTANDARD => "DEFAULT")
-port map (
-O => i_clock_ib2, -- Clock buffer output
-I => i_clock -- Clock buffer input (connect directly to top-level port)
-);
-
 reset_dcm_n <= not reset_dcm;
 synchro_reset_i0 : SRLC16E
 port map (
 D => '1', -- insert input signal
 CE => '1', -- insert Clock Enable signal (optional)
-CLK => i_clock_ib1, -- insert Clock signal
+CLK => clk1, -- insert Clock signal
 A0 => '1', -- insert Address 0 signal
 A1 => '1', -- insert Address 1 signal
 A2 => '1', -- insert Address 2 signal
@@ -1085,6 +1059,18 @@ begin
 end process p0_assert_1;
 --synthesis translate_on
 
+BUFG_mc : BUFG
+port map (
+O => clk0_fb, -- Clock buffer output
+I => clk0 -- Clock buffer input
+);
+
+IBUFG_global_clock1 : IBUF
+port map (
+O => i_clock_ib1, -- Clock buffer output
+I => i_clock100 -- Clock buffer input (connect directly to top-level port)
+);
+
 DCM_SP_mc_fx_vga_dv : DCM_SP
 generic map (
 --CLKDV_DIVIDE => 2.0, -- 50mhz
@@ -1106,7 +1092,7 @@ port map (
 CLK0 => clk0, -- 0 degree DCM CLK ouptput
 CLK180 => open, -- 180 degree DCM CLK output
 CLK270 => open, -- 270 degree DCM CLK output
-CLK2X => clk2x_1, -- 2X DCM CLK output
+CLK2X => open, -- 2X DCM CLK output
 CLK2X180 => open, -- 2X, 180 degree DCM CLK out
 CLK90 => open, -- 90 degree DCM CLK output
 CLKDV => clk_vga, -- Divided DCM CLK out (CLKDV_DIVIDE)
@@ -1121,6 +1107,20 @@ PSCLK => '0', -- Dynamic phase adjust clock input
 PSEN => '0', -- Dynamic phase adjust enable input
 PSINCDEC => '0', -- Dynamic phase adjust increment/decrement
 RST => reset_dcm_n -- DCM asynchronous reset input
+);
+
+BUFG_cam : BUFG
+port map (
+O => clk1_fb, -- Clock buffer output
+I => clk1 -- Clock buffer input
+);
+
+IBUFG_global_clock2 : IBUFG
+generic map (
+IOSTANDARD => "DEFAULT")
+port map (
+O => i_clock_ib2, -- Clock buffer output
+I => i_clock -- Clock buffer input (connect directly to top-level port)
 );
 
 DCM_SP_cam : DCM_SP
@@ -1176,7 +1176,7 @@ CLKIN => i_clock_ib2, -- Clock input (from IBUFG, BUFG or DCM)
 PSCLK => '0', -- Dynamic phase adjust clock input
 PSEN => '0', -- Dynamic phase adjust enable input
 PSINCDEC => '0', -- Dynamic phase adjust increment/decrement
-RST => reset_dcm_n -- DCM asynchronous reset input
+RST => '0' -- DCM asynchronous reset input
 );
 
 end Structural;

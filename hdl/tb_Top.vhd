@@ -206,6 +206,7 @@ constant c_pb_bits : integer := 4
 );
 Port (
 i_clock	: in STD_LOGIC; -- Crystal Oscilator 50MHz  --B8
+i_clock100	: in STD_LOGIC; -- Crystal Oscilator 50MHz  --B8
 --clkcam	: in STD_LOGIC; -- Crystal Oscilator 23.9616 MHz  --U9
 pb		: in STD_LOGIC; -- Push Button --B18
 sw : in std_logic_vector (7 downto 0);
@@ -262,6 +263,7 @@ end component vga_bmp_sink;
 
 --Inputs
 signal clk50 : std_logic := '0';
+signal clk100 : std_logic := '0';
 signal clkcam : std_logic := '0';
 signal pb : std_logic := '0';
 signal ov7670_pclk1: std_logic := '0';
@@ -283,8 +285,8 @@ signal vga_vsync : std_logic;
 signal vga_rgb : std_logic_vector(7 downto 0);
 
 -- Clock period definitions
---constant clk50_period : time := 20 ns; -- 50mhz
-constant clk50_period : time := 10 ns; -- 100mhz
+constant clk50_period : time := 20 ns; -- 50mhz
+constant clk100_period : time := 10 ns; -- 100mhz
 --constant clk50_period : time := 41.667 ns; -- 24mhz
 --constant sdcard_clock_period : time := 10 ns;
 --constant camera_i_xclk_period : time := 41.733 ns; -- ~24mhz
@@ -353,6 +355,7 @@ signal Dq : std_logic_vector(15 downto 0);
 signal oWait : std_logic := '0';
 
 signal test_isimgui_32bit : real;
+signal vga_blank_n : std_logic;
 
 BEGIN
 --synthesis translate_off
@@ -363,7 +366,8 @@ begin
   wait for 1 ms;
 end process p_isim_cmd_ping;
 
-reset_n <= '0', '1' after 100 ns when mem_done = '1' else '1';
+reset_n <= '1', '0' after 475 ns;
+vga_blank_n <= '0', vga_blank after 475 ns;
 
 vga_bmp_i1 : component vga_bmp_sink
 generic map (
@@ -371,7 +375,7 @@ filename => "vga_memory_module_1.bmp"
 )
 port map (
 clk_i        => vga_clock,
-rst_i        => not reset_n,
+rst_i        => pb,
 dat_i        =>
 vga_r &"00000"&
 vga_g &"00000" &
@@ -428,7 +432,7 @@ camera_o_hs => ov7670_href_mux_1,
 camera_o_pclk => ov7670_pclk1,
 camera_i_xclk => ov7670_xclk1,
 camera_o_d => ov7670_data_mux_1,
-camera_i_rst => reset_n,
+camera_i_rst => ov7670_reset1,
 camera_i_pwdn => '0'
 );
 
@@ -510,6 +514,7 @@ ov7670_href1 <= ov7670_href_mux_1;
 -- Instantiate the Unit Under Test (UUT)
 top_uut : top PORT MAP (
 i_clock => clk50,
+i_clock100 => clk100,
 --clkcam => clkcam,
 sw => (others => '0'),
 pb => pb,
@@ -552,6 +557,14 @@ clk50 <= '0';
 wait for clk50_period/2;
 clk50 <= '1';
 wait for clk50_period/2;
+end process;
+
+clk100_process :process
+begin
+clk100 <= '0';
+wait for clk100_period/2;
+clk100 <= '1';
+wait for clk100_period/2;
 end process;
 
 --sdcard_clock_process :process
@@ -607,7 +620,7 @@ camera_i_rst2 <= '0';
 camera_i_rst3 <= '0';
 camera_i_rst4 <= '0';
 pb <= '1';
-wait for 2000 ns;
+wait for 100 ns;
 --i_reset <= '0';
 camera_i_rst1 <= '1';
 camera_i_rst2 <= '1';
