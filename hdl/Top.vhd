@@ -27,6 +27,7 @@ generic (
 );
 port	(
   i_clock	: in STD_LOGIC;
+  i_clock100	: in STD_LOGIC;
   pb		: in STD_LOGIC;
   sw : in std_logic_vector (7 downto 0);
   led1 : out STD_LOGIC; -- configuration done
@@ -591,7 +592,8 @@ signal siodo1_n : std_logic;
 
 signal clk0, clk0_fb : std_logic;
 signal clk1, clk1_fb : std_logic;
-signal i_clock_ib : std_logic;
+signal i_clock_ib1 : std_logic;
+signal i_clock_ib2 : std_logic;
 signal clk_cam, clk_vga, clk_mc : std_logic;
 signal resend : std_logic;
 
@@ -617,7 +619,7 @@ signal ov7670_pclk_p : std_logic;
 signal vga_re, cam_re : std_logic;
 
 constant CLKFX_MULTIPLY_MC : integer := 3;
-constant CLKFX_DIVIDE_MC : integer := 2;
+constant CLKFX_DIVIDE_MC : integer := 4;
 
 COMPONENT cellular_ram_burst_controller
 PORT(
@@ -655,10 +657,10 @@ signal busy, wrc : std_logic;
 signal data, id : std_logic_vector(15 downto 0);
 
 type p_states0 is (
-a0, ar1, a00, a0a, a0b, a0c, a1, a1a, a1b, a1c, ar, br, cr, dr, er, er1, aw, bw, cw, dw, ew
+a0, a1, a1a, aw, bw, cw, dw, ew
 );
 type p_states1 is (
-a0, ar1, a00, a0a, a0b, a0c, a1, a1a, a1b, a1c, ar, br, cr, dr, er, er1, aw, bw, cw, dw, ew
+a0, ar1, a0a, ar, br, cr, dr, er, er1
 );
 signal p0_state : p_states0 := a0;
 signal p1_state : p_states1 := a0;
@@ -702,21 +704,9 @@ signal owait1 : std_logic;
 
 begin
 
--- STARTUP_SPARTAN3E: Startup primitive for GSR, GTS, startup sequence
--- control and Multi-Boot Configuration. Spartan-3E
--- Xilinx HDL Libraries Guide, version 10.1.2
---STARTUP_SPARTAN3E_inst : STARTUP_SPARTAN3E
---port map (
---CLK => i_clock_ib, -- Clock input for start-up sequence
---GSR => resend, -- Global Set/Reset input (GSR cannot be used for the port name)
---GTS => '0', -- Global 3-state input (GTS cannot be used for the port name)
---MBT => '0' -- Multi-Boot Trigger input
---);
--- End of STARTUP_SPARTAN3E_inst instantiation
-
-process (i_clock_ib) is
+process (clk_mc) is
 begin
-  if (rising_edge (i_clock_ib)) then
+  if (rising_edge (clk_mc)) then
     if (resend = '1') then
       owait1 <= '0';
     else
@@ -737,9 +727,9 @@ data <= data_w when p0_w = '1' else data_r when p0_r = '1' else (others => '0');
 wrc <= wrc_w when p0_w = '1' else wrc_r when p0_r = '1' else '0';
 
 -- synchro int wr cam
-process (i_clock_ib) is
+process (clk_mc) is
 begin
-if (rising_edge (i_clock_ib)) then
+if (rising_edge (clk_mc)) then
 if (resend = '1') then
   cints <= '0';
 else
@@ -749,9 +739,9 @@ end if;
 end process;
 
 -- 3 frames write ok
-p0_control_crbc_write : process (i_clock_ib) is
+p0_control_crbc_write : process (clk_mc) is
 begin
-  if (rising_edge (i_clock_ib)) then
+  if (rising_edge (clk_mc)) then
 if (resend = '1') then
   wrc_w <= '0';
   ov7670_hs_prev <= '0';
@@ -773,59 +763,29 @@ else
         p0_state <= a1;
         end if;
         if (ov7670_vs = '1') then
-          p0_w <= '1'; wrc_w <= '1'; id_w <= x"0058"; data_w <= (others => '0');
+--          p0_w <= '1'; wrc_w <= '1'; id_w <= x"0058"; data_w <= (others => '0');
           p0_state <= a1;
         end if;
       when a1 =>
+--        if (ov7670_vs_next /= "11") then
         p0_w <= '0';
         if (cntr_wr1 >= 153280+160+160+160 or ov7670_vs = '1') then
           cntr_wr1 <= (others => '0');
         end if;
---        if (ov7670_vs = '1') then
---          p0_state <= a1a;
---        end if;
---        if (ov7670_hs_prev = '1' and ov7670_hs = '0') then -- wr when hs fe
         if (cints = '1') then -- wr when hs fe
---        if (ov7670_hs = '0') then -- wr when hs fe
---        if (ov7670_hs = '1') then -- wr when hs fe
---        if (ov7670_hs_prev = '0' and ov7670_hs = '1') then -- wr when hs re
---          if (vga_hsync_i_prev = '0' and vga_hsync_i = '1') then
---            p0_state <= aw;
             p0_state <= a1a;
---          end if;
         end if;
+--        end if;
       when a1a =>
         if (busy = '0') then
---          cntr_wr1 <= (others => '0');
           p0_state <= aw;
         end if;
---        p0_w <= '1'; wrc_w <= '1'; id_w <= x"0058"; data_w <= (others => '0');
---      when a1b =>
---        p0_w <= '1'; wrc_w <= '1'; id_w <= x"0055"; data_w <= (others => '0');
---        if (ov7670_hs_prev = '1' and ov7670_hs = '0') then -- cam hs fe
---        if (ov7670_hs_prev = '1' and ov7670_hs = '0') then -- cam hs re
---        if (ov7670_hs = '1' and oe_n_i = '1') then
---          p0_state <= a1c;
---        end if;
---      when a1c =>
---        p0_state <= aw;
---        p0_w <= '1'; wrc_w <= '1'; id_w <= x"0054"; data_w <= (others => '0');
       when aw => if (busy = '0') then p0_w <= '1'; p0_state <= bw; wrc_w <= '1'; id_w <= x"0055"; data_w <= std_logic_vector (cntr_wr1 (15 downto 0)); end if;
       when bw => if (busy = '0') then p0_w <= '1'; p0_state <= cw; wrc_w <= '1'; id_w <= x"0054"; data_w <= "000000000000" & std_logic_vector (cntr_wr1 (19 downto 16)); end if;
       when cw => if (busy = '0') then p0_w <= '1'; p0_state <= dw; wrc_w <= '1'; id_w <= x"0052"; data_w <= std_logic_vector (c_step_w); end if;
       when dw => if (busy = '0') then p0_w <= '1'; p0_state <= ew; wrc_w <= '1'; id_w <= x"0050"; data_w <= x"0000"; end if;
-
       when ew =>
         p0_w <= '0';
---        if (busy = '0') then
---          p0_state <= a1;
---          if (cntr_wr1 = to_unsigned (c_cntr_frame - 1, cntr_wr1'left+1)) then
---            cntr_wr1 <= (others => '0');
---          else
---            cntr_wr1 <= cntr_wr1 + c_step1;
---          end if;
---        end if;
---        if (w8_bw = c_w8_bw - 1) then
           if (ov7670_vs = '1') then
             p0_w <= '1'; wrc_w <= '1'; id_w <= x"0058"; data_w <= (others => '0');
             p0_state <= a0;
@@ -833,27 +793,22 @@ else
             p0_state <= a1;
           end if;
           w8_bw <= 0;
---          if (vga_hsync_i = '1') then
             if (cntr_wr1 = to_unsigned (c_cntr_frame, cntr_wr1'left+1)) then
               cntr_wr1 <= (others => '0');
             else
               cntr_wr1 <= cntr_wr1 + c_step_w;
             end if;
---          end if;
---        else
---          w8_bw <= w8_bw + 1;
---        end if;
       when others => p0_state <= a0;
     end case;
 end if;
   end if;
 end process p0_control_crbc_write;
 
-p1_control_crbc_read : process (i_clock_ib) is
+p1_control_crbc_read : process (clk_mc) is
   variable flag : boolean := false;
   variable w8 : integer range 0 to 1023 := 0;
 begin
-  if (rising_edge (i_clock_ib)) then
+  if (rising_edge (clk_mc)) then
 if (resend = '1') then
   wrc_r <= '0';
   vga_hsync_i_prev <= '0';
@@ -870,39 +825,15 @@ else
     vga_vsync_sig_prev <= vga_vsync_sig;
     case (p1_state) is
       when a0 =>
---        p0_r <= '0';
---        if (cntr_rd1 > (307200 / 2) - 1) then
---        if (ov7670_vs_prev = '0' and ov7670_vs = '1') then
---        if (vga_vsync_sig_prev = '1' and vga_vsync_sig = '0') then
---          p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0'); -- reset sink addr
---        end if;
---        if (vga_vsync_sig_prev = '1' and vga_vsync_sig = '0') then
---        if (ov7670_vs_prev = '1' and ov7670_vs = '0') then
---        if (ov7670_vs_prev = '0' and ov7670_vs = '1') then
-        if (vga_vsync_sig_prev = '0' and vga_vsync_sig = '1') then -- XXX here
-          --cntr_wr1 <= (others => '0');
+        if (ov7670_vs_prev = '0' and ov7670_vs = '1') then -- XXX here
+--        if (vga_vsync_sig_prev = '0' and vga_vsync_sig = '1') then -- XXX here
           ov7670_vs_next <= ov7670_vs_next (0) & '1';
-          p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0');
+--          p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0');
         end if;
---        if (ov7670_hs = '1') then
-----          if (vga_hsync_i_prev = '0' and vga_hsync_i = '1') then
-----          end if;
---        end if;
---        if (ov7670_vs_next = "01" and (vga_vsync_sig_prev = '0' and vga_vsync_sig = '1')) then -- from vs vga
         if (ov7670_vs_next = "11") then -- from vs cam
---        if (ov7670_vs_next = "01") then -- from vs cam
           if (busy = '0') then
---            if (vga_int = '1') then
---          p1_state <= a00;
               p1_state <= a0a;
---            end if;
           end if;
-        end if;
-      when a00 =>
-        if (ov7670_vs = '0') then -- cam vs 1
---        if (vga_vsync_sig_prev = '1' and vga_vsync_sig = '0') then -- vga vs 0
---        if (vga_vsync_sig = '1') then -- vga vs /= 0
-          p1_state <= a0a;
         end if;
       when a0a =>
         if (ov7670_vs = '1') then
@@ -911,42 +842,20 @@ else
         if (cntr_rd1 >= 153280+160+160+160+160) then
           cntr_rd1 <= (others => '0');
         end if;
---                  p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0'); -- reset sink addr
-
         if (vga_hsync_i_prev = '1' and vga_hsync_i = '0') then
---          p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0'); -- reset sink addr
         end if;
---        if (vga_hsync_i_prev = '1' and vga_hsync_i = '0') then
           if (vga_int = '1') then
             if (busy = '0') then
---            p1_state <= a0b;
---            p1_state <= a1;
             p1_state <= ar;
             else
             p1_state <= ar1;
             w8 := w8 + 1;
             end if;
           end if;
---        end if;
       when ar1 =>
         if (busy = '0') then
           p1_state <= ar;
         end if;
-      when a0b =>
-        p1_state <= a0c;
-        p0_r <= '1'; wrc_r <= '1'; id_r <= x"0057"; data_r <= (others => '0');
-      when a0c =>
---        if (we_n_i = '1') then
-        if (busy = '0') then
-          p1_state <= a1;
-          w8 := w8 + 1;
-        end if;
-        p0_r <= '1'; wrc_r <= '1'; id_r <= x"0056"; data_r <= (others => '0');
-      when a1 =>
---        if (vga_hsync_i_prev = '1' and vga_hsync_i = '0') then
-          start_read <= '1';
-          p1_state <= ar;
---        end if;
       when ar =>
         if (busy = '0') then
           p0_r <= '1'; p1_state <= br; wrc_r <= '1'; id_r <= x"0057"; data_r <= std_logic_vector (cntr_rd1 (15 downto 0));
@@ -970,154 +879,28 @@ else
         end if;
       when er1 =>
         p0_r <= '0';
---        if (busy = '0') then
---          p1_state <= a1;
---          if (cntr_rd1 = to_unsigned (c_cntr_frame, cntr_rd1'left+1)) then
---            cntr_rd1 <= (others => '0');
---          else
---            cntr_rd1 <= cntr_rd1 + c_step1;
---          end if;
---        end if;
---        if (w8_br = c_w8_br - 1) then
---          if (vga_vsync_sig = '0') then -- vs vga 0
---          if (ov7670_vs = '1') then -- vs cam 1
           if (busy = '0') then -- vs cam 1
             p1_state <= a0;
           else
             w8 := 0;
---            p1_state <= a0c;
---            p1_state <= a0a;
             p1_state <= a0;
---            p1_state <= a00;
           end if;
           w8_br <= 0;
---          if (flag = true) then
---            flag := false;
             if (cntr_rd1 = to_unsigned (c_cntr_frame, cntr_rd1'left+1)) then
               cntr_rd1 <= (others => '0');
             else
               cntr_rd1 <= cntr_rd1 + c_step_r;
             end if;
---          end if;
---        else
---          w8_br <= w8_br + 1;
---        end if;
       when others => p1_state <= a0;
     end case;
   end if;
   end if;
 end process p1_control_crbc_read;
 
---p0_reset_vga_timing : process (i_clock_ib) is
---  type states is (a, b);
---  variable state : states := a;
---begin
---  if (rising_edge (i_clock_ib)) then
---    case (state) is
---      when a =>
---        if (ov7670_vs_prev = '1' and ov7670_vs = '0') then
---          state := b;
---        end if;
---      when b =>
---        reset_vga_timing <= not reset_vga_timing;
---    end case;
---  end if;
---end process p0_reset_vga_timing;
-
---p0_control_crbc : process (i_clock) is
---begin
---  if (rising_edge (i_clock)) then
---    wrc <= '0';
---    ov7670_vs_prev <= ov7670_vs;
-----    vga_hsync_i_prev <= vga_hsync_i;
---    case (p0_state) is
---      when a1 =>
---        if (ov7670_vs_prev = '1' and ov7670_vs = '0') then
---          --cntr_wr1 <= (others => '0');
---          ov7670_vs_next <= ov7670_vs_next (0) & '1';
---        end if;
---        if (ov7670_hs = '1') then
-----          if (vga_hsync_i_prev = '0' and vga_hsync_i = '1') then
---            p0_state <= ar;
-----          end if;
---        end if;
---        if (ov7670_vs_next = "11") then
---          start_read <= '1';
---        end if;
---
---      when ar =>
---        if (start_read = '1') then
---          p0_state <= br; wrc <= '1'; id <= x"0057"; data <= std_logic_vector (cntr_rd1 (15 downto 0));
---        else
---          p0_state <= aw;
---        end if;
---      when br =>
---        if (start_read = '1') then
---          p0_state <= cr; wrc <= '1'; id <= x"0056"; data <= "000000000000" & std_logic_vector (cntr_rd1 (19 downto 16));
---        end if;
---      when cr =>
---        if (start_read = '1') then
---          p0_state <= dr; wrc <= '1'; id <= x"0053"; data <= std_logic_vector (c_step1);
---        end if;
---      when dr =>
---        if (start_read = '1') then
---          p0_state <= er; wrc <= '1'; id <= x"0051"; data <= x"0000";
---        end if;
---      when er =>
---        if (busy = '0') then
---          p0_state <= aw;
---          if (cntr_rd1 = to_unsigned (c_cntr_frame, cntr_rd1'left+1)) then
---            cntr_rd1 <= (others => '0');
---          else
---            cntr_rd1 <= cntr_rd1 + c_step1;
---          end if;
---        end if;
-----        if (w8_br = c_w8_br - 1) then
-----          p0_state <= aw;
-----          w8_br <= 0;
-----          if (cntr_rd1 = to_unsigned (c_cntr_frame - 1, cntr_rd1'left+1)) then
-----            cntr_rd1 <= (others => '0');
-----          else
-----            cntr_rd1 <= cntr_rd1 + c_step1;
-----          end if;
-----        else
-----          w8_br <= w8_br + 1;
-----        end if;
---
---      when aw => p0_state <= bw; wrc <= '1'; id <= x"0055"; data <= std_logic_vector (cntr_wr1 (15 downto 0));
---      when bw => p0_state <= cw; wrc <= '1'; id <= x"0054"; data <= "000000000000" & std_logic_vector (cntr_wr1 (19 downto 16));
---      when cw => p0_state <= dw; wrc <= '1'; id <= x"0052"; data <= std_logic_vector (c_step1);
---      when dw => p0_state <= ew; wrc <= '1'; id <= x"0050"; data <= x"0000";
---
---      when ew =>
-----        if (busy = '0') then
-----          p0_state <= a1;
-----          if (cntr_wr1 = to_unsigned (c_cntr_frame - 1, cntr_wr1'left+1)) then
-----            cntr_wr1 <= (others => '0');
-----          else
-----            cntr_wr1 <= cntr_wr1 + c_step1;
-----          end if;
-----        end if;
---        if (w8_bw = c_w8_bw - 1) then
---          p0_state <= a1;
---          w8_bw <= 0;
---          if (cntr_wr1 = to_unsigned (c_cntr_frame, cntr_wr1'left+1)) then
---            cntr_wr1 <= (others => '0');
---          else
---            cntr_wr1 <= cntr_wr1 + c_step1;
---          end if;
---        else
---          w8_bw <= w8_bw + 1;
---        end if;
---    end case;
---  end if;
---end process p0_control_crbc;
-
 crbc_i0 : cellular_ram_burst_controller
 PORT MAP (
 busy => busy,
---clk => clk_mc,
-clk => i_clock_ib,
+clk => clk_mc,
 reset => resend,
 writes => wrc,
 data => data,
@@ -1153,18 +936,6 @@ dq => dq,
 vga_int => vga_int
 );
 
--- upper half cam data
---ov7670_data_0 <= ov7670_data1 (4);
---ov7670_data_1 <= ov7670_data1 (5);
---ov7670_data_2 <= ov7670_data1 (6);
---ov7670_data_3 <= ov7670_data1 (7);
-
--- lower half cam data
---ov7670_data_0 <= ov7670_data1 (0);
---ov7670_data_1 <= ov7670_data1 (1);
---ov7670_data_2 <= ov7670_data1 (2);
---ov7670_data_3 <= ov7670_data1 (3);
-
 vga_r <= vga_rgb (7 downto 5);
 vga_g <= vga_rgb (4 downto 2);
 vga_b <= vga_rgb (1 downto 0);
@@ -1182,13 +953,13 @@ generic map (
 PB_BITS => c_pb_bits
 )
 port map(
-clk => i_clock_ib,
+clk => clk1,
 reset => reset_dcm_n,
 input => pb,
 output => resend);
 	
 inst_ov7670contr1: ov7670_controller port map(
-clk => i_clock_ib,
+clk => clk1,
 reset1 => resend,
 resend => resend,
 sioc => ov7670_sioc1,
@@ -1248,7 +1019,7 @@ vga_hsync <= vga_hsync_i;
 inst_vgatiming : VGA_timing_synch port map(
 clk25 => clk_vga,
 --rst => reset_vga_timing,
-rst => resend,
+rst => reset_dcm_n,
 Hsync => vga_hsync_i,
 Vsync => vga_vsync_sig,
 blank => vga_blank,
@@ -1261,32 +1032,12 @@ vga_vsync <= vga_vsync_sig;
 vga_clock_i <= clk_vga;
 vga_clock <= vga_clock_i;
 
-BUFG_mc : BUFG
-port map (
-O => clk0_fb, -- Clock buffer output
-I => clk0 -- Clock buffer input
-);
-
-BUFG_cam : BUFG
-port map (
-O => clk1_fb, -- Clock buffer output
-I => clk1 -- Clock buffer input
-);
-
-IBUFG_global_clock : IBUFG
-generic map (
-IOSTANDARD => "DEFAULT")
-port map (
-O => i_clock_ib, -- Clock buffer output
-I => i_clock -- Clock buffer input (connect directly to top-level port)
-);
-
 reset_dcm_n <= not reset_dcm;
 synchro_reset_i0 : SRLC16E
 port map (
 D => '1', -- insert input signal
 CE => '1', -- insert Clock Enable signal (optional)
-CLK => i_clock_ib, -- insert Clock signal
+CLK => clk1, -- insert Clock signal
 A0 => '1', -- insert Address 0 signal
 A1 => '1', -- insert Address 1 signal
 A2 => '1', -- insert Address 2 signal
@@ -1309,6 +1060,18 @@ begin
 end process p0_assert_1;
 --synthesis translate_on
 
+BUFG_mc : BUFG
+port map (
+O => clk0_fb, -- Clock buffer output
+I => clk0 -- Clock buffer input
+);
+
+IBUFG_global_clock1 : IBUF
+port map (
+O => i_clock_ib1, -- Clock buffer output
+I => i_clock100 -- Clock buffer input (connect directly to top-level port)
+);
+
 DCM_SP_mc_fx_vga_dv : DCM_SP
 generic map (
 --CLKDV_DIVIDE => 2.0, -- 50mhz
@@ -1330,7 +1093,7 @@ port map (
 CLK0 => clk0, -- 0 degree DCM CLK ouptput
 CLK180 => open, -- 180 degree DCM CLK output
 CLK270 => open, -- 270 degree DCM CLK output
-CLK2X => clk2x_1, -- 2X DCM CLK output
+CLK2X => open, -- 2X DCM CLK output
 CLK2X180 => open, -- 2X, 180 degree DCM CLK out
 CLK90 => open, -- 90 degree DCM CLK output
 CLKDV => clk_vga, -- Divided DCM CLK out (CLKDV_DIVIDE)
@@ -1340,20 +1103,36 @@ LOCKED => open, -- DCM LOCK status output
 PSDONE => open, -- Dynamic phase adjust done output
 STATUS => open, -- 8-bit DCM status bits output
 CLKFB => clk0_fb, -- DCM clock feedback
-CLKIN => i_clock_ib, -- Clock input (from IBUFG, BUFG or DCM)
+CLKIN => i_clock_ib1, -- Clock input (from IBUFG, BUFG or DCM)
 PSCLK => '0', -- Dynamic phase adjust clock input
 PSEN => '0', -- Dynamic phase adjust enable input
 PSINCDEC => '0', -- Dynamic phase adjust increment/decrement
 RST => reset_dcm_n -- DCM asynchronous reset input
 );
 
+BUFG_cam : BUFG
+port map (
+O => clk1_fb, -- Clock buffer output
+I => clk1 -- Clock buffer input
+);
+
+IBUFG_global_clock2 : IBUFG
+generic map (
+IOSTANDARD => "DEFAULT")
+port map (
+O => i_clock_ib2, -- Clock buffer output
+I => i_clock -- Clock buffer input (connect directly to top-level port)
+);
+
 DCM_SP_cam : DCM_SP
 generic map (
-CLKDV_DIVIDE => 8.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
+--CLKDV_DIVIDE => 8.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
 --CLKDV_DIVIDE => 4.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
+CLKDV_DIVIDE => 2.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
 -- 7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
 --CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 24, -- 50 -> 25 mhz
 
+CLKFX_MULTIPLY => 24, CLKFX_DIVIDE => 25, -- 25 -> 24.0 mhz
 --CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 25, -- 50 -> 24.0 mhz
 
 --CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 27, -- 50 -> 24.07407407407407407400 mhz
@@ -1362,7 +1141,7 @@ CLKDV_DIVIDE => 8.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
 --CLKFX_MULTIPLY => 24, CLKFX_DIVIDE => 25, -- 50 -> 48.0 mhz
 --CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 24, -- 50 -> 25 mhz
 
-CLKFX_MULTIPLY => 6, CLKFX_DIVIDE => 25, -- 100 -> 24.0 mhz
+--CLKFX_MULTIPLY => 6, CLKFX_DIVIDE => 25, -- 100 -> 24.0 mhz
 
 --CLKFX_MULTIPLY => 5, CLKFX_DIVIDE => 21, -- 100 -> 23.8 mhz (sim)
 --CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 27, -- 50 -> 24.07407407407407407400 mhz
@@ -1371,9 +1150,9 @@ CLKFX_MULTIPLY => 6, CLKFX_DIVIDE => 25, -- 100 -> 24.0 mhz
 --CLKFX_MULTIPLY => 24, CLKFX_DIVIDE => 25, -- 50 -> 48.0 mhz
 --CLKIN_PERIOD => 20.0, CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 28 (23.21428571428571428550)
 --CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 28,
-CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
---CLKIN_PERIOD => 20.0, -- Specify period of input clock
-CLKIN_PERIOD => 10.0, -- Specify period of input clock
+CLKIN_DIVIDE_BY_2 => TRUE, -- TRUE/FALSE to enable CLKIN divide by two feature
+CLKIN_PERIOD => 20.0, -- Specify period of input clock
+--CLKIN_PERIOD => 10.0, -- Specify period of input clock
 CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of "NONE", "FIXED" or "VARIABLE"
 CLK_FEEDBACK => "1X", -- Specify clock feedback of "NONE", "1X" or "2X"
 DESKEW_ADJUST => "SYSTEM_SYNCHRONOUS", -- "SOURCE_SYNCHRONOUS", "SYSTEM_SYNCHRONOUS" or
@@ -1396,11 +1175,11 @@ LOCKED => open, -- DCM LOCK status output
 PSDONE => open, -- Dynamic phase adjust done output
 STATUS => open, -- 8-bit DCM status bits output
 CLKFB => clk1_fb, -- DCM clock feedback
-CLKIN => i_clock_ib, -- Clock input (from IBUFG, BUFG or DCM)
+CLKIN => i_clock_ib2, -- Clock input (from IBUFG, BUFG or DCM)
 PSCLK => '0', -- Dynamic phase adjust clock input
 PSEN => '0', -- Dynamic phase adjust enable input
 PSINCDEC => '0', -- Dynamic phase adjust increment/decrement
-RST => reset_dcm_n -- DCM asynchronous reset input
+RST => '0' -- DCM asynchronous reset input
 );
 
 end Structural;

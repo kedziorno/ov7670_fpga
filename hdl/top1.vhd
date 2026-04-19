@@ -38,6 +38,7 @@ constant c_pb_bits : integer := 25 -- XXX set debounce time
 );
 Port	(
 i_clock	: in STD_LOGIC;
+i_clock100	: in STD_LOGIC;
 pb		: in STD_LOGIC;
 sw : in std_logic_vector (7 downto 0);
 led1 : out STD_LOGIC; -- configuration done
@@ -83,6 +84,7 @@ constant c_pb_bits : integer := c_pb_bits
 );
 Port	(
 i_clock	: in STD_LOGIC;
+i_clock100	: in STD_LOGIC;
 pb		: in STD_LOGIC;
 sw : in std_logic_vector (7 downto 0);
 led1 : out STD_LOGIC; -- configuration done
@@ -129,6 +131,7 @@ begin
 inst_top_camera_monitoring : top_camera_monitoring
 Port map (
 i_clock	=> i_clock,
+i_clock100	=> i_clock100,
 pb	=> pb,
 sw => sw,
 led1 => led1,
