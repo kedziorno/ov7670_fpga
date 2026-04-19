@@ -138,11 +138,10 @@ Architecture behavioral of Entity address_generator is up to date.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/vga_imagegenerator.vhd" in Library work.
 Architecture behavioral of Entity vga_imagegenerator is up to date.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/vga_timing.vhd" in Library work.
-Entity <vga_timing_synch> compiled.
-Entity <vga_timing_synch> (Architecture <lsfr_1>) compiled.
-Entity <vga_timing_synch> (Architecture <lsfr_2>) compiled.
-Entity <vga_timing_synch> (Architecture <jc>) compiled.
-Entity <vga_timing_synch> (Architecture <counter>) compiled.
+Architecture lsfr_1 of Entity vga_timing_synch is up to date.
+Architecture lsfr_2 of Entity vga_timing_synch is up to date.
+Architecture jc of Entity vga_timing_synch is up to date.
+Architecture counter of Entity vga_timing_synch is up to date.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/Top.vhd" in Library work.
 Entity <top_camera_monitoring> compiled.
 Entity <top_camera_monitoring> (Architecture <raw_signal>) compiled.
@@ -524,6 +523,7 @@ WARNING:Xst:646 - Signal <wr_a1<18:11>> is assigned but never used. This unconne
 WARNING:Xst:1780 - Signal <we_ni> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:646 - Signal <w8_bw<0>> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:646 - Signal <w8_br<0>> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <vga_vsync_sig_prev> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <vga_re> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:646 - Signal <vga_hsync_i_prev> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:646 - Signal <vga_fint> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
@@ -537,7 +537,6 @@ WARNING:Xst:1780 - Signal <rd_counter> is never used or assigned. This unconnect
 WARNING:Xst:646 - Signal <rd_a1<18:10>> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <pclk_i2> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <pclk_i1> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
-WARNING:Xst:646 - Signal <ov7670_vs_prev> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <ov7670_pclk_p> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <ov7670_pclk1_inv> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <ov7670_pclk1_ibuf> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -558,7 +557,7 @@ WARNING:Xst:646 - Signal <address1> is assigned but never used. This unconnected
     | States             | 9                                              |
     | Transitions        | 19                                             |
     | Inputs             | 3                                              |
-    | Outputs            | 8                                              |
+    | Outputs            | 7                                              |
     | Clock              | clk1                      (rising_edge)        |
     | Reset              | resend                    (positive)           |
     | Reset type         | synchronous                                    |
@@ -570,9 +569,9 @@ WARNING:Xst:646 - Signal <address1> is assigned but never used. This unconnected
     Found finite state machine <FSM_1> for signal <p0_state>.
     -----------------------------------------------------------------------
     | States             | 8                                              |
-    | Transitions        | 17                                             |
-    | Inputs             | 3                                              |
-    | Outputs            | 7                                              |
+    | Transitions        | 18                                             |
+    | Inputs             | 4                                              |
+    | Outputs            | 6                                              |
     | Clock              | clk1                      (rising_edge)        |
     | Reset              | resend                    (positive)           |
     | Reset type         | synchronous                                    |
@@ -583,20 +582,20 @@ WARNING:Xst:646 - Signal <address1> is assigned but never used. This unconnected
     -----------------------------------------------------------------------
     Found 1-bit register for signal <cints>.
     Found 20-bit register for signal <cntr_rd1>.
-    Found 20-bit adder for signal <cntr_rd1$addsub0000> created at line 890.
-    Found 20-bit comparator greatequal for signal <cntr_rd1$cmp_ge0000> created at line 840.
+    Found 20-bit adder for signal <cntr_rd1$addsub0000> created at line 892.
+    Found 20-bit comparator greatequal for signal <cntr_rd1$cmp_ge0000> created at line 842.
     Found 20-bit register for signal <cntr_wr1>.
-    Found 20-bit adder for signal <cntr_wr1$addsub0000> created at line 798.
-    Found 20-bit comparator greatequal for signal <cntr_wr1$cmp_ge0000> created at line 771.
+    Found 20-bit adder for signal <cntr_wr1$addsub0000> created at line 799.
+    Found 20-bit comparator greatequal for signal <cntr_wr1$cmp_ge0000> created at line 772.
     Found 16-bit register for signal <data_r>.
     Found 16-bit register for signal <data_w>.
     Found 16-bit register for signal <id_r>.
     Found 16-bit register for signal <id_w>.
     Found 2-bit register for signal <ov7670_vs_next>.
+    Found 1-bit register for signal <ov7670_vs_prev>.
     Found 1-bit register for signal <owait1>.
     Found 1-bit register for signal <p0_r>.
     Found 1-bit register for signal <p0_w>.
-    Found 1-bit register for signal <vga_vsync_sig_prev>.
     Found 1-bit register for signal <wrc_r>.
     Found 1-bit register for signal <wrc_w>.
     Summary:
@@ -696,17 +695,27 @@ Optimizing FSM <inst_top_camera_monitoring/p1_state/FSM> on signal <p1_state[1:4
  er    | 0111
  er1   | 1000
 -------------------
-WARNING:Xst:1293 - FF/Latch <data_sr_0> has a constant value of 1 in block <SCCB>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1293 - FF/Latch <id_r_5> has a constant value of 0 in block <inst_top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1293 - FF/Latch <id_r_7> has a constant value of 0 in block <inst_top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1293 - FF/Latch <id_r_8> has a constant value of 0 in block <inst_top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1293 - FF/Latch <id_r_9> has a constant value of 0 in block <inst_top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1293 - FF/Latch <id_r_10> has a constant value of 0 in block <inst_top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1293 - FF/Latch <id_r_11> has a constant value of 0 in block <inst_top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1293 - FF/Latch <id_r_12> has a constant value of 0 in block <inst_top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1293 - FF/Latch <id_r_13> has a constant value of 0 in block <inst_top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1293 - FF/Latch <id_r_14> has a constant value of 0 in block <inst_top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
 WARNING:Xst:1293 - FF/Latch <id_r_15> has a constant value of 0 in block <inst_top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_r_14> has a constant value of 0 in block <inst_top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_r_13> has a constant value of 0 in block <inst_top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_r_12> has a constant value of 0 in block <inst_top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_r_11> has a constant value of 0 in block <inst_top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_r_10> has a constant value of 0 in block <inst_top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_r_9> has a constant value of 0 in block <inst_top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_r_8> has a constant value of 0 in block <inst_top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_r_7> has a constant value of 0 in block <inst_top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_r_5> has a constant value of 0 in block <inst_top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_w_15> has a constant value of 0 in block <inst_top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_w_14> has a constant value of 0 in block <inst_top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_w_13> has a constant value of 0 in block <inst_top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_w_12> has a constant value of 0 in block <inst_top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_w_11> has a constant value of 0 in block <inst_top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_w_10> has a constant value of 0 in block <inst_top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_w_9> has a constant value of 0 in block <inst_top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_w_8> has a constant value of 0 in block <inst_top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_w_7> has a constant value of 0 in block <inst_top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_w_5> has a constant value of 0 in block <inst_top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <data_sr_0> has a constant value of 1 in block <SCCB>. This FF/Latch will be trimmed during the optimization process.
 WARNING:Xst:2677 - Node <read_buffer_data_0> of sequential type is unconnected in block <sink_read_i0>.
 WARNING:Xst:2677 - Node <read_buffer_data_1> of sequential type is unconnected in block <sink_read_i0>.
 WARNING:Xst:2677 - Node <read_buffer_data_2> of sequential type is unconnected in block <sink_read_i0>.
@@ -841,26 +850,26 @@ Macro Statistics
 *                         Low Level Synthesis                           *
 =========================================================================
 WARNING:Xst:1293 - FF/Latch <data_sr_0> has a constant value of 1 in block <ov7670_SCCB>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1293 - FF/Latch <id_r_5> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1293 - FF/Latch <id_r_7> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1293 - FF/Latch <id_r_8> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1293 - FF/Latch <id_r_9> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1293 - FF/Latch <id_r_10> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1293 - FF/Latch <id_r_11> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1293 - FF/Latch <id_r_12> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1293 - FF/Latch <id_r_13> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1293 - FF/Latch <id_r_14> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1293 - FF/Latch <id_r_15> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1293 - FF/Latch <id_w_5> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1293 - FF/Latch <id_w_7> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1293 - FF/Latch <id_w_8> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1293 - FF/Latch <id_w_9> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1293 - FF/Latch <id_w_10> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1293 - FF/Latch <id_w_11> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1293 - FF/Latch <id_w_12> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1293 - FF/Latch <id_w_13> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1293 - FF/Latch <id_w_14> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
 WARNING:Xst:1293 - FF/Latch <id_w_15> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_w_14> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_w_13> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_w_12> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_w_11> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_w_10> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_w_9> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_w_8> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_w_7> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_w_5> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_r_15> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_r_14> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_r_13> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_r_12> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_r_11> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_r_10> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_r_9> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_r_8> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_r_7> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <id_r_5> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
 WARNING:Xst:1293 - FF/Latch <data_w_4> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
 WARNING:Xst:1293 - FF/Latch <data_r_4> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
 WARNING:Xst:1293 - FF/Latch <cntr_rd1_0> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
@@ -973,32 +982,32 @@ Design Statistics
 # IOs                              : 94
 
 Cell Usage :
-# BELS                             : 1664
+# BELS                             : 1657
 #      GND                         : 1
 #      INV                         : 54
 #      LUT1                        : 185
-#      LUT2                        : 166
-#      LUT2_D                      : 2
+#      LUT2                        : 168
+#      LUT2_D                      : 3
 #      LUT2_L                      : 1
-#      LUT3                        : 140
-#      LUT3_D                      : 3
+#      LUT3                        : 138
+#      LUT3_D                      : 2
 #      LUT3_L                      : 3
-#      LUT4                        : 452
+#      LUT4                        : 448
 #      LUT4_D                      : 17
 #      LUT4_L                      : 10
 #      MUXCY                       : 286
-#      MUXF5                       : 66
+#      MUXF5                       : 63
 #      MUXF6                       : 16
 #      VCC                         : 1
 #      XORCY                       : 261
 # FlipFlops/Latches                : 545
 #      FD                          : 23
 #      FDE                         : 106
-#      FDR                         : 114
+#      FDR                         : 116
 #      FDR_1                       : 2
-#      FDRE                        : 222
-#      FDRS                        : 67
-#      FDRSE                       : 4
+#      FDRE                        : 221
+#      FDRS                        : 68
+#      FDRSE                       : 2
 #      FDS                         : 7
 # RAMS                             : 3
 #      RAMB16_S18_S18              : 1
@@ -1022,10 +1031,10 @@ Device utilization summary:
 
 Selected Device : 3s1200efg320-4 
 
- Number of Slices:                      548  out of   8672     6%  
+ Number of Slices:                      547  out of   8672     6%  
  Number of Slice Flip Flops:            545  out of  17344     3%  
- Number of 4 input LUTs:               1034  out of  17344     5%  
-    Number used as logic:              1033
+ Number of 4 input LUTs:               1030  out of  17344     5%  
+    Number used as logic:              1029
     Number used as Shift registers:       1
  Number of IOs:                          94
  Number of bonded IOBs:                  86  out of    250    34%  
@@ -1069,7 +1078,7 @@ Timing Summary:
 Speed Grade: -4
 
    Minimum period: 9.954ns (Maximum Frequency: 100.462MHz)
-   Minimum input arrival time before clock: 5.875ns
+   Minimum input arrival time before clock: 6.285ns
    Maximum output required time after clock: 10.924ns
    Maximum combinational path delay: 6.034ns
 
@@ -1080,7 +1089,7 @@ All values displayed in nanoseconds (ns)
 =========================================================================
 Timing constraint: Default period analysis for Clock 'i_clock'
   Clock period: 9.954ns (frequency: 100.462MHz)
-  Total number of paths / destination ports: 57933 / 1234
+  Total number of paths / destination ports: 57832 / 1232
 -------------------------------------------------------------------------
 Delay:               9.954ns (Levels of Logic = 7)
   Source:            inst_top_camera_monitoring/inst_ov7670contr1/Registers/sequence_0_1 (FF)
@@ -1097,7 +1106,7 @@ Delay:               9.954ns (Levels of Logic = 7)
      MUXF5:I0->O           1   0.321   0.000  inst_top_camera_monitoring/inst_ov7670contr1/Registers/Mrom_cmd_reg_rom00007_f5_0 (inst_top_camera_monitoring/inst_ov7670contr1/Registers/Mrom_cmd_reg_rom00007_f51)
      MUXF6:I0->O           3   0.521   0.706  inst_top_camera_monitoring/inst_ov7670contr1/Registers/Mrom_cmd_reg_rom00007_f6 (inst_top_camera_monitoring/inst_ov7670contr1/command<7>)
      LUT3:I0->O            1   0.704   0.595  inst_top_camera_monitoring/inst_ov7670contr1/Registers/done_cmp_eq000012 (inst_top_camera_monitoring/inst_ov7670contr1/Registers/done_cmp_eq000012)
-     LUT4_D:I0->LO         1   0.704   0.179  inst_top_camera_monitoring/inst_ov7670contr1/Registers/done_cmp_eq0000133 (N259)
+     LUT4_D:I0->LO         1   0.704   0.179  inst_top_camera_monitoring/inst_ov7670contr1/Registers/done_cmp_eq0000133 (N264)
      LUT2:I1->O            2   0.704   0.451  inst_top_camera_monitoring/inst_ov7670contr1/Registers/done_cmp_eq00002 (led1_OBUF)
      LUT4:I3->O           63   0.704   1.272  inst_top_camera_monitoring/inst_ov7670contr1/SCCB/busy_sr_not00031 (inst_top_camera_monitoring/inst_ov7670contr1/SCCB/busy_sr_not0003)
      FDE:CE                    0.555          inst_top_camera_monitoring/inst_ov7670contr1/SCCB/busy_sr_0
@@ -1154,25 +1163,25 @@ Delay:               7.824ns (Levels of Logic = 4)
 
 =========================================================================
 Timing constraint: Default OFFSET IN BEFORE for Clock 'i_clock'
-  Total number of paths / destination ports: 107 / 105
+  Total number of paths / destination ports: 110 / 108
 -------------------------------------------------------------------------
-Offset:              5.875ns (Levels of Logic = 4)
+Offset:              6.285ns (Levels of Logic = 4)
   Source:            ov7670_vsync1 (PAD)
-  Destination:       inst_top_camera_monitoring/data_r_15 (FF)
+  Destination:       inst_top_camera_monitoring/cntr_wr1_19 (FF)
   Destination Clock: i_clock rising
 
-  Data Path: ov7670_vsync1 to inst_top_camera_monitoring/data_r_15
+  Data Path: ov7670_vsync1 to inst_top_camera_monitoring/cntr_wr1_19
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     IBUF:I->O            12   1.218   1.040  ov7670_vsync1_IBUF (ov7670_vsync1_IBUF)
-     LUT4_D:I1->LO         1   0.704   0.135  inst_top_camera_monitoring/id_r_mux0000<13>111 (N253)
-     LUT3:I2->O           13   0.704   1.062  inst_top_camera_monitoring/data_r_mux0000<0>11 (N01)
-     LUT4:I1->O            1   0.704   0.000  inst_top_camera_monitoring/data_r_mux0000<9>1 (inst_top_camera_monitoring/data_r_mux0000<9>)
-     FDR:D                     0.308          inst_top_camera_monitoring/data_r_6
+     IBUF:I->O            16   1.218   1.113  ov7670_vsync1_IBUF (ov7670_vsync1_IBUF)
+     LUT4:I1->O            1   0.704   0.455  inst_top_camera_monitoring/cntr_wr1_mux0000<0>1_SW0 (N99)
+     LUT4_D:I2->O         14   0.704   1.079  inst_top_camera_monitoring/cntr_wr1_mux0000<0>1 (N01)
+     LUT4:I1->O            1   0.704   0.000  inst_top_camera_monitoring/cntr_wr1_mux0000<9>1 (inst_top_camera_monitoring/cntr_wr1_mux0000<9>)
+     FDR:D                     0.308          inst_top_camera_monitoring/cntr_wr1_10
     ----------------------------------------
-    Total                      5.875ns (3.638ns logic, 2.237ns route)
-                                       (61.9% logic, 38.1% route)
+    Total                      6.285ns (3.638ns logic, 2.647ns route)
+                                       (57.9% logic, 42.1% route)
 
 =========================================================================
 Timing constraint: Default OFFSET IN BEFORE for Clock 'ov7670_pclk1'
@@ -1223,15 +1232,15 @@ Timing constraint: Default OFFSET OUT AFTER for Clock 'i_clock100'
   Total number of paths / destination ports: 74 / 11
 -------------------------------------------------------------------------
 Offset:              7.530ns (Levels of Logic = 3)
-  Source:            inst_top_camera_monitoring/inst_vgatiming/hcnt_9 (FF)
+  Source:            inst_top_camera_monitoring/inst_vgatiming/hcnt_7 (FF)
   Destination:       vga_b<1> (PAD)
   Source Clock:      i_clock100 rising 0.2X
 
-  Data Path: inst_top_camera_monitoring/inst_vgatiming/hcnt_9 to vga_b<1>
+  Data Path: inst_top_camera_monitoring/inst_vgatiming/hcnt_7 to vga_b<1>
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDR:C->Q              6   0.591   0.844  inst_top_camera_monitoring/inst_vgatiming/hcnt_9 (inst_top_camera_monitoring/inst_vgatiming/hcnt_9)
+     FDR:C->Q              6   0.591   0.844  inst_top_camera_monitoring/inst_vgatiming/hcnt_7 (inst_top_camera_monitoring/inst_vgatiming/hcnt_7)
      LUT3:I0->O            9   0.704   0.995  inst_top_camera_monitoring/inst_vgatiming/activeArea1_sig_and00008 (inst_top_camera_monitoring/inst_vgatiming/activeArea1_sig_and00008)
      LUT4:I0->O            1   0.704   0.420  inst_top_camera_monitoring/inst_imagegen/RGB_out<7>1 (vga_r_2_OBUF)
      OBUF:I->O                 3.272          vga_r_2_OBUF (vga_r<2>)
@@ -1262,14 +1271,14 @@ Delay:               6.034ns (Levels of Logic = 3)
 
 
 Total REAL time to Xst completion: 10.00 secs
-Total CPU time to Xst completion: 9.29 secs
+Total CPU time to Xst completion: 9.43 secs
  
 --> 
 
 
-Total memory usage is 557336 kilobytes
+Total memory usage is 556184 kilobytes
 
 Number of errors   :    0 (   0 filtered)
-Number of warnings :  158 (   0 filtered)
+Number of warnings :  168 (   0 filtered)
 Number of infos    :   10 (   0 filtered)
 
