@@ -1030,6 +1030,7 @@ else
       when others => null;
     end case;
   end if;
+  end if;
 end process p1_control_crbc_read;
 
 --p0_reset_vga_timing : process (i_clock_ib) is
