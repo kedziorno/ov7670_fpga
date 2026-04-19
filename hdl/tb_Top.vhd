@@ -32,8 +32,8 @@ USE ieee.std_logic_1164.ALL;
 -- arithmetic functions with Signed or Unsigned values
 --USE ieee.numeric_std.ALL;
 
-use work.micron_mem_parameters.all;
-use work.p_constants.all;
+--use work.micron_mem_parameters.all;
+--use work.p_constants.all;
 
 ENTITY tb_top IS
 END tb_top;
@@ -123,12 +123,12 @@ signal mem_done : std_logic;
 
 component mt45w8mw16bgx is
 port (
-Addr  : in    std_logic_vector(c_addr_bits - 1 downto 0);
+Addr  : in    std_logic_vector(23 - 1 downto 0);
 Adv_n : in    std_logic;
 Ce_n  : in    std_logic;
 Clk   : in    std_logic;
 Cre   : in    std_logic;
-Dq    : inout std_logic_vector(c_data_bits - 1 downto 0);
+Dq    : inout std_logic_vector(16 - 1 downto 0);
 Lb_n  : in    std_logic;
 Oe_n  : in    std_logic;
 oWait : out   std_logic; -- Wait is a keyword in HDL
@@ -136,10 +136,10 @@ Ub_n  : in    std_logic;
 We_n  : in    std_logic
 );
 end component mt45w8mw16bgx;
-signal mt45w8mw16bgx_Addr_1  : std_logic_vector(c_addr_bits - 1 downto 0);
-signal mt45w8mw16bgx_Addr_2  : std_logic_vector(c_addr_bits - 1 downto 0);
-signal mt45w8mw16bgx_Addr_3  : std_logic_vector(c_addr_bits - 1 downto 0);
-signal mt45w8mw16bgx_Addr_4  : std_logic_vector(c_addr_bits - 1 downto 0);
+signal mt45w8mw16bgx_Addr_1  : std_logic_vector(23 - 1 downto 0);
+signal mt45w8mw16bgx_Addr_2  : std_logic_vector(23 - 1 downto 0);
+signal mt45w8mw16bgx_Addr_3  : std_logic_vector(23 - 1 downto 0);
+signal mt45w8mw16bgx_Addr_4  : std_logic_vector(23 - 1 downto 0);
 signal mt45w8mw16bgx_Adv_n_1 : std_logic;
 signal mt45w8mw16bgx_Adv_n_2 : std_logic;
 signal mt45w8mw16bgx_Adv_n_3 : std_logic;
@@ -156,10 +156,10 @@ signal mt45w8mw16bgx_Cre_1   : std_logic;
 signal mt45w8mw16bgx_Cre_2   : std_logic;
 signal mt45w8mw16bgx_Cre_3   : std_logic;
 signal mt45w8mw16bgx_Cre_4   : std_logic;
-signal mt45w8mw16bgx_Dq_1    : std_logic_vector(c_data_bits - 1 downto 0);
-signal mt45w8mw16bgx_Dq_2    : std_logic_vector(c_data_bits - 1 downto 0);
-signal mt45w8mw16bgx_Dq_3    : std_logic_vector(c_data_bits - 1 downto 0);
-signal mt45w8mw16bgx_Dq_4    : std_logic_vector(c_data_bits - 1 downto 0);
+signal mt45w8mw16bgx_Dq_1    : std_logic_vector(16 - 1 downto 0);
+signal mt45w8mw16bgx_Dq_2    : std_logic_vector(16 - 1 downto 0);
+signal mt45w8mw16bgx_Dq_3    : std_logic_vector(16 - 1 downto 0);
+signal mt45w8mw16bgx_Dq_4    : std_logic_vector(16 - 1 downto 0);
 signal mt45w8mw16bgx_Lb_n_1  : std_logic;
 signal mt45w8mw16bgx_Lb_n_2  : std_logic;
 signal mt45w8mw16bgx_Lb_n_3  : std_logic;
@@ -183,10 +183,10 @@ signal mt45w8mw16bgx_We_n_4  : std_logic;
 
 signal vga_blank : std_logic;
 signal vga_clock : std_logic;
-signal video_data_1                  : std_logic_vector(c_bits_color_rgb565 - 1 downto 0);
-signal video_data_2                  : std_logic_vector(c_bits_color_rgb565 - 1 downto 0);
-signal video_data_3                  : std_logic_vector(c_bits_color_rgb565 - 1 downto 0);
-signal video_data_4                  : std_logic_vector(c_bits_color_rgb565 - 1 downto 0);
+signal video_data_1                  : std_logic_vector(16 - 1 downto 0);
+signal video_data_2                  : std_logic_vector(16 - 1 downto 0);
+signal video_data_3                  : std_logic_vector(16 - 1 downto 0);
+signal video_data_4                  : std_logic_vector(16 - 1 downto 0);
 signal video_blank_1                 : std_logic := '0';
 signal video_blank_2                 : std_logic := '0';
 signal video_blank_3                 : std_logic := '0';
@@ -201,9 +201,6 @@ signal video_vsync_3                 : std_logic := '0';
 signal video_vsync_4                 : std_logic := '0';
 
 component top is
-generic (
-constant c_pb_bits : integer := 4
-);
 Port (
 i_clock	: in STD_LOGIC; -- Crystal Oscilator 50MHz  --B8
 i_clock100	: in STD_LOGIC; -- Crystal Oscilator 50MHz  --B8
@@ -222,8 +219,8 @@ ov7670_siod1: inout STD_LOGIC; -- Pmod JB4 --H16
 ov7670_pwdn1: out STD_LOGIC; -- Pmod JA1 --L15
 ov7670_reset1: out STD_LOGIC; -- Pmod JA7 --K13
 --memory module
-Dq : inout std_logic_vector (c_data_bits - 1 downto 0);
-Addr : out std_logic_vector (c_addr_bits - 1 downto 0);
+Dq : inout std_logic_vector (16 - 1 downto 0);
+Addr : out std_logic_vector (23 - 1 downto 0);
 Adv_n : out std_logic;
 Ce_n : out std_logic;
 Clk : out std_logic;
@@ -289,7 +286,7 @@ constant clk50_period : time := 20 ns; -- 50mhz
 constant clk100_period : time := 10 ns; -- 100mhz
 --constant clk50_period : time := 41.667 ns; -- 24mhz
 --constant sdcard_clock_period : time := 10 ns;
---constant camera_i_xclk_period : time := 41.733 ns; -- ~24mhz
+constant camera_i_xclk_period : time := 41.733 ns; -- ~24mhz
 --constant camera_i_xclk_period : time := 21 ns; -- to camera ~50mhz
 
 COMPONENT camera
@@ -575,35 +572,35 @@ end process;
 --wait for sdcard_clock_period/2;
 --end process;
 
-camera_i_xclkp :process
-begin
-xclk <= '0';
-wait for camera_i_xclk_period/2;
-xclk <= '1';
-wait for camera_i_xclk_period/2;
-end process;
+--camera_i_xclkp :process
+--begin
+--xclk <= '0';
+--wait for camera_i_xclk_period/2;
+--xclk <= '1';
+--wait for camera_i_xclk_period/2;
+--end process;
 
 load_memory_from_files : process is
-variable start_addr : integer;
-variable file_name  : string (1 to 27+c_hex_rom_files_name_length);
+--variable start_addr : integer;
+--variable file_name  : string (1 to 27+c_hex_rom_files_name_length);
 begin
--- XXX RC when load
-mem_done <= '0';
-wait for 90 ns;
-for i in 1 to c_hex_rom_files_count - 1 loop
-wait for 100 ns;
-start_addr := c_camera_frame_length * (i - 1);
-if (i < 10) then
-file_name := c_hex_rom_files_name & "0" & integer'image(i) & "." & c_hex_rom_files_ext;
-else
-file_name := c_hex_rom_files_name & integer'image(i) & "." & c_hex_rom_files_ext;
-end if;
-report "readandconvertrom " & file_name;
---readandconvertrom(file_name, start_addr);
-wait for 100 ns;
-end loop;
-wait for 100 ns;
---readandconvertrom("hex_memory_file_frame01.hex", 0, c1);
+---- XXX RC when load
+--mem_done <= '0';
+--wait for 90 ns;
+--for i in 1 to c_hex_rom_files_count - 1 loop
+--wait for 100 ns;
+--start_addr := c_camera_frame_length * (i - 1);
+--if (i < 10) then
+--file_name := c_hex_rom_files_name & "0" & integer'image(i) & "." & c_hex_rom_files_ext;
+--else
+--file_name := c_hex_rom_files_name & integer'image(i) & "." & c_hex_rom_files_ext;
+--end if;
+--report "readandconvertrom " & file_name;
+----readandconvertrom(file_name, start_addr);
+--wait for 100 ns;
+--end loop;
+--wait for 100 ns;
+----readandconvertrom("hex_memory_file_frame01.hex", 0, c1);
 mem_done <= '1';
 report "images loaded";
 wait;
