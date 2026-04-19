@@ -619,7 +619,7 @@ signal ov7670_pclk_p : std_logic;
 signal vga_re, cam_re : std_logic;
 
 constant CLKFX_MULTIPLY_MC : integer := 3;
-constant CLKFX_DIVIDE_MC : integer := 2;
+constant CLKFX_DIVIDE_MC : integer := 4;
 
 COMPONENT cellular_ram_burst_controller
 PORT(
@@ -704,9 +704,9 @@ signal owait1 : std_logic;
 
 begin
 
-process (clk1) is
+process (clk_mc) is
 begin
-  if (rising_edge (clk1)) then
+  if (rising_edge (clk_mc)) then
     if (resend = '1') then
       owait1 <= '0';
     else
@@ -727,9 +727,9 @@ data <= data_w when p0_w = '1' else data_r when p0_r = '1' else (others => '0');
 wrc <= wrc_w when p0_w = '1' else wrc_r when p0_r = '1' else '0';
 
 -- synchro int wr cam
-process (clk1) is
+process (clk_mc) is
 begin
-if (rising_edge (clk1)) then
+if (rising_edge (clk_mc)) then
 if (resend = '1') then
   cints <= '0';
 else
@@ -739,9 +739,9 @@ end if;
 end process;
 
 -- 3 frames write ok
-p0_control_crbc_write : process (clk1) is
+p0_control_crbc_write : process (clk_mc) is
 begin
-  if (rising_edge (clk1)) then
+  if (rising_edge (clk_mc)) then
 if (resend = '1') then
   wrc_w <= '0';
   ov7670_hs_prev <= '0';
@@ -804,11 +804,11 @@ end if;
   end if;
 end process p0_control_crbc_write;
 
-p1_control_crbc_read : process (clk1) is
+p1_control_crbc_read : process (clk_mc) is
   variable flag : boolean := false;
   variable w8 : integer range 0 to 1023 := 0;
 begin
-  if (rising_edge (clk1)) then
+  if (rising_edge (clk_mc)) then
 if (resend = '1') then
   wrc_r <= '0';
   vga_hsync_i_prev <= '0';
@@ -900,8 +900,7 @@ end process p1_control_crbc_read;
 crbc_i0 : cellular_ram_burst_controller
 PORT MAP (
 busy => busy,
---clk => clk_mc,
-clk => clk1,
+clk => clk_mc,
 reset => resend,
 writes => wrc,
 data => data,
