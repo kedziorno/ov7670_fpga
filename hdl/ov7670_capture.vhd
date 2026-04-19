@@ -110,7 +110,7 @@ capture_process: process(pclk)
       addr1 <= (others => '0');
       href_last <= (others => '0');
       row <= (others => '0');
-      d_latch <= (others => '0');
+--      d_latch <= (others => '0');
       we_reg <= '0';
       else
 
@@ -163,7 +163,7 @@ capture_process: process(pclk)
       if falling_edge(pclk) then
       if (reset = '1') then
         address <= (others => '0');
-        latched_d <= (others => '0');
+--        latched_d <= (others => '0');
         latched_href <= '0';
         latched_vsync <= '0';
       else
