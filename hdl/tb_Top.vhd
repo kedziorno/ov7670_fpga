@@ -283,8 +283,8 @@ signal vga_vsync : std_logic;
 signal vga_rgb : std_logic_vector(7 downto 0);
 
 -- Clock period definitions
-constant clk50_period : time := 20 ns; -- 50mhz
---constant clk50_period : time := 10 ns; -- 100mhz
+--constant clk50_period : time := 20 ns; -- 50mhz
+constant clk50_period : time := 10 ns; -- 100mhz
 --constant clk50_period : time := 41.667 ns; -- 24mhz
 --constant sdcard_clock_period : time := 10 ns;
 --constant camera_i_xclk_period : time := 41.733 ns; -- ~24mhz
@@ -607,7 +607,7 @@ camera_i_rst2 <= '0';
 camera_i_rst3 <= '0';
 camera_i_rst4 <= '0';
 pb <= '1';
-wait for 200 ns;
+wait for 2000 ns;
 --i_reset <= '0';
 camera_i_rst1 <= '1';
 camera_i_rst2 <= '1';

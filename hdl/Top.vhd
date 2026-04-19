@@ -506,13 +506,13 @@ architecture Structural of top_camera_monitoring is
 
 COMPONENT debounce_circuit
 Generic (PB_BITS : integer := 1);
-	Port ( clk : in STD_LOGIC;
+	Port ( clk, reset : in STD_LOGIC;
 			 input : in STD_LOGIC;
 			 output : out STD_LOGIC);
 END COMPONENT;
 
 COMPONENT ov7670_capture
-	Port ( pclk : in  STD_LOGIC;
+	Port ( pclk,reset : in  STD_LOGIC;
           vsync : in  STD_LOGIC;
           href : in  STD_LOGIC;
           d : in  STD_LOGIC_VECTOR (7 downto 0);
@@ -540,12 +540,12 @@ END COMPONENT;
 
 COMPONENT vga_imagegenerator
 	Port ( Data_in1 : in  STD_LOGIC_VECTOR (15 downto 0);
-						active_area1 : in  STD_LOGIC;
+						active_area1,reset : in  STD_LOGIC;
            RGB_out : out  STD_LOGIC_VECTOR (7 downto 0));
 END COMPONENT;
 
 COMPONENT address_generator
-	Port ( clk25 : in STD_LOGIC;
+	Port ( clk25,reset : in STD_LOGIC;
 			 enable : in STD_LOGIC;
 			 vsync : in STD_LOGIC;
 			 address : out STD_LOGIC_VECTOR (18 downto 0);
@@ -565,35 +565,6 @@ END COMPONENT;
 --for all : VGA_timing_synch use entity work.VGA_timing_synch(lsfr_1);
 --for all : VGA_timing_synch use entity work.VGA_timing_synch(jc);
 for all : VGA_timing_synch use entity work.VGA_timing_synch(counter);
-
-COMPONENT ram_interface
-PORT( i_clk	:	IN	STD_LOGIC;
-      oe_n	:	OUT	STD_LOGIC;
-      lb_n	:	OUT	STD_LOGIC;
-      dq_out	:	OUT	STD_LOGIC_VECTOR (15 DOWNTO 0);
-      cre	:	OUT	STD_LOGIC;
-      clk	:	OUT	STD_LOGIC;
-      ce_n	:	OUT	STD_LOGIC;
-      adv_n	:	OUT	STD_LOGIC;
-      addr	:	OUT	STD_LOGIC_VECTOR (22 DOWNTO 0);
-      i_rd	:	IN	STD_LOGIC;
-      i_wr	:	IN	STD_LOGIC;
-      i_rst_n	:	IN	STD_LOGIC;
-      addr_rd	:	IN	STD_LOGIC_VECTOR (22 DOWNTO 0);
-      addr_wr	:	IN	STD_LOGIC_VECTOR (22 DOWNTO 0);
-      data_wr	:	IN	STD_LOGIC_VECTOR (15 DOWNTO 0);
-      dq_in	:	IN	STD_LOGIC_VECTOR (15 DOWNTO 0);
-      data_rd	:	OUT	STD_LOGIC_VECTOR (15 DOWNTO 0);
-      ub_n	:	OUT	STD_LOGIC;
-      we_n	:	OUT	STD_LOGIC;
-      owait	:	IN	STD_LOGIC);
-END COMPONENT;
-signal ri_ard : std_logic_vector (22 downto 0);
-signal ri_awr : std_logic_vector (22 downto 0);
-signal ri_drd : std_logic_vector (15 downto 0);
-signal ri_dwr : std_logic_vector (15 downto 0);
-signal dqi, dqo : std_logic_vector (15 downto 0);
-signal ri_rd, ri_wr : std_logic;
 
 -- RAM FB
 signal wren1 : STD_LOGIC_VECTOR(0 downto 0);
@@ -652,6 +623,7 @@ COMPONENT cellular_ram_burst_controller
 PORT(
 busy : OUT  std_logic;
 clk : IN  std_logic;
+reset : IN  std_logic;
 writes : IN  std_logic;
 data : IN  std_logic_vector(15 downto 0);
 id : IN  std_logic_vector(15 downto 0);
@@ -682,11 +654,14 @@ END COMPONENT cellular_ram_burst_controller;
 signal busy, wrc : std_logic;
 signal data, id : std_logic_vector(15 downto 0);
 
-type p_states is (
+type p_states0 is (
 a0, ar1, a00, a0a, a0b, a0c, a1, a1a, a1b, a1c, ar, br, cr, dr, er, er1, aw, bw, cw, dw, ew
 );
-signal p0_state : p_states := a0;
-signal p1_state : p_states := a0;
+type p_states1 is (
+a0, ar1, a00, a0a, a0b, a0c, a1, a1a, a1b, a1c, ar, br, cr, dr, er, er1, aw, bw, cw, dw, ew
+);
+signal p0_state : p_states0 := a0;
+signal p1_state : p_states1 := a0;
 constant c_w8_bw : integer := 3200/2/2/2;
 signal w8_bw : integer range 0 to c_w8_bw - 1 := 0;
 constant c_w8_br : integer := 3200/2/2/2/2;
@@ -742,10 +717,14 @@ begin
 process (i_clock_ib) is
 begin
   if (rising_edge (i_clock_ib)) then
+    if (resend = '1') then
+      owait1 <= '0';
+    else
     if (owait = '1') then
     owait1 <= '1';
     else
     owait1 <= '0';
+    end if;
     end if;
   end if;
 end process;
@@ -761,7 +740,11 @@ wrc <= wrc_w when p0_w = '1' else wrc_r when p0_r = '1' else '0';
 process (i_clock_ib) is
 begin
 if (rising_edge (i_clock_ib)) then
+if (resend = '1') then
+  cints <= '0';
+else
   cints <= cint;
+end if;
 end if;
 end process;
 
@@ -769,6 +752,18 @@ end process;
 p0_control_crbc_write : process (i_clock_ib) is
 begin
   if (rising_edge (i_clock_ib)) then
+if (resend = '1') then
+  wrc_w <= '0';
+  ov7670_hs_prev <= '0';
+  ov7670_vs_prev <= '0';
+  p0_state <= a0;
+  p0_w <= '0';
+  wrc_w <= '0';
+  id_w <= (others => '0');
+  data_w <= (others => '0');
+  cntr_wr1 <= (others => '0');
+  w8_bw <= 0;
+else
     wrc_w <= '0';
     ov7670_hs_prev <= ov7670_hs;
     ov7670_vs_prev <= ov7670_vs;
@@ -848,8 +843,9 @@ begin
 --        else
 --          w8_bw <= w8_bw + 1;
 --        end if;
-      when others => null;
+      when others => p0_state <= a0;
     end case;
+end if;
   end if;
 end process p0_control_crbc_write;
 
@@ -858,8 +854,18 @@ p1_control_crbc_read : process (i_clock_ib) is
   variable w8 : integer range 0 to 1023 := 0;
 begin
   if (rising_edge (i_clock_ib)) then
+if (resend = '1') then
+  wrc_r <= '0';
+  vga_hsync_i_prev <= '0';
+  vga_vsync_sig_prev <= '0';
+  p1_state <= a0;
+  ov7670_vs_next <= (others => '0');
+  p0_r <= '0';
+  id_r <= (others => '0');
+  data_r <= (others => '0');
+  cntr_rd1 <= (others => '0');
+else
     wrc_r <= '0';
-    ov7670_vs_prev <= ov7670_vs;
     vga_hsync_i_prev <= vga_hsync_i;
     vga_vsync_sig_prev <= vga_vsync_sig;
     case (p1_state) is
@@ -996,26 +1002,27 @@ begin
 --        else
 --          w8_br <= w8_br + 1;
 --        end if;
-      when others => null;
+      when others => p1_state <= a0;
     end case;
+  end if;
   end if;
 end process p1_control_crbc_read;
 
-p0_reset_vga_timing : process (i_clock_ib) is
-  type states is (a, b);
-  variable state : states := a;
-begin
-  if (rising_edge (i_clock_ib)) then
-    case (state) is
-      when a =>
-        if (ov7670_vs_prev = '1' and ov7670_vs = '0') then
-          state := b;
-        end if;
-      when b =>
-        reset_vga_timing <= not reset_vga_timing;
-    end case;
-  end if;
-end process p0_reset_vga_timing;
+--p0_reset_vga_timing : process (i_clock_ib) is
+--  type states is (a, b);
+--  variable state : states := a;
+--begin
+--  if (rising_edge (i_clock_ib)) then
+--    case (state) is
+--      when a =>
+--        if (ov7670_vs_prev = '1' and ov7670_vs = '0') then
+--          state := b;
+--        end if;
+--      when b =>
+--        reset_vga_timing <= not reset_vga_timing;
+--    end case;
+--  end if;
+--end process p0_reset_vga_timing;
 
 --p0_control_crbc : process (i_clock) is
 --begin
@@ -1111,6 +1118,7 @@ PORT MAP (
 busy => busy,
 --clk => clk_mc,
 clk => i_clock_ib,
+reset => resend,
 writes => wrc,
 data => data,
 id => id,
@@ -1175,6 +1183,7 @@ PB_BITS => c_pb_bits
 )
 port map(
 clk => i_clock_ib,
+reset => reset_dcm_n,
 input => pb,
 output => resend);
 	
@@ -1206,6 +1215,7 @@ ov7670_d <= ov7670_data1;
 
 inst_ov7670capt1: ov7670_capture port map(
 pclk => ov7670_pclk,
+reset => resend,
 vsync => ov7670_vs,
 href => ov7670_hs,
 d => ov7670_d,
@@ -1220,6 +1230,7 @@ int => cint
 --ri_ard <= "0000" & rd_a1;
 inst_addrgen1 : address_generator port map(
 --clk25 => clk_vga,
+reset => resend,
 clk25 => clk2x_2,
 enable => active1,
 vsync => vga_vsync_sig,
@@ -1228,6 +1239,7 @@ address1 => address1);
 
 inst_imagegen : vga_imagegenerator port map(
 Data_in1 => rd_d1,
+reset => resend,
 --Data_in1 => x"55aa", -- test output bmp
 active_area1 => active1,
 RGB_out => vga_rgb);
@@ -1299,13 +1311,13 @@ end process p0_assert_1;
 
 DCM_SP_mc_fx_vga_dv : DCM_SP
 generic map (
-CLKDV_DIVIDE => 2.0, -- 50mhz
---CLKDV_DIVIDE => 4.0, -- 100mhz
+--CLKDV_DIVIDE => 2.0, -- 50mhz
+CLKDV_DIVIDE => 4.0, -- 100mhz
 CLKFX_MULTIPLY => CLKFX_MULTIPLY_MC, -- Can be any integer from 1 to 32
 CLKFX_DIVIDE => CLKFX_DIVIDE_MC, -- Can be any interger from 1 to 32
 CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
-CLKIN_PERIOD => 20.0, -- Specify period of input clock
---CLKIN_PERIOD => 10.0, -- Specify period of input clock
+--CLKIN_PERIOD => 20.0, -- Specify period of input clock
+CLKIN_PERIOD => 10.0, -- Specify period of input clock
 CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of "NONE", "FIXED" or "VARIABLE"
 CLK_FEEDBACK => "1X", -- Specify clock feedback of "NONE", "1X" or "2X"
 DESKEW_ADJUST => "SYSTEM_SYNCHRONOUS", -- "SOURCE_SYNCHRONOUS", "SYSTEM_SYNCHRONOUS" or
@@ -1337,12 +1349,12 @@ RST => reset_dcm_n -- DCM asynchronous reset input
 
 DCM_SP_cam : DCM_SP
 generic map (
---CLKDV_DIVIDE => 8.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
-CLKDV_DIVIDE => 4.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
+CLKDV_DIVIDE => 8.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
+--CLKDV_DIVIDE => 4.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
 -- 7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
 --CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 24, -- 50 -> 25 mhz
 
-CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 25, -- 50 -> 24.0 mhz
+--CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 25, -- 50 -> 24.0 mhz
 
 --CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 27, -- 50 -> 24.07407407407407407400 mhz
 --CLKFX_MULTIPLY => 14, CLKFX_DIVIDE => 29, -- 50 -> 24.13793103448275862050 mhz
@@ -1350,7 +1362,7 @@ CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 25, -- 50 -> 24.0 mhz
 --CLKFX_MULTIPLY => 24, CLKFX_DIVIDE => 25, -- 50 -> 48.0 mhz
 --CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 24, -- 50 -> 25 mhz
 
---CLKFX_MULTIPLY => 6, CLKFX_DIVIDE => 25, -- 100 -> 24.0 mhz
+CLKFX_MULTIPLY => 6, CLKFX_DIVIDE => 25, -- 100 -> 24.0 mhz
 
 --CLKFX_MULTIPLY => 5, CLKFX_DIVIDE => 21, -- 100 -> 23.8 mhz (sim)
 --CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 27, -- 50 -> 24.07407407407407407400 mhz
@@ -1360,8 +1372,8 @@ CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 25, -- 50 -> 24.0 mhz
 --CLKIN_PERIOD => 20.0, CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 28 (23.21428571428571428550)
 --CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 28,
 CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
-CLKIN_PERIOD => 20.0, -- Specify period of input clock
---CLKIN_PERIOD => 10.0, -- Specify period of input clock
+--CLKIN_PERIOD => 20.0, -- Specify period of input clock
+CLKIN_PERIOD => 10.0, -- Specify period of input clock
 CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of "NONE", "FIXED" or "VARIABLE"
 CLK_FEEDBACK => "1X", -- Specify clock feedback of "NONE", "1X" or "2X"
 DESKEW_ADJUST => "SYSTEM_SYNCHRONOUS", -- "SOURCE_SYNCHRONOUS", "SYSTEM_SYNCHRONOUS" or

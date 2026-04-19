@@ -31,13 +31,13 @@ use work.p_constants.all;
 
 entity camera_colorbar is
 port (
-camera_io_scl : inout std_logic;
-camera_io_sda : inout std_logic;
-camera_o_vs : out std_logic;
-camera_o_hs : out std_logic;
-camera_o_pclk : out std_logic;
+camera_io_scl : inout std_logic := 'Z';
+camera_io_sda : inout std_logic := 'Z';
+camera_o_vs : out std_logic := '0';
+camera_o_hs : out std_logic := '0';
+camera_o_pclk : out std_logic := '0';
 camera_i_xclk : in std_logic;
-camera_o_d : out std_logic_vector(7 downto 0);
+camera_o_d : out std_logic_vector(7 downto 0) := (others => '0');
 camera_i_rst : in std_logic;
 camera_i_pwdn : in std_logic
 );
@@ -56,8 +56,8 @@ architecture behavioral of camera_colorbar is
   signal href_time : std_logic;
   signal pixel_time : std_logic;
   signal pixel_time_data : std_logic_vector (7 downto 0);
-  signal href_i : std_logic;
-  signal vsync_i : std_logic;
+  signal href_i : std_logic := '0';
+  signal vsync_i : std_logic := '1';
 
   constant c_frame_bits : integer := 19;
   constant c_all_frame : integer := 388431;

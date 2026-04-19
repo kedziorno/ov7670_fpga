@@ -9,6 +9,7 @@ entity cellular_ram_burst_controller is
 port (
   busy : out std_logic;
   clk : in std_logic;
+  reset : in std_logic;
   writes : in std_logic;
   data : in std_logic_vector (15 downto 0);
   id : in std_logic_vector (15 downto 0);
@@ -104,7 +105,7 @@ signal data_out_enable : std_logic_vector (15 downto 0) := (others => '0');
 
 component asym_ram_sdp_read_wider
 port (
-clkA, clkB, enaA, weA, enaB : in std_logic;
+clkA, clkB, enaA, weA, enaB, reset : in std_logic;
 addrA : in std_logic_vector (10 downto 0);
 addrB: in std_logic_vector (9 downto 0);
 diA : in std_logic_vector (7 downto 0);
@@ -123,7 +124,7 @@ sink_addr : in unsigned (9 downto 0);
 dq : in std_logic_vector (15 downto 0);
 read_buffer_addr : in std_logic_vector (9 downto 0);
 read_buffer_data : out std_logic_vector (15 downto 0);
-clk_wr, clk_rd : in std_logic
+clk_wr, clk_rd, reset : in std_logic
 );
 end component sink_read;
 
@@ -141,7 +142,11 @@ begin
 p0_vga_int : process (clk) is
 begin
   if (falling_edge (clk)) then
+    if (reset = '1') then
+    vga_int_i <= '0';
+    else
     vga_int_i <= vga_int;
+  end if;
   end if;
 end process p0_vga_int;
 
@@ -151,6 +156,7 @@ write_buffer_we1 (0) <= write_buffer_we;
 
 ram_buffer_i0 : asym_ram_sdp_read_wider
 port map (
+reset => reset,
 clkA => write_buffer_clk,
 enaA => write_buffer_we,
 weA => write_buffer_we,
@@ -183,27 +189,31 @@ dq (15) <= source_data (15) when data_out_enable (15) = '1' else 'Z';
 process (clk) is
 begin
   if (rising_edge (clk)) then
+  if (reset = '1') then
+  owait1 <= '0';
+  else
     owait1 <= o_wait;
+  end if;
   end if;
 end process;
 
-start_clock : process (clk) is
-  type states is (a, b);
-  variable state1 : states := a;
-begin
-  if (rising_edge (clk)) then
-    case (state1) is
-      when a =>
---      if ((owait1 = '0' and o_wait = '1') and (state = write_byte2)) then
-      if ((state = write_byte0)) then
-        state1 := b;
-        ramclken <= '0';
-      end if;
-      when b =>
-        ramclken <= '1';
-    end case;
-  end if;
-end process start_clock;
+--start_clock : process (clk) is
+--  type states is (a, b);
+--  variable state1 : states := a;
+--begin
+--  if (rising_edge (clk)) then
+--    case (state1) is
+--      when a =>
+----      if ((owait1 = '0' and o_wait = '1') and (state = write_byte2)) then
+--      if ((state = write_byte0)) then
+--        state1 := b;
+--        ramclken <= '0';
+--      end if;
+--      when b =>
+--        ramclken <= '1';
+--    end case;
+--  end if;
+--end process start_clock;
 
 --ram_clk <= clk when (ramclken = '1') else '0';
 ram_clk <= not clk when (state = write_byte1 or state = write_byte2 or state = write_byte3
@@ -220,12 +230,16 @@ port map (
   read_buffer_addr => read_buffer_addr,
   read_buffer_data => read_buffer_data,
   clk_wr => clk,
+  reset => reset,
   clk_rd => read_buffer_clk
 );
 
 p2_next_state : process (clk) is
 begin
   if (rising_edge  (clk)) then
+    if (reset = '1') then
+    state <= config0;
+    else
     state <= next_state;
     if (id = burst_read and writes = '1' and busy_i = '0' and bytes_to_read > 0) then
       state <= read_byte0;
@@ -236,61 +250,86 @@ begin
       --report "burst write";
     end if;
   end if;
+  end if;
 end process p2_next_state;
 
 p3_b2w : process (clk) is
 begin
   if (rising_edge (clk)) then
+  if (reset = '1') then
+  bytes_to_write <= (others => '0');
+  else
     if (id = write_length and writes = '1' and busy_i = '0') then
       bytes_to_write <= unsigned (data (10 downto 0));
       --report "write length " & integer'image (to_integer (unsigned (data (10 downto 0))));
     end if;
+  end if;
   end if;
 end process p3_b2w;
 
 p4_b2r: process (clk) is
 begin
   if (rising_edge (clk)) then
+  if (reset = '1') then
+  bytes_to_read <= (others => '0');
+  else
     if (id = read_length and writes = '1' and busy_i = '0') then
       bytes_to_read <= unsigned (data (10 downto 0));
       --report "read length " & integer'image (to_integer (unsigned (data (10 downto 0))));
     end if;
+  end if;
   end if;
 end process p4_b2r;
 
 p5_bwah : process (clk) is
 begin
   if (rising_edge (clk)) then
+  if (reset = '1') then
+  burst_write_addr (22 downto 16) <= (others => '0');
+  else
     if (id = write_addr_h and writes = '1' and busy_i = '0') then
       burst_write_addr (22 downto 16) <= unsigned (data (6 downto 0));
     end if;
+  end if;
   end if;
 end process p5_bwah;
 
 p6_bwal : process (clk) is
 begin
   if (rising_edge (clk)) then
+  if (reset = '1') then
+  burst_write_addr (15 downto 0) <= (others => '0');
+  else
     if (id = write_addr_l and writes = '1' and busy_i = '0') then 
       burst_write_addr (15 downto 0) <= unsigned (data);
     end if;
+  end if;
   end if;
 end process p6_bwal;
 
 p7_brah : process (clk) is
 begin
   if (rising_edge (clk)) then
+    if (reset = '1') then
+  burst_read_addr (22 downto 16) <= (others => '0');
+  else
     if (id = read_addr_h and writes = '1' and busy_i = '0') then
       burst_read_addr (22 downto 16) <= unsigned (data (6 downto 0));
     end if;
+  end if;
   end if;
 end process p7_brah;
 
 p8_bral : process (clk) is
 begin
   if (rising_edge (clk)) then
+    if (reset = '1') then
+  burst_read_addr (15 downto 0) <= (others => '0');
+  else
     if (id = read_addr_l and writes = '1' and busy_i = '0') then
       burst_read_addr (15 downto 0) <= unsigned (data);
     end if;
+  end if;
   end if;
 end process p8_bral;
 
@@ -298,6 +337,22 @@ we <= we_i;
 p9_run : process (clk) is
 begin
   if (rising_edge (clk)) then
+    if (reset = '1') then
+    source_addr <= (others => '0');
+    sink_addr <= (others => '0');
+    this_read_addr <= (others => '0');
+    this_write_addr <= (others => '0');
+    write_counter  <= (others => '0');
+          clk_enable <= '0';
+      cre <= '0';
+      sink_we <= '0';
+      adv <= '1';
+      ce <= '1';
+      oe <= '1';
+      we_i <= '1';
+      a <= (others => '0');
+      state_cntr <= (others => '0');      
+    else
     if (state = idle and id = set_wb_addr and writes = '1' and busy_i = '0') then
       source_addr <= unsigned (data (9 downto 0));
       --report "set wb addr";
@@ -484,6 +539,7 @@ begin
       ce <= '0';
       adv <= '0';
     end if;
+  end if;
   end if;
 end process p9_run;
 
