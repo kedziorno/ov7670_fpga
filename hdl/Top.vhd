@@ -714,7 +714,7 @@ begin
 process (i_clock_ib) is
 begin
   if (rising_edge (i_clock_ib)) then
-    if (reset_dcm_n = '1') then
+    if (resend = '1') then
       owait1 <= '0';
     else
     if (owait = '1') then
@@ -737,7 +737,7 @@ wrc <= wrc_w when p0_w = '1' else wrc_r when p0_r = '1' else '0';
 process (i_clock_ib) is
 begin
 if (rising_edge (i_clock_ib)) then
-if (reset_dcm_n = '1') then
+if (resend = '1') then
   cints <= '0';
 else
   cints <= cint;
@@ -749,7 +749,7 @@ end process;
 p0_control_crbc_write : process (i_clock_ib) is
 begin
   if (rising_edge (i_clock_ib)) then
-if (reset_dcm_n = '1') then
+if (resend = '1') then
   wrc_w <= '0';
   ov7670_hs_prev <= '0';
   ov7670_vs_prev <= '0';
@@ -851,7 +851,7 @@ p1_control_crbc_read : process (i_clock_ib) is
   variable w8 : integer range 0 to 1023 := 0;
 begin
   if (rising_edge (i_clock_ib)) then
-if (reset_dcm_n = '1') then
+if (resend = '1') then
   wrc_r <= '0';
   vga_hsync_i_prev <= '0';
   vga_vsync_sig_prev <= '0';
@@ -1115,7 +1115,7 @@ PORT MAP (
 busy => busy,
 --clk => clk_mc,
 clk => i_clock_ib,
-reset => reset_dcm_n,
+reset => resend,
 writes => wrc,
 data => data,
 id => id,
@@ -1212,7 +1212,7 @@ ov7670_d <= ov7670_data1;
 
 inst_ov7670capt1: ov7670_capture port map(
 pclk => ov7670_pclk,
-reset => reset_dcm_n,
+reset => resend,
 vsync => ov7670_vs,
 href => ov7670_hs,
 d => ov7670_d,
@@ -1227,7 +1227,7 @@ int => cint
 --ri_ard <= "0000" & rd_a1;
 inst_addrgen1 : address_generator port map(
 --clk25 => clk_vga,
-reset => reset_dcm_n,
+reset => resend,
 clk25 => clk2x_2,
 enable => active1,
 vsync => vga_vsync_sig,
@@ -1236,7 +1236,7 @@ address1 => address1);
 
 inst_imagegen : vga_imagegenerator port map(
 Data_in1 => rd_d1,
-reset => reset_dcm_n,
+reset => resend,
 --Data_in1 => x"55aa", -- test output bmp
 active_area1 => active1,
 RGB_out => vga_rgb);
@@ -1245,7 +1245,7 @@ vga_hsync <= vga_hsync_i;
 inst_vgatiming : VGA_timing_synch port map(
 clk25 => clk_vga,
 --rst => reset_vga_timing,
-rst => reset_dcm_n,
+rst => resend,
 Hsync => vga_hsync_i,
 Vsync => vga_vsync_sig,
 blank => vga_blank,
