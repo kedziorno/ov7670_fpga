@@ -204,7 +204,7 @@ end process;
 --  if (rising_edge (clk)) then
 --    case (state1) is
 --      when a =>
-----      if ((owait1 = '0' and o_wait = '1') and (state = write_byte2)) then
+----      if ((o_wait = '0' and o_wait = '1') and (state = write_byte2)) then
 --      if ((state = write_byte0)) then
 --        state1 := b;
 --        ramclken <= '0';
@@ -216,6 +216,7 @@ end process;
 --end process start_clock;
 
 --ram_clk <= clk when (ramclken = '1') else '0';
+--ram_clk <= not clk when (clk_enable = '1') else '0';
 ram_clk <= not clk when (state = write_byte1 or state = write_byte2 or state = write_byte3
 or 
 state = read_byte1 or state = read_byte2 or state = read_byte3) else '0';

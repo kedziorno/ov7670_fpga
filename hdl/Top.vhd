@@ -109,7 +109,8 @@ COMPONENT VGA_timing_synch
            Vsync : out  STD_LOGIC;
            blank : out  STD_LOGIC;
            activeArea1 : out  STD_LOGIC;
-           int, fint : out  STD_LOGIC);
+           int, fint : out  STD_LOGIC;
+           vint : in std_logic);
 END COMPONENT;
 --for all : VGA_timing_synch use entity work.VGA_timing_synch(lsfr_2);
 --for all : VGA_timing_synch use entity work.VGA_timing_synch(lsfr_1);
@@ -356,7 +357,8 @@ begin
     blank => vga_blank,
     activeArea1 => active1,
     int => open,
-    fint => open
+    fint => open,
+    vint => '0'
   );
 
   vga_hsync <= ov7670_hs;
@@ -560,7 +562,8 @@ COMPONENT VGA_timing_synch
            Vsync : out  STD_LOGIC;
            blank : out  STD_LOGIC;
            activeArea1 : out  STD_LOGIC;
-           int, fint : out std_logic);
+           int, fint : out std_logic;
+           vint : in std_logic);
 END COMPONENT;
 --for all : VGA_timing_synch use entity work.VGA_timing_synch(lsfr_2);
 --for all : VGA_timing_synch use entity work.VGA_timing_synch(lsfr_1);
@@ -664,13 +667,13 @@ a0, ar1, a0a, ar, br, cr, dr, er, er1
 );
 signal p0_state : p_states0 := a0;
 signal p1_state : p_states1 := a0;
-constant c_w8_bw : integer := 3200/2/2/2;
+constant c_w8_bw : integer := 3200/2/2/2/2;
 signal w8_bw : integer range 0 to c_w8_bw - 1 := 0;
 constant c_w8_br : integer := 3200/2/2/2/2;
 signal w8_br : integer range 0 to c_w8_br - 1 := 0;
 
 constant c_cntr_frame : integer := 307200;
-constant c_step_w : unsigned (15 downto 0) := to_unsigned (160, 16);
+constant c_step_w : unsigned (15 downto 0) := to_unsigned (320, 16);
 constant c_step_r : unsigned (15 downto 0) := to_unsigned (160, 16);
 signal cntr_wr1 : unsigned (19 downto 0) := (others => '0');
 signal cntr_wr1_slv : std_logic_vector (19 downto 0) := (others => '0');
@@ -725,7 +728,11 @@ signal ov7670_siodv : STD_LOGIC;
 signal ov7670_pwdnv : STD_LOGIC;
 signal ov7670_resetv : STD_LOGIC;
 
+signal vint : std_logic;
+
 begin
+
+vint <= '1' when (ov7670_vs_prev = '0' and ov7670_vs = '1') else '0';
 
 virtual_camera : camera_colorbar
 port map (
@@ -803,7 +810,7 @@ else
           p0_state <= a1;
         end if;
       when a1 =>
-        if (ov7670_vs_next /= "11") then
+--        if (ov7670_vs_next /= "11") then
         p0_w <= '0';
         if (cntr_wr1 >= 153280+160+160+160 or ov7670_vs = '1') then
           cntr_wr1 <= (others => '0');
@@ -811,7 +818,7 @@ else
         if (cints = '1') then -- wr when hs fe
             p0_state <= a1a;
         end if;
-        end if;
+--        end if;
       when a1a =>
         if (busy = '0') then
           p0_state <= aw;
@@ -861,7 +868,7 @@ else
     vga_vsync_sig_prev <= vga_vsync_sig;
     case (p1_state) is
       when a0 =>
-        if (ov7670_vs_prev = '0' and ov7670_vs = '1') then -- XXX here
+        if (vint = '1') then -- XXX here
 --        if (vga_vsync_sig_prev = '0' and vga_vsync_sig = '1') then -- XXX here
           ov7670_vs_next <= ov7670_vs_next (0) & '1';
           p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0');
@@ -1041,8 +1048,8 @@ int => cint
 --ri_ard <= "0000" & rd_a1;
 inst_addrgen1 : address_generator port map(
 --clk25 => clk_vga,
-reset => resend,
 clk25 => clk2x_2,
+reset => resend,
 enable => active1,
 vsync => vga_vsync_sig,
 address => rd_a1,
@@ -1065,7 +1072,8 @@ Vsync => vga_vsync_sig,
 blank => vga_blank,
 activeArea1 => active1,
 int => vga_int,
-fint => vga_fint);
+fint => vga_fint,
+vint => '0');
 
 vga_vsync <= vga_vsync_sig;
 
@@ -1167,13 +1175,13 @@ I => i_clock -- Clock buffer input (connect directly to top-level port)
 DCM_SP_cam : DCM_SP
 generic map (
 --CLKDV_DIVIDE => 8.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
---CLKDV_DIVIDE => 4.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
-CLKDV_DIVIDE => 2.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
+CLKDV_DIVIDE => 4.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
+--CLKDV_DIVIDE => 2.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
 -- 7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
 --CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 24, -- 50 -> 25 mhz
 
-CLKFX_MULTIPLY => 24, CLKFX_DIVIDE => 25, -- 25 -> 24.0 mhz
---CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 25, -- 50 -> 24.0 mhz
+--CLKFX_MULTIPLY => 24, CLKFX_DIVIDE => 25, -- 25 -> 24.0 mhz
+CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 25, -- 50 -> 24.0 mhz
 
 --CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 27, -- 50 -> 24.07407407407407407400 mhz
 --CLKFX_MULTIPLY => 14, CLKFX_DIVIDE => 29, -- 50 -> 24.13793103448275862050 mhz
@@ -1190,7 +1198,7 @@ CLKFX_MULTIPLY => 24, CLKFX_DIVIDE => 25, -- 25 -> 24.0 mhz
 --CLKFX_MULTIPLY => 24, CLKFX_DIVIDE => 25, -- 50 -> 48.0 mhz
 --CLKIN_PERIOD => 20.0, CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 28 (23.21428571428571428550)
 --CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 28,
-CLKIN_DIVIDE_BY_2 => TRUE, -- TRUE/FALSE to enable CLKIN divide by two feature
+CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
 CLKIN_PERIOD => 20.0, -- Specify period of input clock
 --CLKIN_PERIOD => 10.0, -- Specify period of input clock
 CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of "NONE", "FIXED" or "VARIABLE"
