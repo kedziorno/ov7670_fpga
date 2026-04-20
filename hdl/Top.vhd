@@ -810,7 +810,7 @@ else
           p0_state <= a1;
         end if;
       when a1 =>
---        if (ov7670_vs_next /= "11") then
+        if (ov7670_vs_next /= "11") then
         p0_w <= '0';
         if (cntr_wr1 >= 153280+160+160+160 or ov7670_vs = '1') then
           cntr_wr1 <= (others => '0');
@@ -818,7 +818,7 @@ else
         if (cints = '1') then -- wr when hs fe
             p0_state <= a1a;
         end if;
---        end if;
+        end if;
       when a1a =>
         if (busy = '0') then
           p0_state <= aw;
@@ -880,7 +880,7 @@ else
         end if;
       when a0a =>
         if (ov7670_vs = '1') then
-          p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0');
+--          p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0');
         end if;
         if (cntr_rd1 >= 153280+160+160+160+160) then
           cntr_rd1 <= (others => '0');
