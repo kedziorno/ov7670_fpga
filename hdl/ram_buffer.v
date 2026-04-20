@@ -78,7 +78,7 @@ initial begin
   end
 end
 
-always @(posedge clkA)
+always @(negedge clkA)
 begin
 if (enaA) begin
 if (weA)
@@ -89,7 +89,7 @@ end
 
 integer i;
 reg [log2RATIO-1:0] lsbaddr;
-always @(posedge clkB)
+always @(negedge clkB)
 begin : ramread
 if(reset)
 readB <= 0;
