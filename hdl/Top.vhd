@@ -868,8 +868,8 @@ else
     vga_vsync_sig_prev <= vga_vsync_sig;
     case (p1_state) is
       when a0 =>
-        if (vint = '1') then -- XXX here
---        if (vga_vsync_sig_prev = '0' and vga_vsync_sig = '1') then -- XXX here
+--        if (vint = '1') then -- XXX here
+        if (vga_vsync_sig_prev = '0' and vga_vsync_sig = '1') then -- XXX here
           ov7670_vs_next <= ov7670_vs_next (0) & '1';
           p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0');
         end if;

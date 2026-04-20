@@ -346,11 +346,10 @@ Architecture behavioral of Entity address_generator is up to date.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/vga_imagegenerator.vhd" in Library work.
 Architecture behavioral of Entity vga_imagegenerator is up to date.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/vga_timing.vhd" in Library work.
-Entity <vga_timing_synch> compiled.
-Entity <vga_timing_synch> (Architecture <lsfr_1>) compiled.
-Entity <vga_timing_synch> (Architecture <lsfr_2>) compiled.
-Entity <vga_timing_synch> (Architecture <jc>) compiled.
-Entity <vga_timing_synch> (Architecture <counter>) compiled.
+Architecture lsfr_1 of Entity vga_timing_synch is up to date.
+Architecture lsfr_2 of Entity vga_timing_synch is up to date.
+Architecture jc of Entity vga_timing_synch is up to date.
+Architecture counter of Entity vga_timing_synch is up to date.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/Top.vhd" in Library work.
 Entity <top_camera_monitoring> compiled.
 Entity <top_camera_monitoring> (Architecture <raw_signal>) compiled.
@@ -827,7 +826,7 @@ WARNING:Xst:646 - Signal <wr_a1<18:11>> is assigned but never used. This unconne
 WARNING:Xst:1780 - Signal <we_ni> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:646 - Signal <w8_bw<0>> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:646 - Signal <w8_br<0>> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
-WARNING:Xst:646 - Signal <vga_vsync_sig_prev> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <vint> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <vga_re> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:646 - Signal <vga_hsync_i_prev> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:646 - Signal <vga_fint> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
@@ -903,10 +902,10 @@ WARNING:Xst:646 - Signal <address1> is assigned but never used. This unconnected
     Found 16-bit register for signal <id_r>.
     Found 16-bit register for signal <id_w>.
     Found 2-bit register for signal <ov7670_vs_next>.
-    Found 1-bit register for signal <ov7670_vs_prev>.
     Found 1-bit register for signal <owait1>.
     Found 1-bit register for signal <p0_r>.
     Found 1-bit register for signal <p0_w>.
+    Found 1-bit register for signal <vga_vsync_sig_prev>.
     Found 1-bit register for signal <wrc_r>.
     Found 1-bit register for signal <wrc_w>.
     Summary:
@@ -1331,15 +1330,15 @@ Design Statistics
 # IOs                              : 94
 
 Cell Usage :
-# BELS                             : 1937
+# BELS                             : 1940
 #      GND                         : 1
 #      INV                         : 62
 #      LUT1                        : 236
 #      LUT2                        : 186
-#      LUT3                        : 165
-#      LUT4                        : 536
+#      LUT3                        : 163
+#      LUT4                        : 539
 #      MUXCY                       : 337
-#      MUXF5                       : 82
+#      MUXF5                       : 84
 #      MUXF6                       : 16
 #      VCC                         : 1
 #      XORCY                       : 315
@@ -1380,8 +1379,8 @@ Selected Device : 3s1200efg320-4
 
  Number of Slices:                      636  out of   8672     7%  
  Number of Slice Flip Flops:            623  out of  17344     3%  
- Number of 4 input LUTs:               1186  out of  17344     6%  
-    Number used as logic:              1185
+ Number of 4 input LUTs:               1187  out of  17344     6%  
+    Number used as logic:              1186
     Number used as Shift registers:       1
  Number of IOs:                          94
  Number of bonded IOBs:                  75  out of    250    30%  
@@ -1445,7 +1444,7 @@ All values displayed in nanoseconds (ns)
 =========================================================================
 Timing constraint: Default period analysis for Clock 'i_clock'
   Clock period: 85.674ns (frequency: 11.672MHz)
-  Total number of paths / destination ports: 53575 / 1265
+  Total number of paths / destination ports: 53557 / 1264
 -------------------------------------------------------------------------
 Delay:               3.570ns (Levels of Logic = 1)
   Source:            inst_top_camera_monitoring/inst_debounce/output_1 (FF)
@@ -1480,7 +1479,7 @@ Delay:               7.543ns (Levels of Logic = 4)
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
      FDRE:C->Q             4   0.591   0.762  inst_top_camera_monitoring/inst_ov7670capt1/address_6 (inst_top_camera_monitoring/inst_ov7670capt1/address_6)
-     LUT4:I0->O            1   0.704   0.499  inst_top_camera_monitoring/inst_ov7670capt1/address_or000041_SW0 (N214)
+     LUT4:I0->O            1   0.704   0.499  inst_top_camera_monitoring/inst_ov7670capt1/address_or000041_SW0 (N211)
      LUT4:I1->O            1   0.704   0.424  inst_top_camera_monitoring/inst_ov7670capt1/address_or000041 (inst_top_camera_monitoring/inst_ov7670capt1/address_or000041)
      LUT4:I3->O            1   0.704   0.455  inst_top_camera_monitoring/inst_ov7670capt1/address_or000062 (inst_top_camera_monitoring/inst_ov7670capt1/address_or000062)
      LUT4:I2->O           19   0.704   1.085  inst_top_camera_monitoring/inst_ov7670capt1/address_or000085 (inst_top_camera_monitoring/inst_ov7670capt1/address_or0000)
@@ -1604,13 +1603,13 @@ Offset:              7.434ns (Levels of Logic = 3)
 =========================================================================
 
 
-Total REAL time to Xst completion: 14.00 secs
-Total CPU time to Xst completion: 13.17 secs
+Total REAL time to Xst completion: 13.00 secs
+Total CPU time to Xst completion: 13.03 secs
  
 --> 
 
 
-Total memory usage is 1307260 kilobytes
+Total memory usage is 1307456 kilobytes
 
 Number of errors   :    0 (   0 filtered)
 Number of warnings :  231 (   0 filtered)
