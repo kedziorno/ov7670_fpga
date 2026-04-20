@@ -16,7 +16,8 @@ entity VGA_timing_synch is
            Vsync : out  STD_LOGIC := '0';
            blank : out  STD_LOGIC;
            activeArea1 : out  STD_LOGIC;
-           int, fint : out std_logic);
+           int, fint : out std_logic;
+           vint : in std_logic);
 end VGA_timing_synch;
 
 -- fastest lsfr
@@ -408,6 +409,10 @@ count_proc : process(clk_vga,vcnt,hcnt) begin
         hcnt <= 0;
         vcnt <= 0;
       else
+        if (vint = '1') then
+          hcnt <= 0;
+          vcnt <= 0;
+        end if;
         if (hcnt = HP) then
           hcnt <= 0;
           if (vcnt = VP) then
@@ -456,8 +461,12 @@ blank <= '1' when ((hcnt >= HD) or (vcnt >= VD)) else '1' when rst = '1' else '0
 --blank <= not activeArea1_sig;
 --int <= '1' when vcnt < VD and ((hcnt = 399) or (hcnt = 0)) else '0';
 --int <= '1' when vcnt < VD and ((hcnt = 753) or (hcnt = 352)) else '0';
-int <= '1' when (vcnt < VD-1 or vcnt = 524 or vcnt = 523) and ((hcnt = 257 or hcnt = 657)) else '0';
+
+--int <= '1' when (vcnt < VD-1 or vcnt = 524 or vcnt = 523) and ((hcnt = 257 or hcnt = 657)) else '0';
+int <= '1' when (vcnt < VD-1 or vcnt = 524 or vcnt = 523) and ((hcnt = 257 or hcnt = 753)) else '0';
+
 --int <= '1' when (vcnt < VD-1 or vcnt = 524 or vcnt = 523) and ((hcnt = 657)) else '0';
+--int <= '1' when (vcnt < VD-1 or vcnt = 524 or vcnt = 523) and ((hcnt = 753)) else '0';
 --int <= '1' when (vcnt < VD-1 or vcnt = 524) and ((hcnt = 657)) else '0';
 --int <= '1' when vcnt <= VD and ((hcnt = 0)) else '0';
 fint <= '1' when (vcnt = 523 and hcnt = 0) else '0';
