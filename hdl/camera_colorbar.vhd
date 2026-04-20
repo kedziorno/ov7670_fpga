@@ -30,6 +30,9 @@ use work.p_camera_colorbar.all;
 use work.p_constants.all;
 
 entity camera_colorbar is
+generic (
+constant c_source : t_source := t_frames
+);
 port (
 camera_io_scl : inout std_logic := 'Z';
 camera_io_sda : inout std_logic := 'Z';

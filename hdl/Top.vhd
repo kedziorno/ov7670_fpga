@@ -17,6 +17,7 @@ use UNISIM.VCOMPONENTS.ALL;
 
 use work.micron_mem_parameters.all;
 use work.p_constants.all;
+use work.p_camera_colorbar.all;
 
 entity top_camera_monitoring is
 generic (
@@ -706,6 +707,9 @@ signal cints : std_logic;
 signal owait1 : std_logic;
 
 component camera_colorbar is
+generic (
+constant c_source : t_source := t_colorbar
+);
 port (
 camera_io_scl : inout std_logic;
 camera_io_sda : inout std_logic;
@@ -729,6 +733,9 @@ signal ov7670_pwdnv : STD_LOGIC;
 signal ov7670_resetv : STD_LOGIC;
 
 signal vint : std_logic;
+
+signal cam_pclk, cam_hs, cam_vs, cam_pwdn, cam_reset : std_logic;
+signal cam_d : std_logic_vector (7 downto 0);
 
 begin
 
@@ -810,7 +817,7 @@ else
           p0_state <= a1;
         end if;
       when a1 =>
-        if (ov7670_vs_next /= "11") then
+--        if (ov7670_vs_next /= "11") then
         p0_w <= '0';
         if (cntr_wr1 >= 153280+160+160+160 or ov7670_vs = '1') then
           cntr_wr1 <= (others => '0');
@@ -818,7 +825,7 @@ else
         if (cints = '1') then -- wr when hs fe
             p0_state <= a1a;
         end if;
-        end if;
+--        end if;
       when a1a =>
         if (busy = '0') then
           p0_state <= aw;
@@ -984,13 +991,13 @@ vga_r <= vga_rgb (7 downto 5);
 vga_g <= vga_rgb (4 downto 2);
 vga_b <= vga_rgb (1 downto 0);
 
---siodo1_n <= not siodi1;
---ov7670_siod1_tri : IOBUF port map (
---O => (siodi1),
---IO=> (ov7670_siod1),
---I=> (siodo1),
---T=> (siodo1_n)
---);
+siodo1_n <= not siodi1;
+ov7670_siod1_tri : IOBUF port map (
+O => (siodi1),
+IO=> (ov7670_siod1),
+I=> (siodo1),
+T=> (siodo1_n)
+);
 
 inst_debounce: debounce_circuit
 generic map (
@@ -1002,18 +1009,25 @@ reset => reset_dcm_n,
 input => pb,
 output => resend);
 
+ov7670_xclk1 <= clk_cam;
+ov7670_xclkv <= clk_cam;
+ov7670_pwdn1 <= cam_pwdn;
+ov7670_pwdnv <= cam_pwdn;
+ov7670_reset1 <= cam_reset;
+ov7670_resetv <= cam_reset;
+
 inst_ov7670contr1: ov7670_controller port map(
 clk => clk1,
 reset1 => resend,
 resend => resend,
-sioc => ov7670_siocv,
+sioc => ov7670_sioc1,
 siodi => siodi1,
 siodo => siodo1,
 conf_done => led1,
-pwdn => ov7670_pwdnv,
-reset => ov7670_resetv,
-xclk_in => clk_cam,
-xclk_out => ov7670_xclkv);
+pwdn => cam_pwdn,
+reset => cam_reset,
+xclk_in => '0',
+xclk_out => open);
 
 ----process (i_clock_ib) is
 --process (clk_mc, resend) is begin
@@ -1026,17 +1040,27 @@ xclk_out => ov7670_xclkv);
 ----elsif (falling_edge (i_clock_ib)) then
 --end if;
 --end process;
-ov7670_pclk <= ov7670_pclkv;
-ov7670_d <= ov7670_datav;
-ov7670_hs <= ov7670_hrefv;
-ov7670_vs <= ov7670_vsyncv;
+--ov7670_pclk <= ov7670_pclkv;
+--ov7670_d <= ov7670_datav;
+--ov7670_hs <= ov7670_hrefv;
+--ov7670_vs <= ov7670_vsyncv;
+ov7670_pclk <= ov7670_pclk1;
+ov7670_d <= ov7670_data1;
+ov7670_hs <= ov7670_href1;
+ov7670_vs <= ov7670_vsync1;
+
+cam_pclk <= ov7670_pclkv when sw(0) = '1' else ov7670_pclk1;
+cam_d <= ov7670_datav when sw(0) = '1' else ov7670_data1;
+cam_hs <= ov7670_hrefv when sw(0) = '1' else ov7670_href1;
+cam_vs <= ov7670_vsyncv when sw(0) = '1' else ov7670_vsync1;
+
 
 inst_ov7670capt1: ov7670_capture port map(
-pclk => ov7670_pclk,
+pclk => cam_pclk,
 reset => resend,
-vsync => ov7670_vs,
-href => ov7670_hs,
-d => ov7670_d,
+vsync => cam_vs,
+href => cam_hs,
+d => cam_d,
 addr => wr_a1,
 dout => wr_d1,
 we => wren1,
