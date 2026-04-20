@@ -351,9 +351,8 @@ Architecture lsfr_2 of Entity vga_timing_synch is up to date.
 Architecture jc of Entity vga_timing_synch is up to date.
 Architecture counter of Entity vga_timing_synch is up to date.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/Top.vhd" in Library work.
-Entity <top_camera_monitoring> compiled.
-Entity <top_camera_monitoring> (Architecture <raw_signal>) compiled.
-Entity <top_camera_monitoring> (Architecture <structural>) compiled.
+Architecture raw_signal of Entity top_camera_monitoring is up to date.
+Architecture structural of Entity top_camera_monitoring is up to date.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/top1.vhd" in Library work.
 Architecture behavioral of Entity top is up to date.
 Compiling verilog file "hdl/ram_buffer.v" in library work
@@ -671,20 +670,21 @@ Synthesizing Unit <VGA_timing_synch>.
     Related source file is "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/vga_timing.vhd".
     Found 1-bit register for signal <Vsync>.
     Found 1-bit register for signal <Hsync>.
-    Found 10-bit comparator less for signal <activeArea1_sig$cmp_lt0000> created at line 458.
-    Found 10-bit comparator less for signal <activeArea1_sig$cmp_lt0001> created at line 458.
-    Found 10-bit comparator greatequal for signal <blank$cmp_ge0000> created at line 460.
-    Found 10-bit comparator greatequal for signal <blank$cmp_ge0001> created at line 460.
+    Found 10-bit comparator less for signal <activeArea1_sig$cmp_lt0000> created at line 461.
+    Found 10-bit comparator less for signal <activeArea1_sig$cmp_lt0001> created at line 461.
+    Found 10-bit comparator greatequal for signal <blank_i$cmp_ge0000> created at line 463.
+    Found 10-bit comparator greatequal for signal <blank_i$cmp_ge0001> created at line 463.
     Found 10-bit up counter for signal <hcnt>.
-    Found 10-bit comparator greater for signal <Hsync$cmp_gt0000> created at line 435.
-    Found 10-bit comparator less for signal <Hsync$cmp_lt0000> created at line 435.
-    Found 10-bit comparator less for signal <int$cmp_lt0000> created at line 469.
+    Found 1-bit register for signal <Hsync_i>.
+    Found 10-bit comparator greater for signal <Hsync_i$cmp_gt0000> created at line 438.
+    Found 10-bit comparator less for signal <Hsync_i$cmp_lt0000> created at line 438.
+    Found 10-bit comparator less for signal <int$cmp_lt0000> created at line 472.
     Found 10-bit up counter for signal <vcnt>.
-    Found 10-bit comparator greater for signal <Vsync$cmp_gt0000> created at line 449.
-    Found 10-bit comparator less for signal <Vsync$cmp_lt0000> created at line 449.
+    Found 10-bit comparator greater for signal <Vsync$cmp_gt0000> created at line 452.
+    Found 10-bit comparator less for signal <Vsync$cmp_lt0000> created at line 452.
     Summary:
 	inferred   2 Counter(s).
-	inferred   2 D-type flip-flop(s).
+	inferred   3 D-type flip-flop(s).
 	inferred   9 Comparator(s).
 Unit <VGA_timing_synch> synthesized.
 
@@ -952,8 +952,8 @@ Macro Statistics
  6-bit up counter                                      : 1
  7-bit up counter                                      : 1
  8-bit up counter                                      : 2
-# Registers                                            : 106
- 1-bit register                                        : 71
+# Registers                                            : 107
+ 1-bit register                                        : 72
  10-bit register                                       : 2
  11-bit register                                       : 4
  16-bit register                                       : 8
@@ -1144,8 +1144,8 @@ Macro Statistics
  6-bit up counter                                      : 1
  7-bit up counter                                      : 1
  8-bit up counter                                      : 2
-# Registers                                            : 559
- Flip-Flops                                            : 559
+# Registers                                            : 560
+ Flip-Flops                                            : 560
 # Comparators                                          : 17
  10-bit comparator greatequal                          : 2
  10-bit comparator greater                             : 2
@@ -1300,8 +1300,8 @@ Final Macro Processing ...
 Final Register Report
 
 Macro Statistics
-# Registers                                            : 623
- Flip-Flops                                            : 623
+# Registers                                            : 624
+ Flip-Flops                                            : 624
 
 =========================================================================
 
@@ -1342,14 +1342,14 @@ Cell Usage :
 #      MUXF6                       : 16
 #      VCC                         : 1
 #      XORCY                       : 315
-# FlipFlops/Latches                : 623
+# FlipFlops/Latches                : 624
 #      FD                          : 23
 #      FDC_1                       : 49
 #      FDCE                        : 36
 #      FDE                         : 75
 #      FDE_1                       : 48
 #      FDP_1                       : 1
-#      FDR                         : 117
+#      FDR                         : 118
 #      FDR_1                       : 2
 #      FDRE                        : 200
 #      FDRS                        : 61
@@ -1377,8 +1377,8 @@ Device utilization summary:
 
 Selected Device : 3s1200efg320-4 
 
- Number of Slices:                      636  out of   8672     7%  
- Number of Slice Flip Flops:            623  out of  17344     3%  
+ Number of Slices:                      637  out of   8672     7%  
+ Number of Slice Flip Flops:            624  out of  17344     3%  
  Number of 4 input LUTs:               1187  out of  17344     6%  
     Number used as logic:              1186
     Number used as Shift registers:       1
@@ -1414,7 +1414,7 @@ i_clock                                                                         
 inst_top_camera_monitoring/crbc_i0/write_buffer_clk_inv1(inst_top_camera_monitoring/crbc_i0/write_buffer_clk_inv:O)| BUFG(*)(inst_top_camera_monitoring/inst_ov7670capt1/address_18)| 21    |
 inst_top_camera_monitoring/ov7670_pclkv1(inst_top_camera_monitoring/virtual_camera/camera_o_pclk1:O)               | BUFG(*)(inst_top_camera_monitoring/inst_ov7670capt1/addr1_9)   | 37    |
 i_clock                                                                                                            | inst_top_camera_monitoring/DCM_SP_cam:CLKDV                    | 20    |
-i_clock100                                                                                                         | inst_top_camera_monitoring/DCM_SP_mc_fx_vga_dv:CLKDV           | 22    |
+i_clock100                                                                                                         | inst_top_camera_monitoring/DCM_SP_mc_fx_vga_dv:CLKDV           | 23    |
 -------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------+-------+
 (*) These 2 clock signal(s) are generated by combinatorial logic,
 and XST is not able to identify which are the primary clock signals.
@@ -1513,7 +1513,7 @@ Delay:               4.150ns (Levels of Logic = 1)
 =========================================================================
 Timing constraint: Default period analysis for Clock 'i_clock100'
   Clock period: 1.681ns (frequency: 595.061MHz)
-  Total number of paths / destination ports: 525 / 52
+  Total number of paths / destination ports: 534 / 54
 -------------------------------------------------------------------------
 Delay:               6.722ns (Levels of Logic = 3)
   Source:            inst_top_camera_monitoring/inst_vgatiming/hcnt_5 (FF)
@@ -1604,12 +1604,12 @@ Offset:              7.434ns (Levels of Logic = 3)
 
 
 Total REAL time to Xst completion: 13.00 secs
-Total CPU time to Xst completion: 13.03 secs
+Total CPU time to Xst completion: 13.00 secs
  
 --> 
 
 
-Total memory usage is 1307456 kilobytes
+Total memory usage is 1307608 kilobytes
 
 Number of errors   :    0 (   0 filtered)
 Number of warnings :  231 (   0 filtered)

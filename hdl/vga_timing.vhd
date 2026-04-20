@@ -399,6 +399,9 @@ signal hcnt,vcnt : INTEGER range 0 to 1023 := 0;
 
 signal activeArea1_sig : std_logic;
 
+signal blank_i : std_logic;
+signal Hsync_i : std_logic;
+
 begin
 
 clk_vga <= clk25;
@@ -430,12 +433,12 @@ end process count_proc;
 hsync_gen : process(clk_vga) begin
 	if rising_edge(clk_vga) then
     if (rst = '1') then
-      Hsync <= '1';
+      Hsync_i <= '1';
     else
       if (hcnt >= (HD+HF) and hcnt <= (HD+HF+HR-1)) then
-        Hsync <= '0';
+        Hsync_i <= '0';
       else
-        Hsync <= '1';
+        Hsync_i <= '1';
       end if;
     end if;
 	end if;
@@ -457,7 +460,7 @@ end process vsync_gen;
 
 activeArea1_sig <= '1' when (hcnt < HD) and (vcnt < VD) else '0';
 activeArea1 <= activeArea1_sig;
-blank <= '1' when ((hcnt >= HD) or (vcnt >= VD)) else '1' when rst = '1' else '0';
+blank_i <= '1' when ((hcnt >= HD) or (vcnt >= VD)) else '1' when rst = '1' else '0';
 --blank <= not activeArea1_sig;
 --int <= '1' when vcnt < VD and ((hcnt = 399) or (hcnt = 0)) else '0';
 --int <= '1' when vcnt < VD and ((hcnt = 753) or (hcnt = 352)) else '0';
@@ -471,5 +474,22 @@ int <= '1' when (vcnt < VD-1 or vcnt = 524 or vcnt = 523) and ((hcnt = 657)) els
 --int <= '1' when (vcnt < VD-1 or vcnt = 524) and ((hcnt = 657)) else '0';
 --int <= '1' when vcnt <= VD and ((hcnt = 0)) else '0';
 fint <= '1' when (vcnt = 523 and hcnt = 0) else '0';
+
+process (clk_vga) is
+begin
+  if (rising_edge (clk_vga)) then
+    if (rst = '1') then
+      Hsync <= '0';
+    else
+      if (blank_i = '0') then
+        Hsync <= Hsync_i;
+      else
+        Hsync <= '0';
+      end if;
+    end if;
+  end if;
+end process;
+
+blank <= blank_i;
 
 end architecture counter;
