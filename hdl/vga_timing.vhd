@@ -475,20 +475,21 @@ int <= '1' when (vcnt < VD-1 or vcnt = 524 or vcnt = 523) and ((hcnt = 657)) els
 --int <= '1' when vcnt <= VD and ((hcnt = 0)) else '0';
 fint <= '1' when (vcnt = 523 and hcnt = 0) else '0';
 
-process (clk_vga) is
-begin
-  if (rising_edge (clk_vga)) then
-    if (rst = '1') then
-      Hsync <= '0';
-    else
-      if (blank_i = '0') then
-        Hsync <= Hsync_i;
-      else
-        Hsync <= '0';
-      end if;
-    end if;
-  end if;
-end process;
+--process (clk_vga) is
+--begin
+--  if (rising_edge (clk_vga)) then
+--    if (rst = '1') then
+--      Hsync <= '0';
+--    else
+--      if (blank_i = '0') then
+--        Hsync <= Hsync_i;
+--      else
+--        Hsync <= '0';
+--      end if;
+--    end if;
+--  end if;
+--end process;
+Hsync <= Hsync_i;
 
 blank <= blank_i;
 
