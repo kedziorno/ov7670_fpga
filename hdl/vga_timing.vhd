@@ -463,7 +463,8 @@ blank <= '1' when ((hcnt >= HD) or (vcnt >= VD)) else '1' when rst = '1' else '0
 --int <= '1' when vcnt < VD and ((hcnt = 753) or (hcnt = 352)) else '0';
 
 --int <= '1' when (vcnt < VD-1 or vcnt = 524 or vcnt = 523) and ((hcnt = 257 or hcnt = 657)) else '0';
-int <= '1' when (vcnt < VD-1 or vcnt = 524 or vcnt = 523) and ((hcnt = 257 or hcnt = 753)) else '0';
+--int <= '1' when (vcnt < VD-1 or vcnt = 524 or vcnt = 523) and ((hcnt = 257 or hcnt = 753)) else '0';
+int <= '1' when (vcnt < VD-1 or vcnt = 524 or vcnt = 523) and ((hcnt = 0 or hcnt = 320)) else '0';
 
 --int <= '1' when (vcnt < VD-1 or vcnt = 524 or vcnt = 523) and ((hcnt = 657)) else '0';
 --int <= '1' when (vcnt < VD-1 or vcnt = 524 or vcnt = 523) and ((hcnt = 753)) else '0';
