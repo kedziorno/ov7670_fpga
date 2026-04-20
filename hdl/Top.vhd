@@ -674,7 +674,7 @@ signal w8_br : integer range 0 to c_w8_br - 1 := 0;
 
 constant c_cntr_frame : integer := 307200;
 constant c_step_w : unsigned (15 downto 0) := to_unsigned (320, 16);
-constant c_step_r : unsigned (15 downto 0) := to_unsigned (160, 16);
+constant c_step_r : unsigned (15 downto 0) := to_unsigned (320, 16);
 signal cntr_wr1 : unsigned (19 downto 0) := (others => '0');
 signal cntr_wr1_slv : std_logic_vector (19 downto 0) := (others => '0');
 signal cntr_rd1 : unsigned (19 downto 0) := (others => '0');
@@ -868,8 +868,8 @@ else
     vga_vsync_sig_prev <= vga_vsync_sig;
     case (p1_state) is
       when a0 =>
-        if (vint = '1') then -- XXX here
---        if (vga_vsync_sig_prev = '0' and vga_vsync_sig = '1') then -- XXX here
+--        if (vint = '1') then -- XXX here
+        if (vga_vsync_sig_prev = '0' and vga_vsync_sig = '1') then -- XXX here
           ov7670_vs_next <= ov7670_vs_next (0) & '1';
           p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0');
         end if;
