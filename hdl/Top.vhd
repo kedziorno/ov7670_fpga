@@ -740,9 +740,9 @@ camera_i_rst => ov7670_resetv,
 camera_i_pwdn => '0'
 );
 
-process (clk_mc) is
+process (clk1) is
 begin
-  if (rising_edge (clk_mc)) then
+  if (rising_edge (clk1)) then
     if (resend = '1') then
       owait1 <= '0';
     else
@@ -763,9 +763,9 @@ data <= data_w when p0_w = '1' else data_r when p0_r = '1' else (others => '0');
 wrc <= wrc_w when p0_w = '1' else wrc_r when p0_r = '1' else '0';
 
 -- synchro int wr cam
-process (clk_mc) is
+process (clk1) is
 begin
-if (rising_edge (clk_mc)) then
+if (rising_edge (clk1)) then
 if (resend = '1') then
   cints <= '0';
 else
@@ -775,9 +775,9 @@ end if;
 end process;
 
 -- 3 frames write ok
-p0_control_crbc_write : process (clk_mc) is
+p0_control_crbc_write : process (clk1) is
 begin
-  if (rising_edge (clk_mc)) then
+  if (rising_edge (clk1)) then
 if (resend = '1') then
   wrc_w <= '0';
   ov7670_hs_prev <= '0';
@@ -803,7 +803,7 @@ else
           p0_state <= a1;
         end if;
       when a1 =>
---        if (ov7670_vs_next /= "11") then
+        if (ov7670_vs_next /= "11") then
         p0_w <= '0';
         if (cntr_wr1 >= 153280+160+160+160 or ov7670_vs = '1') then
           cntr_wr1 <= (others => '0');
@@ -811,7 +811,7 @@ else
         if (cints = '1') then -- wr when hs fe
             p0_state <= a1a;
         end if;
---        end if;
+        end if;
       when a1a =>
         if (busy = '0') then
           p0_state <= aw;
@@ -840,11 +840,11 @@ end if;
   end if;
 end process p0_control_crbc_write;
 
-p1_control_crbc_read : process (clk_mc) is
+p1_control_crbc_read : process (clk1) is
   variable flag : boolean := false;
   variable w8 : integer range 0 to 1023 := 0;
 begin
-  if (rising_edge (clk_mc)) then
+  if (rising_edge (clk1)) then
 if (resend = '1') then
   wrc_r <= '0';
   vga_hsync_i_prev <= '0';
@@ -936,7 +936,7 @@ end process p1_control_crbc_read;
 crbc_i0 : cellular_ram_burst_controller
 PORT MAP (
 busy => busy,
-clk => clk_mc,
+clk => clk1,
 reset => resend,
 writes => wrc,
 data => data,
@@ -996,7 +996,7 @@ input => pb,
 output => resend);
 
 inst_ov7670contr1: ov7670_controller port map(
-clk => clk0,
+clk => clk1,
 reset1 => resend,
 resend => resend,
 sioc => ov7670_siocv,
@@ -1025,7 +1025,7 @@ ov7670_hs <= ov7670_hrefv;
 ov7670_vs <= ov7670_vsyncv;
 
 inst_ov7670capt1: ov7670_capture port map(
-pclk => ov7670_pclkv,
+pclk => ov7670_pclk,
 reset => resend,
 vsync => ov7670_vs,
 href => ov7670_hs,
