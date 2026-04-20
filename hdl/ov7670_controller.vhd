@@ -78,8 +78,17 @@ SCCB : ov7670_SCCB port map(
 
 pwdn <= '0';
 reset <= not resend;
---reset <= '1';
+
 xclk_out <= xclk_in;
+--ERROR:Place:PlXil_Uapflow1.c:3213:1.176 clk clk_mc
+--process (clk,reset1) is
+--begin
+--if (reset1 = '1') then
+--xclk_out <= '0';
+--elsif (rising_edge (clk)) then
+--xclk_out <= xclk_in;
+--end if;
+--end process;
 
 end Behavioral;
 
