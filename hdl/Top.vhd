@@ -17,6 +17,7 @@ use UNISIM.VCOMPONENTS.ALL;
 
 use work.micron_mem_parameters.all;
 use work.p_constants.all;
+use work.p_camera_colorbar.all;
 
 entity top_camera_monitoring is
 generic (
@@ -706,6 +707,9 @@ signal cints : std_logic;
 signal owait1 : std_logic;
 
 component camera_colorbar is
+generic (
+constant c_source : t_source := t_colorbar
+);
 port (
 camera_io_scl : inout std_logic;
 camera_io_sda : inout std_logic;

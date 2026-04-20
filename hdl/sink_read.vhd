@@ -52,7 +52,7 @@ begin
 
 p0_rb : process (clk_wr) is
 begin
-  if (falling_edge (clk_wr)) then
+  if (rising_edge (clk_wr)) then
     if (sink_we = '1') then
       read_buffer (to_integer (sink_addr)) <= dq;
     end if;
@@ -61,7 +61,7 @@ end process p0_rb;
 
 p1_rb : process (clk_rd) is
 begin
-  if (falling_edge (clk_rd)) then
+  if (rising_edge (clk_rd)) then
     if (reset = '1') then
     read_buffer_data <= (others => '0');
     else

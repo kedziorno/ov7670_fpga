@@ -34,6 +34,7 @@ USE ieee.std_logic_1164.ALL;
 
 --use work.micron_mem_parameters.all;
 --use work.p_constants.all;
+use work.p_camera_colorbar.all;
 
 ENTITY tb_top IS
 END tb_top;
@@ -80,6 +81,9 @@ ARCHITECTURE behavior OF tb_top IS
 --end component camera_vga;
 
 component camera_colorbar is
+generic (
+constant c_source : t_source := t_frames
+);
 port (
 camera_io_scl : inout std_logic;
 camera_io_sda : inout std_logic;
@@ -119,7 +123,7 @@ signal sd_miso_3  : std_logic;
 signal sd_miso_4  : std_logic;
 
 signal sdcard_clock   : std_logic := '0';
-signal mem_done : std_logic;
+signal mem_done : std_logic := '0';
 
 component mt45w8mw16bgx is
 port (
@@ -201,6 +205,9 @@ signal video_vsync_3                 : std_logic := '0';
 signal video_vsync_4                 : std_logic := '0';
 
 component top is
+generic (
+constant c_pb_bits : integer := 1 -- XXX set debounce time
+);
 Port (
 i_clock	: in STD_LOGIC; -- Crystal Oscilator 50MHz  --B8
 i_clock100	: in STD_LOGIC; -- Crystal Oscilator 50MHz  --B8
@@ -322,7 +329,7 @@ signal camera_o_pclk1,camera_o_pclk2,camera_o_pclk3,camera_o_pclk4 : std_logic;
 signal camera_o_d1,camera_o_d2,camera_o_d3,camera_o_d4 : std_logic_vector(7 downto 0);
 
 signal xclk : std_logic;
-signal sw : std_logic;
+signal sw : std_logic_vector (7 downto 0);
 
 signal anode : std_logic_vector (3 downto 0);
 
@@ -513,7 +520,7 @@ top_uut : top PORT MAP (
 i_clock => clk50,
 i_clock100 => clk100,
 --clkcam => clkcam,
-sw => (others => '0'),
+sw => sw,
 pb => pb,
 --sw => sw,
 led1 => led1,
@@ -588,7 +595,7 @@ begin
 --mem_done <= '0';
 --wait for 90 ns;
 --for i in 1 to c_hex_rom_files_count - 1 loop
---wait for 100 ns;
+wait for 100 ns;
 --start_addr := c_camera_frame_length * (i - 1);
 --if (i < 10) then
 --file_name := c_hex_rom_files_name & "0" & integer'image(i) & "." & c_hex_rom_files_ext;
@@ -609,15 +616,17 @@ end process load_memory_from_files;
 -- Stimulus process
 stim_proc : process
 begin
-wait until mem_done = '0';
+sw <= (others => '0');
+wait until mem_done = '1';
 -- hold reset state for 100 ns.
 --i_reset <= '1';
 camera_i_rst1 <= '0';
 camera_i_rst2 <= '0';
 camera_i_rst3 <= '0';
 camera_i_rst4 <= '0';
+sw <= "00000000"; -- x01 colorbar, x00 frames
 pb <= '1';
-wait for 100 ns;
+wait for 300 ns; -- min to reset
 --i_reset <= '0';
 camera_i_rst1 <= '1';
 camera_i_rst2 <= '1';
