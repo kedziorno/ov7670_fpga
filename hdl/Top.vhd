@@ -675,7 +675,7 @@ signal w8_br : integer range 0 to c_w8_br - 1 := 0;
 
 constant c_cntr_frame : integer := 307200;
 constant c_step_w : unsigned (15 downto 0) := to_unsigned (320, 16);
-constant c_step_r : unsigned (15 downto 0) := to_unsigned (320, 16);
+constant c_step_r : unsigned (15 downto 0) := to_unsigned (640, 16);
 signal cntr_wr1 : unsigned (19 downto 0) := (others => '0');
 signal cntr_wr1_slv : std_logic_vector (19 downto 0) := (others => '0');
 signal cntr_rd1 : unsigned (19 downto 0) := (others => '0');
@@ -895,16 +895,13 @@ else
         if (vga_hsync_i_prev = '1' and vga_hsync_i = '0') then
         end if;
           if (vga_int = '1') then
-            if (busy = '0') then
-          p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0');
-            p1_state <= ar;
-            else
+--            if (busy = '0') then
             p1_state <= ar1;
-            w8 := w8 + 1;
-            end if;
+--            end if;
           end if;
       when ar1 =>
         if (busy = '0') then
+          p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0');
           p1_state <= ar;
         end if;
       when ar =>
