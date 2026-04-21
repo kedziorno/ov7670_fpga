@@ -664,7 +664,7 @@ type p_states0 is (
 a0, a1, a1a, aw, bw, cw, dw, ew
 );
 type p_states1 is (
-a0, ar1, a0a, ar, br, cr, dr, er, er1
+a0, ar1, ar2, a0a, ar, br, cr, dr, er, er1
 );
 signal p0_state : p_states0 := a0;
 signal p1_state : p_states1 := a0;
@@ -675,7 +675,7 @@ signal w8_br : integer range 0 to c_w8_br - 1 := 0;
 
 constant c_cntr_frame : integer := 307200;
 constant c_step_w : unsigned (15 downto 0) := to_unsigned (320, 16);
-constant c_step_r : unsigned (15 downto 0) := to_unsigned (640, 16);
+constant c_step_r : unsigned (15 downto 0) := to_unsigned (160, 16);
 signal cntr_wr1 : unsigned (19 downto 0) := (others => '0');
 signal cntr_wr1_slv : std_logic_vector (19 downto 0) := (others => '0');
 signal cntr_rd1 : unsigned (19 downto 0) := (others => '0');
@@ -877,6 +877,9 @@ else
     case (p1_state) is
       when a0 =>
 --        if (vint = '1') then -- XXX here
+        if (vga_hsync_i = '0') then
+        p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0');
+        end if;
         if (vga_vsync_sig_prev = '0' and vga_vsync_sig = '1') then -- XXX here
           ov7670_vs_next <= ov7670_vs_next (0) & '1';
           p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0');
@@ -887,23 +890,21 @@ else
           end if;
         end if;
       when a0a =>
-        if (ov7670_vs = '1') then
-        end if;
         if (cntr_rd1 >= 153280+160+160+160+160) then
           cntr_rd1 <= (others => '0');
         end if;
-        if (vga_hsync_i_prev = '1' and vga_hsync_i = '0') then
+        if (vga_int = '1') then
+          p1_state <= ar1;
         end if;
-          if (vga_int = '1') then
---            if (busy = '0') then
-            p1_state <= ar1;
---            end if;
-          end if;
       when ar1 =>
         if (busy = '0') then
-          p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0');
-          p1_state <= ar;
+          p1_state <= ar2;
         end if;
+      when ar2 =>
+--        if (vga_hsync_i = '0') then
+--          p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0');
+          p1_state <= ar;
+--        end if;
       when ar =>
         if (busy = '0') then
           p0_r <= '1'; p1_state <= br; wrc_r <= '1'; id_r <= x"0057"; data_r <= std_logic_vector (cntr_rd1 (15 downto 0));
