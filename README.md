@@ -1,3 +1,9 @@
+Update:
+Used memory controller for store data in mt45w8mw16bgx cellular RAM in burst mode (camera -> write buffer -> memory module -> read buffer -> VGA).
+Output in two modes, colorbar and example frame.
+![vga_memory_module_1.bmp](vga_memory_module_1.bmp)
+![colorbar_output.bmp](colorbar_output.bmp)
+
 Update new branch:
 Run virtual camera emulator IP Core with memory model simulation (mt45w8mw16bgx) at 100MHz board clock (77b9cdecf574f77139afe932f1ad567cf34251fa).
 

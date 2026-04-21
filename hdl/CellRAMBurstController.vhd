@@ -17,8 +17,9 @@ port (
   write_buffer_data : in std_logic_vector (15 downto 0);
   write_buffer_clk : in std_logic;
   write_buffer_we : in std_logic;
+  clk25 : in std_logic;
   read_buffer_addr : in std_logic_vector (9 downto 0);
-  read_buffer_data : out std_logic_vector (15 downto 0);
+  read_buffer_data : out std_logic_vector (7 downto 0);
   read_buffer_clk : in std_logic;
   lb : out std_logic := '0';
   ub : out std_logic := '0';
@@ -117,16 +118,15 @@ signal write_buffer_we1 : std_logic_vector (0 downto 0);
 
 signal busy_i : std_logic;
 
-component sink_read is
+component asym_ram_sdp_read_wider8
 port (
-sink_we : in std_logic;
-sink_addr : in unsigned (9 downto 0);
-dq : in std_logic_vector (15 downto 0);
-read_buffer_addr : in std_logic_vector (9 downto 0);
-read_buffer_data : out std_logic_vector (15 downto 0);
-clk_wr, clk_rd, reset : in std_logic
+clkA, clkB, enaA, weA, enaB, reset : in std_logic;
+addrA : in std_logic_vector (9 downto 0);
+addrB: in std_logic_vector (9 downto 0);
+diA : in std_logic_vector (15 downto 0);
+doB : out std_logic_vector (7 downto 0)
 );
-end component sink_read;
+end component asym_ram_sdp_read_wider8;
 
 signal clk0, clk0_fb : std_logic;
 signal clk2x, clk2d : std_logic;
@@ -136,6 +136,8 @@ signal vga_int_i : std_logic;
 signal we_i : std_logic;
 
 signal owait1, ramclken : std_logic := '0';
+
+signal sink_read_addrb : std_logic_vector (10 downto 0);
 
 begin
 
@@ -223,17 +225,33 @@ state = read_byte1 or state = read_byte2 or state = read_byte3) else '0';
 
 busy_i <= '0' when (state = idle) else '1';
 
-sink_read_i0 : sink_read
-port map (
-  sink_we => sink_we,
-  sink_addr => sink_addr,
-  dq => dq,
-  read_buffer_addr => read_buffer_addr,
-  read_buffer_data => read_buffer_data,
-  clk_wr => clk,
-  reset => reset,
-  clk_rd => read_buffer_clk
-);
+--sink_read_i0 : asym_ram_sdp_read_wider8
+--port map (
+--reset => reset,
+--
+--clkA => clk25,
+--enaA => sink_we,
+--weA => sink_we,
+--addrA => std_logic_vector (sink_addr),
+--diA => dq,
+--
+--clkB => read_buffer_clk,
+--enaB => '1',
+--addrB => read_buffer_addr,
+--doB => read_buffer_data
+--);
+
+sink_read_addrb <= '0' & read_buffer_addr;
+sink_read_i0 : entity work.sink_read_1
+  PORT MAP (
+    clka => clk,
+    wea(0) => sink_we,
+    addra => std_logic_vector (sink_addr),
+    dina => dq,
+    clkb => read_buffer_clk,
+    addrb => sink_read_addrb,
+    doutb => read_buffer_data
+  );
 
 p2_next_state : process (clk) is
 begin
@@ -334,19 +352,56 @@ begin
   end if;
 end process p8_bral;
 
+process (clk) is
+begin
+  if (rising_edge (clk)) then
+    if (reset = '1') then
+    sink_addr <= (others => '0');
+      sink_we <= '0';
+--      sink_read_addrb <= (others => '0');
+    else
+    if (state = idle and id = set_rb_addr and writes = '1' and busy_i = '0') then
+      sink_addr <= unsigned (data (9 downto 0));
+      --report "set rb addr";
+    end if;
+
+    if (state = read_byte1) then
+      sink_we <= '0';
+    end if;
+    if (state = read_byte2) then
+      if (o_wait = '0') then
+        sink_we <= '1';
+      end if;
+    end if;
+    if (state = read_byte3) then
+      if (o_wait = '0') then
+        sink_addr <= sink_addr + 1;
+        sink_we <= '1';
+      end if;
+    end if;
+    if (state = read_byte4) then
+       sink_we <= '0';
+       sink_addr <= sink_addr + 1;
+    end if;
+    if (state = read_rbc0) then
+      sink_addr <= sink_addr + 1;
+    end if;
+end if;
+end if;
+
+end process;
+
 we <= we_i;
 p9_run : process (clk) is
 begin
   if (rising_edge (clk)) then
     if (reset = '1') then
     source_addr <= (others => '0');
-    sink_addr <= (others => '0');
     this_read_addr <= (others => '0');
     this_write_addr <= (others => '0');
     write_counter  <= (others => '0');
           clk_enable <= '0';
       cre <= '0';
-      sink_we <= '0';
       adv <= '1';
       ce <= '1';
       oe <= '1';
@@ -357,10 +412,6 @@ begin
     if (state = idle and id = set_wb_addr and writes = '1' and busy_i = '0') then
       source_addr <= unsigned (data (9 downto 0));
       --report "set wb addr";
-    end if;
-    if (state = idle and id = set_rb_addr and writes = '1' and busy_i = '0') then
-      sink_addr <= unsigned (data (9 downto 0));
-      --report "set rb addr";
     end if;
 --    if (state = idle or state = write_byte0 or state = write_byte1 or state = write_byte2 or state = write_byte3) then
 --    if (we_i = '0') then
@@ -501,13 +552,13 @@ begin
     end if;
     if (state = read_byte1) then
       read_counter <= read_counter - 1;
-      sink_we <= '0';
+--      sink_we <= '0';
       adv <= '1';  
     end if;
     if (state = read_byte2) then
-      if (o_wait = '0') then
-        sink_we <= '1';
-      end if;
+--      if (o_wait = '0') then
+--        sink_we <= '1';
+--      end if;
       if (read_counter = 0 and o_wait = '0') then
         ce <= '1';
         oe <= '1';
@@ -516,8 +567,8 @@ begin
     if (state = read_byte3) then
       if (o_wait = '0') then
         read_counter <= read_counter - 1;
-        sink_addr <= sink_addr + 1;
-        sink_we <= '1';
+--        sink_addr <= sink_addr + 1;
+--        sink_we <= '1';
       end if;
       if (read_counter <= 1) then
         ce <= '1';
@@ -525,14 +576,14 @@ begin
     end if;
     if (state = read_byte4) then
        clk_enable <= '0';
-       sink_we <= '0';
+--       sink_we <= '0';
        ce <= '1';
        oe <= '1';
-       sink_addr <= sink_addr + 1;
+--       sink_addr <= sink_addr + 1;
     end if;
     if (state = read_rbc0) then
       this_read_addr <= burst_read_addr + (bytes_to_read - read_counter);
-      sink_addr <= sink_addr + 1;
+--      sink_addr <= sink_addr + 1;
       ce <= '1';
     end if;
     if (state = read_rbc1) then

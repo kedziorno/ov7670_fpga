@@ -575,7 +575,7 @@ for all : VGA_timing_synch use entity work.VGA_timing_synch(counter);
 signal wren1 : STD_LOGIC_VECTOR(0 downto 0);
 signal wr_d1 : STD_LOGIC_VECTOR(15 downto 0);
 signal wr_a1 : STD_LOGIC_VECTOR(10 downto 0);
-signal rd_d1 : STD_LOGIC_VECTOR(15 downto 0);
+signal rd_d1 : STD_LOGIC_VECTOR(7 downto 0);
 signal rd_a1 : STD_LOGIC_VECTOR(9 downto 0);
 
 --VGA
@@ -607,6 +607,7 @@ signal ov7670_hs, ov7670_vs : std_logic;
 
 signal rgb444 : std_logic_vector (15 downto 0);
 signal rgb565 : std_logic_vector (15 downto 0);
+signal datain : std_logic_vector (15 downto 0);
 
 signal vga_rgb : std_logic_vector (7 downto 0);
 
@@ -639,8 +640,9 @@ write_buffer_data : IN  std_logic_vector(15 downto 0);
 write_buffer_clk : IN  std_logic;
 write_buffer_we : IN  std_logic;
 
+clk25 : in std_logic;
 read_buffer_addr : IN  std_logic_vector(9 downto 0);
-read_buffer_data : OUT  std_logic_vector(15 downto 0);
+read_buffer_data : OUT  std_logic_vector(7 downto 0);
 read_buffer_clk : IN  std_logic;
 
 lb : OUT  std_logic;
@@ -675,7 +677,7 @@ signal w8_br : integer range 0 to c_w8_br - 1 := 0;
 
 constant c_cntr_frame : integer := 307200;
 constant c_step_w : unsigned (15 downto 0) := to_unsigned (320, 16);
-constant c_step_r : unsigned (15 downto 0) := to_unsigned (160, 16);
+constant c_step_r : unsigned (15 downto 0) := to_unsigned (320, 16);
 signal cntr_wr1 : unsigned (19 downto 0) := (others => '0');
 signal cntr_wr1_slv : std_logic_vector (19 downto 0) := (others => '0');
 signal cntr_rd1 : unsigned (19 downto 0) := (others => '0');
@@ -736,6 +738,9 @@ signal vint : std_logic;
 
 signal cam_pclk, cam_hs, cam_vs, cam_pwdn, cam_reset : std_logic;
 signal cam_d : std_logic_vector (7 downto 0);
+
+attribute keep : string;
+attribute keep of clk_vga : signal is "true";
 
 begin
 
@@ -877,9 +882,9 @@ else
     case (p1_state) is
       when a0 =>
 --        if (vint = '1') then -- XXX here
-        if (vga_hsync_i = '0') then
+--        if (vga_hsync_i = '0') then
         p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0');
-        end if;
+--        end if;
         if (vga_vsync_sig_prev = '0' and vga_vsync_sig = '1') then -- XXX here
           ov7670_vs_next <= ov7670_vs_next (0) & '1';
           p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0');
@@ -965,9 +970,10 @@ write_buffer_we => ov7670_hs,
 --write_buffer_we => latched_hs,
 --write_buffer_we => wren1 (0),
 
+clk25 => clk_vga,
 read_buffer_addr => rd_a1,
 --read_buffer_addr => address1,
-read_buffer_data => rd_d1,
+read_buffer_data => rd_d1 (7 downto 0),
 read_buffer_clk => clk_vga,
 --read_buffer_clk => clk2x_2,
 
@@ -1078,8 +1084,9 @@ vsync => vga_vsync_sig,
 address => rd_a1,
 address1 => address1);
 
+datain <= "00000000"&rd_d1 ;
 inst_imagegen : vga_imagegenerator port map(
-Data_in1 => rd_d1,
+Data_in1  => datain,
 reset => resend,
 --Data_in1 => x"55aa", -- test output bmp
 active_area1 => active1,

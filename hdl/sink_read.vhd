@@ -35,8 +35,8 @@ sink_we : in std_logic;
 reset : in std_logic;
 sink_addr : in unsigned (9 downto 0);
 dq : in std_logic_vector (15 downto 0);
-read_buffer_addr : in std_logic_vector (9 downto 0);
-read_buffer_data : out std_logic_vector (15 downto 0) := (others => '0');
+read_buffer_addr : in std_logic_vector (10 downto 0);
+read_buffer_data : out std_logic_vector (7 downto 0) := (others => '0');
 clk_wr, clk_rd : in std_logic
 );
 end entity sink_read;
