@@ -1,7 +1,6 @@
 Update:
 Used memory controller for store data in mt45w8mw16bgx cellular RAM in burst mode (camera -> write buffer -> memory module -> read buffer -> VGA).
 Output in two modes, colorbar and example frame.
-![vga_memory_module_1.bmp](vga_memory_module_1.bmp)
 ![colorbar_output.bmp](colorbar_output.bmp)
 
 Update new branch:
