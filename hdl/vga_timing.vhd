@@ -481,12 +481,12 @@ fint <= '1' when (vcnt = 523 and hcnt = 0) else '0';
 --begin
 --  if (rising_edge (clk_vga)) then
 --    if (rst = '1') then
---      Hsync <= '0';
+--      Hsync <= '1';
 --    else
---      if (blank_i = '0') then
---        Hsync <= Hsync_i;
---      else
+--      if (blank_i = '1') then
 --        Hsync <= '0';
+--      else
+--        Hsync <= Hsync_i;
 --      end if;
 --    end if;
 --  end if;

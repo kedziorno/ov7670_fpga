@@ -1,10 +1,12 @@
 NET "inst_top_camera_monitoring/clk_vga" TNM_NET = "CLK25";
 NET "inst_top_camera_monitoring/cam_pclk" TNM_NET = "CLK24";
 NET "inst_top_camera_monitoring/clk1" TNM_NET = "CLK50";
+NET "inst_top_camera_monitoring/clk0" TNM_NET = "CLK100";
 
 TIMESPEC TS_CLK25 = PERIOD "CLK25" 40 ns HIGH 50%;
 TIMESPEC TS_CLK24 = PERIOD "CLK24" 41.667 ns HIGH 50%;
 TIMESPEC TS_CLK50 = PERIOD "CLK50" 20 ns HIGH 50%;
+TIMESPEC TS_CLK100 = PERIOD "CLK100" 10 ns HIGH 50%;
 
 TIMESPEC TS_25_to_24 = FROM "CLK25" TO "CLK24" TIG;
 TIMESPEC TS_24_to_25 = FROM "CLK24" TO "CLK25" TIG;
@@ -18,7 +20,6 @@ NET "i_clock100" LOC="U9";
 NET "i_clock100" TNM_NET = i_clock100;
 TIMESPEC TS_clk100 = PERIOD "i_clock100" 10 ns HIGH 50%;
 NET "pb" LOC="B18";
-#NET "sw" LOC="G18";
 NET "vga_r<0>" LOC="R9" | IOSTANDARD="LVCMOS33";
 NET "vga_r<1>" LOC="T8" | IOSTANDARD="LVCMOS33";
 NET "vga_r<2>" LOC="R8" | IOSTANDARD="LVCMOS33";
@@ -143,5 +144,5 @@ NET "DQ<13>" LOC = "N4"; # Bank = 3, Pin name = IO_L20P_3, Type = I/O, Sch name 
 NET "DQ<14>" LOC = "R3"; # Bank = 3, Pin name = IO_L23P_3, Type = I/O, Sch name = DB14
 NET "DQ<15>" LOC = "T1"; # Bank = 3, Pin name = IO_L24N_3, Type = I/O, Sch name = DB15
 
-NET "inst_top_camera_monitoring/inst_debounce/*" TIG;
-#NET "inst_top_camera_monitoring/ov7670_pclk1" IOB=TRUE;
+#NET "inst_top_camera_monitoring/inst_debounce/*" TIG;
+NET "inst_top_camera_monitoring/ov7670_pclk1" IOB=TRUE;

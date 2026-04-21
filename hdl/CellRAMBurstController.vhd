@@ -14,7 +14,7 @@ port (
   data : in std_logic_vector (15 downto 0);
   id : in std_logic_vector (15 downto 0);
   write_buffer_addr : in std_logic_vector (10 downto 0);
-  write_buffer_data : in std_logic_vector (15 downto 0);
+  write_buffer_data : in std_logic_vector (7 downto 0);
   write_buffer_clk : in std_logic;
   write_buffer_we : in std_logic;
   clk25 : in std_logic;
@@ -109,7 +109,7 @@ port (
 clkA, clkB, enaA, weA, enaB, reset : in std_logic;
 addrA : in std_logic_vector (10 downto 0);
 addrB: in std_logic_vector (9 downto 0);
-diA : in std_logic_vector (15 downto 0);
+diA : in std_logic_vector (7 downto 0);
 doB : out std_logic_vector (15 downto 0)
 );
 end component asym_ram_sdp_read_wider;

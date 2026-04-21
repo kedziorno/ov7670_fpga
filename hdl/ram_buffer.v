@@ -25,7 +25,7 @@
 // https://docs.amd.com/r/en-US/ug901-vivado-synthesis/Dual-Port-Asymmetric-RAM-When-Read-is-Wider-than-Write-Verilog
 
 module asym_ram_sdp_read_wider (clkA, clkB, enaA, weA, enaB, addrA, addrB, diA, doB, reset);
-parameter WIDTHA = 16;
+parameter WIDTHA = 8;
 parameter SIZEA = 2048;
 parameter ADDRWIDTHA = 11;
 

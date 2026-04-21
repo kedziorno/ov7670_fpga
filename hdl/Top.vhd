@@ -601,7 +601,7 @@ signal i_clock_ib2 : std_logic;
 signal clk_cam, clk_vga, clk_mc : std_logic;
 signal resend : std_logic;
 
-signal ov7670_pclk, pclk_i1, pclk_i2 : std_logic;
+signal ov7670_pclk : std_logic;
 signal ov7670_d : std_logic_vector (7 downto 0);
 signal ov7670_hs, ov7670_vs : std_logic;
 
@@ -623,8 +623,8 @@ signal vga_clock_p : std_logic;
 signal ov7670_pclk_p : std_logic;
 signal vga_re, cam_re : std_logic;
 
-constant CLKFX_MULTIPLY_MC : integer := 3;
-constant CLKFX_DIVIDE_MC : integer := 4;
+constant CLKFX_MULTIPLY_MC : integer := 4;
+constant CLKFX_DIVIDE_MC : integer := 2;
 
 COMPONENT cellular_ram_burst_controller
 PORT(
@@ -636,7 +636,7 @@ data : IN  std_logic_vector(15 downto 0);
 id : IN  std_logic_vector(15 downto 0);
 
 write_buffer_addr : IN  std_logic_vector(10 downto 0);
-write_buffer_data : IN  std_logic_vector(15 downto 0);
+write_buffer_data : IN  std_logic_vector(7 downto 0);
 write_buffer_clk : IN  std_logic;
 write_buffer_we : IN  std_logic;
 
@@ -826,7 +826,8 @@ else
       when a1 =>
 --        if (ov7670_vs_next /= "11") then
         p0_w <= '0';
-        if (cntr_wr1 >= 153280+160+160+160 or ov7670_vs = '1') then
+--        if (cntr_wr1 >= 153280+160+160+160 or ov7670_vs = '1') then
+        if (ov7670_vs_prev = '0' and ov7670_vs = '1') then
           cntr_wr1 <= (others => '0');
         end if;
         if (cints = '1') then -- wr when hs fe
@@ -896,7 +897,8 @@ else
           end if;
         end if;
       when a0a =>
-        if (cntr_rd1 >= 153280+160+160+160+160+160) then
+--        if (cntr_rd1 >= 153280+160+160+160+160+160 or vga_vsync_sig = '0') then
+        if (vga_vsync_sig_prev = '1' and vga_vsync_sig = '0') then
           cntr_rd1 <= (others => '0');
         end if;
         if (vga_int = '1') then
@@ -964,7 +966,8 @@ id => id,
 write_buffer_addr => wr_a1,
 --write_buffer_data => wr_d1 (15 downto 8),
 --write_buffer_data => wr_d1 (7 downto 0),
-write_buffer_data => wr_d1,
+--write_buffer_data => wr_d1,
+write_buffer_data => wr_d1 (7 downto 0),
 write_buffer_clk => ov7670_pclk,
 --write_buffer_clk => wren1(0),
 write_buffer_we => ov7670_hs,
@@ -1035,31 +1038,26 @@ reset => cam_reset,
 xclk_in => '0',
 xclk_out => open);
 
-----process (i_clock_ib) is
---process (clk_mc, resend) is begin
---if (resend = '1') then
-----ov7670_pclk <= '0';
-----ov7670_hs <= '0';
-----ov7670_vs <= '0';
-----ov7670_d <= (others => '0');
---elsif (falling_edge (clk_mc)) then
-----elsif (falling_edge (i_clock_ib)) then
---end if;
---end process;
---ov7670_pclk <= ov7670_pclkv;
---ov7670_d <= ov7670_datav;
---ov7670_hs <= ov7670_hrefv;
---ov7670_vs <= ov7670_vsyncv;
-ov7670_pclk <= ov7670_pclk1;
+--process (i_clock_ib) is
+process (clk_mc, resend) is begin
+if (resend = '1') then
+--ov7670_pclk <= '0';
+--ov7670_hs <= '0';
+--ov7670_vs <= '0';
+--ov7670_d <= (others => '0');
+elsif (falling_edge (clk_mc)) then
+--elsif (falling_edge (i_clock_ib)) then
+end if;
+end process;
 ov7670_d <= ov7670_data1;
+ov7670_pclk <= ov7670_pclk1;
 ov7670_hs <= ov7670_href1;
 ov7670_vs <= ov7670_vsync1;
 
-cam_pclk <= ov7670_pclkv when sw(0) = '1' else ov7670_pclk1;
-cam_d <= ov7670_datav when sw(0) = '1' else ov7670_data1;
-cam_hs <= ov7670_hrefv when sw(0) = '1' else ov7670_href1;
-cam_vs <= ov7670_vsyncv when sw(0) = '1' else ov7670_vsync1;
-
+cam_pclk <= ov7670_pclkv when sw(0) = '1' else ov7670_pclk;
+cam_d <= ov7670_datav when sw(0) = '1' else ov7670_d;
+cam_hs <= ov7670_hrefv when sw(0) = '1' else ov7670_hs;
+cam_vs <= ov7670_vsyncv when sw(0) = '1' else ov7670_vs;
 
 inst_ov7670capt1: ov7670_capture port map(
 pclk => cam_pclk,
