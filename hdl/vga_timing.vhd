@@ -460,7 +460,7 @@ end process vsync_gen;
 
 activeArea1_sig <= '1' when (hcnt < HD) and (vcnt < VD) else '0';
 activeArea1 <= activeArea1_sig;
-blank_i <= '1' when ((hcnt >= HD) or (vcnt >= VD)) else '1' when rst = '1' else '0';
+blank_i <= '1' when rst = '1' else '1' when ((hcnt >= HD) or (vcnt >= VD)) else '0';
 --blank <= not activeArea1_sig;
 --int <= '1' when vcnt < VD and ((hcnt = 399) or (hcnt = 0)) else '0';
 --int <= '1' when vcnt < VD and ((hcnt = 753) or (hcnt = 352)) else '0';

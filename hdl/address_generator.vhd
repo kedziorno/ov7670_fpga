@@ -8,7 +8,7 @@ entity address_generator is
     clk25,reset : in STD_LOGIC;
     enable : in STD_LOGIC;
     vsync : in STD_LOGIC;
-    address : out STD_LOGIC_VECTOR (18 downto 0);
+    address : out STD_LOGIC_VECTOR (9 downto 0);
     address1 : out STD_LOGIC_VECTOR (10 downto 0)
   );  
 end address_generator;
@@ -18,7 +18,7 @@ architecture Behavioral of address_generator is
 
   signal addr: STD_LOGIC_VECTOR(address'range) := (others => '0');
   signal addr1: STD_LOGIC_VECTOR(address1'range) := (others => '0');
-  
+  signal enable_prev : std_logic;
 begin
 
   address <= addr; 
@@ -30,8 +30,10 @@ process (clk25) begin
     addr <= (others => '0');
     addr1 <= (others => '0');
   else
+    enable_prev <= enable;
 		if (enable='1') then
-			if (addr < 307200-1) then
+--			if (addr < 307200-1) then
+			if (addr < 2**(address'left+1)-1) then
 				addr <= addr + 1 ;
 			else
 			addr <= (others => '0');
@@ -45,7 +47,10 @@ process (clk25) begin
 		addr <= addr;
 		addr1 <= addr1;
 		end if;
-		
+		        if (enable = '1' and enable_prev = '0') then
+          addr  <= (others => '0');
+          addr1 <= (others => '0');
+        end if;
 		if vsync = '0' then 
 			addr <= (others => '0');
 			addr1 <= (others => '0');

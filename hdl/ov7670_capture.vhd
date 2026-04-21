@@ -15,7 +15,7 @@ entity ov7670_capture is
            vsync : in  STD_LOGIC;
            href : in  STD_LOGIC;
            d : in  STD_LOGIC_VECTOR (7 downto 0);
-           addr : out  STD_LOGIC_VECTOR (18 downto 0);
+           addr : out  STD_LOGIC_VECTOR (10 downto 0);
            dout : out  STD_LOGIC_VECTOR (15 downto 0);
            we : out  STD_LOGIC_VECTOR (0 downto 0);
            latched_vs, latched_hs : out std_logic;
@@ -24,7 +24,7 @@ end ov7670_capture;
 
 architecture Behavioral of ov7670_capture is
    signal d_latch      : std_logic_vector(15 downto 0) := (others => '0');
-   signal address      : STD_LOGIC_VECTOR(18 downto 0) := (others => '0');
+   signal address      : STD_LOGIC_VECTOR(10 downto 0) := (others => '0');
    signal row         : std_logic_vector(1 downto 0)  := (others => '0');
    signal href_last    : std_logic_vector(0 downto 0)  := (others => '0');
    signal we_reg       : std_logic := '1';
@@ -171,7 +171,8 @@ capture_process: process(pclk)
       else
          if href_hold = '1' then
 --         if href = '1' then
-					if (to_integer(unsigned(address)) = 307200-1) then
+--					if (to_integer(unsigned(address)) = 307200-1) then
+					if (to_integer(unsigned(address)) = 2**(address'left+1)-1) then
 						address <= (others => '0');
 					else
             address <= std_logic_vector(unsigned(address)+1);
