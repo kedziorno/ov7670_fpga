@@ -741,6 +741,7 @@ signal cam_d : std_logic_vector (7 downto 0);
 
 attribute keep : string;
 attribute keep of clk_vga : signal is "true";
+attribute keep of ov7670_pclk1 : signal is "true";
 
 begin
 
