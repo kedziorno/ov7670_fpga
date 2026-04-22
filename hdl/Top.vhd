@@ -826,7 +826,8 @@ else
       when a1 =>
 --        if (ov7670_vs_next /= "11") then
         p0_w <= '0';
-        if (cntr_wr1 >= 153280+160+160+160 or ov7670_vs = '1') then
+--        if (cntr_wr1 >= 153280+160+160+160 or ov7670_vs = '1') then
+        if (ov7670_vs_prev = '0' and ov7670_vs = '1') then
           cntr_wr1 <= (others => '0');
         end if;
         if (cints = '1') then -- wr when hs fe
@@ -897,7 +898,8 @@ else
         end if;
       when a0a =>
 --        if (cntr_rd1 >= 153280+160+160+160+160+160) then
-        if (cntr_rd1 >= 153280+160+160) then
+--        if (cntr_rd1 >= 153280+160+160) then
+        if (vga_vsync_sig_prev = '1' and vga_vsync_sig = '0') then
           cntr_rd1 <= (others => '0');
         end if;
         if (vga_int = '1') then
