@@ -1019,7 +1019,6 @@ PB_BITS => c_pb_bits
 )
 port map(
 clk => clk1,
---reset => reset_dcm_n,
 reset => '0',
 input => pb,
 output => resend);
@@ -1045,16 +1044,16 @@ xclk_in => '0',
 xclk_out => open);
 
 --process (i_clock_ib) is
-process (clk_mc, resend) is begin
-if (resend = '1') then
+--process (clk_mc, resend) is begin
+--if (resend = '1') then
 --ov7670_pclk <= '0';
 --ov7670_hs <= '0';
 --ov7670_vs <= '0';
 --ov7670_d <= (others => '0');
-elsif (falling_edge (clk_mc)) then
+--elsif (falling_edge (clk_mc)) then
 --elsif (falling_edge (i_clock_ib)) then
-end if;
-end process;
+--end if;
+--end process;
 ov7670_d <= ov7670_data1;
 ov7670_pclk <= ov7670_pclk1;
 ov7670_hs <= ov7670_href1;
@@ -1083,6 +1082,7 @@ int => cint
 inst_addrgen1 : address_generator port map(
 clk25 => clk_vga,
 --clk25 => clk2x_2,
+--reset => reset_dcm,
 reset => resend,
 enable => active1,
 vsync => vga_vsync_sig,
@@ -1101,7 +1101,7 @@ vga_hsync <= vga_hsync_i;
 inst_vgatiming : VGA_timing_synch port map(
 clk25 => clk_vga,
 --rst => reset_vga_timing,
---rst => reset_dcm_n,
+--rst => reset_dcm,
 rst => resend,
 Hsync => vga_hsync_i,
 Vsync => vga_vsync_sig,
