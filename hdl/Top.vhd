@@ -675,13 +675,13 @@ signal w8_bw : integer range 0 to c_w8_bw - 1 := 0;
 constant c_w8_br : integer := 3200/2/2/2/2;
 signal w8_br : integer range 0 to c_w8_br - 1 := 0;
 
-constant c_cntr_frame : integer := 307200;
+constant c_cntr_frame : integer := 307200/2;
 constant c_step_w : unsigned (15 downto 0) := to_unsigned (320, 16);
 constant c_step_r : unsigned (15 downto 0) := to_unsigned (320, 16);
-signal cntr_wr1 : unsigned (19 downto 0) := (others => '0');
-signal cntr_wr1_slv : std_logic_vector (19 downto 0) := (others => '0');
-signal cntr_rd1 : unsigned (19 downto 0) := (others => '0');
-signal cntr_rd1_slv : std_logic_vector (19 downto 0) := (others => '0');
+signal cntr_wr1 : unsigned (17 downto 0) := (others => '0');
+signal cntr_wr1_slv : std_logic_vector (17 downto 0) := (others => '0');
+signal cntr_rd1 : unsigned (17 downto 0) := (others => '0');
+signal cntr_rd1_slv : std_logic_vector (17 downto 0) := (others => '0');
 signal ov7670_vs_next : std_logic_vector (1 downto 0) := (others => '0');
 signal ov7670_vs_prev : std_logic := '0';
 signal start_read : std_logic := '0';
@@ -739,9 +739,11 @@ signal vint : std_logic;
 signal cam_pclk, cam_hs, cam_vs, cam_pwdn, cam_reset : std_logic;
 signal cam_d : std_logic_vector (7 downto 0);
 
-attribute keep : string;
-attribute keep of clk_vga : signal is "true";
-attribute keep of ov7670_pclk1 : signal is "true";
+--attribute keep : string;
+--attribute keep of clk_vga : signal is "true";
+--attribute keep of ov7670_pclk1 : signal is "true";
+--attribute keep : string;
+--attribute keep of clk_vga : signal is "true";
 
 begin
 
@@ -757,6 +759,7 @@ camera_o_pclk => ov7670_pclkv,
 camera_i_xclk => ov7670_xclkv,
 camera_o_d => ov7670_datav,
 camera_i_rst => ov7670_resetv,
+--camera_i_rst => reset_dcm,
 camera_i_pwdn => '0'
 );
 
@@ -839,7 +842,7 @@ else
           p0_state <= aw;
         end if;
       when aw => if (busy = '0') then p0_w <= '1'; p0_state <= bw; wrc_w <= '1'; id_w <= x"0055"; data_w <= std_logic_vector (cntr_wr1 (15 downto 0)); end if;
-      when bw => if (busy = '0') then p0_w <= '1'; p0_state <= cw; wrc_w <= '1'; id_w <= x"0054"; data_w <= "000000000000" & std_logic_vector (cntr_wr1 (19 downto 16)); end if;
+      when bw => if (busy = '0') then p0_w <= '1'; p0_state <= cw; wrc_w <= '1'; id_w <= x"0054"; data_w <= "00000000000000" & std_logic_vector (cntr_wr1 (17 downto 16)); end if;
       when cw => if (busy = '0') then p0_w <= '1'; p0_state <= dw; wrc_w <= '1'; id_w <= x"0052"; data_w <= std_logic_vector (c_step_w); end if;
       when dw => if (busy = '0') then p0_w <= '1'; p0_state <= ew; wrc_w <= '1'; id_w <= x"0050"; data_w <= x"0000"; end if;
       when ew =>
@@ -898,6 +901,8 @@ else
         end if;
       when a0a =>
 --        if (cntr_rd1 >= 153280+160+160+160+160+160 or vga_vsync_sig = '0') then
+--        if (cntr_rd1 >= 153280+160+160+160+160+160) then
+--        if (cntr_rd1 >= 153280+160+160) then
         if (vga_vsync_sig_prev = '1' and vga_vsync_sig = '0') then
           cntr_rd1 <= (others => '0');
         end if;
@@ -919,7 +924,7 @@ else
         end if;
       when br =>
         if (busy = '0') then
-          p0_r <= '1'; p1_state <= cr; wrc_r <= '1'; id_r <= x"0056"; data_r <= "000000000000" & std_logic_vector (cntr_rd1 (19 downto 16));
+          p0_r <= '1'; p1_state <= cr; wrc_r <= '1'; id_r <= x"0056"; data_r <= "00000000000000" & std_logic_vector (cntr_rd1 (17 downto 16));
         end if;
       when cr =>
         if (busy = '0') then
@@ -1014,7 +1019,8 @@ PB_BITS => c_pb_bits
 )
 port map(
 clk => clk1,
-reset => reset_dcm_n,
+--reset => reset_dcm_n,
+reset => '0',
 input => pb,
 output => resend);
 
@@ -1095,7 +1101,8 @@ vga_hsync <= vga_hsync_i;
 inst_vgatiming : VGA_timing_synch port map(
 clk25 => clk_vga,
 --rst => reset_vga_timing,
-rst => reset_dcm_n,
+--rst => reset_dcm_n,
+rst => resend,
 Hsync => vga_hsync_i,
 Vsync => vga_vsync_sig,
 blank => vga_blank,
@@ -1184,7 +1191,7 @@ CLKIN => i_clock_ib1, -- Clock input (from IBUFG, BUFG or DCM)
 PSCLK => '0', -- Dynamic phase adjust clock input
 PSEN => '0', -- Dynamic phase adjust enable input
 PSINCDEC => '0', -- Dynamic phase adjust increment/decrement
-RST => reset_dcm_n -- DCM asynchronous reset input
+RST => '0' -- DCM asynchronous reset input
 );
 
 BUFG_cam : BUFG
