@@ -93,7 +93,7 @@ type states is (wait_pt, wait_00_pt, wait_ff, wait_wl, wait_count640);
 signal state : states := wait_pt;
 constant c_count640 : integer := 640;
 signal count640 : integer range 0 to c_count640 - 1;
-constant c_s1_c : integer := 60*2;
+constant c_s1_c : integer := 60*5;
 signal s1_c : integer range 0 to c_s1_c - 1;
 signal s1_tick, s1_mux : std_logic;
 
