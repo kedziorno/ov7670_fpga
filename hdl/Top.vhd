@@ -623,8 +623,8 @@ signal vga_clock_p : std_logic;
 signal ov7670_pclk_p : std_logic;
 signal vga_re, cam_re : std_logic;
 
-constant CLKFX_MULTIPLY_MC : integer := 4;
-constant CLKFX_DIVIDE_MC : integer := 2;
+constant CLKFX_MULTIPLY_MC : integer := 6;
+constant CLKFX_DIVIDE_MC : integer := 25;
 
 COMPONENT cellular_ram_burst_controller
 PORT(
@@ -1183,7 +1183,7 @@ CLK2X => open, -- 2X DCM CLK output
 CLK2X180 => open, -- 2X, 180 degree DCM CLK out
 CLK90 => open, -- 90 degree DCM CLK output
 CLKDV => clk_vga, -- Divided DCM CLK out (CLKDV_DIVIDE)
-CLKFX => clk_mc, -- DCM CLK synthesis out (M/D)
+CLKFX => clk_cam, -- DCM CLK synthesis out (M/D)
 CLKFX180 => open, -- 180 degree CLK synthesis out
 LOCKED => open, -- DCM LOCK status output
 PSDONE => open, -- Dynamic phase adjust done output
@@ -1255,7 +1255,7 @@ CLK2X => open, -- 2X DCM CLK output
 CLK2X180 => open, -- 2X, 180 degree DCM CLK out
 CLK90 => open, -- 90 degree DCM CLK output
 CLKDV => clk2x_2, -- Divided DCM CLK out (CLKDV_DIVIDE)
-CLKFX => clk_cam, -- DCM CLK synthesis out (M/D)
+CLKFX => open, -- DCM CLK synthesis out (M/D)
 CLKFX180 => open, -- 180 degree CLK synthesis out
 LOCKED => open, -- DCM LOCK status output
 PSDONE => open, -- Dynamic phase adjust done output
