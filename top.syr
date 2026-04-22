@@ -5,7 +5,7 @@ Parameter TMPDIR set to xst/projnav.tmp
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.02 secs
+Total CPU time to Xst completion: 0.03 secs
  
 --> 
 Parameter xsthdpdir set to xst
@@ -110,9 +110,10 @@ Cores Search Directories           : {"ipcore_dir"  }
 =========================================================================
 *                          HDL Compilation                              *
 =========================================================================
+WARNING:HDLParsers:3607 - Unit work/p_constants is now defined in a different file.  It was defined in "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/p_constants.vhd", and is now defined in "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/ov7670_camera_emulator/p_constants.vhd".
+WARNING:HDLParsers:3607 - Unit work/p_constants is now defined in a different file.  It was defined in "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/p_constants.vhd", and is now defined in "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/ov7670_camera_emulator/p_constants.vhd".
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/ov7670_rom.vhd" in Library work.
-Package <p_ov7670_rom> compiled.
-Package body <p_ov7670_rom> compiled.
+Architecture p_ov7670_rom of Entity p_ov7670_rom is up to date.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/rom_test/rom00.vhd" in Library work.
 Architecture behavioral_rom00 of Entity rom_rom00 is up to date.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/rom_test/rom01.vhd" in Library work.
@@ -326,7 +327,7 @@ Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/ipcore_d
 Architecture sink_read_1_a of Entity sink_read_1 is up to date.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/p_camera_colorbar.vhd" in Library work.
 Architecture p_camera_colorbar of Entity p_camera_colorbar is up to date.
-Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/p_constants.vhd" in Library work.
+Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/ov7670_camera_emulator/p_constants.vhd" in Library work.
 Architecture p_constants of Entity p_constants is up to date.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/rom_test/rom.vhd" in Library work.
 Architecture behavioral_rom_mux of Entity rom_mux is up to date.
@@ -335,7 +336,8 @@ Architecture behavioral of Entity camera_colorbar is up to date.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/CellRAMBurstController.vhd" in Library work.
 Architecture crbc of Entity cellular_ram_burst_controller is up to date.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/ov7670_camera_emulator/debounce_circuit.vhd" in Library work.
-Architecture behavioral of Entity debounce_circuit is up to date.
+Entity <debounce_circuit> compiled.
+Entity <debounce_circuit> (Architecture <behavioral>) compiled.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/ov7670_controller.vhd" in Library work.
 Architecture behavioral of Entity ov7670_controller is up to date.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/ov7670_capture.vhd" in Library work.
@@ -350,8 +352,9 @@ Architecture lsfr_2 of Entity vga_timing_synch is up to date.
 Architecture jc of Entity vga_timing_synch is up to date.
 Architecture counter of Entity vga_timing_synch is up to date.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/Top.vhd" in Library work.
-Architecture raw_signal of Entity top_camera_monitoring is up to date.
-Architecture structural of Entity top_camera_monitoring is up to date.
+Entity <top_camera_monitoring> compiled.
+Entity <top_camera_monitoring> (Architecture <raw_signal>) compiled.
+Entity <top_camera_monitoring> (Architecture <structural>) compiled.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/top1.vhd" in Library work.
 Architecture behavioral of Entity top is up to date.
 Compiling verilog file "hdl/ram_buffer.v" in library work
@@ -628,10 +631,23 @@ Unit <camera_colorbar> synthesized.
 
 Synthesizing Unit <debounce_circuit>.
     Related source file is "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/ov7670_camera_emulator/debounce_circuit.vhd".
+    Found finite state machine <FSM_3> for signal <state>.
+    -----------------------------------------------------------------------
+    | States             | 3                                              |
+    | Transitions        | 6                                              |
+    | Inputs             | 3                                              |
+    | Outputs            | 3                                              |
+    | Clock              | clk                       (rising_edge)        |
+    | Power Up State     | 00                                             |
+    | Encoding           | automatic                                      |
+    | Implementation     | LUT                                            |
+    -----------------------------------------------------------------------
     Found 1-bit register for signal <output>.
     Found 25-bit up counter for signal <counter>.
+    Found 4-bit up counter for signal <v_ticks>.
     Summary:
-	inferred   1 Counter(s).
+	inferred   1 Finite State Machine(s).
+	inferred   2 Counter(s).
 	inferred   1 D-type flip-flop(s).
 Unit <debounce_circuit> synthesized.
 
@@ -829,7 +845,6 @@ WARNING:Xst:1780 - Signal <start_read> is never used or assigned. This unconnect
 WARNING:Xst:1780 - Signal <rgb565> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <rgb444> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <reset_vga_timing> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
-WARNING:Xst:646 - Signal <reset_dcm_n> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <rd_counter1> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <rd_counter> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <ov7670_siodv> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -851,7 +866,7 @@ WARNING:Xst:1780 - Signal <clk2x_1> is never used or assigned. This unconnected 
 WARNING:Xst:1780 - Signal <cc> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <cam_re> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:646 - Signal <address1> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
-    Found finite state machine <FSM_3> for signal <p1_state>.
+    Found finite state machine <FSM_4> for signal <p1_state>.
     -----------------------------------------------------------------------
     | States             | 10                                             |
     | Transitions        | 19                                             |
@@ -865,7 +880,7 @@ WARNING:Xst:646 - Signal <address1> is assigned but never used. This unconnected
     | Encoding           | automatic                                      |
     | Implementation     | LUT                                            |
     -----------------------------------------------------------------------
-    Found finite state machine <FSM_4> for signal <p0_state>.
+    Found finite state machine <FSM_5> for signal <p0_state>.
     -----------------------------------------------------------------------
     | States             | 8                                              |
     | Transitions        | 17                                             |
@@ -929,11 +944,12 @@ Macro Statistics
  29-bit adder                                          : 1
  3-bit adder                                           : 1
  8-bit subtractor                                      : 1
-# Counters                                             : 15
+# Counters                                             : 16
  10-bit up counter                                     : 5
  11-bit up counter                                     : 3
  20-bit up counter                                     : 1
  25-bit up counter                                     : 1
+ 4-bit up counter                                      : 1
  6-bit up counter                                      : 1
  7-bit up counter                                      : 1
  8-bit up counter                                      : 2
@@ -970,7 +986,7 @@ Macro Statistics
 *                       Advanced HDL Synthesis                          *
 =========================================================================
 
-Analyzing FSM <FSM_4> for best encoding.
+Analyzing FSM <FSM_5> for best encoding.
 Optimizing FSM <inst_top_camera_monitoring/p0_state/FSM> on signal <p0_state[1:3]> with gray encoding.
 -------------------
  State | Encoding
@@ -984,7 +1000,7 @@ Optimizing FSM <inst_top_camera_monitoring/p0_state/FSM> on signal <p0_state[1:3
  dw    | 101
  ew    | 100
 -------------------
-Analyzing FSM <FSM_3> for best encoding.
+Analyzing FSM <FSM_4> for best encoding.
 Optimizing FSM <inst_top_camera_monitoring/p1_state/FSM> on signal <p1_state[1:10]> with one-hot encoding.
 ---------------------
  State | Encoding
@@ -1000,6 +1016,15 @@ Optimizing FSM <inst_top_camera_monitoring/p1_state/FSM> on signal <p1_state[1:1
  er    | 0100000000
  er1   | 1000000000
 ---------------------
+Analyzing FSM <FSM_3> for best encoding.
+Optimizing FSM <inst_top_camera_monitoring/inst_debounce/state/FSM> on signal <state[1:2]> with user encoding.
+-------------------
+ State | Encoding
+-------------------
+ 00    | 00
+ 01    | 01
+ 10    | 10
+-------------------
 Analyzing FSM <FSM_2> for best encoding.
 Optimizing FSM <inst_top_camera_monitoring/virtual_camera/pt_state/FSM> on signal <pt_state[1:2]> with user encoding.
 -------------------
@@ -1127,17 +1152,18 @@ Macro Statistics
  29-bit adder                                          : 1
  3-bit adder                                           : 1
  8-bit subtractor                                      : 1
-# Counters                                             : 15
+# Counters                                             : 16
  10-bit up counter                                     : 5
  11-bit up counter                                     : 3
  20-bit up counter                                     : 1
  25-bit up counter                                     : 1
+ 4-bit up counter                                      : 1
  6-bit up counter                                      : 1
  7-bit up counter                                      : 1
  8-bit up counter                                      : 2
  9-bit up counter                                      : 1
-# Registers                                            : 567
- Flip-Flops                                            : 567
+# Registers                                            : 569
+ Flip-Flops                                            : 569
 # Comparators                                          : 15
  10-bit comparator greatequal                          : 2
  10-bit comparator greater                             : 2
@@ -1232,6 +1258,8 @@ Optimizing unit <top> ...
 
 Optimizing unit <camera_colorbar> ...
 
+Optimizing unit <debounce_circuit> ...
+
 Optimizing unit <ov7670_capture> ...
 
 Optimizing unit <address_generator> ...
@@ -1272,8 +1300,8 @@ Final Macro Processing ...
 Final Register Report
 
 Macro Statistics
-# Registers                                            : 640
- Flip-Flops                                            : 640
+# Registers                                            : 646
+ Flip-Flops                                            : 646
 
 =========================================================================
 
@@ -1302,31 +1330,31 @@ Design Statistics
 # IOs                              : 94
 
 Cell Usage :
-# BELS                             : 1836
+# BELS                             : 1845
 #      GND                         : 2
-#      INV                         : 64
+#      INV                         : 66
 #      LUT1                        : 213
-#      LUT2                        : 170
-#      LUT3                        : 172
-#      LUT4                        : 518
+#      LUT2                        : 171
+#      LUT3                        : 174
+#      LUT4                        : 522
 #      MUXCY                       : 292
 #      MUXF5                       : 88
 #      MUXF6                       : 16
 #      VCC                         : 2
 #      XORCY                       : 299
-# FlipFlops/Latches                : 640
-#      FD                          : 23
+# FlipFlops/Latches                : 646
+#      FD                          : 25
 #      FDE                         : 116
 #      FDE_1                       : 49
-#      FDR                         : 115
+#      FDR                         : 89
 #      FDR_1                       : 49
-#      FDRE                        : 216
+#      FDRE                        : 245
 #      FDRE_1                      : 1
 #      FDRS                        : 53
 #      FDRS_1                      : 1
 #      FDRSE                       : 7
 #      FDRSE_1                     : 1
-#      FDS                         : 8
+#      FDS                         : 9
 #      FDS_1                       : 1
 # RAMS                             : 3
 #      RAMB16_S9_S18               : 1
@@ -1349,10 +1377,10 @@ Device utilization summary:
 
 Selected Device : 3s1200efg320-4 
 
- Number of Slices:                      610  out of   8672     7%  
- Number of Slice Flip Flops:            640  out of  17344     3%  
- Number of 4 input LUTs:               1138  out of  17344     6%  
-    Number used as logic:              1137
+ Number of Slices:                      614  out of   8672     7%  
+ Number of Slice Flip Flops:            646  out of  17344     3%  
+ Number of 4 input LUTs:               1147  out of  17344     6%  
+    Number used as logic:              1146
     Number used as Shift registers:       1
  Number of IOs:                          94
  Number of bonded IOBs:                  87  out of    250    34%  
@@ -1382,7 +1410,7 @@ Clock Information:
 Clock Signal                                                                                                 | Clock buffer(FF name)                                          | Load  |
 -------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------+-------+
 i_clock100                                                                                                   | inst_top_camera_monitoring/DCM_SP_mc_fx_vga_dv:CLKDV           | 34    |
-i_clock                                                                                                      | inst_top_camera_monitoring/DCM_SP_cam:CLK0                     | 434   |
+i_clock                                                                                                      | inst_top_camera_monitoring/DCM_SP_cam:CLK0                     | 440   |
 i_clock                                                                                                      | inst_top_camera_monitoring/DCM_SP_cam:CLKFX                    | 137   |
 inst_top_camera_monitoring/inst_ov7670capt1/pclk_inv(inst_top_camera_monitoring/inst_ov7670capt1/pclk_inv1:O)| NONE(*)(inst_top_camera_monitoring/inst_ov7670capt1/address_10)| 11    |
 inst_top_camera_monitoring/cam_pclk1(inst_top_camera_monitoring/cam_pclk:O)                                  | BUFG(*)(inst_top_camera_monitoring/inst_ov7670capt1/addr1_9)   | 29    |
@@ -1413,7 +1441,7 @@ All values displayed in nanoseconds (ns)
 =========================================================================
 Timing constraint: Default period analysis for Clock 'i_clock'
   Clock period: 105.606ns (frequency: 9.469MHz)
-  Total number of paths / destination ports: 57540 / 1376
+  Total number of paths / destination ports: 57691 / 1416
 -------------------------------------------------------------------------
 Delay:               4.400ns (Levels of Logic = 1)
   Source:            inst_top_camera_monitoring/inst_ov7670contr1/reset (FF)
@@ -1505,7 +1533,7 @@ Delay:               4.150ns (Levels of Logic = 1)
 
 =========================================================================
 Timing constraint: Default OFFSET IN BEFORE for Clock 'i_clock'
-  Total number of paths / destination ports: 79 / 77
+  Total number of paths / destination ports: 54 / 52
 -------------------------------------------------------------------------
 Offset:              4.873ns (Levels of Logic = 3)
   Source:            ov7670_vsync1 (PAD)
@@ -1631,15 +1659,15 @@ Delay:               6.034ns (Levels of Logic = 3)
 =========================================================================
 
 
-Total REAL time to Xst completion: 13.00 secs
-Total CPU time to Xst completion: 12.91 secs
+Total REAL time to Xst completion: 14.00 secs
+Total CPU time to Xst completion: 13.42 secs
  
 --> 
 
 
-Total memory usage is 1306164 kilobytes
+Total memory usage is 1306612 kilobytes
 
 Number of errors   :    0 (   0 filtered)
-Number of warnings :  200 (   0 filtered)
+Number of warnings :  201 (   0 filtered)
 Number of infos    :   11 (   0 filtered)
 

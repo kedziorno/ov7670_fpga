@@ -1116,17 +1116,17 @@ vga_vsync <= vga_vsync_sig;
 vga_clock_i <= clk_vga;
 vga_clock <= vga_clock_i;
 
-reset_dcm_n <= not reset_dcm;
+reset_dcm <= not reset_dcm_n;
 synchro_reset_i0 : SRLC16E
 port map (
 D => '1', -- insert input signal
 CE => '1', -- insert Clock Enable signal (optional)
-CLK => clk1, -- insert Clock signal
+CLK => i_clock_ib2, -- insert Clock signal
 A0 => '1', -- insert Address 0 signal
 A1 => '1', -- insert Address 1 signal
 A2 => '1', -- insert Address 2 signal
 A3 => '1', -- insert Address 3 signal
-Q => reset_dcm, -- insert output signal
+Q => reset_dcm_n, -- insert output signal
 Q15 => open -- insert cascadable output signal
 );
 
@@ -1191,7 +1191,7 @@ CLKIN => i_clock_ib1, -- Clock input (from IBUFG, BUFG or DCM)
 PSCLK => '0', -- Dynamic phase adjust clock input
 PSEN => '0', -- Dynamic phase adjust enable input
 PSINCDEC => '0', -- Dynamic phase adjust increment/decrement
-RST => '0' -- DCM asynchronous reset input
+RST => reset_dcm -- DCM asynchronous reset input
 );
 
 BUFG_cam : BUFG
@@ -1263,7 +1263,7 @@ CLKIN => i_clock_ib2, -- Clock input (from IBUFG, BUFG or DCM)
 PSCLK => '0', -- Dynamic phase adjust clock input
 PSEN => '0', -- Dynamic phase adjust enable input
 PSINCDEC => '0', -- Dynamic phase adjust increment/decrement
-RST => '0' -- DCM asynchronous reset input
+RST => reset_dcm -- DCM asynchronous reset input
 );
 
 end Structural;
