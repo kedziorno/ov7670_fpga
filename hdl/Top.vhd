@@ -663,7 +663,7 @@ signal busy, wrc : std_logic;
 signal data, id : std_logic_vector(15 downto 0);
 
 type p_states0 is (
-a0, a1, a1a, aw, bw, cw, dw, ew
+a0, a1, a1a, aw, bw, cw, cw1, dw, ew
 );
 type p_states1 is (
 a0, ar1, ar2, a0a, ar, br, cr, dr, er, er1
@@ -844,12 +844,13 @@ else
         end if;
       when aw => if (busy = '0') then p0_w <= '1'; p0_state <= bw; wrc_w <= '1'; id_w <= x"0055"; data_w <= std_logic_vector (cntr_wr1 (15 downto 0)); end if;
       when bw => if (busy = '0') then p0_w <= '1'; p0_state <= cw; wrc_w <= '1'; id_w <= x"0054"; data_w <= "00000000000000" & std_logic_vector (cntr_wr1 (17 downto 16)); end if;
-      when cw => if (busy = '0') then p0_w <= '1'; p0_state <= dw; wrc_w <= '1'; id_w <= x"0052"; data_w <= std_logic_vector (c_step_w); end if;
+      when cw => if (busy = '0') then p0_w <= '1'; p0_state <= cw1; wrc_w <= '1'; id_w <= x"0052"; data_w <= std_logic_vector (c_step_w); end if;
+      when cw1 => if (busy = '0') then p0_w <= '1'; p0_state <= dw; wrc_w <= '1'; id_w <= x"0058"; data_w <= x"0000"; end if;
       when dw => if (busy = '0') then p0_w <= '1'; p0_state <= ew; wrc_w <= '1'; id_w <= x"0050"; data_w <= x"0000"; end if;
       when ew =>
         p0_w <= '0';
-          if (ov7670_vs = '1') then
             p0_w <= '1'; wrc_w <= '1'; id_w <= x"0058"; data_w <= (others => '0');
+          if (ov7670_vs = '1') then
             p0_state <= a0;
           else
             p0_state <= a1;
