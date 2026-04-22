@@ -624,8 +624,8 @@ camera_i_rst1 <= '0';
 camera_i_rst2 <= '0';
 camera_i_rst3 <= '0';
 camera_i_rst4 <= '0';
-sw <= "00000000"; -- x00 frames
---sw <= "00000001"; -- x01 colorbar
+--sw <= "00000000"; -- x00 frames
+sw <= "00000001"; -- x01 colorbar
 pb <= '1';
 wait for 300 ns; -- min to reset
 --i_reset <= '0';

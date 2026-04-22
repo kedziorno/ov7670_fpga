@@ -93,8 +93,30 @@ type states is (wait_pt, wait_00_pt, wait_ff, wait_wl, wait_count640);
 signal state : states := wait_pt;
 constant c_count640 : integer := 640;
 signal count640 : integer range 0 to c_count640 - 1;
+constant c_s1_c : integer := 60;
+signal s1_c : integer range 0 to c_s1_c - 1;
+signal s1_tick, s1_mux : std_logic;
 
 begin
+
+process (camera_i_xclk) is begin
+  if (falling_edge (camera_i_xclk)) then
+    if (camera_i_rst = '0') then
+      s1_c <= 0;
+      s1_tick <= '0';
+    else
+      if (s1_mux = '1') then
+        if (s1_c = c_s1_c - 1) then
+          s1_tick <= '1';
+          s1_c <= 0;
+        else
+          s1_tick <= '0';
+          s1_c <= s1_c + 1;
+        end if;
+      end if;
+    end if;
+  end if;
+end process;
 
   g_source_frames : if (c_source = t_frames) generate
     reset_rom <= '1', '0' after 1111 ns;
@@ -119,6 +141,12 @@ begin
     p4_frame_out : process (camera_i_xclk) is
     begin
       if (falling_edge (camera_i_xclk)) then
+        if (camera_i_rst = '0') then
+          addra <= 0;
+          state <= wait_pt;
+          count640 <= 0;
+          all_frame <= all_frame + 1;
+        else
         case (state) is
           when wait_pt =>
             count640 <= 0;
@@ -163,6 +191,7 @@ begin
         end case;
         addra <= all_frame;
       end if;
+      end if;
     end process p4_frame_out;
   end generate g_source_frames;
 
@@ -187,13 +216,14 @@ begin
     constant c_wait_start : integer := 1234;
     variable wait_start : integer range 0 to c_wait_start - 1;
   begin
-    if (camera_i_rst = '0') then
-      count := 0;
-      vsync_i <= '1'; -- XXX check when startup
-      vs_state <= cold_start;
-      href_time <= '0';
-      wait_start := 0;
-    elsif (falling_edge (camera_i_xclk)) then
+    if (falling_edge (camera_i_xclk)) then
+      if (camera_i_rst = '0') then
+        count := 0;
+        vsync_i <= '1'; -- XXX check when startup
+        vs_state <= cold_start;
+        href_time <= '0';
+        wait_start := 0;
+      else
       case (vs_state) is
         when cold_start => -- shift first vs
           if (wait_start = c_wait_start - 1) then
@@ -205,6 +235,7 @@ begin
         when svs1 =>
           vsync_i <= '0';
           href_time <= '0';
+          s1_mux <= '0';
           if (count = c_vsync1 - 1) then
             vs_state <= svs2;
             count := 0;
@@ -233,7 +264,10 @@ begin
           vsync_i <= '1';
           href_time <= '0';
           if (count = c_vsync4 - 1) then
-            if (c_slide_colorbar_pattern = true) then
+            s1_mux <= '1';
+--            if (c_slide_colorbar_pattern = true) then
+            if (s1_tick = '1') then
+              report "cb change" severity note;
               colorbar(4) <= colorbar(4)(0) & colorbar(4)(7 downto 1);
               colorbar(3) <= colorbar(3)(0) & colorbar(3)(7 downto 1);
               colorbar(2) <= colorbar(2)(0) & colorbar(2)(7 downto 1);
@@ -246,6 +280,7 @@ begin
             count := count + 1;
           end if;
       end case;
+      end if;
     end if;
   end process p1_vsync;
 
@@ -259,13 +294,14 @@ begin
       variable counth1 : integer range 0 to c_href1 - 1;
       variable counth0 : integer range 0 to c_href0 - 1;
     begin
-      if (camera_i_rst = '0') then
-        count := 0;
-        counth1 := 0;
-        counth0 := 0;
-        hs_state <= swait4vsync;
-        href_i <= '0';
-      elsif (falling_edge (camera_i_xclk)) then
+      if (falling_edge (camera_i_xclk)) then
+        if (camera_i_rst = '0') then
+          count := 0;
+          counth1 := 0;
+          counth0 := 0;
+          hs_state <= swait4vsync;
+          href_i <= '0';
+        else
         case (hs_state) is
           when swait4vsync =>
             if (href_time = '1') then
@@ -288,6 +324,7 @@ begin
               counth0 := counth0 + 1;
             end if;
         end case;
+        end if;
       end if;
     end process p2_href_colorbar;
   end generate g_source_colorbar_hs;
@@ -301,13 +338,14 @@ begin
       variable counth1 : integer range 0 to c_href1 - 1;
       variable counth0 : integer range 0 to c_href0 - 1;
     begin
-      if (camera_i_rst = '0') then
-        count := 0;
-        counth1 := 0;
-        counth0 := 0;
-        hs_state <= shref1;
-        href_i <= '0';
-      elsif (falling_edge (camera_i_xclk)) then
+      if (falling_edge (camera_i_xclk)) then
+        if (camera_i_rst = '0') then
+          count := 0;
+          counth1 := 0;
+          counth0 := 0;
+          hs_state <= shref1;
+          href_i <= '0';
+        else
         case (hs_state) is
           when shref1 =>
             if (href_time = '1') then
@@ -329,6 +367,7 @@ begin
             end if;
           when others => null;
         end case;
+        end if;
       end if;
     end process p2_href_lines;
   end generate g_source_lines_hs;
@@ -340,12 +379,13 @@ begin
       constant c_num_pixels : integer := c_href1 / c_colorbar_length;
       variable count1 : integer range 0 to c_num_pixels - 1;
     begin
-      if (camera_i_rst = '0') then
-        pixel_time_data <= (others => '0');
-        pt_state <= s1;
-        colorbar_count <= 0;
-        count1 := 0;
-      elsif (falling_edge (camera_i_xclk)) then
+      if (falling_edge (camera_i_xclk)) then
+        if (camera_i_rst = '0') then
+          pixel_time_data <= (others => '0');
+          pt_state <= s1;
+          colorbar_count <= 0;
+          count1 := 0;
+        else
         case (pt_state) is
           when s1 =>
             if (pixel_time = '1') then
@@ -372,6 +412,7 @@ begin
               pt_state <= s2; -- next color
             end if;
         end case;
+        end if;
       end if;
     end process p3_pixeltime;
   end generate g_source_colorbar;
@@ -385,13 +426,14 @@ begin
       constant c_vs_index : integer := 256;
       variable vs_index : integer range 0 to c_vs_index - 1;
     begin
-      if (camera_i_rst = '0') then
-        pixel_time_data <= (others => '0');
-        pt_state <= s2;
-        count1 := 0;
-        count2 := 0;
-        vs_index := 1;
-      elsif (falling_edge (camera_i_xclk)) then
+      if (falling_edge (camera_i_xclk)) then
+        if (camera_i_rst = '0') then
+          pixel_time_data <= (others => '0');
+          pt_state <= s2;
+          count1 := 0;
+          count2 := 0;
+          vs_index := 1;
+        else
         case (pt_state) is
           when s2 =>
             if (href_time = '1') then
@@ -420,6 +462,7 @@ begin
             end if;
           when others => null;
         end case;
+        end if;
       end if;
     end process p3_pixeltime;
   end generate g_source_lines;
