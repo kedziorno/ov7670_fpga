@@ -520,7 +520,7 @@ COMPONENT ov7670_capture
           vsync : in  STD_LOGIC;
           href : in  STD_LOGIC;
           d : in  STD_LOGIC_VECTOR (7 downto 0);
-          addr : out  STD_LOGIC_VECTOR (10 downto 0);
+          addr : out  STD_LOGIC_VECTOR (9 downto 0);
           dout : out  STD_LOGIC_VECTOR (15 downto 0);
           we : out  STD_LOGIC_VECTOR (0 downto 0);
 latched_vs, latched_hs : out std_logic;
@@ -574,8 +574,8 @@ for all : VGA_timing_synch use entity work.VGA_timing_synch(counter);
 -- RAM FB
 signal wren1 : STD_LOGIC_VECTOR(0 downto 0);
 signal wr_d1 : STD_LOGIC_VECTOR(15 downto 0);
-signal wr_a1 : STD_LOGIC_VECTOR(10 downto 0);
-signal rd_d1 : STD_LOGIC_VECTOR(7 downto 0);
+signal wr_a1 : STD_LOGIC_VECTOR(9 downto 0);
+signal rd_d1 : STD_LOGIC_VECTOR(15 downto 0);
 signal rd_a1 : STD_LOGIC_VECTOR(9 downto 0);
 
 --VGA
@@ -635,14 +635,14 @@ writes : IN  std_logic;
 data : IN  std_logic_vector(15 downto 0);
 id : IN  std_logic_vector(15 downto 0);
 
-write_buffer_addr : IN  std_logic_vector(10 downto 0);
-write_buffer_data : IN  std_logic_vector(7 downto 0);
+write_buffer_addr : IN  std_logic_vector(9 downto 0);
+write_buffer_data : IN  std_logic_vector(15 downto 0);
 write_buffer_clk : IN  std_logic;
 write_buffer_we : IN  std_logic;
 
 clk25 : in std_logic;
 read_buffer_addr : IN  std_logic_vector(9 downto 0);
-read_buffer_data : OUT  std_logic_vector(7 downto 0);
+read_buffer_data : OUT  std_logic_vector(15 downto 0);
 read_buffer_clk : IN  std_logic;
 
 lb : OUT  std_logic;
@@ -839,6 +839,7 @@ else
 --        end if;
       when a1a =>
         if (busy = '0') then
+          p0_w <= '1'; wrc_w <= '1'; id_w <= x"0058"; data_w <= (others => '0');
           p0_state <= aw;
         end if;
       when aw => if (busy = '0') then p0_w <= '1'; p0_state <= bw; wrc_w <= '1'; id_w <= x"0055"; data_w <= std_logic_vector (cntr_wr1 (15 downto 0)); end if;
@@ -971,8 +972,8 @@ id => id,
 write_buffer_addr => wr_a1,
 --write_buffer_data => wr_d1 (15 downto 8),
 --write_buffer_data => wr_d1 (7 downto 0),
---write_buffer_data => wr_d1,
-write_buffer_data => wr_d1 (7 downto 0),
+write_buffer_data => wr_d1,
+--write_buffer_data => wr_d1 (7 downto 0),
 write_buffer_clk => ov7670_pclk,
 --write_buffer_clk => wren1(0),
 write_buffer_we => ov7670_hs,
@@ -982,9 +983,9 @@ write_buffer_we => ov7670_hs,
 clk25 => clk_vga,
 read_buffer_addr => rd_a1,
 --read_buffer_addr => address1,
-read_buffer_data => rd_d1 (7 downto 0),
-read_buffer_clk => clk_vga,
---read_buffer_clk => clk2x_2,
+read_buffer_data => rd_d1,
+--read_buffer_clk => clk_vga,
+read_buffer_clk => clk2x_2,
 
 lb => lb_n,
 ub => ub_n,
@@ -1080,8 +1081,8 @@ int => cint
 
 --ri_ard <= "0000" & rd_a1;
 inst_addrgen1 : address_generator port map(
-clk25 => clk_vga,
---clk25 => clk2x_2,
+--clk25 => clk_vga,
+clk25 => clk2x_2,
 --reset => reset_dcm,
 reset => resend,
 enable => active1,
@@ -1089,7 +1090,7 @@ vsync => vga_vsync_sig,
 address => rd_a1,
 address1 => address1);
 
-datain <= "00000000"&rd_d1 ;
+datain <= rd_d1 ;
 inst_imagegen : vga_imagegenerator port map(
 Data_in1  => datain,
 reset => resend,

@@ -13,13 +13,13 @@ port (
   writes : in std_logic;
   data : in std_logic_vector (15 downto 0);
   id : in std_logic_vector (15 downto 0);
-  write_buffer_addr : in std_logic_vector (10 downto 0);
-  write_buffer_data : in std_logic_vector (7 downto 0);
+  write_buffer_addr : in std_logic_vector (9 downto 0);
+  write_buffer_data : in std_logic_vector (15 downto 0);
   write_buffer_clk : in std_logic;
   write_buffer_we : in std_logic;
   clk25 : in std_logic;
   read_buffer_addr : in std_logic_vector (9 downto 0);
-  read_buffer_data : out std_logic_vector (7 downto 0);
+  read_buffer_data : out std_logic_vector (15 downto 0);
   read_buffer_clk : in std_logic;
   lb : out std_logic := '0';
   ub : out std_logic := '0';
@@ -107,9 +107,9 @@ signal data_out_enable : std_logic_vector (15 downto 0) := (others => '0');
 component asym_ram_sdp_read_wider
 port (
 clkA, clkB, enaA, weA, enaB, reset : in std_logic;
-addrA : in std_logic_vector (10 downto 0);
+addrA : in std_logic_vector (9 downto 0);
 addrB: in std_logic_vector (9 downto 0);
-diA : in std_logic_vector (7 downto 0);
+diA : in std_logic_vector (15 downto 0);
 doB : out std_logic_vector (15 downto 0)
 );
 end component asym_ram_sdp_read_wider;
@@ -117,16 +117,6 @@ end component asym_ram_sdp_read_wider;
 signal write_buffer_we1 : std_logic_vector (0 downto 0);
 
 signal busy_i : std_logic;
-
-component asym_ram_sdp_read_wider8
-port (
-clkA, clkB, enaA, weA, enaB, reset : in std_logic;
-addrA : in std_logic_vector (9 downto 0);
-addrB: in std_logic_vector (9 downto 0);
-diA : in std_logic_vector (15 downto 0);
-doB : out std_logic_vector (7 downto 0)
-);
-end component asym_ram_sdp_read_wider8;
 
 signal clk0, clk0_fb : std_logic;
 signal clk2x, clk2d : std_logic;
@@ -137,7 +127,7 @@ signal we_i : std_logic;
 
 signal owait1, ramclken : std_logic := '0';
 
-signal sink_read_addrb : std_logic_vector (10 downto 0);
+signal sink_read_addrb : std_logic_vector (9 downto 0);
 
 begin
 
@@ -241,7 +231,7 @@ busy_i <= '0' when (state = idle) else '1';
 --doB => read_buffer_data
 --);
 
-sink_read_addrb <= '0' & read_buffer_addr;
+sink_read_addrb <= read_buffer_addr;
 sink_read_i0 : entity work.sink_read_1
   PORT MAP (
     clka => clk,
