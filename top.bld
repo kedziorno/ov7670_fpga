@@ -2,9 +2,9 @@ Release 14.7 ngdbuild P.20131013 (lin64)
 Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
 
 Command Line:
-/home/user/.local/Xilinx/14.7/ISE_DS/ISE/bin/lin64/unwrapped/ngdbuild -filter
-iseconfig/filter.filter -intstyle ise -dd _ngo -sd ipcore_dir -nt timestamp -uc
-hdl/top.ucf -p xc3s1200e-fg320-4 top.ngc top.ngd
+/home/user/.local/Xilinx/14.7/ISE_DS/ISE/bin/lin64/unwrapped/ngdbuild -intstyle
+ise -dd _ngo -sd ipcore_dir -nt timestamp -uc hdl/top.ucf -p xc3s1200e-fg320-4
+top.ngc top.ngd
 
 Reading NGO file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/top.ngc"
 ...
@@ -16,48 +16,39 @@ Annotating constraints to design from ucf file "hdl/top.ucf" ...
 Resolving constraint associations...
 Checking Constraint Associations...
 INFO:ConstraintSystem:178 - TNM 'i_clock', used in period specification
-   'TS_clk', was traced into DCM_SP instance DCM_SP_cam. The following new TNM
-   groups and period specifications were generated at the DCM_SP output(s): 
+   'TS_clk', was traced into DCM_SP instance
+   inst_top_camera_monitoring/DCM_SP_cam. The following new TNM groups and
+   period specifications were generated at the DCM_SP output(s): 
    CLK0: <TIMESPEC TS_inst_top_camera_monitoring_clk11 = PERIOD
    "inst_top_camera_monitoring_clk11" TS_clk HIGH 50%>
 
 INFO:ConstraintSystem:178 - TNM 'i_clock', used in period specification
-   'TS_clk', was traced into DCM_SP instance DCM_SP_cam. The following new TNM
-   groups and period specifications were generated at the DCM_SP output(s): 
-   CLKFX: <TIMESPEC TS_ov7670_xclk1_OBUF = PERIOD "ov7670_xclk1_OBUF" TS_clk /
+   'TS_clk', was traced into DCM_SP instance
+   inst_top_camera_monitoring/DCM_SP_cam. The following new TNM groups and
+   period specifications were generated at the DCM_SP output(s): 
+   CLKFX: <TIMESPEC TS_ov7670_xclk1_OBUF1 = PERIOD "ov7670_xclk1_OBUF1" TS_clk /
    0.48 HIGH 50%>
 
 INFO:ConstraintSystem:178 - TNM 'i_clock100', used in period specification
-   'TS_clk100', was traced into DCM_SP instance DCM_SP_mc_fx_vga_dv. The
-   following new TNM groups and period specifications were generated at the
-   DCM_SP output(s): 
-   CLKDV: <TIMESPEC TS_vga_clock_OBUF = PERIOD "vga_clock_OBUF" TS_clk100 * 4
+   'TS_clk100', was traced into DCM_SP instance
+   inst_top_camera_monitoring/DCM_SP_mc_fx_vga_dv. The following new TNM groups
+   and period specifications were generated at the DCM_SP output(s): 
+   CLKDV: <TIMESPEC TS_vga_clock_OBUF1 = PERIOD "vga_clock_OBUF1" TS_clk100 * 4
    HIGH 50%>
 
+WARNING:NgdBuild:1345 - The constraint <TIMESPEC TS_CLK100 = PERIOD "CLK100" 10
+   ns HIGH 50%;> [hdl/top.ucf(9)] is overridden by the constraint <TIMESPEC
+   TS_clk100 = PERIOD "i_clock100" 10 ns HIGH 50%;> [hdl/top.ucf(25)]. The
+   overriden constraint usually comes from the input netlist or ncf files.
+   Please set XIL_NGDBUILD_CONSTR_OVERRIDE_ERROR to promote this message to an
+   error.
 Done...
 
 INFO:NgdBuild:1222 - Setting CLKIN_PERIOD attribute associated with DCM instance
-   DCM_SP_mc_fx_vga_dv to 10.000000 ns based on the period specification
-   (<TIMESPEC TS_clk100 = PERIOD "i_clock100" 10 ns HIGH 50%;>
-   [hdl/top.ucf(19)]).
+   inst_top_camera_monitoring/DCM_SP_mc_fx_vga_dv to 10.000000 ns based on the
+   period specification (<TIMESPEC TS_clk100 = PERIOD "i_clock100" 10 ns HIGH
+   50%;> [hdl/top.ucf(25)]).
 Checking expanded design ...
-WARNING:NgdBuild:452 - logical net 'N21' has no driver
-WARNING:NgdBuild:452 - logical net 'N22' has no driver
-WARNING:NgdBuild:452 - logical net 'N23' has no driver
-WARNING:NgdBuild:452 - logical net 'N24' has no driver
-WARNING:NgdBuild:452 - logical net 'N25' has no driver
-WARNING:NgdBuild:452 - logical net 'N26' has no driver
-WARNING:NgdBuild:452 - logical net 'N27' has no driver
-WARNING:NgdBuild:452 - logical net 'N28' has no driver
-WARNING:NgdBuild:452 - logical net 'N29' has no driver
-WARNING:NgdBuild:452 - logical net 'N30' has no driver
-WARNING:NgdBuild:452 - logical net 'N31' has no driver
-WARNING:NgdBuild:452 - logical net 'N32' has no driver
-WARNING:NgdBuild:452 - logical net 'N33' has no driver
-WARNING:NgdBuild:452 - logical net 'N34' has no driver
-WARNING:NgdBuild:452 - logical net 'N35' has no driver
-WARNING:NgdBuild:452 - logical net 'N36' has no driver
-WARNING:NgdBuild:452 - logical net 'N37' has no driver
 
 Partition Implementation Status
 -------------------------------
@@ -68,9 +59,9 @@ Partition Implementation Status
 
 NGDBUILD Design Results Summary:
   Number of errors:     0
-  Number of warnings:  17
+  Number of warnings:   1
 
-Total memory usage is 385680 kilobytes
+Total memory usage is 386744 kilobytes
 
 Writing NGD file "top.ngd" ...
 Total REAL time to NGDBUILD completion:  1 sec
