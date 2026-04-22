@@ -15,39 +15,32 @@ Done.
 Annotating constraints to design from ucf file "hdl/top.ucf" ...
 Resolving constraint associations...
 Checking Constraint Associations...
-INFO:ConstraintSystem:178 - TNM 'i_clock', used in period specification
-   'TS_clk', was traced into DCM_SP instance
-   inst_top_camera_monitoring/DCM_SP_cam. The following new TNM groups and
-   period specifications were generated at the DCM_SP output(s): 
-   CLK0: <TIMESPEC TS_inst_top_camera_monitoring_clk11 = PERIOD
-   "inst_top_camera_monitoring_clk11" TS_clk HIGH 50%>
+WARNING:ConstraintSystem:56 - Constraint <TIMESPEC TS_pclk_to_24 = FROM "pclk"
+   TO "CLK24" TIG;> [hdl/top.ucf(51)]: Unable to find an active 'TimeGrp' or
+   'TNM' or 'TPSync' constraint named 'CLK24'.
 
-INFO:ConstraintSystem:178 - TNM 'i_clock', used in period specification
-   'TS_clk', was traced into DCM_SP instance
-   inst_top_camera_monitoring/DCM_SP_cam. The following new TNM groups and
-   period specifications were generated at the DCM_SP output(s): 
-   CLKFX: <TIMESPEC TS_ov7670_xclk1_OBUF1 = PERIOD "ov7670_xclk1_OBUF1" TS_clk /
-   0.48 HIGH 50%>
+WARNING:ConstraintSystem:56 - Constraint <TIMESPEC TS_24_to_pclk = FROM "CLK24"
+   TO "pclk" TIG;> [hdl/top.ucf(52)]: Unable to find an active 'TimeGrp' or
+   'TNM' or 'TPSync' constraint named 'CLK24'.
 
-INFO:ConstraintSystem:178 - TNM 'i_clock100', used in period specification
-   'TS_clk100', was traced into DCM_SP instance
-   inst_top_camera_monitoring/DCM_SP_mc_fx_vga_dv. The following new TNM groups
-   and period specifications were generated at the DCM_SP output(s): 
-   CLKDV: <TIMESPEC TS_vga_clock_OBUF1 = PERIOD "vga_clock_OBUF1" TS_clk100 * 4
-   HIGH 50%>
+WARNING:ConstraintSystem:56 - Constraint <TIMESPEC TS_50_to_pclk = FROM "CLK50"
+   TO "pclk" TIG;> [hdl/top.ucf(53)]: Unable to find an active 'TimeGrp' or
+   'TNM' or 'TPSync' constraint named 'CLK50'.
 
-WARNING:NgdBuild:1345 - The constraint <TIMESPEC TS_CLK100 = PERIOD "CLK100" 10
-   ns HIGH 50%;> [hdl/top.ucf(9)] is overridden by the constraint <TIMESPEC
-   TS_clk100 = PERIOD "i_clock100" 10 ns HIGH 50%;> [hdl/top.ucf(25)]. The
-   overriden constraint usually comes from the input netlist or ncf files.
-   Please set XIL_NGDBUILD_CONSTR_OVERRIDE_ERROR to promote this message to an
-   error.
+WARNING:ConstraintSystem:56 - Constraint <TIMESPEC TS_pclk_to_50 = FROM "pclk"
+   TO "CLK50" TIG;> [hdl/top.ucf(54)]: Unable to find an active 'TimeGrp' or
+   'TNM' or 'TPSync' constraint named 'CLK50'.
+
+WARNING:ConstraintSystem:56 - Constraint <TIMESPEC TS_100_to_pclk = FROM
+   "CLK100" TO "pclk" TIG;> [hdl/top.ucf(55)]: Unable to find an active
+   'TimeGrp' or 'TNM' or 'TPSync' constraint named 'CLK100'.
+
+WARNING:ConstraintSystem:56 - Constraint <TIMESPEC TS_pclk_to_100 = FROM "pclk"
+   TO "CLK100" TIG;> [hdl/top.ucf(56)]: Unable to find an active 'TimeGrp' or
+   'TNM' or 'TPSync' constraint named 'CLK100'.
+
 Done...
 
-INFO:NgdBuild:1222 - Setting CLKIN_PERIOD attribute associated with DCM instance
-   inst_top_camera_monitoring/DCM_SP_mc_fx_vga_dv to 10.000000 ns based on the
-   period specification (<TIMESPEC TS_clk100 = PERIOD "i_clock100" 10 ns HIGH
-   50%;> [hdl/top.ucf(25)]).
 Checking expanded design ...
 
 Partition Implementation Status
@@ -59,12 +52,12 @@ Partition Implementation Status
 
 NGDBUILD Design Results Summary:
   Number of errors:     0
-  Number of warnings:   1
+  Number of warnings:   6
 
-Total memory usage is 386744 kilobytes
+Total memory usage is 385100 kilobytes
 
 Writing NGD file "top.ngd" ...
-Total REAL time to NGDBUILD completion:  1 sec
+Total REAL time to NGDBUILD completion:  2 sec
 Total CPU time to NGDBUILD completion:   1 sec
 
 Writing NGDBUILD log file "top.bld"...

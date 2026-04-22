@@ -897,7 +897,7 @@ else
         end if;
       when a0a =>
 --        if (cntr_rd1 >= 153280+160+160+160+160+160) then
-        if (cntr_rd1 >= 153280+160+160+160+160) then
+        if (cntr_rd1 >= 153280+160+160) then
           cntr_rd1 <= (others => '0');
         end if;
         if (vga_int = '1') then

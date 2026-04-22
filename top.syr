@@ -684,7 +684,7 @@ Synthesizing Unit <VGA_timing_synch>.
     Found 1-bit register for signal <Hsync_i>.
     Found 10-bit comparator greater for signal <Hsync_i$cmp_gt0000> created at line 438.
     Found 10-bit comparator less for signal <Hsync_i$cmp_lt0000> created at line 438.
-    Found 10-bit comparator less for signal <int$cmp_lt0000> created at line 473.
+    Found 10-bit comparator less for signal <int$cmp_lt0000> created at line 474.
     Found 10-bit up counter for signal <vcnt>.
     Found 10-bit comparator greater for signal <Vsync$cmp_gt0000> created at line 452.
     Found 10-bit comparator less for signal <Vsync$cmp_lt0000> created at line 452.
@@ -1259,15 +1259,15 @@ Design Statistics
 # IOs                              : 94
 
 Cell Usage :
-# BELS                             : 1861
+# BELS                             : 1847
 #      GND                         : 2
-#      INV                         : 64
-#      LUT1                        : 212
-#      LUT2                        : 186
+#      INV                         : 63
+#      LUT1                        : 208
+#      LUT2                        : 183
 #      LUT3                        : 183
-#      LUT4                        : 517
-#      MUXCY                       : 301
-#      MUXF5                       : 88
+#      LUT4                        : 519
+#      MUXCY                       : 292
+#      MUXF5                       : 89
 #      MUXF6                       : 16
 #      VCC                         : 2
 #      XORCY                       : 290
@@ -1305,10 +1305,10 @@ Device utilization summary:
 
 Selected Device : 3s1200efg320-4 
 
- Number of Slices:                      626  out of   8672     7%  
+ Number of Slices:                      624  out of   8672     7%  
  Number of Slice Flip Flops:            636  out of  17344     3%  
- Number of 4 input LUTs:               1163  out of  17344     6%  
-    Number used as logic:              1162
+ Number of 4 input LUTs:               1157  out of  17344     6%  
+    Number used as logic:              1156
     Number used as Shift registers:       1
  Number of IOs:                          94
  Number of bonded IOBs:                  87  out of    250    34%  
@@ -1373,7 +1373,7 @@ All values displayed in nanoseconds (ns)
 =========================================================================
 Timing constraint: Default period analysis for Clock 'i_clock'
   Clock period: 88.338ns (frequency: 11.320MHz)
-  Total number of paths / destination ports: 57427 / 1255
+  Total number of paths / destination ports: 57355 / 1255
 -------------------------------------------------------------------------
 Delay:               3.681ns (Levels of Logic = 1)
   Source:            inst_top_camera_monitoring/inst_ov7670contr1/reset (FF)
@@ -1394,27 +1394,28 @@ Delay:               3.681ns (Levels of Logic = 1)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'i_clock100'
-  Clock period: 1.833ns (frequency: 545.628MHz)
+  Clock period: 1.842ns (frequency: 542.962MHz)
   Total number of paths / destination ports: 878 / 93
 -------------------------------------------------------------------------
-Delay:               7.331ns (Levels of Logic = 3)
-  Source:            inst_top_camera_monitoring/inst_vgatiming/hcnt_9 (FF)
-  Destination:       inst_top_camera_monitoring/inst_addrgen1/addr_9 (FF)
+Delay:               7.367ns (Levels of Logic = 4)
+  Source:            inst_top_camera_monitoring/inst_vgatiming/vcnt_4 (FF)
+  Destination:       inst_top_camera_monitoring/inst_vgatiming/vcnt_9 (FF)
   Source Clock:      i_clock100 rising 0.2X
   Destination Clock: i_clock100 rising 0.2X
 
-  Data Path: inst_top_camera_monitoring/inst_vgatiming/hcnt_9 to inst_top_camera_monitoring/inst_addrgen1/addr_9
+  Data Path: inst_top_camera_monitoring/inst_vgatiming/vcnt_4 to inst_top_camera_monitoring/inst_vgatiming/vcnt_9
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDR:C->Q              6   0.591   0.844  inst_top_camera_monitoring/inst_vgatiming/hcnt_9 (inst_top_camera_monitoring/inst_vgatiming/hcnt_9)
-     LUT3:I0->O            9   0.704   0.995  inst_top_camera_monitoring/inst_vgatiming/activeArea1_sig_and00008 (inst_top_camera_monitoring/inst_vgatiming/activeArea1_sig_and00008)
-     LUT3:I0->O           12   0.704   0.996  inst_top_camera_monitoring/inst_vgatiming/activeArea1_sig_and000032 (inst_top_camera_monitoring/active1)
-     LUT4:I2->O           10   0.704   0.882  inst_top_camera_monitoring/inst_addrgen1/addr_or000053 (inst_top_camera_monitoring/inst_addrgen1/addr_or0000)
-     FDRE:R                    0.911          inst_top_camera_monitoring/inst_addrgen1/addr_0
+     FDRE:C->Q             4   0.591   0.762  inst_top_camera_monitoring/inst_vgatiming/vcnt_4 (inst_top_camera_monitoring/inst_vgatiming/vcnt_4)
+     LUT3:I0->O            1   0.704   0.424  inst_top_camera_monitoring/inst_vgatiming/int_and000012_SW0 (N51)
+     LUT4:I3->O            2   0.704   0.482  inst_top_camera_monitoring/inst_vgatiming/int_and000012 (inst_top_camera_monitoring/inst_vgatiming/N5)
+     LUT4:I2->O            1   0.704   0.499  inst_top_camera_monitoring/inst_vgatiming/vcnt_or0000_SW0 (N71)
+     LUT4:I1->O           10   0.704   0.882  inst_top_camera_monitoring/inst_vgatiming/vcnt_or0000 (inst_top_camera_monitoring/inst_vgatiming/vcnt_or0000)
+     FDRE:R                    0.911          inst_top_camera_monitoring/inst_vgatiming/vcnt_0
     ----------------------------------------
-    Total                      7.331ns (3.614ns logic, 3.717ns route)
-                                       (49.3% logic, 50.7% route)
+    Total                      7.367ns (4.318ns logic, 3.049ns route)
+                                       (58.6% logic, 41.4% route)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'inst_top_camera_monitoring/inst_ov7670capt1/pclk_inv'
@@ -1590,13 +1591,13 @@ Delay:               6.034ns (Levels of Logic = 3)
 =========================================================================
 
 
-Total REAL time to Xst completion: 15.00 secs
-Total CPU time to Xst completion: 14.19 secs
+Total REAL time to Xst completion: 16.00 secs
+Total CPU time to Xst completion: 14.60 secs
  
 --> 
 
 
-Total memory usage is 1306332 kilobytes
+Total memory usage is 1306220 kilobytes
 
 Number of errors   :    0 (   0 filtered)
 Number of warnings :  187 (   0 filtered)
