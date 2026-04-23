@@ -52,7 +52,7 @@ port (
   vga_g     : out STD_LOGIC_VECTOR (2 downto 0);
   vga_b     : out STD_LOGIC_VECTOR (1 downto 0);
   -- Pins for debug (on JA-JD)
-  vga_vsdbg     : out STD_LOGIC;
+  vga_hsdbg     : out STD_LOGIC;
   vga_vsdbg     : out STD_LOGIC;
   ov7670_data_0 : out std_logic;
   ov7670_data_1 : out std_logic;
@@ -520,7 +520,8 @@ crbc_i0 : cellular_ram_burst_controller
 PORT MAP (
 busy => busy,
 clk => clk1,
-reset => resend,
+--reset => resend,
+reset => reset_dcm,
 writes => wrc,
 data => data,
 id => id,
@@ -678,7 +679,7 @@ synchro_reset_i0 : SRLC16E
 port map (
 D => '1', -- insert input signal
 CE => '1', -- insert Clock Enable signal (optional)
-CLK => i_clock_ib2, -- insert Clock signal
+CLK => i_clock_ib1, -- insert Clock signal
 A0 => '1', -- insert Address 0 signal
 A1 => '1', -- insert Address 1 signal
 A2 => '1', -- insert Address 2 signal

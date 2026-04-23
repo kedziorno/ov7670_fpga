@@ -9,9 +9,36 @@ Target Device  : xc3s1200e
 Target Package : fg320
 Target Speed   : -4
 Mapper Version : spartan3e -- $Revision: 1.55 $
-Mapped Date    : Wed Apr 22 22:52:30 2026
+Mapped Date    : Thu Apr 23 16:53:37 2026
 
+WARNING:Map:83 - The range defined by columns 13, 25 and rows 5, 23 in area
+   group "g2" does not fall on CLB boundary.  The constraint value equals
+   SLICE_X13Y23:SLICE_X25Y5.  This practice is dangerous and will likely lead to
+   overlapping area group warnings in PAR as well as possibly undesirable RPM
+   placements.
+WARNING:Map:83 - The range defined by columns 13, 26 and rows 29, 50 in area
+   group "g1" does not fall on CLB boundary.  The constraint value equals
+   SLICE_X13Y29:SLICE_X26Y50.  This practice is dangerous and will likely lead
+   to overlapping area group warnings in PAR as well as possibly undesirable RPM
+   placements.
 Mapping design into LUTs...
+WARNING:LIT:176 - Clock buffer is designated to drive clock loads. BUFGMUX
+   symbol
+   "physical_group_inst_top_camera_monitoring/clk1/inst_top_camera_monitoring/cl
+   k1_BUFG" (output signal=inst_top_camera_monitoring/clk1) has a mix of clock
+   and non-clock loads. The non-clock loads are:
+   Pin I1 of inst_top_camera_monitoring/crbc_i0/ram_clk
+WARNING:LIT:176 - Clock buffer is designated to drive clock loads. BUFGMUX
+   symbol
+   "physical_group_inst_top_camera_monitoring/clk_cam/inst_top_camera_monitoring
+   /clk_cam_BUFG" (output signal=inst_top_camera_monitoring/clk_cam) has a mix
+   of clock and non-clock loads. The non-clock loads are:
+   Pin I0 of inst_top_camera_monitoring/virtual_camera/camera_o_pclk1
+WARNING:LIT:176 - Clock buffer is designated to drive clock loads. BUFGMUX
+   symbol "physical_group_ov7670_pclk1_BUFGP/ov7670_pclk1_BUFGP/BUFG" (output
+   signal=ov7670_pclk1_BUFGP) has a mix of clock and non-clock loads. The
+   non-clock loads are:
+   Pin I1 of inst_top_camera_monitoring/cam_pclk1
 Running directed packing...
 Running delay-based LUT packing...
 Running related packing...
@@ -36,18 +63,18 @@ Design Summary
 
 Design Summary:
 Number of errors:      0
-Number of warnings:    7
+Number of warnings:   12
 Logic Utilization:
-  Number of Slice Flip Flops:           664 out of  17,344    3%
-  Number of 4 input LUTs:               922 out of  17,344    5%
+  Number of Slice Flip Flops:           661 out of  17,344    3%
+  Number of 4 input LUTs:               924 out of  17,344    5%
 Logic Distribution:
-  Number of occupied Slices:            686 out of   8,672    7%
-    Number of Slices containing only related logic:     686 out of     686 100%
-    Number of Slices containing unrelated logic:          0 out of     686   0%
+  Number of occupied Slices:            675 out of   8,672    7%
+    Number of Slices containing only related logic:     675 out of     675 100%
+    Number of Slices containing unrelated logic:          0 out of     675   0%
       *See NOTES below for an explanation of the effects of unrelated logic.
-  Total Number of 4 input LUTs:       1,137 out of  17,344    6%
-    Number used as logic:               921
-    Number used as a route-thru:        215
+  Total Number of 4 input LUTs:       1,138 out of  17,344    6%
+    Number used as logic:               923
+    Number used as a route-thru:        214
     Number used as Shift registers:       1
 
   The Slice Logic Distribution report is not meaningful if the design is
@@ -55,12 +82,12 @@ Logic Distribution:
 
   Number of bonded IOBs:                 93 out of     250   37%
   Number of RAMB16s:                      2 out of      28    7%
-  Number of BUFGMUXs:                     7 out of      24   29%
+  Number of BUFGMUXs:                     8 out of      24   33%
   Number of DCMs:                         2 out of       8   25%
 
-Average Fanout of Non-Clock Nets:                3.30
+Average Fanout of Non-Clock Nets:                3.22
 
-Peak Memory Usage:  589 MB
+Peak Memory Usage:  591 MB
 Total REAL time to MAP completion:  2 secs 
 Total CPU time to MAP completion:   2 secs 
 
