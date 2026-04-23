@@ -1,14 +1,3 @@
-----------------------------------------------------------------------------------
--- OV7670 -- FPGA -- VGA -- Monitor
--- The 1st revision
--- Revision : 
-	-- Adjustment several entities so they can fit with the top module.
-	-- Generate single clock modificator.
--- Credit:
-	-- Thanks to Mike Field for Registers Reference
--- Your design might has diffent pin assignment.
--- Discuss with me by email : Jason Danny Setiawan [jasondannysetiawan@gmail.com]
-----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use ieee.numeric_std.all;
@@ -21,490 +10,56 @@ use work.p_camera_colorbar.all;
 
 entity top_camera_monitoring is
 generic (
-  constant c_synchronisation : boolean := true;
-  constant c_hs_blanking : boolean := true;
-  constant c_pb_bits : integer := 1;
-  constant c_zero : integer := 0
+  constant c_synchronisation  : boolean := true;
+  constant c_hs_blanking      : boolean := true;
+  constant c_pb_bits          : integer := 1;
+  constant c_zero             : integer := 0
 );
-port	(
-  i_clock	: in STD_LOGIC;
-  i_clock100	: in STD_LOGIC;
-  pb		: in STD_LOGIC;
-  sw : in std_logic_vector (7 downto 0);
-  led1 : out STD_LOGIC; -- configuration done
+port (
+  i_clock     : in  STD_LOGIC;
+  i_clock100  : in  STD_LOGIC;
+  pb          : in  STD_LOGIC;
+  sw          : in  std_logic_vector (7 downto 0);
+  led1        : out STD_LOGIC; -- configuration done
   -- OV7670
-  ov7670_pclk1 : in  STD_LOGIC;
-  ov7670_xclk1 : out STD_LOGIC;
-  ov7670_vsync1 : in  STD_LOGIC;
-  ov7670_href1 : in  STD_LOGIC;
-  ov7670_data1 : in  STD_LOGIC_vector(7 downto 0);
-  ov7670_sioc1 : out STD_LOGIC;
-  ov7670_siod1 : inout STD_LOGIC;
-  ov7670_pwdn1 : out STD_LOGIC;
-  ov7670_reset1 : out STD_LOGIC;
-  --memory module
-  Dq : inout std_logic_vector (c_data_bits - 1 downto 0);
-  Addr : out std_logic_vector (c_addr_bits - 1 downto 0);
-  Adv_n : out std_logic := '1';
-  Ce_n : out std_logic := '1';
-  Clk : out std_logic := '0';
-  Cre : out std_logic := '0';
-  Lb_n : out std_logic := '0';
-  Oe_n : out std_logic := '1';
-  Ub_n : out std_logic := '0';
-  We_n : out std_logic := '1';
-  oWait : in std_logic;
-  --VGA
+  ov7670_pclk1  : in    STD_LOGIC;
+  ov7670_xclk1  : out   STD_LOGIC;
+  ov7670_vsync1 : in    STD_LOGIC;
+  ov7670_href1  : in    STD_LOGIC;
+  ov7670_data1  : in    STD_LOGIC_vector(7 downto 0);
+  ov7670_sioc1  : out   STD_LOGIC;
+  ov7670_siod1  : inout STD_LOGIC;
+  ov7670_pwdn1  : out   STD_LOGIC;
+  ov7670_reset1 : out   STD_LOGIC;
+  -- memory module
+  Dq    : inout std_logic_vector (c_data_bits - 1 downto 0);
+  Addr  : out   std_logic_vector (c_addr_bits - 1 downto 0);
+  Adv_n : out   std_logic := '1';
+  Ce_n  : out   std_logic := '1';
+  Clk   : out   std_logic := '0';
+  Cre   : out   std_logic := '0';
+  Lb_n  : out   std_logic := '0';
+  Oe_n  : out   std_logic := '1';
+  Ub_n  : out   std_logic := '0';
+  We_n  : out   std_logic := '1';
+  oWait : in    std_logic;
+  -- VGA
   vga_clock : out STD_LOGIC;
   vga_blank : out STD_LOGIC;
-  vga_hsync, vga_hsdbg : out STD_LOGIC;
-  vga_vsync, vga_vsdbg : out STD_LOGIC;
-  vga_r	: out STD_LOGIC_VECTOR(2 downto 0);
-  vga_g	: out STD_LOGIC_VECTOR(2 downto 0);
-  vga_b	: out STD_LOGIC_VECTOR(1 downto 0);
-  ov7670_data_0, ov7670_data_1, ov7670_data_2, ov7670_data_3 : out std_logic
+  vga_hsync : out STD_LOGIC;
+  vga_vsync : out STD_LOGIC;
+  vga_r     : out STD_LOGIC_VECTOR (2 downto 0);
+  vga_g     : out STD_LOGIC_VECTOR (2 downto 0);
+  vga_b     : out STD_LOGIC_VECTOR (1 downto 0);
+  -- Pins for debug (on JA-JD)
+  vga_vsdbg     : out STD_LOGIC;
+  vga_vsdbg     : out STD_LOGIC;
+  ov7670_data_0 : out std_logic;
+  ov7670_data_1 : out std_logic;
+  ov7670_data_2 : out std_logic;
+  ov7670_data_3 : out std_logic
 );
-end top_camera_monitoring;
-
-architecture raw_signal of top_camera_monitoring is
-
-COMPONENT debounce_circuit
-	Port ( clk : in STD_LOGIC;
-			 input : in STD_LOGIC;
-			 output : out STD_LOGIC);
-END COMPONENT;
-
-COMPONENT ov7670_capture
-	Port ( pclk : in  STD_LOGIC;
-          vsync : in  STD_LOGIC;
-          href : in  STD_LOGIC;
-          d : in  STD_LOGIC_VECTOR (7 downto 0);
-          addr : out  STD_LOGIC_VECTOR (18 downto 0);
-          dout : out  STD_LOGIC_VECTOR (15 downto 0);
-          we : out  STD_LOGIC_VECTOR (0 downto 0));
-END COMPONENT;
-
-COMPONENT ov7670_controller
-	Port ( clk : in  STD_LOGIC;
-          reset1 : in  STD_LOGIC;
-          resend : in  STD_LOGIC;
-          sioc : out  STD_LOGIC;
-          siodi : in  STD_LOGIC;
-          siodo : out  STD_LOGIC;
-          conf_done : out  STD_LOGIC;
-          pwdn : out  STD_LOGIC;
-			 reset: out  STD_LOGIC;
-			 xclk_in : in  STD_LOGIC;
-          xclk_out: out  STD_LOGIC);
-END COMPONENT;
-
-COMPONENT vga_imagegenerator
-	Port ( Data_in1 : in  STD_LOGIC_VECTOR (15 downto 0);
-						active_area1 : in  STD_LOGIC;
-           RGB_out : out  STD_LOGIC_VECTOR (7 downto 0));
-END COMPONENT;
-
-COMPONENT VGA_timing_synch
-	Port ( clk25, rst : in  STD_LOGIC;
-           Hsync : out  STD_LOGIC;
-           Vsync : out  STD_LOGIC;
-           blank : out  STD_LOGIC;
-           activeArea1 : out  STD_LOGIC;
-           int, fint : out  STD_LOGIC;
-           vint : in std_logic);
-END COMPONENT;
---for all : VGA_timing_synch use entity work.VGA_timing_synch(lsfr_2);
---for all : VGA_timing_synch use entity work.VGA_timing_synch(lsfr_1);
---for all : VGA_timing_synch use entity work.VGA_timing_synch(jc);
-for all : VGA_timing_synch use entity work.VGA_timing_synch(counter);
-
-signal siodo1, siodi1 : std_logic;
-
-signal clk0, clk0_fb : std_logic;
-signal clk1, clk1_fb : std_logic;
-signal i_clock_ib : std_logic;
-signal clkg1, clkg2 : std_logic;
-signal clk_cam, clk_vga, clk_mc : std_logic;
-signal resend : std_logic;
-
-signal ov7670_pclk : std_logic;
-signal ov7670_d : std_logic_vector (7 downto 0);
-signal ov7670_hs, ov7670_vs : std_logic;
-
-signal reset_dcm_n, reset_dcm : std_logic;
-
-signal siodi1_n : std_logic;
-
-signal wr_d1 : std_logic_vector (15 downto 0);
-
-signal active1 : std_logic;
-signal vga_hsync_i, vga_vsync_i : std_logic;
-
-signal vga_rgb : std_logic_vector (7 downto 0);
-  
-begin
-
-  vga_r <= vga_rgb (7 downto 5);
-  vga_g <= vga_rgb (4 downto 2);
-  vga_b <= vga_rgb (1 downto 0);
-
---  grayscale : process (wr_d1, ov7670_hs) is
---    variable rgb : std_logic_vector (2 downto 0);
---  begin
---    rgb (2) := wr_d1 (15);
---    rgb (1) := wr_d1 (10);
---    rgb (0) := wr_d1 (4);
---    case (rgb) is
---      when "001"  => if (ov7670_hs = '1') then vga_rgb <= "00100100"; end if;
---      when "010"  => if (ov7670_hs = '1') then vga_rgb <= "01001001"; end if;
---      when "011"  => if (ov7670_hs = '1') then vga_rgb <= "01101101"; end if;
---      when "100"  => if (ov7670_hs = '1') then vga_rgb <= "10010010"; end if;
---      when "101"  => if (ov7670_hs = '1') then vga_rgb <= "10110110"; end if;
---      when "110"  => if (ov7670_hs = '1') then vga_rgb <= "11011011"; end if;
---      when "111"  => if (ov7670_hs = '1') then vga_rgb <= "11111111"; end if;
---      when others => if (ov7670_hs = '1') then vga_rgb <= "00000000"; end if;
---    end case;
---  end process grayscale;
-
---  prio_dec_black_white : process (sw, wr_d1, ov7670_hs) is
---  begin
---    case (sw) is
---      when "1-------" =>
---        if (ov7670_hs = '1') then
---          vga_rgb <=
---            (wr_d1 (15) xor wr_d1 (14)) &
---            (wr_d1 (15) xor wr_d1 (14)) &
---            (wr_d1 (15) xor wr_d1 (14)) &
---            (wr_d1 (15) xor wr_d1 (14)) &
---            (wr_d1 (15) xor wr_d1 (14)) &
---            (wr_d1 (15) xor wr_d1 (14)) &
---            (wr_d1 (15) xor wr_d1 (14)) &
---            (wr_d1 (15) xor wr_d1 (14));
---        end if;
---      when "01------" =>
---        if (ov7670_hs = '1') then
---          vga_rgb <=
---            (wr_d1 (13) xor wr_d1 (12)) &
---            (wr_d1 (13) xor wr_d1 (12)) &
---            (wr_d1 (13) xor wr_d1 (12)) &
---            (wr_d1 (13) xor wr_d1 (12)) &
---            (wr_d1 (13) xor wr_d1 (12)) &
---            (wr_d1 (13) xor wr_d1 (12)) &
---            (wr_d1 (13) xor wr_d1 (12)) &
---            (wr_d1 (13) xor wr_d1 (12));
---        end if;
---      when "001-----" =>
---        if (ov7670_hs = '1') then
---          vga_rgb <=
---            (wr_d1 (11) xor wr_d1 (10)) &
---            (wr_d1 (11) xor wr_d1 (10)) &
---            (wr_d1 (11) xor wr_d1 (10)) &
---            (wr_d1 (11) xor wr_d1 (10)) &
---            (wr_d1 (11) xor wr_d1 (10)) &
---            (wr_d1 (11) xor wr_d1 (10)) &
---            (wr_d1 (11) xor wr_d1 (10)) &
---            (wr_d1 (11) xor wr_d1 (10));
---        end if;
---      when "0001----" =>
---        if (ov7670_hs = '1') then
---          vga_rgb <=
---            (wr_d1 (9) xor wr_d1 (8)) &
---            (wr_d1 (9) xor wr_d1 (8)) &
---            (wr_d1 (9) xor wr_d1 (8)) &
---            (wr_d1 (9) xor wr_d1 (8)) &
---            (wr_d1 (9) xor wr_d1 (8)) &
---            (wr_d1 (9) xor wr_d1 (8)) &
---            (wr_d1 (9) xor wr_d1 (8)) &
---            (wr_d1 (9) xor wr_d1 (8));
---        end if;
---      when "00001---" =>
---        if (ov7670_hs = '1') then
---          vga_rgb <=
---            (wr_d1 (7) xor wr_d1 (6)) &
---            (wr_d1 (7) xor wr_d1 (6)) &
---            (wr_d1 (7) xor wr_d1 (6)) &
---            (wr_d1 (7) xor wr_d1 (6)) &
---            (wr_d1 (7) xor wr_d1 (6)) &
---            (wr_d1 (7) xor wr_d1 (6)) &
---            (wr_d1 (7) xor wr_d1 (6)) &
---            (wr_d1 (7) xor wr_d1 (6));
---        end if;
---      when "000001--" =>
---        if (ov7670_hs = '1') then
---          vga_rgb <=
---            (wr_d1 (5) xor wr_d1 (4)) &
---            (wr_d1 (5) xor wr_d1 (4)) &
---            (wr_d1 (5) xor wr_d1 (4)) &
---            (wr_d1 (5) xor wr_d1 (4)) &
---            (wr_d1 (5) xor wr_d1 (4)) &
---            (wr_d1 (5) xor wr_d1 (4)) &
---            (wr_d1 (5) xor wr_d1 (4)) &
---            (wr_d1 (5) xor wr_d1 (4));
---        end if;
---      when "0000001-" =>
---        if (ov7670_hs = '1') then
---          vga_rgb <=
---            (wr_d1 (3) xor wr_d1 (2)) &
---            (wr_d1 (3) xor wr_d1 (2)) &
---            (wr_d1 (3) xor wr_d1 (2)) &
---            (wr_d1 (3) xor wr_d1 (2)) &
---            (wr_d1 (3) xor wr_d1 (2)) &
---            (wr_d1 (3) xor wr_d1 (2)) &
---            (wr_d1 (3) xor wr_d1 (2)) &
---            (wr_d1 (3) xor wr_d1 (2));
---        end if;
---      when "00000001" =>
---        if (ov7670_hs = '1') then
---          vga_rgb <=
---            (wr_d1 (1) xor wr_d1 (0)) &
---            (wr_d1 (1) xor wr_d1 (0)) &
---            (wr_d1 (1) xor wr_d1 (0)) &
---            (wr_d1 (1) xor wr_d1 (0)) &
---            (wr_d1 (1) xor wr_d1 (0)) &
---            (wr_d1 (1) xor wr_d1 (0)) &
---            (wr_d1 (1) xor wr_d1 (0)) &
---            (wr_d1 (1) xor wr_d1 (0));
---        end if;
---      when others =>
---        if (ov7670_hs = '1') then
---          vga_rgb <= wr_d1 (15 downto 13) & wr_d1 (10 downto 8) & wr_d1 (4 downto 3);
---        end if;
---    end case;
---  end process prio_dec_black_white;
-
-  siodi1_n <= not siodi1;
-  ov7670_siod1_tri : IOBUF port map (
-     O  => (siodi1),
-     IO => (ov7670_siod1),
-     I  => (siodo1),
-     T  => (siodi1_n)
-  );
-
-	inst_debounce: debounce_circuit port map(
-		clk => i_clock_ib,
-		input => pb,
-		output => resend
-  );
-
-	inst_ov7670contr1: ov7670_controller port map(
-		clk => i_clock_ib,
-    reset1 => resend,
-		resend => resend,
-		sioc => ov7670_sioc1,
-		siodi => siodi1,
-		siodo => siodo1,
-		conf_done => led1,
-		pwdn => ov7670_pwdn1,
-		reset => ov7670_reset1,
-		xclk_in => clk_cam,
-		xclk_out => ov7670_xclk1
-  );
-
-  g_input_cam_syn : if (c_synchronisation = true) generate
-    process (clk_mc, resend) is
-    begin
-      if (resend = '1') then
-        ov7670_pclk <= '0';
-        ov7670_hs <= '0';
-        ov7670_vs <= '0';
-        ov7670_d <= (others => '0');
-      elsif (falling_edge (clk_mc)) then
-        ov7670_pclk <= ov7670_pclk1;
-        ov7670_hs <= ov7670_href1;
-        ov7670_vs <= ov7670_vsync1;
-        ov7670_d <= ov7670_data1;
-      end if;
-    end process;
-  end generate g_input_cam_syn;
-
-  g_input_cam_no_syn : if (c_synchronisation = false) generate
-    ov7670_pclk <= ov7670_pclk1;
-    ov7670_hs <= ov7670_href1;
-    ov7670_vs <= ov7670_vsync1;
-    ov7670_d <= ov7670_data1;
-  end generate g_input_cam_no_syn;
-
-	inst_ov7670capt1: ov7670_capture port map(
-		pclk => ov7670_pclk,
-		vsync => ov7670_vs,
-		href => ov7670_hs,
-		d => ov7670_d,
-		addr => open,
-		dout => wr_d1,
-		we => open
-  );
-
-  g_hsync_blanking : if (c_hs_blanking = true) generate
-    inst_imagegen_blanking : vga_imagegenerator port map(
-      Data_in1 => wr_d1,
-      active_area1 => ov7670_hs,
-      RGB_out => vga_rgb
-    );
-  end generate g_hsync_blanking;
-
-  g_hsync_no_blanking : if (c_hs_blanking = false) generate
-    inst_imagegen_no_blanking : vga_imagegenerator port map(
-      Data_in1 => wr_d1,
-      active_area1 => '1',
-      RGB_out => vga_rgb
-    );
-  end generate g_hsync_no_blanking;
-
-  inst_vgatiming : VGA_timing_synch port map(
-    clk25 => clk_vga,
-    rst => resend,
-    Hsync => vga_hsync_i,
-    Vsync => vga_vsync_i,
-    blank => vga_blank,
-    activeArea1 => active1,
-    int => open,
-    fint => open,
-    vint => '0'
-  );
-
-  vga_hsync <= ov7670_hs;
-  vga_vsync <= ov7670_vs;
-  --vga_hsync <= vga_hsync_i;
-  --vga_vsync <= vga_vsync_i;
-  vga_hsdbg <= vga_hsync_i;
-  vga_vsdbg <= vga_vsync_i;
-
-  --vga_clock <= ov7670_pclk;
-  --vga_clock <= clk_vga;
-  vga_clock <= clk_cam; -- debug camera clock
-
-  BUFG_mc : BUFG
-  port map (
-    O => clk0_fb,
-    I => clk0
-  );
-
-  BUFG_cam : BUFG
-  port map (
-    O => clk1_fb,
-    I => clk1
-  );
-
-  IBUFG_global_clock : IBUFG
-  generic map (
-    IOSTANDARD => "DEFAULT")
-  port map (
-    O => i_clock_ib,
-    I => i_clock
-  );
-
-  BUFG_clk1 : BUFG
-  port map (
-    O => clkg1,
-    I => i_clock_ib
-  );
-
-  BUFG_clk2 : BUFG
-  port map (
-    O => clkg2,
-    I => i_clock_ib
-  );
-
-  reset_dcm_n <= not reset_dcm;
-  synchro_reset_i0 : SRLC16E
-  port map (
-    D => '1', -- insert input signal
-    CE => '1', -- insert Clock Enable signal (optional)
-    CLK => i_clock_ib, -- insert Clock signal
-    A0 => '1', -- insert Address 0 signal
-    A1 => '1', -- insert Address 1 signal
-    A2 => '1', -- insert Address 2 signal
-    A3 => '1', -- insert Address 3 signal
-    Q => reset_dcm, -- insert output signal
-    Q15 => open -- insert cascadable output signal
-  );
-
-  DCM_SP_mc_fx_vga_dv : DCM_SP
-  generic map (
-    --CLKDV_DIVIDE => 2.0, -- 50mhz
-    CLKDV_DIVIDE => 4.0, -- 100mhz
-    CLKFX_MULTIPLY => 31, -- Can be any integer from 1 to 32
-    --CLKFX_DIVIDE => 1, -- dont work
-    --CLKFX_DIVIDE => 2, -- glitches, max
-    CLKFX_DIVIDE => 3, -- stable
-    CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
-    CLKIN_PERIOD => 10.0, -- Specify period of input clock
-    CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of "NONE", "FIXED" or "VARIABLE"
-    CLK_FEEDBACK => "1X", -- Specify clock feedback of "NONE", "1X" or "2X"
-    DESKEW_ADJUST => "SYSTEM_SYNCHRONOUS", -- "SOURCE_SYNCHRONOUS", "SYSTEM_SYNCHRONOUS" or
-    -- an integer from 0 to 15
-    DLL_FREQUENCY_MODE => "LOW", -- "HIGH" or "LOW" frequency mode for DLL
-    DUTY_CYCLE_CORRECTION => TRUE, -- Duty cycle correction, TRUE or FALSE
-    PHASE_SHIFT => 0, -- Amount of fixed phase shift from -255 to 255
-    STARTUP_WAIT => FALSE) -- Delay configuration DONE until DCM_SP LOCK, TRUE/FALSE
-  port map (
-    CLK0 => clk0, -- 0 degree DCM CLK ouptput
-    CLK180 => open, -- 180 degree DCM CLK output
-    CLK270 => open, -- 270 degree DCM CLK output
-    CLK2X => open, -- 2X DCM CLK output
-    CLK2X180 => open, -- 2X, 180 degree DCM CLK out
-    CLK90 => open, -- 90 degree DCM CLK output
-    CLKDV => clk_vga, -- Divided DCM CLK out (CLKDV_DIVIDE)
-    CLKFX => clk_mc, -- DCM CLK synthesis out (M/D)
-    CLKFX180 => open, -- 180 degree CLK synthesis out
-    LOCKED => open, -- DCM LOCK status output
-    PSDONE => open, -- Dynamic phase adjust done output
-    STATUS => open, -- 8-bit DCM status bits output
-    CLKFB => clk0_fb, -- DCM clock feedback
-    CLKIN => clkg1, -- Clock input (from IBUFG, BUFG or DCM)
-    PSCLK => '0', -- Dynamic phase adjust clock input
-    PSEN => '0', -- Dynamic phase adjust enable input
-    PSINCDEC => '0', -- Dynamic phase adjust increment/decrement
-    RST => reset_dcm_n -- DCM asynchronous reset input
-  );
-
-  DCM_SP_cam : DCM_SP
-  generic map (
-    CLKDV_DIVIDE => 2.0, -- Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
-    -- 7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
-    --CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 24, -- 50 -> 25 mhz
-    --CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 25, -- 50 -> 24.0 mhz
-    CLKFX_MULTIPLY => 6, CLKFX_DIVIDE => 25, -- 100 -> 24.0 mhz
-    --CLKFX_MULTIPLY => 13, CLKFX_DIVIDE => 27, -- 50 -> 24.07407407407407407400 mhz
-    --CLKFX_MULTIPLY => 14, CLKFX_DIVIDE => 29, -- 50 -> 24.13793103448275862050 mhz
-    --CLKFX_MULTIPLY => 15, CLKFX_DIVIDE => 31, -- 50 -> 24.19354838709677419350 mhz
-    --CLKFX_MULTIPLY => 24, CLKFX_DIVIDE => 25, -- 50 -> 48.0 mhz
-    CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
-    CLKIN_PERIOD => 10.0, -- Specify period of input clock
-    CLKOUT_PHASE_SHIFT => "NONE", -- Specify phase shift of "NONE", "FIXED" or "VARIABLE"
-    CLK_FEEDBACK => "1X", -- Specify clock feedback of "NONE", "1X" or "2X"
-    DESKEW_ADJUST => "SYSTEM_SYNCHRONOUS", -- "SOURCE_SYNCHRONOUS", "SYSTEM_SYNCHRONOUS" or
-    -- an integer from 0 to 15
-    DLL_FREQUENCY_MODE => "LOW", -- "HIGH" or "LOW" frequency mode for DLL
-    DUTY_CYCLE_CORRECTION => TRUE, -- Duty cycle correction, TRUE or FALSE
-    PHASE_SHIFT => 0, -- Amount of fixed phase shift from -255 to 255
-    STARTUP_WAIT => FALSE) -- Delay configuration DONE until DCM_SP LOCK, TRUE/FALSE
-  port map (
-    CLK0 => clk1, -- 0 degree DCM CLK ouptput
-    CLK180 => open, -- 180 degree DCM CLK output
-    CLK270 => open, -- 270 degree DCM CLK output
-    CLK2X => open, -- 2X DCM CLK output
-    CLK2X180 => open, -- 2X, 180 degree DCM CLK out
-    CLK90 => open, -- 90 degree DCM CLK output
-    CLKDV => open, -- Divided DCM CLK out (CLKDV_DIVIDE)
-    CLKFX => clk_cam, -- DCM CLK synthesis out (M/D)
-    CLKFX180 => open, -- 180 degree CLK synthesis out
-    LOCKED => open, -- DCM LOCK status output
-    PSDONE => open, -- Dynamic phase adjust done output
-    STATUS => open, -- 8-bit DCM status bits output
-    CLKFB => clk1_fb, -- DCM clock feedback
-    CLKIN => clkg2, -- Clock input (from IBUFG, BUFG or DCM)
-    PSCLK => '0', -- Dynamic phase adjust clock input
-    PSEN => '0', -- Dynamic phase adjust enable input
-    PSINCDEC => '0', -- Dynamic phase adjust increment/decrement
-    RST => reset_dcm_n -- DCM asynchronous reset input
-  );
-
-end architecture raw_signal;
-
--- ///////////////////////////////////////////////////////////////////////////////
--- ///////////////////////////////////////////////////////////////////////////////
--- ///////////////////////////////////////////////////////////////////////////////
+end entity top_camera_monitoring;
 
 architecture Structural of top_camera_monitoring is
 

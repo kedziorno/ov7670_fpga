@@ -40,7 +40,7 @@ begin
       when 2 => cmd_reg <= x"1280";
       when 3 => cmd_reg <= x"fffe";
       -- configuration registers
-      when 4 => cmd_reg <= x"12"&"00000000"; -- CLKRC - internal p-s
+      when 4 => cmd_reg <= x"12"&"00000100"; -- CLKRC - internal p-s
       when 5 => cmd_reg <= x"6b"&"11000000"; -- DBLV - ic x8
       when 6 => cmd_reg <= x"11"&"00000001"; -- COM14, 4,2:0 hsync period
       when 7 => cmd_reg <= x"3e"&"00000000"; -- COM7 - RGB selection
@@ -48,16 +48,16 @@ begin
       when 9 => cmd_reg <= x"40"&"11010000"; -- COM15 - out ran 255, RGB565
       when 10 => cmd_reg <= x"8c"&"00000010"; -- RGB444 - enable, xRGB
       when 11 => cmd_reg <= x"15"&"00000010"; -- COM10 - negate VSYNC
-      when 12 => cmd_reg <= x"17"&"00000000"; -- HSTART
-      when 13 => cmd_reg <= x"18"&"00000000"; -- HSTOP
-      when 14 => cmd_reg <= x"32"&"00000000"; -- HREF
-      when 15 => cmd_reg <= x"19"&"00000000"; -- VSTART
-      when 16 => cmd_reg <= x"1a"&"00000000"; -- VSTOP
-      when 17 => cmd_reg <= x"03"&"00000000"; -- VREF
-      when 18 => cmd_reg <= x"70"&"00000000";
-      when 19 => cmd_reg <= x"71"&"00000000";
-      when 20 => cmd_reg <= x"72"&"00000000";
-      when 21 => cmd_reg <= x"73"&"00000000"; -- SCALING_PCLK_DIV
+      when 12 => cmd_reg <= x"17"&x"14"; -- HSTART
+      when 13 => cmd_reg <= x"18"&x"02"; -- HSTOP
+      when 14 => cmd_reg <= x"32"&x"80"; -- HREF
+      when 15 => cmd_reg <= x"19"&x"03"; -- VSTART
+      when 16 => cmd_reg <= x"1a"&x"7b"; -- VSTOP
+      when 17 => cmd_reg <= x"03"&x"3a"; -- VREF
+      when 18 => cmd_reg <= x"70"&x"3a";
+      when 19 => cmd_reg <= x"71"&x"35";
+      when 20 => cmd_reg <= x"72"&x"22";
+      when 21 => cmd_reg <= x"73"&x"f2"; -- SCALING_PCLK_DIV
       when 22 => cmd_reg <= x"3a"&"00000001"; -- TSLB auto window, 00 have pattern
       when 23 => cmd_reg <= x"0c"&"00000100";
       when 24 => cmd_reg <= x"b0"&"10001000";
