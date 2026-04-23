@@ -9,34 +9,34 @@ Target Device  : xc3s1200e
 Target Package : fg320
 Target Speed   : -4
 Mapper Version : spartan3e -- $Revision: 1.55 $
-Mapped Date    : Thu Apr 23 16:58:00 2026
+Mapped Date    : Thu Apr 23 18:35:55 2026
 
 Design Summary
 --------------
 Number of errors:      0
-Number of warnings:   12
+Number of warnings:   11
 Logic Utilization:
-  Number of Slice Flip Flops:           661 out of  17,344    3%
+  Number of Slice Flip Flops:           671 out of  17,344    3%
   Number of 4 input LUTs:               924 out of  17,344    5%
 Logic Distribution:
-  Number of occupied Slices:            675 out of   8,672    7%
-    Number of Slices containing only related logic:     675 out of     675 100%
-    Number of Slices containing unrelated logic:          0 out of     675   0%
+  Number of occupied Slices:            681 out of   8,672    7%
+    Number of Slices containing only related logic:     681 out of     681 100%
+    Number of Slices containing unrelated logic:          0 out of     681   0%
       *See NOTES below for an explanation of the effects of unrelated logic.
   Total Number of 4 input LUTs:       1,138 out of  17,344    6%
-    Number used as logic:               923
+    Number used as logic:               924
     Number used as a route-thru:        214
-    Number used as Shift registers:       1
 
   The Slice Logic Distribution report is not meaningful if the design is
   over-mapped for a non-slice resource or if Placement fails.
 
   Number of bonded IOBs:                 93 out of     250   37%
+    IOB Flip Flops:                       1
   Number of RAMB16s:                      2 out of      28    7%
-  Number of BUFGMUXs:                     8 out of      24   33%
+  Number of BUFGMUXs:                     7 out of      24   29%
   Number of DCMs:                         2 out of       8   25%
 
-Average Fanout of Non-Clock Nets:                3.22
+Average Fanout of Non-Clock Nets:                3.21
 
 Peak Memory Usage:  591 MB
 Total REAL time to MAP completion:  2 secs 
@@ -103,11 +103,6 @@ WARNING:LIT:176 - Clock buffer is designated to drive clock loads. BUFGMUX
    /clk_cam_BUFG" (output signal=inst_top_camera_monitoring/clk_cam) has a mix
    of clock and non-clock loads. The non-clock loads are:
    Pin I0 of inst_top_camera_monitoring/virtual_camera/camera_o_pclk1
-WARNING:LIT:176 - Clock buffer is designated to drive clock loads. BUFGMUX
-   symbol "physical_group_ov7670_pclk1_BUFGP/ov7670_pclk1_BUFGP/BUFG" (output
-   signal=ov7670_pclk1_BUFGP) has a mix of clock and non-clock loads. The
-   non-clock loads are:
-   Pin I1 of inst_top_camera_monitoring/cam_pclk1
 WARNING:PhysDesignRules:367 - The signal <sw<1>_IBUF> is incomplete. The signal
    does not drive any load pins in the design.
 WARNING:PhysDesignRules:367 - The signal <sw<2>_IBUF> is incomplete. The signal
@@ -145,6 +140,7 @@ INFO:PhysDesignRules:772 - To achieve optimal frequency synthesis performance
 
 Section 4 - Removed Logic Summary
 ---------------------------------
+   1 block(s) removed
   24 block(s) optimized away
    8 signal(s) removed
 
@@ -161,6 +157,7 @@ To quickly locate the original cause for the removal of a chain of logic, look
 above the place where that logic is listed in the trimming report, then locate
 the lines that are least indented (begin at the leftmost edge).
 
+Loadless block "inst_top_camera_monitoring/synchro_reset_i0" (SRLC16E) removed.
 The signal "inst_top_camera_monitoring/rd_d1<0>" is sourceless and has been
 removed.
 The signal "inst_top_camera_monitoring/rd_d1<12>" is sourceless and has been
@@ -279,7 +276,7 @@ Section 6 - IOB Properties
 | ov7670_data_2                      | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | ov7670_data_3                      | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | ov7670_href1                       | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
-| ov7670_pclk1                       | IBUF             | INPUT     | LVCMOS33             |       |          |      |              |          | 0 / 0    |
+| ov7670_pclk1                       | IBUF             | INPUT     | LVCMOS33             |       |          |      | IFF1         |          | 0 / 3    |
 | ov7670_pwdn1                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | ov7670_reset1                      | IOB              | OUTPUT    | LVCMOS33             |       | 12       | SLOW |              |          | 0 / 0    |
 | ov7670_sioc1                       | IOB              | OUTPUT    | LVCMOS33             |       | 12       | SLOW |              | PULLUP   | 0 / 0    |
@@ -301,7 +298,7 @@ Section 6 - IOB Properties
 | vga_g<0>                           | IOB              | OUTPUT    | LVCMOS33             |       | 12       | SLOW |              |          | 0 / 0    |
 | vga_g<1>                           | IOB              | OUTPUT    | LVCMOS33             |       | 12       | SLOW |              |          | 0 / 0    |
 | vga_g<2>                           | IOB              | OUTPUT    | LVCMOS33             |       | 12       | SLOW |              |          | 0 / 0    |
-| vga_hsdbg                          | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| vga_hsdbg                          | IOB              | OUTPUT    | LVCMOS33             |       | 12       | SLOW |              |          | 0 / 0    |
 | vga_hsync                          | IOB              | OUTPUT    | LVCMOS33             |       | 12       | SLOW |              |          | 0 / 0    |
 | vga_r<0>                           | IOB              | OUTPUT    | LVCMOS33             |       | 12       | SLOW |              |          | 0 / 0    |
 | vga_r<1>                           | IOB              | OUTPUT    | LVCMOS33             |       | 12       | SLOW |              |          | 0 / 0    |

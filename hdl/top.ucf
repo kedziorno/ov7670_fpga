@@ -40,7 +40,7 @@ NET "vga_b<0>" LOC="U5" | IOSTANDARD="LVCMOS33";
 NET "vga_b<1>" LOC="U4" | IOSTANDARD="LVCMOS33";
 NET "vga_hsync" LOC="T4" | IOSTANDARD="LVCMOS33";
 NET "vga_vsync" LOC="U3" | IOSTANDARD="LVCMOS33";
-#NET "vga_hsdbg" LOC="M18" | IOSTANDARD="LVCMOS33";
+NET "vga_hsdbg" LOC="G15" | IOSTANDARD="LVCMOS33";
 #NET "vga_vsdbg" LOC="N18" | IOSTANDARD="LVCMOS33";
 #NET "vga_clock" LOC="J13" | IOSTANDARD="LVCMOS33";
 
@@ -128,7 +128,7 @@ NET "DQ<15>" LOC = "T1"| IOSTANDARD="LVCMOS33"; # Bank = 3, Pin name = IO_L24N_3
 
 NET "ov7670_pclk1" CLOCK_DEDICATED_ROUTE = FALSE;
 
-NET "inst_top_camera_monitoring/inst_debounce/output" TIG;
+#NET "inst_top_camera_monitoring/inst_debounce/output" TIG;
 INST "inst_top_camera_monitoring/inst_ov7670contr1/*" TIG;
 
 INST "inst_top_camera_monitoring/crbc_i0/ram_buffer_i0/Mram_RAM" LOC="RAMB16_X0Y0:RAMB16_X0Y13";
@@ -137,6 +137,9 @@ INST "inst_top_camera_monitoring/crbc_i0/*" AREA_GROUP="g1";
 
 AREA_GROUP "g2" RANGE="SLICE_X13Y23:SLICE_X25Y5";
 INST "inst_top_camera_monitoring/virtual_camera/*" AREA_GROUP="g2";
+
+#INST "ov7670_pclk" IOB=TRUE;
+INST "inst_top_camera_monitoring/ov7670_pclk" IOB=TRUE;
 
 # unused
 
