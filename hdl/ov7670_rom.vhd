@@ -17,7 +17,7 @@ x"1280",
 x"fffe",
 x"1204", -- scaling
 x"1101",
-x"6b40",
+x"6bc0",
 x"8c03",
 x"0c00", -- scaling
 x"3e00", -- scaling
