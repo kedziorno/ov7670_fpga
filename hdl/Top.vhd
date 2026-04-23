@@ -340,9 +340,9 @@ end if;
 end process;
 
 -- 3 frames write ok
-p0_control_crbc_write : process (clk0) is
+p0_control_crbc_write : process (clk1) is
 begin
-  if (rising_edge (clk0)) then
+  if (rising_edge (clk1)) then
 if (resend = '1') then
   wrc_w <= '0';
   ov7670_hs_prev <= '0';
@@ -408,11 +408,11 @@ end if;
   end if;
 end process p0_control_crbc_write;
 
-p1_control_crbc_read : process (clk0) is
+p1_control_crbc_read : process (clk1) is
   variable flag : boolean := false;
   variable w8 : integer range 0 to 1023 := 0;
 begin
-  if (rising_edge (clk0)) then
+  if (rising_edge (clk1)) then
 if (resend = '1') then
   wrc_r <= '0';
   vga_hsync_i_prev <= '0';
@@ -505,7 +505,7 @@ end process p1_control_crbc_read;
 crbc_i0 : cellular_ram_burst_controller
 PORT MAP (
 busy => busy,
-clk => clk0,
+clk => clk1,
 reset => resend,
 --reset => reset_dcm,
 writes => wrc,

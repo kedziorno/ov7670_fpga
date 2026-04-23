@@ -2,13 +2,17 @@ PIN "inst_top_camera_monitoring/DCM_SP_mc_fx_vga_dv.CLKDV" TNM_NET = "CLK25";
 NET "ov7670_pclk1" TNM_NET = "CLK24";
 NET "inst_top_camera_monitoring/clk1" TNM_NET = "CLK50";
 NET "inst_top_camera_monitoring/clk0" TNM_NET = "CLK100";
+NET "inst_top_camera_monitoring/clk2x_2" TNM_NET = "CLK12_5";
 
 TIMESPEC TS_CLK25 = PERIOD "CLK25" 40 ns HIGH 50%;
 TIMESPEC TS_CLK24 = PERIOD "CLK24" 41.667 ns HIGH 50%;
 TIMESPEC TS_CLK50 = PERIOD "CLK50" 20 ns HIGH 50%;
+TIMESPEC TS_CLK12_5 = PERIOD "CLK12_5" 80 ns HIGH 50%;
 
 TIMESPEC TS_50_to_24 = FROM "CLK50" TO "CLK24" TIG;
 TIMESPEC TS_24_to_50 = FROM "CLK24" TO "CLK50" TIG;
+TIMESPEC TS_12_5_to_24 = FROM "CLK12_5" TO "CLK24" TIG;
+TIMESPEC TS_24_to_12_5 = FROM "CLK24" TO "CLK12_5" TIG;
 
 NET "i_clock" LOC="B8";
 NET "i_clock" TNM_NET = i_clock;
@@ -65,6 +69,8 @@ TIMESPEC TS_pclk_to_24 = FROM "pclk" TO "CLK24" TIG;
 TIMESPEC TS_24_to_pclk = FROM "CLK24" TO "pclk" TIG;
 TIMESPEC TS_50_to_pclk = FROM "CLK50" TO "pclk" TIG;
 TIMESPEC TS_pclk_to_50 = FROM "pclk" TO "CLK50" TIG;
+TIMESPEC TS_12_5_to_pclk = FROM "CLK12_5" TO "pclk" TIG;
+TIMESPEC TS_pclk_to_12_5 = FROM "pclk" TO "CLK12_5" TIG;
 
 #INST "inst_top_camera_monitoring/inst_ov7670contr1/*" TIG;
 #NET "inst_top_camera_monitoring/inst_debounce/*" TIG;
