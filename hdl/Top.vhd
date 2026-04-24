@@ -255,8 +255,6 @@ signal clk2x_1, clk2x_2 : std_logic;
 
 signal ov7670_hs_prev : std_logic;
 
-signal oe_n_i, we_n_i : std_logic;
-
 signal reset_vga_timing : std_logic := '1';
 
 signal vga_int, vga_fint : std_logic;
@@ -302,10 +300,11 @@ signal cam_d : std_logic_vector (7 downto 0);
 --attribute keep : string;
 --attribute keep of clk_vga : signal is "true";
 
-signal addr_i : std_logic_vector (22 downto 0);
+signal addr_o : std_logic_vector (22 downto 0);
 signal dq_i,dq_ii : std_logic_vector (15 downto 0);
 signal dq_o,dq_oo : std_logic_vector (15 downto 0);
 signal data_out_enable : std_logic_vector (15 downto 0);
+signal oe_n_i, we_n_i, adv_n_i, ce_n_i, cre_i, clk_i : std_logic;
 
 begin
 
@@ -314,13 +313,21 @@ begin
   if (rising_edge (clk1)) then
     if (resend = '1') then
       dq_oo <= (others => '0');
---      dq_ii <= (others => '0');
+      dq_i <= (others => '0');
     else
       dq_oo <= dq_o;
       dq_i <= dq_ii;
+      addr <= addr_o;
+      oe_n <= oe_n_i;
+      we_n <= we_n_i;
+      adv_n <= adv_n_i;
+      ce_n <= ce_n_i;
+      cre <= cre_i;
+      owait1 <= owait;
     end if;
   end if;
 end process;
+      clk <= clk_i;
 
 dq_iob : for i in 15 downto 0 generate
 IOBUF_inst : IOBUF
@@ -339,9 +346,6 @@ T => not data_out_enable(i)
 end generate dq_iob;
 
 vint <= '1' when (ov7670_vs_prev = '0' and ov7670_vs = '1') else '0';
-
-oe_n <= oe_n_i;
-we_n <= we_n_i;
 
 id <= id_w when p0_w = '1' else id_r when p0_r = '1' else (others => '0');
 data <= data_w when p0_w = '1' else data_r when p0_r = '1' else (others => '0');
@@ -556,14 +560,19 @@ lb => lb_n,
 ub => ub_n,
 oe => oe_n_i,
 we => we_n_i,
-adv => adv_n,
-ce => ce_n,
-cre => cre,
-ram_clk => clk,
-o_wait => owait,
-a => addr,
+
+adv => adv_n_i,
+ce => ce_n_i,
+cre => cre_i,
+ram_clk => clk_i,
+
+--o_wait => owait1,
+o_wait => owait, -- better image
+
+a => addr_o,
 dq_i => dq_i,
 dq_o => dq_o,
+
 vga_int => vga_int
 );
 
