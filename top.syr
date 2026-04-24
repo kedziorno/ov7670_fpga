@@ -332,7 +332,7 @@ Analyzing generic Entity <top_camera_monitoring> in library <work> (Architecture
     Set user-defined property "IFD_DELAY_VALUE =  AUTO" for instance <ov7670_siod1_tri> in unit <top_camera_monitoring>.
     Set user-defined property "IOSTANDARD =  DEFAULT" for instance <ov7670_siod1_tri> in unit <top_camera_monitoring>.
     Set user-defined property "SLEW =  SLOW" for instance <ov7670_siod1_tri> in unit <top_camera_monitoring>.
-WARNING:Xst:753 - "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/Top.vhd" line 608: Unconnected output port 'xclk_out' of component 'ov7670_controller'.
+WARNING:Xst:753 - "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/Top.vhd" line 609: Unconnected output port 'xclk_out' of component 'ov7670_controller'.
     Set user-defined property "INIT =  0000" for instance <synchro_reset_i0> in unit <top_camera_monitoring>.
     Set user-defined property "CAPACITANCE =  DONT_CARE" for instance <IBUFG_global_clock1> in unit <top_camera_monitoring>.
     Set user-defined property "IBUF_DELAY_VALUE =  0" for instance <IBUFG_global_clock1> in unit <top_camera_monitoring>.
@@ -618,9 +618,6 @@ Unit <cellular_ram_burst_controller> synthesized.
 
 Synthesizing Unit <ov7670_controller>.
     Related source file is "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/ov7670_controller.vhd".
-    Found 1-bit register for signal <reset>.
-    Summary:
-	inferred   1 D-type flip-flop(s).
 Unit <ov7670_controller> synthesized.
 
 
@@ -649,7 +646,6 @@ WARNING:Xst:1780 - Signal <rgb444> is never used or assigned. This unconnected s
 WARNING:Xst:1780 - Signal <reset_vga_timing> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <rd_counter1> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <rd_counter> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
-WARNING:Xst:646 - Signal <owait1> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <ov7670_xclkv> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <ov7670_vsyncv> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 WARNING:Xst:1780 - Signal <ov7670_siodv> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -726,6 +722,7 @@ WARNING:Xst:646 - Signal <address1> is assigned but never used. This unconnected
     Found 1-bit register for signal <ov7670_vs>.
     Found 2-bit register for signal <ov7670_vs_next>.
     Found 1-bit register for signal <ov7670_vs_prev>.
+    Found 1-bit register for signal <owait1>.
     Found 1-bit register for signal <p0_r>.
     Found 1-bit register for signal <p0_w>.
     Found 1-bit register for signal <vga_vsync_sig_prev>.
@@ -733,7 +730,7 @@ WARNING:Xst:646 - Signal <address1> is assigned but never used. This unconnected
     Found 1-bit register for signal <wrc_w>.
     Summary:
 	inferred   2 Finite State Machine(s).
-	inferred 181 D-type flip-flop(s).
+	inferred 182 D-type flip-flop(s).
 	inferred   2 Adder/Subtractor(s).
 Unit <top_camera_monitoring> synthesized.
 
@@ -1091,9 +1088,9 @@ Cell Usage :
 #      XORCY                       : 230
 # FlipFlops/Latches                : 595
 #      FD                          : 23
-#      FDE                         : 150
+#      FDE                         : 151
 #      FDE_1                       : 8
-#      FDR                         : 129
+#      FDR                         : 128
 #      FDR_1                       : 2
 #      FDRE                        : 209
 #      FDRS                        : 60
@@ -1119,14 +1116,13 @@ Device utilization summary:
 
 Selected Device : 3s1200efg320-4 
 
- Number of Slices:                      532  out of   8672     6%  
- Number of Slice Flip Flops:            594  out of  17344     3%  
+ Number of Slices:                      533  out of   8672     6%  
+ Number of Slice Flip Flops:            595  out of  17344     3%  
  Number of 4 input LUTs:                950  out of  17344     5%  
     Number used as logic:               949
     Number used as Shift registers:       1
  Number of IOs:                          94
  Number of bonded IOBs:                  86  out of    250    34%  
-    IOB Flip Flops:                       1
  Number of BRAMs:                         2  out of     28     7%  
  Number of GCLKs:                         6  out of     24    25%  
  Number of DCMs:                          2  out of      8    25%  
@@ -1168,7 +1164,7 @@ Timing Summary:
 Speed Grade: -4
 
    Minimum period: 9.971ns (Maximum Frequency: 100.291MHz)
-   Minimum input arrival time before clock: 6.909ns
+   Minimum input arrival time before clock: 2.729ns
    Maximum output required time after clock: 10.962ns
    Maximum combinational path delay: 6.034ns
 
@@ -1179,7 +1175,7 @@ All values displayed in nanoseconds (ns)
 =========================================================================
 Timing constraint: Default period analysis for Clock 'i_clock'
   Clock period: 9.971ns (frequency: 100.291MHz)
-  Total number of paths / destination ports: 52492 / 849
+  Total number of paths / destination ports: 52598 / 851
 -------------------------------------------------------------------------
 Delay:               9.971ns (Levels of Logic = 7)
   Source:            inst_top_camera_monitoring/inst_ov7670contr1/Registers/sequence_0_1 (FF)
@@ -1249,29 +1245,6 @@ Delay:               4.325ns (Levels of Logic = 1)
                                        (51.0% logic, 49.0% route)
 
 =========================================================================
-Timing constraint: Default OFFSET IN BEFORE for Clock 'i_clock'
-  Total number of paths / destination ports: 122 / 106
--------------------------------------------------------------------------
-Offset:              6.909ns (Levels of Logic = 5)
-  Source:            oWait (PAD)
-  Destination:       inst_top_camera_monitoring/crbc_i0/state_23 (FF)
-  Destination Clock: i_clock rising
-
-  Data Path: oWait to inst_top_camera_monitoring/crbc_i0/state_23
-                                Gate     Net
-    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
-    ----------------------------------------  ------------
-     IBUF:I->O            36   1.218   1.342  oWait_IBUF (oWait_IBUF)
-     LUT3:I1->O            1   0.704   0.424  inst_top_camera_monitoring/crbc_i0/next_state_and0001_SW0 (N72)
-     LUT4_D:I3->LO         1   0.704   0.179  inst_top_camera_monitoring/crbc_i0/next_state_and0001 (N191)
-     LUT4:I1->O            2   0.704   0.622  inst_top_camera_monitoring/crbc_i0/ce_mux00002 (inst_top_camera_monitoring/crbc_i0/N41)
-     LUT3:I0->O            1   0.704   0.000  inst_top_camera_monitoring/crbc_i0/ce_mux000031 (inst_top_camera_monitoring/crbc_i0/ce_mux0000)
-     FDS:D                     0.308          inst_top_camera_monitoring/crbc_i0/ce
-    ----------------------------------------
-    Total                      6.909ns (4.342ns logic, 2.567ns route)
-                                       (62.8% logic, 37.2% route)
-
-=========================================================================
 Timing constraint: Default OFFSET IN BEFORE for Clock 'i_clock100'
   Total number of paths / destination ports: 12 / 12
 -------------------------------------------------------------------------
@@ -1292,8 +1265,27 @@ Offset:              2.729ns (Levels of Logic = 2)
                                        (81.7% logic, 18.3% route)
 
 =========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'i_clock'
+  Total number of paths / destination ports: 17 / 17
+-------------------------------------------------------------------------
+Offset:              1.946ns (Levels of Logic = 1)
+  Source:            oWait (PAD)
+  Destination:       inst_top_camera_monitoring/owait1 (FF)
+  Destination Clock: i_clock rising
+
+  Data Path: oWait to inst_top_camera_monitoring/owait1
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O             1   1.218   0.420  oWait_IBUF (oWait_IBUF)
+     FDE:D                     0.308          inst_top_camera_monitoring/owait1
+    ----------------------------------------
+    Total                      1.946ns (1.526ns logic, 0.420ns route)
+                                       (78.4% logic, 21.6% route)
+
+=========================================================================
 Timing constraint: Default OFFSET OUT AFTER for Clock 'i_clock'
-  Total number of paths / destination ports: 960 / 55
+  Total number of paths / destination ports: 959 / 54
 -------------------------------------------------------------------------
 Offset:              10.962ns (Levels of Logic = 7)
   Source:            inst_top_camera_monitoring/inst_ov7670contr1/Registers/sequence_2_2 (FF)
@@ -1318,7 +1310,7 @@ Offset:              10.962ns (Levels of Logic = 7)
 
 =========================================================================
 Timing constraint: Default OFFSET OUT AFTER for Clock 'i_clock100'
-  Total number of paths / destination ports: 76 / 12
+  Total number of paths / destination ports: 77 / 13
 -------------------------------------------------------------------------
 Offset:              7.434ns (Levels of Logic = 3)
   Source:            inst_top_camera_monitoring/inst_vgatiming/vcnt_6 (FF)
@@ -1360,14 +1352,14 @@ Delay:               6.034ns (Levels of Logic = 3)
 
 
 Total REAL time to Xst completion: 7.00 secs
-Total CPU time to Xst completion: 6.54 secs
+Total CPU time to Xst completion: 6.90 secs
  
 --> 
 
 
-Total memory usage is 555856 kilobytes
+Total memory usage is 555864 kilobytes
 
 Number of errors   :    0 (   0 filtered)
-Number of warnings :  168 (   0 filtered)
+Number of warnings :  167 (   0 filtered)
 Number of infos    :    9 (   0 filtered)
 

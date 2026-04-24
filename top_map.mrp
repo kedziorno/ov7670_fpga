@@ -9,7 +9,7 @@ Target Device  : xc3s1200e
 Target Package : fg320
 Target Speed   : -4
 Mapper Version : spartan3e -- $Revision: 1.55 $
-Mapped Date    : Fri Apr 24 14:10:46 2026
+Mapped Date    : Fri Apr 24 16:09:24 2026
 
 Design Summary
 --------------
@@ -132,6 +132,11 @@ WARNING:Pack:1542 - The register
    IOB=TRUE, but was not packed into the output side of an I/O component. The
    register symbol "inst_top_camera_monitoring/crbc_i0/data_out_enable_i_9" has
    no connections inside the I/O component.
+WARNING:Pack:1542 - The register inst_top_camera_monitoring/inst_debounce/output
+   has the property IOB=TRUE, but was not packed into the output side of an I/O
+   component. The register symbol
+   "inst_top_camera_monitoring/inst_debounce/output" has no connections inside
+   the I/O component.
 WARNING:Pack:1542 - The register
    inst_top_camera_monitoring/crbc_i0/data_out_enable_i_10 has the property
    IOB=TRUE, but was not packed into the output side of an I/O component. The
@@ -1129,10 +1134,6 @@ WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/inst_debounce/counter_9" has the property
    IOB=TRUE, but it did not join an IO component because it is not connected to
    any IO element.
-WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/inst_debounce/output" has the property IOB=TRUE,
-   but it did not join an IO component because it is not connected to any IO
-   element.
 WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/crbc_i0/sink_addr_0" has the property IOB=TRUE,
    but it did not join an IO component because it is not connected to any IO
@@ -2230,7 +2231,7 @@ Section 6 - IOB Properties
 | i_clock                            | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
 | i_clock100                         | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
 | led1                               | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| oWait                              | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| oWait                              | IBUF             | INPUT     | LVCMOS25             |       |          |      | IFF1         |          | 0 / 3    |
 | ov7670_data1<0>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      | IFF1         |          | 0 / 3    |
 | ov7670_data1<1>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      | IFF1         |          | 0 / 3    |
 | ov7670_data1<2>                    | IBUF             | INPUT     | LVCMOS25             |       |          |      | IFF1         |          | 0 / 3    |
@@ -2246,7 +2247,7 @@ Section 6 - IOB Properties
 | ov7670_href1                       | IBUF             | INPUT     | LVCMOS25             |       |          |      | IFF1         |          | 0 / 3    |
 | ov7670_pclk1                       | IBUF             | INPUT     | LVCMOS25             |       |          |      | IFF1         |          | 0 / 3    |
 | ov7670_pwdn1                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| ov7670_reset1                      | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW | OFF1         |          | 0 / 0    |
+| ov7670_reset1                      | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | ov7670_sioc1                       | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              | PULLUP   | 0 / 0    |
 | ov7670_siod1                       | IOB              | BIDIR     | LVCMOS25             |       | 12       | SLOW |              | PULLUP   | 0 / 0    |
 | ov7670_vsync1                      | IBUF             | INPUT     | LVCMOS25             |       |          |      | IFF1         |          | 0 / 3    |

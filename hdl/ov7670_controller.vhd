@@ -77,11 +77,11 @@ SCCB : ov7670_SCCB port map(
 	taken => taken);
 
 pwdn <= '0';
-process (clk) is begin
-if (rising_edge (clk)) then
+--process (clk) is begin
+--if (rising_edge (clk)) then
 reset <= not resend;
-end if;
-end process;
+--end if;
+--end process;
 
 xclk_out <= xclk_in;
 --ERROR:Place:PlXil_Uapflow1.c:3213:1.176 clk clk_mc

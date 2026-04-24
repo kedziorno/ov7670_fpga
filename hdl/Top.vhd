@@ -12,7 +12,7 @@ entity top_camera_monitoring is
 generic (
   constant c_synchronisation  : boolean := true;
   constant c_hs_blanking      : boolean := true;
-  constant c_pb_bits          : integer := 1;
+  constant c_pb_bits          : integer := 23;
   constant c_zero             : integer := 0
 );
 port (
@@ -566,8 +566,8 @@ ce => ce_n_i,
 cre => cre_i,
 ram_clk => clk_i,
 
---o_wait => owait1,
-o_wait => owait, -- better image
+o_wait => owait1,
+--o_wait => owait, -- better image
 
 a => addr_o,
 dq_i => dq_i,
@@ -595,6 +595,7 @@ PB_BITS => c_pb_bits
 port map(
 clk => i_clock_ib1,
 reset => reset_dcm,
+--reset => '0',
 input => pb,
 output => resend);
 
@@ -774,7 +775,7 @@ CLKIN => i_clock_ib1, -- Clock input (from IBUFG, BUFG or DCM)
 PSCLK => '0', -- Dynamic phase adjust clock input
 PSEN => '0', -- Dynamic phase adjust enable input
 PSINCDEC => '0', -- Dynamic phase adjust increment/decrement
-RST => resend -- DCM asynchronous reset input
+RST => pb -- DCM asynchronous reset input
 );
 
 BUFG_cam : BUFG
@@ -846,7 +847,7 @@ CLKIN => i_clock_ib2, -- Clock input (from IBUFG, BUFG or DCM)
 PSCLK => '0', -- Dynamic phase adjust clock input
 PSEN => '0', -- Dynamic phase adjust enable input
 PSINCDEC => '0', -- Dynamic phase adjust increment/decrement
-RST => resend -- DCM asynchronous reset input
+RST => pb -- DCM asynchronous reset input
 );
 
 end Structural;
