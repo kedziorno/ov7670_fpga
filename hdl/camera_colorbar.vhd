@@ -31,7 +31,10 @@ use work.p_constants.all;
 
 entity camera_colorbar is
 generic (
-constant c_source : t_source := t_frames
+constant c_source : t_source := t_frames;
+constant c_xclk_divide_enable : boolean := true;
+constant c_xclk_divide_factor : integer := 1;
+constant c_zero : integer := 0
 );
 port (
 camera_io_scl : inout std_logic := 'Z';
@@ -97,10 +100,41 @@ constant c_s1_c : integer := 60*5;
 signal s1_c : integer range 0 to c_s1_c - 1;
 signal s1_tick, s1_mux : std_logic;
 
+constant c_xclk_divide : integer := 1;
+signal xclk_divide : integer range 0 to c_xclk_divide - 1;
+signal xclk_divided : std_logic := '0';
+
 begin
 
+g_xclk_divide_enable : if (c_xclk_divide_enable = true) generate
+  -- only flip source clock
+  camera_o_pclk <= xclk_divided when (vs_state /= cold_start) else '0';
+end generate g_xclk_divide_enable;
+
+g_xclk_divide_disable : if (c_xclk_divide_enable = false) generate
+  -- only flip source clock
+  camera_o_pclk <= camera_i_xclk when (vs_state /= cold_start) else '0';
+end generate g_xclk_divide_disable;
+
 process (camera_i_xclk) is begin
-  if (falling_edge (camera_i_xclk)) then
+  if (rising_edge (camera_i_xclk)) then
+    if (camera_i_rst = '0') then
+      xclk_divide <= 0;
+      xclk_divided <= '0';
+    else
+      if (xclk_divide = c_xclk_divide - 1) then
+        xclk_divided <= not xclk_divided;
+        xclk_divide <= 0;
+      else
+        xclk_divided <= xclk_divided;
+        xclk_divide <= xclk_divide + 1;
+      end if;
+    end if;
+  end if;
+end process;
+
+process (xclk_divided) is begin
+  if (falling_edge (xclk_divided)) then
     if (camera_i_rst = '0') then
       s1_c <= 0;
       s1_tick <= '0';
@@ -138,9 +172,9 @@ end process;
     );
 
     camera_o_d <= douta;
-    p4_frame_out : process (camera_i_xclk) is
+    p4_frame_out : process (xclk_divided) is
     begin
-      if (falling_edge (camera_i_xclk)) then
+      if (falling_edge (xclk_divided)) then
         if (camera_i_rst = '0') then
           addra <= 0;
           state <= wait_pt;
@@ -211,12 +245,12 @@ end process;
 
   -- generate sync pulse on falling edge pclk
   camera_o_vs <= not vsync_i when c_com10_02 = true else vsync_i;
-  p1_vsync : process (camera_i_xclk, camera_i_rst) is
+  p1_vsync : process (xclk_divided, camera_i_rst) is
     variable count : integer range 0 to c_vsync_all * a_tline - 1;
     constant c_wait_start : integer := 1234;
     variable wait_start : integer range 0 to c_wait_start - 1;
   begin
-    if (falling_edge (camera_i_xclk)) then
+    if (falling_edge (xclk_divided)) then
       if (camera_i_rst = '0') then
         count := 0;
         vsync_i <= '1'; -- XXX check when startup
@@ -289,12 +323,12 @@ end process;
     -- generate href pulse on falling edge pclk - t_colorbar
     camera_o_hs <= href_i;
     pixel_time <= '1' when hs_state = shref1 else '0';
-    p2_href_colorbar : process (camera_i_xclk, camera_i_rst) is
+    p2_href_colorbar : process (xclk_divided, camera_i_rst) is
       variable count : integer range 0 to c_vsync3 - 1;
       variable counth1 : integer range 0 to c_href1 - 1;
       variable counth0 : integer range 0 to c_href0 - 1;
     begin
-      if (falling_edge (camera_i_xclk)) then
+      if (falling_edge (xclk_divided)) then
         if (camera_i_rst = '0') then
           count := 0;
           counth1 := 0;
@@ -333,12 +367,12 @@ end process;
     -- generate href pulse on falling edge pclk - t_lines
     camera_o_hs <= href_i;
     pixel_time <= '1' when hs_state = shref1 else '0';
-    p2_href_lines : process (camera_i_xclk, camera_i_rst) is
+    p2_href_lines : process (xclk_divided, camera_i_rst) is
       variable count : integer range 0 to c_vsync3 - 1;
       variable counth1 : integer range 0 to c_href1 - 1;
       variable counth0 : integer range 0 to c_href0 - 1;
     begin
-      if (falling_edge (camera_i_xclk)) then
+      if (falling_edge (xclk_divided)) then
         if (camera_i_rst = '0') then
           count := 0;
           counth1 := 0;
@@ -375,11 +409,11 @@ end process;
   g_source_colorbar : if (c_source = t_colorbar) generate
     -- Show pattern from virtual camera on VGA display on falling edge pclk
     camera_o_d <= pixel_time_data when href_i = '1' else (others => '0');
-    p3_pixeltime : process (camera_i_xclk, camera_i_rst) is
+    p3_pixeltime : process (xclk_divided, camera_i_rst) is
       constant c_num_pixels : integer := c_href1 / c_colorbar_length;
       variable count1 : integer range 0 to c_num_pixels - 1;
     begin
-      if (falling_edge (camera_i_xclk)) then
+      if (falling_edge (xclk_divided)) then
         if (camera_i_rst = '0') then
           pixel_time_data <= (others => '0');
           pt_state <= s1;
@@ -420,13 +454,13 @@ end process;
   g_source_lines : if (c_source = t_lines) generate
     -- Show indexed lines HREF width from virtual camera on VGA display on falling edge pclk
     camera_o_d <= pixel_time_data when href_i = '1' else (others => '0');
-    p3_pixeltime : process (camera_i_xclk, camera_i_rst) is
+    p3_pixeltime : process (xclk_divided, camera_i_rst) is
       variable count1 : integer range 0 to c_href1 - 1;
       variable count2 : integer range 0 to c_href0 - 1;
       constant c_vs_index : integer := 256;
       variable vs_index : integer range 0 to c_vs_index - 1;
     begin
-      if (falling_edge (camera_i_xclk)) then
+      if (falling_edge (xclk_divided)) then
         if (camera_i_rst = '0') then
           pixel_time_data <= (others => '0');
           pt_state <= s2;
@@ -466,9 +500,6 @@ end process;
       end if;
     end process p3_pixeltime;
   end generate g_source_lines;
-
-  -- only flip source clock
-  camera_o_pclk <= camera_i_xclk when (vs_state /= cold_start) else '0';
 
 --  g_source_frames_adjust_clock : if (c_source = t_frames) generate
 --  BUFG_cam : BUFG
