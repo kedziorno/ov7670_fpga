@@ -311,7 +311,7 @@ begin
 process (clk1) is
 begin
   if (rising_edge (clk1)) then
-    if (resend = '1') then
+    if (pb = '1') then
       dq_oo <= (others => '0');
       dq_i <= (others => '0');
     else
@@ -355,7 +355,7 @@ wrc <= wrc_w when p0_w = '1' else wrc_r when p0_r = '1' else '0';
 process (clk1) is
 begin
 if (rising_edge (clk1)) then
-if (resend = '1') then
+if (pb = '1') then
   cints <= '0';
 else
   cint1 <= cint;
@@ -368,7 +368,7 @@ end process;
 p0_control_crbc_write : process (clk1) is
 begin
   if (rising_edge (clk1)) then
-if (resend = '1') then
+if (pb = '1') then
   wrc_w <= '0';
   ov7670_hs_prev <= '0';
   ov7670_vs_prev <= '0';
@@ -438,7 +438,7 @@ p1_control_crbc_read : process (clk1) is
   variable w8 : integer range 0 to 1023 := 0;
 begin
   if (rising_edge (clk1)) then
-if (resend = '1') then
+if (pb = '1') then
   wrc_r <= '0';
   vga_hsync_i_prev <= '0';
   vga_vsync_sig_prev <= '0';
@@ -531,7 +531,7 @@ crbc_i0 : cellular_ram_burst_controller
 PORT MAP (
 busy => busy,
 clk => clk1,
-reset => resend,
+reset => pb,
 --reset => reset_dcm,
 writes => wrc,
 data => data,
@@ -603,13 +603,14 @@ ov7670_xclk1 <= clk_cam;
 --ov7670_xclkv <= clk_cam;
 ov7670_pwdn1 <= cam_pwdn;
 --ov7670_pwdnv <= cam_pwdn;
-ov7670_reset1 <= cam_reset;
+--ov7670_reset1 <= cam_reset;
+ov7670_reset1 <= not pb;
 --ov7670_resetv <= cam_reset;
 
 inst_ov7670contr1: ov7670_controller port map(
 clk => clk1,
-reset1 => resend,
-resend => resend,
+reset1 => pb,
+resend => pb,
 sioc => ov7670_sioc1,
 siodi => siodi1,
 siodo => siodo1,
@@ -622,7 +623,7 @@ xclk_out => open);
 process (i_clock_ib1) is begin
 --process (clk_mc, resend) is begin
 if (rising_edge (i_clock_ib1)) then
-if (resend = '1') then
+if (pb = '1') then
 ov7670_pclk <= '0';
 ov7670_hs <= '0';
 ov7670_vs <= '0';
@@ -649,7 +650,7 @@ cam_d <= ov7670_d;
 
 inst_ov7670capt1: ov7670_capture port map(
 pclk => cam_pclk,
-reset => resend,
+reset => pb,
 vsync => cam_vs,
 href => cam_hs,
 d => cam_d,
@@ -666,7 +667,7 @@ inst_addrgen1 : address_generator port map(
 --clk25 => clk_vga,
 clk25 => clk2x_2,
 --reset => reset_dcm,
-reset => resend,
+reset => pb,
 enable => active1,
 vsync => vga_vsync_sig,
 address => rd_a1,
@@ -675,7 +676,7 @@ address1 => address1);
 datain <= rd_d1 ;
 inst_imagegen : vga_imagegenerator port map(
 Data_in1  => datain,
-reset => resend,
+reset => pb,
 --Data_in1 => x"55aa", -- test output bmp
 active_area1 => active1,
 RGB_out => vga_rgb);
@@ -686,7 +687,7 @@ inst_vgatiming : VGA_timing_synch port map(
 clk25 => clk_vga,
 --rst => reset_vga_timing,
 --rst => reset_dcm,
-rst => resend,
+rst => pb,
 Hsync => vga_hsync_i,
 Vsync => vga_vsync_sig,
 blank => vga_blank,
