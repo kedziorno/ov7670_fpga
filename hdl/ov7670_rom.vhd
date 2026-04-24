@@ -49,7 +49,7 @@ x"b084",
 x"b10c",
 x"b20e",
 x"b380",
-x"70ba", -- ba - pattern
+x"703a", -- ba - pattern
 x"7135",
 x"7222",
 x"73f2",
