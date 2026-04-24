@@ -20,6 +20,7 @@ port (
   clk25 : in std_logic;
   read_buffer_addr : in std_logic_vector (9 downto 0);
   read_buffer_data : out std_logic_vector (15 downto 0);
+  data_out_enable : out std_logic_vector (15 downto 0);
   read_buffer_clk : in std_logic;
   lb : out std_logic := '0';
   ub : out std_logic := '0';
@@ -31,7 +32,8 @@ port (
   ram_clk : out std_logic;
   o_wait : in std_logic;
   a : out std_logic_vector (22 downto 0);
-  dq : inout std_logic_vector (15 downto 0);
+  dq_i : in std_logic_vector (15 downto 0);
+  dq_o : out std_logic_vector (15 downto 0);
   vga_int : in std_logic
 );
 end entity cellular_ram_burst_controller;
@@ -102,8 +104,6 @@ signal state, next_state : states := config0;
 signal state_cntr : unsigned (7 downto 0) := (others => '0');
 signal clk_enable : std_logic := '0';
 
-signal data_out_enable : std_logic_vector (15 downto 0) := (others => '0');
-
 component asym_ram_sdp_read_wider
 port (
 clkA, clkB, enaA, weA, enaB, reset : in std_logic;
@@ -129,7 +129,13 @@ signal owait1, ramclken : std_logic := '0';
 
 signal sink_read_addrb : std_logic_vector (9 downto 0);
 
+signal data_out_enable_i : std_logic_vector (15 downto 0);
+
 begin
+
+data_out_enable <= data_out_enable_i;
+
+dq_o <= source_data when data_out_enable_i = x"ffff" else x"0000";
 
 p0_vga_int : process (clk) is
 begin
@@ -146,7 +152,7 @@ busy <= busy_i;
 
 write_buffer_we1 (0) <= write_buffer_we;
 
-ram_buffer_i0 : asym_ram_sdp_read_wider
+write_buffer_i0 : asym_ram_sdp_read_wider
 port map (
 reset => reset,
 clkA => write_buffer_clk,
@@ -160,23 +166,6 @@ enaB => '1',
 addrB => std_logic_vector (source_addr),
 doB => source_data
 );
-
-dq (0)  <= source_data (0)  when data_out_enable (0)  = '1' else 'Z';
-dq (1)  <= source_data (1)  when data_out_enable (1)  = '1' else 'Z';
-dq (2)  <= source_data (2)  when data_out_enable (2)  = '1' else 'Z';
-dq (3)  <= source_data (3)  when data_out_enable (3)  = '1' else 'Z';
-dq (4)  <= source_data (4)  when data_out_enable (4)  = '1' else 'Z';
-dq (5)  <= source_data (5)  when data_out_enable (5)  = '1' else 'Z';
-dq (6)  <= source_data (6)  when data_out_enable (6)  = '1' else 'Z';
-dq (7)  <= source_data (7)  when data_out_enable (7)  = '1' else 'Z';
-dq (8)  <= source_data (8)  when data_out_enable (8)  = '1' else 'Z';
-dq (9)  <= source_data (9)  when data_out_enable (9)  = '1' else 'Z';
-dq (10) <= source_data (10) when data_out_enable (10) = '1' else 'Z';
-dq (11) <= source_data (11) when data_out_enable (11) = '1' else 'Z';
-dq (12) <= source_data (12) when data_out_enable (12) = '1' else 'Z';
-dq (13) <= source_data (13) when data_out_enable (13) = '1' else 'Z';
-dq (14) <= source_data (14) when data_out_enable (14) = '1' else 'Z';
-dq (15) <= source_data (15) when data_out_enable (15) = '1' else 'Z';
 
 process (clk) is
 begin
@@ -232,12 +221,12 @@ busy_i <= '0' when (state = idle) else '1';
 --);
 
 sink_read_addrb <= read_buffer_addr;
-sink_read_i0 : entity work.sink_read_1
+read_buffer_i0 : entity work.sink_read_1
   PORT MAP (
     clka => clk,
     wea(0) => sink_we,
     addra => std_logic_vector (sink_addr),
-    dina => dq,
+    dina => dq_i,
     clkb => read_buffer_clk,
     addrb => sink_read_addrb,
     doutb => read_buffer_data
@@ -484,7 +473,7 @@ begin
       this_write_addr <= burst_write_addr;
       --report "burst write addr " & integer'image (to_integer (unsigned (burst_write_addr)));
       write_counter <= bytes_to_write;
-      data_out_enable <= (others => '1');
+      data_out_enable_i <= (others => '1');
       clk_enable <= '1';
       a <= std_logic_vector (burst_write_addr);
       adv <= '0';
@@ -511,7 +500,7 @@ begin
     end if;
     if (state = write_byte4) then
       if (o_wait = '0') then
-        data_out_enable <= (others => '0');
+        data_out_enable_i <= (others => '0');
         clk_enable <= '0';
         ce <= '1';
         we_i <= '1';
