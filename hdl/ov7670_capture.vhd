@@ -102,8 +102,8 @@ dout  <= d_latch;
 
 --int <= '1' when (addr1 = 639 or addr1 = 318-72) else '0';
 --int <= '1' when (addr1 = 639 or addr1 = 318-72) else '0';
-int <= '1' when (addr1 = 639) else '0';
---int <= '1' when (addr1 = 1) else '0';
+--int <= '1' when (addr1 = 639) else '0';
+int <= '1' when (addr1 = 1) else '0';
 capture_process: process(pclk)
    begin
       if rising_edge(pclk) then

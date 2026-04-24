@@ -618,28 +618,28 @@ reset => cam_reset,
 xclk_in => '0',
 xclk_out => open);
 
-process (i_clock_ib1) is begin
---process (clk_mc, resend) is begin
-if (rising_edge (i_clock_ib1)) then
-if (resend = '1') then
-ov7670_pclk <= '0';
-ov7670_hs <= '0';
-ov7670_vs <= '0';
-ov7670_d <= (others => '0');
---elsif (rising_edge (clk_mc)) then
---elsif (falling_edge (clk_mc)) then
-else
-ov7670_pclk <= ov7670_pclk1;
-ov7670_hs <= ov7670_href1;
-ov7670_vs <= ov7670_vsync1;
-ov7670_d <= ov7670_data1;
-end if;
-end if;
-end process;
+--process (i_clock_ib1) is begin
+----process (clk_mc, resend) is begin
+--if (rising_edge (i_clock_ib1)) then
+--if (resend = '1') then
+--ov7670_pclk <= '0';
+--ov7670_hs <= '0';
+--ov7670_vs <= '0';
+--ov7670_d <= (others => '0');
+----elsif (rising_edge (clk_mc)) then
+----elsif (falling_edge (clk_mc)) then
+--else
 --ov7670_pclk <= ov7670_pclk1;
 --ov7670_hs <= ov7670_href1;
 --ov7670_vs <= ov7670_vsync1;
 --ov7670_d <= ov7670_data1;
+--end if;
+--end if;
+--end process;
+ov7670_pclk <= ov7670_pclk1;
+ov7670_hs <= ov7670_href1;
+ov7670_vs <= ov7670_vsync1;
+ov7670_d <= ov7670_data1;
 
 cam_pclk <= ov7670_pclk;
 cam_hs <= ov7670_hs;
