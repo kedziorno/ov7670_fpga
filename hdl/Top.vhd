@@ -743,8 +743,8 @@ DCM_SP_mc_fx_vga_dv : DCM_SP
 generic map (
 --CLKDV_DIVIDE => 2.0, -- 50mhz
 CLKDV_DIVIDE => 4.0, -- 100mhz
-CLKFX_MULTIPLY => 7, -- Can be any integer from 1 to 32
-CLKFX_DIVIDE => 31, -- Can be any interger from 1 to 32
+CLKFX_MULTIPLY => 6, -- Can be any integer from 1 to 32
+CLKFX_DIVIDE => 25, -- Can be any interger from 1 to 32
 CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
 --CLKIN_PERIOD => 20.0, -- Specify period of input clock
 CLKIN_PERIOD => 10.0, -- Specify period of input clock
