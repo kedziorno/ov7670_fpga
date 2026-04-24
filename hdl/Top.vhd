@@ -75,7 +75,7 @@ COMPONENT ov7670_capture
           vsync : in  STD_LOGIC;
           href : in  STD_LOGIC;
           d : in  STD_LOGIC_VECTOR (7 downto 0);
-          addr : out  STD_LOGIC_VECTOR (9 downto 0);
+          addr : out  STD_LOGIC_VECTOR (10 downto 0);
           dout : out  STD_LOGIC_VECTOR (15 downto 0);
           we : out  STD_LOGIC_VECTOR (0 downto 0);
 latched_vs, latched_hs : out std_logic;
@@ -129,7 +129,7 @@ for all : VGA_timing_synch use entity work.VGA_timing_synch(counter);
 -- RAM FB
 signal wren1 : STD_LOGIC_VECTOR(0 downto 0);
 signal wr_d1 : STD_LOGIC_VECTOR(15 downto 0);
-signal wr_a1 : STD_LOGIC_VECTOR(9 downto 0);
+signal wr_a1 : STD_LOGIC_VECTOR(10 downto 0);
 signal rd_d1 : STD_LOGIC_VECTOR(15 downto 0);
 signal rd_a1 : STD_LOGIC_VECTOR(9 downto 0);
 
@@ -190,7 +190,7 @@ writes : IN  std_logic;
 data : IN  std_logic_vector(15 downto 0);
 id : IN  std_logic_vector(15 downto 0);
 
-write_buffer_addr : IN  std_logic_vector(9 downto 0);
+write_buffer_addr : IN  std_logic_vector(10 downto 0);
 write_buffer_data : IN  std_logic_vector(15 downto 0);
 write_buffer_clk : IN  std_logic;
 write_buffer_we : IN  std_logic;
@@ -310,7 +310,7 @@ begin
 
 process (clk1) is
 begin
-  if (rising_edge (clk1)) then
+  if (falling_edge (clk1)) then
     if (pb = '1') then
       dq_oo <= (others => '0');
       dq_i <= (others => '0');
@@ -544,8 +544,8 @@ write_buffer_data => wr_d1,
 --write_buffer_data => wr_d1 (7 downto 0),
 write_buffer_clk => ov7670_pclk,
 --write_buffer_clk => wren1(0),
-write_buffer_we => ov7670_hs,
---write_buffer_we => latched_hs,
+--write_buffer_we => ov7670_hs,
+write_buffer_we => latched_hs,
 --write_buffer_we => wren1 (0),
 
 clk25 => clk_vga,
@@ -745,7 +745,7 @@ DCM_SP_mc_fx_vga_dv : DCM_SP
 generic map (
 --CLKDV_DIVIDE => 2.0, -- 50mhz
 CLKDV_DIVIDE => 4.0, -- 100mhz
-CLKFX_MULTIPLY => 3, -- Can be any integer from 1 to 32
+CLKFX_MULTIPLY => 6, -- Can be any integer from 1 to 32
 CLKFX_DIVIDE => 25, -- Can be any interger from 1 to 32
 CLKIN_DIVIDE_BY_2 => FALSE, -- TRUE/FALSE to enable CLKIN divide by two feature
 --CLKIN_PERIOD => 20.0, -- Specify period of input clock
