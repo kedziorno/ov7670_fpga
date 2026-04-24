@@ -310,7 +310,7 @@ begin
 
 process (clk1) is
 begin
-  if (rising_edge (clk1)) then
+  if (falling_edge (clk1)) then
     if (resend = '1') then
       dq_oo <= (others => '0');
       dq_i <= (others => '0');
