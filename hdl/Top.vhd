@@ -340,21 +340,6 @@ end generate dq_iob;
 
 vint <= '1' when (ov7670_vs_prev = '0' and ov7670_vs = '1') else '0';
 
-process (clk1) is
-begin
-  if (rising_edge (clk1)) then
-    if (resend = '1') then
-      owait1 <= '0';
-    else
-    if (owait = '1') then
-    owait1 <= '1';
-    else
-    owait1 <= '0';
-    end if;
-    end if;
-  end if;
-end process;
-
 oe_n <= oe_n_i;
 we_n <= we_n_i;
 
@@ -575,8 +560,7 @@ adv => adv_n,
 ce => ce_n,
 cre => cre,
 ram_clk => clk,
---o_wait => owait,
-o_wait => owait1,
+o_wait => owait,
 a => addr,
 dq_i => dq_i,
 dq_o => dq_o,

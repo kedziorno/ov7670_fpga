@@ -125,8 +125,6 @@ signal vga_int_i : std_logic;
 
 signal we_i : std_logic;
 
-signal owait1, ramclken : std_logic := '0';
-
 signal sink_read_addrb : std_logic_vector (9 downto 0);
 
 signal data_out_enable_i : std_logic_vector (15 downto 0);
@@ -166,17 +164,6 @@ enaB => '1',
 addrB => std_logic_vector (source_addr),
 doB => source_data
 );
-
-process (clk) is
-begin
-  if (rising_edge (clk)) then
-  if (reset = '1') then
-  owait1 <= '0';
-  else
-    owait1 <= o_wait;
-  end if;
-  end if;
-end process;
 
 --start_clock : process (clk) is
 --  type states is (a, b);
