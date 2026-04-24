@@ -75,7 +75,7 @@ COMPONENT ov7670_capture
           vsync : in  STD_LOGIC;
           href : in  STD_LOGIC;
           d : in  STD_LOGIC_VECTOR (7 downto 0);
-          addr : out  STD_LOGIC_VECTOR (9 downto 0);
+          addr : out  STD_LOGIC_VECTOR (10 downto 0);
           dout : out  STD_LOGIC_VECTOR (15 downto 0);
           we : out  STD_LOGIC_VECTOR (0 downto 0);
 latched_vs, latched_hs : out std_logic;
@@ -129,7 +129,7 @@ for all : VGA_timing_synch use entity work.VGA_timing_synch(counter);
 -- RAM FB
 signal wren1 : STD_LOGIC_VECTOR(0 downto 0);
 signal wr_d1 : STD_LOGIC_VECTOR(15 downto 0);
-signal wr_a1 : STD_LOGIC_VECTOR(9 downto 0);
+signal wr_a1 : STD_LOGIC_VECTOR(10 downto 0);
 signal rd_d1 : STD_LOGIC_VECTOR(15 downto 0);
 signal rd_a1 : STD_LOGIC_VECTOR(9 downto 0);
 
@@ -190,7 +190,7 @@ writes : IN  std_logic;
 data : IN  std_logic_vector(15 downto 0);
 id : IN  std_logic_vector(15 downto 0);
 
-write_buffer_addr : IN  std_logic_vector(9 downto 0);
+write_buffer_addr : IN  std_logic_vector(10 downto 0);
 write_buffer_data : IN  std_logic_vector(15 downto 0);
 write_buffer_clk : IN  std_logic;
 write_buffer_we : IN  std_logic;

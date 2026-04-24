@@ -26,8 +26,8 @@
 
 module asym_ram_sdp_read_wider (clkA, clkB, enaA, weA, enaB, addrA, addrB, diA, doB, reset);
 parameter WIDTHA = 16;
-parameter SIZEA = 1024;
-parameter ADDRWIDTHA = 10;
+parameter SIZEA = 2024;
+parameter ADDRWIDTHA = 11;
 
 parameter WIDTHB = 16;
 parameter SIZEB = 1024;
