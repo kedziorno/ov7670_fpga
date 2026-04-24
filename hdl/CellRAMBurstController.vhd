@@ -137,7 +137,7 @@ dq_o <= source_data when data_out_enable_i = x"ffff" else x"0000";
 
 p0_vga_int : process (clk) is
 begin
-  if (falling_edge (clk)) then
+  if (rising_edge (clk)) then
     if (reset = '1') then
     vga_int_i <= '0';
     else

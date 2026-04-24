@@ -47,7 +47,7 @@ begin
       when 8 => cmd_reg <= x"3b"&"00000000"; -- COM11 - divide vsync
       when 9 => cmd_reg <= x"40"&"11010000"; -- COM15 - out ran 255, RGB565
       when 10 => cmd_reg <= x"8c"&"00000010"; -- RGB444 - enable, xRGB
-      when 11 => cmd_reg <= x"15"&"00000010"; -- COM10 - negate VSYNC
+      when 11 => cmd_reg <= x"0c"&"00000100";
       when 12 => cmd_reg <= x"17"&x"14"; -- HSTART
       when 13 => cmd_reg <= x"18"&x"02"; -- HSTOP
       when 14 => cmd_reg <= x"32"&x"80"; -- HREF
@@ -56,10 +56,10 @@ begin
       when 17 => cmd_reg <= x"03"&x"3a"; -- VREF
       when 18 => cmd_reg <= x"70"&x"3a";
       when 19 => cmd_reg <= x"71"&x"35";
-      when 20 => cmd_reg <= x"72"&x"22";
-      when 21 => cmd_reg <= x"73"&x"f2"; -- SCALING_PCLK_DIV
+      when 20 => cmd_reg <= x"72"&x"01";
+      when 21 => cmd_reg <= x"73"&x"01"; -- SCALING_PCLK_DIV
       when 22 => cmd_reg <= x"3a"&"00000001"; -- TSLB auto window, 00 have pattern
-      when 23 => cmd_reg <= x"0c"&"00000100";
+      when 23 => cmd_reg <= x"15"&"00000010"; -- COM10 - negate VSYNC
       when 24 => cmd_reg <= x"b0"&"10001000";
       when others => cmd_reg <= x"ffff";
     end case;
