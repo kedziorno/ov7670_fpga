@@ -309,24 +309,39 @@ signal data_out_enable : std_logic_vector (15 downto 0);
 
 begin
 
-dq (0)  <= dq_o(0)  when data_out_enable (0)  = '1' else 'Z';
-dq (1)  <= dq_o(1)  when data_out_enable (1)  = '1' else 'Z';
-dq (2)  <= dq_o(2)  when data_out_enable (2)  = '1' else 'Z';
-dq (3)  <= dq_o(3)  when data_out_enable (3)  = '1' else 'Z';
-dq (4)  <= dq_o(4)  when data_out_enable (4)  = '1' else 'Z';
-dq (5)  <= dq_o(5)  when data_out_enable (5)  = '1' else 'Z';
-dq (6)  <= dq_o(6)  when data_out_enable (6)  = '1' else 'Z';
-dq (7)  <= dq_o(7)  when data_out_enable (7)  = '1' else 'Z';
-dq (8)  <= dq_o(8)  when data_out_enable (8)  = '1' else 'Z';
-dq (9)  <= dq_o(9)  when data_out_enable (9)  = '1' else 'Z';
-dq (10) <= dq_o(10) when data_out_enable (10) = '1' else 'Z';
-dq (11) <= dq_o(11) when data_out_enable (11) = '1' else 'Z';
-dq (12) <= dq_o(12) when data_out_enable (12) = '1' else 'Z';
-dq (13) <= dq_o(13) when data_out_enable (13) = '1' else 'Z';
-dq (14) <= dq_o(14) when data_out_enable (14) = '1' else 'Z';
-dq (15) <= dq_o(15) when data_out_enable (15) = '1' else 'Z';
+dq_iob : for i in 15 downto 0 generate
+IOBUF_inst : IOBUF
+generic map (
+DRIVE => 12,
+IBUF_DELAY_VALUE => "0",
+IFD_DELAY_VALUE => "AUTO",
+IOSTANDARD => "DEFAULT",
+SLEW => "SLOW")
+port map (
+O => dq_i(i),
+IO => dq(i),
+I => dq_o(i),
+T => not data_out_enable(i)
+);
+end generate dq_iob;
 
-dq_i <= dq;
+--dq (0)  <= dq_o(0)  when data_out_enable (0)  = '1' else 'Z';
+--dq (1)  <= dq_o(1)  when data_out_enable (1)  = '1' else 'Z';
+--dq (2)  <= dq_o(2)  when data_out_enable (2)  = '1' else 'Z';
+--dq (3)  <= dq_o(3)  when data_out_enable (3)  = '1' else 'Z';
+--dq (4)  <= dq_o(4)  when data_out_enable (4)  = '1' else 'Z';
+--dq (5)  <= dq_o(5)  when data_out_enable (5)  = '1' else 'Z';
+--dq (6)  <= dq_o(6)  when data_out_enable (6)  = '1' else 'Z';
+--dq (7)  <= dq_o(7)  when data_out_enable (7)  = '1' else 'Z';
+--dq (8)  <= dq_o(8)  when data_out_enable (8)  = '1' else 'Z';
+--dq (9)  <= dq_o(9)  when data_out_enable (9)  = '1' else 'Z';
+--dq (10) <= dq_o(10) when data_out_enable (10) = '1' else 'Z';
+--dq (11) <= dq_o(11) when data_out_enable (11) = '1' else 'Z';
+--dq (12) <= dq_o(12) when data_out_enable (12) = '1' else 'Z';
+--dq (13) <= dq_o(13) when data_out_enable (13) = '1' else 'Z';
+--dq (14) <= dq_o(14) when data_out_enable (14) = '1' else 'Z';
+--dq (15) <= dq_o(15) when data_out_enable (15) = '1' else 'Z';
+--dq_i <= dq;
 
 --process (clk1) is
 --begin
