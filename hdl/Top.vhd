@@ -309,17 +309,17 @@ signal oe_n_i, we_n_i, adv_n_i, ce_n_i, cre_i, clk_i : std_logic;
 
 begin
 
-synchronise_owait : process (clk1) is
-begin
-  if (falling_edge (clk1)) then
-    if (pb = '1') then
-      owait1 <= '0';
-    else
-      owait1 <= owait;
-    end if;
-  end if;
-end process synchronise_owait;
---owait1 <= owait;
+--synchronise_owait : process (clk1) is
+--begin
+--  if (falling_edge (clk1)) then
+--    if (pb = '1') then
+--      owait1 <= '0';
+--    else
+--      owait1 <= owait;
+--    end if;
+--  end if;
+--end process synchronise_owait;
+owait1 <= owait;
 
 synchronise_mem_addr_dq : process (clk1) is
 begin
@@ -364,18 +364,6 @@ id <= id_w when p0_w = '1' else id_r when p0_r = '1' else (others => '0');
 data <= data_w when p0_w = '1' else data_r when p0_r = '1' else (others => '0');
 wrc <= wrc_w when p0_w = '1' else wrc_r when p0_r = '1' else '0';
 
-p_synchro_int_wr_cam : process (clk1) is
-begin
-  if (rising_edge (clk1)) then
-    if (pb = '1') then
-      cints <= '0';
-    else
-      cint1 <= cint;
-      cints <= cint1;
-    end if;
-  end if;
-end process p_synchro_int_wr_cam;
-
 p0_control_crbc_write : process (clk1) is
 begin
   if (rising_edge (clk1)) then
@@ -396,8 +384,8 @@ begin
       ov7670_vs_prev <= ov7670_vs;
       case (p0_state) is
         when a0 =>
-          if (cints = '1') then
-          p0_state <= a1;
+          if (ov7670_hs_prev = '1' and ov7670_hs = '0') then
+            p0_state <= a1;
           end if;
           if (ov7670_vs = '1') then
             p0_w <= '1'; wrc_w <= '1'; id_w <= x"0058"; data_w <= (others => '0');
@@ -410,7 +398,7 @@ begin
           if (ov7670_vs_prev = '0' and ov7670_vs = '1') then
             cntr_wr1 <= (others => '0');
           end if;
-          if (cints = '1') then -- wr when hs fe
+          if (ov7670_hs_prev = '1' and ov7670_hs = '0') then -- wr when hs fe
               p0_state <= a1a;
           end if;
   --        end if;
@@ -611,8 +599,8 @@ PORT MAP (
   write_buffer_addr => write_buffer_addr,
   write_buffer_data => write_buffer_data,
   write_buffer_clk => ov7670_pclk,
-  write_buffer_we => ov7670_hs,
-  --write_buffer_we => latched_hs,
+  --write_buffer_we => ov7670_hs,
+  write_buffer_we => latched_hs,
 
   clk25 => clk_vga,
   read_buffer_addr => read_buffer_addr,
@@ -799,33 +787,43 @@ begin
 end process p0_assert_1;
 --synthesis translate_on
 
-BUFG_mc : BUFG
-port map (
-  O => clk0_fb,
-  I => clk0
-);
+p2_vga_clk : process (clk1) is
+  variable vga : integer range 0 to 1;
+begin
+  if (rising_edge (clk1)) then
+    if (pb = '1') then
+      clk_vga <= '0';
+      vga := 0;
+    else
+      if (vga = 1) then
+        clk_vga <= '1';
+        vga := 0;
+      else
+        clk_vga <= '0';
+        vga := vga + 1;
+      end if;
+    end if;
+  end if;
+end process p2_vga_clk;
 
-IBUFG_global_clock1 : IBUF
-port map (
-  O => i_clock_ib1,
-  I => i_clock100
-);
-
-DCM_SP_mc_fx_vga_dv : DCM_SP
-generic map (
-  CLKDV_DIVIDE => 4.0,
-  CLKFX_MULTIPLY => 6, CLKFX_DIVIDE => 25,
-  CLKIN_PERIOD => 10.0
-)
-port map (
-  CLK0 => clk0,
-  CLKDV => clk_vga,
-  CLKFX => clk_cam,
-  CLKFB => clk0_fb,
-  CLKIN => i_clock_ib1,
-  RST => pb,
-  PSCLK => '0', PSEN => '0', PSINCDEC => '0'
-);
+p3_read_buffer_clk : process (clk1) is
+  variable vga_read : integer range 0 to 3;
+begin
+  if (rising_edge (clk1)) then
+    if (pb = '1') then
+      read_buffer_clk <= '0';
+      vga_read := 0;
+    else
+      if (vga_read = 3) then
+        read_buffer_clk <= '1';
+        vga_read := 0;
+      else
+        read_buffer_clk <= '0';
+        vga_read := vga_read + 1;
+      end if;
+    end if;
+  end if;
+end process p3_read_buffer_clk;
 
 BUFG_cam : BUFG
 port map (
@@ -844,13 +842,13 @@ port map (
 DCM_SP_cam : DCM_SP
 generic map (
   CLKDV_DIVIDE => 4.0,
-  CLKFX_MULTIPLY => 8, CLKFX_DIVIDE => 2,
+  CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 25,
   CLKIN_PERIOD => 20.0
 )
 port map (
   CLK0 => clk1,
-  CLKDV => read_buffer_clk,
-  CLKFX => memory_controller_clk,
+  CLKFX => clk_cam,
+  --CLKDV => read_buffer_clk,
   CLKFB => clk1_fb,
   CLKIN => i_clock_ib2,
   RST => pb,

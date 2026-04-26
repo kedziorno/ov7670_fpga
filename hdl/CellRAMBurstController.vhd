@@ -135,16 +135,16 @@ data_out_enable <= data_out_enable_i;
 
 dq_o <= source_data when data_out_enable_i = x"ffff" else x"0000";
 
-p0_vga_int : process (clk) is
-begin
-  if (rising_edge (clk)) then
-    if (reset = '1') then
-    vga_int_i <= '0';
-    else
-    vga_int_i <= vga_int;
-  end if;
-  end if;
-end process p0_vga_int;
+--p0_vga_int : process (clk) is
+--begin
+--  if (rising_edge (clk)) then
+--    if (reset = '1') then
+--    vga_int_i <= '0';
+--    else
+--    vga_int_i <= vga_int;
+--  end if;
+--  end if;
+--end process p0_vga_int;
 
 busy <= busy_i;
 
