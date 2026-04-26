@@ -172,7 +172,7 @@ capture_process: process(pclk)
    latched_vs <= latched_vsync;
    latched_process: process (pclk) is
    begin
-      if rising_edge(pclk) then
+      if falling_edge(pclk) then
       if (reset = '1') then
 --        latched_d <= (others => '0');
         latched_href <= '0';

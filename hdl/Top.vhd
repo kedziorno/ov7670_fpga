@@ -129,8 +129,8 @@ for all : VGA_timing_synch use entity work.VGA_timing_synch(counter);
 
 -- RAM FB
 signal wren1 : STD_LOGIC_VECTOR(0 downto 0);
-signal wr_d1 : STD_LOGIC_VECTOR(15 downto 0);
-signal wr_a1 : STD_LOGIC_VECTOR(10 downto 0);
+signal write_buffer_data : STD_LOGIC_VECTOR(15 downto 0);
+signal write_buffer_addr : STD_LOGIC_VECTOR(10 downto 0);
 signal read_buffer_data : STD_LOGIC_VECTOR(15 downto 0);
 signal read_buffer_addr : STD_LOGIC_VECTOR(9 downto 0);
 
@@ -358,7 +358,7 @@ dq_iob : for i in 15 downto 0 generate
   );
 end generate dq_iob;
 
-vint <= '1' when (ov7670_vs_prev = '0' and ov7670_vs = '1') else '0';
+--vint <= '1' when (ov7670_vs_prev = '0' and latched_vs = '1') else '0';
 
 id <= id_w when p0_w = '1' else id_r when p0_r = '1' else (others => '0');
 data <= data_w when p0_w = '1' else data_r when p0_r = '1' else (others => '0');
@@ -608,16 +608,11 @@ PORT MAP (
   data => data,
   id => id,
 
-  write_buffer_addr => wr_a1,
-  --write_buffer_data => wr_d1 (15 downto 8),
-  --write_buffer_data => wr_d1 (7 downto 0),
-  write_buffer_data => wr_d1,
-  --write_buffer_data => wr_d1 (7 downto 0),
+  write_buffer_addr => write_buffer_addr,
+  write_buffer_data => write_buffer_data,
   write_buffer_clk => ov7670_pclk,
-  --write_buffer_clk => wren1(0),
   write_buffer_we => ov7670_hs,
   --write_buffer_we => latched_hs,
-  --write_buffer_we => wren1 (0),
 
   clk25 => clk_vga,
   read_buffer_addr => read_buffer_addr,
@@ -729,8 +724,8 @@ port map (
   vsync => cam_vs,
   href => cam_hs,
   d => cam_d,
-  addr => wr_a1,
-  dout => wr_d1,
+  addr => write_buffer_addr,
+  dout => write_buffer_data,
   we => wren1,
   latched_vs => latched_vs,
   latched_hs => latched_hs,
