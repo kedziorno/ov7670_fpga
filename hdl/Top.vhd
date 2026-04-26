@@ -615,8 +615,8 @@ PORT MAP (
   --write_buffer_data => wr_d1 (7 downto 0),
   write_buffer_clk => ov7670_pclk,
   --write_buffer_clk => wren1(0),
-  --write_buffer_we => ov7670_hs,
-  write_buffer_we => latched_hs,
+  write_buffer_we => ov7670_hs,
+  --write_buffer_we => latched_hs,
   --write_buffer_we => wren1 (0),
 
   clk25 => clk_vga,

@@ -141,8 +141,8 @@ capture_process: process(pclk)
           else
             addr1 <= addr1 + 1;
           end if;
-            d_latch <= d_latch(7 downto 0) & latched_d;
          end if;
+            d_latch <= d_latch(7 downto 0) & latched_d;
          we_reg  <= '0';
          if (latched_vsync = '1') then
            address      <= (others => '0');
@@ -172,7 +172,7 @@ capture_process: process(pclk)
    latched_vs <= latched_vsync;
    latched_process: process (pclk) is
    begin
-      if falling_edge(pclk) then
+      if rising_edge(pclk) then
       if (reset = '1') then
 --        latched_d <= (others => '0');
         latched_href <= '0';
