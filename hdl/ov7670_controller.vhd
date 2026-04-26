@@ -10,6 +10,7 @@ use IEEE.NUMERIC_STD.ALL;
 entity ov7670_controller is
     Port ( reset1, clk : in  STD_LOGIC;
            resend : in  STD_LOGIC;
+           sw : in std_logic;
            sioc : out  STD_LOGIC;
            siodi : in  STD_LOGIC;
            siodo : out  STD_LOGIC;
@@ -76,7 +77,8 @@ SCCB : ov7670_SCCB port map(
 	siodo => siodo,
 	taken => taken);
 
-pwdn <= '0';
+--pwdn <= resend;
+pwdn <= sw;
 --process (clk) is begin
 --if (rising_edge (clk)) then
 reset <= not resend;
