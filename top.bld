@@ -3,8 +3,8 @@ Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
 
 Command Line:
 /home/user/.local/Xilinx/14.7/ISE_DS/ISE/bin/lin64/unwrapped/ngdbuild -intstyle
-ise -dd _ngo -sd ipcore_dir -nt timestamp -uc hdl/top.ucf -p xc3s1200e-fg320-4
-top.ngc top.ngd
+ise -dd _ngo -sd ipcore_dir -nt timestamp -i -p xc3s1200e-fg320-4 top.ngc
+top.ngd
 
 Reading NGO file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/top.ngc"
 ...
@@ -12,58 +12,10 @@ Loading design module "ipcore_dir/sink_read_1.ngc"...
 Gathering constraint information from source properties...
 Done.
 
-Annotating constraints to design from ucf file "hdl/top.ucf" ...
 Resolving constraint associations...
 Checking Constraint Associations...
-WARNING:ConstraintSystem:56 - Constraint <TIMESPEC TS_12_5_to_24p = FROM
-   "CLK12_5" TO "CLK24p" TIG;> [hdl/top.ucf(54)]: Unable to find an active
-   'TimeGrp' or 'TNM' or 'TPSync' constraint named 'CLK24p'.
-
-WARNING:ConstraintSystem:56 - Constraint <TIMESPEC TS_24p_to_12_5 = FROM
-   "CLK24p" TO "CLK12_5" TIG;> [hdl/top.ucf(55)]: Unable to find an active
-   'TimeGrp' or 'TNM' or 'TPSync' constraint named 'CLK24p'.
-
-WARNING:ConstraintSystem:56 - Constraint <TIMESPEC TS_12_5_to_24x = FROM
-   "CLK12_5" TO "CLK24x" TIG;> [hdl/top.ucf(56)]: Unable to find an active
-   'TimeGrp' or 'TNM' or 'TPSync' constraint named 'CLK24x'.
-
-WARNING:ConstraintSystem:56 - Constraint <TIMESPEC TS_24x_to_12_5 = FROM
-   "CLK24x" TO "CLK12_5" TIG;> [hdl/top.ucf(57)]: Unable to find an active
-   'TimeGrp' or 'TNM' or 'TPSync' constraint named 'CLK24x'.
-
-WARNING:ConstraintSystem:56 - Constraint <TIMESPEC TS_pclk_to_24 = FROM "pclk"
-   TO "CLK24" TIG;> [hdl/top.ucf(127)]: Unable to find an active 'TimeGrp' or
-   'TNM' or 'TPSync' constraint named 'CLK24'.
-
-WARNING:ConstraintSystem:56 - Constraint <TIMESPEC TS_24_to_pclk = FROM "CLK24"
-   TO "pclk" TIG;> [hdl/top.ucf(128)]: Unable to find an active 'TimeGrp' or
-   'TNM' or 'TPSync' constraint named 'CLK24'.
-
-INFO:ConstraintSystem:178 - TNM 'i_clock', used in period specification
-   'TS_clk', was traced into DCM_SP instance DCM_SP_cam. The following new TNM
-   groups and period specifications were generated at the DCM_SP output(s): 
-   CLK0: <TIMESPEC TS_inst_top_camera_monitoring_clk11 = PERIOD
-   "inst_top_camera_monitoring_clk11" TS_clk HIGH 50%>
-
-INFO:ConstraintSystem:178 - TNM 'i_clock', used in period specification
-   'TS_clk', was traced into DCM_SP instance DCM_SP_cam. The following new TNM
-   groups and period specifications were generated at the DCM_SP output(s): 
-   CLKDV: <TIMESPEC TS_inst_top_camera_monitoring_read_buffer_clk = PERIOD
-   "inst_top_camera_monitoring_read_buffer_clk" TS_clk * 4 HIGH 50%>
-
-INFO:ConstraintSystem:178 - TNM 'i_clock100', used in period specification
-   'TS_clk100', was traced into DCM_SP instance DCM_SP_mc_fx_vga_dv. The
-   following new TNM groups and period specifications were generated at the
-   DCM_SP output(s): 
-   CLKDV: <TIMESPEC TS_vga_clock_OBUF = PERIOD "vga_clock_OBUF" TS_clk100 * 4
-   HIGH 50%>
-
 Done...
 
-INFO:NgdBuild:1222 - Setting CLKIN_PERIOD attribute associated with DCM instance
-   DCM_SP_mc_fx_vga_dv to 10.000000 ns based on the period specification
-   (<TIMESPEC TS_clk100 = PERIOD "i_clock100" 10 ns HIGH 50%;>
-   [hdl/top.ucf(83)]).
 Checking expanded design ...
 WARNING:NgdBuild:452 - logical net 'N21' has no driver
 WARNING:NgdBuild:452 - logical net 'N22' has no driver
@@ -92,9 +44,9 @@ Partition Implementation Status
 
 NGDBUILD Design Results Summary:
   Number of errors:     0
-  Number of warnings:  23
+  Number of warnings:  17
 
-Total memory usage is 384628 kilobytes
+Total memory usage is 380368 kilobytes
 
 Writing NGD file "top.ngd" ...
 Total REAL time to NGDBUILD completion:  1 sec
