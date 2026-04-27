@@ -71,7 +71,7 @@ Automatic Register Balancing       : No
 
 ---- Target Options
 Add IO Buffers                     : YES
-Global Maximum Fanout              : 500
+Global Maximum Fanout              : 100000
 Add Generic Clock Buffer(BUFG)     : 24
 Register Duplication               : YES
 Slice Packing                      : YES
@@ -85,7 +85,7 @@ Equivalent register Removal        : YES
 ---- General Options
 Optimization Goal                  : Speed
 Optimization Effort                : 1
-Keep Hierarchy                     : No
+Keep Hierarchy                     : Soft
 Netlist Hierarchy                  : As_Optimized
 RTL Output                         : Yes
 Global Optimization                : AllClockNets
@@ -133,7 +133,8 @@ Architecture behavioral of Entity debounce_circuit is up to date.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/ov7670_controller.vhd" in Library work.
 Architecture behavioral of Entity ov7670_controller is up to date.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/ov7670_capture.vhd" in Library work.
-Architecture behavioral of Entity ov7670_capture is up to date.
+Entity <ov7670_capture> compiled.
+Entity <ov7670_capture> (Architecture <behavioral>) compiled.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/address_generator.vhd" in Library work.
 Architecture behavioral of Entity address_generator is up to date.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/vga_imagegenerator.vhd" in Library work.
@@ -144,7 +145,8 @@ Architecture lsfr_2 of Entity vga_timing_synch is up to date.
 Architecture jc of Entity vga_timing_synch is up to date.
 Architecture counter of Entity vga_timing_synch is up to date.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/Top.vhd" in Library work.
-Architecture structural of Entity top_camera_monitoring is up to date.
+Entity <top_camera_monitoring> compiled.
+Entity <top_camera_monitoring> (Architecture <structural>) compiled.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/top1.vhd" in Library work.
 Architecture behavioral of Entity top is up to date.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/ipcore_dir/frame_buffer.vhd" in Library work.
@@ -836,38 +838,39 @@ WARNING:Xst:1293 - FF/Latch <id_r_13> has a constant value of 0 in block <inst_t
 WARNING:Xst:1293 - FF/Latch <id_r_14> has a constant value of 0 in block <inst_top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
 WARNING:Xst:1293 - FF/Latch <id_r_15> has a constant value of 0 in block <inst_top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
 
-Synthesizing (advanced) Unit <cellular_ram_burst_controller>.
-INFO:Xst:3226 - The RAM <write_buffer_i0/Mram_RAM> will be implemented as a BLOCK RAM, absorbing the following register(s): <write_buffer_i0/readB>
+Synthesizing (advanced) Unit <asym_ram_sdp_read_wider>.
+INFO:Xst:3226 - The RAM <Mram_RAM> will be implemented as a BLOCK RAM, absorbing the following register(s): <readB>
     -----------------------------------------------------------------------
     | ram_type           | Block                               |          |
     -----------------------------------------------------------------------
     | Port A                                                              |
     |     aspect ratio   | 2048-word x 16-bit                  |          |
     |     mode           | read-first                          |          |
-    |     clkA           | connected to signal <write_buffer_clk> | fall     |
-    |     weA            | connected to signal <write_buffer_i0/weA_0> | high     |
-    |     addrA          | connected to signal <write_buffer_addr> |          |
-    |     diA            | connected to signal <write_buffer_data> |          |
+    |     clkA           | connected to signal <clkA>          | fall     |
+    |     weA            | connected to signal <weA_0>         | high     |
+    |     addrA          | connected to signal <addrA>         |          |
+    |     diA            | connected to signal <diA>           |          |
     -----------------------------------------------------------------------
     | optimization       | speed                               |          |
     -----------------------------------------------------------------------
     | Port B                                                              |
     |     aspect ratio   | 2048-word x 16-bit                  |          |
     |     mode           | write-first                         |          |
-    |     clkB           | connected to signal <clk>           | fall     |
-    |     addrB          | connected to signal <GND>           |          |
-    |     doB            | connected to signal <source_data>   |          |
+    |     clkB           | connected to signal <clkB>          | fall     |
+    |     addrB          | connected to internal node          |          |
+    |     doB            | connected to signal <readB>         |          |
     |     dorstB         | connected to signal <reset>         | high     |
     | reset value        | 0000000000000000                               |
     -----------------------------------------------------------------------
     | optimization       | speed                               |          |
     -----------------------------------------------------------------------
-Unit <cellular_ram_burst_controller> synthesized (advanced).
+Unit <asym_ram_sdp_read_wider> synthesized (advanced).
 
 =========================================================================
 Advanced HDL Synthesis Report
 
 Macro Statistics
+# FSMs                                                 : 3
 # RAMs                                                 : 1
  2048x16-bit dual-port block RAM                       : 1
 # ROMs                                                 : 2
@@ -891,8 +894,8 @@ Macro Statistics
  4-bit up counter                                      : 1
  6-bit up counter                                      : 1
  8-bit up counter                                      : 1
-# Registers                                            : 537
- Flip-Flops                                            : 537
+# Registers                                            : 521
+ Flip-Flops                                            : 521
 # Comparators                                          : 15
  10-bit comparator greatequal                          : 2
  10-bit comparator greater                             : 2
@@ -918,9 +921,6 @@ WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <id_r_12> has a cons
 WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <id_r_13> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
 WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <id_r_14> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
 WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <id_r_15> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1710 - FF/Latch <output> (without init value) has a constant value of 0 in block <debounce_circuit>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <state_FSM_FFd1> has a constant value of 0 in block <debounce_circuit>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <state_FSM_FFd2> has a constant value of 0 in block <debounce_circuit>. This FF/Latch will be trimmed during the optimization process.
 WARNING:Xst:1293 - FF/Latch <id_w_5> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
 WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <id_w_7> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
 WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <id_w_8> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
@@ -950,11 +950,17 @@ WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <cntr_wr1_5> has a c
 
 Optimizing unit <top> ...
 
+Optimizing unit <vga_imagegenerator> ...
+
+Optimizing unit <debounce_circuit> ...
+
 Optimizing unit <ov7670_capture> ...
 
 Optimizing unit <address_generator> ...
 
 Optimizing unit <VGA_timing_synch> ...
+
+Optimizing unit <asym_ram_sdp_read_wider> ...
 
 Optimizing unit <ov7670_registers> ...
 
@@ -962,71 +968,75 @@ Optimizing unit <ov7670_SCCB> ...
 
 Optimizing unit <cellular_ram_burst_controller> ...
 
+Optimizing unit <ov7670_controller> ...
+
 Optimizing unit <top_camera_monitoring> ...
 WARNING:Xst:1293 - FF/Latch <data_w_2> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
 WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <data_w_3> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
 WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <data_w_4> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
 WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <data_w_5> has a constant value of 0 in block <top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1293 - FF/Latch <inst_top_camera_monitoring/crbc_i0/burst_read_addr_19> has a constant value of 0 in block <top>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <inst_top_camera_monitoring/crbc_i0/burst_read_addr_18> has a constant value of 0 in block <top>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <inst_top_camera_monitoring/crbc_i0/burst_read_addr_21> has a constant value of 0 in block <top>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <inst_top_camera_monitoring/crbc_i0/bytes_to_read_5> has a constant value of 0 in block <top>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <inst_top_camera_monitoring/crbc_i0/bytes_to_read_4> has a constant value of 0 in block <top>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <inst_top_camera_monitoring/crbc_i0/bytes_to_read_3> has a constant value of 0 in block <top>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <inst_top_camera_monitoring/crbc_i0/bytes_to_read_2> has a constant value of 0 in block <top>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <inst_top_camera_monitoring/crbc_i0/burst_read_addr_20> has a constant value of 0 in block <top>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <inst_top_camera_monitoring/crbc_i0/this_write_addr_21> has a constant value of 0 in block <top>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <inst_top_camera_monitoring/crbc_i0/this_write_addr_20> has a constant value of 0 in block <top>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <inst_top_camera_monitoring/crbc_i0/this_write_addr_19> has a constant value of 0 in block <top>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <inst_top_camera_monitoring/crbc_i0/this_read_addr_21> has a constant value of 0 in block <top>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <inst_top_camera_monitoring/crbc_i0/this_read_addr_20> has a constant value of 0 in block <top>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <inst_top_camera_monitoring/crbc_i0/this_read_addr_19> has a constant value of 0 in block <top>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <inst_top_camera_monitoring/crbc_i0/bytes_to_write_5> has a constant value of 0 in block <top>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <inst_top_camera_monitoring/crbc_i0/bytes_to_write_4> has a constant value of 0 in block <top>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <inst_top_camera_monitoring/crbc_i0/burst_write_addr_4> has a constant value of 0 in block <top>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <inst_top_camera_monitoring/crbc_i0/burst_write_addr_2> has a constant value of 0 in block <top>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <inst_top_camera_monitoring/crbc_i0/burst_write_addr_3> has a constant value of 0 in block <top>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <inst_top_camera_monitoring/crbc_i0/burst_write_addr_5> has a constant value of 0 in block <top>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <inst_top_camera_monitoring/crbc_i0/burst_read_addr_2> has a constant value of 0 in block <top>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <inst_top_camera_monitoring/crbc_i0/burst_read_addr_3> has a constant value of 0 in block <top>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <inst_top_camera_monitoring/crbc_i0/burst_read_addr_4> has a constant value of 0 in block <top>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <inst_top_camera_monitoring/crbc_i0/burst_read_addr_5> has a constant value of 0 in block <top>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <inst_top_camera_monitoring/crbc_i0/burst_write_addr_20> has a constant value of 0 in block <top>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <inst_top_camera_monitoring/crbc_i0/burst_write_addr_21> has a constant value of 0 in block <top>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <inst_top_camera_monitoring/crbc_i0/burst_write_addr_18> has a constant value of 0 in block <top>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <inst_top_camera_monitoring/crbc_i0/a_20> (without init value) has a constant value of 0 in block <top>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <inst_top_camera_monitoring/crbc_i0/a_21> (without init value) has a constant value of 0 in block <top>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <inst_top_camera_monitoring/crbc_i0/burst_write_addr_19> has a constant value of 0 in block <top>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <inst_top_camera_monitoring/crbc_i0/bytes_to_write_2> has a constant value of 0 in block <top>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <inst_top_camera_monitoring/crbc_i0/bytes_to_write_3> has a constant value of 0 in block <top>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <inst_top_camera_monitoring/Addr_21> (without init value) has a constant value of 0 in block <top>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <inst_top_camera_monitoring/Addr_20> (without init value) has a constant value of 0 in block <top>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:2677 - Node <inst_top_camera_monitoring/inst_addrgen1/addr1_0> of sequential type is unconnected in block <top>.
-WARNING:Xst:2677 - Node <inst_top_camera_monitoring/inst_addrgen1/addr1_1> of sequential type is unconnected in block <top>.
-WARNING:Xst:2677 - Node <inst_top_camera_monitoring/inst_addrgen1/addr1_2> of sequential type is unconnected in block <top>.
-WARNING:Xst:2677 - Node <inst_top_camera_monitoring/inst_addrgen1/addr1_3> of sequential type is unconnected in block <top>.
-WARNING:Xst:2677 - Node <inst_top_camera_monitoring/inst_addrgen1/addr1_4> of sequential type is unconnected in block <top>.
-WARNING:Xst:2677 - Node <inst_top_camera_monitoring/inst_addrgen1/addr1_5> of sequential type is unconnected in block <top>.
-WARNING:Xst:2677 - Node <inst_top_camera_monitoring/inst_addrgen1/addr1_6> of sequential type is unconnected in block <top>.
-WARNING:Xst:2677 - Node <inst_top_camera_monitoring/inst_addrgen1/addr1_7> of sequential type is unconnected in block <top>.
-WARNING:Xst:2677 - Node <inst_top_camera_monitoring/inst_addrgen1/addr1_8> of sequential type is unconnected in block <top>.
-WARNING:Xst:2677 - Node <inst_top_camera_monitoring/inst_addrgen1/addr1_9> of sequential type is unconnected in block <top>.
-WARNING:Xst:2677 - Node <inst_top_camera_monitoring/inst_addrgen1/addr1_10> of sequential type is unconnected in block <top>.
-WARNING:Xst:2677 - Node <inst_top_camera_monitoring/inst_ov7670capt1/we_reg> of sequential type is unconnected in block <top>.
-WARNING:Xst:2677 - Node <inst_top_camera_monitoring/inst_ov7670capt1/addr1_0> of sequential type is unconnected in block <top>.
-WARNING:Xst:2677 - Node <inst_top_camera_monitoring/inst_ov7670capt1/addr1_1> of sequential type is unconnected in block <top>.
-WARNING:Xst:2677 - Node <inst_top_camera_monitoring/inst_ov7670capt1/addr1_2> of sequential type is unconnected in block <top>.
-WARNING:Xst:2677 - Node <inst_top_camera_monitoring/inst_ov7670capt1/addr1_3> of sequential type is unconnected in block <top>.
-WARNING:Xst:2677 - Node <inst_top_camera_monitoring/inst_ov7670capt1/addr1_4> of sequential type is unconnected in block <top>.
-WARNING:Xst:2677 - Node <inst_top_camera_monitoring/inst_ov7670capt1/addr1_5> of sequential type is unconnected in block <top>.
-WARNING:Xst:2677 - Node <inst_top_camera_monitoring/inst_ov7670capt1/addr1_6> of sequential type is unconnected in block <top>.
-WARNING:Xst:2677 - Node <inst_top_camera_monitoring/inst_ov7670capt1/addr1_7> of sequential type is unconnected in block <top>.
-WARNING:Xst:2677 - Node <inst_top_camera_monitoring/inst_ov7670capt1/addr1_8> of sequential type is unconnected in block <top>.
-WARNING:Xst:2677 - Node <inst_top_camera_monitoring/inst_ov7670capt1/addr1_9> of sequential type is unconnected in block <top>.
+WARNING:Xst:1293 - FF/Latch <bytes_to_write_3> has a constant value of 0 in block <crbc_i0>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <bytes_to_write_4> has a constant value of 0 in block <crbc_i0>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <bytes_to_write_5> has a constant value of 0 in block <crbc_i0>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <this_read_addr_19> has a constant value of 0 in block <crbc_i0>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <this_read_addr_20> has a constant value of 0 in block <crbc_i0>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <this_read_addr_21> has a constant value of 0 in block <crbc_i0>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <this_write_addr_19> has a constant value of 0 in block <crbc_i0>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <this_write_addr_20> has a constant value of 0 in block <crbc_i0>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <this_write_addr_21> has a constant value of 0 in block <crbc_i0>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <burst_read_addr_20> has a constant value of 0 in block <crbc_i0>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <bytes_to_read_2> has a constant value of 0 in block <crbc_i0>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <bytes_to_read_3> has a constant value of 0 in block <crbc_i0>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <bytes_to_read_4> has a constant value of 0 in block <crbc_i0>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <bytes_to_read_5> has a constant value of 0 in block <crbc_i0>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <burst_read_addr_21> has a constant value of 0 in block <crbc_i0>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <burst_read_addr_19> has a constant value of 0 in block <crbc_i0>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <burst_read_addr_18> has a constant value of 0 in block <crbc_i0>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <Addr_20> (without init value) has a constant value of 0 in block <inst_top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <Addr_21> (without init value) has a constant value of 0 in block <inst_top_camera_monitoring>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <burst_write_addr_3> has a constant value of 0 in block <crbc_i0>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <burst_write_addr_2> has a constant value of 0 in block <crbc_i0>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <burst_write_addr_4> has a constant value of 0 in block <crbc_i0>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <burst_write_addr_5> has a constant value of 0 in block <crbc_i0>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <burst_read_addr_2> has a constant value of 0 in block <crbc_i0>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <burst_read_addr_3> has a constant value of 0 in block <crbc_i0>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <burst_read_addr_4> has a constant value of 0 in block <crbc_i0>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <burst_read_addr_5> has a constant value of 0 in block <crbc_i0>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <burst_write_addr_20> has a constant value of 0 in block <crbc_i0>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <burst_write_addr_21> has a constant value of 0 in block <crbc_i0>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <burst_write_addr_18> has a constant value of 0 in block <crbc_i0>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <a_20> (without init value) has a constant value of 0 in block <crbc_i0>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <a_21> (without init value) has a constant value of 0 in block <crbc_i0>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <burst_write_addr_19> has a constant value of 0 in block <crbc_i0>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <bytes_to_write_2> has a constant value of 0 in block <crbc_i0>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1290 - Hierarchical block <inst_debounce> is unconnected in block <inst_top_camera_monitoring>.
+   It will be removed from the design.
+WARNING:Xst:2677 - Node <we_reg> of sequential type is unconnected in block <inst_ov7670capt1>.
+WARNING:Xst:2677 - Node <addr1_0> of sequential type is unconnected in block <inst_ov7670capt1>.
+WARNING:Xst:2677 - Node <addr1_1> of sequential type is unconnected in block <inst_ov7670capt1>.
+WARNING:Xst:2677 - Node <addr1_2> of sequential type is unconnected in block <inst_ov7670capt1>.
+WARNING:Xst:2677 - Node <addr1_3> of sequential type is unconnected in block <inst_ov7670capt1>.
+WARNING:Xst:2677 - Node <addr1_4> of sequential type is unconnected in block <inst_ov7670capt1>.
+WARNING:Xst:2677 - Node <addr1_5> of sequential type is unconnected in block <inst_ov7670capt1>.
+WARNING:Xst:2677 - Node <addr1_6> of sequential type is unconnected in block <inst_ov7670capt1>.
+WARNING:Xst:2677 - Node <addr1_7> of sequential type is unconnected in block <inst_ov7670capt1>.
+WARNING:Xst:2677 - Node <addr1_8> of sequential type is unconnected in block <inst_ov7670capt1>.
+WARNING:Xst:2677 - Node <addr1_9> of sequential type is unconnected in block <inst_ov7670capt1>.
+WARNING:Xst:2677 - Node <addr1_0> of sequential type is unconnected in block <inst_addrgen1>.
+WARNING:Xst:2677 - Node <addr1_1> of sequential type is unconnected in block <inst_addrgen1>.
+WARNING:Xst:2677 - Node <addr1_2> of sequential type is unconnected in block <inst_addrgen1>.
+WARNING:Xst:2677 - Node <addr1_3> of sequential type is unconnected in block <inst_addrgen1>.
+WARNING:Xst:2677 - Node <addr1_4> of sequential type is unconnected in block <inst_addrgen1>.
+WARNING:Xst:2677 - Node <addr1_5> of sequential type is unconnected in block <inst_addrgen1>.
+WARNING:Xst:2677 - Node <addr1_6> of sequential type is unconnected in block <inst_addrgen1>.
+WARNING:Xst:2677 - Node <addr1_7> of sequential type is unconnected in block <inst_addrgen1>.
+WARNING:Xst:2677 - Node <addr1_8> of sequential type is unconnected in block <inst_addrgen1>.
+WARNING:Xst:2677 - Node <addr1_9> of sequential type is unconnected in block <inst_addrgen1>.
+WARNING:Xst:2677 - Node <addr1_10> of sequential type is unconnected in block <inst_addrgen1>.
 
 Mapping all equations...
 Building and optimizing final netlist ...
-Found area constraint ratio of 100 (+ 5) on block top, actual ratio is 5.
+Found area constraint ratio of 100 (+ 5) on block top, actual ratio is 6.
 FlipFlop inst_top_camera_monitoring/inst_ov7670contr1/Registers/sequence_0 has been replicated 1 time(s)
 FlipFlop inst_top_camera_monitoring/inst_ov7670contr1/Registers/sequence_1 has been replicated 1 time(s)
 FlipFlop inst_top_camera_monitoring/inst_ov7670contr1/Registers/sequence_2 has been replicated 1 time(s)
@@ -1063,39 +1073,39 @@ RTL Top Level Output File Name     : top.ngr
 Top Level Output File Name         : top
 Output Format                      : NGC
 Optimization Goal                  : Speed
-Keep Hierarchy                     : No
+Keep Hierarchy                     : Soft
 
 Design Statistics
 # IOs                              : 94
 
 Cell Usage :
-# BELS                             : 1343
-#      GND                         : 2
-#      INV                         : 53
+# BELS                             : 1362
+#      GND                         : 9
+#      INV                         : 60
 #      LUT1                        : 117
-#      LUT2                        : 184
-#      LUT2_D                      : 2
+#      LUT2                        : 204
+#      LUT2_D                      : 3
 #      LUT2_L                      : 1
-#      LUT3                        : 131
-#      LUT3_D                      : 2
-#      LUT3_L                      : 2
-#      LUT4                        : 370
-#      LUT4_D                      : 16
-#      LUT4_L                      : 9
+#      LUT3                        : 126
+#      LUT3_D                      : 3
+#      LUT3_L                      : 3
+#      LUT4                        : 372
+#      LUT4_D                      : 15
+#      LUT4_L                      : 7
 #      MUXCY                       : 190
-#      MUXF5                       : 50
-#      MUXF6                       : 15
-#      VCC                         : 2
+#      MUXF5                       : 33
+#      MUXF6                       : 13
+#      VCC                         : 9
 #      XORCY                       : 197
 # FlipFlops/Latches                : 540
 #      FD                          : 23
 #      FDE                         : 149
 #      FDE_1                       : 8
-#      FDR                         : 120
+#      FDR                         : 121
 #      FDR_1                       : 2
-#      FDRE                        : 164
-#      FDRS                        : 60
-#      FDRSE                       : 6
+#      FDRE                        : 162
+#      FDRS                        : 64
+#      FDRSE                       : 3
 #      FDS                         : 8
 # RAMS                             : 3
 #      RAMB16_S18_S18              : 1
@@ -1119,13 +1129,13 @@ Device utilization summary:
 
 Selected Device : 3s1200efg320-4 
 
- Number of Slices:                      496  out of   8672     5%  
+ Number of Slices:                      527  out of   8672     6%  
  Number of Slice Flip Flops:            540  out of  17344     3%  
- Number of 4 input LUTs:                888  out of  17344     5%  
-    Number used as logic:               887
+ Number of 4 input LUTs:                912  out of  17344     5%  
+    Number used as logic:               911
     Number used as Shift registers:       1
  Number of IOs:                          94
- Number of bonded IOBs:                  87  out of    250    34%  
+ Number of bonded IOBs:                  86  out of    250    34%  
  Number of BRAMs:                         3  out of     28    10%  
  Number of GCLKs:                         4  out of     24    16%  
  Number of DCMs:                          1  out of      8    12%  
@@ -1148,15 +1158,15 @@ NOTE: THESE TIMING NUMBERS ARE ONLY A SYNTHESIS ESTIMATE.
 
 Clock Information:
 ------------------
-------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------+
-Clock Signal                              | Clock buffer(FF name)                                                                                                                                                     | Load  |
-------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------+
-i_clock                                   | inst_top_camera_monitoring/DCM_SP_cam:CLK0                                                                                                                                | 473   |
-inst_top_camera_monitoring/read_buffer_clk| NONE(inst_top_camera_monitoring/crbc_i0/read_buffer_i0/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/s3_noinit.ram/dpram.dp18x18.ram)| 12    |
-inst_top_camera_monitoring/clk_vga1       | BUFG                                                                                                                                                                      | 22    |
-ov7670_pclk1                              | BUFGP                                                                                                                                                                     | 39    |
-Addr_20_OBUF                              | NONE(inst_top_camera_monitoring/synchro_reset_i0)                                                                                                                         | 1     |
-------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------+
+------------------------------------------+-----------------------------------------------------------+-------+
+Clock Signal                              | Clock buffer(FF name)                                     | Load  |
+------------------------------------------+-----------------------------------------------------------+-------+
+i_clock                                   | DCM_SP_cam:CLK0                                           | 473   |
+inst_top_camera_monitoring/Addr<20>       | NONE(inst_top_camera_monitoring/synchro_reset_i0)         | 1     |
+ov7670_pclk1                              | BUFGP                                                     | 39    |
+inst_top_camera_monitoring/read_buffer_clk| NONE(inst_top_camera_monitoring/inst_addrgen1/enable_prev)| 12    |
+inst_top_camera_monitoring/vga_clock      | BUFG                                                      | 22    |
+------------------------------------------+-----------------------------------------------------------+-------+
 INFO:Xst:2169 - HDL ADVISOR - Some clock signals were not automatically buffered by XST with BUFG/BUFR resources. Please use the buffer_type constraint in order to insert these buffers to the clock signals to help prevent skew problems.
 
 Asynchronous Control Signals Information:
@@ -1167,10 +1177,10 @@ Timing Summary:
 ---------------
 Speed Grade: -4
 
-   Minimum period: 10.151ns (Maximum Frequency: 98.515MHz)
+   Minimum period: 10.809ns (Maximum Frequency: 92.514MHz)
    Minimum input arrival time before clock: 6.909ns
-   Maximum output required time after clock: 12.223ns
-   Maximum combinational path delay: 7.812ns
+   Maximum output required time after clock: 12.600ns
+   Maximum combinational path delay: 7.800ns
 
 Timing Detail:
 --------------
@@ -1178,10 +1188,10 @@ All values displayed in nanoseconds (ns)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'i_clock'
-  Clock period: 10.151ns (frequency: 98.515MHz)
-  Total number of paths / destination ports: 44724 / 835
+  Clock period: 10.809ns (frequency: 92.514MHz)
+  Total number of paths / destination ports: 44742 / 834
 -------------------------------------------------------------------------
-Delay:               10.151ns (Levels of Logic = 7)
+Delay:               10.809ns (Levels of Logic = 8)
   Source:            inst_top_camera_monitoring/inst_ov7670contr1/Registers/sequence_0_1 (FF)
   Destination:       inst_top_camera_monitoring/inst_ov7670contr1/SCCB/busy_sr_0 (FF)
   Source Clock:      i_clock rising
@@ -1191,18 +1201,42 @@ Delay:               10.151ns (Levels of Logic = 7)
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDRE:C->Q            40   0.591   1.440  inst_top_camera_monitoring/inst_ov7670contr1/Registers/sequence_0_1 (inst_top_camera_monitoring/inst_ov7670contr1/Registers/sequence_0_1)
-     LUT4:I0->O            1   0.704   0.000  inst_top_camera_monitoring/inst_ov7670contr1/Registers/Mrom_cmd_reg_rom000072 (inst_top_camera_monitoring/inst_ov7670contr1/Registers/Mrom_cmd_reg_rom000072)
-     MUXF5:I0->O           1   0.321   0.000  inst_top_camera_monitoring/inst_ov7670contr1/Registers/Mrom_cmd_reg_rom00007_f5_0 (inst_top_camera_monitoring/inst_ov7670contr1/Registers/Mrom_cmd_reg_rom00007_f51)
-     MUXF6:I0->O           3   0.521   0.706  inst_top_camera_monitoring/inst_ov7670contr1/Registers/Mrom_cmd_reg_rom00007_f6 (inst_top_camera_monitoring/inst_ov7670contr1/command<7>)
-     LUT4:I0->O            1   0.704   0.595  inst_top_camera_monitoring/inst_ov7670contr1/Registers/done_cmp_eq0000118 (inst_top_camera_monitoring/inst_ov7670contr1/Registers/done_cmp_eq0000118)
-     LUT4_D:I0->LO         1   0.704   0.179  inst_top_camera_monitoring/inst_ov7670contr1/Registers/done_cmp_eq0000133 (N201)
-     LUT2:I1->O            2   0.704   0.451  inst_top_camera_monitoring/inst_ov7670contr1/Registers/done_cmp_eq00002 (led1_OBUF)
-     LUT4:I3->O           63   0.704   1.272  inst_top_camera_monitoring/inst_ov7670contr1/SCCB/busy_sr_not00031 (inst_top_camera_monitoring/inst_ov7670contr1/SCCB/busy_sr_not0003)
-     FDE:CE                    0.555          inst_top_camera_monitoring/inst_ov7670contr1/SCCB/busy_sr_0
+     FDRE:C->Q            23   0.591   1.377  sequence_0_1 (sequence_0_1)
+     LUT3:I0->O            1   0.704   0.000  Mrom_cmd_reg_rom000062 (Mrom_cmd_reg_rom000062)
+     MUXF5:I0->O           1   0.321   0.455  Mrom_cmd_reg_rom00006_f5 (Mrom_cmd_reg_rom00006_f5)
+     LUT3:I2->O            3   0.704   0.535  Mrom_cmd_reg_rom00006_f6 (command<6>)
+     LUT4:I3->O            2   0.704   0.451  done_cmp_eq000017 (done_cmp_eq000017)
+     LUT4:I3->O            2   0.704   0.447  done_cmp_eq00002 (done)
+     end scope: 'Registers'
+     INV:I->O              4   0.704   0.591  send1_INV_0 (send)
+     begin scope: 'SCCB'
+     LUT4:I3->O           31   0.704   1.262  busy_sr_not00031 (busy_sr_not0003)
+     FDE:CE                    0.555          data_sr_1
     ----------------------------------------
-    Total                     10.151ns (5.508ns logic, 4.643ns route)
-                                       (54.3% logic, 45.7% route)
+    Total                     10.809ns (5.691ns logic, 5.118ns route)
+                                       (52.7% logic, 47.3% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'ov7670_pclk1'
+  Clock period: 8.538ns (frequency: 117.123MHz)
+  Total number of paths / destination ports: 278 / 89
+-------------------------------------------------------------------------
+Delay:               4.269ns (Levels of Logic = 1)
+  Source:            inst_top_camera_monitoring/inst_ov7670capt1/latched_href (FF)
+  Destination:       inst_top_camera_monitoring/inst_ov7670capt1/address_0 (FF)
+  Source Clock:      ov7670_pclk1 falling
+  Destination Clock: ov7670_pclk1 rising
+
+  Data Path: inst_top_camera_monitoring/inst_ov7670capt1/latched_href to inst_top_camera_monitoring/inst_ov7670capt1/address_0
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDR_1:C->Q           17   0.591   1.130  latched_href (latched_href)
+     LUT4:I1->O           11   0.704   0.933  address_or000050 (address_or0000)
+     FDRE:R                    0.911          address_0
+    ----------------------------------------
+    Total                      4.269ns (2.206ns logic, 2.063ns route)
+                                       (51.7% logic, 48.3% route)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'inst_top_camera_monitoring/read_buffer_clk'
@@ -1219,67 +1253,44 @@ Delay:               6.156ns (Levels of Logic = 3)
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDRE:C->Q             3   0.591   0.706  inst_top_camera_monitoring/inst_addrgen1/addr_9 (inst_top_camera_monitoring/inst_addrgen1/addr_9)
-     LUT2:I0->O            1   0.704   0.499  inst_top_camera_monitoring/inst_addrgen1/addr_or00008 (inst_top_camera_monitoring/inst_addrgen1/addr_or00008)
-     LUT4:I1->O            1   0.704   0.455  inst_top_camera_monitoring/inst_addrgen1/addr_or000032 (inst_top_camera_monitoring/inst_addrgen1/addr_or000032)
-     LUT4:I2->O           10   0.704   0.882  inst_top_camera_monitoring/inst_addrgen1/addr_or000053 (inst_top_camera_monitoring/inst_addrgen1/addr_or0000)
-     FDRE:R                    0.911          inst_top_camera_monitoring/inst_addrgen1/addr_0
+     FDRE:C->Q             3   0.591   0.706  addr_9 (addr_9)
+     LUT2:I0->O            1   0.704   0.499  addr_or00008 (addr_or00008)
+     LUT4:I1->O            1   0.704   0.455  addr_or000032 (addr_or000032)
+     LUT4:I2->O           10   0.704   0.882  addr_or000053 (addr_or0000)
+     FDRE:R                    0.911          addr_0
     ----------------------------------------
     Total                      6.156ns (3.614ns logic, 2.542ns route)
                                        (58.7% logic, 41.3% route)
 
 =========================================================================
-Timing constraint: Default period analysis for Clock 'inst_top_camera_monitoring/clk_vga1'
-  Clock period: 7.098ns (frequency: 140.885MHz)
+Timing constraint: Default period analysis for Clock 'inst_top_camera_monitoring/vga_clock'
+  Clock period: 6.900ns (frequency: 144.928MHz)
   Total number of paths / destination ports: 525 / 52
 -------------------------------------------------------------------------
-Delay:               7.098ns (Levels of Logic = 4)
-  Source:            inst_top_camera_monitoring/inst_vgatiming/vcnt_8 (FF)
+Delay:               6.900ns (Levels of Logic = 3)
+  Source:            inst_top_camera_monitoring/inst_vgatiming/hcnt_8 (FF)
   Destination:       inst_top_camera_monitoring/inst_vgatiming/vcnt_0 (FF)
-  Source Clock:      inst_top_camera_monitoring/clk_vga1 rising
-  Destination Clock: inst_top_camera_monitoring/clk_vga1 rising
+  Source Clock:      inst_top_camera_monitoring/vga_clock rising
+  Destination Clock: inst_top_camera_monitoring/vga_clock rising
 
-  Data Path: inst_top_camera_monitoring/inst_vgatiming/vcnt_8 to inst_top_camera_monitoring/inst_vgatiming/vcnt_0
+  Data Path: inst_top_camera_monitoring/inst_vgatiming/hcnt_8 to inst_top_camera_monitoring/inst_vgatiming/vcnt_0
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDRE:C->Q             6   0.591   0.844  inst_top_camera_monitoring/inst_vgatiming/vcnt_8 (inst_top_camera_monitoring/inst_vgatiming/vcnt_8)
-     LUT3:I0->O            1   0.704   0.424  inst_top_camera_monitoring/inst_vgatiming/int_and000012_SW0 (N54)
-     LUT4_L:I3->LO         1   0.704   0.179  inst_top_camera_monitoring/inst_vgatiming/int_and000012 (inst_top_camera_monitoring/inst_vgatiming/N5)
-     LUT4:I1->O            2   0.704   0.451  inst_top_camera_monitoring/inst_vgatiming/int_and0000105 (inst_top_camera_monitoring/inst_vgatiming/int_and0000105)
-     LUT4:I3->O           10   0.704   0.882  inst_top_camera_monitoring/inst_vgatiming/vcnt_or0000 (inst_top_camera_monitoring/inst_vgatiming/vcnt_or0000)
-     FDRE:R                    0.911          inst_top_camera_monitoring/inst_vgatiming/vcnt_0
+     FDR:C->Q              6   0.591   0.844  hcnt_8 (hcnt_8)
+     LUT4:I0->O            1   0.704   0.424  vcnt_or0000119 (vcnt_or0000119)
+     LUT4:I3->O           12   0.704   1.136  vcnt_or0000128 (vcnt_cmp_eq0000)
+     LUT4:I0->O           10   0.704   0.882  vcnt_or0000 (vcnt_or0000)
+     FDRE:R                    0.911          vcnt_0
     ----------------------------------------
-    Total                      7.098ns (4.318ns logic, 2.780ns route)
-                                       (60.8% logic, 39.2% route)
-
-=========================================================================
-Timing constraint: Default period analysis for Clock 'ov7670_pclk1'
-  Clock period: 8.538ns (frequency: 117.123MHz)
-  Total number of paths / destination ports: 276 / 89
--------------------------------------------------------------------------
-Delay:               4.269ns (Levels of Logic = 1)
-  Source:            inst_top_camera_monitoring/inst_ov7670capt1/latched_href (FF)
-  Destination:       inst_top_camera_monitoring/inst_ov7670capt1/address_0 (FF)
-  Source Clock:      ov7670_pclk1 falling
-  Destination Clock: ov7670_pclk1 rising
-
-  Data Path: inst_top_camera_monitoring/inst_ov7670capt1/latched_href to inst_top_camera_monitoring/inst_ov7670capt1/address_0
-                                Gate     Net
-    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
-    ----------------------------------------  ------------
-     FDR_1:C->Q           17   0.591   1.130  inst_top_camera_monitoring/inst_ov7670capt1/latched_href (inst_top_camera_monitoring/inst_ov7670capt1/latched_href)
-     LUT4:I1->O           11   0.704   0.933  inst_top_camera_monitoring/inst_ov7670capt1/address_or000050 (inst_top_camera_monitoring/inst_ov7670capt1/address_or0000)
-     FDRE:R                    0.911          inst_top_camera_monitoring/inst_ov7670capt1/address_0
-    ----------------------------------------
-    Total                      4.269ns (2.206ns logic, 2.063ns route)
-                                       (51.7% logic, 48.3% route)
+    Total                      6.900ns (3.614ns logic, 3.286ns route)
+                                       (52.4% logic, 47.6% route)
 
 =========================================================================
 Timing constraint: Default OFFSET IN BEFORE for Clock 'i_clock'
-  Total number of paths / destination ports: 520 / 473
+  Total number of paths / destination ports: 503 / 457
 -------------------------------------------------------------------------
-Offset:              6.909ns (Levels of Logic = 5)
+Offset:              6.909ns (Levels of Logic = 6)
   Source:            oWait (PAD)
   Destination:       inst_top_camera_monitoring/crbc_i0/ce (FF)
   Destination Clock: i_clock rising
@@ -1289,61 +1300,22 @@ Offset:              6.909ns (Levels of Logic = 5)
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
      IBUF:I->O            36   1.218   1.342  oWait_IBUF (oWait_IBUF)
-     LUT3:I1->O            1   0.704   0.424  inst_top_camera_monitoring/crbc_i0/next_state_and0001_SW0 (N72)
-     LUT4_D:I3->LO         1   0.704   0.179  inst_top_camera_monitoring/crbc_i0/next_state_and0001 (N196)
-     LUT4:I1->O            2   0.704   0.622  inst_top_camera_monitoring/crbc_i0/ce_mux00002 (inst_top_camera_monitoring/crbc_i0/N41)
-     LUT3:I0->O            1   0.704   0.000  inst_top_camera_monitoring/crbc_i0/ce_mux000031 (inst_top_camera_monitoring/crbc_i0/ce_mux0000)
-     FDS:D                     0.308          inst_top_camera_monitoring/crbc_i0/ce
+     begin scope: 'inst_top_camera_monitoring'
+     begin scope: 'crbc_i0'
+     LUT3:I1->O            1   0.704   0.424  next_state_and0001_SW0 (N37)
+     LUT4_D:I3->LO         1   0.704   0.179  next_state_and0001 (N125)
+     LUT4:I1->O            2   0.704   0.622  ce_mux00002 (N41)
+     LUT3:I0->O            1   0.704   0.000  ce_mux000031 (ce_mux0000)
+     FDS:D                     0.308          ce
     ----------------------------------------
     Total                      6.909ns (4.342ns logic, 2.567ns route)
                                        (62.8% logic, 37.2% route)
 
 =========================================================================
-Timing constraint: Default OFFSET IN BEFORE for Clock 'inst_top_camera_monitoring/clk_vga1'
-  Total number of paths / destination ports: 22 / 22
--------------------------------------------------------------------------
-Offset:              5.975ns (Levels of Logic = 3)
-  Source:            pb (PAD)
-  Destination:       inst_top_camera_monitoring/inst_vgatiming/Hsync_i (FF)
-  Destination Clock: inst_top_camera_monitoring/clk_vga1 rising
-
-  Data Path: pb to inst_top_camera_monitoring/inst_vgatiming/Hsync_i
-                                Gate     Net
-    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
-    ----------------------------------------  ------------
-     IBUF:I->O           291   1.218   1.519  pb_IBUF (pb_IBUF)
-     LUT4:I0->O            1   0.704   0.499  inst_top_camera_monitoring/inst_vgatiming/Hsync_i_or0000_SW0 (N42)
-     LUT4:I1->O            1   0.704   0.420  inst_top_camera_monitoring/inst_vgatiming/Hsync_i_or0000 (inst_top_camera_monitoring/inst_vgatiming/Hsync_i_or0000)
-     FDS:S                     0.911          inst_top_camera_monitoring/inst_vgatiming/Hsync_i
-    ----------------------------------------
-    Total                      5.975ns (3.537ns logic, 2.438ns route)
-                                       (59.2% logic, 40.8% route)
-
-=========================================================================
-Timing constraint: Default OFFSET IN BEFORE for Clock 'inst_top_camera_monitoring/read_buffer_clk'
-  Total number of paths / destination ports: 11 / 11
--------------------------------------------------------------------------
-Offset:              5.234ns (Levels of Logic = 2)
-  Source:            pb (PAD)
-  Destination:       inst_top_camera_monitoring/inst_addrgen1/addr_0 (FF)
-  Destination Clock: inst_top_camera_monitoring/read_buffer_clk rising
-
-  Data Path: pb to inst_top_camera_monitoring/inst_addrgen1/addr_0
-                                Gate     Net
-    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
-    ----------------------------------------  ------------
-     IBUF:I->O           291   1.218   1.519  pb_IBUF (pb_IBUF)
-     LUT4:I0->O           10   0.704   0.882  inst_top_camera_monitoring/inst_addrgen1/addr_or000053 (inst_top_camera_monitoring/inst_addrgen1/addr_or0000)
-     FDRE:R                    0.911          inst_top_camera_monitoring/inst_addrgen1/addr_0
-    ----------------------------------------
-    Total                      5.234ns (2.833ns logic, 2.401ns route)
-                                       (54.1% logic, 45.9% route)
-
-=========================================================================
 Timing constraint: Default OFFSET IN BEFORE for Clock 'ov7670_pclk1'
   Total number of paths / destination ports: 47 / 47
 -------------------------------------------------------------------------
-Offset:              5.114ns (Levels of Logic = 2)
+Offset:              5.115ns (Levels of Logic = 3)
   Source:            pb (PAD)
   Destination:       inst_top_camera_monitoring/inst_ov7670capt1/address_0 (FF)
   Destination Clock: ov7670_pclk1 rising
@@ -1352,18 +1324,65 @@ Offset:              5.114ns (Levels of Logic = 2)
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     IBUF:I->O           291   1.218   1.348  pb_IBUF (pb_IBUF)
-     LUT4:I3->O           11   0.704   0.933  inst_top_camera_monitoring/inst_ov7670capt1/address_or000050 (inst_top_camera_monitoring/inst_ov7670capt1/address_or0000)
-     FDRE:R                    0.911          inst_top_camera_monitoring/inst_ov7670capt1/address_0
+     IBUF:I->O           294   1.218   1.349  pb_IBUF (pb_IBUF)
+     begin scope: 'inst_top_camera_monitoring'
+     begin scope: 'inst_ov7670capt1'
+     LUT4:I3->O           11   0.704   0.933  address_or000050 (address_or0000)
+     FDRE:R                    0.911          address_0
     ----------------------------------------
-    Total                      5.114ns (2.833ns logic, 2.281ns route)
+    Total                      5.115ns (2.833ns logic, 2.282ns route)
                                        (55.4% logic, 44.6% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'inst_top_camera_monitoring/read_buffer_clk'
+  Total number of paths / destination ports: 11 / 11
+-------------------------------------------------------------------------
+Offset:              5.235ns (Levels of Logic = 3)
+  Source:            pb (PAD)
+  Destination:       inst_top_camera_monitoring/inst_addrgen1/addr_0 (FF)
+  Destination Clock: inst_top_camera_monitoring/read_buffer_clk rising
+
+  Data Path: pb to inst_top_camera_monitoring/inst_addrgen1/addr_0
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O           294   1.218   1.520  pb_IBUF (pb_IBUF)
+     begin scope: 'inst_top_camera_monitoring'
+     begin scope: 'inst_addrgen1'
+     LUT4:I0->O           10   0.704   0.882  addr_or000053 (addr_or0000)
+     FDRE:R                    0.911          addr_0
+    ----------------------------------------
+    Total                      5.235ns (2.833ns logic, 2.402ns route)
+                                       (54.1% logic, 45.9% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'inst_top_camera_monitoring/vga_clock'
+  Total number of paths / destination ports: 22 / 22
+-------------------------------------------------------------------------
+Offset:              5.976ns (Levels of Logic = 4)
+  Source:            pb (PAD)
+  Destination:       inst_top_camera_monitoring/inst_vgatiming/Hsync_i (FF)
+  Destination Clock: inst_top_camera_monitoring/vga_clock rising
+
+  Data Path: pb to inst_top_camera_monitoring/inst_vgatiming/Hsync_i
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O           294   1.218   1.520  pb_IBUF (pb_IBUF)
+     begin scope: 'inst_top_camera_monitoring'
+     begin scope: 'inst_vgatiming'
+     LUT4:I0->O            1   0.704   0.499  Hsync_i_or0000_SW0 (N01)
+     LUT4:I1->O            1   0.704   0.420  Hsync_i_or0000 (Hsync_i_or0000)
+     FDS:S                     0.911          Hsync_i
+    ----------------------------------------
+    Total                      5.976ns (3.537ns logic, 2.439ns route)
+                                       (59.2% logic, 40.8% route)
 
 =========================================================================
 Timing constraint: Default OFFSET OUT AFTER for Clock 'i_clock'
   Total number of paths / destination ports: 760 / 47
 -------------------------------------------------------------------------
-Offset:              12.223ns (Levels of Logic = 8)
+Offset:              12.600ns (Levels of Logic = 11)
   Source:            inst_top_camera_monitoring/inst_ov7670contr1/Registers/sequence_0_1 (FF)
   Destination:       ov7670_siod1 (PAD)
   Source Clock:      i_clock rising
@@ -1372,45 +1391,55 @@ Offset:              12.223ns (Levels of Logic = 8)
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDRE:C->Q            40   0.591   1.440  inst_top_camera_monitoring/inst_ov7670contr1/Registers/sequence_0_1 (inst_top_camera_monitoring/inst_ov7670contr1/Registers/sequence_0_1)
-     LUT4:I0->O            1   0.704   0.000  inst_top_camera_monitoring/inst_ov7670contr1/Registers/Mrom_cmd_reg_rom000023 (inst_top_camera_monitoring/inst_ov7670contr1/Registers/Mrom_cmd_reg_rom000023)
-     MUXF5:I0->O           1   0.321   0.000  inst_top_camera_monitoring/inst_ov7670contr1/Registers/Mrom_cmd_reg_rom00002_f5_0 (inst_top_camera_monitoring/inst_ov7670contr1/Registers/Mrom_cmd_reg_rom00002_f51)
-     MUXF6:I0->O           3   0.521   0.706  inst_top_camera_monitoring/inst_ov7670contr1/Registers/Mrom_cmd_reg_rom00002_f6 (inst_top_camera_monitoring/inst_ov7670contr1/command<2>)
-     LUT4:I0->O            2   0.704   0.526  inst_top_camera_monitoring/inst_ov7670contr1/SCCB/taken_i_cmp_eq000112 (inst_top_camera_monitoring/inst_ov7670contr1/SCCB/taken_i_cmp_eq000112)
-     LUT2:I1->O            2   0.704   0.482  inst_top_camera_monitoring/inst_ov7670contr1/SCCB/taken_i_cmp_eq000113 (inst_top_camera_monitoring/inst_ov7670contr1/SCCB/taken_i_cmp_eq0001)
-     LUT4:I2->O            1   0.704   0.424  inst_top_camera_monitoring/inst_ov7670contr1/SCCB/siodo38_SW0 (N176)
-     LUT4:I3->O            1   0.704   0.420  inst_top_camera_monitoring/inst_ov7670contr1/SCCB/siodo38 (inst_top_camera_monitoring/siodo1)
-     IOBUF:I->IO               3.272          inst_top_camera_monitoring/ov7670_siod1_tri (ov7670_siod1)
+     FDRE:C->Q            23   0.591   1.377  sequence_0_1 (sequence_0_1)
+     LUT3:I0->O            1   0.704   0.000  Mrom_cmd_reg_rom000062 (Mrom_cmd_reg_rom000062)
+     MUXF5:I0->O           1   0.321   0.455  Mrom_cmd_reg_rom00006_f5 (Mrom_cmd_reg_rom00006_f5)
+     LUT3:I2->O            3   0.704   0.535  Mrom_cmd_reg_rom00006_f6 (command<6>)
+     end scope: 'Registers'
+     begin scope: 'SCCB'
+     LUT4:I3->O            2   0.704   0.526  taken_i_cmp_eq00014 (taken_i_cmp_eq00014)
+     LUT2_D:I1->O          1   0.704   0.424  taken_i_cmp_eq000113 (taken_i_cmp_eq0001)
+     LUT4:I3->O            1   0.704   0.455  siodo38_SW0 (N4)
+     LUT4:I2->O            1   0.704   0.420  siodo38 (siodo)
+     end scope: 'SCCB'
+     end scope: 'inst_ov7670contr1'
+     IOBUF:I->IO               3.272          ov7670_siod1_tri (ov7670_siod1)
+     end scope: 'inst_top_camera_monitoring'
     ----------------------------------------
-    Total                     12.223ns (8.225ns logic, 3.998ns route)
-                                       (67.3% logic, 32.7% route)
+    Total                     12.600ns (8.408ns logic, 4.192ns route)
+                                       (66.7% logic, 33.3% route)
 
 =========================================================================
-Timing constraint: Default OFFSET OUT AFTER for Clock 'inst_top_camera_monitoring/clk_vga1'
+Timing constraint: Default OFFSET OUT AFTER for Clock 'inst_top_camera_monitoring/vga_clock'
   Total number of paths / destination ports: 75 / 12
 -------------------------------------------------------------------------
-Offset:              7.434ns (Levels of Logic = 3)
-  Source:            inst_top_camera_monitoring/inst_vgatiming/vcnt_6 (FF)
+Offset:              9.111ns (Levels of Logic = 6)
+  Source:            inst_top_camera_monitoring/inst_vgatiming/hcnt_9 (FF)
   Destination:       vga_b<1> (PAD)
-  Source Clock:      inst_top_camera_monitoring/clk_vga1 rising
+  Source Clock:      inst_top_camera_monitoring/vga_clock rising
 
-  Data Path: inst_top_camera_monitoring/inst_vgatiming/vcnt_6 to vga_b<1>
+  Data Path: inst_top_camera_monitoring/inst_vgatiming/hcnt_9 to vga_b<1>
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDRE:C->Q             6   0.591   0.844  inst_top_camera_monitoring/inst_vgatiming/vcnt_6 (inst_top_camera_monitoring/inst_vgatiming/vcnt_6)
-     LUT4:I0->O            9   0.704   0.899  inst_top_camera_monitoring/inst_vgatiming/activeArea1_sig_and000021 (inst_top_camera_monitoring/inst_vgatiming/activeArea1_sig_and000021)
-     LUT4:I1->O            1   0.704   0.420  inst_top_camera_monitoring/inst_imagegen/RGB_out<7>1 (vga_r_2_OBUF)
+     FDR:C->Q              6   0.591   0.844  hcnt_9 (hcnt_9)
+     LUT3:I0->O            1   0.704   0.595  activeArea1_sig_and00008 (activeArea1_sig_and00008)
+     LUT3:I0->O           20   0.704   1.277  activeArea1_sig_and000032 (activeArea1)
+     end scope: 'inst_vgatiming'
+     begin scope: 'inst_imagegen'
+     LUT2:I0->O            1   0.704   0.420  RGB_out<7>1 (RGB_out<7>)
+     end scope: 'inst_imagegen'
+     end scope: 'inst_top_camera_monitoring'
      OBUF:I->O                 3.272          vga_r_2_OBUF (vga_r<2>)
     ----------------------------------------
-    Total                      7.434ns (5.271ns logic, 2.163ns route)
-                                       (70.9% logic, 29.1% route)
+    Total                      9.111ns (5.975ns logic, 3.136ns route)
+                                       (65.6% logic, 34.4% route)
 
 =========================================================================
 Timing constraint: Default OFFSET OUT AFTER for Clock 'inst_top_camera_monitoring/read_buffer_clk'
   Total number of paths / destination ports: 8 / 8
 -------------------------------------------------------------------------
-Offset:              7.791ns (Levels of Logic = 3)
+Offset:              7.695ns (Levels of Logic = 5)
   Source:            inst_top_camera_monitoring/crbc_i0/read_buffer_i0/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/s3_noinit.ram/dpram.dp18x18.ram (RAM)
   Destination:       vga_b<1> (PAD)
   Source Clock:      inst_top_camera_monitoring/read_buffer_clk rising
@@ -1419,19 +1448,23 @@ Offset:              7.791ns (Levels of Logic = 3)
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     RAMB16_S18_S18:CLKB->DOB7    1   2.800   0.595  U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/s3_noinit.ram/dpram.dp18x18.ram (doutb<7>)
-     end scope: 'inst_top_camera_monitoring/crbc_i0/read_buffer_i0'
-     LUT4:I0->O            1   0.704   0.420  inst_top_camera_monitoring/inst_imagegen/RGB_out<1>1 (vga_b_1_OBUF)
+     RAMB16_S18_S18:CLKB->DOB7    1   2.800   0.499  U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/s3_noinit.ram/dpram.dp18x18.ram (doutb<7>)
+     end scope: 'read_buffer_i0'
+     end scope: 'crbc_i0'
+     begin scope: 'inst_imagegen'
+     LUT2:I1->O            1   0.704   0.420  RGB_out<1>1 (RGB_out<1>)
+     end scope: 'inst_imagegen'
+     end scope: 'inst_top_camera_monitoring'
      OBUF:I->O                 3.272          vga_b_1_OBUF (vga_b<1>)
     ----------------------------------------
-    Total                      7.791ns (6.776ns logic, 1.015ns route)
-                                       (87.0% logic, 13.0% route)
+    Total                      7.695ns (6.776ns logic, 0.919ns route)
+                                       (88.1% logic, 11.9% route)
 
 =========================================================================
 Timing constraint: Default path analysis
-  Total number of paths / destination ports: 4 / 4
+  Total number of paths / destination ports: 3 / 3
 -------------------------------------------------------------------------
-Delay:               7.812ns (Levels of Logic = 3)
+Delay:               7.800ns (Levels of Logic = 4)
   Source:            pb (PAD)
   Destination:       ov7670_reset1 (PAD)
 
@@ -1439,25 +1472,27 @@ Delay:               7.812ns (Levels of Logic = 3)
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     IBUF:I->O           291   1.218   1.344  pb_IBUF (pb_IBUF)
-     INV:I->O             68   0.704   1.274  inst_top_camera_monitoring/ov7670_reset11_INV_0 (inst_top_camera_monitoring/crbc_i0/reset_inv)
+     IBUF:I->O           294   1.218   1.345  pb_IBUF (pb_IBUF)
+     begin scope: 'inst_top_camera_monitoring'
+     INV:I->O             27   0.704   1.261  ov7670_reset11_INV_0 (ov7670_reset1)
+     end scope: 'inst_top_camera_monitoring'
      OBUF:I->O                 3.272          ov7670_reset1_OBUF (ov7670_reset1)
     ----------------------------------------
-    Total                      7.812ns (5.194ns logic, 2.618ns route)
-                                       (66.5% logic, 33.5% route)
+    Total                      7.800ns (5.194ns logic, 2.606ns route)
+                                       (66.6% logic, 33.4% route)
 
 =========================================================================
 
 
-Total REAL time to Xst completion: 7.00 secs
-Total CPU time to Xst completion: 7.60 secs
+Total REAL time to Xst completion: 6.00 secs
+Total CPU time to Xst completion: 6.42 secs
  
 --> 
 
 
-Total memory usage is 557408 kilobytes
+Total memory usage is 555276 kilobytes
 
 Number of errors   :    0 (   0 filtered)
-Number of warnings :  189 (   0 filtered)
+Number of warnings :  187 (   0 filtered)
 Number of infos    :    9 (   0 filtered)
 
