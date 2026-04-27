@@ -2,7 +2,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 
 package p_ov7670_rom is
-  constant NC : integer := 53-10+1;
+  constant NC : integer := 55-10+1;
   type cmd_rom is array (0 to NC-1) of STD_LOGIC_VECTOR (15 downto 0);
 
   constant ov7670_rom : cmd_rom :=
@@ -18,6 +18,8 @@ x"0c00", -- scaling
 x"3e00", -- scaling
 x"0400",
 x"40d0",
+x"138f",
+x"4108",
 x"3a04",
 x"1418",
 x"4fb3",

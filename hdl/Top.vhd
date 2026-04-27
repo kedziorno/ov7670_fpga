@@ -311,7 +311,7 @@ begin
 
 --synchronise_owait : process (clk1) is
 --begin
---  if (falling_edge (clk1)) then
+--  if (rising_edge (clk1)) then
 --    if (pb = '1') then
 --      owait1 <= '0';
 --    else
@@ -323,7 +323,7 @@ owait1 <= owait;
 
 synchronise_mem_addr_dq : process (clk1) is
 begin
-  if (falling_edge (clk1)) then
+  if (rising_edge (clk1)) then
     if (pb = '1') then
       dq_oo <= (others => '0');
       dq_i <= (others => '0');
@@ -380,14 +380,14 @@ begin
       w8_bw <= 0;
     else
       wrc_w <= '0';
-      ov7670_hs_prev <= ov7670_hs;
-      ov7670_vs_prev <= ov7670_vs;
+      ov7670_hs_prev <= latched_hs;
+      ov7670_vs_prev <= latched_vs;
       case (p0_state) is
         when a0 =>
-          if (ov7670_hs_prev = '1' and ov7670_hs = '0') then
+          if (ov7670_hs_prev = '1' and latched_hs = '0') then
             p0_state <= a1;
           end if;
-          if (ov7670_vs = '1') then
+          if (latched_vs = '1') then
             p0_w <= '1'; wrc_w <= '1'; id_w <= x"0058"; data_w <= (others => '0');
             p0_state <= a1;
           end if;
@@ -395,10 +395,10 @@ begin
   --        if (ov7670_vs_next /= "11") then
           p0_w <= '0';
   --        if (cntr_wr1 >= 153280+160+160+160 or ov7670_vs = '1') then
-          if (ov7670_vs_prev = '0' and ov7670_vs = '1') then
+          if (ov7670_vs_prev = '0' and latched_vs = '1') then
             cntr_wr1 <= (others => '0');
           end if;
-          if (ov7670_hs_prev = '1' and ov7670_hs = '0') then -- wr when hs fe
+          if (ov7670_hs_prev = '1' and latched_hs = '0') then -- wr when hs fe
               p0_state <= a1a;
           end if;
   --        end if;
@@ -453,7 +453,7 @@ begin
           wrc_w <= '1';
           id_w <= x"0058";
           data_w <= (others => '0');
-          if (ov7670_vs = '1') then
+          if (latched_vs = '1') then
             p0_state <= a0;
           else
             p0_state <= a1;
@@ -599,7 +599,7 @@ PORT MAP (
   write_buffer_addr => write_buffer_addr,
   write_buffer_data => write_buffer_data,
   write_buffer_clk => ov7670_pclk,
-  --write_buffer_we => ov7670_hs,
+--  write_buffer_we => ov7670_hs,
   write_buffer_we => latched_hs,
 
   clk25 => clk_vga,
