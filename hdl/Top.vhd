@@ -358,8 +358,6 @@ dq_iob : for i in 15 downto 0 generate
   );
 end generate dq_iob;
 
---vint <= '1' when (ov7670_vs_prev = '0' and latched_vs = '1') else '0';
-
 id <= id_w when p0_w = '1' else id_r when p0_r = '1' else (others => '0');
 data <= data_w when p0_w = '1' else data_r when p0_r = '1' else (others => '0');
 wrc <= wrc_w when p0_w = '1' else wrc_r when p0_r = '1' else '0';
@@ -387,7 +385,7 @@ begin
           if (ov7670_hs_prev = '1' and latched_hs = '0') then
             p0_state <= a1;
           end if;
-          if (latched_vs = '1') then
+          if (ov7670_vs_prev = '0' and latched_vs = '1') then
             p0_w <= '1'; wrc_w <= '1'; id_w <= x"0058"; data_w <= (others => '0');
             p0_state <= a1;
           end if;
@@ -453,7 +451,7 @@ begin
           wrc_w <= '1';
           id_w <= x"0058";
           data_w <= (others => '0');
-          if (latched_vs = '1') then
+          if (ov7670_vs_prev = '0' and latched_vs = '1') then
             p0_state <= a0;
           else
             p0_state <= a1;
@@ -665,7 +663,7 @@ inst_ov7670contr1: ov7670_controller
 port map (
   clk => clk1,
   reset1 => pb,
-  resend => pb,
+  resend => sw(1),
   sw => sw (0),
   sioc => ov7670_sioc1,
   siodi => siodi1,

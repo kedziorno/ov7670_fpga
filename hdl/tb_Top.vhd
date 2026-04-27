@@ -624,7 +624,7 @@ camera_i_rst1 <= '0';
 camera_i_rst2 <= '0';
 camera_i_rst3 <= '0';
 camera_i_rst4 <= '0';
-sw <= "00000000"; -- x00 frames
+--sw <= "00000000"; -- x00 frames
 --sw <= "00000001"; -- x01 colorbar
 pb <= '1';
 wait for 300 ns; -- min to reset
@@ -635,6 +635,10 @@ camera_i_rst3 <= '1';
 camera_i_rst4 <= '1';
 pb <= '0';
 wait for clk50_period*10;
+wait for 35 ms;
+sw (1) <= '1';
+wait for clk50_period;
+sw (1) <= '0';
 -- insert stimulus here
 wait;
 end process;

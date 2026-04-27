@@ -149,7 +149,7 @@ capture_process: process(pclk)
          end if;
 
          -- Is a new screen about to start (i.e. we have to restart capturing
-         if latched_vsync = '1' then 
+         if latched_vsync = '0' then 
 --         if vsync = '1' then 
             href_last    <= (others => '0');
             row         <= (others => '0');
