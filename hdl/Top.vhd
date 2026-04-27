@@ -842,7 +842,7 @@ port map (
 DCM_SP_cam : DCM_SP
 generic map (
   CLKDV_DIVIDE => 4.0,
-  CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 25,
+  CLKFX_MULTIPLY => 6, CLKFX_DIVIDE => 25,
   CLKIN_PERIOD => 20.0
 )
 port map (
