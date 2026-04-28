@@ -383,26 +383,31 @@ begin
       case (p0_state) is
         when a0 =>
           if (ov7670_hs_prev = '1' and latched_hs = '0') then
-            p0_state <= a1;
-          end if;
-          if (ov7670_vs_prev = '0' and latched_vs = '1') then
             p0_w <= '1'; wrc_w <= '1'; id_w <= x"0058"; data_w <= (others => '0');
             p0_state <= a1;
+          p0_w <= '0';
+          end if;
+--          if (ov7670_vs_prev = '0' and latched_vs = '1') then
+          if (latched_vs = '1') then
+            cntr_wr1 <= (others => '0');
+--            p0_state <= a1a;
           end if;
         when a1 =>
+            p0_w <= '0'; wrc_w <= '0'; id_w <= x"0000"; data_w <= (others => '0');
+            p0_state <= a1a;
+        
   --        if (ov7670_vs_next /= "11") then
-          p0_w <= '0';
+--          p0_w <= '0';
   --        if (cntr_wr1 >= 153280+160+160+160 or ov7670_vs = '1') then
-          if (ov7670_vs_prev = '0' and latched_vs = '1') then
-            cntr_wr1 <= (others => '0');
-          end if;
-          if (ov7670_hs_prev = '1' and latched_hs = '0') then -- wr when hs fe
-              p0_state <= a1a;
-          end if;
+--          if (ov7670_vs_prev = '0' and latched_vs = '1') then
+--          end if;
+--          if (ov7670_hs_prev = '1' and latched_hs = '0') then -- wr when hs fe
+--              p0_state <= a1a;
+--          end if;
   --        end if;
         when a1a =>
+          p0_w <= '1'; wrc_w <= '1'; id_w <= x"0058"; data_w <= (others => '0');
           if (busy = '0') then
-            p0_w <= '1'; wrc_w <= '1'; id_w <= x"0058"; data_w <= (others => '0');
             p0_state <= aw;
           end if;
         when aw =>
@@ -446,15 +451,16 @@ begin
             data_w <= x"0000";
           end if;
         when ew =>
-          p0_w <= '0';
-          p0_w <= '1';
-          wrc_w <= '1';
-          id_w <= x"0058";
-          data_w <= (others => '0');
-          if (ov7670_vs_prev = '0' and latched_vs = '1') then
+            p0_w <= '0'; wrc_w <= '0'; id_w <= x"0000"; data_w <= (others => '0');
+--          if (busy = '0') then
+--          wrc_w <= '1';
+--          id_w <= x"0058";
+--          data_w <= (others => '0');
+          if (latched_vs = '1') then
             p0_state <= a0;
-          else
-            p0_state <= a1;
+          end if;
+          if (busy = '0') then
+            p0_state <= a1a;
           end if;
           w8_bw <= 0;
           if (cntr_wr1 = to_unsigned (c_cntr_frame, cntr_wr1'left+1)) then
@@ -462,6 +468,7 @@ begin
           else
             cntr_wr1 <= cntr_wr1 + c_step_w;
           end if;
+--          end if;
         when others => p0_state <= a0;
       end case;
     end if;
@@ -491,10 +498,10 @@ begin
         when a0 =>
   --        if (vint = '1') then -- XXX here
   --        if (vga_hsync_i = '0') then
-          p0_r <= '1';
-          wrc_r <= '1';
-          id_r <= x"0059";
-          data_r <= (others => '0');
+--          p0_r <= '1';
+--          wrc_r <= '1';
+--          id_r <= x"0059";
+--          data_r <= (others => '0');
   --        end if;
           if (vga_vsync_sig_prev = '0' and vga_vsync_sig = '1') then -- XXX here
             ov7670_vs_next <= ov7670_vs_next (0) & '1';
@@ -509,6 +516,7 @@ begin
             end if;
           end if;
         when a0a =>
+          p0_r <= '0'; wrc_r <= '0'; id_r <= x"0000"; data_r <= (others => '0');
   --        if (cntr_rd1 >= 153280+160+160+160+160+160 or vga_vsync_sig = '0') then
   --        if (cntr_rd1 >= 153280+160+160+160+160+160) then
   --        if (cntr_rd1 >= 153280+160+160) then
@@ -519,8 +527,9 @@ begin
             p1_state <= ar1;
           end if;
         when ar1 =>
+          p0_r <= '0'; wrc_r <= '0'; id_r <= x"0000"; data_r <= (others => '0');
           if (busy = '0') then
-            p1_state <= ar2;
+            p1_state <= ar;
           end if;
         when ar2 =>
   --        if (vga_hsync_i = '0') then
@@ -560,12 +569,13 @@ begin
             data_r <= x"0000";
           end if;
         when er =>
+          p0_r <= '0'; wrc_r <= '0'; id_r <= x"0000"; data_r <= (others => '0');
           if (busy = '0') then
             p1_state <= er1;
             w8 := w8 + 160;
           end if;
         when er1 =>
-          p0_r <= '0';
+          p0_r <= '0'; wrc_r <= '0'; id_r <= x"0000"; data_r <= (others => '0');
           if (busy = '0') then -- vs cam 1
             p1_state <= a0;
           else
@@ -644,7 +654,7 @@ generic map (
   PB_BITS => c_pb_bits
 )
 port map (
-  clk => i_clock_ib1,
+  clk => i_clock_ib2,
   reset => reset_dcm,
   --reset => '0',
   input => pb,
@@ -762,7 +772,7 @@ synchro_reset_i0 : SRLC16E
 port map (
   D => '1',
   CE => '1',
-  CLK => i_clock_ib1,
+  CLK => i_clock_ib2,
   A0 => '1',
   A1 => '1',
   A2 => '1',
@@ -840,7 +850,8 @@ port map (
 DCM_SP_cam : DCM_SP
 generic map (
   CLKDV_DIVIDE => 4.0,
-  CLKFX_MULTIPLY => 6, CLKFX_DIVIDE => 25,
+  CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 25,
+--  CLKFX_MULTIPLY => 4, CLKFX_DIVIDE => 25,
   CLKIN_PERIOD => 20.0
 )
 port map (

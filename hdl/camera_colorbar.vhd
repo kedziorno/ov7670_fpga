@@ -32,7 +32,7 @@ use work.p_constants.all;
 entity camera_colorbar is
 generic (
 constant c_source : t_source := t_frames;
-constant c_xclk_divide_enable : boolean := true;
+constant c_xclk_divide_enable : boolean := false;
 constant c_xclk_divide_factor : integer := 1;
 constant c_zero : integer := 0
 );
@@ -104,16 +104,20 @@ constant c_xclk_divide : integer := 1;
 signal xclk_divide : integer range 0 to c_xclk_divide - 1;
 signal xclk_divided : std_logic := '0';
 
+signal camera_xclk_mux_i : std_logic;
+
 begin
+
+camera_o_pclk <= camera_xclk_mux_i when (vs_state /= cold_start) else '0';
 
 g_xclk_divide_enable : if (c_xclk_divide_enable = true) generate
   -- only flip source clock
-  camera_o_pclk <= xclk_divided when (vs_state /= cold_start) else '0';
+  camera_xclk_mux_i <= xclk_divided;
 end generate g_xclk_divide_enable;
 
 g_xclk_divide_disable : if (c_xclk_divide_enable = false) generate
   -- only flip source clock
-  camera_o_pclk <= camera_i_xclk when (vs_state /= cold_start) else '0';
+  camera_xclk_mux_i <= camera_i_xclk;
 end generate g_xclk_divide_disable;
 
 process (camera_i_xclk) is begin
@@ -133,20 +137,18 @@ process (camera_i_xclk) is begin
   end if;
 end process;
 
-process (xclk_divided) is begin
-  if (falling_edge (xclk_divided)) then
-    if (camera_i_rst = '0') then
-      s1_c <= 0;
-      s1_tick <= '0';
-    else
-      if (s1_mux = '1') then
-        if (s1_c = c_s1_c - 1) then
-          s1_tick <= '1';
-          s1_c <= 0;
-        else
-          s1_tick <= '0';
-          s1_c <= s1_c + 1;
-        end if;
+process (camera_i_xclk, camera_i_rst) is begin
+  if (camera_i_rst = '0') then
+    s1_c <= 0;
+    s1_tick <= '0';
+  elsif (falling_edge (camera_i_xclk)) then
+    if (s1_mux = '1') then
+      if (s1_c = c_s1_c - 1) then
+        s1_tick <= '1';
+        s1_c <= 0;
+      else
+        s1_tick <= '0';
+        s1_c <= s1_c + 1;
       end if;
     end if;
   end if;
@@ -172,9 +174,9 @@ end process;
     );
 
     camera_o_d <= douta;
-    p4_frame_out : process (xclk_divided) is
+    p4_frame_out : process (camera_xclk_mux_i) is
     begin
-      if (falling_edge (xclk_divided)) then
+      if (falling_edge (camera_xclk_mux_i)) then
         if (camera_i_rst = '0') then
           addra <= 0;
           state <= wait_pt;
@@ -245,18 +247,19 @@ end process;
 
   -- generate sync pulse on falling edge pclk
   camera_o_vs <= not vsync_i when c_com10_02 = true else vsync_i;
-  p1_vsync : process (xclk_divided, camera_i_rst) is
+  p1_vsync : process (camera_xclk_mux_i) is
     variable count : integer range 0 to c_vsync_all * a_tline - 1;
     constant c_wait_start : integer := 1234;
     variable wait_start : integer range 0 to c_wait_start - 1;
   begin
-    if (falling_edge (xclk_divided)) then
+    if (falling_edge (camera_xclk_mux_i)) then
       if (camera_i_rst = '0') then
         count := 0;
         vsync_i <= '1'; -- XXX check when startup
         vs_state <= cold_start;
         href_time <= '0';
         wait_start := 0;
+        s1_mux <= '0';
       else
       case (vs_state) is
         when cold_start => -- shift first vs
@@ -323,12 +326,12 @@ end process;
     -- generate href pulse on falling edge pclk - t_colorbar
     camera_o_hs <= href_i;
     pixel_time <= '1' when hs_state = shref1 else '0';
-    p2_href_colorbar : process (xclk_divided, camera_i_rst) is
+    p2_href_colorbar : process (camera_xclk_mux_i) is
       variable count : integer range 0 to c_vsync3 - 1;
       variable counth1 : integer range 0 to c_href1 - 1;
       variable counth0 : integer range 0 to c_href0 - 1;
     begin
-      if (falling_edge (xclk_divided)) then
+      if (falling_edge (camera_xclk_mux_i)) then
         if (camera_i_rst = '0') then
           count := 0;
           counth1 := 0;
@@ -367,12 +370,12 @@ end process;
     -- generate href pulse on falling edge pclk - t_lines
     camera_o_hs <= href_i;
     pixel_time <= '1' when hs_state = shref1 else '0';
-    p2_href_lines : process (xclk_divided, camera_i_rst) is
+    p2_href_lines : process (camera_xclk_mux_i) is
       variable count : integer range 0 to c_vsync3 - 1;
       variable counth1 : integer range 0 to c_href1 - 1;
       variable counth0 : integer range 0 to c_href0 - 1;
     begin
-      if (falling_edge (xclk_divided)) then
+      if (falling_edge (camera_xclk_mux_i)) then
         if (camera_i_rst = '0') then
           count := 0;
           counth1 := 0;
@@ -409,11 +412,11 @@ end process;
   g_source_colorbar : if (c_source = t_colorbar) generate
     -- Show pattern from virtual camera on VGA display on falling edge pclk
     camera_o_d <= pixel_time_data when href_i = '1' else (others => '0');
-    p3_pixeltime : process (xclk_divided, camera_i_rst) is
+    p3_pixeltime : process (camera_xclk_mux_i) is
       constant c_num_pixels : integer := c_href1 / c_colorbar_length;
       variable count1 : integer range 0 to c_num_pixels - 1;
     begin
-      if (falling_edge (xclk_divided)) then
+      if (falling_edge (camera_xclk_mux_i)) then
         if (camera_i_rst = '0') then
           pixel_time_data <= (others => '0');
           pt_state <= s1;
@@ -454,13 +457,13 @@ end process;
   g_source_lines : if (c_source = t_lines) generate
     -- Show indexed lines HREF width from virtual camera on VGA display on falling edge pclk
     camera_o_d <= pixel_time_data when href_i = '1' else (others => '0');
-    p3_pixeltime : process (xclk_divided, camera_i_rst) is
+    p3_pixeltime : process (camera_xclk_mux_i) is
       variable count1 : integer range 0 to c_href1 - 1;
       variable count2 : integer range 0 to c_href0 - 1;
       constant c_vs_index : integer := 256;
       variable vs_index : integer range 0 to c_vs_index - 1;
     begin
-      if (falling_edge (xclk_divided)) then
+      if (falling_edge (camera_xclk_mux_i)) then
         if (camera_i_rst = '0') then
           pixel_time_data <= (others => '0');
           pt_state <= s2;
