@@ -31,7 +31,7 @@ use work.p_constants.all;
 
 entity camera_colorbar is
 generic (
-constant c_source : t_source := t_frames;
+constant c_source : t_source := t_colorbar;
 constant c_xclk_divide_enable : boolean := false;
 constant c_xclk_divide_factor : integer := 1;
 constant c_zero : integer := 0
@@ -57,7 +57,7 @@ architecture behavioral of camera_colorbar is
   signal vs_state : t_vs_states;
   signal hs_state : t_hs_states;
   signal pt_state : t_pt_states;
-  signal colorbar : t_colorbar_data := c_colorbar;
+  signal colorbar, colorbar_chess : t_colorbar_data := c_colorbar;
   signal colorbar_count : integer range 0 to c_colorbar_length;
   signal href_time : std_logic;
   signal pixel_time : std_logic;
@@ -96,7 +96,8 @@ type states is (wait_pt, wait_00_pt, wait_ff, wait_wl, wait_count640);
 signal state : states := wait_pt;
 constant c_count640 : integer := 640;
 signal count640 : integer range 0 to c_count640 - 1;
-constant c_s1_c : integer := 60*5;
+--constant c_s1_c : integer := 60*5; -- syn
+constant c_s1_c : integer := 1; -- sim
 signal s1_c : integer range 0 to c_s1_c - 1;
 signal s1_tick, s1_mux : std_logic;
 
@@ -296,6 +297,9 @@ end process;
             count := 0;
           else
             count := count + 1;
+            if (count mod 62721 = 0) then -- ~80 lines shift color to right
+              colorbar_chess (0 to 4) <= colorbar_chess (4) & colorbar_chess (0 to 3);
+            end if;
           end if;
         when svs4 =>
           vsync_i <= '1';
@@ -310,6 +314,7 @@ end process;
               colorbar(2) <= colorbar(2)(0) & colorbar(2)(7 downto 1);
               colorbar(1) <= colorbar(1)(0) & colorbar(1)(7 downto 1);
               colorbar(0) <= colorbar(0)(0) & colorbar(0)(7 downto 1);
+              colorbar_chess <= colorbar;
             end if;
             vs_state <= svs1;
             count := 0;
@@ -427,12 +432,12 @@ end process;
           when s1 =>
             if (pixel_time = '1') then
               pt_state <= s2;
-              pixel_time_data <= colorbar (colorbar_count);
+              pixel_time_data <= colorbar_chess (colorbar_count);
             else
               pixel_time_data <= (others => '0');
             end if;
           when s2 =>
-            pixel_time_data <= colorbar (colorbar_count);
+            pixel_time_data <= colorbar_chess (colorbar_count);
             if (count1 = c_num_pixels - 2) then -- XXX -2 equal send data
               pt_state <= s3;
               count1 := 0;
@@ -441,7 +446,7 @@ end process;
               count1 := count1 + 1;
             end if;
           when s3 =>
-            pixel_time_data <= colorbar (colorbar_count);
+            pixel_time_data <= colorbar_chess (colorbar_count);
             if (colorbar_count = c_colorbar_length) then
               pt_state <= s1;
               colorbar_count <= 0;
