@@ -82,7 +82,7 @@ ARCHITECTURE behavior OF tb_top IS
 
 component camera_colorbar is
 generic (
-constant c_source : t_source := t_frames
+constant c_source : t_source := t_colorbar
 );
 port (
 camera_io_scl : inout std_logic;
