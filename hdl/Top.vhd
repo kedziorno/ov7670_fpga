@@ -855,7 +855,7 @@ port map (
   CLKFX => clk_mc,
   CLKDV => clk_vga,
   CLKFB => clk0_fb,
-  CLKIN => clk100,
+  CLKIN => clk1,
   RST => reset_dcm,
   LOCKED => locked_vga,
   PSCLK => '0', PSEN => '0', PSINCDEC => '0'
@@ -872,19 +872,18 @@ generic map (
   IOSTANDARD => "DEFAULT")
 port map (
   O => i_clock_ib2,
-  I => i_clock
+  I => i_clock100
 );
 
 DCM_SP_cam : DCM_SP
 generic map (
-  CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 25,
-  CLKIN_PERIOD => 20.0,
+  CLKFX_MULTIPLY => 6, CLKFX_DIVIDE => 25,
+  CLKIN_PERIOD => 10.0,
   STARTUP_WAIT => true
 )
 port map (
   CLK0 => clk1,
   CLKFX => clk_cam,
-  CLK2X => clk100,
   CLKFB => clk1_fb,
   CLKIN => i_clock_ib2,
   RST => pb,
