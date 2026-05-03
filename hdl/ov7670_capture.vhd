@@ -130,7 +130,7 @@ capture_process: process(pclk)
          href_hold <= latched_href;
          -- capturing the data from the camera, 12-bit RGB
          if latched_href = '1' then
-					if (to_integer(unsigned(address)) = 640*2-1) then
+					if (to_integer(unsigned(address)) = 640*1-1) then
 						address <= (others => '0');
 					else
             address <= std_logic_vector(unsigned(address)+1);
@@ -172,7 +172,7 @@ capture_process: process(pclk)
    latched_vs <= latched_vsync;
    latched_process: process (pclk) is
    begin
-      if falling_edge(pclk) then
+      if rising_edge(pclk) then
       if (reset = '1') then
 --        latched_d <= (others => '0');
         latched_href <= '0';
