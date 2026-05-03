@@ -307,7 +307,7 @@ signal dq_o,dq_oo : std_logic_vector (15 downto 0);
 signal data_out_enable : std_logic_vector (15 downto 0);
 signal oe_n_i, we_n_i, adv_n_i, ce_n_i, cre_i, clk_i : std_logic;
 
-signal clk100 : std_logic;
+signal clk100, locked_cam, locked_vga : std_logic;
 
 begin
 
@@ -364,8 +364,10 @@ id <= id_w when p0_w = '1' else id_r when p0_r = '1' else (others => '0');
 data <= data_w when p0_w = '1' else data_r when p0_r = '1' else (others => '0');
 wrc <= wrc_w when p0_w = '1' else wrc_r when p0_r = '1' else '0';
 
+--p0_control_crbc_write : process (ov7670_pclk) is
 p0_control_crbc_write : process (clk_mc) is
 begin
+--  if (rising_edge (ov7670_pclk)) then
   if (rising_edge (clk_mc)) then
     if (pb = '1') then
       wrc_w <= '0';
@@ -453,7 +455,7 @@ begin
           wrc_w <= '1';
           id_w <= x"0058";
           data_w <= (others => '0');
-          if (ov7670_vs_prev = '0' and latched_vs = '1') then
+          if (latched_vs = '1') then
             p0_state <= a0;
           else
             p0_state <= a1;
@@ -764,7 +766,7 @@ synchro_reset_i0 : SRLC16E
 port map (
   D => '1',
   CE => '1',
-  CLK => i_clock_ib1,
+  CLK => clk1_fb,
   A0 => '1',
   A1 => '1',
   A2 => '1',
@@ -812,7 +814,7 @@ p3_read_buffer_clk : process (clk_vga) is
   variable vga_read : integer range 0 to c_vga_read - 1;
 begin
   if (rising_edge (clk_vga)) then
-    if (pb = '1') then
+    if (locked_vga = '0') then
       read_buffer_clk <= '0';
       vga_read := 0;
     else
@@ -845,7 +847,8 @@ DCM_SP_vga : DCM_SP
 generic map (
   CLKDV_DIVIDE => 4.0,
   CLKFX_MULTIPLY => 3, CLKFX_DIVIDE => 5,
-  CLKIN_PERIOD => 10.0
+  CLKIN_PERIOD => 10.0,
+  STARTUP_WAIT => true
 )
 port map (
   CLK0 => clk0,
@@ -853,7 +856,8 @@ port map (
   CLKDV => clk_vga,
   CLKFB => clk0_fb,
   CLKIN => clk100,
-  RST => pb,
+  RST => reset_dcm,
+  LOCKED => locked_vga,
   PSCLK => '0', PSEN => '0', PSINCDEC => '0'
 );
 
@@ -874,7 +878,8 @@ port map (
 DCM_SP_cam : DCM_SP
 generic map (
   CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 25,
-  CLKIN_PERIOD => 20.0
+  CLKIN_PERIOD => 20.0,
+  STARTUP_WAIT => true
 )
 port map (
   CLK0 => clk1,
@@ -883,6 +888,7 @@ port map (
   CLKFB => clk1_fb,
   CLKIN => i_clock_ib2,
   RST => pb,
+  LOCKED => locked_cam,
   PSCLK => '0', PSEN => '0', PSINCDEC => '0'
 );
 
