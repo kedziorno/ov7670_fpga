@@ -307,6 +307,8 @@ signal dq_o,dq_oo : std_logic_vector (15 downto 0);
 signal data_out_enable : std_logic_vector (15 downto 0);
 signal oe_n_i, we_n_i, adv_n_i, ce_n_i, cre_i, clk_i : std_logic;
 
+signal clk100 : std_logic;
+
 begin
 
 --synchronise_owait : process (clk1_fb) is
@@ -385,7 +387,7 @@ begin
           if (ov7670_hs_prev = '1' and latched_hs = '0') then
             p0_state <= a1;
           end if;
-          if (ov7670_vs_prev = '0' and latched_vs = '1') then
+          if (latched_vs = '1') then
             p0_w <= '1'; wrc_w <= '1'; id_w <= x"0058"; data_w <= (others => '0');
             p0_state <= a1;
           end if;
@@ -393,7 +395,7 @@ begin
   --        if (ov7670_vs_next /= "11") then
           p0_w <= '0';
   --        if (cntr_wr1 >= 153280+160+160+160 or ov7670_vs = '1') then
-          if (ov7670_vs_prev = '0' and latched_vs = '1') then
+          if (latched_vs = '1') then
             cntr_wr1 <= (others => '0');
           end if;
           if (ov7670_hs_prev = '1' and latched_hs = '0') then -- wr when hs fe
@@ -831,13 +833,13 @@ port map (
   I => clk0
 );
 
-IBUFG_global_clock2 : IBUFG
-generic map (
-  IOSTANDARD => "DEFAULT")
-port map (
-  O => i_clock_ib1,
-  I => i_clock100
-);
+--IBUFG_global_clock2 : IBUFG
+--generic map (
+--  IOSTANDARD => "DEFAULT")
+--port map (
+--  O => i_clock_ib1,
+--  I => i_clock100
+--);
 
 DCM_SP_vga : DCM_SP
 generic map (
@@ -850,7 +852,7 @@ port map (
   CLKFX => clk_mc,
   CLKDV => clk_vga,
   CLKFB => clk0_fb,
-  CLKIN => i_clock_ib1,
+  CLKIN => clk100,
   RST => pb,
   PSCLK => '0', PSEN => '0', PSINCDEC => '0'
 );
@@ -877,6 +879,7 @@ generic map (
 port map (
   CLK0 => clk1,
   CLKFX => clk_cam,
+  CLK2X => clk100,
   CLKFB => clk1_fb,
   CLKIN => i_clock_ib2,
   RST => pb,

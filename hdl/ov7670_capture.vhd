@@ -131,7 +131,7 @@ capture_process: process(pclk)
          -- capturing the data from the camera, 12-bit RGB
          if latched_href = '1' then
 					if (to_integer(unsigned(address)) = 640*1-1) then
-						address <= (others => '0');
+						address <= "00000000000";
 					else
             address <= std_logic_vector(unsigned(address)+1);
 					end if;
