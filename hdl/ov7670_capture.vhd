@@ -174,7 +174,7 @@ capture_process: process(pclk)
    begin
       if rising_edge(pclk) then
       if (reset = '1') then
---        latched_d <= (others => '0');
+        latched_d <= (others => '0');
         latched_href <= '0';
         latched_vsync <= '0';
       else

@@ -132,8 +132,7 @@ Architecture behavioral of Entity debounce_circuit is up to date.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/ov7670_controller.vhd" in Library work.
 Architecture behavioral of Entity ov7670_controller is up to date.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/ov7670_capture.vhd" in Library work.
-Entity <ov7670_capture> compiled.
-Entity <ov7670_capture> (Architecture <behavioral>) compiled.
+Architecture behavioral of Entity ov7670_capture is up to date.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/address_generator.vhd" in Library work.
 Architecture behavioral of Entity address_generator is up to date.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/vga_imagegenerator.vhd" in Library work.
@@ -665,7 +664,7 @@ WARNING:Xst:646 - Signal <address1> is assigned but never used. This unconnected
     | Transitions        | 19                                             |
     | Inputs             | 3                                              |
     | Outputs            | 8                                              |
-    | Clock              | clk1                      (rising_edge)        |
+    | Clock              | clk1_fb                   (rising_edge)        |
     | Reset              | pb                        (positive)           |
     | Reset type         | synchronous                                    |
     | Reset State        | a0                                             |
@@ -679,7 +678,7 @@ WARNING:Xst:646 - Signal <address1> is assigned but never used. This unconnected
     | Transitions        | 25                                             |
     | Inputs             | 5                                              |
     | Outputs            | 9                                              |
-    | Clock              | clk1                      (rising_edge)        |
+    | Clock              | clk1_fb                   (rising_edge)        |
     | Reset              | pb                        (positive)           |
     | Reset type         | synchronous                                    |
     | Reset State        | a0                                             |
@@ -1044,25 +1043,12 @@ FlipFlop inst_top_camera_monitoring/inst_ov7670contr1/Registers/sequence_4 has b
 
 Final Macro Processing ...
 
-Processing Unit <inst_ov7670capt1> :
-	Found 2-bit shift register for signal <d_latch_0>.
-	Found 2-bit shift register for signal <d_latch_1>.
-	Found 2-bit shift register for signal <d_latch_2>.
-	Found 2-bit shift register for signal <d_latch_3>.
-	Found 2-bit shift register for signal <d_latch_4>.
-	Found 2-bit shift register for signal <d_latch_5>.
-	Found 2-bit shift register for signal <d_latch_6>.
-	Found 2-bit shift register for signal <d_latch_7>.
-Unit <inst_ov7670capt1> processed.
-
 =========================================================================
 Final Register Report
 
 Macro Statistics
-# Registers                                            : 524
- Flip-Flops                                            : 524
-# Shift Registers                                      : 8
- 2-bit shift register                                  : 8
+# Registers                                            : 540
+ Flip-Flops                                            : 540
 
 =========================================================================
 
@@ -1109,10 +1095,10 @@ Cell Usage :
 #      MUXF6                       : 15
 #      VCC                         : 9
 #      XORCY                       : 197
-# FlipFlops/Latches                : 532
+# FlipFlops/Latches                : 540
 #      FD                          : 23
 #      FDE                         : 149
-#      FDR                         : 123
+#      FDR                         : 131
 #      FDRE                        : 162
 #      FDRS                        : 64
 #      FDRSE                       : 3
@@ -1120,11 +1106,10 @@ Cell Usage :
 # RAMS                             : 3
 #      RAMB16_S18_S18              : 1
 #      RAMB16_S9_S9                : 2
-# Shift Registers                  : 9
-#      SRL16E                      : 8
+# Shift Registers                  : 1
 #      SRLC16E                     : 1
-# Clock Buffers                    : 4
-#      BUFG                        : 3
+# Clock Buffers                    : 3
+#      BUFG                        : 2
 #      BUFGP                       : 1
 # IO Buffers                       : 86
 #      IBUF                        : 14
@@ -1140,15 +1125,15 @@ Device utilization summary:
 
 Selected Device : 3s1200efg320-4 
 
- Number of Slices:                      523  out of   8672     6%  
- Number of Slice Flip Flops:            532  out of  17344     3%  
- Number of 4 input LUTs:                920  out of  17344     5%  
+ Number of Slices:                      528  out of   8672     6%  
+ Number of Slice Flip Flops:            540  out of  17344     3%  
+ Number of 4 input LUTs:                912  out of  17344     5%  
     Number used as logic:               911
-    Number used as Shift registers:       9
+    Number used as Shift registers:       1
  Number of IOs:                          94
  Number of bonded IOBs:                  86  out of    250    34%  
  Number of BRAMs:                         3  out of     28    10%  
- Number of GCLKs:                         4  out of     24    16%  
+ Number of GCLKs:                         3  out of     24    12%  
  Number of DCMs:                          1  out of      8    12%  
 
 ---------------------------
@@ -1191,7 +1176,7 @@ Speed Grade: -4
    Minimum period: 11.595ns (Maximum Frequency: 86.243MHz)
    Minimum input arrival time before clock: 6.909ns
    Maximum output required time after clock: 11.185ns
-   Maximum combinational path delay: 7.800ns
+   Maximum combinational path delay: 7.802ns
 
 Timing Detail:
 --------------
@@ -1330,7 +1315,7 @@ Offset:              6.909ns (Levels of Logic = 6)
 Timing constraint: Default OFFSET IN BEFORE for Clock 'ov7670_pclk1'
   Total number of paths / destination ports: 47 / 47
 -------------------------------------------------------------------------
-Offset:              6.318ns (Levels of Logic = 4)
+Offset:              6.320ns (Levels of Logic = 4)
   Source:            pb (PAD)
   Destination:       inst_top_camera_monitoring/inst_ov7670capt1/address_0 (FF)
   Destination Clock: ov7670_pclk1 rising
@@ -1339,21 +1324,21 @@ Offset:              6.318ns (Levels of Logic = 4)
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     IBUF:I->O           294   1.218   1.424  pb_IBUF (pb_IBUF)
+     IBUF:I->O           302   1.218   1.426  pb_IBUF (pb_IBUF)
      begin scope: 'inst_top_camera_monitoring'
      begin scope: 'inst_ov7670capt1'
      LUT2:I1->O            1   0.704   0.424  address_or00000 (address_or00000)
      LUT4:I3->O           11   0.704   0.933  address_or000045 (address_or0000)
      FDRE:R                    0.911          address_0
     ----------------------------------------
-    Total                      6.318ns (3.537ns logic, 2.781ns route)
+    Total                      6.320ns (3.537ns logic, 2.783ns route)
                                        (56.0% logic, 44.0% route)
 
 =========================================================================
 Timing constraint: Default OFFSET IN BEFORE for Clock 'inst_top_camera_monitoring/read_buffer_clk'
   Total number of paths / destination ports: 11 / 11
 -------------------------------------------------------------------------
-Offset:              5.064ns (Levels of Logic = 3)
+Offset:              5.066ns (Levels of Logic = 3)
   Source:            pb (PAD)
   Destination:       inst_top_camera_monitoring/inst_addrgen1/addr_0 (FF)
   Destination Clock: inst_top_camera_monitoring/read_buffer_clk rising
@@ -1362,20 +1347,20 @@ Offset:              5.064ns (Levels of Logic = 3)
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     IBUF:I->O           294   1.218   1.349  pb_IBUF (pb_IBUF)
+     IBUF:I->O           302   1.218   1.351  pb_IBUF (pb_IBUF)
      begin scope: 'inst_top_camera_monitoring'
      begin scope: 'inst_addrgen1'
      LUT4:I3->O           10   0.704   0.882  addr_or000053 (addr_or0000)
      FDRE:R                    0.911          addr_0
     ----------------------------------------
-    Total                      5.064ns (2.833ns logic, 2.231ns route)
+    Total                      5.066ns (2.833ns logic, 2.233ns route)
                                        (55.9% logic, 44.1% route)
 
 =========================================================================
 Timing constraint: Default OFFSET IN BEFORE for Clock 'inst_top_camera_monitoring/vga_clock'
   Total number of paths / destination ports: 22 / 22
 -------------------------------------------------------------------------
-Offset:              5.976ns (Levels of Logic = 4)
+Offset:              5.978ns (Levels of Logic = 4)
   Source:            pb (PAD)
   Destination:       inst_top_camera_monitoring/inst_vgatiming/Hsync_i (FF)
   Destination Clock: inst_top_camera_monitoring/vga_clock rising
@@ -1384,14 +1369,14 @@ Offset:              5.976ns (Levels of Logic = 4)
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     IBUF:I->O           294   1.218   1.520  pb_IBUF (pb_IBUF)
+     IBUF:I->O           302   1.218   1.522  pb_IBUF (pb_IBUF)
      begin scope: 'inst_top_camera_monitoring'
      begin scope: 'inst_vgatiming'
      LUT4:I0->O            1   0.704   0.499  Hsync_i_or0000_SW0 (N01)
      LUT4:I1->O            1   0.704   0.420  Hsync_i_or0000 (Hsync_i_or0000)
      FDS:S                     0.911          Hsync_i
     ----------------------------------------
-    Total                      5.976ns (3.537ns logic, 2.439ns route)
+    Total                      5.978ns (3.537ns logic, 2.441ns route)
                                        (59.2% logic, 40.8% route)
 
 =========================================================================
@@ -1479,7 +1464,7 @@ Offset:              7.695ns (Levels of Logic = 5)
 Timing constraint: Default path analysis
   Total number of paths / destination ports: 3 / 3
 -------------------------------------------------------------------------
-Delay:               7.800ns (Levels of Logic = 4)
+Delay:               7.802ns (Levels of Logic = 4)
   Source:            pb (PAD)
   Destination:       ov7670_reset1 (PAD)
 
@@ -1487,25 +1472,25 @@ Delay:               7.800ns (Levels of Logic = 4)
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     IBUF:I->O           294   1.218   1.345  pb_IBUF (pb_IBUF)
+     IBUF:I->O           302   1.218   1.347  pb_IBUF (pb_IBUF)
      begin scope: 'inst_top_camera_monitoring'
      INV:I->O             27   0.704   1.261  ov7670_reset11_INV_0 (ov7670_reset1)
      end scope: 'inst_top_camera_monitoring'
      OBUF:I->O                 3.272          ov7670_reset1_OBUF (ov7670_reset1)
     ----------------------------------------
-    Total                      7.800ns (5.194ns logic, 2.606ns route)
+    Total                      7.802ns (5.194ns logic, 2.608ns route)
                                        (66.6% logic, 33.4% route)
 
 =========================================================================
 
 
 Total REAL time to Xst completion: 8.00 secs
-Total CPU time to Xst completion: 7.15 secs
+Total CPU time to Xst completion: 7.25 secs
  
 --> 
 
 
-Total memory usage is 557504 kilobytes
+Total memory usage is 557500 kilobytes
 
 Number of errors   :    0 (   0 filtered)
 Number of warnings :  187 (   0 filtered)

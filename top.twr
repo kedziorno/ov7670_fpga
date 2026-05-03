@@ -15,6 +15,19 @@ Environment Variable      Effect
 NONE                      No environment variables were set
 --------------------------------------------------------------------------------
 
+WARNING:Timing:3223 - Timing constraint PATH "TS_50_to_24p_path" TIG; ignored 
+   during timing analysis.
+WARNING:Timing:3223 - Timing constraint PATH "TS_50_to_24x_path" TIG; ignored 
+   during timing analysis.
+WARNING:Timing:3223 - Timing constraint PATH "TS_24x_to_50_path" TIG; ignored 
+   during timing analysis.
+WARNING:Timing:3223 - Timing constraint PATH "TS_25_to_50_path" TIG; ignored 
+   during timing analysis.
+WARNING:Timing:3223 - Timing constraint PATH "TS_12_5_to_50_path" TIG; ignored 
+   during timing analysis.
+INFO:Timing:3386 - Intersecting Constraints found and resolved.  For more 
+   information, see the TSI report.  Please consult the Xilinx Command Line 
+   Tools User Guide for information on generating a TSI report.
 INFO:Timing:3412 - To improve timing, see the Timing Closure User Guide (UG612).
 INFO:Timing:2752 - To get complete path coverage, use the unconstrained paths 
    option. All paths that are not constrained will be reported in the 
@@ -31,6 +44,400 @@ INFO:Timing:3389 - This architecture does not support 'Discrete Jitter' and
    Uncertainty calculation.  Please make appropriate modification to 
    SYSTEM_JITTER to account for the unsupported Discrete Jitter and Phase 
    Error.
+
+================================================================================
+Timing constraint: PATH "TS_50_to_24p_path" TIG;
+
+ 0 paths analyzed, 0 endpoints analyzed, 0 failing endpoints
+ 0 timing errors detected.
+--------------------------------------------------------------------------------
+
+================================================================================
+Timing constraint: PATH "TS_24p_to_50_path" TIG;
+
+ 42 paths analyzed, 38 endpoints analyzed, 0 failing endpoints
+ 0 timing errors detected. (0 setup errors, 0 hold errors)
+--------------------------------------------------------------------------------
+
+Paths for end point inst_top_camera_monitoring/data_w_8 (SLICE_X29Y79.BY), 1 path
+--------------------------------------------------------------------------------
+Delay (setup path):     12.249ns (data path - clock path skew + uncertainty)
+  Source:               inst_top_camera_monitoring/inst_ov7670capt1/latched_vsync (FF)
+  Destination:          inst_top_camera_monitoring/data_w_8 (FF)
+  Data Path Delay:      9.163ns (Levels of Logic = 2)
+  Clock Path Skew:      -3.086ns (0.278 - 3.364)
+  Source Clock:         ov7670_pclk1_BUFGP rising
+  Destination Clock:    inst_top_camera_monitoring/clk1_fb rising at 0.000ns
+  Clock Uncertainty:    0.000ns
+
+  Maximum Data Path: inst_top_camera_monitoring/inst_ov7670capt1/latched_vsync to inst_top_camera_monitoring/data_w_8
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    M16.IQ1              Tiockiq               0.508   ov7670_vsync1
+                                                       inst_top_camera_monitoring/inst_ov7670capt1/latched_vsync
+    SLICE_X37Y73.G3      net (fanout=5)        4.203   inst_top_camera_monitoring/latched_vs
+    SLICE_X37Y73.Y       Tilo                  0.704   inst_top_camera_monitoring/N20
+                                                       inst_top_camera_monitoring/data_w_mux0000<7>1
+    SLICE_X32Y78.F2      net (fanout=13)       1.205   inst_top_camera_monitoring/N0
+    SLICE_X32Y78.X       Tilo                  0.759   inst_top_camera_monitoring/N29
+                                                       inst_top_camera_monitoring/data_w_mux0000<7>_SW0
+    SLICE_X29Y79.BY      net (fanout=1)        0.688   inst_top_camera_monitoring/N29
+    SLICE_X29Y79.CLK     Tsrck                 1.096   inst_top_camera_monitoring/data_w<8>
+                                                       inst_top_camera_monitoring/data_w_8
+    -------------------------------------------------  ---------------------------
+    Total                                      9.163ns (3.067ns logic, 6.096ns route)
+                                                       (33.5% logic, 66.5% route)
+
+--------------------------------------------------------------------------------
+
+Paths for end point inst_top_camera_monitoring/p0_w (SLICE_X30Y72.BY), 2 paths
+--------------------------------------------------------------------------------
+Delay (setup path):     11.757ns (data path - clock path skew + uncertainty)
+  Source:               inst_top_camera_monitoring/inst_ov7670capt1/latched_vsync (FF)
+  Destination:          inst_top_camera_monitoring/p0_w (FF)
+  Data Path Delay:      8.677ns (Levels of Logic = 3)
+  Clock Path Skew:      -3.080ns (0.284 - 3.364)
+  Source Clock:         ov7670_pclk1_BUFGP rising
+  Destination Clock:    inst_top_camera_monitoring/clk1_fb rising at 0.000ns
+  Clock Uncertainty:    0.000ns
+
+  Maximum Data Path: inst_top_camera_monitoring/inst_ov7670capt1/latched_vsync to inst_top_camera_monitoring/p0_w
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    M16.IQ1              Tiockiq               0.508   ov7670_vsync1
+                                                       inst_top_camera_monitoring/inst_ov7670capt1/latched_vsync
+    SLICE_X44Y70.G1      net (fanout=5)        3.429   inst_top_camera_monitoring/latched_vs
+    SLICE_X44Y70.Y       Tilo                  0.759   inst_top_camera_monitoring/N161
+                                                       inst_top_camera_monitoring/p0_state_FSM_FFd4-In38
+    SLICE_X28Y70.G2      net (fanout=6)        0.847   inst_top_camera_monitoring/N34
+    SLICE_X28Y70.Y       Tilo                  0.759   inst_top_camera_monitoring/wrc_w
+                                                       inst_top_camera_monitoring/wrc_w_mux0003_SW0
+    SLICE_X28Y70.F4      net (fanout=1)        0.023   inst_top_camera_monitoring/N151
+    SLICE_X28Y70.X       Tilo                  0.759   inst_top_camera_monitoring/wrc_w
+                                                       inst_top_camera_monitoring/wrc_w_mux0003
+    SLICE_X30Y72.BY      net (fanout=3)        0.476   inst_top_camera_monitoring/wrc_w_mux0003
+    SLICE_X30Y72.CLK     Tsrck                 1.117   inst_top_camera_monitoring/p0_w
+                                                       inst_top_camera_monitoring/p0_w
+    -------------------------------------------------  ---------------------------
+    Total                                      8.677ns (3.902ns logic, 4.775ns route)
+                                                       (45.0% logic, 55.0% route)
+
+--------------------------------------------------------------------------------
+Delay (setup path):     11.705ns (data path - clock path skew + uncertainty)
+  Source:               inst_top_camera_monitoring/inst_ov7670capt1/latched_vsync (FF)
+  Destination:          inst_top_camera_monitoring/p0_w (FF)
+  Data Path Delay:      8.625ns (Levels of Logic = 3)
+  Clock Path Skew:      -3.080ns (0.284 - 3.364)
+  Source Clock:         ov7670_pclk1_BUFGP rising
+  Destination Clock:    inst_top_camera_monitoring/clk1_fb rising at 0.000ns
+  Clock Uncertainty:    0.000ns
+
+  Maximum Data Path: inst_top_camera_monitoring/inst_ov7670capt1/latched_vsync to inst_top_camera_monitoring/p0_w
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    M16.IQ1              Tiockiq               0.508   ov7670_vsync1
+                                                       inst_top_camera_monitoring/inst_ov7670capt1/latched_vsync
+    SLICE_X44Y70.G1      net (fanout=5)        3.429   inst_top_camera_monitoring/latched_vs
+    SLICE_X44Y70.Y       Tilo                  0.759   inst_top_camera_monitoring/N161
+                                                       inst_top_camera_monitoring/p0_state_FSM_FFd4-In38
+    SLICE_X44Y70.F4      net (fanout=6)        0.032   inst_top_camera_monitoring/N34
+    SLICE_X44Y70.X       Tilo                  0.759   inst_top_camera_monitoring/N161
+                                                       inst_top_camera_monitoring/wrc_w_mux0003_SW1
+    SLICE_X28Y70.F1      net (fanout=1)        0.786   inst_top_camera_monitoring/N161
+    SLICE_X28Y70.X       Tilo                  0.759   inst_top_camera_monitoring/wrc_w
+                                                       inst_top_camera_monitoring/wrc_w_mux0003
+    SLICE_X30Y72.BY      net (fanout=3)        0.476   inst_top_camera_monitoring/wrc_w_mux0003
+    SLICE_X30Y72.CLK     Tsrck                 1.117   inst_top_camera_monitoring/p0_w
+                                                       inst_top_camera_monitoring/p0_w
+    -------------------------------------------------  ---------------------------
+    Total                                      8.625ns (3.902ns logic, 4.723ns route)
+                                                       (45.2% logic, 54.8% route)
+
+--------------------------------------------------------------------------------
+
+Paths for end point inst_top_camera_monitoring/data_w_1 (SLICE_X36Y79.BY), 1 path
+--------------------------------------------------------------------------------
+Delay (setup path):     11.678ns (data path - clock path skew + uncertainty)
+  Source:               inst_top_camera_monitoring/inst_ov7670capt1/latched_vsync (FF)
+  Destination:          inst_top_camera_monitoring/data_w_1 (FF)
+  Data Path Delay:      8.620ns (Levels of Logic = 2)
+  Clock Path Skew:      -3.058ns (0.306 - 3.364)
+  Source Clock:         ov7670_pclk1_BUFGP rising
+  Destination Clock:    inst_top_camera_monitoring/clk1_fb rising at 0.000ns
+  Clock Uncertainty:    0.000ns
+
+  Maximum Data Path: inst_top_camera_monitoring/inst_ov7670capt1/latched_vsync to inst_top_camera_monitoring/data_w_1
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    M16.IQ1              Tiockiq               0.508   ov7670_vsync1
+                                                       inst_top_camera_monitoring/inst_ov7670capt1/latched_vsync
+    SLICE_X37Y73.G3      net (fanout=5)        4.203   inst_top_camera_monitoring/latched_vs
+    SLICE_X37Y73.Y       Tilo                  0.704   inst_top_camera_monitoring/N20
+                                                       inst_top_camera_monitoring/data_w_mux0000<7>1
+    SLICE_X32Y78.G4      net (fanout=13)       0.927   inst_top_camera_monitoring/N0
+    SLICE_X32Y78.Y       Tilo                  0.759   inst_top_camera_monitoring/N29
+                                                       inst_top_camera_monitoring/data_w_mux0000<14>_SW0
+    SLICE_X36Y79.BY      net (fanout=1)        0.402   inst_top_camera_monitoring/N221
+    SLICE_X36Y79.CLK     Tsrck                 1.117   inst_top_camera_monitoring/data_w<1>
+                                                       inst_top_camera_monitoring/data_w_1
+    -------------------------------------------------  ---------------------------
+    Total                                      8.620ns (3.088ns logic, 5.532ns route)
+                                                       (35.8% logic, 64.2% route)
+
+--------------------------------------------------------------------------------
+
+Hold Paths: PATH "TS_24p_to_50_path" TIG;
+--------------------------------------------------------------------------------
+
+Paths for end point inst_top_camera_monitoring/ov7670_vs_prev (SLICE_X48Y70.BY), 1 path
+--------------------------------------------------------------------------------
+Delay (hold path):      6.095ns (datapath - clock path skew - uncertainty)
+  Source:               inst_top_camera_monitoring/inst_ov7670capt1/latched_vsync (FF)
+  Destination:          inst_top_camera_monitoring/ov7670_vs_prev (FF)
+  Data Path Delay:      3.052ns (Levels of Logic = 0)
+  Clock Path Skew:      -3.043ns (0.321 - 3.364)
+  Source Clock:         ov7670_pclk1_BUFGP rising
+  Destination Clock:    inst_top_camera_monitoring/clk1_fb rising at 0.000ns
+  Clock Uncertainty:    0.000ns
+
+  Minimum Data Path: inst_top_camera_monitoring/inst_ov7670capt1/latched_vsync to inst_top_camera_monitoring/ov7670_vs_prev
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    M16.IQ1              Tiockiq               0.406   ov7670_vsync1
+                                                       inst_top_camera_monitoring/inst_ov7670capt1/latched_vsync
+    SLICE_X48Y70.BY      net (fanout=5)        2.494   inst_top_camera_monitoring/latched_vs
+    SLICE_X48Y70.CLK     Tckdi       (-Th)    -0.152   inst_top_camera_monitoring/ov7670_vs_prev
+                                                       inst_top_camera_monitoring/ov7670_vs_prev
+    -------------------------------------------------  ---------------------------
+    Total                                      3.052ns (0.558ns logic, 2.494ns route)
+                                                       (18.3% logic, 81.7% route)
+
+--------------------------------------------------------------------------------
+
+Paths for end point inst_top_camera_monitoring/p0_state_FSM_FFd3 (SLICE_X40Y71.G1), 1 path
+--------------------------------------------------------------------------------
+Delay (hold path):      7.304ns (datapath - clock path skew - uncertainty)
+  Source:               inst_top_camera_monitoring/inst_ov7670capt1/latched_href (FF)
+  Destination:          inst_top_camera_monitoring/p0_state_FSM_FFd3 (FF)
+  Data Path Delay:      4.252ns (Levels of Logic = 1)
+  Clock Path Skew:      -3.052ns (0.318 - 3.370)
+  Source Clock:         ov7670_pclk1_BUFGP rising
+  Destination Clock:    inst_top_camera_monitoring/clk1_fb rising at 0.000ns
+  Clock Uncertainty:    0.000ns
+
+  Minimum Data Path: inst_top_camera_monitoring/inst_ov7670capt1/latched_href to inst_top_camera_monitoring/p0_state_FSM_FFd3
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    M14.IQ1              Tiockiq               0.406   ov7670_href1
+                                                       inst_top_camera_monitoring/inst_ov7670capt1/latched_href
+    SLICE_X40Y71.G1      net (fanout=11)       2.972   inst_top_camera_monitoring/latched_hs
+    SLICE_X40Y71.CLK     Tckg        (-Th)    -0.874   inst_top_camera_monitoring/p0_state_FSM_FFd3
+                                                       inst_top_camera_monitoring/p0_state_FSM_FFd3-In_F
+                                                       inst_top_camera_monitoring/p0_state_FSM_FFd3-In
+                                                       inst_top_camera_monitoring/p0_state_FSM_FFd3
+    -------------------------------------------------  ---------------------------
+    Total                                      4.252ns (1.280ns logic, 2.972ns route)
+                                                       (30.1% logic, 69.9% route)
+
+--------------------------------------------------------------------------------
+
+Paths for end point inst_top_camera_monitoring/ov7670_hs_prev (SLICE_X43Y70.BY), 1 path
+--------------------------------------------------------------------------------
+Delay (hold path):      6.773ns (datapath - clock path skew - uncertainty)
+  Source:               inst_top_camera_monitoring/inst_ov7670capt1/latched_href (FF)
+  Destination:          inst_top_camera_monitoring/ov7670_hs_prev (FF)
+  Data Path Delay:      3.724ns (Levels of Logic = 0)
+  Clock Path Skew:      -3.049ns (0.321 - 3.370)
+  Source Clock:         ov7670_pclk1_BUFGP rising
+  Destination Clock:    inst_top_camera_monitoring/clk1_fb rising at 0.000ns
+  Clock Uncertainty:    0.000ns
+
+  Minimum Data Path: inst_top_camera_monitoring/inst_ov7670capt1/latched_href to inst_top_camera_monitoring/ov7670_hs_prev
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    M14.IQ1              Tiockiq               0.406   ov7670_href1
+                                                       inst_top_camera_monitoring/inst_ov7670capt1/latched_href
+    SLICE_X43Y70.BY      net (fanout=11)       3.183   inst_top_camera_monitoring/latched_hs
+    SLICE_X43Y70.CLK     Tckdi       (-Th)    -0.135   inst_top_camera_monitoring/ov7670_hs_prev
+                                                       inst_top_camera_monitoring/ov7670_hs_prev
+    -------------------------------------------------  ---------------------------
+    Total                                      3.724ns (0.541ns logic, 3.183ns route)
+                                                       (14.5% logic, 85.5% route)
+
+--------------------------------------------------------------------------------
+
+================================================================================
+Timing constraint: PATH "TS_50_to_24x_path" TIG;
+
+ 0 paths analyzed, 0 endpoints analyzed, 0 failing endpoints
+ 0 timing errors detected.
+--------------------------------------------------------------------------------
+
+================================================================================
+Timing constraint: PATH "TS_24x_to_50_path" TIG;
+
+ 0 paths analyzed, 0 endpoints analyzed, 0 failing endpoints
+ 0 timing errors detected.
+--------------------------------------------------------------------------------
+
+================================================================================
+Timing constraint: PATH "TS_50_to_25_path" TIG;
+
+ 1 path analyzed, 1 endpoint analyzed, 0 failing endpoints
+ 0 timing errors detected. (0 setup errors, 0 hold errors)
+--------------------------------------------------------------------------------
+
+Paths for end point inst_top_camera_monitoring/clk_vga (SLICE_X26Y1.SR), 1 path
+--------------------------------------------------------------------------------
+Delay (setup path):     3.030ns (data path - clock path skew + uncertainty)
+  Source:               inst_top_camera_monitoring/vga_0 (FF)
+  Destination:          inst_top_camera_monitoring/clk_vga (FF)
+  Data Path Delay:      3.030ns (Levels of Logic = 1)
+  Clock Path Skew:      0.000ns
+  Source Clock:         inst_top_camera_monitoring/clk1_fb rising at 0.000ns
+  Destination Clock:    inst_top_camera_monitoring/clk1_fb rising at 20.000ns
+  Clock Uncertainty:    0.000ns
+
+  Maximum Data Path: inst_top_camera_monitoring/vga_0 to inst_top_camera_monitoring/clk_vga
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X27Y0.YQ       Tcko                  0.587   inst_top_camera_monitoring/vga<0>
+                                                       inst_top_camera_monitoring/vga_0
+    SLICE_X26Y0.G4       net (fanout=2)        0.490   inst_top_camera_monitoring/vga<0>
+    SLICE_X26Y0.Y        Tilo                  0.759   inst_top_camera_monitoring/vga_0_or0000
+                                                       inst_top_camera_monitoring/clk_vga_or00001
+    SLICE_X26Y1.SR       net (fanout=1)        0.284   inst_top_camera_monitoring/clk_vga_or0000
+    SLICE_X26Y1.CLK      Tsrck                 0.910   vga_clock_OBUF
+                                                       inst_top_camera_monitoring/clk_vga
+    -------------------------------------------------  ---------------------------
+    Total                                      3.030ns (2.256ns logic, 0.774ns route)
+                                                       (74.5% logic, 25.5% route)
+
+--------------------------------------------------------------------------------
+
+Hold Paths: PATH "TS_50_to_25_path" TIG;
+--------------------------------------------------------------------------------
+
+Paths for end point inst_top_camera_monitoring/clk_vga (SLICE_X26Y1.SR), 1 path
+--------------------------------------------------------------------------------
+Delay (hold path):      2.187ns (datapath - clock path skew - uncertainty)
+  Source:               inst_top_camera_monitoring/vga_0 (FF)
+  Destination:          inst_top_camera_monitoring/clk_vga (FF)
+  Data Path Delay:      2.187ns (Levels of Logic = 1)
+  Clock Path Skew:      0.000ns
+  Source Clock:         inst_top_camera_monitoring/clk1_fb rising at 20.000ns
+  Destination Clock:    inst_top_camera_monitoring/clk1_fb rising at 20.000ns
+  Clock Uncertainty:    0.000ns
+
+  Minimum Data Path: inst_top_camera_monitoring/vga_0 to inst_top_camera_monitoring/clk_vga
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X27Y0.YQ       Tcko                  0.470   inst_top_camera_monitoring/vga<0>
+                                                       inst_top_camera_monitoring/vga_0
+    SLICE_X26Y0.G4       net (fanout=2)        0.392   inst_top_camera_monitoring/vga<0>
+    SLICE_X26Y0.Y        Tilo                  0.607   inst_top_camera_monitoring/vga_0_or0000
+                                                       inst_top_camera_monitoring/clk_vga_or00001
+    SLICE_X26Y1.SR       net (fanout=1)        0.227   inst_top_camera_monitoring/clk_vga_or0000
+    SLICE_X26Y1.CLK      Tcksr       (-Th)    -0.491   vga_clock_OBUF
+                                                       inst_top_camera_monitoring/clk_vga
+    -------------------------------------------------  ---------------------------
+    Total                                      2.187ns (1.568ns logic, 0.619ns route)
+                                                       (71.7% logic, 28.3% route)
+
+--------------------------------------------------------------------------------
+
+================================================================================
+Timing constraint: PATH "TS_25_to_50_path" TIG;
+
+ 0 paths analyzed, 0 endpoints analyzed, 0 failing endpoints
+ 0 timing errors detected.
+--------------------------------------------------------------------------------
+
+================================================================================
+Timing constraint: PATH "TS_12_5_to_50_path" TIG;
+
+ 0 paths analyzed, 0 endpoints analyzed, 0 failing endpoints
+ 0 timing errors detected.
+--------------------------------------------------------------------------------
+
+================================================================================
+Timing constraint: PATH "TS_50_to_12_5_path" TIG;
+
+ 11 paths analyzed, 11 endpoints analyzed, 0 failing endpoints
+ 0 timing errors detected. (0 setup errors, 0 hold errors)
+--------------------------------------------------------------------------------
+
+Paths for end point inst_top_camera_monitoring/inst_addrgen1/addr_0 (SLICE_X13Y1.CLK), 1 path
+--------------------------------------------------------------------------------
+Delay (setup path):     2.691ns (data path)
+  Source:               inst_top_camera_monitoring/read_buffer_clk (FF)
+  Destination:          inst_top_camera_monitoring/inst_addrgen1/addr_0 (FF)
+  Data Path Delay:      2.691ns (Levels of Logic = 0)
+  Source Clock:         inst_top_camera_monitoring/clk1_fb rising at 0.000ns
+
+  Maximum Data Path: inst_top_camera_monitoring/read_buffer_clk to inst_top_camera_monitoring/inst_addrgen1/addr_0
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X10Y0.YQ       Tcko                  0.652   inst_top_camera_monitoring/read_buffer_clk
+                                                       inst_top_camera_monitoring/read_buffer_clk
+    SLICE_X13Y1.CLK      net (fanout=7)        2.039   inst_top_camera_monitoring/read_buffer_clk
+    -------------------------------------------------  ---------------------------
+    Total                                      2.691ns (0.652ns logic, 2.039ns route)
+                                                       (24.2% logic, 75.8% route)
+
+--------------------------------------------------------------------------------
+
+Paths for end point inst_top_camera_monitoring/inst_addrgen1/addr_1 (SLICE_X13Y1.CLK), 1 path
+--------------------------------------------------------------------------------
+Delay (setup path):     2.691ns (data path)
+  Source:               inst_top_camera_monitoring/read_buffer_clk (FF)
+  Destination:          inst_top_camera_monitoring/inst_addrgen1/addr_1 (FF)
+  Data Path Delay:      2.691ns (Levels of Logic = 0)
+  Source Clock:         inst_top_camera_monitoring/clk1_fb rising at 0.000ns
+
+  Maximum Data Path: inst_top_camera_monitoring/read_buffer_clk to inst_top_camera_monitoring/inst_addrgen1/addr_1
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X10Y0.YQ       Tcko                  0.652   inst_top_camera_monitoring/read_buffer_clk
+                                                       inst_top_camera_monitoring/read_buffer_clk
+    SLICE_X13Y1.CLK      net (fanout=7)        2.039   inst_top_camera_monitoring/read_buffer_clk
+    -------------------------------------------------  ---------------------------
+    Total                                      2.691ns (0.652ns logic, 2.039ns route)
+                                                       (24.2% logic, 75.8% route)
+
+--------------------------------------------------------------------------------
+
+Paths for end point inst_top_camera_monitoring/inst_addrgen1/addr_2 (SLICE_X13Y2.CLK), 1 path
+--------------------------------------------------------------------------------
+Delay (setup path):     2.688ns (data path)
+  Source:               inst_top_camera_monitoring/read_buffer_clk (FF)
+  Destination:          inst_top_camera_monitoring/inst_addrgen1/addr_2 (FF)
+  Data Path Delay:      2.688ns (Levels of Logic = 0)
+  Source Clock:         inst_top_camera_monitoring/clk1_fb rising at 0.000ns
+
+  Maximum Data Path: inst_top_camera_monitoring/read_buffer_clk to inst_top_camera_monitoring/inst_addrgen1/addr_2
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X10Y0.YQ       Tcko                  0.652   inst_top_camera_monitoring/read_buffer_clk
+                                                       inst_top_camera_monitoring/read_buffer_clk
+    SLICE_X13Y2.CLK      net (fanout=7)        2.036   inst_top_camera_monitoring/read_buffer_clk
+    -------------------------------------------------  ---------------------------
+    Total                                      2.688ns (0.652ns logic, 2.036ns route)
+                                                       (24.3% logic, 75.7% route)
+
+--------------------------------------------------------------------------------
 
 ================================================================================
 Timing constraint: TS_clk = PERIOD TIMEGRP "i_clock" 20 ns HIGH 50%;
@@ -71,331 +478,229 @@ Slack: 15.834ns (period - min period limit)
 --------------------------------------------------------------------------------
 
 ================================================================================
-Timing constraint: TS_inst_top_camera_monitoring_clk11 = PERIOD TIMEGRP         
-"inst_top_camera_monitoring_clk11" TS_clk HIGH 50%;
+Timing constraint: TS_inst_top_camera_monitoring_clk1 = PERIOD TIMEGRP         
+"inst_top_camera_monitoring_clk1" TS_clk HIGH 50%;
 For more information, see Period Analysis in the Timing Closure User Guide (UG612).
 
- 45558 paths analyzed, 1549 endpoints analyzed, 0 failing endpoints
+ 45557 paths analyzed, 1548 endpoints analyzed, 0 failing endpoints
  0 timing errors detected. (0 setup errors, 0 hold errors, 0 component switching limit errors)
- Minimum period is  18.850ns.
+ Minimum period is  15.469ns.
 --------------------------------------------------------------------------------
 
-Paths for end point inst_top_camera_monitoring/dq_oo_15 (T1.O1), 17 paths
+Paths for end point inst_top_camera_monitoring/crbc_i0/write_buffer_i0/Mram_RAM2.B (RAMB16_X0Y5.ADDRB7), 1 path
 --------------------------------------------------------------------------------
-Slack (setup path):     0.575ns (requirement - (data path - clock path skew + uncertainty))
-  Source:               inst_top_camera_monitoring/crbc_i0/write_buffer_i0/Mram_RAM2.B (RAM)
-  Destination:          inst_top_camera_monitoring/dq_oo_15 (FF)
-  Requirement:          10.000ns
-  Data Path Delay:      9.425ns (Levels of Logic = 1)
+Slack (setup path):     4.531ns (requirement - (data path - clock path skew + uncertainty))
+  Source:               inst_top_camera_monitoring/crbc_i0/source_addr_3 (FF)
+  Destination:          inst_top_camera_monitoring/crbc_i0/write_buffer_i0/Mram_RAM2.B (RAM)
+  Requirement:          20.000ns
+  Data Path Delay:      15.469ns (Levels of Logic = 0)
   Clock Path Skew:      0.000ns
-  Source Clock:         inst_top_camera_monitoring/clk1 falling at 10.000ns
-  Destination Clock:    inst_top_camera_monitoring/clk1 rising at 20.000ns
+  Source Clock:         inst_top_camera_monitoring/clk1_fb rising at 0.000ns
+  Destination Clock:    inst_top_camera_monitoring/crbc_i0/write_buffer_i0/clkB_inv1 rising at 20.000ns
   Clock Uncertainty:    0.000ns
 
-  Maximum Data Path: inst_top_camera_monitoring/crbc_i0/write_buffer_i0/Mram_RAM2.B to inst_top_camera_monitoring/dq_oo_15
+  Maximum Data Path: inst_top_camera_monitoring/crbc_i0/source_addr_3 to inst_top_camera_monitoring/crbc_i0/write_buffer_i0/Mram_RAM2.B
     Location             Delay type         Delay(ns)  Physical Resource
                                                        Logical Resource(s)
     -------------------------------------------------  -------------------
-    RAMB16_X1Y4.DOB6     Tbcko                 2.812   inst_top_camera_monitoring/crbc_i0/write_buffer_i0/Mram_RAM2
+    SLICE_X20Y35.XQ      Tcko                  0.592   inst_top_camera_monitoring/crbc_i0/source_addr<3>
+                                                       inst_top_camera_monitoring/crbc_i0/source_addr_3
+    RAMB16_X0Y5.ADDRB7   net (fanout=4)       14.500   inst_top_camera_monitoring/crbc_i0/source_addr<3>
+    RAMB16_X0Y5.CLKB     Tback                 0.377   inst_top_camera_monitoring/crbc_i0/write_buffer_i0/Mram_RAM2
                                                        inst_top_camera_monitoring/crbc_i0/write_buffer_i0/Mram_RAM2.B
-    SLICE_X2Y24.F4       net (fanout=1)        3.751   inst_top_camera_monitoring/crbc_i0/source_data<15>
-    SLICE_X2Y24.X        Tilo                  0.759   inst_top_camera_monitoring/dq_o<15>
-                                                       inst_top_camera_monitoring/crbc_i0/dq_o<15>1
-    T1.O1                net (fanout=1)        1.419   inst_top_camera_monitoring/dq_o<15>
-    T1.OTCLK1            Tioock                0.684   Dq<15>
-                                                       inst_top_camera_monitoring/dq_oo_15
     -------------------------------------------------  ---------------------------
-    Total                                      9.425ns (4.255ns logic, 5.170ns route)
-                                                       (45.1% logic, 54.9% route)
+    Total                                     15.469ns (0.969ns logic, 14.500ns route)
+                                                       (6.3% logic, 93.7% route)
 
 --------------------------------------------------------------------------------
-Slack (setup path):     9.322ns (requirement - (data path - clock path skew + uncertainty))
-  Source:               inst_top_camera_monitoring/crbc_i0/data_out_enable_i_4 (FF)
-  Destination:          inst_top_camera_monitoring/dq_oo_15 (FF)
+
+Paths for end point inst_top_camera_monitoring/crbc_i0/write_buffer_i0/Mram_RAM1.B (RAMB16_X0Y4.ADDRB7), 1 path
+--------------------------------------------------------------------------------
+Slack (setup path):     4.535ns (requirement - (data path - clock path skew + uncertainty))
+  Source:               inst_top_camera_monitoring/crbc_i0/source_addr_3 (FF)
+  Destination:          inst_top_camera_monitoring/crbc_i0/write_buffer_i0/Mram_RAM1.B (RAM)
   Requirement:          20.000ns
-  Data Path Delay:      10.678ns (Levels of Logic = 3)
+  Data Path Delay:      15.465ns (Levels of Logic = 0)
   Clock Path Skew:      0.000ns
-  Source Clock:         inst_top_camera_monitoring/clk1 rising at 0.000ns
-  Destination Clock:    inst_top_camera_monitoring/clk1 rising at 20.000ns
+  Source Clock:         inst_top_camera_monitoring/clk1_fb rising at 0.000ns
+  Destination Clock:    inst_top_camera_monitoring/crbc_i0/write_buffer_i0/clkB_inv rising at 20.000ns
   Clock Uncertainty:    0.000ns
 
-  Maximum Data Path: inst_top_camera_monitoring/crbc_i0/data_out_enable_i_4 to inst_top_camera_monitoring/dq_oo_15
+  Maximum Data Path: inst_top_camera_monitoring/crbc_i0/source_addr_3 to inst_top_camera_monitoring/crbc_i0/write_buffer_i0/Mram_RAM1.B
     Location             Delay type         Delay(ns)  Physical Resource
                                                        Logical Resource(s)
     -------------------------------------------------  -------------------
-    SLICE_X1Y17.YQ       Tcko                  0.587   inst_top_camera_monitoring/data_out_enable<5>
-                                                       inst_top_camera_monitoring/crbc_i0/data_out_enable_i_4
-    SLICE_X15Y17.F2      net (fanout=3)        1.252   inst_top_camera_monitoring/data_out_enable<4>
-    SLICE_X15Y17.X       Tilo                  0.704   inst_top_camera_monitoring/crbc_i0/dq_o_cmp_eq00004
-                                                       inst_top_camera_monitoring/crbc_i0/dq_o_cmp_eq00004
-    SLICE_X35Y34.G1      net (fanout=1)        2.167   inst_top_camera_monitoring/crbc_i0/dq_o_cmp_eq00004
-    SLICE_X35Y34.Y       Tilo                  0.704   inst_top_camera_monitoring/dq_o<9>
-                                                       inst_top_camera_monitoring/crbc_i0/dq_o_cmp_eq000036
-    SLICE_X2Y24.F3       net (fanout=16)       2.402   inst_top_camera_monitoring/crbc_i0/dq_o_cmp_eq0000
-    SLICE_X2Y24.X        Tilo                  0.759   inst_top_camera_monitoring/dq_o<15>
-                                                       inst_top_camera_monitoring/crbc_i0/dq_o<15>1
-    T1.O1                net (fanout=1)        1.419   inst_top_camera_monitoring/dq_o<15>
-    T1.OTCLK1            Tioock                0.684   Dq<15>
-                                                       inst_top_camera_monitoring/dq_oo_15
-    -------------------------------------------------  ---------------------------
-    Total                                     10.678ns (3.438ns logic, 7.240ns route)
-                                                       (32.2% logic, 67.8% route)
-
---------------------------------------------------------------------------------
-Slack (setup path):     9.409ns (requirement - (data path - clock path skew + uncertainty))
-  Source:               inst_top_camera_monitoring/crbc_i0/data_out_enable_i_5 (FF)
-  Destination:          inst_top_camera_monitoring/dq_oo_15 (FF)
-  Requirement:          20.000ns
-  Data Path Delay:      10.591ns (Levels of Logic = 3)
-  Clock Path Skew:      0.000ns
-  Source Clock:         inst_top_camera_monitoring/clk1 rising at 0.000ns
-  Destination Clock:    inst_top_camera_monitoring/clk1 rising at 20.000ns
-  Clock Uncertainty:    0.000ns
-
-  Maximum Data Path: inst_top_camera_monitoring/crbc_i0/data_out_enable_i_5 to inst_top_camera_monitoring/dq_oo_15
-    Location             Delay type         Delay(ns)  Physical Resource
-                                                       Logical Resource(s)
-    -------------------------------------------------  -------------------
-    SLICE_X1Y17.XQ       Tcko                  0.591   inst_top_camera_monitoring/data_out_enable<5>
-                                                       inst_top_camera_monitoring/crbc_i0/data_out_enable_i_5
-    SLICE_X15Y17.F3      net (fanout=3)        1.161   inst_top_camera_monitoring/data_out_enable<5>
-    SLICE_X15Y17.X       Tilo                  0.704   inst_top_camera_monitoring/crbc_i0/dq_o_cmp_eq00004
-                                                       inst_top_camera_monitoring/crbc_i0/dq_o_cmp_eq00004
-    SLICE_X35Y34.G1      net (fanout=1)        2.167   inst_top_camera_monitoring/crbc_i0/dq_o_cmp_eq00004
-    SLICE_X35Y34.Y       Tilo                  0.704   inst_top_camera_monitoring/dq_o<9>
-                                                       inst_top_camera_monitoring/crbc_i0/dq_o_cmp_eq000036
-    SLICE_X2Y24.F3       net (fanout=16)       2.402   inst_top_camera_monitoring/crbc_i0/dq_o_cmp_eq0000
-    SLICE_X2Y24.X        Tilo                  0.759   inst_top_camera_monitoring/dq_o<15>
-                                                       inst_top_camera_monitoring/crbc_i0/dq_o<15>1
-    T1.O1                net (fanout=1)        1.419   inst_top_camera_monitoring/dq_o<15>
-    T1.OTCLK1            Tioock                0.684   Dq<15>
-                                                       inst_top_camera_monitoring/dq_oo_15
-    -------------------------------------------------  ---------------------------
-    Total                                     10.591ns (3.442ns logic, 7.149ns route)
-                                                       (32.5% logic, 67.5% route)
-
---------------------------------------------------------------------------------
-
-Paths for end point inst_top_camera_monitoring/dq_oo_1 (L4.O1), 17 paths
---------------------------------------------------------------------------------
-Slack (setup path):     1.502ns (requirement - (data path - clock path skew + uncertainty))
-  Source:               inst_top_camera_monitoring/crbc_i0/write_buffer_i0/Mram_RAM1.B (RAM)
-  Destination:          inst_top_camera_monitoring/dq_oo_1 (FF)
-  Requirement:          10.000ns
-  Data Path Delay:      8.498ns (Levels of Logic = 1)
-  Clock Path Skew:      0.000ns
-  Source Clock:         inst_top_camera_monitoring/clk1 falling at 10.000ns
-  Destination Clock:    inst_top_camera_monitoring/clk1 rising at 20.000ns
-  Clock Uncertainty:    0.000ns
-
-  Maximum Data Path: inst_top_camera_monitoring/crbc_i0/write_buffer_i0/Mram_RAM1.B to inst_top_camera_monitoring/dq_oo_1
-    Location             Delay type         Delay(ns)  Physical Resource
-                                                       Logical Resource(s)
-    -------------------------------------------------  -------------------
-    RAMB16_X1Y3.DOB1     Tbcko                 2.812   inst_top_camera_monitoring/crbc_i0/write_buffer_i0/Mram_RAM1
+    SLICE_X20Y35.XQ      Tcko                  0.592   inst_top_camera_monitoring/crbc_i0/source_addr<3>
+                                                       inst_top_camera_monitoring/crbc_i0/source_addr_3
+    RAMB16_X0Y4.ADDRB7   net (fanout=4)       14.496   inst_top_camera_monitoring/crbc_i0/source_addr<3>
+    RAMB16_X0Y4.CLKB     Tback                 0.377   inst_top_camera_monitoring/crbc_i0/write_buffer_i0/Mram_RAM1
                                                        inst_top_camera_monitoring/crbc_i0/write_buffer_i0/Mram_RAM1.B
-    SLICE_X39Y35.G4      net (fanout=1)        2.018   inst_top_camera_monitoring/crbc_i0/source_data<1>
-    SLICE_X39Y35.Y       Tilo                  0.704   inst_top_camera_monitoring/dq_o<11>
-                                                       inst_top_camera_monitoring/crbc_i0/dq_o<1>1
-    L4.O1                net (fanout=1)        2.280   inst_top_camera_monitoring/dq_o<1>
-    L4.OTCLK1            Tioock                0.684   Dq<1>
-                                                       inst_top_camera_monitoring/dq_oo_1
     -------------------------------------------------  ---------------------------
-    Total                                      8.498ns (4.200ns logic, 4.298ns route)
-                                                       (49.4% logic, 50.6% route)
+    Total                                     15.465ns (0.969ns logic, 14.496ns route)
+                                                       (6.3% logic, 93.7% route)
 
 --------------------------------------------------------------------------------
-Slack (setup path):     10.375ns (requirement - (data path - clock path skew + uncertainty))
-  Source:               inst_top_camera_monitoring/crbc_i0/data_out_enable_i_4 (FF)
-  Destination:          inst_top_camera_monitoring/dq_oo_1 (FF)
+
+Paths for end point inst_top_camera_monitoring/inst_ov7670contr1/SCCB/data_sr_16 (SLICE_X60Y84.CE), 253 paths
+--------------------------------------------------------------------------------
+Slack (setup path):     4.782ns (requirement - (data path - clock path skew + uncertainty))
+  Source:               inst_top_camera_monitoring/inst_ov7670contr1/Registers/sequence_0_1 (FF)
+  Destination:          inst_top_camera_monitoring/inst_ov7670contr1/SCCB/data_sr_16 (FF)
   Requirement:          20.000ns
-  Data Path Delay:      9.551ns (Levels of Logic = 3)
-  Clock Path Skew:      -0.074ns (0.196 - 0.270)
-  Source Clock:         inst_top_camera_monitoring/clk1 rising at 0.000ns
-  Destination Clock:    inst_top_camera_monitoring/clk1 rising at 20.000ns
+  Data Path Delay:      15.216ns (Levels of Logic = 6)
+  Clock Path Skew:      -0.002ns (0.013 - 0.015)
+  Source Clock:         inst_top_camera_monitoring/clk1_fb rising at 0.000ns
+  Destination Clock:    inst_top_camera_monitoring/clk1_fb rising at 20.000ns
   Clock Uncertainty:    0.000ns
 
-  Maximum Data Path: inst_top_camera_monitoring/crbc_i0/data_out_enable_i_4 to inst_top_camera_monitoring/dq_oo_1
+  Maximum Data Path: inst_top_camera_monitoring/inst_ov7670contr1/Registers/sequence_0_1 to inst_top_camera_monitoring/inst_ov7670contr1/SCCB/data_sr_16
     Location             Delay type         Delay(ns)  Physical Resource
                                                        Logical Resource(s)
     -------------------------------------------------  -------------------
-    SLICE_X1Y17.YQ       Tcko                  0.587   inst_top_camera_monitoring/data_out_enable<5>
-                                                       inst_top_camera_monitoring/crbc_i0/data_out_enable_i_4
-    SLICE_X15Y17.F2      net (fanout=3)        1.252   inst_top_camera_monitoring/data_out_enable<4>
-    SLICE_X15Y17.X       Tilo                  0.704   inst_top_camera_monitoring/crbc_i0/dq_o_cmp_eq00004
-                                                       inst_top_camera_monitoring/crbc_i0/dq_o_cmp_eq00004
-    SLICE_X35Y34.G1      net (fanout=1)        2.167   inst_top_camera_monitoring/crbc_i0/dq_o_cmp_eq00004
-    SLICE_X35Y34.Y       Tilo                  0.704   inst_top_camera_monitoring/dq_o<9>
-                                                       inst_top_camera_monitoring/crbc_i0/dq_o_cmp_eq000036
-    SLICE_X39Y35.G2      net (fanout=16)       0.469   inst_top_camera_monitoring/crbc_i0/dq_o_cmp_eq0000
-    SLICE_X39Y35.Y       Tilo                  0.704   inst_top_camera_monitoring/dq_o<11>
-                                                       inst_top_camera_monitoring/crbc_i0/dq_o<1>1
-    L4.O1                net (fanout=1)        2.280   inst_top_camera_monitoring/dq_o<1>
-    L4.OTCLK1            Tioock                0.684   Dq<1>
-                                                       inst_top_camera_monitoring/dq_oo_1
+    SLICE_X60Y86.YQ      Tcko                  0.652   inst_top_camera_monitoring/inst_ov7670contr1/Registers/sequence_0_1
+                                                       inst_top_camera_monitoring/inst_ov7670contr1/Registers/sequence_0_1
+    SLICE_X63Y77.G4      net (fanout=24)       2.404   inst_top_camera_monitoring/inst_ov7670contr1/Registers/sequence_0_1
+    SLICE_X63Y77.F5      Tif5                  0.875   inst_top_camera_monitoring/inst_ov7670contr1/Registers/Mrom_cmd_reg_rom00002_f51
+                                                       inst_top_camera_monitoring/inst_ov7670contr1/Registers/Mrom_cmd_reg_rom000023
+                                                       inst_top_camera_monitoring/inst_ov7670contr1/Registers/Mrom_cmd_reg_rom00002_f5_0
+    SLICE_X63Y76.FXINB   net (fanout=1)        0.000   inst_top_camera_monitoring/inst_ov7670contr1/Registers/Mrom_cmd_reg_rom00002_f51
+    SLICE_X63Y76.Y       Tif6y                 0.521   inst_top_camera_monitoring/inst_ov7670contr1/SCCB/reg_value_prev<2>
+                                                       inst_top_camera_monitoring/inst_ov7670contr1/Registers/Mrom_cmd_reg_rom00002_f6
+    SLICE_X61Y80.F4      net (fanout=2)        0.598   inst_top_camera_monitoring/inst_ov7670contr1/command<2>
+    SLICE_X61Y80.X       Tilo                  0.704   inst_top_camera_monitoring/inst_ov7670contr1/Registers/done_cmp_eq0000126
+                                                       inst_top_camera_monitoring/inst_ov7670contr1/Registers/done_cmp_eq0000126
+    SLICE_X60Y82.F1      net (fanout=1)        0.409   inst_top_camera_monitoring/inst_ov7670contr1/Registers/done_cmp_eq0000126
+    SLICE_X60Y82.X       Tilo                  0.759   inst_top_camera_monitoring/inst_ov7670contr1/Registers/done_cmp_eq0000127
+                                                       inst_top_camera_monitoring/inst_ov7670contr1/Registers/done_cmp_eq0000127
+    SLICE_X65Y84.F1      net (fanout=2)        1.056   inst_top_camera_monitoring/inst_ov7670contr1/Registers/done_cmp_eq0000127
+    SLICE_X65Y84.X       Tilo                  0.704   led1_OBUF
+                                                       inst_top_camera_monitoring/inst_ov7670contr1/Registers/done_cmp_eq00002
+    SLICE_X66Y50.G1      net (fanout=5)        2.037   led1_OBUF
+    SLICE_X66Y50.Y       Tilo                  0.759   inst_top_camera_monitoring/inst_ov7670contr1/SCCB/data_sr<31>
+                                                       inst_top_camera_monitoring/inst_ov7670contr1/SCCB/busy_sr_not00031
+    SLICE_X60Y84.CE      net (fanout=16)       3.183   inst_top_camera_monitoring/inst_ov7670contr1/SCCB/busy_sr_not0003
+    SLICE_X60Y84.CLK     Tceck                 0.555   inst_top_camera_monitoring/inst_ov7670contr1/SCCB/data_sr<16>
+                                                       inst_top_camera_monitoring/inst_ov7670contr1/SCCB/data_sr_16
     -------------------------------------------------  ---------------------------
-    Total                                      9.551ns (3.383ns logic, 6.168ns route)
-                                                       (35.4% logic, 64.6% route)
+    Total                                     15.216ns (5.529ns logic, 9.687ns route)
+                                                       (36.3% logic, 63.7% route)
 
 --------------------------------------------------------------------------------
-Slack (setup path):     10.462ns (requirement - (data path - clock path skew + uncertainty))
-  Source:               inst_top_camera_monitoring/crbc_i0/data_out_enable_i_5 (FF)
-  Destination:          inst_top_camera_monitoring/dq_oo_1 (FF)
+Slack (setup path):     4.782ns (requirement - (data path - clock path skew + uncertainty))
+  Source:               inst_top_camera_monitoring/inst_ov7670contr1/Registers/sequence_0_1 (FF)
+  Destination:          inst_top_camera_monitoring/inst_ov7670contr1/SCCB/data_sr_16 (FF)
   Requirement:          20.000ns
-  Data Path Delay:      9.464ns (Levels of Logic = 3)
-  Clock Path Skew:      -0.074ns (0.196 - 0.270)
-  Source Clock:         inst_top_camera_monitoring/clk1 rising at 0.000ns
-  Destination Clock:    inst_top_camera_monitoring/clk1 rising at 20.000ns
+  Data Path Delay:      15.216ns (Levels of Logic = 6)
+  Clock Path Skew:      -0.002ns (0.013 - 0.015)
+  Source Clock:         inst_top_camera_monitoring/clk1_fb rising at 0.000ns
+  Destination Clock:    inst_top_camera_monitoring/clk1_fb rising at 20.000ns
   Clock Uncertainty:    0.000ns
 
-  Maximum Data Path: inst_top_camera_monitoring/crbc_i0/data_out_enable_i_5 to inst_top_camera_monitoring/dq_oo_1
+  Maximum Data Path: inst_top_camera_monitoring/inst_ov7670contr1/Registers/sequence_0_1 to inst_top_camera_monitoring/inst_ov7670contr1/SCCB/data_sr_16
     Location             Delay type         Delay(ns)  Physical Resource
                                                        Logical Resource(s)
     -------------------------------------------------  -------------------
-    SLICE_X1Y17.XQ       Tcko                  0.591   inst_top_camera_monitoring/data_out_enable<5>
-                                                       inst_top_camera_monitoring/crbc_i0/data_out_enable_i_5
-    SLICE_X15Y17.F3      net (fanout=3)        1.161   inst_top_camera_monitoring/data_out_enable<5>
-    SLICE_X15Y17.X       Tilo                  0.704   inst_top_camera_monitoring/crbc_i0/dq_o_cmp_eq00004
-                                                       inst_top_camera_monitoring/crbc_i0/dq_o_cmp_eq00004
-    SLICE_X35Y34.G1      net (fanout=1)        2.167   inst_top_camera_monitoring/crbc_i0/dq_o_cmp_eq00004
-    SLICE_X35Y34.Y       Tilo                  0.704   inst_top_camera_monitoring/dq_o<9>
-                                                       inst_top_camera_monitoring/crbc_i0/dq_o_cmp_eq000036
-    SLICE_X39Y35.G2      net (fanout=16)       0.469   inst_top_camera_monitoring/crbc_i0/dq_o_cmp_eq0000
-    SLICE_X39Y35.Y       Tilo                  0.704   inst_top_camera_monitoring/dq_o<11>
-                                                       inst_top_camera_monitoring/crbc_i0/dq_o<1>1
-    L4.O1                net (fanout=1)        2.280   inst_top_camera_monitoring/dq_o<1>
-    L4.OTCLK1            Tioock                0.684   Dq<1>
-                                                       inst_top_camera_monitoring/dq_oo_1
+    SLICE_X60Y86.YQ      Tcko                  0.652   inst_top_camera_monitoring/inst_ov7670contr1/Registers/sequence_0_1
+                                                       inst_top_camera_monitoring/inst_ov7670contr1/Registers/sequence_0_1
+    SLICE_X63Y76.G4      net (fanout=24)       2.404   inst_top_camera_monitoring/inst_ov7670contr1/Registers/sequence_0_1
+    SLICE_X63Y76.F5      Tif5                  0.875   inst_top_camera_monitoring/inst_ov7670contr1/SCCB/reg_value_prev<2>
+                                                       inst_top_camera_monitoring/inst_ov7670contr1/Registers/Mrom_cmd_reg_rom000021
+                                                       inst_top_camera_monitoring/inst_ov7670contr1/Registers/Mrom_cmd_reg_rom00002_f5
+    SLICE_X63Y76.FXINA   net (fanout=1)        0.000   inst_top_camera_monitoring/inst_ov7670contr1/Registers/Mrom_cmd_reg_rom00002_f5
+    SLICE_X63Y76.Y       Tif6y                 0.521   inst_top_camera_monitoring/inst_ov7670contr1/SCCB/reg_value_prev<2>
+                                                       inst_top_camera_monitoring/inst_ov7670contr1/Registers/Mrom_cmd_reg_rom00002_f6
+    SLICE_X61Y80.F4      net (fanout=2)        0.598   inst_top_camera_monitoring/inst_ov7670contr1/command<2>
+    SLICE_X61Y80.X       Tilo                  0.704   inst_top_camera_monitoring/inst_ov7670contr1/Registers/done_cmp_eq0000126
+                                                       inst_top_camera_monitoring/inst_ov7670contr1/Registers/done_cmp_eq0000126
+    SLICE_X60Y82.F1      net (fanout=1)        0.409   inst_top_camera_monitoring/inst_ov7670contr1/Registers/done_cmp_eq0000126
+    SLICE_X60Y82.X       Tilo                  0.759   inst_top_camera_monitoring/inst_ov7670contr1/Registers/done_cmp_eq0000127
+                                                       inst_top_camera_monitoring/inst_ov7670contr1/Registers/done_cmp_eq0000127
+    SLICE_X65Y84.F1      net (fanout=2)        1.056   inst_top_camera_monitoring/inst_ov7670contr1/Registers/done_cmp_eq0000127
+    SLICE_X65Y84.X       Tilo                  0.704   led1_OBUF
+                                                       inst_top_camera_monitoring/inst_ov7670contr1/Registers/done_cmp_eq00002
+    SLICE_X66Y50.G1      net (fanout=5)        2.037   led1_OBUF
+    SLICE_X66Y50.Y       Tilo                  0.759   inst_top_camera_monitoring/inst_ov7670contr1/SCCB/data_sr<31>
+                                                       inst_top_camera_monitoring/inst_ov7670contr1/SCCB/busy_sr_not00031
+    SLICE_X60Y84.CE      net (fanout=16)       3.183   inst_top_camera_monitoring/inst_ov7670contr1/SCCB/busy_sr_not0003
+    SLICE_X60Y84.CLK     Tceck                 0.555   inst_top_camera_monitoring/inst_ov7670contr1/SCCB/data_sr<16>
+                                                       inst_top_camera_monitoring/inst_ov7670contr1/SCCB/data_sr_16
     -------------------------------------------------  ---------------------------
-    Total                                      9.464ns (3.387ns logic, 6.077ns route)
-                                                       (35.8% logic, 64.2% route)
+    Total                                     15.216ns (5.529ns logic, 9.687ns route)
+                                                       (36.3% logic, 63.7% route)
 
 --------------------------------------------------------------------------------
-
-Paths for end point inst_top_camera_monitoring/dq_oo_0 (L1.O1), 17 paths
---------------------------------------------------------------------------------
-Slack (setup path):     1.540ns (requirement - (data path - clock path skew + uncertainty))
-  Source:               inst_top_camera_monitoring/crbc_i0/write_buffer_i0/Mram_RAM1.B (RAM)
-  Destination:          inst_top_camera_monitoring/dq_oo_0 (FF)
-  Requirement:          10.000ns
-  Data Path Delay:      8.460ns (Levels of Logic = 1)
-  Clock Path Skew:      0.000ns
-  Source Clock:         inst_top_camera_monitoring/clk1 falling at 10.000ns
-  Destination Clock:    inst_top_camera_monitoring/clk1 rising at 20.000ns
-  Clock Uncertainty:    0.000ns
-
-  Maximum Data Path: inst_top_camera_monitoring/crbc_i0/write_buffer_i0/Mram_RAM1.B to inst_top_camera_monitoring/dq_oo_0
-    Location             Delay type         Delay(ns)  Physical Resource
-                                                       Logical Resource(s)
-    -------------------------------------------------  -------------------
-    RAMB16_X1Y3.DOB0     Tbcko                 2.812   inst_top_camera_monitoring/crbc_i0/write_buffer_i0/Mram_RAM1
-                                                       inst_top_camera_monitoring/crbc_i0/write_buffer_i0/Mram_RAM1.B
-    SLICE_X2Y37.G2       net (fanout=1)        3.030   inst_top_camera_monitoring/crbc_i0/source_data<0>
-    SLICE_X2Y37.Y        Tilo                  0.759   inst_top_camera_monitoring/dq_o<10>
-                                                       inst_top_camera_monitoring/crbc_i0/dq_o<0>1
-    L1.O1                net (fanout=1)        1.175   inst_top_camera_monitoring/dq_o<0>
-    L1.OTCLK1            Tioock                0.684   Dq<0>
-                                                       inst_top_camera_monitoring/dq_oo_0
-    -------------------------------------------------  ---------------------------
-    Total                                      8.460ns (4.255ns logic, 4.205ns route)
-                                                       (50.3% logic, 49.7% route)
-
---------------------------------------------------------------------------------
-Slack (setup path):     10.196ns (requirement - (data path - clock path skew + uncertainty))
-  Source:               inst_top_camera_monitoring/crbc_i0/data_out_enable_i_4 (FF)
-  Destination:          inst_top_camera_monitoring/dq_oo_0 (FF)
+Slack (setup path):     4.785ns (requirement - (data path - clock path skew + uncertainty))
+  Source:               inst_top_camera_monitoring/inst_ov7670contr1/Registers/sequence_0_1 (FF)
+  Destination:          inst_top_camera_monitoring/inst_ov7670contr1/SCCB/data_sr_16 (FF)
   Requirement:          20.000ns
-  Data Path Delay:      9.737ns (Levels of Logic = 3)
-  Clock Path Skew:      -0.067ns (0.203 - 0.270)
-  Source Clock:         inst_top_camera_monitoring/clk1 rising at 0.000ns
-  Destination Clock:    inst_top_camera_monitoring/clk1 rising at 20.000ns
+  Data Path Delay:      15.213ns (Levels of Logic = 6)
+  Clock Path Skew:      -0.002ns (0.013 - 0.015)
+  Source Clock:         inst_top_camera_monitoring/clk1_fb rising at 0.000ns
+  Destination Clock:    inst_top_camera_monitoring/clk1_fb rising at 20.000ns
   Clock Uncertainty:    0.000ns
 
-  Maximum Data Path: inst_top_camera_monitoring/crbc_i0/data_out_enable_i_4 to inst_top_camera_monitoring/dq_oo_0
+  Maximum Data Path: inst_top_camera_monitoring/inst_ov7670contr1/Registers/sequence_0_1 to inst_top_camera_monitoring/inst_ov7670contr1/SCCB/data_sr_16
     Location             Delay type         Delay(ns)  Physical Resource
                                                        Logical Resource(s)
     -------------------------------------------------  -------------------
-    SLICE_X1Y17.YQ       Tcko                  0.587   inst_top_camera_monitoring/data_out_enable<5>
-                                                       inst_top_camera_monitoring/crbc_i0/data_out_enable_i_4
-    SLICE_X15Y17.F2      net (fanout=3)        1.252   inst_top_camera_monitoring/data_out_enable<4>
-    SLICE_X15Y17.X       Tilo                  0.704   inst_top_camera_monitoring/crbc_i0/dq_o_cmp_eq00004
-                                                       inst_top_camera_monitoring/crbc_i0/dq_o_cmp_eq00004
-    SLICE_X35Y34.G1      net (fanout=1)        2.167   inst_top_camera_monitoring/crbc_i0/dq_o_cmp_eq00004
-    SLICE_X35Y34.Y       Tilo                  0.704   inst_top_camera_monitoring/dq_o<9>
-                                                       inst_top_camera_monitoring/crbc_i0/dq_o_cmp_eq000036
-    SLICE_X2Y37.G1       net (fanout=16)       1.705   inst_top_camera_monitoring/crbc_i0/dq_o_cmp_eq0000
-    SLICE_X2Y37.Y        Tilo                  0.759   inst_top_camera_monitoring/dq_o<10>
-                                                       inst_top_camera_monitoring/crbc_i0/dq_o<0>1
-    L1.O1                net (fanout=1)        1.175   inst_top_camera_monitoring/dq_o<0>
-    L1.OTCLK1            Tioock                0.684   Dq<0>
-                                                       inst_top_camera_monitoring/dq_oo_0
+    SLICE_X60Y86.YQ      Tcko                  0.652   inst_top_camera_monitoring/inst_ov7670contr1/Registers/sequence_0_1
+                                                       inst_top_camera_monitoring/inst_ov7670contr1/Registers/sequence_0_1
+    SLICE_X63Y77.F4      net (fanout=24)       2.401   inst_top_camera_monitoring/inst_ov7670contr1/Registers/sequence_0_1
+    SLICE_X63Y77.F5      Tif5                  0.875   inst_top_camera_monitoring/inst_ov7670contr1/Registers/Mrom_cmd_reg_rom00002_f51
+                                                       inst_top_camera_monitoring/inst_ov7670contr1/Registers/Mrom_cmd_reg_rom000022
+                                                       inst_top_camera_monitoring/inst_ov7670contr1/Registers/Mrom_cmd_reg_rom00002_f5_0
+    SLICE_X63Y76.FXINB   net (fanout=1)        0.000   inst_top_camera_monitoring/inst_ov7670contr1/Registers/Mrom_cmd_reg_rom00002_f51
+    SLICE_X63Y76.Y       Tif6y                 0.521   inst_top_camera_monitoring/inst_ov7670contr1/SCCB/reg_value_prev<2>
+                                                       inst_top_camera_monitoring/inst_ov7670contr1/Registers/Mrom_cmd_reg_rom00002_f6
+    SLICE_X61Y80.F4      net (fanout=2)        0.598   inst_top_camera_monitoring/inst_ov7670contr1/command<2>
+    SLICE_X61Y80.X       Tilo                  0.704   inst_top_camera_monitoring/inst_ov7670contr1/Registers/done_cmp_eq0000126
+                                                       inst_top_camera_monitoring/inst_ov7670contr1/Registers/done_cmp_eq0000126
+    SLICE_X60Y82.F1      net (fanout=1)        0.409   inst_top_camera_monitoring/inst_ov7670contr1/Registers/done_cmp_eq0000126
+    SLICE_X60Y82.X       Tilo                  0.759   inst_top_camera_monitoring/inst_ov7670contr1/Registers/done_cmp_eq0000127
+                                                       inst_top_camera_monitoring/inst_ov7670contr1/Registers/done_cmp_eq0000127
+    SLICE_X65Y84.F1      net (fanout=2)        1.056   inst_top_camera_monitoring/inst_ov7670contr1/Registers/done_cmp_eq0000127
+    SLICE_X65Y84.X       Tilo                  0.704   led1_OBUF
+                                                       inst_top_camera_monitoring/inst_ov7670contr1/Registers/done_cmp_eq00002
+    SLICE_X66Y50.G1      net (fanout=5)        2.037   led1_OBUF
+    SLICE_X66Y50.Y       Tilo                  0.759   inst_top_camera_monitoring/inst_ov7670contr1/SCCB/data_sr<31>
+                                                       inst_top_camera_monitoring/inst_ov7670contr1/SCCB/busy_sr_not00031
+    SLICE_X60Y84.CE      net (fanout=16)       3.183   inst_top_camera_monitoring/inst_ov7670contr1/SCCB/busy_sr_not0003
+    SLICE_X60Y84.CLK     Tceck                 0.555   inst_top_camera_monitoring/inst_ov7670contr1/SCCB/data_sr<16>
+                                                       inst_top_camera_monitoring/inst_ov7670contr1/SCCB/data_sr_16
     -------------------------------------------------  ---------------------------
-    Total                                      9.737ns (3.438ns logic, 6.299ns route)
-                                                       (35.3% logic, 64.7% route)
-
---------------------------------------------------------------------------------
-Slack (setup path):     10.283ns (requirement - (data path - clock path skew + uncertainty))
-  Source:               inst_top_camera_monitoring/crbc_i0/data_out_enable_i_5 (FF)
-  Destination:          inst_top_camera_monitoring/dq_oo_0 (FF)
-  Requirement:          20.000ns
-  Data Path Delay:      9.650ns (Levels of Logic = 3)
-  Clock Path Skew:      -0.067ns (0.203 - 0.270)
-  Source Clock:         inst_top_camera_monitoring/clk1 rising at 0.000ns
-  Destination Clock:    inst_top_camera_monitoring/clk1 rising at 20.000ns
-  Clock Uncertainty:    0.000ns
-
-  Maximum Data Path: inst_top_camera_monitoring/crbc_i0/data_out_enable_i_5 to inst_top_camera_monitoring/dq_oo_0
-    Location             Delay type         Delay(ns)  Physical Resource
-                                                       Logical Resource(s)
-    -------------------------------------------------  -------------------
-    SLICE_X1Y17.XQ       Tcko                  0.591   inst_top_camera_monitoring/data_out_enable<5>
-                                                       inst_top_camera_monitoring/crbc_i0/data_out_enable_i_5
-    SLICE_X15Y17.F3      net (fanout=3)        1.161   inst_top_camera_monitoring/data_out_enable<5>
-    SLICE_X15Y17.X       Tilo                  0.704   inst_top_camera_monitoring/crbc_i0/dq_o_cmp_eq00004
-                                                       inst_top_camera_monitoring/crbc_i0/dq_o_cmp_eq00004
-    SLICE_X35Y34.G1      net (fanout=1)        2.167   inst_top_camera_monitoring/crbc_i0/dq_o_cmp_eq00004
-    SLICE_X35Y34.Y       Tilo                  0.704   inst_top_camera_monitoring/dq_o<9>
-                                                       inst_top_camera_monitoring/crbc_i0/dq_o_cmp_eq000036
-    SLICE_X2Y37.G1       net (fanout=16)       1.705   inst_top_camera_monitoring/crbc_i0/dq_o_cmp_eq0000
-    SLICE_X2Y37.Y        Tilo                  0.759   inst_top_camera_monitoring/dq_o<10>
-                                                       inst_top_camera_monitoring/crbc_i0/dq_o<0>1
-    L1.O1                net (fanout=1)        1.175   inst_top_camera_monitoring/dq_o<0>
-    L1.OTCLK1            Tioock                0.684   Dq<0>
-                                                       inst_top_camera_monitoring/dq_oo_0
-    -------------------------------------------------  ---------------------------
-    Total                                      9.650ns (3.442ns logic, 6.208ns route)
-                                                       (35.7% logic, 64.3% route)
+    Total                                     15.213ns (5.529ns logic, 9.684ns route)
+                                                       (36.3% logic, 63.7% route)
 
 --------------------------------------------------------------------------------
 
-Hold Paths: TS_inst_top_camera_monitoring_clk11 = PERIOD TIMEGRP
-        "inst_top_camera_monitoring_clk11" TS_clk HIGH 50%;
+Hold Paths: TS_inst_top_camera_monitoring_clk1 = PERIOD TIMEGRP
+        "inst_top_camera_monitoring_clk1" TS_clk HIGH 50%;
 --------------------------------------------------------------------------------
 
-Paths for end point inst_top_camera_monitoring/crbc_i0/read_buffer_i0/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/s3_noinit.ram/dpram.dp18x18.ram.A (RAMB16_X0Y2.DIA5), 1 path
+Paths for end point inst_top_camera_monitoring/crbc_i0/read_buffer_i0/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/s3_noinit.ram/dpram.dp18x18.ram.A (RAMB16_X0Y3.DIA4), 1 path
 --------------------------------------------------------------------------------
-Slack (hold path):      0.851ns (requirement - (clock path skew + uncertainty - data path))
-  Source:               inst_top_camera_monitoring/dq_i_5 (FF)
+Slack (hold path):      1.012ns (requirement - (clock path skew + uncertainty - data path))
+  Source:               inst_top_camera_monitoring/dq_i_4 (FF)
   Destination:          inst_top_camera_monitoring/crbc_i0/read_buffer_i0/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/s3_noinit.ram/dpram.dp18x18.ram.A (RAM)
   Requirement:          0.000ns
-  Data Path Delay:      0.843ns (Levels of Logic = 0)
-  Clock Path Skew:      -0.008ns (0.134 - 0.142)
-  Source Clock:         inst_top_camera_monitoring/clk1 rising at 20.000ns
-  Destination Clock:    inst_top_camera_monitoring/clk1 rising at 20.000ns
+  Data Path Delay:      1.004ns (Levels of Logic = 0)
+  Clock Path Skew:      -0.008ns (0.137 - 0.145)
+  Source Clock:         inst_top_camera_monitoring/clk1_fb rising at 20.000ns
+  Destination Clock:    inst_top_camera_monitoring/clk1_fb rising at 20.000ns
   Clock Uncertainty:    0.000ns
 
-  Minimum Data Path: inst_top_camera_monitoring/dq_i_5 to inst_top_camera_monitoring/crbc_i0/read_buffer_i0/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/s3_noinit.ram/dpram.dp18x18.ram.A
+  Minimum Data Path: inst_top_camera_monitoring/dq_i_4 to inst_top_camera_monitoring/crbc_i0/read_buffer_i0/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/s3_noinit.ram/dpram.dp18x18.ram.A
     Location             Delay type         Delay(ns)  Physical Resource
                                                        Logical Resource(s)
     -------------------------------------------------  -------------------
-    P1.IQ1               Tiockiq               0.406   Dq<5>
-                                                       inst_top_camera_monitoring/dq_i_5
-    RAMB16_X0Y2.DIA5     net (fanout=1)        0.563   inst_top_camera_monitoring/dq_i<5>
-    RAMB16_X0Y2.CLKA     Tbckd       (-Th)     0.126   inst_top_camera_monitoring/crbc_i0/read_buffer_i0/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/s3_noinit.ram/dpram.dp18x18.ram
+    N5.IQ1               Tiockiq               0.406   Dq<4>
+                                                       inst_top_camera_monitoring/dq_i_4
+    RAMB16_X0Y3.DIA4     net (fanout=1)        0.724   inst_top_camera_monitoring/dq_i<4>
+    RAMB16_X0Y3.CLKA     Tbckd       (-Th)     0.126   inst_top_camera_monitoring/crbc_i0/read_buffer_i0/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/s3_noinit.ram/dpram.dp18x18.ram
                                                        inst_top_camera_monitoring/crbc_i0/read_buffer_i0/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/s3_noinit.ram/dpram.dp18x18.ram.A
     -------------------------------------------------  ---------------------------
-    Total                                      0.843ns (0.280ns logic, 0.563ns route)
-                                                       (33.2% logic, 66.8% route)
+    Total                                      1.004ns (0.280ns logic, 0.724ns route)
+                                                       (27.9% logic, 72.1% route)
 
 --------------------------------------------------------------------------------
 
@@ -407,15 +712,15 @@ Slack (hold path):      1.013ns (requirement - (clock path skew + uncertainty - 
   Requirement:          0.000ns
   Data Path Delay:      1.015ns (Levels of Logic = 0)
   Clock Path Skew:      0.002ns (0.136 - 0.134)
-  Source Clock:         inst_top_camera_monitoring/clk1 rising at 20.000ns
-  Destination Clock:    inst_top_camera_monitoring/clk1 rising at 20.000ns
+  Source Clock:         inst_top_camera_monitoring/clk1_fb rising at 20.000ns
+  Destination Clock:    inst_top_camera_monitoring/clk1_fb rising at 20.000ns
   Clock Uncertainty:    0.000ns
 
   Minimum Data Path: inst_top_camera_monitoring/crbc_i0/a_19 to inst_top_camera_monitoring/Addr_19
     Location             Delay type         Delay(ns)  Physical Resource
                                                        Logical Resource(s)
     -------------------------------------------------  -------------------
-    SLICE_X1Y115.XQ      Tcko                  0.473   inst_top_camera_monitoring/addr_o<19>
+    SLICE_X1Y114.XQ      Tcko                  0.473   inst_top_camera_monitoring/addr_o<19>
                                                        inst_top_camera_monitoring/crbc_i0/a_19
     D2.O1                net (fanout=1)        0.259   inst_top_camera_monitoring/addr_o<19>
     D2.OTCLK1            Tiocko      (-Th)    -0.283   Addr<19>
@@ -426,35 +731,35 @@ Slack (hold path):      1.013ns (requirement - (clock path skew + uncertainty - 
 
 --------------------------------------------------------------------------------
 
-Paths for end point inst_top_camera_monitoring/ov7670_vs_next_1 (SLICE_X31Y42.BX), 1 path
+Paths for end point inst_top_camera_monitoring/crbc_i0/read_buffer_i0/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/s3_noinit.ram/dpram.dp18x18.ram.A (RAMB16_X0Y3.DIA10), 1 path
 --------------------------------------------------------------------------------
-Slack (hold path):      1.024ns (requirement - (clock path skew + uncertainty - data path))
-  Source:               inst_top_camera_monitoring/ov7670_vs_next_0 (FF)
-  Destination:          inst_top_camera_monitoring/ov7670_vs_next_1 (FF)
+Slack (hold path):      1.055ns (requirement - (clock path skew + uncertainty - data path))
+  Source:               inst_top_camera_monitoring/dq_i_10 (FF)
+  Destination:          inst_top_camera_monitoring/crbc_i0/read_buffer_i0/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/s3_noinit.ram/dpram.dp18x18.ram.A (RAM)
   Requirement:          0.000ns
-  Data Path Delay:      1.024ns (Levels of Logic = 0)
+  Data Path Delay:      1.055ns (Levels of Logic = 0)
   Clock Path Skew:      0.000ns
-  Source Clock:         inst_top_camera_monitoring/clk1 rising at 20.000ns
-  Destination Clock:    inst_top_camera_monitoring/clk1 rising at 20.000ns
+  Source Clock:         inst_top_camera_monitoring/clk1_fb rising at 20.000ns
+  Destination Clock:    inst_top_camera_monitoring/clk1_fb rising at 20.000ns
   Clock Uncertainty:    0.000ns
 
-  Minimum Data Path: inst_top_camera_monitoring/ov7670_vs_next_0 to inst_top_camera_monitoring/ov7670_vs_next_1
+  Minimum Data Path: inst_top_camera_monitoring/dq_i_10 to inst_top_camera_monitoring/crbc_i0/read_buffer_i0/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/s3_noinit.ram/dpram.dp18x18.ram.A
     Location             Delay type         Delay(ns)  Physical Resource
                                                        Logical Resource(s)
     -------------------------------------------------  -------------------
-    SLICE_X31Y42.YQ      Tcko                  0.470   inst_top_camera_monitoring/ov7670_vs_next<1>
-                                                       inst_top_camera_monitoring/ov7670_vs_next_0
-    SLICE_X31Y42.BX      net (fanout=3)        0.461   inst_top_camera_monitoring/ov7670_vs_next<0>
-    SLICE_X31Y42.CLK     Tckdi       (-Th)    -0.093   inst_top_camera_monitoring/ov7670_vs_next<1>
-                                                       inst_top_camera_monitoring/ov7670_vs_next_1
+    M3.IQ1               Tiockiq               0.406   Dq<10>
+                                                       inst_top_camera_monitoring/dq_i_10
+    RAMB16_X0Y3.DIA10    net (fanout=1)        0.775   inst_top_camera_monitoring/dq_i<10>
+    RAMB16_X0Y3.CLKA     Tbckd       (-Th)     0.126   inst_top_camera_monitoring/crbc_i0/read_buffer_i0/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/s3_noinit.ram/dpram.dp18x18.ram
+                                                       inst_top_camera_monitoring/crbc_i0/read_buffer_i0/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/s3_noinit.ram/dpram.dp18x18.ram.A
     -------------------------------------------------  ---------------------------
-    Total                                      1.024ns (0.563ns logic, 0.461ns route)
-                                                       (55.0% logic, 45.0% route)
+    Total                                      1.055ns (0.280ns logic, 0.775ns route)
+                                                       (26.5% logic, 73.5% route)
 
 --------------------------------------------------------------------------------
 
-Component Switching Limit Checks: TS_inst_top_camera_monitoring_clk11 = PERIOD TIMEGRP
-        "inst_top_camera_monitoring_clk11" TS_clk HIGH 50%;
+Component Switching Limit Checks: TS_inst_top_camera_monitoring_clk1 = PERIOD TIMEGRP
+        "inst_top_camera_monitoring_clk1" TS_clk HIGH 50%;
 --------------------------------------------------------------------------------
 Slack: 16.808ns (period - (min low pulse limit / (low pulse / period)))
   Period: 20.000ns
@@ -492,9 +797,9 @@ Derived Constraints for TS_clk
 |           Constraint          | Requirement |-------------+-------------|-------------+-------------|-------------+-------------|
 |                               |             |   Direct    | Derivative  |   Direct    | Derivative  |   Direct    | Derivative  |
 +-------------------------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+
-|TS_clk                         |     20.000ns|      6.000ns|     18.850ns|            0|            0|            0|        45558|
-| TS_inst_top_camera_monitoring_|     20.000ns|     18.850ns|          N/A|            0|            0|        45558|            0|
-| clk11                         |             |             |             |             |             |             |             |
+|TS_clk                         |     20.000ns|      6.000ns|     15.469ns|            0|            0|            0|        45557|
+| TS_inst_top_camera_monitoring_|     20.000ns|     15.469ns|          N/A|            0|            0|        45557|            0|
+| clk1                          |             |             |             |             |             |             |             |
 +-------------------------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+
 
 All constraints were met.
@@ -509,7 +814,7 @@ Clock to Setup on destination clock i_clock
                | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
 Source Clock   |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
 ---------------+---------+---------+---------+---------+
-i_clock        |   13.862|    9.425|    5.018|         |
+i_clock        |   15.469|         |         |         |
 ---------------+---------+---------+---------+---------+
 
 
@@ -518,23 +823,23 @@ Timing summary:
 
 Timing errors: 0  Score: 0  (Setup/Max: 0, Hold: 0)
 
-Constraints cover 45558 paths, 0 nets, and 3101 connections
+Constraints cover 45611 paths, 0 nets, and 3118 connections
 
 Design statistics:
-   Minimum period:  18.850ns{1}   (Maximum frequency:  53.050MHz)
+   Minimum period:  15.469ns{1}   (Maximum frequency:  64.645MHz)
 
 
 ------------------------------------Footnotes-----------------------------------
 1)  The minimum period statistic assumes all single cycle delays.
 
-Analysis completed Sun May  3 14:52:35 2026 
+Analysis completed Sun May  3 16:38:53 2026 
 --------------------------------------------------------------------------------
 
 Trace Settings:
 -------------------------
 Trace Settings 
 
-Peak Memory Usage: 371 MB
+Peak Memory Usage: 373 MB
 
 
 

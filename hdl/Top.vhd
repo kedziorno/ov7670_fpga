@@ -309,9 +309,9 @@ signal oe_n_i, we_n_i, adv_n_i, ce_n_i, cre_i, clk_i : std_logic;
 
 begin
 
---synchronise_owait : process (clk1) is
+--synchronise_owait : process (clk1_fb) is
 --begin
---  if (rising_edge (clk1)) then
+--  if (rising_edge (clk1_fb)) then
 --    if (pb = '1') then
 --      owait1 <= '0';
 --    else
@@ -321,9 +321,9 @@ begin
 --end process synchronise_owait;
 owait1 <= owait;
 
-synchronise_mem_addr_dq : process (clk1) is
+synchronise_mem_addr_dq : process (clk1_fb) is
 begin
-  if (rising_edge (clk1)) then
+  if (rising_edge (clk1_fb)) then
     if (pb = '1') then
       dq_oo <= (others => '0');
       dq_i <= (others => '0');
@@ -362,9 +362,9 @@ id <= id_w when p0_w = '1' else id_r when p0_r = '1' else (others => '0');
 data <= data_w when p0_w = '1' else data_r when p0_r = '1' else (others => '0');
 wrc <= wrc_w when p0_w = '1' else wrc_r when p0_r = '1' else '0';
 
-p0_control_crbc_write : process (clk1) is
+p0_control_crbc_write : process (clk1_fb) is
 begin
-  if (rising_edge (clk1)) then
+  if (rising_edge (clk1_fb)) then
     if (pb = '1') then
       wrc_w <= '0';
       ov7670_hs_prev <= '0';
@@ -468,11 +468,11 @@ begin
   end if;
 end process p0_control_crbc_write;
 
-p1_control_crbc_read : process (clk1) is
+p1_control_crbc_read : process (clk1_fb) is
   variable flag : boolean := false;
   variable w8 : integer range 0 to 1023 := 0;
 begin
-  if (rising_edge (clk1)) then
+  if (rising_edge (clk1_fb)) then
     if (pb = '1') then
       wrc_r <= '0';
       vga_hsync_i_prev <= '0';
@@ -587,7 +587,7 @@ end process p1_control_crbc_read;
 crbc_i0 : cellular_ram_burst_controller
 PORT MAP (
   busy => busy,
-  clk => clk1,
+  clk => clk1_fb,
   reset => pb,
   --reset => reset_dcm,
   writes => wrc,
@@ -661,7 +661,7 @@ ov7670_reset1 <= not pb;
 
 inst_ov7670contr1: ov7670_controller
 port map (
-  clk => clk1,
+  clk => clk1_fb,
   reset1 => pb,
   resend => sw(1),
   sw => sw (0),
@@ -785,10 +785,10 @@ begin
 end process p0_assert_1;
 --synthesis translate_on
 
-p2_vga_clk : process (clk1) is
+p2_vga_clk : process (clk1_fb) is
   variable vga : integer range 0 to 1;
 begin
-  if (rising_edge (clk1)) then
+  if (rising_edge (clk1_fb)) then
     if (pb = '1') then
       clk_vga <= '0';
       vga := 0;
@@ -804,10 +804,10 @@ begin
   end if;
 end process p2_vga_clk;
 
-p3_read_buffer_clk : process (clk1) is
+p3_read_buffer_clk : process (clk1_fb) is
   variable vga_read : integer range 0 to 3;
 begin
-  if (rising_edge (clk1)) then
+  if (rising_edge (clk1_fb)) then
     if (pb = '1') then
       read_buffer_clk <= '0';
       vga_read := 0;
