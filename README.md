@@ -1,7 +1,6 @@
 Update:
-Used memory controller for store data in mt45w8mw16bgx cellular RAM in burst mode (camera -> write buffer -> memory module -> read buffer -> VGA).
-Output in two modes, colorbar and example frame.
-![colorbar_output.bmp](colorbar_output.bmp)
+Used memory controller for store data in mt45w8mw16bgx cellular RAM in burst mode (camera -> fpga write buffer -> mt45 -> fpga read buffer -> VGA). Demo on Nexys 2 (xc3s1200e) with RGB444 and 8-bit VGA output : https://www.youtube.com/watch?v=b_n_j4rr9jE
+![simulation colorbar output](colorbar_output.bmp)
 
 Update new branch:
 Run virtual camera emulator IP Core with memory model simulation (mt45w8mw16bgx) at 100MHz board clock (77b9cdecf574f77139afe932f1ad567cf34251fa).

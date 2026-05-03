@@ -132,7 +132,8 @@ Architecture behavioral of Entity debounce_circuit is up to date.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/ov7670_controller.vhd" in Library work.
 Architecture behavioral of Entity ov7670_controller is up to date.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/ov7670_capture.vhd" in Library work.
-Architecture behavioral of Entity ov7670_capture is up to date.
+Entity <ov7670_capture> compiled.
+Entity <ov7670_capture> (Architecture <behavioral>) compiled.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/address_generator.vhd" in Library work.
 Architecture behavioral of Entity address_generator is up to date.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/vga_imagegenerator.vhd" in Library work.
@@ -1043,12 +1044,25 @@ FlipFlop inst_top_camera_monitoring/inst_ov7670contr1/Registers/sequence_4 has b
 
 Final Macro Processing ...
 
+Processing Unit <inst_ov7670capt1> :
+	Found 2-bit shift register for signal <d_latch_0>.
+	Found 2-bit shift register for signal <d_latch_1>.
+	Found 2-bit shift register for signal <d_latch_2>.
+	Found 2-bit shift register for signal <d_latch_3>.
+	Found 2-bit shift register for signal <d_latch_4>.
+	Found 2-bit shift register for signal <d_latch_5>.
+	Found 2-bit shift register for signal <d_latch_6>.
+	Found 2-bit shift register for signal <d_latch_7>.
+Unit <inst_ov7670capt1> processed.
+
 =========================================================================
 Final Register Report
 
 Macro Statistics
-# Registers                                            : 540
- Flip-Flops                                            : 540
+# Registers                                            : 524
+ Flip-Flops                                            : 524
+# Shift Registers                                      : 8
+ 2-bit shift register                                  : 8
 
 =========================================================================
 
@@ -1081,13 +1095,13 @@ Cell Usage :
 #      GND                         : 9
 #      INV                         : 60
 #      LUT1                        : 117
-#      LUT2                        : 206
+#      LUT2                        : 207
 #      LUT2_D                      : 1
 #      LUT2_L                      : 3
-#      LUT3                        : 124
+#      LUT3                        : 122
 #      LUT3_D                      : 2
 #      LUT3_L                      : 3
-#      LUT4                        : 376
+#      LUT4                        : 377
 #      LUT4_D                      : 11
 #      LUT4_L                      : 8
 #      MUXCY                       : 190
@@ -1095,12 +1109,10 @@ Cell Usage :
 #      MUXF6                       : 15
 #      VCC                         : 9
 #      XORCY                       : 197
-# FlipFlops/Latches                : 540
+# FlipFlops/Latches                : 532
 #      FD                          : 23
 #      FDE                         : 149
-#      FDE_1                       : 8
-#      FDR                         : 121
-#      FDR_1                       : 2
+#      FDR                         : 123
 #      FDRE                        : 162
 #      FDRS                        : 64
 #      FDRSE                       : 3
@@ -1108,7 +1120,8 @@ Cell Usage :
 # RAMS                             : 3
 #      RAMB16_S18_S18              : 1
 #      RAMB16_S9_S9                : 2
-# Shift Registers                  : 1
+# Shift Registers                  : 9
+#      SRL16E                      : 8
 #      SRLC16E                     : 1
 # Clock Buffers                    : 4
 #      BUFG                        : 3
@@ -1127,11 +1140,11 @@ Device utilization summary:
 
 Selected Device : 3s1200efg320-4 
 
- Number of Slices:                      528  out of   8672     6%  
- Number of Slice Flip Flops:            540  out of  17344     3%  
- Number of 4 input LUTs:                912  out of  17344     5%  
+ Number of Slices:                      523  out of   8672     6%  
+ Number of Slice Flip Flops:            532  out of  17344     3%  
+ Number of 4 input LUTs:                920  out of  17344     5%  
     Number used as logic:               911
-    Number used as Shift registers:       1
+    Number used as Shift registers:       9
  Number of IOs:                          94
  Number of bonded IOBs:                  86  out of    250    34%  
  Number of BRAMs:                         3  out of     28    10%  
@@ -1217,25 +1230,28 @@ Delay:               11.595ns (Levels of Logic = 9)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'ov7670_pclk1'
-  Clock period: 8.538ns (frequency: 117.123MHz)
+  Clock period: 8.442ns (frequency: 118.455MHz)
   Total number of paths / destination ports: 278 / 89
 -------------------------------------------------------------------------
-Delay:               4.269ns (Levels of Logic = 1)
+Delay:               4.221ns (Levels of Logic = 3)
   Source:            inst_top_camera_monitoring/inst_ov7670capt1/latched_href (FF)
-  Destination:       inst_top_camera_monitoring/inst_ov7670capt1/address_0 (FF)
-  Source Clock:      ov7670_pclk1 falling
-  Destination Clock: ov7670_pclk1 rising
+  Destination:       inst_top_camera_monitoring/crbc_i0/write_buffer_i0/Mram_RAM1 (RAM)
+  Source Clock:      ov7670_pclk1 rising
+  Destination Clock: ov7670_pclk1 falling
 
-  Data Path: inst_top_camera_monitoring/inst_ov7670capt1/latched_href to inst_top_camera_monitoring/inst_ov7670capt1/address_0
+  Data Path: inst_top_camera_monitoring/inst_ov7670capt1/latched_href to inst_top_camera_monitoring/crbc_i0/write_buffer_i0/Mram_RAM1
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDR_1:C->Q           17   0.591   1.130  latched_href (latched_href)
-     LUT4:I1->O           11   0.704   0.933  address_or000050 (address_or0000)
-     FDRE:R                    0.911          address_0
+     FDR:C->Q             17   0.591   1.226  latched_href (latched_href)
+     end scope: 'inst_ov7670capt1'
+     begin scope: 'crbc_i0'
+     begin scope: 'write_buffer_i0'
+     LUT2:I0->O            2   0.704   0.447  weA1 (weA_0)
+     RAMB16_S9_S9:WEA          1.253          Mram_RAM1
     ----------------------------------------
-    Total                      4.269ns (2.206ns logic, 2.063ns route)
-                                       (51.7% logic, 48.3% route)
+    Total                      4.221ns (2.548ns logic, 1.673ns route)
+                                       (60.4% logic, 39.6% route)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'inst_top_camera_monitoring/read_buffer_clk'
@@ -1314,7 +1330,7 @@ Offset:              6.909ns (Levels of Logic = 6)
 Timing constraint: Default OFFSET IN BEFORE for Clock 'ov7670_pclk1'
   Total number of paths / destination ports: 47 / 47
 -------------------------------------------------------------------------
-Offset:              5.115ns (Levels of Logic = 3)
+Offset:              6.318ns (Levels of Logic = 4)
   Source:            pb (PAD)
   Destination:       inst_top_camera_monitoring/inst_ov7670capt1/address_0 (FF)
   Destination Clock: ov7670_pclk1 rising
@@ -1323,14 +1339,15 @@ Offset:              5.115ns (Levels of Logic = 3)
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     IBUF:I->O           294   1.218   1.349  pb_IBUF (pb_IBUF)
+     IBUF:I->O           294   1.218   1.424  pb_IBUF (pb_IBUF)
      begin scope: 'inst_top_camera_monitoring'
      begin scope: 'inst_ov7670capt1'
-     LUT4:I3->O           11   0.704   0.933  address_or000050 (address_or0000)
+     LUT2:I1->O            1   0.704   0.424  address_or00000 (address_or00000)
+     LUT4:I3->O           11   0.704   0.933  address_or000044 (address_or0000)
      FDRE:R                    0.911          address_0
     ----------------------------------------
-    Total                      5.115ns (2.833ns logic, 2.282ns route)
-                                       (55.4% logic, 44.6% route)
+    Total                      6.318ns (3.537ns logic, 2.781ns route)
+                                       (56.0% logic, 44.0% route)
 
 =========================================================================
 Timing constraint: Default OFFSET IN BEFORE for Clock 'inst_top_camera_monitoring/read_buffer_clk'
@@ -1412,16 +1429,16 @@ Timing constraint: Default OFFSET OUT AFTER for Clock 'inst_top_camera_monitorin
   Total number of paths / destination ports: 75 / 12
 -------------------------------------------------------------------------
 Offset:              9.111ns (Levels of Logic = 6)
-  Source:            inst_top_camera_monitoring/inst_vgatiming/hcnt_9 (FF)
+  Source:            inst_top_camera_monitoring/inst_vgatiming/vcnt_6 (FF)
   Destination:       vga_b<1> (PAD)
   Source Clock:      inst_top_camera_monitoring/vga_clock rising
 
-  Data Path: inst_top_camera_monitoring/inst_vgatiming/hcnt_9 to vga_b<1>
+  Data Path: inst_top_camera_monitoring/inst_vgatiming/vcnt_6 to vga_b<1>
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDR:C->Q              6   0.591   0.844  hcnt_9 (hcnt_9)
-     LUT3:I0->O            1   0.704   0.595  activeArea1_sig_and00008 (activeArea1_sig_and00008)
+     FDRE:C->Q             6   0.591   0.844  vcnt_6 (vcnt_6)
+     LUT4:I0->O            1   0.704   0.595  activeArea1_sig_and000021 (activeArea1_sig_and000021)
      LUT3:I0->O           20   0.704   1.277  activeArea1_sig_and000032 (activeArea1)
      end scope: 'inst_vgatiming'
      begin scope: 'inst_imagegen'
@@ -1482,13 +1499,13 @@ Delay:               7.800ns (Levels of Logic = 4)
 =========================================================================
 
 
-Total REAL time to Xst completion: 8.00 secs
-Total CPU time to Xst completion: 7.49 secs
+Total REAL time to Xst completion: 7.00 secs
+Total CPU time to Xst completion: 7.43 secs
  
 --> 
 
 
-Total memory usage is 557476 kilobytes
+Total memory usage is 557500 kilobytes
 
 Number of errors   :    0 (   0 filtered)
 Number of warnings :  187 (   0 filtered)
