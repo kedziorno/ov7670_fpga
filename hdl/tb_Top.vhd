@@ -82,7 +82,7 @@ ARCHITECTURE behavior OF tb_top IS
 
 component camera_colorbar is
 generic (
-constant c_source : t_source := t_frames
+constant c_source : t_source := t_colorbar
 );
 port (
 camera_io_scl : inout std_logic;
@@ -359,7 +359,9 @@ signal Dq : std_logic_vector(15 downto 0);
 signal oWait : std_logic := '0';
 
 signal test_isimgui_32bit : real;
-signal vga_blank_n : std_logic;
+signal vga_blank_n : std_logic := '1';
+
+signal tb_reset : std_logic := '1';
 
 BEGIN
 --synthesis translate_off
@@ -436,7 +438,7 @@ camera_o_hs => ov7670_href_mux_1,
 camera_o_pclk => ov7670_pclk1,
 camera_i_xclk => ov7670_xclk1,
 camera_o_d => ov7670_data_mux_1,
-camera_i_rst => ov7670_reset1,
+camera_i_rst => ov7670_reset1 xnor tb_reset,
 camera_i_pwdn => '0'
 );
 
@@ -627,13 +629,17 @@ camera_i_rst4 <= '0';
 --sw <= "00000000"; -- x00 frames
 --sw <= "00000001"; -- x01 colorbar
 pb <= '1';
-wait for 300 ns; -- min to reset
+wait for clk50_period*15; -- min to reset
 --i_reset <= '0';
 camera_i_rst1 <= '1';
 camera_i_rst2 <= '1';
 camera_i_rst3 <= '1';
 camera_i_rst4 <= '1';
 pb <= '0';
+wait for 300 ns;
+tb_reset <= '0';
+wait for clk50_period*15;
+tb_reset <= '1';
 wait for clk50_period*10;
 wait for 35 ms;
 sw (1) <= '1';
