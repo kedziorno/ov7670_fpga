@@ -309,17 +309,17 @@ signal oe_n_i, we_n_i, adv_n_i, ce_n_i, cre_i, clk_i : std_logic;
 
 begin
 
-synchronise_owait : process (clk1) is
-begin
-  if (falling_edge (clk1)) then
-    if (pb = '1') then
-      owait1 <= '0';
-    else
-      owait1 <= owait;
-    end if;
-  end if;
-end process synchronise_owait;
---owait1 <= owait;
+--synchronise_owait : process (clk1) is
+--begin
+--  if (rising_edge (clk1)) then
+--    if (pb = '1') then
+--      owait1 <= '0';
+--    else
+--      owait1 <= owait;
+--    end if;
+--  end if;
+--end process synchronise_owait;
+owait1 <= owait;
 
 synchronise_mem_addr_dq : process (clk1) is
 begin
@@ -840,7 +840,7 @@ port map (
 DCM_SP_cam : DCM_SP
 generic map (
   CLKDV_DIVIDE => 4.0,
-  CLKFX_MULTIPLY => 12, CLKFX_DIVIDE => 25,
+  CLKFX_MULTIPLY => 6, CLKFX_DIVIDE => 25,
   CLKIN_PERIOD => 20.0
 )
 port map (

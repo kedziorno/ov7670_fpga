@@ -11,10 +11,10 @@ x"1280", -- COM7   Reset -- Do it twice to make sure its wiped
 x"1280", -- COM7   Reset -- choose output format. 
 x"fffe",
 x"1204", -- scaling
-x"11"&"00000001",
-x"6b"&"10000000",
+x"11"&"10000000",
+x"6b"&"00000000",
 x"1b01",
-x"8c03",
+x"8c02",
 x"0c00", -- scaling
 x"3e00", -- scaling
 x"0400",
