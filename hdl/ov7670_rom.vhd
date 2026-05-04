@@ -13,7 +13,7 @@ x"fffe",
 x"12"&"00000101", -- COM7 2 - RGB
 x"11"&"10000001", -- CLKRC 7 - reserved
 x"6b"&"01000000", -- DBLV
-x"8c"&"00000000", -- RGB444 xRGB
+x"8c"&"00000010", -- RGB444 xRGB
 x"0c"&"00000000", -- COM3
 x"3e"&"00010001", -- COM14 4 - DCW and scaling PCLK, 20 - Divided by 2
 x"04"&"00000000", -- COM1
