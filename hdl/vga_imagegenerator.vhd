@@ -33,10 +33,10 @@ begin
 --end if;
 --end if;
 --end process;
-RGB_out <= Data_in1(11 downto 9) & Data_in1(7 downto 5) & Data_in1(3 downto 2) when active_area1 = '1' else (others => '0'); -- rgb444
+--RGB_out <= Data_in1(11 downto 9) & Data_in1(7 downto 5) & Data_in1(3 downto 2) when active_area1 = '1' else (others => '0'); -- rgb444
 --RGB_out <= Data_in1(15 downto 13) & Data_in1(11 downto 9) & Data_in1(7 downto 6) when active_area1 = '1' else (others => '0'); -- rgb444
 --RGB_out <= Data_in1(15 downto 13) & Data_in1(10 downto 8) & Data_in1(4 downto 3) when active_area1 = '1' else (others => '0'); -- rgb565
---RGB_out <= Data_in1(14 downto 12) & Data_in1(9 downto 7) & Data_in1(4 downto 3) when active_area1 = '1' else (others => '0'); -- rgb555
+RGB_out <= Data_in1(14 downto 12) & Data_in1(9 downto 7) & Data_in1(4 downto 3) when active_area1 = '1' else (others => '0'); -- rgb555
 --else (others => '0');
 --RGB_out <= Data_in1(7 downto 0) when active_area1 = '1' else (others => '0');
 end Behavioral;

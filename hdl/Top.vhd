@@ -877,7 +877,7 @@ port map (
 
 DCM_SP_cam : DCM_SP
 generic map (
-  CLKFX_MULTIPLY => 6, CLKFX_DIVIDE => 25,
+  CLKFX_MULTIPLY => 3, CLKFX_DIVIDE => 25,
   CLKIN_PERIOD => 10.0,
   STARTUP_WAIT => true
 )
