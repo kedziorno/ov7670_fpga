@@ -45,7 +45,7 @@ x"6900", -- GFIX
 x"7400", -- REG74
 x"703a", -- SCALING_XSC 60 - horizontal scale factor
 x"7135", -- SCALING_YSC 60 - vertical scale factor
-x"72"&"00010001", -- SCALING_DCWCTR 54 - v down sample 4, 10 - h down sample 4
+x"72"&"00100010", -- SCALING_DCWCTR 54 - v down sample 4, 10 - h down sample 4
 x"73"&"11110000", -- SCALING_PCLK_DIV 74 - reserved, 20 - clk dv dsp by 4
 x"a2"&"00000010", -- SCALING_PCLK_DELAY 60 - scaling output delay
 x"b0"&"10000100", -- RSVD
