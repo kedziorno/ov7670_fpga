@@ -15,10 +15,10 @@ x"11"&"10000000", -- CLKRC 7 - reserved
 x"6b"&"00000000", -- DBLV
 x"8c"&"00000010", -- RGB444 xRGB
 x"0c"&"00000000", -- COM3
-x"3e"&"00000000", -- COM14
+x"3e"&"00010001", -- COM14 4 - DCW and scaling PCLK, 20 - Divided by 2
 x"04"&"00000000", -- COM1
 x"40"&"11111000", -- COM15 76 - FF, 54 - RGB555
-x"13"&"0001ffff", -- COM8 43 - reserved, 2 - AGC, 1 - AWB, 0 - AEC
+x"13"&"00011111", -- COM8 43 - reserved, 2 - AGC, 1 - AWB, 0 - AEC
 x"41"&"00001000", -- COM16 3 - AWB gain
 x"3a"&"00000100", -- TSLB 2 - reserved
 x"14"&"00011000", -- COM9 4 - AGC 4x, 3 - reserved
@@ -31,12 +31,12 @@ x"54e4", -- MTX6
 x"1500", -- COM10
 x"58"&"10011110", -- MTXS 7 - autocontrast center enable
 x"3d"&"11000000", -- COM13 7 - gamma enable, 6 - UV sat lvl
-x"1714", -- HSTART
-x"1802", -- HSTOP
+x"1711", -- HSTART
+x"1861", -- HSTOP
 x"3280", -- HREF
 x"1903", -- VSTRT
 x"1a7b", -- VSTOP
-x"030a", -- VREF
+x"0300", -- VREF
 x"0f"&"01000001", -- COM6 6 - reserved, 1 - reserved
 x"1e00", -- MVFP
 x"33"&"00001011", -- CHLF 70 - reserved
