@@ -2,7 +2,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 
 package p_ov7670_rom is
-  constant NC : integer := 55-10+1;
+  constant NC : integer := 56-10+1;
   type cmd_rom is array (0 to NC-1) of STD_LOGIC_VECTOR (15 downto 0);
 
   constant ov7670_rom : cmd_rom :=
@@ -10,17 +10,17 @@ package p_ov7670_rom is
 x"1280", -- COM7   Reset -- Do it twice to make sure its wiped
 x"1280", -- COM7   Reset -- choose output format. 
 x"fffe",
-x"12"&"00000101", -- COM7 2 - RGB
+x"12"&"00000100", -- COM7 2 - RGB
 x"11"&"10000001", -- CLKRC 7 - reserved
 x"6b"&"01000000", -- DBLV
 x"8c"&"00000010", -- RGB444 xRGB
 x"0c"&"00000000", -- COM3
 x"3e"&"00010001", -- COM14 4 - DCW and scaling PCLK, 20 - Divided by 2
 x"04"&"00000000", -- COM1
-x"40"&"11111000", -- COM15 76 - FF, 54 - RGB555
+x"40"&"10011000", -- COM15 76 - FF, 54 - RGB555
 x"13"&"00011111", -- COM8 43 - reserved, 2 - AGC, 1 - AWB, 0 - AEC
 x"41"&"00001000", -- COM16 3 - AWB gain
-x"3a"&"00000100", -- TSLB 2 - reserved
+x"3a"&"00000001", -- TSLB 2 - reserved
 x"14"&"00011000", -- COM9 4 - AGC 4x, 3 - reserved
 x"4fb3", -- MTX1
 x"50b3", -- MTX2
@@ -28,15 +28,16 @@ x"5100", -- MTX3
 x"523d", -- MTX4
 x"53a7", -- MTX5
 x"54e4", -- MTX6
-x"1500", -- COM10
 x"58"&"10011110", -- MTXS 7 - autocontrast center enable
+x"1500", -- COM10
 x"3d"&"11000000", -- COM13 7 - gamma enable, 6 - UV sat lvl
 x"1711", -- HSTART
 x"1861", -- HSTOP
 x"3280", -- HREF
 x"1903", -- VSTRT
 x"1a7b", -- VSTOP
-x"0300", -- VREF
+x"00"&"01100000", -- GAIN
+x"03"&"00000000", -- VREF
 x"0f"&"01000001", -- COM6 6 - reserved, 1 - reserved
 x"1e00", -- MVFP
 x"33"&"00001011", -- CHLF 70 - reserved

@@ -143,6 +143,8 @@ capture_process: process(pclk)
           end if;
          end if;
             d_latch <= d_latch(7 downto 0) & latched_d;
+--            d_latch <= latched_d & d_latch(7 downto 0);
+--            d_latch <= x"00" & latched_d;
          we_reg  <= '0';
          if (latched_vsync = '1') then
            address      <= (others => '0');
