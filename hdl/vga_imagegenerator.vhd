@@ -38,8 +38,8 @@ begin
 --RGB_out <= Data_in1(10 downto 8) & "000" & "00" when active_area1 = '1' else (others => '0'); -- rgb444
 --RGB_out <= "000" & Data_in1(6 downto 4) & "00" when active_area1 = '1' else (others => '0'); -- rgb444
 --RGB_out <= "000" & "000" & Data_in1(1 downto 0) when active_area1 = '1' else (others => '0'); -- rgb444
---RGB_out <= Data_in1(11 downto 9) & Data_in1(7 downto 5) & Data_in1(3 downto 2) when active_area1 = '1' else (others => '0'); -- rgb444 - less dark blue
-RGB_out <= Data_in1(11 downto 9) & Data_in1(7 downto 5) & Data_in1(2 downto 1) when active_area1 = '1' else (others => '0'); -- rgb444 - better dark blue but white with yellow
+RGB_out <= Data_in1(11 downto 9) & Data_in1(7 downto 5) & Data_in1(3 downto 2) when active_area1 = '1' else (others => '0'); -- rgb444 - less dark blue
+--RGB_out <= Data_in1(11 downto 9) & Data_in1(7 downto 5) & Data_in1(2 downto 1) when active_area1 = '1' else (others => '0'); -- rgb444 - better dark blue but white with yellow
 
 --RGB_out <= Data_in1(15 downto 13) & Data_in1(11 downto 9) & Data_in1(7 downto 6) when active_area1 = '1' else (others => '0'); -- rgb444
 --RGB_out <= Data_in1(15 downto 13) & Data_in1(10 downto 8) & Data_in1(4 downto 3) when active_area1 = '1' else (others => '0'); -- rgb565

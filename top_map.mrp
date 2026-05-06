@@ -3,29 +3,29 @@ Xilinx Mapping Report File for Design 'top'
 
 Design Information
 ------------------
-Command Line   : map -intstyle ise -p xc3s1200e-fg320-4 -cm area -ir off -pr off
--c 100 -o top_map.ncd top.ngd top.pcf 
+Command Line   : map -intstyle ise -p xc3s1200e-fg320-4 -timing -logic_opt off -ol high -xe n -t 1 -register_duplication
+on -cm balanced -ir off -pr b -power off -o top_map.ncd top.ngd top.pcf 
 Target Device  : xc3s1200e
 Target Package : fg320
 Target Speed   : -4
 Mapper Version : spartan3e -- $Revision: 1.55 $
-Mapped Date    : Tue May  5 15:06:47 2026
+Mapped Date    : Wed May  6 11:36:53 2026
 
 Design Summary
 --------------
 Number of errors:      0
-Number of warnings:  469
+Number of warnings:  559
 Logic Utilization:
-  Number of Slice Flip Flops:           464 out of  17,344    2%
-  Number of 4 input LUTs:               771 out of  17,344    4%
+  Number of Slice Flip Flops:           524 out of  17,344    3%
+  Number of 4 input LUTs:               786 out of  17,344    4%
 Logic Distribution:
-  Number of occupied Slices:            517 out of   8,672    5%
-    Number of Slices containing only related logic:     517 out of     517 100%
-    Number of Slices containing unrelated logic:          0 out of     517   0%
+  Number of occupied Slices:            720 out of   8,672    8%
+    Number of Slices containing only related logic:     720 out of     720 100%
+    Number of Slices containing unrelated logic:          0 out of     720   0%
       *See NOTES below for an explanation of the effects of unrelated logic.
-  Total Number of 4 input LUTs:         889 out of  17,344    5%
-    Number used as logic:               770
-    Number used as a route-thru:        118
+  Total Number of 4 input LUTs:         906 out of  17,344    5%
+    Number used as logic:               785
+    Number used as a route-thru:        120
     Number used as Shift registers:       1
 
   The Slice Logic Distribution report is not meaningful if the design is
@@ -37,29 +37,11 @@ Logic Distribution:
   Number of BUFGMUXs:                     5 out of      24   20%
   Number of DCMs:                         2 out of       8   25%
 
-Average Fanout of Non-Clock Nets:                3.24
+Average Fanout of Non-Clock Nets:                3.25
 
-Peak Memory Usage:  586 MB
-Total REAL time to MAP completion:  2 secs 
-Total CPU time to MAP completion:   1 secs 
-
-NOTES:
-
-   Related logic is defined as being logic that shares connectivity - e.g. two
-   LUTs are "related" if they share common inputs.  When assembling slices,
-   Map gives priority to combine logic that is related.  Doing so results in
-   the best timing performance.
-
-   Unrelated logic shares no connectivity.  Map will only begin packing
-   unrelated logic into a slice once 99% of the slices are occupied through
-   related logic packing.
-
-   Note that once logic distribution reaches the 99% level through related
-   logic packing, this does not mean the device is completely utilized.
-   Unrelated logic packing will then begin, continuing until all usable LUTs
-   and FFs are occupied.  Depending on your timing budget, increased levels of
-   unrelated logic packing may adversely affect the overall timing performance
-   of your design.
+Peak Memory Usage:  703 MB
+Total REAL time to MAP completion:  11 secs 
+Total CPU time to MAP completion:   10 secs 
 
 Table of Contents
 -----------------
@@ -83,156 +65,722 @@ Section 1 - Errors
 Section 2 - Warnings
 --------------------
 WARNING:LIT:176 - Clock buffer is designated to drive clock loads. BUFGMUX
-   symbol
-   "physical_group_inst_top_camera_monitoring/clk_mc/inst_top_camera_monitoring/
-   clk_mc_BUFG" (output signal=inst_top_camera_monitoring/clk_mc) has a mix of
-   clock and non-clock loads. The non-clock loads are:
+   symbol "inst_top_camera_monitoring/physical_group_clk_mc/clk_mc_BUFG" (output
+   signal=inst_top_camera_monitoring/clk_mc) has a mix of clock and non-clock
+   loads. The non-clock loads are:
    Pin I1 of inst_top_camera_monitoring/crbc_i0/ram_clk
-WARNING:Pack:1542 - The register
+WARNING:Pack:1238 - The register inst_top_camera_monitoring/crbc_i0/state_1 has
+   the property IOB=TRUE, but failed to join the input side of an I/O component.
+   Symbol inst_top_camera_monitoring/crbc_i0/state_1 is not under the same
+   hierarchy region as symbol pb_IBUF. There are three ways to fix the problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/crbc_i0 in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1239 - The register inst_top_camera_monitoring/crbc_i0/state_1
+   failed to join the input side of an I/O component. Symbol
+   inst_top_camera_monitoring/crbc_i0/state_1 is not under the same hierarchy
+   region as symbol pb_IBUF. There are three ways to fix the problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/crbc_i0 in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1236 - The register
    inst_top_camera_monitoring/crbc_i0/data_out_enable_i_0 has the property
-   IOB=TRUE, but was not packed into the output side of an I/O component. The
-   register symbol "inst_top_camera_monitoring/crbc_i0/data_out_enable_i_0" has
-   no connections inside the I/O component.
-WARNING:Pack:1542 - The register
+   IOB=TRUE, but failed to join the output side of an I/O component. Symbol
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_0 is not under the same
+   hierarchy region as symbol
+   inst_top_camera_monitoring/dq_iob[0].IOBUF_inst/OBUFT. There are three ways
+   to fix the problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/crbc_i0 in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1237 - The register
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_0 failed to join the
+   output side of an I/O component. Symbol
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_0 is not under the same
+   hierarchy region as symbol
+   inst_top_camera_monitoring/dq_iob[0].IOBUF_inst/OBUFT. There are three ways
+   to fix the problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/crbc_i0 in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1236 - The register
    inst_top_camera_monitoring/crbc_i0/data_out_enable_i_1 has the property
-   IOB=TRUE, but was not packed into the output side of an I/O component. The
-   register symbol "inst_top_camera_monitoring/crbc_i0/data_out_enable_i_1" has
-   no connections inside the I/O component.
-WARNING:Pack:1542 - The register
+   IOB=TRUE, but failed to join the output side of an I/O component. Symbol
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_1 is not under the same
+   hierarchy region as symbol
+   inst_top_camera_monitoring/dq_iob[1].IOBUF_inst/OBUFT. There are three ways
+   to fix the problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/crbc_i0 in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1237 - The register
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_1 failed to join the
+   output side of an I/O component. Symbol
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_1 is not under the same
+   hierarchy region as symbol
+   inst_top_camera_monitoring/dq_iob[1].IOBUF_inst/OBUFT. There are three ways
+   to fix the problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/crbc_i0 in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1236 - The register
    inst_top_camera_monitoring/crbc_i0/data_out_enable_i_2 has the property
-   IOB=TRUE, but was not packed into the output side of an I/O component. The
-   register symbol "inst_top_camera_monitoring/crbc_i0/data_out_enable_i_2" has
-   no connections inside the I/O component.
-WARNING:Pack:1542 - The register
+   IOB=TRUE, but failed to join the output side of an I/O component. Symbol
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_2 is not under the same
+   hierarchy region as symbol
+   inst_top_camera_monitoring/dq_iob[2].IOBUF_inst/OBUFT. There are three ways
+   to fix the problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/crbc_i0 in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1237 - The register
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_2 failed to join the
+   output side of an I/O component. Symbol
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_2 is not under the same
+   hierarchy region as symbol
+   inst_top_camera_monitoring/dq_iob[2].IOBUF_inst/OBUFT. There are three ways
+   to fix the problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/crbc_i0 in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1236 - The register
    inst_top_camera_monitoring/crbc_i0/data_out_enable_i_3 has the property
-   IOB=TRUE, but was not packed into the output side of an I/O component. The
-   register symbol "inst_top_camera_monitoring/crbc_i0/data_out_enable_i_3" has
-   no connections inside the I/O component.
-WARNING:Pack:1542 - The register
+   IOB=TRUE, but failed to join the output side of an I/O component. Symbol
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_3 is not under the same
+   hierarchy region as symbol
+   inst_top_camera_monitoring/dq_iob[3].IOBUF_inst/OBUFT. There are three ways
+   to fix the problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/crbc_i0 in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1237 - The register
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_3 failed to join the
+   output side of an I/O component. Symbol
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_3 is not under the same
+   hierarchy region as symbol
+   inst_top_camera_monitoring/dq_iob[3].IOBUF_inst/OBUFT. There are three ways
+   to fix the problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/crbc_i0 in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1236 - The register
    inst_top_camera_monitoring/crbc_i0/data_out_enable_i_4 has the property
-   IOB=TRUE, but was not packed into the output side of an I/O component. The
-   register symbol "inst_top_camera_monitoring/crbc_i0/data_out_enable_i_4" has
-   no connections inside the I/O component.
-WARNING:Pack:1542 - The register
+   IOB=TRUE, but failed to join the output side of an I/O component. Symbol
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_4 is not under the same
+   hierarchy region as symbol
+   inst_top_camera_monitoring/dq_iob[4].IOBUF_inst/OBUFT. There are three ways
+   to fix the problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/crbc_i0 in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1237 - The register
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_4 failed to join the
+   output side of an I/O component. Symbol
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_4 is not under the same
+   hierarchy region as symbol
+   inst_top_camera_monitoring/dq_iob[4].IOBUF_inst/OBUFT. There are three ways
+   to fix the problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/crbc_i0 in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1236 - The register
    inst_top_camera_monitoring/crbc_i0/data_out_enable_i_5 has the property
-   IOB=TRUE, but was not packed into the output side of an I/O component. The
-   register symbol "inst_top_camera_monitoring/crbc_i0/data_out_enable_i_5" has
-   no connections inside the I/O component.
-WARNING:Pack:1542 - The register
+   IOB=TRUE, but failed to join the output side of an I/O component. Symbol
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_5 is not under the same
+   hierarchy region as symbol
+   inst_top_camera_monitoring/dq_iob[5].IOBUF_inst/OBUFT. There are three ways
+   to fix the problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/crbc_i0 in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1237 - The register
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_5 failed to join the
+   output side of an I/O component. Symbol
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_5 is not under the same
+   hierarchy region as symbol
+   inst_top_camera_monitoring/dq_iob[5].IOBUF_inst/OBUFT. There are three ways
+   to fix the problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/crbc_i0 in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1236 - The register
    inst_top_camera_monitoring/crbc_i0/data_out_enable_i_6 has the property
-   IOB=TRUE, but was not packed into the output side of an I/O component. The
-   register symbol "inst_top_camera_monitoring/crbc_i0/data_out_enable_i_6" has
-   no connections inside the I/O component.
-WARNING:Pack:1542 - The register
+   IOB=TRUE, but failed to join the output side of an I/O component. Symbol
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_6 is not under the same
+   hierarchy region as symbol
+   inst_top_camera_monitoring/dq_iob[6].IOBUF_inst/OBUFT. There are three ways
+   to fix the problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/crbc_i0 in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1237 - The register
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_6 failed to join the
+   output side of an I/O component. Symbol
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_6 is not under the same
+   hierarchy region as symbol
+   inst_top_camera_monitoring/dq_iob[6].IOBUF_inst/OBUFT. There are three ways
+   to fix the problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/crbc_i0 in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1236 - The register
    inst_top_camera_monitoring/crbc_i0/data_out_enable_i_7 has the property
-   IOB=TRUE, but was not packed into the output side of an I/O component. The
-   register symbol "inst_top_camera_monitoring/crbc_i0/data_out_enable_i_7" has
-   no connections inside the I/O component.
-WARNING:Pack:1542 - The register
+   IOB=TRUE, but failed to join the output side of an I/O component. Symbol
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_7 is not under the same
+   hierarchy region as symbol
+   inst_top_camera_monitoring/dq_iob[7].IOBUF_inst/OBUFT. There are three ways
+   to fix the problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/crbc_i0 in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1237 - The register
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_7 failed to join the
+   output side of an I/O component. Symbol
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_7 is not under the same
+   hierarchy region as symbol
+   inst_top_camera_monitoring/dq_iob[7].IOBUF_inst/OBUFT. There are three ways
+   to fix the problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/crbc_i0 in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1236 - The register
    inst_top_camera_monitoring/crbc_i0/data_out_enable_i_8 has the property
-   IOB=TRUE, but was not packed into the output side of an I/O component. The
-   register symbol "inst_top_camera_monitoring/crbc_i0/data_out_enable_i_8" has
-   no connections inside the I/O component.
-WARNING:Pack:1542 - The register
+   IOB=TRUE, but failed to join the output side of an I/O component. Symbol
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_8 is not under the same
+   hierarchy region as symbol
+   inst_top_camera_monitoring/dq_iob[8].IOBUF_inst/OBUFT. There are three ways
+   to fix the problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/crbc_i0 in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1237 - The register
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_8 failed to join the
+   output side of an I/O component. Symbol
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_8 is not under the same
+   hierarchy region as symbol
+   inst_top_camera_monitoring/dq_iob[8].IOBUF_inst/OBUFT. There are three ways
+   to fix the problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/crbc_i0 in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1236 - The register
    inst_top_camera_monitoring/crbc_i0/data_out_enable_i_9 has the property
-   IOB=TRUE, but was not packed into the output side of an I/O component. The
-   register symbol "inst_top_camera_monitoring/crbc_i0/data_out_enable_i_9" has
-   no connections inside the I/O component.
-WARNING:Pack:1542 - The register
+   IOB=TRUE, but failed to join the output side of an I/O component. Symbol
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_9 is not under the same
+   hierarchy region as symbol
+   inst_top_camera_monitoring/dq_iob[9].IOBUF_inst/OBUFT. There are three ways
+   to fix the problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/crbc_i0 in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1237 - The register
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_9 failed to join the
+   output side of an I/O component. Symbol
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_9 is not under the same
+   hierarchy region as symbol
+   inst_top_camera_monitoring/dq_iob[9].IOBUF_inst/OBUFT. There are three ways
+   to fix the problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/crbc_i0 in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1236 - The register
    inst_top_camera_monitoring/crbc_i0/data_out_enable_i_10 has the property
-   IOB=TRUE, but was not packed into the output side of an I/O component. The
-   register symbol "inst_top_camera_monitoring/crbc_i0/data_out_enable_i_10" has
-   no connections inside the I/O component.
-WARNING:Pack:1542 - The register
+   IOB=TRUE, but failed to join the output side of an I/O component. Symbol
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_10 is not under the same
+   hierarchy region as symbol
+   inst_top_camera_monitoring/dq_iob[10].IOBUF_inst/OBUFT. There are three ways
+   to fix the problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/crbc_i0 in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1237 - The register
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_10 failed to join the
+   output side of an I/O component. Symbol
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_10 is not under the same
+   hierarchy region as symbol
+   inst_top_camera_monitoring/dq_iob[10].IOBUF_inst/OBUFT. There are three ways
+   to fix the problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/crbc_i0 in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1236 - The register
    inst_top_camera_monitoring/crbc_i0/data_out_enable_i_11 has the property
-   IOB=TRUE, but was not packed into the output side of an I/O component. The
-   register symbol "inst_top_camera_monitoring/crbc_i0/data_out_enable_i_11" has
-   no connections inside the I/O component.
-WARNING:Pack:1542 - The register
+   IOB=TRUE, but failed to join the output side of an I/O component. Symbol
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_11 is not under the same
+   hierarchy region as symbol
+   inst_top_camera_monitoring/dq_iob[11].IOBUF_inst/OBUFT. There are three ways
+   to fix the problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/crbc_i0 in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1237 - The register
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_11 failed to join the
+   output side of an I/O component. Symbol
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_11 is not under the same
+   hierarchy region as symbol
+   inst_top_camera_monitoring/dq_iob[11].IOBUF_inst/OBUFT. There are three ways
+   to fix the problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/crbc_i0 in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1236 - The register
    inst_top_camera_monitoring/crbc_i0/data_out_enable_i_12 has the property
-   IOB=TRUE, but was not packed into the output side of an I/O component. The
-   register symbol "inst_top_camera_monitoring/crbc_i0/data_out_enable_i_12" has
-   no connections inside the I/O component.
-WARNING:Pack:1542 - The register
+   IOB=TRUE, but failed to join the output side of an I/O component. Symbol
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_12 is not under the same
+   hierarchy region as symbol
+   inst_top_camera_monitoring/dq_iob[12].IOBUF_inst/OBUFT. There are three ways
+   to fix the problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/crbc_i0 in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1237 - The register
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_12 failed to join the
+   output side of an I/O component. Symbol
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_12 is not under the same
+   hierarchy region as symbol
+   inst_top_camera_monitoring/dq_iob[12].IOBUF_inst/OBUFT. There are three ways
+   to fix the problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/crbc_i0 in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1236 - The register
    inst_top_camera_monitoring/crbc_i0/data_out_enable_i_13 has the property
-   IOB=TRUE, but was not packed into the output side of an I/O component. The
-   register symbol "inst_top_camera_monitoring/crbc_i0/data_out_enable_i_13" has
-   no connections inside the I/O component.
-WARNING:Pack:1542 - The register
+   IOB=TRUE, but failed to join the output side of an I/O component. Symbol
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_13 is not under the same
+   hierarchy region as symbol
+   inst_top_camera_monitoring/dq_iob[13].IOBUF_inst/OBUFT. There are three ways
+   to fix the problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/crbc_i0 in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1237 - The register
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_13 failed to join the
+   output side of an I/O component. Symbol
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_13 is not under the same
+   hierarchy region as symbol
+   inst_top_camera_monitoring/dq_iob[13].IOBUF_inst/OBUFT. There are three ways
+   to fix the problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/crbc_i0 in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1236 - The register
    inst_top_camera_monitoring/crbc_i0/data_out_enable_i_14 has the property
-   IOB=TRUE, but was not packed into the output side of an I/O component. The
-   register symbol "inst_top_camera_monitoring/crbc_i0/data_out_enable_i_14" has
-   no connections inside the I/O component.
-WARNING:Pack:1542 - The register
+   IOB=TRUE, but failed to join the output side of an I/O component. Symbol
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_14 is not under the same
+   hierarchy region as symbol
+   inst_top_camera_monitoring/dq_iob[14].IOBUF_inst/OBUFT. There are three ways
+   to fix the problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/crbc_i0 in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1237 - The register
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_14 failed to join the
+   output side of an I/O component. Symbol
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_14 is not under the same
+   hierarchy region as symbol
+   inst_top_camera_monitoring/dq_iob[14].IOBUF_inst/OBUFT. There are three ways
+   to fix the problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/crbc_i0 in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1236 - The register
    inst_top_camera_monitoring/crbc_i0/data_out_enable_i_15 has the property
-   IOB=TRUE, but was not packed into the output side of an I/O component. The
-   register symbol "inst_top_camera_monitoring/crbc_i0/data_out_enable_i_15" has
-   no connections inside the I/O component.
-WARNING:Pack:1542 - The register
+   IOB=TRUE, but failed to join the output side of an I/O component. Symbol
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_15 is not under the same
+   hierarchy region as symbol
+   inst_top_camera_monitoring/dq_iob[15].IOBUF_inst/OBUFT. There are three ways
+   to fix the problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/crbc_i0 in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1237 - The register
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_15 failed to join the
+   output side of an I/O component. Symbol
+   inst_top_camera_monitoring/crbc_i0/data_out_enable_i_15 is not under the same
+   hierarchy region as symbol
+   inst_top_camera_monitoring/dq_iob[15].IOBUF_inst/OBUFT. There are three ways
+   to fix the problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/crbc_i0 in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1236 - The register
    inst_top_camera_monitoring/inst_vgatiming/Hsync_i has the property IOB=TRUE,
-   but was not packed into the output side of an I/O component. The output
-   register symbol "inst_top_camera_monitoring/inst_vgatiming/Hsync_i" has loads
-   outside the I/O component.
-   The output register symbol
-   "inst_top_camera_monitoring/inst_vgatiming/Hsync_i" has loads outside the I/O
-   component.
-WARNING:Pack:1542 - The register
+   but failed to join the output side of an I/O component. Symbol
+   inst_top_camera_monitoring/inst_vgatiming/Hsync_i is not under the same
+   hierarchy region as symbol vga_hsdbg_OBUF. There are three ways to fix the
+   problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/inst_vgatiming in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1237 - The register
+   inst_top_camera_monitoring/inst_vgatiming/Hsync_i failed to join the output
+   side of an I/O component. Symbol
+   inst_top_camera_monitoring/inst_vgatiming/Hsync_i is not under the same
+   hierarchy region as symbol vga_hsdbg_OBUF. There are three ways to fix the
+   problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/inst_vgatiming in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1236 - The register
    inst_top_camera_monitoring/inst_vgatiming/Hsync_i has the property IOB=TRUE,
-   but was not packed into the output side of an I/O component. The output
-   register symbol "inst_top_camera_monitoring/inst_vgatiming/Hsync_i" has loads
-   outside the I/O component.
-   The output register symbol
-   "inst_top_camera_monitoring/inst_vgatiming/Hsync_i" has loads outside the I/O
-   component.
-WARNING:Pack:1542 - The register inst_top_camera_monitoring/inst_vgatiming/Vsync
-   has the property IOB=TRUE, but was not packed into the output side of an I/O
-   component. The output register symbol
-   "inst_top_camera_monitoring/inst_vgatiming/Vsync" has loads outside the I/O
-   component.
-   The output register symbol "inst_top_camera_monitoring/inst_vgatiming/Vsync"
-   has loads outside the I/O component.
+   but failed to join the output side of an I/O component. Symbol
+   inst_top_camera_monitoring/inst_vgatiming/Hsync_i is not under the same
+   hierarchy region as symbol vga_hsync_OBUF. There are three ways to fix the
+   problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/inst_vgatiming in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1237 - The register
+   inst_top_camera_monitoring/inst_vgatiming/Hsync_i failed to join the output
+   side of an I/O component. Symbol
+   inst_top_camera_monitoring/inst_vgatiming/Hsync_i is not under the same
+   hierarchy region as symbol vga_hsync_OBUF. There are three ways to fix the
+   problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/inst_vgatiming in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1236 - The register inst_top_camera_monitoring/inst_vgatiming/Vsync
+   has the property IOB=TRUE, but failed to join the output side of an I/O
+   component. Symbol inst_top_camera_monitoring/inst_vgatiming/Vsync is not
+   under the same hierarchy region as symbol vga_vsync_OBUF. There are three
+   ways to fix the problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/inst_vgatiming in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
+WARNING:Pack:1237 - The register inst_top_camera_monitoring/inst_vgatiming/Vsync
+   failed to join the output side of an I/O component. Symbol
+   inst_top_camera_monitoring/inst_vgatiming/Vsync is not under the same
+   hierarchy region as symbol vga_vsync_OBUF. There are three ways to fix the
+   problem:
+   1. Put both symbols under the same hierarchy region and process the design.
+   If the I/O buffer is being inferred by the synthesis tool, it is suggested to
+   code I/O registers on the top level of code. If this can not be done, it is
+   suggested to instantiate the proper I/O buffer in the lower level of code and
+   disable I/O buffer inference for that port in the design.
+   2. Remove KEEP_HIERARCHY constraint or add KEEP_HIERARCHY = FALSE to block
+   inst_top_camera_monitoring/inst_vgatiming in the UCF file.
+   3. Run map with the option -ignore_keep_hierarchy (TCL/ProjNav command:
+   process set "Allow Logic Optimization Across Hierarchy" TRUE). This option
+   will dissolve all hierarchy in the design.
+
 WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/inst_addrgen1/enable_prev" has the property
    IOB=TRUE, but it did not join an IO component because it is not connected to
    any IO element.
 WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_write_addr_10" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_write_addr_11" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_write_addr_12" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_write_addr_13" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/crbc_i0/this_write_addr_22" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_write_addr_14" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_write_addr_15" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_write_addr_16" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_write_addr_17" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_write_addr_18" has the property
    IOB=TRUE, but it did not join an IO component because it is not connected to
    any IO element.
 WARNING:Pack:2780 - The register "inst_top_camera_monitoring/data_r_0" has the
@@ -355,13 +903,22 @@ WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/a_8" has
 WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/a_9" has
    the property IOB=TRUE, but it did not join an IO component because it is not
    connected to any IO element.
-WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/adv" has
-   the property IOB=TRUE, but it did not join an IO component because it is not
-   connected to any IO element.
 WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/cre" has
    the property IOB=TRUE, but it did not join an IO component because it is not
    connected to any IO element.
 WARNING:Pack:2780 - The register "inst_top_camera_monitoring/read_buffer_clk"
+   has the property IOB=TRUE, but it did not join an IO component because it is
+   not connected to any IO element.
+WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/adv_BRB0"
+   has the property IOB=TRUE, but it did not join an IO component because it is
+   not connected to any IO element.
+WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/adv_BRB1"
+   has the property IOB=TRUE, but it did not join an IO component because it is
+   not connected to any IO element.
+WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/adv_BRB2"
+   has the property IOB=TRUE, but it did not join an IO component because it is
+   not connected to any IO element.
+WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/adv_BRB3"
    has the property IOB=TRUE, but it did not join an IO component because it is
    not connected to any IO element.
 WARNING:Pack:2780 - The register "inst_top_camera_monitoring/wrc_r" has the
@@ -410,16 +967,93 @@ WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/crbc_i0/source_addr_9" has the property IOB=TRUE,
    but it did not join an IO component because it is not connected to any IO
    element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_write_addr_10_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_write_addr_10_BRB2" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_write_addr_11_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_write_addr_11_BRB2" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
 WARNING:Pack:2780 - The register "inst_top_camera_monitoring/ov7670_hs_prev" has
    the property IOB=TRUE, but it did not join an IO component because it is not
    connected to any IO element.
-WARNING:Pack:2780 - The register "inst_top_camera_monitoring/p1_state_FSM_FFd10"
-   has the property IOB=TRUE, but it did not join an IO component because it is
-   not connected to any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_write_addr_12_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_write_addr_12_BRB2" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_write_addr_13_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_write_addr_13_BRB2" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_write_addr_14_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_write_addr_14_BRB2" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_write_addr_15_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_write_addr_15_BRB2" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_write_addr_16_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_write_addr_16_BRB2" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_write_addr_17_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_write_addr_17_BRB2" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_write_addr_18_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
 WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/inst_ov7670contr1/SCCB/sioc_i" has the property
    IOB=TRUE, but it did not join an IO component because it is not connected to
    any IO element.
+WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/oe_BRB0"
+   has the property IOB=TRUE, but it did not join an IO component because it is
+   not connected to any IO element.
+WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/oe_BRB1"
+   has the property IOB=TRUE, but it did not join an IO component because it is
+   not connected to any IO element.
+WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/oe_BRB2"
+   has the property IOB=TRUE, but it did not join an IO component because it is
+   not connected to any IO element.
+WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/oe_BRB3"
+   has the property IOB=TRUE, but it did not join an IO component because it is
+   not connected to any IO element.
 WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/inst_ov7670capt1/address_10" has the property
    IOB=TRUE, but it did not join an IO component because it is not connected to
@@ -525,6 +1159,14 @@ WARNING:Pack:2780 - The register
    IOB=TRUE, but it did not join an IO component because it is not connected to
    any IO element.
 WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_write_addr_0_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_write_addr_0_BRB2" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/inst_ov7670capt1/d_latch_0" has the property
    IOB=TRUE, but it did not join an IO component because it is not connected to
    any IO element.
@@ -565,6 +1207,66 @@ WARNING:Pack:2780 - The register
    IOB=TRUE, but it did not join an IO component because it is not connected to
    any IO element.
 WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_write_addr_1_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_write_addr_1_BRB2" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_write_addr_2_BRB0" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_write_addr_2_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_write_addr_3_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_write_addr_4_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_write_addr_5_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_write_addr_6_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_write_addr_6_BRB2" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_write_addr_7_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_write_addr_7_BRB2" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_write_addr_8_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_write_addr_8_BRB2" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_write_addr_9_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_write_addr_9_BRB2" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/inst_ov7670contr1/SCCB/data_sr_1" has the
    property IOB=TRUE, but it did not join an IO component because it is not
    connected to any IO element.
@@ -600,74 +1302,7 @@ WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/inst_ov7670contr1/SCCB/data_sr_9" has the
    property IOB=TRUE, but it did not join an IO component because it is not
    connected to any IO element.
-WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_read_addr_0" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_read_addr_1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_read_addr_2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_read_addr_3" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_read_addr_4" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_read_addr_5" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_read_addr_6" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
 WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/sink_we"
-   has the property IOB=TRUE, but it did not join an IO component because it is
-   not connected to any IO element.
-WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_read_addr_7" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_read_addr_8" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_read_addr_9" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/state_0"
-   has the property IOB=TRUE, but it did not join an IO component because it is
-   not connected to any IO element.
-WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/state_2"
-   has the property IOB=TRUE, but it did not join an IO component because it is
-   not connected to any IO element.
-WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/state_3"
-   has the property IOB=TRUE, but it did not join an IO component because it is
-   not connected to any IO element.
-WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/state_4"
-   has the property IOB=TRUE, but it did not join an IO component because it is
-   not connected to any IO element.
-WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/state_5"
-   has the property IOB=TRUE, but it did not join an IO component because it is
-   not connected to any IO element.
-WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/state_6"
-   has the property IOB=TRUE, but it did not join an IO component because it is
-   not connected to any IO element.
-WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/state_7"
-   has the property IOB=TRUE, but it did not join an IO component because it is
-   not connected to any IO element.
-WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/state_8"
-   has the property IOB=TRUE, but it did not join an IO component because it is
-   not connected to any IO element.
-WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/state_9"
    has the property IOB=TRUE, but it did not join an IO component because it is
    not connected to any IO element.
 WARNING:Pack:2780 - The register
@@ -759,6 +1394,38 @@ WARNING:Pack:2780 - The register
    property IOB=TRUE, but it did not join an IO component because it is not
    connected to any IO element.
 WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/state_0_BRB1" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/state_0_BRB2" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/state_0_BRB3" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/state_2_BRB0" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/state_3_BRB3" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/state_4_BRB0" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/state_4_BRB1" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/state_5_BRB3" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/inst_ov7670contr1/SCCB/taken_i" has the property
    IOB=TRUE, but it did not join an IO component because it is not connected to
    any IO element.
@@ -770,6 +1437,10 @@ WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/crbc_i0/bytes_to_read_1" has the property
    IOB=TRUE, but it did not join an IO component because it is not connected to
    any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/state_6_BRB0" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
 WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/crbc_i0/bytes_to_read_6" has the property
    IOB=TRUE, but it did not join an IO component because it is not connected to
@@ -787,97 +1458,28 @@ WARNING:Pack:2780 - The register
    IOB=TRUE, but it did not join an IO component because it is not connected to
    any IO element.
 WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_read_addr_10" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_read_addr_11" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_read_addr_12" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_read_addr_13" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
+   "inst_top_camera_monitoring/crbc_i0/state_7_BRB0" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
 WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/crbc_i0/this_read_addr_22" has the property
    IOB=TRUE, but it did not join an IO component because it is not connected to
    any IO element.
 WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_read_addr_14" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
+   "inst_top_camera_monitoring/crbc_i0/state_8_BRB0" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
 WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_read_addr_15" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_read_addr_16" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_read_addr_17" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_read_addr_18" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
+   "inst_top_camera_monitoring/crbc_i0/state_9_BRB3" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
 WARNING:Pack:2780 - The register "inst_top_camera_monitoring/vga_read_0" has the
    property IOB=TRUE, but it did not join an IO component because it is not
    connected to any IO element.
-WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/state_10"
-   has the property IOB=TRUE, but it did not join an IO component because it is
-   not connected to any IO element.
-WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/state_11"
-   has the property IOB=TRUE, but it did not join an IO component because it is
-   not connected to any IO element.
 WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/state_20"
    has the property IOB=TRUE, but it did not join an IO component because it is
    not connected to any IO element.
-WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/state_12"
-   has the property IOB=TRUE, but it did not join an IO component because it is
-   not connected to any IO element.
 WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/state_13"
-   has the property IOB=TRUE, but it did not join an IO component because it is
-   not connected to any IO element.
-WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/state_21"
-   has the property IOB=TRUE, but it did not join an IO component because it is
-   not connected to any IO element.
-WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/state_22"
-   has the property IOB=TRUE, but it did not join an IO component because it is
-   not connected to any IO element.
-WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/state_14"
-   has the property IOB=TRUE, but it did not join an IO component because it is
-   not connected to any IO element.
-WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/state_23"
-   has the property IOB=TRUE, but it did not join an IO component because it is
-   not connected to any IO element.
-WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/state_15"
-   has the property IOB=TRUE, but it did not join an IO component because it is
-   not connected to any IO element.
-WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/state_16"
-   has the property IOB=TRUE, but it did not join an IO component because it is
-   not connected to any IO element.
-WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/state_24"
-   has the property IOB=TRUE, but it did not join an IO component because it is
-   not connected to any IO element.
-WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/state_25"
-   has the property IOB=TRUE, but it did not join an IO component because it is
-   not connected to any IO element.
-WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/state_17"
-   has the property IOB=TRUE, but it did not join an IO component because it is
-   not connected to any IO element.
-WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/state_26"
-   has the property IOB=TRUE, but it did not join an IO component because it is
-   not connected to any IO element.
-WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/state_18"
-   has the property IOB=TRUE, but it did not join an IO component because it is
-   not connected to any IO element.
-WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/state_19"
    has the property IOB=TRUE, but it did not join an IO component because it is
    not connected to any IO element.
 WARNING:Pack:2780 - The register
@@ -921,6 +1523,14 @@ WARNING:Pack:2780 - The register
    property IOB=TRUE, but it did not join an IO component because it is not
    connected to any IO element.
 WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_read_addr_0_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_read_addr_0_BRB2" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/crbc_i0/read_counter_10" has the property
    IOB=TRUE, but it did not join an IO component because it is not connected to
    any IO element.
@@ -937,13 +1547,93 @@ WARNING:Pack:2780 - The register "inst_top_camera_monitoring/p0_state_FSM_FFd4"
    has the property IOB=TRUE, but it did not join an IO component because it is
    not connected to any IO element.
 WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/inst_ov7670contr1/Registers/sequence_0_1" has the
-   property IOB=TRUE, but it did not join an IO component because it is not
-   connected to any IO element.
+   "inst_top_camera_monitoring/crbc_i0/this_read_addr_1_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
 WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/inst_ov7670contr1/Registers/sequence_0_2" has the
-   property IOB=TRUE, but it did not join an IO component because it is not
-   connected to any IO element.
+   "inst_top_camera_monitoring/crbc_i0/this_read_addr_1_BRB2" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_read_addr_2_BRB0" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_read_addr_2_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_read_addr_3_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_read_addr_4_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_read_addr_5_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_read_addr_6_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_read_addr_6_BRB2" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_read_addr_7_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_read_addr_7_BRB2" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_read_addr_8_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_read_addr_8_BRB2" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_read_addr_9_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_read_addr_9_BRB2" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/inst_vgatiming/Result<0>_FRB" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/inst_vgatiming/Result<1>_FRB" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/inst_vgatiming/Result<2>_FRB" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/inst_vgatiming/Result<3>_FRB" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/inst_vgatiming/Result<4>_FRB" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/inst_vgatiming/Result<5>_FRB" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/inst_vgatiming/Result<6>_FRB" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
 WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/crbc_i0/sink_addr_0" has the property IOB=TRUE,
    but it did not join an IO component because it is not connected to any IO
@@ -984,6 +1674,22 @@ WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/crbc_i0/sink_addr_9" has the property IOB=TRUE,
    but it did not join an IO component because it is not connected to any IO
    element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/inst_vgatiming/Result<7>_FRB" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/inst_vgatiming/Result<8>_FRB" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/inst_vgatiming/Result<9>_FRB" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/inst_vgatiming/int_and000012_SW0_FRB" has the
+   property IOB=TRUE, but it did not join an IO component because it is not
+   connected to any IO element.
 WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/inst_ov7670contr1/SCCB/busy_sr_0" has the
    property IOB=TRUE, but it did not join an IO component because it is not
@@ -1149,61 +1855,21 @@ WARNING:Pack:2780 - The register "inst_top_camera_monitoring/cntr_wr1_17" has
    the property IOB=TRUE, but it did not join an IO component because it is not
    connected to any IO element.
 WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_write_addr_0" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_write_addr_1" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_write_addr_2" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_write_addr_3" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_write_addr_4" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_write_addr_5" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/inst_ov7670contr1/SCCB/addr_reg_prev_0" has the
    property IOB=TRUE, but it did not join an IO component because it is not
    connected to any IO element.
-WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_write_addr_6" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
 WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/inst_ov7670contr1/SCCB/addr_reg_prev_1" has the
    property IOB=TRUE, but it did not join an IO component because it is not
    connected to any IO element.
 WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_write_addr_7" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/inst_ov7670contr1/SCCB/addr_reg_prev_2" has the
    property IOB=TRUE, but it did not join an IO component because it is not
    connected to any IO element.
 WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_write_addr_8" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/inst_ov7670contr1/SCCB/addr_reg_prev_3" has the
    property IOB=TRUE, but it did not join an IO component because it is not
    connected to any IO element.
-WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/crbc_i0/this_write_addr_9" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
 WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/inst_ov7670contr1/SCCB/addr_reg_prev_4" has the
    property IOB=TRUE, but it did not join an IO component because it is not
@@ -1221,9 +1887,6 @@ WARNING:Pack:2780 - The register
    property IOB=TRUE, but it did not join an IO component because it is not
    connected to any IO element.
 WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/ce" has the
-   property IOB=TRUE, but it did not join an IO component because it is not
-   connected to any IO element.
-WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/oe" has the
    property IOB=TRUE, but it did not join an IO component because it is not
    connected to any IO element.
 WARNING:Pack:2780 - The register
@@ -1258,6 +1921,82 @@ WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/inst_ov7670contr1/SCCB/reg_value_prev_7" has the
    property IOB=TRUE, but it did not join an IO component because it is not
    connected to any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/state_10_BRB0" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/state_11_BRB3" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/state_12_BRB0" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/state_21_BRB1" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/state_21_BRB2" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/state_14_BRB0" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/state_14_BRB1" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/state_22_BRB3" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/state_15_BRB1" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/state_23_BRB1" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/state_15_BRB3" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/state_16_BRB0" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/state_24_BRB1" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/state_16_BRB1" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/state_24_BRB2" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/state_25_BRB0" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/state_17_BRB1" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/state_26_BRB0" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/state_18_BRB3" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
 WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/crbc_i0/read_counter_0" has the property
    IOB=TRUE, but it did not join an IO component because it is not connected to
@@ -1298,6 +2037,10 @@ WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/crbc_i0/read_counter_9" has the property
    IOB=TRUE, but it did not join an IO component because it is not connected to
    any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/state_19_BRB0" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
 WARNING:Pack:2780 - The register "inst_top_camera_monitoring/p1_state_FSM_FFd1"
    has the property IOB=TRUE, but it did not join an IO component because it is
    not connected to any IO element.
@@ -1308,21 +2051,6 @@ WARNING:Pack:2780 - The register "inst_top_camera_monitoring/p1_state_FSM_FFd3"
    has the property IOB=TRUE, but it did not join an IO component because it is
    not connected to any IO element.
 WARNING:Pack:2780 - The register "inst_top_camera_monitoring/p1_state_FSM_FFd4"
-   has the property IOB=TRUE, but it did not join an IO component because it is
-   not connected to any IO element.
-WARNING:Pack:2780 - The register "inst_top_camera_monitoring/p1_state_FSM_FFd5"
-   has the property IOB=TRUE, but it did not join an IO component because it is
-   not connected to any IO element.
-WARNING:Pack:2780 - The register "inst_top_camera_monitoring/p1_state_FSM_FFd6"
-   has the property IOB=TRUE, but it did not join an IO component because it is
-   not connected to any IO element.
-WARNING:Pack:2780 - The register "inst_top_camera_monitoring/p1_state_FSM_FFd7"
-   has the property IOB=TRUE, but it did not join an IO component because it is
-   not connected to any IO element.
-WARNING:Pack:2780 - The register "inst_top_camera_monitoring/p1_state_FSM_FFd8"
-   has the property IOB=TRUE, but it did not join an IO component because it is
-   not connected to any IO element.
-WARNING:Pack:2780 - The register "inst_top_camera_monitoring/p1_state_FSM_FFd9"
    has the property IOB=TRUE, but it did not join an IO component because it is
    not connected to any IO element.
 WARNING:Pack:2780 - The register "inst_top_camera_monitoring/vga_vsync_sig_prev"
@@ -1352,6 +2080,19 @@ WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/inst_ov7670contr1/Registers/sequence_5" has the
    property IOB=TRUE, but it did not join an IO component because it is not
    connected to any IO element.
+WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/we_i_BRB0"
+   has the property IOB=TRUE, but it did not join an IO component because it is
+   not connected to any IO element.
+WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/we_i_BRB1"
+   has the property IOB=TRUE, but it did not join an IO component because it is
+   not connected to any IO element.
+WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/we_i_BRB2"
+   has the property IOB=TRUE, but it did not join an IO component because it is
+   not connected to any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/inst_vgatiming/Result<0>1_FRB" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
 WARNING:Pack:2780 - The register "inst_top_camera_monitoring/data_r_10" has the
    property IOB=TRUE, but it did not join an IO component because it is not
    connected to any IO element.
@@ -1370,6 +2111,10 @@ WARNING:Pack:2780 - The register "inst_top_camera_monitoring/data_r_14" has the
 WARNING:Pack:2780 - The register "inst_top_camera_monitoring/data_r_15" has the
    property IOB=TRUE, but it did not join an IO component because it is not
    connected to any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/inst_vgatiming/Result<1>1_FRB" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
 WARNING:Pack:2780 - The register "inst_top_camera_monitoring/data_w_10" has the
    property IOB=TRUE, but it did not join an IO component because it is not
    connected to any IO element.
@@ -1428,12 +2173,40 @@ WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/inst_vgatiming/hcnt_9" has the property IOB=TRUE,
    but it did not join an IO component because it is not connected to any IO
    element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/inst_vgatiming/Result<2>1_FRB" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/inst_vgatiming/Result<3>1_FRB" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/inst_vgatiming/Result<4>1_FRB" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
 WARNING:Pack:2780 - The register "inst_top_camera_monitoring/ov7670_vs_next_0"
    has the property IOB=TRUE, but it did not join an IO component because it is
    not connected to any IO element.
 WARNING:Pack:2780 - The register "inst_top_camera_monitoring/ov7670_vs_next_1"
    has the property IOB=TRUE, but it did not join an IO component because it is
    not connected to any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/inst_vgatiming/Result<5>1_FRB" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/inst_vgatiming/Result<6>1_FRB" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/inst_vgatiming/Result<7>1_FRB" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/inst_vgatiming/Result<8>1_FRB" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
 WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/inst_vgatiming/vcnt_0" has the property IOB=TRUE,
    but it did not join an IO component because it is not connected to any IO
@@ -1506,6 +2279,10 @@ WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/inst_vgatiming/vcnt_9" has the property IOB=TRUE,
    but it did not join an IO component because it is not connected to any IO
    element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/inst_vgatiming/Result<9>1_FRB" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
 WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/crbc_i0/burst_read_addr_10" has the property
    IOB=TRUE, but it did not join an IO component because it is not connected to
@@ -1616,12 +2393,77 @@ WARNING:Pack:2780 - The register
    IOB=TRUE, but it did not join an IO component because it is not connected to
    any IO element.
 WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_read_addr_10_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_read_addr_10_BRB2" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_read_addr_11_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_read_addr_11_BRB2" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_read_addr_12_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_read_addr_12_BRB2" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_read_addr_13_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_read_addr_13_BRB2" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_read_addr_14_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_read_addr_14_BRB2" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_read_addr_15_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_read_addr_15_BRB2" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/crbc_i0/write_counter_10" has the property
    IOB=TRUE, but it did not join an IO component because it is not connected to
    any IO element.
-WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/we_i" has
-   the property IOB=TRUE, but it did not join an IO component because it is not
-   connected to any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_read_addr_16_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_read_addr_16_BRB2" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_read_addr_17_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_read_addr_17_BRB2" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/crbc_i0/this_read_addr_18_BRB1" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
 WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/inst_addrgen1/addr_0" has the property IOB=TRUE,
    but it did not join an IO component because it is not connected to any IO
@@ -1838,18 +2680,206 @@ WARNING:Pack:2780 - The register "inst_top_camera_monitoring/cntr_wr1_8" has the
 WARNING:Pack:2780 - The register "inst_top_camera_monitoring/cntr_wr1_9" has the
    property IOB=TRUE, but it did not join an IO component because it is not
    connected to any IO element.
-WARNING:PhysDesignRules:367 - The signal <i_clock_IBUF> is incomplete. The
-   signal does not drive any load pins in the design.
-WARNING:PhysDesignRules:781 - PULLUP on an active net. PULLUP of comp
-   ov7670_sioc1 is set but the tri state is not configured. 
-WARNING:PhysDesignRules:1063 - Issue with pin connections and/or configuration
-   on
-   block:<inst_top_camera_monitoring/crbc_i0/write_buffer_i0/Mram_RAM1.A>:<RAMB1
-   6_RAMB16A>.  The block is configured to use an input parity pins. There is a
-   dangling output parity pin.
+WARNING:Timing:3223 - Timing constraint PATH "TS_50_to_24p_path" TIG ignored
+   during timing analysis.
+WARNING:Timing:3223 - Timing constraint PATH "TS_24p_to_50_path" TIG ignored
+   during timing analysis.
+WARNING:Timing:3223 - Timing constraint PATH "TS_50_to_24x_path" TIG ignored
+   during timing analysis.
+WARNING:Timing:3223 - Timing constraint PATH "TS_24x_to_50_path" TIG ignored
+   during timing analysis.
+WARNING:Timing:3223 - Timing constraint PATH "TS_50_to_25_path" TIG ignored
+   during timing analysis.
+WARNING:Timing:3223 - Timing constraint PATH "TS_25_to_50_path" TIG ignored
+   during timing analysis.
+WARNING:Timing:3223 - Timing constraint PATH "TS_12_5_to_50_path" TIG ignored
+   during timing analysis.
+WARNING:Timing:3223 - Timing constraint PATH "TS_50_to_12_5_path" TIG ignored
+   during timing analysis.
+WARNING:Pack:1653 - At least one timing constraint is impossible to meet because
+   component delays alone exceed the constraint. A timing constraint summary
+   below shows the failing constraints (preceded with an Asterisk (*)). Please
+   use the Timing Analyzer (GUI) or TRCE (command line) with the Mapped NCD and
+   PCF files to identify which constraints and paths are failing because of the
+   component delays alone. If the failing path(s) is mapped to Xilinx components
+   as expected, consider relaxing the constraint. If it is not mapped to
+   components as expected, re-evaluate your HDL and how synthesis is optimizing
+   the path. To allow the tools to bypass this error, set the environment
+   variable XIL_TIMING_ALLOW_IMPOSSIBLE to 1.
+
+
+   For more information about the Timing Analyzer, consult the Xilinx Timing
+   Analyzer Reference manual; for more information on TRCE, consult the Xilinx
+   Command Line Tools User Guide "TRACE" chapter.
+WARNING:Place:619 - This design is using a Side-BUFG site due to placement constraints on a BUFG, DCM, clock IOB or the
+   loads of these components. It is recommended that Top and Bottom BUFG sites be used instead of Side-BUFG sites
+   whenever possible because they can reach every clock region on the device. Side-BUFG sites can reach only clock
+   regions on the same side of the device and also preclude the use of certain Top and Bottom BUFGs in the same clock
+   region.
+WARNING:PhysDesignRules:367 - The signal <i_clock_IBUF> is incomplete. The signal does not drive any load pins in the
+   design.
+WARNING:PhysDesignRules:1063 - Issue with pin connections and/or configuration on
+   block:<inst_top_camera_monitoring/crbc_i0/write_buffer_i0/Mram_RAM1.A>:<RAMB16_RAMB16A>.  The block is configured to
+   use an input parity pins. There is a dangling output parity pin.
+WARNING:PhysDesignRules:781 - PULLUP on an active net. PULLUP of comp ov7670_sioc1 is set but the tri state is not
+   configured. 
 
 Section 3 - Informational
 -------------------------
+INFO:Map:110 - output buffer 'Addr_0_OBUF' driving design level port 'Addr<0>'
+   is being pushed into module 'inst_top_camera_monitoring' to enable I/O
+   register usage. The buffer has been renamed as
+   'inst_top_camera_monitoring/Addr_0_OBUF'.
+INFO:Map:110 - output buffer 'Addr_10_OBUF' driving design level port 'Addr<10>'
+   is being pushed into module 'inst_top_camera_monitoring' to enable I/O
+   register usage. The buffer has been renamed as
+   'inst_top_camera_monitoring/Addr_10_OBUF'.
+INFO:Map:110 - output buffer 'Addr_11_OBUF' driving design level port 'Addr<11>'
+   is being pushed into module 'inst_top_camera_monitoring' to enable I/O
+   register usage. The buffer has been renamed as
+   'inst_top_camera_monitoring/Addr_11_OBUF'.
+INFO:Map:110 - output buffer 'Addr_12_OBUF' driving design level port 'Addr<12>'
+   is being pushed into module 'inst_top_camera_monitoring' to enable I/O
+   register usage. The buffer has been renamed as
+   'inst_top_camera_monitoring/Addr_12_OBUF'.
+INFO:Map:110 - output buffer 'Addr_13_OBUF' driving design level port 'Addr<13>'
+   is being pushed into module 'inst_top_camera_monitoring' to enable I/O
+   register usage. The buffer has been renamed as
+   'inst_top_camera_monitoring/Addr_13_OBUF'.
+INFO:Map:110 - output buffer 'Addr_14_OBUF' driving design level port 'Addr<14>'
+   is being pushed into module 'inst_top_camera_monitoring' to enable I/O
+   register usage. The buffer has been renamed as
+   'inst_top_camera_monitoring/Addr_14_OBUF'.
+INFO:Map:110 - output buffer 'Addr_15_OBUF' driving design level port 'Addr<15>'
+   is being pushed into module 'inst_top_camera_monitoring' to enable I/O
+   register usage. The buffer has been renamed as
+   'inst_top_camera_monitoring/Addr_15_OBUF'.
+INFO:Map:110 - output buffer 'Addr_16_OBUF' driving design level port 'Addr<16>'
+   is being pushed into module 'inst_top_camera_monitoring' to enable I/O
+   register usage. The buffer has been renamed as
+   'inst_top_camera_monitoring/Addr_16_OBUF'.
+INFO:Map:110 - output buffer 'Addr_17_OBUF' driving design level port 'Addr<17>'
+   is being pushed into module 'inst_top_camera_monitoring' to enable I/O
+   register usage. The buffer has been renamed as
+   'inst_top_camera_monitoring/Addr_17_OBUF'.
+INFO:Map:110 - output buffer 'Addr_18_OBUF' driving design level port 'Addr<18>'
+   is being pushed into module 'inst_top_camera_monitoring' to enable I/O
+   register usage. The buffer has been renamed as
+   'inst_top_camera_monitoring/Addr_18_OBUF'.
+INFO:Map:110 - output buffer 'Addr_19_OBUF' driving design level port 'Addr<19>'
+   is being pushed into module 'inst_top_camera_monitoring' to enable I/O
+   register usage. The buffer has been renamed as
+   'inst_top_camera_monitoring/Addr_19_OBUF'.
+INFO:Map:110 - output buffer 'Addr_1_OBUF' driving design level port 'Addr<1>'
+   is being pushed into module 'inst_top_camera_monitoring' to enable I/O
+   register usage. The buffer has been renamed as
+   'inst_top_camera_monitoring/Addr_1_OBUF'.
+INFO:Map:110 - output buffer 'Addr_22_OBUF' driving design level port 'Addr<22>'
+   is being pushed into module 'inst_top_camera_monitoring' to enable I/O
+   register usage. The buffer has been renamed as
+   'inst_top_camera_monitoring/Addr_22_OBUF'.
+INFO:Map:110 - output buffer 'Addr_2_OBUF' driving design level port 'Addr<2>'
+   is being pushed into module 'inst_top_camera_monitoring' to enable I/O
+   register usage. The buffer has been renamed as
+   'inst_top_camera_monitoring/Addr_2_OBUF'.
+INFO:Map:110 - output buffer 'Addr_3_OBUF' driving design level port 'Addr<3>'
+   is being pushed into module 'inst_top_camera_monitoring' to enable I/O
+   register usage. The buffer has been renamed as
+   'inst_top_camera_monitoring/Addr_3_OBUF'.
+INFO:Map:110 - output buffer 'Addr_4_OBUF' driving design level port 'Addr<4>'
+   is being pushed into module 'inst_top_camera_monitoring' to enable I/O
+   register usage. The buffer has been renamed as
+   'inst_top_camera_monitoring/Addr_4_OBUF'.
+INFO:Map:110 - output buffer 'Addr_5_OBUF' driving design level port 'Addr<5>'
+   is being pushed into module 'inst_top_camera_monitoring' to enable I/O
+   register usage. The buffer has been renamed as
+   'inst_top_camera_monitoring/Addr_5_OBUF'.
+INFO:Map:110 - output buffer 'Addr_6_OBUF' driving design level port 'Addr<6>'
+   is being pushed into module 'inst_top_camera_monitoring' to enable I/O
+   register usage. The buffer has been renamed as
+   'inst_top_camera_monitoring/Addr_6_OBUF'.
+INFO:Map:110 - output buffer 'Addr_7_OBUF' driving design level port 'Addr<7>'
+   is being pushed into module 'inst_top_camera_monitoring' to enable I/O
+   register usage. The buffer has been renamed as
+   'inst_top_camera_monitoring/Addr_7_OBUF'.
+INFO:Map:110 - output buffer 'Addr_8_OBUF' driving design level port 'Addr<8>'
+   is being pushed into module 'inst_top_camera_monitoring' to enable I/O
+   register usage. The buffer has been renamed as
+   'inst_top_camera_monitoring/Addr_8_OBUF'.
+INFO:Map:110 - output buffer 'Addr_9_OBUF' driving design level port 'Addr<9>'
+   is being pushed into module 'inst_top_camera_monitoring' to enable I/O
+   register usage. The buffer has been renamed as
+   'inst_top_camera_monitoring/Addr_9_OBUF'.
+INFO:Map:110 - output buffer 'Adv_n_OBUF' driving design level port 'Adv_n' is
+   being pushed into module 'inst_top_camera_monitoring' to enable I/O register
+   usage. The buffer has been renamed as
+   'inst_top_camera_monitoring/Adv_n_OBUF'.
+INFO:Map:110 - output buffer 'Ce_n_OBUF' driving design level port 'Ce_n' is
+   being pushed into module 'inst_top_camera_monitoring' to enable I/O register
+   usage. The buffer has been renamed as 'inst_top_camera_monitoring/Ce_n_OBUF'.
+INFO:Map:110 - output buffer 'Cre_OBUF' driving design level port 'Cre' is being
+   pushed into module 'inst_top_camera_monitoring' to enable I/O register usage.
+   The buffer has been renamed as 'inst_top_camera_monitoring/Cre_OBUF'.
+INFO:Map:110 - output buffer 'Oe_n_OBUF' driving design level port 'Oe_n' is
+   being pushed into module 'inst_top_camera_monitoring' to enable I/O register
+   usage. The buffer has been renamed as 'inst_top_camera_monitoring/Oe_n_OBUF'.
+INFO:Map:110 - output buffer 'We_n_OBUF' driving design level port 'We_n' is
+   being pushed into module 'inst_top_camera_monitoring' to enable I/O register
+   usage. The buffer has been renamed as 'inst_top_camera_monitoring/We_n_OBUF'.
+INFO:Map:113 - input buffer 'oWait_IBUF' driving design level port 'oWait' is
+   being pushed into module 'inst_top_camera_monitoring/crbc_i0' to enable I/O
+   register usage. The buffer has been renamed as
+   'inst_top_camera_monitoring/crbc_i0/oWait_IBUF'.
+INFO:Map:113 - input buffer 'ov7670_data1_0_IBUF' driving design level port
+   'ov7670_data1<0>' is being pushed into module
+   'inst_top_camera_monitoring/inst_ov7670capt1' to enable I/O register usage.
+   The buffer has been renamed as
+   'inst_top_camera_monitoring/inst_ov7670capt1/ov7670_data1_0_IBUF'.
+INFO:Map:113 - input buffer 'ov7670_data1_1_IBUF' driving design level port
+   'ov7670_data1<1>' is being pushed into module
+   'inst_top_camera_monitoring/inst_ov7670capt1' to enable I/O register usage.
+   The buffer has been renamed as
+   'inst_top_camera_monitoring/inst_ov7670capt1/ov7670_data1_1_IBUF'.
+INFO:Map:113 - input buffer 'ov7670_data1_2_IBUF' driving design level port
+   'ov7670_data1<2>' is being pushed into module
+   'inst_top_camera_monitoring/inst_ov7670capt1' to enable I/O register usage.
+   The buffer has been renamed as
+   'inst_top_camera_monitoring/inst_ov7670capt1/ov7670_data1_2_IBUF'.
+INFO:Map:113 - input buffer 'ov7670_data1_3_IBUF' driving design level port
+   'ov7670_data1<3>' is being pushed into module
+   'inst_top_camera_monitoring/inst_ov7670capt1' to enable I/O register usage.
+   The buffer has been renamed as
+   'inst_top_camera_monitoring/inst_ov7670capt1/ov7670_data1_3_IBUF'.
+INFO:Map:113 - input buffer 'ov7670_data1_4_IBUF' driving design level port
+   'ov7670_data1<4>' is being pushed into module
+   'inst_top_camera_monitoring/inst_ov7670capt1' to enable I/O register usage.
+   The buffer has been renamed as
+   'inst_top_camera_monitoring/inst_ov7670capt1/ov7670_data1_4_IBUF'.
+INFO:Map:113 - input buffer 'ov7670_data1_5_IBUF' driving design level port
+   'ov7670_data1<5>' is being pushed into module
+   'inst_top_camera_monitoring/inst_ov7670capt1' to enable I/O register usage.
+   The buffer has been renamed as
+   'inst_top_camera_monitoring/inst_ov7670capt1/ov7670_data1_5_IBUF'.
+INFO:Map:113 - input buffer 'ov7670_data1_6_IBUF' driving design level port
+   'ov7670_data1<6>' is being pushed into module
+   'inst_top_camera_monitoring/inst_ov7670capt1' to enable I/O register usage.
+   The buffer has been renamed as
+   'inst_top_camera_monitoring/inst_ov7670capt1/ov7670_data1_6_IBUF'.
+INFO:Map:113 - input buffer 'ov7670_data1_7_IBUF' driving design level port
+   'ov7670_data1<7>' is being pushed into module
+   'inst_top_camera_monitoring/inst_ov7670capt1' to enable I/O register usage.
+   The buffer has been renamed as
+   'inst_top_camera_monitoring/inst_ov7670capt1/ov7670_data1_7_IBUF'.
+INFO:Map:113 - input buffer 'ov7670_href1_IBUF' driving design level port
+   'ov7670_href1' is being pushed into module
+   'inst_top_camera_monitoring/inst_ov7670capt1' to enable I/O register usage.
+   The buffer has been renamed as
+   'inst_top_camera_monitoring/inst_ov7670capt1/ov7670_href1_IBUF'.
+INFO:Map:113 - input buffer 'ov7670_vsync1_IBUF' driving design level port
+   'ov7670_vsync1' is being pushed into module
+   'inst_top_camera_monitoring/inst_ov7670capt1' to enable I/O register usage.
+   The buffer has been renamed as
+   'inst_top_camera_monitoring/inst_ov7670capt1/ov7670_vsync1_IBUF'.
 INFO:LIT:243 - Logical network N21 has no load.
 INFO:LIT:395 - The above info message is repeated 31 more times for the
    following (max. 5 shown):
@@ -1860,19 +2890,22 @@ INFO:LIT:395 - The above info message is repeated 31 more times for the
    N26
    To see the details of these info messages, please use the -detail switch.
 INFO:MapLib:562 - No environment variables are currently set.
-INFO:PhysDesignRules:772 - To achieve optimal frequency synthesis performance
-   with the CLKFX and CLKFX180 outputs of the DCM comp
-   inst_top_camera_monitoring/DCM_SP_cam, consult the device Interactive Data
-   Sheet.
-INFO:PhysDesignRules:772 - To achieve optimal frequency synthesis performance
-   with the CLKFX and CLKFX180 outputs of the DCM comp
-   inst_top_camera_monitoring/DCM_SP_vga, consult the device Interactive Data
-   Sheet.
+INFO:Pack:1716 - Initializing temperature to 85.000 Celsius. (default - Range:
+   -40.000 to 100.000 Celsius)
+INFO:Pack:1720 - Initializing voltage to 1.140 Volts. (default - Range: 1.140 to
+   1.320 Volts)
+INFO:Place:834 - Only a subset of IOs are locked. Out of 71 IOs, 64 are locked and 7 are not locked. If you would like
+   to print the names of these IOs, please set the environment variable XIL_PAR_DESIGN_CHECK_VERBOSE to 1. 
+INFO:Pack:1650 - Map created a placed design.
+INFO:PhysDesignRules:772 - To achieve optimal frequency synthesis performance with the CLKFX and CLKFX180 outputs of the
+   DCM comp inst_top_camera_monitoring/DCM_SP_cam, consult the device Interactive Data Sheet.
+INFO:PhysDesignRules:772 - To achieve optimal frequency synthesis performance with the CLKFX and CLKFX180 outputs of the
+   DCM comp inst_top_camera_monitoring/DCM_SP_vga, consult the device Interactive Data Sheet.
 
 Section 4 - Removed Logic Summary
 ---------------------------------
   18 block(s) optimized away
-   8 signal(s) removed
+   9 signal(s) removed
 
 Section 5 - Removed Logic
 -------------------------
@@ -1897,12 +2930,14 @@ The signal "inst_top_camera_monitoring/read_buffer_data<14>" is sourceless and
 has been removed.
 The signal "inst_top_camera_monitoring/read_buffer_data<15>" is sourceless and
 has been removed.
-The signal "inst_top_camera_monitoring/read_buffer_data<3>" is sourceless and
+The signal "inst_top_camera_monitoring/read_buffer_data<1>" is sourceless and
 has been removed.
 The signal "inst_top_camera_monitoring/read_buffer_data<4>" is sourceless and
 has been removed.
 The signal "inst_top_camera_monitoring/read_buffer_data<8>" is sourceless and
 has been removed.
+The signal "inst_top_camera_monitoring/siodi1" is sourceless and has been
+removed.
 
 Optimized Block(s):
 TYPE 		BLOCK
@@ -1927,6 +2962,112 @@ VCC 		inst_top_camera_monitoring/inst_vgatiming/XST_VCC
 
 To enable printing of redundant blocks removed and signals merged, set the
 detailed map report option and rerun map.
+
+Section 11 - Timing Report
+--------------------------
+WARNING:Timing:3223 - Timing constraint PATH "TS_50_to_24p_path" TIG ignored 
+   during timing analysis.
+WARNING:Timing:3223 - Timing constraint PATH "TS_24p_to_50_path" TIG ignored 
+   during timing analysis.
+WARNING:Timing:3223 - Timing constraint PATH "TS_50_to_24x_path" TIG ignored 
+   during timing analysis.
+WARNING:Timing:3223 - Timing constraint PATH "TS_24x_to_50_path" TIG ignored 
+   during timing analysis.
+WARNING:Timing:3223 - Timing constraint PATH "TS_50_to_25_path" TIG ignored 
+   during timing analysis.
+WARNING:Timing:3223 - Timing constraint PATH "TS_25_to_50_path" TIG ignored 
+   during timing analysis.
+WARNING:Timing:3223 - Timing constraint PATH "TS_12_5_to_50_path" TIG ignored 
+   during timing analysis.
+WARNING:Timing:3223 - Timing constraint PATH "TS_50_to_12_5_path" TIG ignored 
+   during timing analysis.
+INFO:Timing:3284 - This timing report was generated using estimated delay 
+   information.  For accurate numbers, please refer to the post Place and Route 
+   timing report.
+Number of Timing Constraints that were not applied: 13
+
+Asterisk (*) preceding a constraint indicates it was not met.
+   This may be due to a setup or hold violation.
+
+----------------------------------------------------------------------------------------------------------
+  Constraint                                |    Check    | Worst Case |  Best Case | Timing |   Timing   
+                                            |             |    Slack   | Achievable | Errors |    Score   
+----------------------------------------------------------------------------------------------------------
+* TS_inst_top_camera_monitoring_clk_mc1 = P | SETUP       |    -1.728ns|    25.306ns|       1|        1728
+  ERIOD TIMEGRP "inst_top_camera_monitoring | HOLD        |     0.380ns|            |       0|           0
+  _clk_mc1" TS_inst_top_camera_monitoring_c |             |            |            |        |            
+  lk1 / 0.6 HIGH 50%                        |             |            |            |        |            
+----------------------------------------------------------------------------------------------------------
+  TS_inst_top_camera_monitoring_clk1 = PERI | MINLOWPULSE |     5.200ns|     4.800ns|       0|           0
+  OD TIMEGRP "inst_top_camera_monitoring_cl |             |            |            |        |            
+  k1" TS_clk100 HIGH 50%                    |             |            |            |        |            
+----------------------------------------------------------------------------------------------------------
+  TS_clk100 = PERIOD TIMEGRP "i_clock100" 1 | MINLOWPULSE |     5.200ns|     4.800ns|       0|           0
+  0 ns HIGH 50%                             |             |            |            |        |            
+----------------------------------------------------------------------------------------------------------
+  TS_CLK24pclk = PERIOD TIMEGRP "CLK24pclk" | SETUP       |    18.168ns|     5.330ns|       0|           0
+   41.667 ns HIGH 50%                       | HOLD        |     0.575ns|            |       0|           0
+----------------------------------------------------------------------------------------------------------
+  TS_vga_clock_OBUF = PERIOD TIMEGRP "vga_c | SETUP       |    35.187ns|     4.813ns|       0|           0
+  lock_OBUF" TS_inst_top_camera_monitoring_ | HOLD        |     0.705ns|            |       0|           0
+  clk1 * 4 HIGH 50%                         |             |            |            |        |            
+----------------------------------------------------------------------------------------------------------
+  TS_CLK25 = PERIOD TIMEGRP "CLK25" 40 ns H | MINPERIOD   |    38.404ns|     1.596ns|       0|           0
+  IGH 50%                                   |             |            |            |        |            
+----------------------------------------------------------------------------------------------------------
+  TS_CLK12_5 = PERIOD TIMEGRP "CLK12_5" 80  | SETUP       |    75.987ns|     4.013ns|       0|           0
+  ns HIGH 50%                               | HOLD        |     0.439ns|            |       0|           0
+----------------------------------------------------------------------------------------------------------
+  PATH "TS_50_to_12_5_path" TIG             | N/A         |         N/A|         N/A|     N/A|         N/A
+----------------------------------------------------------------------------------------------------------
+  PATH "TS_12_5_to_50_path" TIG             | N/A         |         N/A|         N/A|     N/A|         N/A
+----------------------------------------------------------------------------------------------------------
+  PATH "TS_25_to_50_path" TIG               | N/A         |         N/A|         N/A|     N/A|         N/A
+----------------------------------------------------------------------------------------------------------
+  PATH "TS_50_to_25_path" TIG               | N/A         |         N/A|         N/A|     N/A|         N/A
+----------------------------------------------------------------------------------------------------------
+  PATH "TS_24x_to_50_path" TIG              | N/A         |         N/A|         N/A|     N/A|         N/A
+----------------------------------------------------------------------------------------------------------
+  PATH "TS_50_to_24x_path" TIG              | N/A         |         N/A|         N/A|     N/A|         N/A
+----------------------------------------------------------------------------------------------------------
+  PATH "TS_24p_to_50_path" TIG              | N/A         |         N/A|         N/A|     N/A|         N/A
+----------------------------------------------------------------------------------------------------------
+  PATH "TS_50_to_24p_path" TIG              | N/A         |         N/A|         N/A|     N/A|         N/A
+----------------------------------------------------------------------------------------------------------
+  TS_CLK24xclk = PERIOD TIMEGRP "CLK24xclk" | N/A         |         N/A|         N/A|     N/A|         N/A
+   41.667 ns HIGH 50%                       |             |            |            |        |            
+----------------------------------------------------------------------------------------------------------
+  TS_ramclk = PERIOD TIMEGRP "ram_clk" 10 n | N/A         |         N/A|         N/A|     N/A|         N/A
+  s HIGH 50%                                |             |            |            |        |            
+----------------------------------------------------------------------------------------------------------
+
+
+Derived Constraint Report
+Review Timing Report for more details on the following derived constraints.
+To create a Timing Report, run "trce -v 12 -fastpaths -o design_timing_report design.ncd design.pcf"
+or "Run Timing Analysis" from Timing Analyzer (timingan).
+Derived Constraints for TS_clk100
++-------------------------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+
+|                               |   Period    |       Actual Period       |      Timing Errors        |      Paths Analyzed       |
+|           Constraint          | Requirement |-------------+-------------|-------------+-------------|-------------+-------------|
+|                               |             |   Direct    | Derivative  |   Direct    | Derivative  |   Direct    | Derivative  |
++-------------------------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+
+|TS_clk100                      |     10.000ns|      4.800ns|     15.184ns|            0|            1|            0|        46737|
+| TS_inst_top_camera_monitoring_|     10.000ns|      4.800ns|     15.184ns|            0|            1|            0|        46737|
+| clk1                          |             |             |             |             |             |             |             |
+|  TS_vga_clock_OBUF            |     40.000ns|      4.813ns|          N/A|            0|            0|          938|            0|
+|  TS_inst_top_camera_monitoring|     16.667ns|     25.306ns|          N/A|            1|            0|        45799|            0|
+|  _clk_mc1                     |             |             |             |             |             |             |             |
++-------------------------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+
+
+1 constraint not met.
+INFO:Timing:2761 - N/A entries in the Constraints List may indicate that the 
+   constraint is not analyzed due to the following: No paths covered by this 
+   constraint; Other constraints intersect with this constraint; or This 
+   constraint was disabled by a Path Tracing Control. Please run the Timespec 
+   Interaction Report (TSI) via command line (trce tsi) or Timing Analyzer GUI.
+
+
 
 Section 6 - IOB Properties
 --------------------------
@@ -2001,7 +3142,7 @@ Section 6 - IOB Properties
 | i_clock                            | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
 | i_clock100                         | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
 | led1                               | IOB              | OUTPUT    | LVCMOS33             |       | 12       | SLOW |              |          | 0 / 0    |
-| oWait                              | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
+| oWait                              | IBUF             | INPUT     | LVCMOS25             |       |          |      | IFF1         |          | 0 / 3    |
 | ov7670_data1<0>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      | IFF1         |          | 0 / 3    |
 | ov7670_data1<1>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      | IFF1         |          | 0 / 3    |
 | ov7670_data1<2>                    | IBUF             | INPUT     | LVCMOS33             |       |          |      | IFF1         |          | 0 / 3    |
@@ -2022,7 +3163,7 @@ Section 6 - IOB Properties
 | ov7670_siod1                       | IOB              | BIDIR     | LVCMOS33             |       | 12       | SLOW |              | PULLUP   | 0 / 0    |
 | ov7670_vsync1                      | IBUF             | INPUT     | LVCMOS33             |       |          |      | IFF1         |          | 0 / 3    |
 | ov7670_xclk1                       | IOB              | OUTPUT    | LVCMOS33             |       | 12       | FAST |              |          | 0 / 0    |
-| pb                                 | IBUF             | INPUT     | LVCMOS25             |       |          |      | IFF1         |          | 0 / 3    |
+| pb                                 | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
 | sw<0>                              | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
 | sw<1>                              | IBUF             | INPUT     | LVCMOS25             |       |          |      |              |          | 0 / 0    |
 | vga_b<0>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
@@ -2067,7 +3208,15 @@ Area Group Information
 
 Section 10 - Timing Report
 --------------------------
-This design was not run using timing mode.
+A logic-level (pre-route) timing report can be generated by using Xilinx static
+timing analysis tools, Timing Analyzer (GUI) or TRCE (command line), with the
+mapped NCD and PCF files. Please note that this timing report will be generated
+using estimated delay information. For accurate numbers, please generate a
+timing report with the post Place and Route NCD file.
+
+For more information about the Timing Analyzer, consult the Xilinx Timing
+Analyzer Reference Manual; for more information about TRCE, consult the Xilinx
+Command Line Tools User Guide "TRACE" chapter.
 
 Section 11 - Configuration String Details
 -----------------------------------------

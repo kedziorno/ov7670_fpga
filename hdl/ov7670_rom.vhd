@@ -17,7 +17,7 @@ x"8c"&"00000010", -- RGB444 xRGB
 x"0c"&"00000000", -- COM3
 x"3e"&"00010001", -- COM14 4 - DCW and scaling PCLK, 20 - Divided by 2
 x"04"&"00000000", -- COM1
-x"40"&"10011000", -- COM15 76 - FF, 54 - RGB555
+x"40"&"11011000", -- COM15 76 - FF, 54 - RGB555
 x"13"&"00011111", -- COM8 43 - reserved, 2 - AGC, 1 - AWB, 0 - AEC
 x"41"&"00001000", -- COM16 3 - AWB gain
 x"3a"&"00000001", -- TSLB 2 - reserved
