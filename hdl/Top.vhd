@@ -525,20 +525,15 @@ port map (
 vga_hsync <= vga_hsync_i;
 vga_vsync <= vga_vsync_sig;
 vga_clock <= clk_vga;
---for all : vga_timing_synch use entity work.vga_timing_synch(lsfr_2);
---for all : vga_timing_synch use entity work.vga_timing_synch(lsfr_1);
---for all : vga_timing_synch use entity work.vga_timing_synch(jc);
-inst_vgatiming : entity work.vga_timing_synch (counter)
+vga_timing_i0 : entity work.vga_timing (counter) -- jc, lsfr_1, lsfr_2
 port map (
   clk25 => clk_vga,
   rst => pb,
   hsync => vga_hsync_i,
   vsync => vga_vsync_sig,
   blank => vga_blank,
-  activearea1 => active1,
-  int => vga_int,
-  fint => open,
-  vint => '0'
+  activearea => active1,
+  interrupt => vga_int
 );
 
 reset_dcm <= not reset_dcm_n;
