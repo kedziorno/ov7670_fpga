@@ -12,7 +12,6 @@ entity ov7670_controller is
            resend : in  STD_LOGIC;
            sw : in std_logic;
            sioc : out  STD_LOGIC;
-           siodi : in  STD_LOGIC;
            siodo : out  STD_LOGIC;
            conf_done : out  STD_LOGIC;
            pwdn : out  STD_LOGIC;
@@ -40,7 +39,6 @@ component ov7670_SCCB
           slave_addr : in  STD_LOGIC_VECTOR (7 downto 0);
           addr_reg : in  STD_LOGIC_VECTOR (7 downto 0);
           send : in  STD_LOGIC;
-          siodi : in  STD_LOGIC;
           siodo : out  STD_LOGIC;
           sioc : out  STD_LOGIC;
           taken : out  STD_LOGIC);
@@ -73,7 +71,6 @@ SCCB : ov7670_SCCB port map(
 	addr_reg => command (15 downto 8),
 	send => send,
 	sioc => sioc,
-	siodi => siodi,
 	siodo => siodo,
 	taken => taken);
 

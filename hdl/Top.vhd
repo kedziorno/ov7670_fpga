@@ -432,13 +432,12 @@ vga_r <= vga_rgb (7 downto 5);
 vga_g <= vga_rgb (4 downto 2);
 vga_b <= vga_rgb (1 downto 0);
 
-siodo1_n <= not siodi1;
 ov7670_siod1_tri : iobuf
 port map (
-  o => siodi1,
+  o => open,
   io=> ov7670_siod1,
   i=> siodo1,
-  t=> siodo1_n
+  t=> '0'
 );
 
 inst_debounce: entity work.debounce_circuit
@@ -467,7 +466,6 @@ port map (
   resend => sw(1),
   sw => sw (0),
   sioc => ov7670_sioc1,
-  siodi => siodi1,
   siodo => siodo1,
   conf_done => led1,
   pwdn => cam_pwdn,
@@ -476,23 +474,13 @@ port map (
   xclk_out => open
 );
 
-ov7670_pclk <= ov7670_pclk1;
-ov7670_hs <= ov7670_href1;
-ov7670_vs <= ov7670_vsync1;
-ov7670_d <= ov7670_data1;
-
-cam_pclk <= ov7670_pclk;
-cam_hs <= ov7670_hs;
-cam_vs <= ov7670_vs;
-cam_d <= ov7670_d;
-
 ov7670_capture_i0 : entity work.ov7670_capture
 port map (
-  pclk => cam_pclk,
   reset => pb,
-  vsync => cam_vs,
-  href => cam_hs,
-  d => cam_d,
+  pclk => ov7670_pclk1,
+  vsync => ov7670_vsync1,
+  href => ov7670_href1,
+  d => ov7670_data1,
   addr => write_buffer_addr,
   dout => write_buffer_data,
   latched_vs => latched_vs,
@@ -524,8 +512,8 @@ vga_vsync <= vga_vsync_sig;
 vga_clock <= clk_vga;
 vga_timing_i0 : entity work.vga_timing (counter) -- jc, lsfr_1, lsfr_2
 port map (
-  clk25 => clk_vga,
   rst => pb,
+  clk25 => clk_vga,
   hsync => vga_hsync_i,
   vsync => vga_vsync_sig,
   blank => vga_blank,

@@ -13,7 +13,6 @@ entity ov7670_SCCB is
            addr_reg : in  STD_LOGIC_VECTOR (7 downto 0);
            send : in  STD_LOGIC;
            siodo : out  STD_LOGIC;
-           siodi : in  STD_LOGIC;
            sioc : out  STD_LOGIC;
            taken : out  STD_LOGIC);
 end ov7670_SCCB;
