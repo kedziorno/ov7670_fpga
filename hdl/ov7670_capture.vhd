@@ -13,7 +13,6 @@ entity ov7670_capture is
     -- System output
     addr       : out std_logic_vector (10 downto 0);
     dout       : out std_logic_vector (15 downto 0);
-    we         : out std_logic_vector (0 downto 0);
     latched_hs : out std_logic;
     latched_vs : out std_logic
   );
@@ -23,33 +22,31 @@ architecture behavioral of ov7670_capture is
   constant c_one_row_ticks : integer := 640;
   signal d_latch       : std_logic_vector (15 downto 0);
   signal address       : std_logic_vector (10 downto 0);
-  signal we_reg        : std_logic;
   signal latched_vsync : std_logic;
   signal latched_href  : std_logic;
   signal latched_d     : std_logic_vector (7 downto 0);
 begin
-  addr  <= address;
-  we(0) <= we_reg;
-  dout  <= d_latch;
+  addr <= address;
+  dout <= d_latch;
 
-  capture_process: process (pclk, reset) is
+  capture_process: process (pclk) is
   begin
-    if (reset = '1') then
-      we_reg  <= '0';
-      address <= (others => '0');
-      d_latch <= (others => '0');
-    elsif (rising_edge (pclk)) then
-      d_latch   <= d_latch (7 downto 0) & latched_d;
-      we_reg    <= not we_reg;
-      if (latched_href = '1') then
-        if (to_integer (unsigned (address)) = c_one_row_ticks * 1 - 1) then
-          address <= (others => '0');
-        else
-          address <= std_logic_vector (unsigned (address) + 1);
-        end if;
-      end if;
-      if (latched_vsync = '1') then
+    if (rising_edge (pclk)) then
+      if (vsync = '1') then
         address <= (others => '0');
+        d_latch <= (others => '0');
+      else
+        d_latch <= d_latch (7 downto 0) & latched_d;
+        if (latched_href = '1') then
+          if (to_integer (unsigned (address)) = c_one_row_ticks * 1 - 1) then
+            address <= (others => '0');
+          else
+            address <= std_logic_vector (unsigned (address) + 1);
+          end if;
+        end if;
+        if (latched_vsync = '1') then
+          address <= (others => '0');
+        end if;
       end if;
     end if;
   end process capture_process;

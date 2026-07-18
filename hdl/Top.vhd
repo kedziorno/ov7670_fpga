@@ -498,7 +498,6 @@ port map (
   d => cam_d,
   addr => write_buffer_addr,
   dout => write_buffer_data,
-  we => open,
   latched_vs => latched_vs,
   latched_hs => latched_hs
 );
