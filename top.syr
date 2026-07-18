@@ -5,14 +5,14 @@ Parameter TMPDIR set to xst/projnav.tmp
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.03 secs
+Total CPU time to Xst completion: 0.02 secs
  
 --> 
 Parameter xsthdpdir set to xst
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.03 secs
+Total CPU time to Xst completion: 0.02 secs
  
 --> 
 Reading design: top.prj
@@ -140,7 +140,8 @@ Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/ov76
 Entity <ov7670_capture> compiled.
 Entity <ov7670_capture> (Architecture <behavioral>) compiled.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/address_generator.vhd" in Library work.
-Architecture behavioral of Entity address_generator is up to date.
+Entity <address_generator> compiled.
+Entity <address_generator> (Architecture <behavioral>) compiled.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/vga_imagegenerator.vhd" in Library work.
 Architecture behavioral of Entity vga_imagegenerator is up to date.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/vga_timing.vhd" in Library work.
@@ -183,7 +184,7 @@ Analyzing hierarchy for entity <ov7670_controller> in library <work> (architectu
 
 Analyzing hierarchy for entity <ov7670_capture> in library <work> (architecture <behavioral>).
 
-Analyzing hierarchy for entity <address_generator> in library <work> (architecture <Behavioral>).
+Analyzing hierarchy for entity <address_generator> in library <work> (architecture <behavioral>).
 
 Analyzing hierarchy for entity <vga_imagegenerator> in library <work> (architecture <Behavioral>).
 
@@ -343,7 +344,6 @@ Analyzing generic Entity <top_camera_monitoring> in library <work> (Architecture
 WARNING:Xst:753 - "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/Top.vhd" line 447: Unconnected output port 'output' of component 'debounce_circuit'.
 WARNING:Xst:753 - "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/Top.vhd" line 466: Unconnected output port 'reset' of component 'ov7670_controller'.
 WARNING:Xst:753 - "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/Top.vhd" line 466: Unconnected output port 'xclk_out' of component 'ov7670_controller'.
-WARNING:Xst:753 - "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/Top.vhd" line 505: Unconnected output port 'address1' of component 'address_generator'.
 WARNING:Xst:753 - "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/Top.vhd" line 531: Unconnected output port 'fint' of component 'VGA_timing_synch'.
     Set user-defined property "INIT =  0000" for instance <synchro_reset_i0> in unit <top_camera_monitoring>.
     Set user-defined property "CLKDV_DIVIDE =  4.0000000000000000" for instance <dcm_sp_vga> in unit <top_camera_monitoring>.
@@ -417,7 +417,7 @@ Entity <ov7670_SCCB> analyzed. Unit <ov7670_SCCB> generated.
 Analyzing Entity <ov7670_capture> in library <work> (Architecture <behavioral>).
 Entity <ov7670_capture> analyzed. Unit <ov7670_capture> generated.
 
-Analyzing Entity <address_generator> in library <work> (Architecture <Behavioral>).
+Analyzing Entity <address_generator> in library <work> (Architecture <behavioral>).
 Entity <address_generator> analyzed. Unit <address_generator> generated.
 
 Analyzing Entity <vga_imagegenerator> in library <work> (Architecture <Behavioral>).
@@ -460,14 +460,10 @@ Unit <ov7670_capture> synthesized.
 Synthesizing Unit <address_generator>.
     Related source file is "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/address_generator.vhd".
     Found 10-bit up counter for signal <addr>.
-    Found 11-bit comparator greatequal for signal <addr$cmp_ge0000> created at line 36.
-    Found 11-bit up counter for signal <addr1>.
-    Found 12-bit comparator greatequal for signal <addr1$cmp_ge0000> created at line 41.
     Found 1-bit register for signal <enable_prev>.
     Summary:
-	inferred   2 Counter(s).
+	inferred   1 Counter(s).
 	inferred   1 D-type flip-flop(s).
-	inferred   2 Comparator(s).
 Unit <address_generator> synthesized.
 
 
@@ -692,9 +688,9 @@ Macro Statistics
  18-bit adder                                          : 2
  23-bit adder                                          : 2
  8-bit subtractor                                      : 1
-# Counters                                             : 8
+# Counters                                             : 7
  10-bit up counter                                     : 3
- 11-bit up counter                                     : 2
+ 11-bit up counter                                     : 1
  20-bit up counter                                     : 1
  6-bit up counter                                      : 1
  8-bit up counter                                      : 1
@@ -709,14 +705,12 @@ Macro Statistics
  27-bit register                                       : 1
  32-bit register                                       : 2
  8-bit register                                        : 4
-# Comparators                                          : 15
+# Comparators                                          : 13
  10-bit comparator greatequal                          : 2
  10-bit comparator greater                             : 2
  10-bit comparator less                                : 5
- 11-bit comparator greatequal                          : 1
  11-bit comparator greater                             : 2
  11-bit comparator lessequal                           : 2
- 12-bit comparator greatequal                          : 1
 
 =========================================================================
 
@@ -813,22 +807,20 @@ Macro Statistics
  18-bit adder                                          : 2
  23-bit adder                                          : 2
  8-bit subtractor                                      : 1
-# Counters                                             : 8
+# Counters                                             : 7
  10-bit up counter                                     : 3
- 11-bit up counter                                     : 2
+ 11-bit up counter                                     : 1
  20-bit up counter                                     : 1
  6-bit up counter                                      : 1
  8-bit up counter                                      : 1
 # Registers                                            : 517
  Flip-Flops                                            : 517
-# Comparators                                          : 15
+# Comparators                                          : 13
  10-bit comparator greatequal                          : 2
  10-bit comparator greater                             : 2
  10-bit comparator less                                : 5
- 11-bit comparator greatequal                          : 1
  11-bit comparator greater                             : 2
  11-bit comparator lessequal                           : 2
- 12-bit comparator greatequal                          : 1
 
 =========================================================================
 
@@ -934,17 +926,6 @@ WARNING:Xst:1710 - FF/Latch <a_20> (without init value) has a constant value of 
 WARNING:Xst:1710 - FF/Latch <a_21> (without init value) has a constant value of 0 in block <crbc_i0>. This FF/Latch will be trimmed during the optimization process.
 WARNING:Xst:1293 - FF/Latch <burst_write_addr_19> has a constant value of 0 in block <crbc_i0>. This FF/Latch will be trimmed during the optimization process.
 WARNING:Xst:1293 - FF/Latch <bytes_to_write_2> has a constant value of 0 in block <crbc_i0>. This FF/Latch will be trimmed during the optimization process.
-WARNING:Xst:2677 - Node <addr1_0> of sequential type is unconnected in block <inst_addrgen1>.
-WARNING:Xst:2677 - Node <addr1_1> of sequential type is unconnected in block <inst_addrgen1>.
-WARNING:Xst:2677 - Node <addr1_2> of sequential type is unconnected in block <inst_addrgen1>.
-WARNING:Xst:2677 - Node <addr1_3> of sequential type is unconnected in block <inst_addrgen1>.
-WARNING:Xst:2677 - Node <addr1_4> of sequential type is unconnected in block <inst_addrgen1>.
-WARNING:Xst:2677 - Node <addr1_5> of sequential type is unconnected in block <inst_addrgen1>.
-WARNING:Xst:2677 - Node <addr1_6> of sequential type is unconnected in block <inst_addrgen1>.
-WARNING:Xst:2677 - Node <addr1_7> of sequential type is unconnected in block <inst_addrgen1>.
-WARNING:Xst:2677 - Node <addr1_8> of sequential type is unconnected in block <inst_addrgen1>.
-WARNING:Xst:2677 - Node <addr1_9> of sequential type is unconnected in block <inst_addrgen1>.
-WARNING:Xst:2677 - Node <addr1_10> of sequential type is unconnected in block <inst_addrgen1>.
 
 Mapping all equations...
 Building and optimizing final netlist ...
@@ -1063,9 +1044,9 @@ Design Statistics
 # IOs                              : 87
 
 Cell Usage :
-# BELS                             : 1366
+# BELS                             : 1365
 #      GND                         : 9
-#      INV                         : 58
+#      INV                         : 57
 #      LUT1                        : 117
 #      LUT2                        : 161
 #      LUT3                        : 111
@@ -1078,8 +1059,8 @@ Cell Usage :
 # FlipFlops/Latches                : 594
 #      FD                          : 40
 #      FDC                         : 10
-#      FDE                         : 171
-#      FDR                         : 142
+#      FDE                         : 170
+#      FDR                         : 143
 #      FDRE                        : 159
 #      FDRS                        : 58
 #      FDRSE                       : 5
@@ -1109,8 +1090,8 @@ Selected Device : 3s1200efg320-4
 
  Number of Slices:                      521  out of   8672     6%  
  Number of Slice Flip Flops:            562  out of  17344     3%  
- Number of 4 input LUTs:                899  out of  17344     5%  
-    Number used as logic:               898
+ Number of 4 input LUTs:                898  out of  17344     5%  
+    Number used as logic:               897
     Number used as Shift registers:       1
  Number of IOs:                          87
  Number of bonded IOBs:                  80  out of    250    32%  
@@ -1137,15 +1118,15 @@ NOTE: THESE TIMING NUMBERS ARE ONLY A SYNTHESIS ESTIMATE.
 
 Clock Information:
 ------------------
-------------------------------------------+-----------------------------------------------------------+-------+
-Clock Signal                              | Clock buffer(FF name)                                     | Load  |
-------------------------------------------+-----------------------------------------------------------+-------+
-i_clock                                   | dcm_sp_cam:CLK0+dcm_sp_vga:CLKFX                          | 504   |
-i_clock                                   | dcm_sp_cam:CLK0+dcm_sp_vga:CLKDV                          | 45    |
-i_clock                                   | dcm_sp_cam:CLK0                                           | 1     |
-ov7670_pclk1                              | BUFGP                                                     | 39    |
-inst_top_camera_monitoring/read_buffer_clk| NONE(inst_top_camera_monitoring/inst_addrgen1/enable_prev)| 12    |
-------------------------------------------+-----------------------------------------------------------+-------+
+------------------------------------------+------------------------------------------------------------------+-------+
+Clock Signal                              | Clock buffer(FF name)                                            | Load  |
+------------------------------------------+------------------------------------------------------------------+-------+
+i_clock                                   | dcm_sp_cam:CLK0+dcm_sp_vga:CLKFX                                 | 504   |
+i_clock                                   | dcm_sp_cam:CLK0+dcm_sp_vga:CLKDV                                 | 45    |
+i_clock                                   | dcm_sp_cam:CLK0                                                  | 1     |
+ov7670_pclk1                              | BUFGP                                                            | 39    |
+inst_top_camera_monitoring/read_buffer_clk| NONE(inst_top_camera_monitoring/address_generator_i0/enable_prev)| 12    |
+------------------------------------------+------------------------------------------------------------------+-------+
 INFO:Xst:2169 - HDL ADVISOR - Some clock signals were not automatically buffered by XST with BUFG/BUFR resources. Please use the buffer_type constraint in order to insert these buffers to the clock signals to help prevent skew problems.
 
 Asynchronous Control Signals Information:
@@ -1228,16 +1209,16 @@ Timing constraint: Default period analysis for Clock 'inst_top_camera_monitoring
   Total number of paths / destination ports: 175 / 30
 -------------------------------------------------------------------------
 Delay:               6.156ns (Levels of Logic = 3)
-  Source:            inst_top_camera_monitoring/inst_addrgen1/addr_7 (FF)
-  Destination:       inst_top_camera_monitoring/inst_addrgen1/addr_0 (FF)
+  Source:            inst_top_camera_monitoring/address_generator_i0/addr_2 (FF)
+  Destination:       inst_top_camera_monitoring/address_generator_i0/addr_0 (FF)
   Source Clock:      inst_top_camera_monitoring/read_buffer_clk rising
   Destination Clock: inst_top_camera_monitoring/read_buffer_clk rising
 
-  Data Path: inst_top_camera_monitoring/inst_addrgen1/addr_7 to inst_top_camera_monitoring/inst_addrgen1/addr_0
+  Data Path: inst_top_camera_monitoring/address_generator_i0/addr_2 to inst_top_camera_monitoring/address_generator_i0/addr_0
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDRE:C->Q             3   0.591   0.706  addr_7 (addr_7)
+     FDRE:C->Q             3   0.591   0.706  addr_2 (addr_2)
      LUT4:I0->O            1   0.704   0.499  addr_or00007 (addr_or00007)
      LUT4:I1->O            1   0.704   0.455  addr_or000053_SW0 (N01)
      LUT4:I2->O           10   0.704   0.882  addr_or000053 (addr_or0000)
@@ -1300,16 +1281,16 @@ Timing constraint: Default OFFSET IN BEFORE for Clock 'inst_top_camera_monitorin
 -------------------------------------------------------------------------
 Offset:              5.058ns (Levels of Logic = 3)
   Source:            pb (PAD)
-  Destination:       inst_top_camera_monitoring/inst_addrgen1/addr_0 (FF)
+  Destination:       inst_top_camera_monitoring/address_generator_i0/addr_0 (FF)
   Destination Clock: inst_top_camera_monitoring/read_buffer_clk rising
 
-  Data Path: pb to inst_top_camera_monitoring/inst_addrgen1/addr_0
+  Data Path: pb to inst_top_camera_monitoring/address_generator_i0/addr_0
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
      IBUF:I->O           275   1.218   1.343  pb_IBUF (pb_IBUF)
      begin scope: 'inst_top_camera_monitoring'
-     begin scope: 'inst_addrgen1'
+     begin scope: 'address_generator_i0'
      LUT4:I3->O           10   0.704   0.882  addr_or000053 (addr_or0000)
      FDRE:R                    0.911          addr_0
     ----------------------------------------
@@ -1393,14 +1374,14 @@ Delay:               7.794ns (Levels of Logic = 4)
 
 
 Total REAL time to Xst completion: 7.00 secs
-Total CPU time to Xst completion: 6.88 secs
+Total CPU time to Xst completion: 6.75 secs
  
 --> 
 
 
-Total memory usage is 557120 kilobytes
+Total memory usage is 556864 kilobytes
 
 Number of errors   :    0 (   0 filtered)
-Number of warnings :  127 (   0 filtered)
+Number of warnings :  115 (   0 filtered)
 Number of infos    :    4 (   0 filtered)
 

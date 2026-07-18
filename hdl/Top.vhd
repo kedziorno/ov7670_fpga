@@ -502,7 +502,7 @@ port map (
   latched_hs => latched_hs
 );
 
-inst_addrgen1 : entity work.address_generator
+address_generator_i0 : entity work.address_generator
 port map (
   --clk25 => clk_vga,
   clk25 => read_buffer_clk,
@@ -510,8 +510,8 @@ port map (
   reset => pb,
   enable => active1,
   vsync => vga_vsync_sig,
-  address => read_buffer_addr,
-  address1 => open);
+  address => read_buffer_addr
+  );
 
 inst_imagegen : entity work.vga_imagegenerator
 port map (

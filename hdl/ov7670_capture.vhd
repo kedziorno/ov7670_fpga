@@ -19,16 +19,18 @@ entity ov7670_capture is
 end entity ov7670_capture;
 
 architecture behavioral of ov7670_capture is
+
   constant c_one_row_ticks : integer := 640;
   signal d_latch       : std_logic_vector (15 downto 0);
   signal address       : std_logic_vector (10 downto 0);
   signal latched_vsync : std_logic;
   signal latched_href  : std_logic;
   signal latched_d     : std_logic_vector (7 downto 0);
+
 begin
+
   addr <= address;
   dout <= d_latch;
-
   capture_process: process (pclk) is
   begin
     if (rising_edge (pclk)) then
@@ -65,5 +67,5 @@ begin
       latched_vsync <= vsync;
     end if;
   end process latched_process;
-end architecture behavioral;
 
+end architecture behavioral;

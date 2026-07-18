@@ -1,61 +1,51 @@
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.STD_LOGIC_ARITH.ALL;
-use IEEE.STD_LOGIC_UNSIGNED.ALL;
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.std_logic_arith.all;
+use ieee.std_logic_unsigned.all;
 
 entity address_generator is
-  Port ( 
-    clk25,reset : in STD_LOGIC;
-    enable : in STD_LOGIC;
-    vsync : in STD_LOGIC;
-    address : out STD_LOGIC_VECTOR (9 downto 0);
-    address1 : out STD_LOGIC_VECTOR (10 downto 0)
+  port (
+    clk25   : in std_logic;
+    reset   : in std_logic;
+    enable  : in std_logic;
+    vsync   : in std_logic;
+    address : out std_logic_vector (9 downto 0)
   );  
-end address_generator;
+end entity address_generator;
 
+architecture behavioral of address_generator is
 
-architecture Behavioral of address_generator is
-
-  signal addr: STD_LOGIC_VECTOR(address'range) := (others => '0');
-  signal addr1: STD_LOGIC_VECTOR(address1'range) := (others => '0');
+  signal addr        : std_logic_vector (address'range);
   signal enable_prev : std_logic;
+
 begin
 
-  address <= addr; 
-  address1 <= addr1; 
-
-process (clk25) begin
-	if rising_edge (clk25) then
-  if (reset = '1') then
-    addr <= (others => '0');
-    addr1 <= (others => '0');
-  else
-    enable_prev <= enable;
-		if (enable='1') then
---			if (addr < 307200-1) then
-			if (addr < 2**(address'left+1)-1) then
-				addr <= addr + 1 ;
-			else
-			addr <= (others => '0');
-			end if;
-			if (addr1 < 640*2-1) then
-				addr1 <= addr1 + 1 ;
-			else
-			addr1 <= (others => '0');
-			end if;
-		else
-		addr <= addr;
-		addr1 <= addr1;
-		end if;
-		        if (enable = '1' and enable_prev = '0') then
-          addr  <= (others => '0');
-          addr1 <= (others => '0');
+  address <= addr;
+  p0_address_generator : process (clk25) begin
+    if (rising_edge (clk25)) then
+      if (reset = '1') then
+        addr        <= (others => '0');
+        enable_prev <= '0';
+      else
+        enable_prev <= enable;
+        if (enable = '1') then
+          if (addr = 2 ** (address'left + 1) - 1) then
+            addr <= (others => '0');
+          else
+            addr <= addr + 1;
+          end if;
+        else
+          addr <= addr;
         end if;
-		if vsync = '0' then 
-			addr <= (others => '0');
-			addr1 <= (others => '0');
-		end if;
-	end if;
-	end if;
-end process;    
-end Behavioral;
+        if (enable = '1' and enable_prev = '0') then
+          addr <= (others => '0');
+        end if;
+        if (vsync = '0') then
+          addr <= (others => '0');
+        end if;
+      end if;
+    end if;
+  end process p0_address_generator;
+
+end architecture behavioral;
+
