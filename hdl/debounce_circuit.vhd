@@ -22,9 +22,9 @@ end entity debounce_circuit;
 
 architecture Behavioral of debounce_circuit is
 
-constant MAX : unsigned (PB_BITS - 1 downto 0) := (others => '1');
-constant MIN : unsigned (PB_BITS - 1 downto 0) := (others => '0');
-signal counter : unsigned (PB_BITS-1 downto 0) := (others => '0');
+constant MAX   : unsigned (PB_BITS - 1 downto 0) := (others => '1');
+constant MIN   : unsigned (PB_BITS - 1 downto 0) := (others => '0');
+signal counter : unsigned (PB_BITS - 1 downto 0) := (others => '0');
 
 begin
 

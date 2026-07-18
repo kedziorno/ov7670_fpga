@@ -489,7 +489,7 @@ cam_hs <= ov7670_hs;
 cam_vs <= ov7670_vs;
 cam_d <= ov7670_d;
 
-inst_ov7670capt1 : entity work.ov7670_capture
+ov7670_capture_i0 : entity work.ov7670_capture
 port map (
   pclk => cam_pclk,
   reset => pb,
@@ -500,8 +500,7 @@ port map (
   dout => write_buffer_data,
   we => open,
   latched_vs => latched_vs,
-  latched_hs => latched_hs,
-  int => open
+  latched_hs => latched_hs
 );
 
 inst_addrgen1 : entity work.address_generator
