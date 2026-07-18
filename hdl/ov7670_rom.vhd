@@ -39,7 +39,7 @@ x"1a7b", -- VSTOP
 x"00"&"01100000", -- GAIN
 x"03"&"00000000", -- VREF
 x"0f"&"01000001", -- COM6 6 - reserved, 1 - reserved
-x"1e00", -- MVFP
+x"1e"&"00100000", -- MVFP
 x"33"&"00001011", -- CHLF 70 - reserved
 x"3c"&"01000000", -- COM12 - 60 - reserved
 x"6900", -- GFIX

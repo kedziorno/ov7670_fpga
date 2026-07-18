@@ -210,7 +210,6 @@ constant c_pb_bits : integer := 1 -- XXX set debounce time
 );
 Port (
 i_clock	: in STD_LOGIC; -- Crystal Oscilator 50MHz  --B8
-i_clock100	: in STD_LOGIC; -- Crystal Oscilator 50MHz  --B8
 --clkcam	: in STD_LOGIC; -- Crystal Oscilator 23.9616 MHz  --U9
 pb		: in STD_LOGIC; -- Push Button --B18
 sw : in std_logic_vector (7 downto 0);
@@ -519,8 +518,7 @@ ov7670_href1 <= ov7670_href_mux_1;
 
 -- Instantiate the Unit Under Test (UUT)
 top_uut : top PORT MAP (
-i_clock => clk50,
-i_clock100 => clk100,
+i_clock => clk100,
 --clkcam => clkcam,
 sw => sw,
 pb => pb,

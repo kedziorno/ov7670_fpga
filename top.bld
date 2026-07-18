@@ -24,14 +24,6 @@ WARNING:ConstraintSystem:56 - Constraint <TIMESPEC TS_CLK50 = PERIOD "CLK50" 20
    ns HIGH 50%;> [hdl/top.ucf(13)]: Unable to find an active 'TNM' or 'TimeGrp'
    constraint named 'CLK50'.
 
-WARNING:ConstraintSystem:137 - Constraint <NET "i_clock" TNM_NET = i_clock;>
-   [hdl/top.ucf(100)]: No appropriate instances for the TNM constraint are
-   driven by "i_clock".
-
-WARNING:ConstraintSystem:56 - Constraint <TIMESPEC TS_clk = PERIOD "i_clock" 20
-   ns HIGH 50%;> [hdl/top.ucf(101)]: Unable to find an active 'TNM' or 'TimeGrp'
-   constraint named 'i_clock'.
-
 WARNING:ConstraintSystem:191 - The TNM 'CLK50', does not directly or indirectly
    drive any flip-flops, latches and/or RAMS and cannot be actively used by the
    referencing Period constraint 'TS_CLK50'. If clock manager blocks are
@@ -45,35 +37,22 @@ WARNING:ConstraintSystem:197 - The following specification is invalid because
    the referenced TNM constraint was removed:
    <TIMESPEC TS_CLK50 = PERIOD "CLK50" 20 ns HIGH 50%;> [hdl/top.ucf(13)]
 
-WARNING:ConstraintSystem:191 - The TNM 'i_clock', does not directly or
-   indirectly drive any flip-flops, latches and/or RAMS and cannot be actively
-   used by the referencing Period constraint 'TS_clk'. If clock manager blocks
-   are directly or indirectly driven, a new TNM constraint will not be derived
-   even though the referencing constraint is a PERIOD constraint unless an
-   output of the clock manager drives flip-flops, latches or RAMs. This TNM is
-   used in the following user PERIOD specification:
-   <TIMESPEC TS_clk = PERIOD "i_clock" 20 ns HIGH 50%;> [hdl/top.ucf(101)]
-
-WARNING:ConstraintSystem:197 - The following specification is invalid because
-   the referenced TNM constraint was removed:
-   <TIMESPEC TS_clk = PERIOD "i_clock" 20 ns HIGH 50%;> [hdl/top.ucf(101)]
-
-INFO:ConstraintSystem:178 - TNM 'i_clock100', used in period specification
-   'TS_clk100', was traced into DCM_SP instance DCM_SP_cam. The following new
+INFO:ConstraintSystem:178 - TNM 'i_clock', used in period specification
+   'TS_clk100', was traced into DCM_SP instance dcm_sp_cam. The following new
    TNM groups and period specifications were generated at the DCM_SP output(s): 
    CLK0: <TIMESPEC TS_inst_top_camera_monitoring_clk1 = PERIOD
    "inst_top_camera_monitoring_clk1" TS_clk100 HIGH 50%>
 
 INFO:ConstraintSystem:178 - TNM 'inst_top_camera_monitoring_clk1', used in
    period specification 'TS_inst_top_camera_monitoring_clk1', was traced into
-   DCM_SP instance DCM_SP_vga. The following new TNM groups and period
+   DCM_SP instance dcm_sp_vga. The following new TNM groups and period
    specifications were generated at the DCM_SP output(s): 
    CLKDV: <TIMESPEC TS_vga_clock_OBUF = PERIOD "vga_clock_OBUF"
    TS_inst_top_camera_monitoring_clk1 * 4 HIGH 50%>
 
 INFO:ConstraintSystem:178 - TNM 'inst_top_camera_monitoring_clk1', used in
    period specification 'TS_inst_top_camera_monitoring_clk1', was traced into
-   DCM_SP instance DCM_SP_vga. The following new TNM groups and period
+   DCM_SP instance dcm_sp_vga. The following new TNM groups and period
    specifications were generated at the DCM_SP output(s): 
    CLKFX: <TIMESPEC TS_inst_top_camera_monitoring_clk_mc1 = PERIOD
    "inst_top_camera_monitoring_clk_mc1" TS_inst_top_camera_monitoring_clk1 / 0.6
@@ -209,19 +188,19 @@ WARNING:NgdBuild:1012 - The constraint <INST
    <INST "inst_top_camera_monitoring/*" IOB=TRUE;> [hdl/top.ucf(30)].
 WARNING:NgdBuild:1345 - The constraint <TIMESPEC TS_CLK100 = PERIOD "CLK100" 10
    ns HIGH 50%;> [hdl/top.ucf(14)] is overridden by the constraint <TIMESPEC
-   TS_clk100 = PERIOD "i_clock100" 10 ns HIGH 50%;> [hdl/top.ucf(105)]. The
+   TS_clk100 = PERIOD "i_clock" 10 ns HIGH 50%;> [hdl/top.ucf(104)]. The
    overriden constraint usually comes from the input netlist or ncf files.
    Please set XIL_NGDBUILD_CONSTR_OVERRIDE_ERROR to promote this message to an
    error.
 Done...
 
 INFO:NgdBuild:1222 - Setting CLKIN_PERIOD attribute associated with DCM instance
-   DCM_SP_vga to 10.000000 ns based on the period specification (<TIMESPEC
+   dcm_sp_vga to 10.000000 ns based on the period specification (<TIMESPEC
    TS_inst_top_camera_monitoring_clk1 = PERIOD "inst_top_camera_monitoring_clk1"
    TS_clk100 HIGH 50%>).
 INFO:NgdBuild:1222 - Setting CLKIN_PERIOD attribute associated with DCM instance
-   DCM_SP_cam to 10.000000 ns based on the period specification (<TIMESPEC
-   TS_clk100 = PERIOD "i_clock100" 10 ns HIGH 50%;> [hdl/top.ucf(105)]).
+   dcm_sp_cam to 10.000000 ns based on the period specification (<TIMESPEC
+   TS_clk100 = PERIOD "i_clock" 10 ns HIGH 50%;> [hdl/top.ucf(104)]).
 Checking expanded design ...
 WARNING:NgdBuild:452 - logical net 'N21' has no driver
 WARNING:NgdBuild:452 - logical net 'N22' has no driver
@@ -250,9 +229,9 @@ Partition Implementation Status
 
 NGDBUILD Design Results Summary:
   Number of errors:     0
-  Number of warnings:  58
+  Number of warnings:  54
 
-Total memory usage is 387356 kilobytes
+Total memory usage is 387268 kilobytes
 
 Writing NGD file "top.ngd" ...
 Total REAL time to NGDBUILD completion:  1 sec

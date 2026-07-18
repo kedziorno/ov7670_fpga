@@ -44,7 +44,6 @@ INST "inst_top_camera_monitoring/inst_ov7670capt1/*" IOB=TRUE;
 #net "vga_vsync" tig;
 #net "vga_clock" tig;
 #net "vga_blank" tig;
-#net "vga_hsdbg" tig;
 
 #TIMESPEC TS_MY_PathA = FROM "CLK24xclk" TO "CLK24pclk" 2.5 ns DATAPATHONLY;
 #TIMESPEC TS_MY_PathB = FROM "CLK24pclk" TO "CLK24xclk" 2.5 ns DATAPATHONLY;
@@ -96,13 +95,13 @@ INST "inst_top_camera_monitoring/inst_ov7670capt1/*" IOB=TRUE;
 #Created by Constraints Editor (xc3s1200e-fg320-4) - 2026/04/23
 #NET "ov7670_vsync1" OFFSET = IN 4 ns VALID 4 ns BEFORE "i_clock" TIMEGRP "CLK24xclk" RISING;
 
-NET "i_clock" LOC="B8";
-NET "i_clock" TNM_NET = i_clock;
-TIMESPEC TS_clk = PERIOD "i_clock" 20 ns HIGH 50%;
+#NET "i_clock" LOC="B8";
+#NET "i_clock" TNM_NET = i_clock;
+#TIMESPEC TS_clk = PERIOD "i_clock" 20 ns HIGH 50%;
 
-NET "i_clock100" LOC="U9";
-NET "i_clock100" TNM_NET = i_clock100;
-TIMESPEC TS_clk100 = PERIOD "i_clock100" 10 ns HIGH 50%;
+NET "i_clock" LOC="U9";
+NET "i_clock" TNM_NET = i_clock;
+TIMESPEC TS_clk100 = PERIOD "i_clock" 10 ns HIGH 50%;
 
 NET "pb" LOC="B18" | TIG;
 #NET "pb" LOC="R17";
@@ -125,8 +124,6 @@ NET "vga_b<0>" LOC="U5" ;
 NET "vga_b<1>" LOC="U4" ;
 NET "vga_hsync" LOC="T4" ;
 NET "vga_vsync" LOC="U3" ;
-NET "vga_hsdbg" LOC="J16" | IOSTANDARD = "LVCMOS33";
-#NET "vga_vsdbg" LOC="N18";
 #NET "vga_clock" LOC="J13";
 NET "ov7670_reset1" LOC = "P17" | IOSTANDARD = "LVCMOS33"; # JB7
 NET "ov7670_pwdn1" LOC = "G15"| IOSTANDARD = "LVCMOS33"; # JC1
