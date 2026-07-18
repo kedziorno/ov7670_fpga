@@ -405,7 +405,6 @@ port map (
 --  write_buffer_we => ov7670_hs,
   write_buffer_we => latched_hs,
 
-  clk25 => clk_vga,
   read_buffer_addr => read_buffer_addr,
   read_buffer_data => read_buffer_data,
   --read_buffer_clk => clk_vga,
@@ -426,9 +425,7 @@ port map (
 
   a => addr_o,
   dq_i => dq_i,
-  dq_o => dq_o,
-
-  vga_int => vga_int
+  dq_o => dq_o
 );
 
 vga_r <= vga_rgb (7 downto 5);
