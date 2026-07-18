@@ -401,7 +401,7 @@ port map (
 
   write_buffer_addr => write_buffer_addr,
   write_buffer_data => write_buffer_data,
-  write_buffer_clk => ov7670_pclk,
+  write_buffer_clk => ov7670_pclk1,
 --  write_buffer_we => ov7670_hs,
   write_buffer_we => latched_hs,
 
