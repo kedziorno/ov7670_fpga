@@ -6,71 +6,95 @@
 -- Also send 10 ticks for reset DCM
 -----------------------------------------------------------------------
 
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.NUMERIC_STD.ALL;
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
 entity debounce_circuit is
-Generic (
-  PB_BITS : integer := 2
+generic (
+  constant c_syn         : string (1 to 1) := "y";
+  constant c_pb_bits_sim : integer := 2; -- small value for start in sim
+  constant c_pb_bits_syn : integer := 24; -- 2^24 * 20ns = ~300ms
+  constant c_ticks       : integer := 10; -- output ticks
+  constant c_zero        : integer := 0
 );
-Port (
-clk : in  STD_LOGIC;
-reset : in  STD_LOGIC;
-input : in  STD_LOGIC;
-output : out  STD_LOGIC);
+port (
+  i_clock : in  std_logic;
+  i_reset : in  std_logic;
+  input   : in  std_logic;
+  output  : out std_logic
+);
 end entity debounce_circuit;
 
-architecture Behavioral of debounce_circuit is
+architecture behavioral of debounce_circuit is
 
-constant MAX   : unsigned (PB_BITS - 1 downto 0) := (others => '1');
-constant MIN   : unsigned (PB_BITS - 1 downto 0) := (others => '0');
-signal counter : unsigned (PB_BITS - 1 downto 0) := (others => '0');
+  constant c_max_sim   : unsigned (c_pb_bits_sim - 1 downto 0);
+  constant c_min_sim   : unsigned (c_pb_bits_sim - 1 downto 0);
+  constant c_max_syn   : unsigned (c_pb_bits_syn - 1 downto 0);
+  constant c_min_syn   : unsigned (c_pb_bits_syn - 1 downto 0);
+  signal   counter_sim : unsigned (c_pb_bits_sim - 1 downto 0);
+  signal   counter_syn : unsigned (c_pb_bits_syn - 1 downto 0);
 
 begin
 
-counting_proc : process (clk) is
-  type states is (a, b, c);
-  variable state : states := a;
-  constant c_ticks : integer := 10;
-  variable v_ticks : integer range 0 to c_ticks - 1;
-begin
-  if rising_edge (clk) then
-    if (reset = '1') then
-      counter <= (others => '0');
-      output <= '0';
-      state := a;
-      v_ticks := 0;
-    else
-      case (state) is
-        when a =>
-          if input = '1' then
-            state := b;
-          end if;
-        when b =>
-          if (counter = MAX - 1) then 
-            -- Counter will count 2^24 * 20ns = ~300ms
-            state := c;
-            output <= '1';
-            counter <= MIN;
-          else
-            -- Bouncing with high logic below 300ms will not trigger the output
-            -- output, this case, pb that reset the camera
-            output <= '0';
-            counter <= counter + 1;
-          end if;
-        when c =>
-          if (v_ticks = c_ticks - 1) then
-            state := a;
-            output <= '0';
-            v_ticks := 0;
-          else
-            output <= '1';
-            v_ticks := v_ticks + 1;
-          end if;
-      end case;
+  counting_proc : process (i_clock) is
+    type states is (a, b, c);
+    variable state : states := a;
+    variable v_ticks : integer range 0 to c_ticks - 1;
+  begin
+    if rising_edge (i_clock) then
+      if (i_reset = '1') then
+        state   := a;
+        v_ticks := 0;
+        output  <= '0';
+        if (c_syn = "n") then
+          counter_sim <= (others => '0');
+        end if;
+        if (c_syn = "y") then
+          counter_syn <= (others => '0');
+        end if;
+      else
+        case (state) is
+          when a =>
+            if (input = '1') then
+              state := b;
+            end if;
+          when b =>
+            if (c_syn = "n") then
+              if (counter_sim = c_max_sim - 1) then
+                state := c;
+                output <= '1';
+                counter_sim <= c_min_sim;
+              else
+                output <= '0';
+                counter_sim <= counter_sim + 1;
+              end if;
+            end if;
+            if (c_syn = "y") then
+              if (counter_syn = c_max_syn - 1) then
+                state := c;
+                output <= '1';
+                counter_syn <= c_min_syn;
+              else
+                -- bouncing with high logic below 300ms will not trigger the output
+                -- output, this case, pb that reset the camera
+                output <= '0';
+                counter_syn <= counter_syn + 1;
+              end if;
+            end if;
+          when c =>
+            if (v_ticks = c_ticks - 1) then
+              state := a;
+              output <= '0';
+              v_ticks := 0;
+            else
+              output <= '1';
+              v_ticks := v_ticks + 1;
+            end if;
+        end case;
+      end if;
     end if;
-  end if;
-end process counting_proc;
+  end process counting_proc;
 
-end Behavioral;
+end architecture behavioral;
 

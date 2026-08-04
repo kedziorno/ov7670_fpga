@@ -22,7 +22,7 @@
 --    devices, or systems.  Use in such applications are expressly            --
 --    prohibited.                                                             --
 --                                                                            --
---    (c) Copyright 1995-2026 Xilinx, Inc.                                    --
+--    (c) Copyright 1995-2022 Xilinx, Inc.                                    --
 --    All rights reserved.                                                    --
 --------------------------------------------------------------------------------
 
@@ -49,11 +49,11 @@ COMPONENT frame_buffer
   PORT (
     clka : IN STD_LOGIC;
     wea : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
-    addra : IN STD_LOGIC_VECTOR(18 DOWNTO 0);
-    dina : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+    addra : IN STD_LOGIC_VECTOR(14 DOWNTO 0);
+    dina : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
     clkb : IN STD_LOGIC;
-    addrb : IN STD_LOGIC_VECTOR(18 DOWNTO 0);
-    doutb : OUT STD_LOGIC_VECTOR(0 DOWNTO 0)
+    addrb : IN STD_LOGIC_VECTOR(14 DOWNTO 0);
+    doutb : OUT STD_LOGIC_VECTOR(2 DOWNTO 0)
   );
 END COMPONENT;
 -- COMP_TAG_END ------ End COMPONENT Declaration ------------
