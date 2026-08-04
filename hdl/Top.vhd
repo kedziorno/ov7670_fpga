@@ -10,11 +10,12 @@ use work.p_camera_colorbar.all;
 
 entity top_camera_monitoring is
   generic (
-    constant c_sync        : boolean := true;
-    constant c_hs_blanking : boolean := true;
-    constant c_pb_bits     : integer := 23;
-    constant c_async_owait : boolean := true;
-    constant c_zero        : integer := 0
+    constant c_module_mode : module_mode_st := c_module_mode_syn;
+    constant c_sync        : boolean        := true;
+    constant c_hs_blanking : boolean        := true;
+    constant c_pb_bits     : integer        := 23;
+    constant c_async_owait : boolean        := true;
+    constant c_zero        : integer        := 0
   );
   port  (
     i_clock    : in std_logic; -- 100 MHz
@@ -55,6 +56,7 @@ entity top_camera_monitoring is
 end entity top_camera_monitoring;
 
 architecture structural of top_camera_monitoring is
+
 -- ram fb
 signal write_buffer_data : std_logic_vector(15 downto 0);
 signal write_buffer_addr : std_logic_vector(10 downto 0);
@@ -442,7 +444,8 @@ port map (
 
 inst_debounce: entity work.debounce_circuit
 generic map (
-  pb_bits => c_pb_bits
+  c_module_mode => c_module_mode,
+  pb_bits       => c_pb_bits
 )
 port map (
   clk => '0',
@@ -595,7 +598,6 @@ port map (
   i => clk0
 );
 
-
 dcm_sp_vga : dcm_sp
 generic map (
   clkdv_divide => 4.0,
@@ -645,4 +647,3 @@ port map (
 );
 
 end architecture structural;
-

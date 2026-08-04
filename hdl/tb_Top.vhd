@@ -35,6 +35,7 @@ USE ieee.std_logic_1164.ALL;
 --use work.micron_mem_parameters.all;
 --use work.p_constants.all;
 use work.p_camera_colorbar.all;
+use work.p_constants.all;
 
 ENTITY tb_top IS
 END tb_top;
@@ -517,7 +518,11 @@ ov7670_vsync1 <= ov7670_vsync_mux_1;
 ov7670_href1 <= ov7670_href_mux_1;
 
 -- Instantiate the Unit Under Test (UUT)
-top_uut : top PORT MAP (
+top_uut : top
+generic map (
+  c_syn => "n" -- module is in sim mode
+)
+PORT MAP (
 i_clock => clk100,
 --clkcam => clkcam,
 sw => sw,

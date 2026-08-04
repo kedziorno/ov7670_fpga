@@ -26,7 +26,8 @@ use work.p_constants.all;
 
 entity top is
   generic (
-    constant c_pb_bits : integer := 25 -- xxx set debounce time
+    constant c_module_mode : module_mode_st := c_module_mode_syn;
+    constant c_pb_bits     : integer        := 25 -- xxx set debounce time
   );
   port  (
     i_clock    : in std_logic;
@@ -70,7 +71,8 @@ architecture behavioral of top is
 
   component top_camera_monitoring is
   generic (
-    constant c_pb_bits : integer := c_pb_bits
+    constant c_module_mode : module_mode_st := c_module_mode;
+    constant c_pb_bits     : integer        := c_pb_bits
   );
   port  (
     i_clock    : in std_logic;
@@ -115,6 +117,9 @@ architecture behavioral of top is
 begin
 
   inst_top_camera_monitoring : top_camera_monitoring
+  generic map (
+    c_module_mode => c_module_mode
+  )
   port map (
     i_clock    => i_clock,
     pb         => pb,
