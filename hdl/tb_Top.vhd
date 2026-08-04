@@ -205,48 +205,6 @@ signal video_vsync_2                 : std_logic := '0';
 signal video_vsync_3                 : std_logic := '0';
 signal video_vsync_4                 : std_logic := '0';
 
-component top is
-generic (
-constant c_pb_bits : integer := 1 -- XXX set debounce time
-);
-Port (
-i_clock	: in STD_LOGIC; -- Crystal Oscilator 50MHz  --B8
---clkcam	: in STD_LOGIC; -- Crystal Oscilator 23.9616 MHz  --U9
-pb		: in STD_LOGIC; -- Push Button --B18
-sw : in std_logic_vector (7 downto 0);
---sw		: in STD_LOGIC; -- Push Button --G18
-led1 : out STD_LOGIC; -- Indicates configuration has been done --J14
-ov7670_pclk1: in  STD_LOGIC; -- Pmod JB8 --R16
-ov7670_xclk1: out STD_LOGIC; -- Pmod JB2 --R18
-ov7670_vsync1: in  STD_LOGIC; -- Pmod JB9 --T18
-ov7670_href1: in  STD_LOGIC; -- Pmod JB3 --R15
-ov7670_data1: in  STD_LOGIC_vector(7 downto 0);
-ov7670_sioc1: out STD_LOGIC; -- Pmod JB10 --J12
-ov7670_siod1: inout STD_LOGIC; -- Pmod JB4 --H16
-ov7670_pwdn1: out STD_LOGIC; -- Pmod JA1 --L15
-ov7670_reset1: out STD_LOGIC; -- Pmod JA7 --K13
---memory module
-Dq : inout std_logic_vector (16 - 1 downto 0);
-Addr : out std_logic_vector (23 - 1 downto 0);
-Adv_n : out std_logic;
-Ce_n : out std_logic;
-Clk : out std_logic;
-Cre : out std_logic;
-Lb_n : out std_logic;
-Oe_n : out std_logic;
-Ub_n : out std_logic;
-We_n : out std_logic;
-oWait : in std_logic;
-vga_clock : out STD_LOGIC;
-vga_blank : out STD_LOGIC;
-vga_hsync : out STD_LOGIC; --T4
-vga_vsync : out STD_LOGIC; --U3
-vga_r	: out STD_LOGIC_VECTOR(2 downto 0);
-vga_g	: out STD_LOGIC_VECTOR(2 downto 0);
-vga_b	: out STD_LOGIC_VECTOR(1 downto 0)
-);
-end component top;
-
 signal vga_r	: STD_LOGIC_VECTOR(2 downto 0);
 signal vga_g	: STD_LOGIC_VECTOR(2 downto 0);
 signal vga_b	: STD_LOGIC_VECTOR(1 downto 0);
@@ -518,9 +476,10 @@ ov7670_vsync1 <= ov7670_vsync_mux_1;
 ov7670_href1 <= ov7670_href_mux_1;
 
 -- Instantiate the Unit Under Test (UUT)
-top_uut : top
+top_uut : entity work.top
 generic map (
-  c_syn => "n" -- module is in sim mode
+  c_module_mode => c_module_mode_sim, -- module is in sim mode
+  c_pb_bits => 1 -- XXX set debounce time
 )
 PORT MAP (
 i_clock => clk100,

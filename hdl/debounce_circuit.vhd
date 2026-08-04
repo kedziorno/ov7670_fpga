@@ -30,10 +30,10 @@ end entity debounce_circuit;
 
 architecture behavioral of debounce_circuit is
 
-  constant c_max_sim   : unsigned (c_pb_bits_sim - 1 downto 0);
-  constant c_min_sim   : unsigned (c_pb_bits_sim - 1 downto 0);
-  constant c_max_syn   : unsigned (c_pb_bits_syn - 1 downto 0);
-  constant c_min_syn   : unsigned (c_pb_bits_syn - 1 downto 0);
+  constant c_max_sim   : unsigned (c_pb_bits_sim - 1 downto 0) := (others => '1');
+  constant c_min_sim   : unsigned (c_pb_bits_sim - 1 downto 0) := (others => '0');
+  constant c_max_syn   : unsigned (c_pb_bits_syn - 1 downto 0) := (others => '1');
+  constant c_min_syn   : unsigned (c_pb_bits_syn - 1 downto 0) := (others => '0');
   signal   counter_sim : unsigned (c_pb_bits_sim - 1 downto 0);
   signal   counter_syn : unsigned (c_pb_bits_syn - 1 downto 0);
 

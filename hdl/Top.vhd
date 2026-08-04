@@ -148,6 +148,7 @@ signal addr_o : std_logic_vector (22 downto 0);
 signal dq_i,dq_ii : std_logic_vector (15 downto 0);
 signal dq_o,dq_oo : std_logic_vector (15 downto 0);
 signal data_out_enable : std_logic_vector (15 downto 0);
+signal data_out_enable_not : std_logic_vector (15 downto 0);
 signal oe_n_i, we_n_i, adv_n_i, ce_n_i, cre_i, clk_i : std_logic;
 
 
@@ -204,6 +205,7 @@ g1_async_mem_signals : if (c_sync = false) generate
 end generate g1_async_mem_signals;
 
 g2_dq_iob_inout : for i in c_data_bits - 1 downto 0 generate
+  data_out_enable_not (i) <= not data_out_enable (i);
   iobuf_inst : iobuf
   generic map (
     drive            =>        12,
@@ -216,7 +218,7 @@ g2_dq_iob_inout : for i in c_data_bits - 1 downto 0 generate
     o  => dq_ii               (i),
     io => dq                  (i),
     i  => dq_oo               (i),
-    t  => not data_out_enable (i)
+    t  => data_out_enable_not (i)
   );
 end generate g2_dq_iob_inout;
 
@@ -445,7 +447,7 @@ port map (
 debounce_circuit_i0 : entity work.debounce_circuit
 generic map (
   c_module_mode => c_module_mode,
-  pb_bits       => c_pb_bits
+  c_pb_bits_syn => c_pb_bits
 )
 port map (
   i_clock => '0',
@@ -462,13 +464,13 @@ ov7670_pwdn1 <= cam_pwdn;
 --ov7670_pwdnv <= cam_pwdn;
 ov7670_reset1 <= not pb;
 
-ov7670_i2c_controller_i0 : entity work.ov7670_controller
+ov7670_i2c_controller_i0 : entity work.ov7670_i2c_controller
 generic map (
   c_module_mode => c_module_mode
 )
 port map (
-  clk => clk_mc,
-  reset1 => pb,
+  i_clock => clk_mc,
+  i_reset => pb,
   resend => sw(1),
   sw => sw (0),
   sioc => ov7670_sioc1,
@@ -481,6 +483,9 @@ port map (
 );
 
 ov7670_capture_i0 : entity work.ov7670_capture
+generic map (
+  c_module_mode => c_module_mode
+)
 port map (
   reset => pb,
   pclk => ov7670_pclk1,
@@ -494,6 +499,9 @@ port map (
 );
 
 address_generator_i0 : entity work.address_generator
+generic map (
+  c_module_mode => c_module_mode
+)
 port map (
   --clk25 => clk_vga,
   clk25 => read_buffer_clk,
@@ -505,6 +513,9 @@ port map (
   );
 
 inst_imagegen : entity work.vga_imagegenerator
+generic map (
+  c_module_mode => c_module_mode
+)
 port map (
   data_in1 => read_buffer_data,
   reset => pb,
@@ -517,6 +528,9 @@ vga_hsync <= vga_hsync_i;
 vga_vsync <= vga_vsync_sig;
 vga_clock <= clk_vga;
 vga_timing_i0 : entity work.vga_timing (counter) -- jc, lsfr_1, lsfr_2
+generic map (
+  c_module_mode => c_module_mode
+)
 port map (
   rst => pb,
   clk25 => clk_vga,

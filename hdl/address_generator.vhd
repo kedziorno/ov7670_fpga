@@ -2,15 +2,20 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_arith.all;
 use ieee.std_logic_unsigned.all;
+library work;
+use work.p_constants.all;
 
 entity address_generator is
-  port (
-    clk25   : in std_logic;
-    reset   : in std_logic;
-    enable  : in std_logic;
-    vsync   : in std_logic;
-    address : out std_logic_vector (9 downto 0)
-  );  
+generic (
+  c_module_mode : module_mode_st := c_module_mode_syn
+);
+port (
+  clk25   : in std_logic;
+  reset   : in std_logic;
+  enable  : in std_logic;
+  vsync   : in std_logic;
+  address : out std_logic_vector (9 downto 0)
+);  
 end entity address_generator;
 
 architecture behavioral of address_generator is

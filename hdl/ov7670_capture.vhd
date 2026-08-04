@@ -1,21 +1,26 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+library work;
+use work.p_constants.all;
 
 entity ov7670_capture is
-  port (
-    reset : in  std_logic;
-    -- Camera input
-    pclk  : in std_logic;
-    vsync : in std_logic;
-    href  : in std_logic;
-    d     : in std_logic_vector (7 downto 0);
-    -- System output
-    addr       : out std_logic_vector (10 downto 0);
-    dout       : out std_logic_vector (15 downto 0);
-    latched_hs : out std_logic;
-    latched_vs : out std_logic
-  );
+generic (
+  c_module_mode : module_mode_st := c_module_mode_syn
+);
+port (
+  reset : in  std_logic;
+  -- Camera input
+  pclk  : in std_logic;
+  vsync : in std_logic;
+  href  : in std_logic;
+  d     : in std_logic_vector (7 downto 0);
+  -- System output
+  addr       : out std_logic_vector (10 downto 0);
+  dout       : out std_logic_vector (15 downto 0);
+  latched_hs : out std_logic;
+  latched_vs : out std_logic
+);
 end entity ov7670_capture;
 
 architecture behavioral of ov7670_capture is
@@ -70,3 +75,4 @@ begin
   end process latched_process;
 
 end architecture behavioral;
+

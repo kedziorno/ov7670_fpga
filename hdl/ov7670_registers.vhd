@@ -9,12 +9,13 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 library work;
-use work.p_contants.all;
+use work.p_constants.all;
 use work.p_ov7670_rom.all;
 
 entity ov7670_registers is
 generic (
-  c_module_mode : module_mode_st := c_module_mode_syn
+  c_module_mode : module_mode_st := c_module_mode_syn;
+  c_mode        : integer        := 0
 );
 port (
   i_clock : in  std_logic;

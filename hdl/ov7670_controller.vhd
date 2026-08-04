@@ -7,6 +7,9 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
+library work;
+use work.p_constants.all;
+
 entity ov7670_i2c_controller is
 generic (
   c_module_mode : module_mode_st := c_module_mode_syn
@@ -56,7 +59,7 @@ begin
   ov7670_registers_i0 : entity work.ov7670_registers (behavioral)
   generic map (
     c_module_mode => c_module_mode,
-    mode => 0
+    c_mode => 0
   )
   port map (
     i_clock => i_clock,

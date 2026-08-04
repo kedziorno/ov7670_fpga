@@ -4,15 +4,20 @@ use ieee.numeric_std.all;
 use ieee.std_logic_arith.all;
 library unisim;
 use unisim.vcomponents.all;
+library work;
+use work.p_constants.all;
 
 entity vga_timing is
+generic (
+  c_module_mode : module_mode_st := c_module_mode_syn
+);
 port (
-  clk25, rst  : in  std_logic;
-  hsync       : out std_logic;
-  vsync       : out std_logic;
-  blank       : out std_logic;
+  clk25, rst : in  std_logic;
+  hsync      : out std_logic;
+  vsync      : out std_logic;
+  blank      : out std_logic;
   activearea : out std_logic;
-  interrupt         : out std_logic
+  interrupt  : out std_logic
 );
 end entity vga_timing;
 
