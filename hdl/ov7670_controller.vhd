@@ -1,97 +1,87 @@
 ---------------------------------------------
--- simulation completed 2/08/19
 -- This entity is needed to setup the camera
-	-- Thanks to Mike Field for Register Value
+-- Thanks to Mike Field for Register Value
 ---------------------------------------------
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.NUMERIC_STD.ALL;
 
-entity ov7670_controller is
-    Port ( reset1, clk : in  STD_LOGIC;
-           resend : in  STD_LOGIC;
-           sw : in std_logic;
-           sioc : out  STD_LOGIC;
-           siodo : out  STD_LOGIC;
-           conf_done : out  STD_LOGIC;
-           pwdn : out  STD_LOGIC;
-			  reset: out STD_LOGIC;
-           xclk_in : in STD_LOGIC;
-			  xclk_out : out  STD_LOGIC);
-end ov7670_controller;
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
 
-architecture Behavioral of ov7670_controller is
+entity ov7670_i2c_controller is
+generic (
+  c_module_mode : module_mode_st := c_module_mode_syn
+);
+port (
+  i_clock   : in  std_logic;
+  i_reset   : in  std_logic;
+  resend    : in  std_logic; -- from external reset
+  sw        : in  std_logic; -- switch as external reset
+  sioc      : out std_logic; -- i2c clock
+  siodo     : out std_logic; -- i2c data
+  conf_done : out std_logic; -- led pin flag
+  pwdn      : out std_logic; -- camera PWDN pin
+  reset     : out std_logic; -- camera RESET pin
+  xclk_in   : in  std_logic; -- camera clock input
+  xclk_out  : out std_logic  -- camera clock output
+);
+end entity ov7670_i2c_controller;
 
-component ov7670_registers
-generic (constant MODE : integer := 0);
-	Port ( reset : in std_logic; clk : in  STD_LOGIC;
-          resend : in  STD_LOGIC;
-          advance : in  STD_LOGIC;
-          command : out  STD_LOGIC_VECTOR (15 downto 0);
-          done : out  STD_LOGIC);
-end component;
-for all : ov7670_registers use entity work.ov7670_registers (Behavioral);
---for all : ov7670_registers use entity work.ov7670_registers (raw_signal);
+architecture behavioral of ov7670_i2c_controller is
 
-component ov7670_SCCB
-	Port ( clk : in  STD_LOGIC;
-          reg_value : in  STD_LOGIC_VECTOR (7 downto 0);
-          slave_addr : in  STD_LOGIC_VECTOR (7 downto 0);
-          addr_reg : in  STD_LOGIC_VECTOR (7 downto 0);
-          send : in  STD_LOGIC;
-          siodo : out  STD_LOGIC;
-          sioc : out  STD_LOGIC;
-          taken : out  STD_LOGIC);
-end component;	
-
---signal clk25 : std_logic := '0';
-signal command : std_logic_vector(15 downto 0);
-signal done : std_logic := '0';
-signal taken : std_logic := '0';
-signal send : std_logic;
-constant camera_address : std_logic_vector(7 downto 0) := x"42"; -- Device write ID, see pg.10. (OV datasheet)
+  signal command : std_logic_vector (15 downto 0);
+  signal done : std_logic := '0';
+  signal taken : std_logic := '0';
+  signal send : std_logic;
 
 begin
-conf_done <= done; -- overall finish
-send <= not done;
 
+  conf_done <= done;
+  send <= not done;
+  pwdn <= sw or resend;
+  reset <= not resend;
+  xclk_out <= xclk_in;
 
-Registers: ov7670_registers port map(
-	clk => clk,
-  reset => reset1,
-	resend => resend,
-	advance => taken,
-	command => command,
-	done => done);
+  -- Strange error when building project
+  --error:place:plxil_uapflow1.c:3213:1.176 clk clk_mc
+  --process (clk,reset1) is
+  --begin
+  --if (reset1 = '1') then
+  --xclk_out <= '0';
+  --elsif (rising_edge (clk)) then
+  --xclk_out <= xclk_in;
+  --end if;
+  --end process;
 
-SCCB : ov7670_SCCB port map(
-	clk => clk,
-	reg_value => command (7 downto 0),
-	slave_addr => camera_address,
-	addr_reg => command (15 downto 8),
-	send => send,
-	sioc => sioc,
-	siodo => siodo,
-	taken => taken);
+  --ov7670_registers_i0 : entity work.ov7670_registers (raw_signal)
+  ov7670_registers_i0 : entity work.ov7670_registers (behavioral)
+  generic map (
+    c_module_mode => c_module_mode,
+    mode => 0
+  )
+  port map (
+    i_clock => i_clock,
+    i_reset => i_reset,
+    resend  => resend,
+    advance => taken,
+    command => command,
+    done    => done
+  );
 
---pwdn <= resend;
-pwdn <= sw;
---process (clk) is begin
---if (rising_edge (clk)) then
-reset <= not resend;
---end if;
---end process;
+  ov7670_sccb_i0 : entity work.ov7670_sccb
+  generic map (
+    c_module_mode => c_module_mode
+  )
+  port map(
+    i_clock    => i_clock,
+    i_reset    => i_reset,
+    slave_addr => c_camera_i2c_address,
+    reg_value  => command (7 downto 0),
+    addr_reg   => command (15 downto 8),
+    send       => send,
+    sioc       => sioc,
+    siodo      => siodo,
+    taken      => taken
+  );
 
-xclk_out <= xclk_in;
---ERROR:Place:PlXil_Uapflow1.c:3213:1.176 clk clk_mc
---process (clk,reset1) is
---begin
---if (reset1 = '1') then
---xclk_out <= '0';
---elsif (rising_edge (clk)) then
---xclk_out <= xclk_in;
---end if;
---end process;
-
-end Behavioral;
+end architecture behavioral;
 

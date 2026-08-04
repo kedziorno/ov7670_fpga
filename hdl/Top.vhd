@@ -442,15 +442,15 @@ port map (
   t=> '0'
 );
 
-inst_debounce: entity work.debounce_circuit
+debounce_circuit_i0 : entity work.debounce_circuit
 generic map (
   c_module_mode => c_module_mode,
   pb_bits       => c_pb_bits
 )
 port map (
-  clk => '0',
-  reset => reset_dcm,
-  --reset => '0',
+  i_clock => '0',
+  i_reset => reset_dcm,
+  --i_reset => '0',
   input => pb,
   --output => resend
   output => open
@@ -462,7 +462,10 @@ ov7670_pwdn1 <= cam_pwdn;
 --ov7670_pwdnv <= cam_pwdn;
 ov7670_reset1 <= not pb;
 
-inst_ov7670contr1: entity work.ov7670_controller
+ov7670_i2c_controller_i0 : entity work.ov7670_controller
+generic map (
+  c_module_mode => c_module_mode
+)
 port map (
   clk => clk_mc,
   reset1 => pb,
