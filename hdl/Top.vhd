@@ -527,13 +527,12 @@ port map (
 vga_hsync <= vga_hsync_i;
 vga_vsync <= vga_vsync_sig;
 vga_clock <= clk_vga;
-vga_timing_i0 : entity work.vga_timing (counter) -- jc, lsfr_1, lsfr_2
-generic map (
-  c_module_mode => c_module_mode
-)
+vga_timing_i0 : entity work.vga_timing (vga_7slices) -- jc, lsfr_1, lsfr_2, counter
+--vga_timing_i0 : entity work.vga_timing (counter) -- jc, lsfr_1, lsfr_2, counter
 port map (
   rst => pb,
-  clk25 => clk_vga,
+--  clk25 => clk_vga,
+  clk25 => clk0_fb,
   hsync => vga_hsync_i,
   vsync => vga_vsync_sig,
   blank => vga_blank,
