@@ -477,3 +477,118 @@ begin
 
 end architecture counter;
 
+architecture vga_7slices of vga_timing is
+
+signal a, b, c, d, e, en, f, fn, g, gn, h, hn : std_logic;
+signal tmp1, tmp2 : std_logic;
+
+begin
+
+div99_9bit : SRL16E
+generic map (INIT => x"0001")
+port map (
+  Q   => a,
+  A0  => '0', A1 => '0', A2 => '0', A3 => '1',
+  CE  => '1',
+  CLK => clk25,
+  D   => a
+);
+
+div99_11bit : SRL16E
+generic map (INIT => x"0001")
+port map (
+  Q   => b,
+  A0  => '0', A1 => '1', A2 => '0', A3 => '1',
+  CE  => a,
+  CLK => clk25,
+  D   => b
+);
+
+hsync <= not c;
+hs : entity work.dummyplug_srlc32e
+generic map (INIT => "00111100000000000000000000000000")
+port map (
+  Q     => open,
+  Q31   => c,
+  A(0)  => '1', A(1) => '1', A(2) => '0', A(3) => '1', A(4) => '0',
+  CE    => '1',
+  CLK   => b,
+  D     => c
+);
+
+--interrupt <= h;
+--int_srlc32e_i0 : entity work.dummyplug_srlc32e
+--generic map (INIT => "10000000000000000000000000000000")
+--port map (
+--  Q     => open,
+--  Q31   => h,
+--  A(0)  => '1', A(1) => '1', A(2) => '0', A(3) => '1', A(4) => '0',
+--  CE    => '1',
+--  CLK   => b,
+--  D     => h
+--);
+bufg_cam : bufg
+port map (
+  o => tmp2,
+  i => d
+);
+interrupt <= '1' when (tmp1 = '0' and tmp2 = '1') else '0';
+process (clk25) is
+begin
+  if (rising_edge (clk25)) then
+    tmp1 <= d;
+  end if;
+end process;
+
+blank <= d;
+activearea <= not d;
+hb : entity work.dummyplug_srlc32e
+generic map (INIT => "11111110000000000000000000000000")
+port map (
+  Q     => open,
+  Q31   => d,
+  A(0)  => '0', A(1) => '0', A(2) => '0', A(3) => '0', A(4) => '0',
+  CE    => '1',
+  CLK   => b,
+  D     => d
+);
+
+e <= not en;
+vga_15dot84us : entity work.dummyplug_srlc32e
+generic map (INIT => "00000000000000000111111111111111")
+port map (
+  Q     => en,
+  Q31   => open,
+  A(0)  => '1', A(1) => '1', A(2) => '1', A(3) => '1', A(4) => '0',
+  CE    => '1',
+  CLK   => b,
+  D     => en
+);
+
+f <= not fn;
+vga_522dot72us : entity work.dummyplug_srlc33e
+generic map (INIT => "111111111111111111111111111111110")
+port map (
+  Q     => fn,
+  Q32   => open,
+  A(0)  => '1', A(1) => '1', A(2) => '1', A(3) => '1', A(4) => '1', A(5) => '1',
+  CE    => '1',
+  CLK   => en,
+  D     => fn
+);
+
+vsync <= gn;
+--o_vb <= g;
+g <= not gn;
+vga_16727dot04us : entity work.dummyplug_srlc32e
+generic map (INIT => "11111111111111111111111111111110")
+port map (
+  Q     => gn,
+  Q31   => open,
+  A(0)  => '1', A(1) => '1', A(2) => '1', A(3) => '1', A(4) => '1',
+  CE    => '1',
+  CLK   => fn,
+  D     => gn
+);
+
+end architecture vga_7slices;

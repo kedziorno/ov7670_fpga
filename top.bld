@@ -15,28 +15,6 @@ Done.
 Annotating constraints to design from ucf file "hdl/top.ucf" ...
 Resolving constraint associations...
 Checking Constraint Associations...
-WARNING:ConstraintSystem:137 - Constraint <NET
-   "inst_top_camera_monitoring/clk0_fb" TNM_NET = "CLK50";> [hdl/top.ucf(4)]: No
-   appropriate instances for the TNM constraint are driven by
-   "inst_top_camera_monitoring/clk0_fb".
-
-WARNING:ConstraintSystem:56 - Constraint <TIMESPEC TS_CLK50 = PERIOD "CLK50" 20
-   ns HIGH 50%;> [hdl/top.ucf(13)]: Unable to find an active 'TNM' or 'TimeGrp'
-   constraint named 'CLK50'.
-
-WARNING:ConstraintSystem:191 - The TNM 'CLK50', does not directly or indirectly
-   drive any flip-flops, latches and/or RAMS and cannot be actively used by the
-   referencing Period constraint 'TS_CLK50'. If clock manager blocks are
-   directly or indirectly driven, a new TNM constraint will not be derived even
-   though the referencing constraint is a PERIOD constraint unless an output of
-   the clock manager drives flip-flops, latches or RAMs. This TNM is used in the
-   following user PERIOD specification:
-   <TIMESPEC TS_CLK50 = PERIOD "CLK50" 20 ns HIGH 50%;> [hdl/top.ucf(13)]
-
-WARNING:ConstraintSystem:197 - The following specification is invalid because
-   the referenced TNM constraint was removed:
-   <TIMESPEC TS_CLK50 = PERIOD "CLK50" 20 ns HIGH 50%;> [hdl/top.ucf(13)]
-
 INFO:ConstraintSystem:178 - TNM 'i_clock', used in period specification
    'TS_clk100', was traced into DCM_SP instance
    inst_top_camera_monitoring/dcm_sp_cam. The following new TNM groups and
@@ -48,7 +26,15 @@ INFO:ConstraintSystem:178 - TNM 'inst_top_camera_monitoring_clk1', used in
    period specification 'TS_inst_top_camera_monitoring_clk1', was traced into
    DCM_SP instance inst_top_camera_monitoring/dcm_sp_vga. The following new TNM
    groups and period specifications were generated at the DCM_SP output(s): 
-   CLKDV: <TIMESPEC TS_vga_clock_OBUF1 = PERIOD "vga_clock_OBUF1"
+   CLK0: <TIMESPEC TS_inst_top_camera_monitoring_clk0 = PERIOD
+   "inst_top_camera_monitoring_clk0" TS_inst_top_camera_monitoring_clk1 HIGH
+   50%>
+
+INFO:ConstraintSystem:178 - TNM 'inst_top_camera_monitoring_clk1', used in
+   period specification 'TS_inst_top_camera_monitoring_clk1', was traced into
+   DCM_SP instance inst_top_camera_monitoring/dcm_sp_vga. The following new TNM
+   groups and period specifications were generated at the DCM_SP output(s): 
+   CLKDV: <TIMESPEC TS_vga_clock_OBUF = PERIOD "vga_clock_OBUF"
    TS_inst_top_camera_monitoring_clk1 * 4 HIGH 50%>
 
 INFO:ConstraintSystem:178 - TNM 'inst_top_camera_monitoring_clk1', used in
@@ -76,6 +62,9 @@ INFO:NgdBuild:1222 - Setting CLKIN_PERIOD attribute associated with DCM instance
    specification (<TIMESPEC TS_inst_top_camera_monitoring_clk1 = PERIOD
    "inst_top_camera_monitoring_clk1" TS_clk100 HIGH 50%>).
 Checking expanded design ...
+WARNING:NgdBuild:478 - clock net inst_top_camera_monitoring/vga_timing_i0/tmp2
+   with clock driver inst_top_camera_monitoring/vga_timing_i0/bufg_cam drives no
+   clock pins
 
 Partition Implementation Status
 -------------------------------
@@ -86,9 +75,9 @@ Partition Implementation Status
 
 NGDBUILD Design Results Summary:
   Number of errors:     0
-  Number of warnings:   5
+  Number of warnings:   2
 
-Total memory usage is 386796 kilobytes
+Total memory usage is 385784 kilobytes
 
 Writing NGD file "top.ngd" ...
 Total REAL time to NGDBUILD completion:  1 sec
