@@ -506,7 +506,7 @@ port map (
 
 hsync <= not c;
 hs : entity work.dummyplug_srlc32e
-generic map (INIT => "00111100000000000000000000000000")
+generic map (INIT => "01111000000000000000000000000000")
 port map (
   Q     => open,
   Q31   => c,
@@ -532,7 +532,7 @@ port map (
   o => tmp2,
   i => d
 );
-interrupt <= '1' when (tmp1 = '0' and tmp2 = '1') else '0';
+interrupt <= '1' when (tmp1 = '0' and tmp2 = '1') and gn = '1' else '0';
 process (clk25) is
 begin
   if (rising_edge (clk25)) then
@@ -540,8 +540,8 @@ begin
   end if;
 end process;
 
-blank <= d;
-activearea <= not d;
+blank <= d when gn = '1' else '1';
+activearea <= not d when gn = '1' else '0';
 hb : entity work.dummyplug_srlc32e
 generic map (INIT => "11111110000000000000000000000000")
 port map (
@@ -581,6 +581,8 @@ vsync <= gn;
 --o_vb <= g;
 g <= not gn;
 vga_16727dot04us : entity work.dummyplug_srlc32e
+--generic map (INIT => "11111111111111111111111111111000")
+--generic map (INIT => "11111111111111111111111111111100")
 generic map (INIT => "11111111111111111111111111111110")
 port map (
   Q     => gn,
