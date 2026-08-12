@@ -9,24 +9,24 @@ Target Device  : xc3s1200e
 Target Package : fg320
 Target Speed   : -4
 Mapper Version : spartan3e -- $Revision: 1.55 $
-Mapped Date    : Wed Aug 12 14:26:13 2026
+Mapped Date    : Wed Aug 12 22:53:47 2026
 
 Design Summary
 --------------
 Number of errors:      0
-Number of warnings:  442
+Number of warnings:  446
 Logic Utilization:
-  Number of Slice Flip Flops:           436 out of  17,344    2%
-  Number of 4 input LUTs:               746 out of  17,344    4%
+  Number of Slice Flip Flops:           439 out of  17,344    2%
+  Number of 4 input LUTs:               751 out of  17,344    4%
 Logic Distribution:
-  Number of occupied Slices:            492 out of   8,672    5%
-    Number of Slices containing only related logic:     492 out of     492 100%
-    Number of Slices containing unrelated logic:          0 out of     492   0%
+  Number of occupied Slices:            498 out of   8,672    5%
+    Number of Slices containing only related logic:     498 out of     498 100%
+    Number of Slices containing unrelated logic:          0 out of     498   0%
       *See NOTES below for an explanation of the effects of unrelated logic.
-  Total Number of 4 input LUTs:         846 out of  17,344    4%
-    Number used as logic:               734
+  Total Number of 4 input LUTs:         851 out of  17,344    4%
+    Number used as logic:               735
     Number used as a route-thru:        100
-    Number used as Shift registers:      12
+    Number used as Shift registers:      16
 
   The Slice Logic Distribution report is not meaningful if the design is
   over-mapped for a non-slice resource or if Placement fails.
@@ -37,7 +37,7 @@ Logic Distribution:
   Number of BUFGMUXs:                     5 out of      24   20%
   Number of DCMs:                         2 out of       8   25%
 
-Average Fanout of Non-Clock Nets:                3.30
+Average Fanout of Non-Clock Nets:                3.29
 
 Peak Memory Usage:  584 MB
 Total REAL time to MAP completion:  2 secs 
@@ -88,14 +88,16 @@ WARNING:LIT:176 - Clock buffer is designated to drive clock loads. BUFGMUX
    clk_mc_BUFG" (output signal=inst_top_camera_monitoring/clk_mc) has a mix of
    clock and non-clock loads. The non-clock loads are:
    Pin I0 of inst_top_camera_monitoring/crbc_i0/ram_clk
-WARNING:LIT:178 - Clock buffer BUFGMUX symbol
-   "physical_group_inst_top_camera_monitoring/vga_timing_i0/tmp2/inst_top_camera
-   _monitoring/vga_timing_i0/bufg_cam" (output
-   signal=inst_top_camera_monitoring/vga_timing_i0/tmp2) does not drive clock
-   loads. Driving only non-clock loads with a clock buffer will cause ALL of the
-   dedicated clock routing resources for this buffer to be wasted. The non-clock
-   loads are:
-   Pin I1 of inst_top_camera_monitoring/vga_timing_i0/interrupt_and00001
+WARNING:LIT:175 - Clock buffer is designated to drive clock loads. BUFGMUX
+   symbol
+   "physical_group_vga_blank_OBUF/inst_top_camera_monitoring/vga_timing_i0/bufg_
+   cam" (output signal=vga_blank_OBUF) has a mix of clock and non-clock loads.
+   Some of the non-clock loads are (maximum of 5 listed):
+   Pin I0 of inst_top_camera_monitoring/inst_imagegen/RGB_out<7>1
+   Pin I0 of inst_top_camera_monitoring/inst_imagegen/RGB_out<6>1
+   Pin I0 of inst_top_camera_monitoring/inst_imagegen/RGB_out<5>1
+   Pin I0 of inst_top_camera_monitoring/inst_imagegen/RGB_out<4>1
+   Pin I0 of inst_top_camera_monitoring/inst_imagegen/RGB_out<3>1
 WARNING:Pack:1542 - The register
    inst_top_camera_monitoring/crbc_i0/data_out_enable_i_0 has the property
    IOB=TRUE, but was not packed into the output side of an I/O component. The
@@ -507,6 +509,9 @@ WARNING:Pack:2780 - The register
    IOB=TRUE, but it did not join an IO component because it is not connected to
    any IO element.
 WARNING:Pack:2780 - The register "inst_top_camera_monitoring/vga_timing_i0/tmp1"
+   has the property IOB=TRUE, but it did not join an IO component because it is
+   not connected to any IO element.
+WARNING:Pack:2780 - The register "inst_top_camera_monitoring/vga_timing_i0/tmp3"
    has the property IOB=TRUE, but it did not join an IO component because it is
    not connected to any IO element.
 WARNING:Pack:2780 - The register
@@ -1542,12 +1547,19 @@ WARNING:Pack:2780 - The register
    IOB=TRUE, but it did not join an IO component because it is not connected to
    any IO element.
 WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/vga_timing_i0/move_next_i0" has the property
+   IOB=TRUE, but it did not join an IO component because it is not connected to
+   any IO element.
+WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/crbc_i0/write_counter_10" has the property
    IOB=TRUE, but it did not join an IO component because it is not connected to
    any IO element.
 WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/we_i" has
    the property IOB=TRUE, but it did not join an IO component because it is not
    connected to any IO element.
+WARNING:Pack:2780 - The register "inst_top_camera_monitoring/vga_timing_i0/t8"
+   has the property IOB=TRUE, but it did not join an IO component because it is
+   not connected to any IO element.
 WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/inst_ov7670contr1/SCCB/busy_sr_10" has the
    property IOB=TRUE, but it did not join an IO component because it is not
@@ -1732,6 +1744,10 @@ WARNING:PhysDesignRules:372 - Gated clock. Clock net
    inst_top_camera_monitoring/vga_timing_i0/en is sourced by a combinatorial
    pin. This is not good design practice. Use the CE pin to control the loading
    of data into the flip-flop.
+WARNING:PhysDesignRules:372 - Gated clock. Clock net
+   inst_top_camera_monitoring/vga_timing_i0/tmp4 is sourced by a combinatorial
+   pin. This is not good design practice. Use the CE pin to control the loading
+   of data into the flip-flop.
 WARNING:PhysDesignRules:781 - PULLUP on an active net. PULLUP of comp
    ov7670_sioc1 is set but the tri state is not configured. 
 WARNING:PhysDesignRules:1063 - Issue with pin connections and/or configuration
@@ -1764,7 +1780,7 @@ INFO:PhysDesignRules:772 - To achieve optimal frequency synthesis performance
 Section 4 - Removed Logic Summary
 ---------------------------------
    2 block(s) removed
-  19 block(s) optimized away
+  20 block(s) optimized away
   15 signal(s) removed
 
 Section 5 - Removed Logic
@@ -1836,6 +1852,7 @@ VCC 		inst_top_camera_monitoring/ov7670_capture_i0/XST_VCC
 GND 		inst_top_camera_monitoring/vga_timing_i0/XST_GND
 VCC 		inst_top_camera_monitoring/vga_timing_i0/XST_VCC
 GND 		inst_top_camera_monitoring/vga_timing_i0/vga_522dot72us/XST_GND
+GND 		inst_top_camera_monitoring/vga_timing_i0/vsync_fill/XST_GND
 
 To enable printing of redundant blocks removed and signals merged, set the
 detailed map report option and rerun map.
