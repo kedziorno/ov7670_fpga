@@ -490,23 +490,23 @@ signal t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20 : std_logic;
 
 begin
 
-div99_9bit : SRL16E
+div99_7bit : SRL16E
 generic map (INIT => x"0001")
 port map (
   Q   => a,
-  A0  => '0', A1 => '0', A2 => '0', A3 => '1',
+  A0  => '0', A1 => '1', A2 => '1', A3 => '0',
   CE  => '1',
   CLK => clk25,
   D   => a
 );
 
-div99_11bit : SRL16E
+div99_14bit : SRL16E
 generic map (INIT => x"0001")
 port map (
   Q   => b,
-  A0  => '0', A1 => '1', A2 => '0', A3 => '1',
-  CE  => a,
-  CLK => clk25,
+  A0  => '1', A1 => '0', A2 => '1', A3 => '1',
+  CE  => '1',
+  CLK => a,
   D   => b
 );
 
@@ -601,8 +601,7 @@ port map (
   o => tmp2,
   i => d
 );
---interrupt <= '1' when (tmp1 = '0' and tmp2 = '1') and gn = '1' else '0';
-interrupt <= '1' when (tmp1 = '0' and tmp2 = '1') else '0';
+interrupt <= '1' when (tmp1 = '1' and tmp2 = '0') and gn = '1' else '0';
 process (clk25) is
 begin
   if (rising_edge (clk25)) then
@@ -610,17 +609,10 @@ begin
   end if;
 end process;
 
---buf_1 : bufg
---port map (
---  o => tmp2,
---  i => d
---);
---blank <= d when gn = '1' else '1';
---activearea <= not d when gn = '1' else '0';
-blank <= tmp2;
-activearea <= not tmp2;
+blank <= d when gn = '1' else '1';
+activearea <= not d when gn = '1' else '0';
 hb : entity work.dummyplug_srlc32e
-generic map (INIT => "11111110000000000000000000000000")
+generic map (INIT => "01111110000000000000000000000000")
 port map (
   Q     => open,
   Q31   => d,
@@ -644,7 +636,7 @@ port map (
 
 f <= not fn;
 vga_522dot72us : entity work.dummyplug_srlc33e
-generic map (INIT => "111111111111111111111111111111110")
+generic map (INIT => "011111111111111111111111111111111")
 port map (
   Q     => fn,
   Q32   => open,
@@ -665,9 +657,8 @@ begin
   end if;
 end process;
 vga_16727dot04us : entity work.dummyplug_srlc32e
-generic map (INIT => "11111111111111111111111111111000")
---generic map (INIT => "11111111111111111111111111111100")
---generic map (INIT => "11111111111111111111111111111110")
+--generic map (INIT => "00011111111111111111111111111111")
+generic map (INIT => "01111111111111111111111111111111")
 port map (
   Q     => gn,
   Q31   => open,
