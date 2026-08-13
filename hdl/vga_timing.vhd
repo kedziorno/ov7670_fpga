@@ -567,7 +567,7 @@ port map (
 
 f <= not fn;
 vga_522dot72us : entity work.dummyplug_srlc33e
-generic map (INIT => "111111111111111111111111111111110")
+generic map (INIT => "011111111111111111111111111111111")
 port map (
   Q     => fn,
   Q32   => open,
@@ -581,7 +581,8 @@ vsync <= gn;
 --o_vb <= g;
 g <= not gn;
 vga_16727dot04us : entity work.dummyplug_srlc32e
-generic map (INIT => "11111111111111111111111111111110")
+--generic map (INIT => "00011111111111111111111111111111")
+generic map (INIT => "01111111111111111111111111111111")
 port map (
   Q     => gn,
   Q31   => open,

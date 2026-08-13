@@ -106,7 +106,8 @@ st01, st02, st03, st04, st05, st06, st07, st08, st09
 signal p0_state : p_states0 := st01;
 signal p1_state : p_states1 := st01;
 
-constant c_cntr_frame : integer := 307200/2;
+constant c_cntr_frame_w : integer := 307200/2;
+constant c_cntr_frame_r : integer := (637*480)/2;
 constant c_step_w : unsigned (15 downto 0) := to_unsigned (320, 16);
 constant c_step_r : unsigned (15 downto 0) := to_unsigned (320, 16);
 signal cntr_wr1 : unsigned (17 downto 0) := (others => '0');
@@ -301,7 +302,7 @@ begin
           else
             p0_state <= st02;
           end if;
-          if (cntr_wr1 = to_unsigned (c_cntr_frame, cntr_wr1'left + 1)) then
+          if (cntr_wr1 = to_unsigned (c_cntr_frame_w, cntr_wr1'left + 1)) then
             cntr_wr1 <= (others => '0');
           else
             cntr_wr1 <= cntr_wr1 + c_step_w;
@@ -331,7 +332,8 @@ begin
       case (p1_state) is
         when st01 =>
           p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0');
-          if (vga_vsync_sig_prev = '0' and vga_vsync_sig = '1') then -- xxx here
+--          if (vga_vsync_sig_prev = '0' and vga_vsync_sig = '1') then -- xxx here
+          if (vga_vsync_sig_prev = '1' and vga_vsync_sig = '0') then -- xxx here
             ov7670_vs_next <= ov7670_vs_next (0) & '1';
             p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0');
           end if;
@@ -378,7 +380,7 @@ begin
         when st09 =>
           p0_r <= '0';
           p1_state <= st01;
-          if (cntr_rd1 = to_unsigned (c_cntr_frame, cntr_rd1'left+1)) then
+          if (cntr_rd1 = to_unsigned (c_cntr_frame_r, cntr_rd1'left+1)) then
             cntr_rd1 <= (others => '0');
           else
             cntr_rd1 <= cntr_rd1 + c_step_r;
@@ -601,7 +603,7 @@ port map (
 dcm_sp_vga : dcm_sp
 generic map (
   clkdv_divide => 4.0,
-  clkfx_multiply => 3, clkfx_divide => 5,
+  clkfx_multiply => 4, clkfx_divide => 6,
   clkin_period => 10.0,
   startup_wait => true
 )
