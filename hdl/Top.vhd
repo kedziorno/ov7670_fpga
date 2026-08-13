@@ -249,7 +249,7 @@ begin
       ov7670_hs_prev <= latched_hs;
       case (p0_state) is
         when st01 =>
-          if (ov7670_hs_prev = '1' and latched_hs = '0') then
+          if (ov7670_hs_prev = '0' and latched_hs = '1') then
             p0_state <= st02;
           end if;
           if (latched_vs = '1') then
@@ -261,7 +261,7 @@ begin
           if (latched_vs = '1') then
             cntr_wr1 <= (others => '0');
           end if;
-          if (ov7670_hs_prev = '1' and latched_hs = '0') then -- wr when hs fe
+          if (ov7670_hs_prev = '0' and latched_hs = '1') then -- wr when hs fe
             p0_state <= st03;
           end if;
         when st03 =>
