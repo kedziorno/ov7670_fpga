@@ -484,23 +484,23 @@ signal tmp1, tmp2 : std_logic;
 
 begin
 
-div99_9bit : SRL16E
+div99_7bit : SRL16E
 generic map (INIT => x"0001")
 port map (
   Q   => a,
-  A0  => '0', A1 => '0', A2 => '0', A3 => '1',
+  A0  => '0', A1 => '1', A2 => '1', A3 => '0',
   CE  => '1',
   CLK => clk25,
   D   => a
 );
 
-div99_11bit : SRL16E
+div99_14bit : SRL16E
 generic map (INIT => x"0001")
 port map (
   Q   => b,
-  A0  => '0', A1 => '1', A2 => '0', A3 => '1',
-  CE  => a,
-  CLK => clk25,
+  A0  => '1', A1 => '0', A2 => '1', A3 => '1',
+  CE  => '1',
+  CLK => a,
   D   => b
 );
 
@@ -532,7 +532,7 @@ port map (
   o => tmp2,
   i => d
 );
-interrupt <= '1' when (tmp1 = '0' and tmp2 = '1') else '0';
+interrupt <= '1' when (tmp1 = '1' and tmp2 = '0') and gn = '1' else '0';
 process (clk25) is
 begin
   if (rising_edge (clk25)) then
@@ -540,10 +540,10 @@ begin
   end if;
 end process;
 
-blank <= d;
-activearea <= not d;
+blank <= d when gn = '1' else '1';
+activearea <= not d when gn = '1' else '0';
 hb : entity work.dummyplug_srlc32e
-generic map (INIT => "11111110000000000000000000000000")
+generic map (INIT => "01111110000000000000000000000000")
 port map (
   Q     => open,
   Q31   => d,
