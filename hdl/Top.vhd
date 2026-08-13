@@ -107,7 +107,7 @@ signal p0_state : p_states0 := st01;
 signal p1_state : p_states1 := st01;
 
 constant c_cntr_frame_w : integer := 307200/2;
-constant c_cntr_frame_r : integer := (637*480)/2;
+constant c_cntr_frame_r : integer := 307200/2;
 constant c_step_w : unsigned (15 downto 0) := to_unsigned (320, 16);
 constant c_step_r : unsigned (15 downto 0) := to_unsigned (320, 16);
 signal cntr_wr1 : unsigned (17 downto 0) := (others => '0');
@@ -332,7 +332,6 @@ begin
       case (p1_state) is
         when st01 =>
           p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0');
---          if (vga_vsync_sig_prev = '0' and vga_vsync_sig = '1') then -- xxx here
           if (vga_vsync_sig_prev = '1' and vga_vsync_sig = '0') then -- xxx here
             ov7670_vs_next <= ov7670_vs_next (0) & '1';
             p0_r <= '1'; wrc_r <= '1'; id_r <= x"0059"; data_r <= (others => '0');
