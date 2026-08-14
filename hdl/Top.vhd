@@ -466,7 +466,7 @@ ov7670_reset1 <= not pb;
 
 inst_ov7670contr1: entity work.ov7670_controller
 port map (
-  clk => clk_mc1,
+  clk => clk_vga,
   reset1 => pb,
   resend => sw(1),
   sw => sw (0),
@@ -702,7 +702,7 @@ port map (
 
 dcm_sp_mc_r : dcm_sp
 generic map (
-  clkfx_multiply => 13, clkfx_divide => 21,
+  clkfx_multiply => 17, clkfx_divide => 32,
   clkin_period => 10.0,
   startup_wait => true
 )
