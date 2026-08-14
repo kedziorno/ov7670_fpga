@@ -19,21 +19,41 @@ end entity vga_timing;
 -- fastest lsfr
 architecture lsfr_1 of vga_timing is
 
+-- horizontal counter
 signal qr1 : std_logic_vector (9 downto 0) := "0000000001";
 signal hsync_set, hsync_reset : std_logic := '1';
 
+-- vertical counter
 signal qr2 : std_logic_vector (18 downto 0) := "0000000000000000001";
 signal vsync_set, vsync_reset : std_logic := '1';
 
+-- horizontal syncing
 constant c_hsync_10 : std_logic_vector (9 downto 0) := "0000110100";
 constant c_hsync_01 : std_logic_vector (9 downto 0) := "0011110000";
 type hs_gen_states is (hs_gen_set, hs_gen_reset);
 signal hs_gen_state : hs_gen_states := hs_gen_set;
 
+-- horizontal blanking
+constant c_hblank_10 : std_logic_vector (9 downto 0) := "0010011111";
+constant c_hblank_01 : std_logic_vector (9 downto 0) := "1111100110";
+type hb_gen_states is (hb_gen_set, hb_gen_reset);
+signal hb_gen_state : hb_gen_states := hb_gen_set;
+signal hblank_set, hblank_reset : std_logic := '0';
+signal hblank_not : std_logic := '1';
+
+-- vertical syncing
 constant c_vsync_10 : std_logic_vector (18 downto 0) := "1101110011011000011";
 constant c_vsync_01 : std_logic_vector (18 downto 0) := "0110010010110010110";
 type vs_gen_states is (vs_gen_set, vs_gen_reset);
 signal vs_gen_state : vs_gen_states := vs_gen_set;
+
+-- vertical blanking
+constant c_vblank_10 : std_logic_vector (18 downto 0) := "1011010100101000100";
+constant c_vblank_01 : std_logic_vector (18 downto 0) := "1001000100101110111";
+type vb_gen_states is (vb_gen_set, vb_gen_reset);
+signal vb_gen_state : vb_gen_states := vb_gen_set;
+signal vblank_set, vblank_reset : std_logic := '0';
+signal vblank_not : std_logic := '1';
 
 begin
 
@@ -129,6 +149,40 @@ port map (
   d   => '0'
 );
 
+hblank_gen1 : process (clk25) is
+begin
+  if (rising_edge (clk25)) then
+  case (hb_gen_state) is
+    when hb_gen_set =>
+      if (qr1 = c_hblank_10) then
+        hb_gen_state <= hb_gen_reset;
+        hblank_set <= '0';
+        hblank_reset <= '1';
+      end if;
+    when hb_gen_reset =>
+      if (qr1 = c_hblank_01) then
+        hb_gen_state <= hb_gen_set;
+        hblank_set <= '1';
+        hblank_reset <= '0';
+      end if;
+    end case;
+  end if;
+end process hblank_gen1;
+
+hblank_gen_fdcpe : fdcpe
+port map (
+  q   => hblank_not,
+  clr => hblank_reset,
+  pre => hblank_set,
+  c   => clk25,
+  ce  => '0',
+  d   => '0'
+);
+
+blank <= hblank_not when (vsync_set = '1' and vblank_reset = '1') else '1';
+activearea <= not hblank_not when (vsync_set = '1' and vblank_reset = '1') else '0';
+interrupt <= '1' when qr1 = "1101001101" and vsync_set = '1' and vblank_reset = '1' else '0';
+
 -- better than if/elsif (process) or when/else (latch) in rtl schematic
 -- but slowest in syn reports
 vsync_gen1 : process (clk25) is
@@ -156,6 +210,36 @@ port map (
   q   => vsync,
   clr => vsync_reset,
   pre => vsync_set,
+  c   => clk25,
+  ce  => '0',
+  d   => '0'
+);
+
+vblank_gen1 : process (clk25) is
+begin
+  if (rising_edge (clk25)) then
+  case (vb_gen_state) is
+    when vb_gen_set =>
+      if (qr2 = c_vblank_10) then
+        vb_gen_state <= vb_gen_reset;
+        vblank_set <= '0';
+        vblank_reset <= '1';
+      end if;
+    when vb_gen_reset =>
+      if (qr2 = c_vblank_01) then
+        vb_gen_state <= vb_gen_set;
+        vblank_set <= '1';
+        vblank_reset <= '0';
+      end if;
+    end case;
+  end if;
+end process vblank_gen1;
+
+vblank_gen_fdcpe : fdcpe
+port map (
+  q   => vblank_not,
+  clr => vblank_reset,
+  pre => vblank_set,
   c   => clk25,
   ce  => '0',
   d   => '0'
