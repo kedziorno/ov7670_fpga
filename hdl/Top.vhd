@@ -644,7 +644,7 @@ port map (
   clkfx => clk_mc,
   clkdv => clk_vga,
   clkfb => clk2_fb,
-  clkin => i_clock_ibg, -- from previous dcm
+  clkin => clk1, -- from previous dcm
   rst => reset_dcm,
   locked => locked_vga,
   psclk => '0', psen => '0', psincdec => '0'
@@ -666,7 +666,7 @@ port map (
   clk0 => clk3,
   clkfx => clk_mc1,
   clkfb => clk3_fb,
-  clkin => i_clock_ibg,
+  clkin => clk1, -- from previous dcm
   rst => pb,
   locked => open,
   psclk => '0', psen => '0', psincdec => '0'
@@ -688,7 +688,7 @@ port map (
   clk0 => clk4,
   clkfx => clk_mc1_w,
   clkfb => clk4_fb,
-  clkin => i_clock_ibg,
+  clkin => clk1, -- from previous dcm
   rst => pb,
   locked => open,
   psclk => '0', psen => '0', psincdec => '0'
@@ -710,7 +710,7 @@ port map (
   clk0 => clk5,
   clkfx => clk_mc1_r,
   clkfb => clk5_fb,
-  clkin => i_clock_ibg,
+  clkin => clk1, -- from previous dcm
   rst => pb,
   locked => open,
   psclk => '0', psen => '0', psincdec => '0'
