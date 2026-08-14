@@ -641,7 +641,7 @@ generic map (
 )
 port map (
   clk0 => clk2,
-  clkfx => clk_mc,
+  --clkfx => clk_mc,
   clkdv => clk_vga,
   clkfb => clk2_fb,
   clkin => clk1, -- from previous dcm
@@ -702,7 +702,7 @@ port map (
 
 dcm_sp_mc_r : dcm_sp
 generic map (
-  clkfx_multiply => 2, clkfx_divide => 4,
+  clkfx_multiply => 13, clkfx_divide => 21,
   clkin_period => 10.0,
   startup_wait => true
 )
