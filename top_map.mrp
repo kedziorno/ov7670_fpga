@@ -9,39 +9,39 @@ Target Device  : xc3s1200e
 Target Package : fg320
 Target Speed   : -4
 Mapper Version : spartan3e -- $Revision: 1.55 $
-Mapped Date    : Fri Aug 14 13:37:53 2026
+Mapped Date    : Fri Aug 14 13:43:32 2026
 
 Design Summary
 --------------
 Number of errors:      0
-Number of warnings:  447
+Number of warnings:  457
 Logic Utilization:
-  Number of Slice Flip Flops:           440 out of  17,344    2%
-  Number of 4 input LUTs:               766 out of  17,344    4%
+  Number of Slice Flip Flops:           455 out of  17,344    2%
+  Number of 4 input LUTs:               758 out of  17,344    4%
 Logic Distribution:
-  Number of occupied Slices:            507 out of   8,672    5%
-    Number of Slices containing only related logic:     507 out of     507 100%
-    Number of Slices containing unrelated logic:          0 out of     507   0%
+  Number of occupied Slices:            511 out of   8,672    5%
+    Number of Slices containing only related logic:     511 out of     511 100%
+    Number of Slices containing unrelated logic:          0 out of     511   0%
       *See NOTES below for an explanation of the effects of unrelated logic.
-  Total Number of 4 input LUTs:         865 out of  17,344    4%
-    Number used as logic:               750
-    Number used as a route-thru:         99
-    Number used as Shift registers:      16
+  Total Number of 4 input LUTs:         877 out of  17,344    5%
+    Number used as logic:               757
+    Number used as a route-thru:        119
+    Number used as Shift registers:       1
 
   The Slice Logic Distribution report is not meaningful if the design is
   over-mapped for a non-slice resource or if Placement fails.
 
   Number of bonded IOBs:                 81 out of     250   32%
-    IOB Flip Flops:                      69
+    IOB Flip Flops:                      71
   Number of RAMB16s:                      3 out of      28   10%
-  Number of BUFGMUXs:                    11 out of      24   45%
+  Number of BUFGMUXs:                    10 out of      24   41%
   Number of DCMs:                         5 out of       8   62%
 
-Average Fanout of Non-Clock Nets:                3.37
+Average Fanout of Non-Clock Nets:                3.36
 
 Peak Memory Usage:  586 MB
 Total REAL time to MAP completion:  2 secs 
-Total CPU time to MAP completion:   1 secs 
+Total CPU time to MAP completion:   2 secs 
 
 NOTES:
 
@@ -82,14 +82,6 @@ Section 1 - Errors
 
 Section 2 - Warnings
 --------------------
-WARNING:LIT:178 - Clock buffer BUFGMUX symbol
-   "physical_group_inst_top_camera_monitoring/vga_timing_i0/tmp2/inst_top_camera
-   _monitoring/vga_timing_i0/bufg_cam" (output
-   signal=inst_top_camera_monitoring/vga_timing_i0/tmp2) does not drive clock
-   loads. Driving only non-clock loads with a clock buffer will cause ALL of the
-   dedicated clock routing resources for this buffer to be wasted. The non-clock
-   loads are:
-   Pin I3 of inst_top_camera_monitoring/p1_state_FSM_FFd3-In1_SW1
 WARNING:Pack:1542 - The register
    inst_top_camera_monitoring/crbc_i0/data_out_enable_i_0 has the property
    IOB=TRUE, but was not packed into the output side of an I/O component. The
@@ -170,10 +162,13 @@ WARNING:Pack:1542 - The register
    IOB=TRUE, but was not packed into the output side of an I/O component. The
    register symbol "inst_top_camera_monitoring/crbc_i0/data_out_enable_i_15" has
    no connections inside the I/O component.
-WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/vga_timing_i0/vga_522dot72us/srl33_i0" has the
-   property IOB=TRUE, but it did not join an IO component because it is not
-   connected to any IO element.
+WARNING:Pack:1542 - The register inst_top_camera_monitoring/vga_timing_i0/vsync
+   has the property IOB=TRUE, but was not packed into the output side of an I/O
+   component. The output register symbol
+   "inst_top_camera_monitoring/vga_timing_i0/vsync" has loads outside the I/O
+   component.
+   The output register symbol "inst_top_camera_monitoring/vga_timing_i0/vsync"
+   has loads outside the I/O component.
 WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/crbc_i0/this_write_addr_10" has the property
    IOB=TRUE, but it did not join an IO component because it is not connected to
@@ -432,9 +427,6 @@ WARNING:Pack:2780 - The register
 WARNING:Pack:2780 - The register "inst_top_camera_monitoring/ov7670_hs_prev" has
    the property IOB=TRUE, but it did not join an IO component because it is not
    connected to any IO element.
-WARNING:Pack:2780 - The register "inst_top_camera_monitoring/p0_r_1" has the
-   property IOB=TRUE, but it did not join an IO component because it is not
-   connected to any IO element.
 WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/inst_ov7670contr1/SCCB/sioc_i" has the property
    IOB=TRUE, but it did not join an IO component because it is not connected to
@@ -503,12 +495,6 @@ WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/ov7670_capture_i0/d_latch_15" has the property
    IOB=TRUE, but it did not join an IO component because it is not connected to
    any IO element.
-WARNING:Pack:2780 - The register "inst_top_camera_monitoring/vga_timing_i0/tmp1"
-   has the property IOB=TRUE, but it did not join an IO component because it is
-   not connected to any IO element.
-WARNING:Pack:2780 - The register "inst_top_camera_monitoring/vga_timing_i0/tmp3"
-   has the property IOB=TRUE, but it did not join an IO component because it is
-   not connected to any IO element.
 WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/inst_ov7670contr1/SCCB/data_sr_1" has the
    property IOB=TRUE, but it did not join an IO component because it is not
@@ -588,6 +574,46 @@ WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/crbc_i0/this_read_addr_9" has the property
    IOB=TRUE, but it did not join an IO component because it is not connected to
    any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/vga_timing_i0/hcnt_0" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/vga_timing_i0/hcnt_1" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/vga_timing_i0/hcnt_2" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/vga_timing_i0/hcnt_3" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/vga_timing_i0/hcnt_4" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/vga_timing_i0/hcnt_5" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/vga_timing_i0/hcnt_6" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/vga_timing_i0/hcnt_7" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/vga_timing_i0/hcnt_8" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/vga_timing_i0/hcnt_9" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
 WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/state_0"
    has the property IOB=TRUE, but it did not join an IO component because it is
    not connected to any IO element.
@@ -703,6 +729,46 @@ WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/inst_ov7670contr1/SCCB/data_sr_29" has the
    property IOB=TRUE, but it did not join an IO component because it is not
    connected to any IO element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/vga_timing_i0/vcnt_0" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/vga_timing_i0/vcnt_1" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/vga_timing_i0/vcnt_2" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/vga_timing_i0/vcnt_3" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/vga_timing_i0/vcnt_4" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/vga_timing_i0/vcnt_5" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/vga_timing_i0/vcnt_6" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/vga_timing_i0/vcnt_7" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/vga_timing_i0/vcnt_8" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
+WARNING:Pack:2780 - The register
+   "inst_top_camera_monitoring/vga_timing_i0/vcnt_9" has the property IOB=TRUE,
+   but it did not join an IO component because it is not connected to any IO
+   element.
 WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/inst_ov7670contr1/SCCB/taken_i" has the property
    IOB=TRUE, but it did not join an IO component because it is not connected to
@@ -1542,19 +1608,12 @@ WARNING:Pack:2780 - The register
    IOB=TRUE, but it did not join an IO component because it is not connected to
    any IO element.
 WARNING:Pack:2780 - The register
-   "inst_top_camera_monitoring/vga_timing_i0/move_next_i0" has the property
-   IOB=TRUE, but it did not join an IO component because it is not connected to
-   any IO element.
-WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/crbc_i0/write_counter_10" has the property
    IOB=TRUE, but it did not join an IO component because it is not connected to
    any IO element.
 WARNING:Pack:2780 - The register "inst_top_camera_monitoring/crbc_i0/we_i" has
    the property IOB=TRUE, but it did not join an IO component because it is not
    connected to any IO element.
-WARNING:Pack:2780 - The register "inst_top_camera_monitoring/vga_timing_i0/t8"
-   has the property IOB=TRUE, but it did not join an IO component because it is
-   not connected to any IO element.
 WARNING:Pack:2780 - The register
    "inst_top_camera_monitoring/inst_ov7670contr1/SCCB/busy_sr_10" has the
    property IOB=TRUE, but it did not join an IO component because it is not
@@ -1731,22 +1790,6 @@ WARNING:Pack:2780 - The register "inst_top_camera_monitoring/cntr_wr1_8" has the
 WARNING:Pack:2780 - The register "inst_top_camera_monitoring/cntr_wr1_9" has the
    property IOB=TRUE, but it did not join an IO component because it is not
    connected to any IO element.
-WARNING:PhysDesignRules:372 - Gated clock. Clock net
-   inst_top_camera_monitoring/vga_timing_i0/b is sourced by a combinatorial pin.
-   This is not good design practice. Use the CE pin to control the loading of
-   data into the flip-flop.
-WARNING:PhysDesignRules:372 - Gated clock. Clock net
-   inst_top_camera_monitoring/vga_timing_i0/en is sourced by a combinatorial
-   pin. This is not good design practice. Use the CE pin to control the loading
-   of data into the flip-flop.
-WARNING:PhysDesignRules:372 - Gated clock. Clock net
-   inst_top_camera_monitoring/vga_timing_i0/tmp4 is sourced by a combinatorial
-   pin. This is not good design practice. Use the CE pin to control the loading
-   of data into the flip-flop.
-WARNING:PhysDesignRules:372 - Gated clock. Clock net
-   inst_top_camera_monitoring/vga_timing_i0/a is sourced by a combinatorial pin.
-   This is not good design practice. Use the CE pin to control the loading of
-   data into the flip-flop.
 WARNING:PhysDesignRules:781 - PULLUP on an active net. PULLUP of comp
    ov7670_sioc1 is set but the tri state is not configured. 
 WARNING:PhysDesignRules:1063 - Issue with pin connections and/or configuration
@@ -1786,9 +1829,9 @@ INFO:PhysDesignRules:772 - To achieve optimal frequency synthesis performance
 
 Section 4 - Removed Logic Summary
 ---------------------------------
-   2 block(s) removed
+   1 block(s) removed
    4 block(s) optimized away
-  10 signal(s) removed
+   9 signal(s) removed
 
 Section 5 - Removed Logic
 -------------------------
@@ -1803,11 +1846,6 @@ To quickly locate the original cause for the removal of a chain of logic, look
 above the place where that logic is listed in the trimming report, then locate
 the lines that are least indented (begin at the leftmost edge).
 
-Loadless block
-"inst_top_camera_monitoring/vga_timing_i0/vga_15dot84us/srlc16e_hi_i0" (SRLC16E)
-removed.
- The signal "inst_top_camera_monitoring/vga_timing_i0/vga_15dot84us/q15_lo" is
-loadless and has been removed.
 The signal "inst_top_camera_monitoring/ov7670_siod1_tri/O" is sourceless and has
 been removed.
 The signal "inst_top_camera_monitoring/crbc_i0/read_buffer_i0/doutb<15>" is
@@ -1936,7 +1974,7 @@ Section 6 - IOB Properties
 | vga_g<0>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | vga_g<1>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | vga_g<2>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
-| vga_hsync                          | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
+| vga_hsync                          | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW | OFF1         |          | 0 / 0    |
 | vga_r<0>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | vga_r<1>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
 | vga_r<2>                           | IOB              | OUTPUT    | LVCMOS25             |       | 12       | SLOW |              |          | 0 / 0    |
