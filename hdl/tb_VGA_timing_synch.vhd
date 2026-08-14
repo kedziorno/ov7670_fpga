@@ -32,32 +32,37 @@ USE ieee.std_logic_1164.ALL;
 -- arithmetic functions with Signed or Unsigned values
 --USE ieee.numeric_std.ALL;
  
-ENTITY tb_VGA_timing_synch IS
-END tb_VGA_timing_synch;
+ENTITY tb_vga_timing IS
+END tb_vga_timing;
  
-ARCHITECTURE behavior OF tb_VGA_timing_synch IS 
+ARCHITECTURE behavior OF tb_vga_timing IS 
  
     -- Component Declaration for the Unit Under Test (UUT)
  
-    COMPONENT VGA_timing_synch
+    COMPONENT vga_timing
     PORT(
          clk25 : IN  std_logic;
+         rst   : IN  std_logic;
          Hsync : OUT  std_logic;
          Vsync : OUT  std_logic;
          blank : OUT  std_logic;
-         activeArea1 : OUT  std_logic
+         activeArea : OUT  std_logic;
+         interrupt  : out std_logic
+
         );
     END COMPONENT;
-    for all : VGA_timing_synch use entity work.VGA_timing_synch(lsfr_1);
+    for all : vga_timing use entity work.vga_timing (lsfr_2);
 
    --Inputs
    signal clk25 : std_logic := '0';
+   signal rst : std_logic := '0';
 
  	--Outputs
    signal Hsync : std_logic;
    signal Vsync : std_logic;
    signal blank : std_logic;
-   signal activeArea1 : std_logic;
+   signal activeArea : std_logic;
+   signal interrupt : std_logic;
 
    -- Clock period definitions
    constant clk25_period : time := 40 ns;
@@ -65,12 +70,14 @@ ARCHITECTURE behavior OF tb_VGA_timing_synch IS
 BEGIN
 
 	-- Instantiate the Unit Under Test (UUT)
-   uut: VGA_timing_synch PORT MAP (
+   uut: vga_timing PORT MAP (
           clk25 => clk25,
+          rst => rst,
           Hsync => Hsync,
           Vsync => Vsync,
           blank => blank,
-          activeArea1 => activeArea1
+          activeArea => activeArea,
+          interrupt => interrupt
         );
 
    -- Clock process definitions
@@ -87,8 +94,9 @@ BEGIN
    stim_proc: process
    begin		
       -- hold reset state for 100 ns.
+      rst <= '1';
       wait for 100 ns;	
-
+      rst <= '0';
       wait for clk25_period*10;
 
       -- insert stimulus here 

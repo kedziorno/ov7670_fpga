@@ -84,6 +84,8 @@ ARCHITECTURE behavior OF tb_top IS
 component camera_colorbar is
 generic (
 constant c_source : t_source := t_colorbar
+--constant c_source : t_source := t_frames
+--constant c_source : t_source := t_lines
 );
 port (
 camera_io_scl : inout std_logic;
@@ -320,6 +322,7 @@ signal test_isimgui_32bit : real;
 signal vga_blank_n : std_logic := '1';
 
 signal tb_reset : std_logic := '1';
+signal tb_reset_bmp : std_logic := '1';
 
 BEGIN
 --synthesis translate_off
@@ -333,13 +336,15 @@ end process p_isim_cmd_ping;
 reset_n <= '1', '0' after 475 ns;
 vga_blank_n <= '0', vga_blank after 475 ns;
 
+--tb_reset_bmp <= '1', '0' after 6.3353 us;
+tb_reset_bmp <= '1', '0' after 5 us;
 vga_bmp_i1 : component vga_bmp_sink
 generic map (
 filename => "vga_memory_module_1.bmp"
 )
 port map (
 clk_i        => vga_clock,
-rst_i        => pb,
+rst_i        => tb_reset_bmp,
 dat_i        =>
 vga_r &"00000"&
 vga_g &"00000" &
