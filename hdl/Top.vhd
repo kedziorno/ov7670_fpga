@@ -592,17 +592,24 @@ begin
   end if;
 end process p3_read_buffer_clk;
 
+ibufg_global_clock50 : ibufg
+generic map (
+  iostandard => "DEFAULT")
+port map (
+  o => i_clock_ib2,
+  i => i_clock
+);
+
 bufg_cam : bufg
 port map (
   o => clk0_fb,
   i => clk0
 );
 
-
 dcm_sp_vga : dcm_sp
 generic map (
   clkdv_divide => 4.0,
-  clkfx_multiply => 4, clkfx_divide => 6,
+  clkfx_multiply => 13, clkfx_divide => 21,
   clkin_period => 10.0,
   startup_wait => true
 )
@@ -621,14 +628,6 @@ bufg_cam50 : bufg
 port map (
   o => clk1_fb,
   i => clk1
-);
-
-ibufg_global_clock50 : ibufg
-generic map (
-  iostandard => "DEFAULT")
-port map (
-  o => i_clock_ib2,
-  i => i_clock
 );
 
 dcm_sp_cam : dcm_sp
