@@ -476,12 +476,13 @@ port map (
 
 end architecture lsfr_2;
 
--- johnson counter
+-- johnson counter - XXX WIP
 architecture jc of vga_timing is
 
 signal jc_1 : std_logic_vector (799 downto 0) := '0'& (798 downto 0 => '1');
 signal jc_2 : std_logic_vector (524 downto 0) := '0'& (523 downto 0 => '1');
 signal clk_vga, hsync1, vsync1, activearea_sig1, blank1 : std_logic := '1';
+signal blankh, blankv : std_logic;
 
 begin
 
@@ -490,62 +491,106 @@ begin
 jc_sr_h : process (clk25) is
 begin
   if (rising_edge (clk25)) then
-  for i in 0 to 798 loop
-    jc_1 (i +1) <= jc_1 (i);
-  end loop;
-  jc_1 (0) <= jc_1 (799);
+  if (rst = '1') then
+    jc_1 <= '0'& (798 downto 0 => '1');
+  else
+    for i in 0 to 798 loop
+      jc_1 (i + 1) <= jc_1 (i);
+    end loop;
+    jc_1 (0) <= jc_1 (799);
+    end if;
   end if;
 end process jc_sr_h;
 
 jc_sr_v : process (jc_1(799)) is
 begin
-  if (falling_edge (jc_1(799))) then
-  for i in 0 to 523 loop
-    jc_2 (i +1) <= jc_2 (i);
-  end loop;
-  jc_2 (0) <= jc_2 (524);
+--  if (falling_edge (jc_1(799))) then
+  if (rising_edge (jc_1(799))) then
+  if (rst = '1') then
+    jc_2 <= '0'& (523 downto 0 => '1');
+  else
+    for i in 0 to 523 loop
+      jc_2 (i + 1) <= jc_2 (i);
+    end loop;
+    jc_2 (0) <= jc_2 (524);
+    end if;
   end if;
 end process jc_sr_v;
 
 hsync_gen1 : process(clk25) begin
   if rising_edge(clk25) then
-    if (jc_1(752) = '0') then
+    if (rst = '1') then
       hsync <= '1';
-    elsif (jc_1(656) = '0') then
-      hsync <= '0';
+    else
+      if (jc_1(752) = '0') then
+        hsync <= '1';
+      elsif (jc_1(656) = '0') then
+        hsync <= '0';
+      end if;
     end if;
   end if;
 end process hsync_gen1;
 
 vsync_gen1 : process(clk25) begin
   if rising_edge(clk25) then
-    if (jc_2(492) = '0') then
+    if (rst = '1') then
       vsync <= '1';
-    elsif (jc_2(490) = '0') then
-      vsync <= '0';
+    else
+      if (jc_2(492) = '0') then
+        vsync <= '1';
+      elsif (jc_2(490) = '0') then
+        vsync <= '0';
+      end if;
     end if;
   end if;
 end process vsync_gen1;
 
-active_area_jc : process(clk_vga) begin
-  if rising_edge(clk_vga) then
-    if (jc_1(639) = '0') then
-      activearea <= '0';
-    elsif (jc_1(799) = '0') then
-      activearea <= '1';
-    end if;
-  end if;
-end process active_area_jc;
+--active_area_jc : process(clk25) begin
+--  if rising_edge(clk25) then
+--    if (rst = '1') then
+--      activearea <= '0';
+--    else
+--      if (jc_1(639) = '0') then
+--        activearea <= '0';
+--      elsif (jc_1(799) = '0') then
+--        activearea <= '1';
+--      end if;
+--    end if;
+--  end if;
+--end process active_area_jc;
 
-blank_jc : process(clk_vga) begin
-  if rising_edge(clk_vga) then
-    if (jc_1(639) = '0') then
-      blank <= '1';
-    elsif (jc_1(799) = '0') then
-      blank <= '0';
+blank <= '1' when blankh = '1' xnor blankv = '1' else '0';
+activearea <= '1' when not (blankh = '1' xnor blankv = '1') else '0';
+
+blankh_jc : process(clk25) begin
+  if rising_edge(clk25) then
+    if (rst = '1') then
+      blankh <= '1';
+    else
+      if (jc_1(639) = '0') then
+        blankh <= '1';
+      elsif (jc_1(799) = '0') then
+        blankh <= '0';
+      end if;
     end if;
   end if;
-end process blank_jc;
+end process blankh_jc;
+
+blankv_jc : process(clk25) begin
+  if rising_edge(clk25) then
+    if (rst = '1') then
+      blankv <= '1';
+    else
+      if (jc_2(479) = '0') then
+        blankv <= '1';
+      elsif (jc_2(523) = '0') then
+        blankv <= '0';
+      end if;
+    end if;
+  end if;
+end process blankv_jc;
+
+interrupt <= '1' when jc_1 (640) = '0' else '0';
 
 end architecture jc;
 

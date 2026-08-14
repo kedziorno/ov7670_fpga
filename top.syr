@@ -5,14 +5,14 @@ Parameter TMPDIR set to xst/projnav.tmp
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.04 secs
+Total CPU time to Xst completion: 0.05 secs
  
 --> 
 Parameter xsthdpdir set to xst
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.04 secs
+Total CPU time to Xst completion: 0.05 secs
  
 --> 
 Reading design: top.prj
@@ -144,11 +144,12 @@ Architecture behavioral of Entity address_generator is up to date.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/vga_imagegenerator.vhd" in Library work.
 Architecture behavioral of Entity vga_imagegenerator is up to date.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/vga_timing.vhd" in Library work.
-Architecture lsfr_1 of Entity vga_timing is up to date.
-Architecture lsfr_2 of Entity vga_timing is up to date.
-Architecture jc of Entity vga_timing is up to date.
-Architecture counter of Entity vga_timing is up to date.
-Architecture vga_7slices of Entity vga_timing is up to date.
+Entity <vga_timing> compiled.
+Entity <vga_timing> (Architecture <lsfr_1>) compiled.
+Entity <vga_timing> (Architecture <lsfr_2>) compiled.
+Entity <vga_timing> (Architecture <jc>) compiled.
+Entity <vga_timing> (Architecture <counter>) compiled.
+Entity <vga_timing> (Architecture <vga_7slices>) compiled.
 Compiling vhdl file "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/Top.vhd" in Library work.
 Entity <top_camera_monitoring> compiled.
 Entity <top_camera_monitoring> (Architecture <structural>) compiled.
@@ -198,7 +199,7 @@ Analyzing hierarchy for entity <address_generator> in library <work> (architectu
 Analyzing hierarchy for entity <vga_imagegenerator> in library <work> (architecture <behavioral>) with generics.
 	c_module_mode = "c_module_mode_syn"
 
-Analyzing hierarchy for entity <vga_timing> in library <work> (architecture <counter>) with generics.
+Analyzing hierarchy for entity <vga_timing> in library <work> (architecture <lsfr_2>) with generics.
 	c_module_mode = "c_module_mode_syn"
 
 Analyzing hierarchy for module <asym_ram_sdp_read_wider> in library <work> with parameters.
@@ -492,8 +493,12 @@ Analyzing generic Entity <vga_imagegenerator> in library <work> (Architecture <b
 	c_module_mode = "c_module_mode_syn"
 Entity <vga_imagegenerator> analyzed. Unit <vga_imagegenerator> generated.
 
-Analyzing generic Entity <vga_timing> in library <work> (Architecture <counter>).
+Analyzing generic Entity <vga_timing> in library <work> (Architecture <lsfr_2>).
 	c_module_mode = "c_module_mode_syn"
+    Set user-defined property "INIT =  0" for instance <hsync_gen_fdcpe> in unit <vga_timing>.
+    Set user-defined property "INIT =  0" for instance <hblank_gen_fdcpe> in unit <vga_timing>.
+    Set user-defined property "INIT =  0" for instance <vsync_gen_fdcpe> in unit <vga_timing>.
+    Set user-defined property "INIT =  0" for instance <vblank_gen_fdcpe> in unit <vga_timing>.
 Entity <vga_timing> analyzed. Unit <vga_timing> generated.
 
 
@@ -546,28 +551,6 @@ WARNING:Xst:647 - Input <data_in1<4>> is never used. This port will be preserved
 WARNING:Xst:647 - Input <data_in1<1:0>> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
 WARNING:Xst:647 - Input <reset> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
 Unit <vga_imagegenerator> synthesized.
-
-
-Synthesizing Unit <vga_timing>.
-    Related source file is "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/vga_timing.vhd".
-    Found 1-bit register for signal <vsync>.
-    Found 10-bit comparator less for signal <activearea$cmp_lt0000> created at line 623.
-    Found 10-bit comparator less for signal <activearea$cmp_lt0001> created at line 623.
-    Found 10-bit comparator greatequal for signal <blank_i$cmp_ge0000> created at line 626.
-    Found 10-bit comparator greatequal for signal <blank_i$cmp_ge0001> created at line 626.
-    Found 10-bit up counter for signal <hcnt>.
-    Found 1-bit register for signal <hsync_i>.
-    Found 10-bit comparator greater for signal <hsync_i$cmp_gt0000> created at line 599.
-    Found 10-bit comparator less for signal <hsync_i$cmp_lt0000> created at line 599.
-    Found 10-bit comparator less for signal <interrupt$cmp_lt0000> created at line 630.
-    Found 10-bit up counter for signal <vcnt>.
-    Found 10-bit comparator greater for signal <vsync$cmp_gt0000> created at line 614.
-    Found 10-bit comparator less for signal <vsync$cmp_lt0000> created at line 614.
-    Summary:
-	inferred   2 Counter(s).
-	inferred   2 D-type flip-flop(s).
-	inferred   9 Comparator(s).
-Unit <vga_timing> synthesized.
 
 
 Synthesizing Unit <asym_ram_sdp_read_wider>.
@@ -657,6 +640,33 @@ Unit <cellular_ram_burst_controller> synthesized.
 Synthesizing Unit <ov7670_i2c_controller>.
     Related source file is "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/ov7670_controller.vhd".
 Unit <ov7670_i2c_controller> synthesized.
+
+
+Synthesizing Unit <vga_timing>.
+    Related source file is "/home/user/_WORKSPACE_/kedziorno/ov7670_vga_Nexys2/hdl/vga_timing.vhd".
+WARNING:Xst:647 - Input <rst> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:646 - Signal <vblank_not> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+    Found 1-bit register for signal <hb_gen_state<0>>.
+    Found 1-bit register for signal <hblank_reset>.
+    Found 1-bit register for signal <hblank_set>.
+    Found 1-bit register for signal <hs_gen_state<0>>.
+    Found 1-bit register for signal <hsync_reset>.
+    Found 1-bit register for signal <hsync_set>.
+    Found 10-bit register for signal <qr1>.
+    Found 1-bit xor2 for signal <qr1_7$xor0000> created at line 314.
+    Found 10-bit register for signal <qr2>.
+    Found 10-bit comparator lessequal for signal <qr2_0$cmp_le0000> created at line 331.
+    Found 1-bit xor2 for signal <qr2_7$xor0000> created at line 334.
+    Found 1-bit register for signal <vb_gen_state<0>>.
+    Found 1-bit register for signal <vblank_reset>.
+    Found 1-bit register for signal <vblank_set>.
+    Found 1-bit register for signal <vs_gen_state<0>>.
+    Found 1-bit register for signal <vsync_reset>.
+    Found 1-bit register for signal <vsync_set>.
+    Summary:
+	inferred  32 D-type flip-flop(s).
+	inferred   1 Comparator(s).
+Unit <vga_timing> synthesized.
 
 
 Synthesizing Unit <top_camera_monitoring>.
@@ -758,14 +768,14 @@ Macro Statistics
  18-bit adder                                          : 2
  23-bit adder                                          : 2
  8-bit subtractor                                      : 1
-# Counters                                             : 7
- 10-bit up counter                                     : 3
+# Counters                                             : 5
+ 10-bit up counter                                     : 1
  11-bit up counter                                     : 1
  20-bit up counter                                     : 1
  6-bit up counter                                      : 1
  8-bit up counter                                      : 1
-# Registers                                            : 101
- 1-bit register                                        : 72
+# Registers                                            : 131
+ 1-bit register                                        : 102
  10-bit register                                       : 2
  11-bit register                                       : 4
  16-bit register                                       : 9
@@ -775,12 +785,12 @@ Macro Statistics
  27-bit register                                       : 1
  32-bit register                                       : 2
  8-bit register                                        : 4
-# Comparators                                          : 13
- 10-bit comparator greatequal                          : 2
- 10-bit comparator greater                             : 2
- 10-bit comparator less                                : 5
+# Comparators                                          : 5
+ 10-bit comparator lessequal                           : 1
  11-bit comparator greater                             : 2
  11-bit comparator lessequal                           : 2
+# Xors                                                 : 2
+ 1-bit xor2                                            : 2
 
 =========================================================================
 
@@ -878,20 +888,20 @@ Macro Statistics
  18-bit adder                                          : 2
  23-bit adder                                          : 2
  8-bit subtractor                                      : 1
-# Counters                                             : 7
- 10-bit up counter                                     : 3
+# Counters                                             : 5
+ 10-bit up counter                                     : 1
  11-bit up counter                                     : 1
  20-bit up counter                                     : 1
  6-bit up counter                                      : 1
  8-bit up counter                                      : 1
-# Registers                                            : 525
- Flip-Flops                                            : 525
-# Comparators                                          : 13
- 10-bit comparator greatequal                          : 2
- 10-bit comparator greater                             : 2
- 10-bit comparator less                                : 5
+# Registers                                            : 559
+ Flip-Flops                                            : 559
+# Comparators                                          : 5
+ 10-bit comparator lessequal                           : 1
  11-bit comparator greater                             : 2
  11-bit comparator lessequal                           : 2
+# Xors                                                 : 2
+ 1-bit xor2                                            : 2
 
 =========================================================================
 
@@ -940,11 +950,11 @@ Optimizing unit <top> ...
 
 Optimizing unit <ov7670_capture> ...
 
-Optimizing unit <vga_timing> ...
-
 Optimizing unit <ov7670_registers> ...
 
 Optimizing unit <ov7670_sccb> ...
+
+Optimizing unit <vga_timing> ...
 
 Optimizing unit <cellular_ram_burst_controller> ...
 
@@ -1000,8 +1010,8 @@ Final Macro Processing ...
 Final Register Report
 
 Macro Statistics
-# Registers                                            : 526
- Flip-Flops                                            : 526
+# Registers                                            : 540
+ Flip-Flops                                            : 540
 
 =========================================================================
 
@@ -1030,32 +1040,33 @@ Design Statistics
 # IOs                              : 87
 
 Cell Usage :
-# BELS                             : 1337
+# BELS                             : 1289
 #      GND                         : 2
-#      INV                         : 53
-#      LUT1                        : 117
-#      LUT2                        : 178
+#      INV                         : 55
+#      LUT1                        : 99
+#      LUT2                        : 179
 #      LUT2_D                      : 1
 #      LUT2_L                      : 1
-#      LUT3                        : 120
+#      LUT3                        : 112
 #      LUT3_D                      : 2
-#      LUT4                        : 394
+#      LUT4                        : 405
 #      LUT4_D                      : 6
 #      LUT4_L                      : 2
-#      MUXCY                       : 190
-#      MUXF5                       : 57
+#      MUXCY                       : 172
+#      MUXF5                       : 59
 #      MUXF6                       : 15
 #      VCC                         : 2
-#      XORCY                       : 197
-# FlipFlops/Latches                : 526
+#      XORCY                       : 177
+# FlipFlops/Latches                : 540
 #      FD                          : 23
 #      FDC                         : 11
-#      FDE                         : 132
-#      FDR                         : 122
-#      FDRE                        : 173
+#      FDCPE                       : 4
+#      FDE                         : 154
+#      FDR                         : 121
+#      FDRE                        : 163
 #      FDRS                        : 54
 #      FDRSE                       : 4
-#      FDS                         : 7
+#      FDS                         : 6
 # RAMS                             : 3
 #      RAMB16_S18_S18              : 1
 #      RAMB16_S9_S9                : 2
@@ -1078,13 +1089,14 @@ Device utilization summary:
 
 Selected Device : 3s1200efg320-4 
 
- Number of Slices:                      484  out of   8672     5%  
- Number of Slice Flip Flops:            526  out of  17344     3%  
- Number of 4 input LUTs:                875  out of  17344     5%  
-    Number used as logic:               874
+ Number of Slices:                      496  out of   8672     5%  
+ Number of Slice Flip Flops:            539  out of  17344     3%  
+ Number of 4 input LUTs:                863  out of  17344     4%  
+    Number used as logic:               862
     Number used as Shift registers:       1
  Number of IOs:                          87
  Number of bonded IOBs:                  81  out of    250    32%  
+    IOB Flip Flops:                       1
  Number of BRAMs:                         3  out of     28    10%  
  Number of GCLKs:                        10  out of     24    41%  
  Number of DCMs:                          5  out of      8    62%  
@@ -1112,7 +1124,7 @@ Clock Signal                              | Clock buffer(FF name)               
 ------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------+
 i_clock                                   | inst_top_camera_monitoring/dcm_sp_cam:CLK0+inst_top_camera_monitoring/dcm_sp_mc_r:CLKFX                                                                                   | 341   |
 inst_top_camera_monitoring/read_buffer_clk| NONE(inst_top_camera_monitoring/crbc_i0/read_buffer_i0/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/s3_noinit.ram/dpram.dp18x18.ram)| 12    |
-i_clock                                   | inst_top_camera_monitoring/dcm_sp_cam:CLK0+inst_top_camera_monitoring/dcm_sp_vga:CLKDV                                                                                    | 139   |
+i_clock                                   | inst_top_camera_monitoring/dcm_sp_cam:CLK0+inst_top_camera_monitoring/dcm_sp_vga:CLKDV                                                                                    | 153   |
 ov7670_pclk1                              | BUFGP                                                                                                                                                                     | 40    |
 i_clock                                   | inst_top_camera_monitoring/dcm_sp_cam:CLK0                                                                                                                                | 1     |
 ------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------+
@@ -1120,20 +1132,28 @@ INFO:Xst:2169 - HDL ADVISOR - Some clock signals were not automatically buffered
 
 Asynchronous Control Signals Information:
 ----------------------------------------
------------------------------------+------------------------+-------+
-Control Signal                     | Buffer(FF name)        | Load  |
------------------------------------+------------------------+-------+
-pb                                 | IBUF                   | 11    |
------------------------------------+------------------------+-------+
+--------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------+-------+
+Control Signal                                                                                                | Buffer(FF name)                                                | Load  |
+--------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------+-------+
+pb                                                                                                            | IBUF                                                           | 11    |
+inst_top_camera_monitoring/vga_timing_i0/hblank_reset(inst_top_camera_monitoring/vga_timing_i0/hblank_reset:Q)| NONE(inst_top_camera_monitoring/vga_timing_i0/hblank_gen_fdcpe)| 1     |
+inst_top_camera_monitoring/vga_timing_i0/hblank_set(inst_top_camera_monitoring/vga_timing_i0/hblank_set:Q)    | NONE(inst_top_camera_monitoring/vga_timing_i0/hblank_gen_fdcpe)| 1     |
+inst_top_camera_monitoring/vga_timing_i0/hsync_reset(inst_top_camera_monitoring/vga_timing_i0/hsync_reset:Q)  | NONE(inst_top_camera_monitoring/vga_timing_i0/hsync_gen_fdcpe) | 1     |
+inst_top_camera_monitoring/vga_timing_i0/hsync_set(inst_top_camera_monitoring/vga_timing_i0/hsync_set:Q)      | NONE(inst_top_camera_monitoring/vga_timing_i0/hsync_gen_fdcpe) | 1     |
+inst_top_camera_monitoring/vga_timing_i0/vblank_reset(inst_top_camera_monitoring/vga_timing_i0/vblank_reset:Q)| NONE(inst_top_camera_monitoring/vga_timing_i0/vblank_gen_fdcpe)| 1     |
+inst_top_camera_monitoring/vga_timing_i0/vblank_set(inst_top_camera_monitoring/vga_timing_i0/vblank_set:Q)    | NONE(inst_top_camera_monitoring/vga_timing_i0/vblank_gen_fdcpe)| 1     |
+inst_top_camera_monitoring/vga_timing_i0/vsync_reset(inst_top_camera_monitoring/vga_timing_i0/vsync_reset:Q)  | NONE(inst_top_camera_monitoring/vga_timing_i0/vsync_gen_fdcpe) | 1     |
+inst_top_camera_monitoring/vga_timing_i0/vsync_set(inst_top_camera_monitoring/vga_timing_i0/vsync_set:Q)      | NONE(inst_top_camera_monitoring/vga_timing_i0/vsync_gen_fdcpe) | 1     |
+--------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------+-------+
 
 Timing Summary:
 ---------------
 Speed Grade: -4
 
    Minimum period: 6.211ns (Maximum Frequency: 161.017MHz)
-   Minimum input arrival time before clock: 7.340ns
+   Minimum input arrival time before clock: 7.296ns
    Maximum output required time after clock: 12.627ns
-   Maximum combinational path delay: 8.468ns
+   Maximum combinational path delay: 7.801ns
 
 Timing Detail:
 --------------
@@ -1141,10 +1161,10 @@ All values displayed in nanoseconds (ns)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'i_clock'
-  Clock period: 4.864ns (frequency: 205.589MHz)
-  Total number of paths / destination ports: 43040 / 853
+  Clock period: 4.880ns (frequency: 204.936MHz)
+  Total number of paths / destination ports: 42978 / 865
 -------------------------------------------------------------------------
-Delay:               9.728ns (Levels of Logic = 6)
+Delay:               9.759ns (Levels of Logic = 6)
   Source:            inst_top_camera_monitoring/crbc_i0/state_0 (FF)
   Destination:       inst_top_camera_monitoring/crbc_i0/state_0 (FF)
   Source Clock:      i_clock rising 0.5X
@@ -1155,16 +1175,16 @@ Delay:               9.728ns (Levels of Logic = 6)
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
      FD:C->Q              35   0.591   1.267  inst_top_camera_monitoring/crbc_i0/state_0 (inst_top_camera_monitoring/crbc_i0/state_0)
-     LUT4:I3->O            1   0.704   0.424  inst_top_camera_monitoring/crbc_i0/state_and0000228_SW1 (N168)
-     LUT4:I3->O            3   0.704   0.535  inst_top_camera_monitoring/crbc_i0/state_and0000228 (inst_top_camera_monitoring/crbc_i0/N9)
-     LUT4_D:I3->O          1   0.704   0.455  inst_top_camera_monitoring/crbc_i0/state_and000041 (inst_top_camera_monitoring/crbc_i0/N54)
+     LUT4:I3->O            1   0.704   0.424  inst_top_camera_monitoring/crbc_i0/state_and0000228_SW1 (N174)
+     LUT4:I3->O            3   0.704   0.566  inst_top_camera_monitoring/crbc_i0/state_and0000228 (inst_top_camera_monitoring/crbc_i0/N9)
+     LUT4_D:I2->O          1   0.704   0.455  inst_top_camera_monitoring/crbc_i0/state_and000041 (inst_top_camera_monitoring/crbc_i0/N54)
      LUT3:I2->O            9   0.704   0.855  inst_top_camera_monitoring/crbc_i0/state_and00011 (inst_top_camera_monitoring/crbc_i0/state_and0001)
      LUT3_D:I2->O         16   0.704   1.069  inst_top_camera_monitoring/crbc_i0/state_mux0003<26>1112 (inst_top_camera_monitoring/crbc_i0/N10)
-     LUT4:I2->O            1   0.704   0.000  inst_top_camera_monitoring/crbc_i0/state_mux0003<2>1 (inst_top_camera_monitoring/crbc_i0/state_mux0003<2>1)
-     FD:D                      0.308          inst_top_camera_monitoring/crbc_i0/state_24
+     LUT3:I2->O            1   0.704   0.000  inst_top_camera_monitoring/crbc_i0/state_mux0003<1>11 (inst_top_camera_monitoring/crbc_i0/state_mux0003<1>1)
+     FD:D                      0.308          inst_top_camera_monitoring/crbc_i0/state_25
     ----------------------------------------
-    Total                      9.728ns (5.123ns logic, 4.605ns route)
-                                       (52.7% logic, 47.3% route)
+    Total                      9.759ns (5.123ns logic, 4.636ns route)
+                                       (52.5% logic, 47.5% route)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'inst_top_camera_monitoring/read_buffer_clk'
@@ -1213,9 +1233,9 @@ Delay:               3.105ns (Levels of Logic = 0)
 
 =========================================================================
 Timing constraint: Default OFFSET IN BEFORE for Clock 'i_clock'
-  Total number of paths / destination ports: 519 / 477
+  Total number of paths / destination ports: 497 / 455
 -------------------------------------------------------------------------
-Offset:              7.340ns (Levels of Logic = 5)
+Offset:              7.296ns (Levels of Logic = 5)
   Source:            owait (PAD)
   Destination:       inst_top_camera_monitoring/crbc_i0/ce (FF)
   Destination Clock: i_clock rising 0.5X
@@ -1224,15 +1244,15 @@ Offset:              7.340ns (Levels of Logic = 5)
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     IBUF:I->O            35   1.218   1.342  owait_IBUF (owait_IBUF)
-     LUT3:I1->O            1   0.704   0.424  inst_top_camera_monitoring/crbc_i0/next_state_and0001_SW0 (N143)
+     IBUF:I->O            35   1.218   1.298  owait_IBUF (owait_IBUF)
+     LUT3:I2->O            1   0.704   0.424  inst_top_camera_monitoring/crbc_i0/next_state_and0001_SW0 (N149)
      LUT4:I3->O            3   0.704   0.610  inst_top_camera_monitoring/crbc_i0/next_state_and0001 (inst_top_camera_monitoring/crbc_i0/next_state_and0001)
      LUT4:I1->O            2   0.704   0.622  inst_top_camera_monitoring/crbc_i0/ce_mux00002 (inst_top_camera_monitoring/crbc_i0/N41)
      LUT4:I0->O            1   0.704   0.000  inst_top_camera_monitoring/crbc_i0/ce_mux000038 (inst_top_camera_monitoring/crbc_i0/ce_mux0000)
      FDS:D                     0.308          inst_top_camera_monitoring/crbc_i0/ce
     ----------------------------------------
-    Total                      7.340ns (4.342ns logic, 2.998ns route)
-                                       (59.2% logic, 40.8% route)
+    Total                      7.296ns (4.342ns logic, 2.954ns route)
+                                       (59.5% logic, 40.5% route)
 
 =========================================================================
 Timing constraint: Default OFFSET IN BEFORE for Clock 'ov7670_pclk1'
@@ -1257,7 +1277,7 @@ Offset:              1.973ns (Levels of Logic = 1)
 Timing constraint: Default OFFSET IN BEFORE for Clock 'inst_top_camera_monitoring/read_buffer_clk'
   Total number of paths / destination ports: 11 / 11
 -------------------------------------------------------------------------
-Offset:              5.233ns (Levels of Logic = 2)
+Offset:              5.232ns (Levels of Logic = 2)
   Source:            pb (PAD)
   Destination:       inst_top_camera_monitoring/address_generator_i0/addr_9 (FF)
   Destination Clock: inst_top_camera_monitoring/read_buffer_clk rising
@@ -1266,16 +1286,16 @@ Offset:              5.233ns (Levels of Logic = 2)
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     IBUF:I->O           289   1.218   1.518  pb_IBUF (pb_IBUF)
+     IBUF:I->O           284   1.218   1.517  pb_IBUF (pb_IBUF)
      LUT4:I0->O           10   0.704   0.882  inst_top_camera_monitoring/address_generator_i0/addr_or000053 (inst_top_camera_monitoring/address_generator_i0/addr_or0000)
      FDRE:R                    0.911          inst_top_camera_monitoring/address_generator_i0/addr_0
     ----------------------------------------
-    Total                      5.233ns (2.833ns logic, 2.400ns route)
+    Total                      5.232ns (2.833ns logic, 2.399ns route)
                                        (54.1% logic, 45.9% route)
 
 =========================================================================
 Timing constraint: Default OFFSET OUT AFTER for Clock 'i_clock'
-  Total number of paths / destination ports: 843 / 57
+  Total number of paths / destination ports: 794 / 57
 -------------------------------------------------------------------------
 Offset:              12.627ns (Levels of Logic = 8)
   Source:            inst_top_camera_monitoring/ov7670_i2c_controller_i0/ov7670_registers_i0/sequence_1 (FF)
@@ -1291,7 +1311,7 @@ Offset:              12.627ns (Levels of Logic = 8)
      MUXF5:I1->O           1   0.321   0.000  inst_top_camera_monitoring/ov7670_i2c_controller_i0/ov7670_registers_i0/Mrom_cmd_reg_rom00008_f5_0 (inst_top_camera_monitoring/ov7670_i2c_controller_i0/ov7670_registers_i0/Mrom_cmd_reg_rom00008_f51)
      MUXF6:I0->O           3   0.521   0.706  inst_top_camera_monitoring/ov7670_i2c_controller_i0/ov7670_registers_i0/Mrom_cmd_reg_rom00008_f6 (inst_top_camera_monitoring/ov7670_i2c_controller_i0/command<8>)
      LUT4:I0->O            1   0.704   0.595  inst_top_camera_monitoring/ov7670_i2c_controller_i0/ov7670_registers_i0/done_cmp_eq0000121 (inst_top_camera_monitoring/ov7670_i2c_controller_i0/ov7670_registers_i0/done_cmp_eq0000121)
-     LUT3:I0->O            1   0.704   0.424  inst_top_camera_monitoring/ov7670_i2c_controller_i0/ov7670_registers_i0/done_cmp_eq0000136_SW0 (N176)
+     LUT3:I0->O            1   0.704   0.424  inst_top_camera_monitoring/ov7670_i2c_controller_i0/ov7670_registers_i0/done_cmp_eq0000136_SW0 (N180)
      LUT4:I3->O            7   0.704   0.787  inst_top_camera_monitoring/ov7670_i2c_controller_i0/ov7670_registers_i0/done_cmp_eq0000136 (inst_top_camera_monitoring/ov7670_i2c_controller_i0/ov7670_registers_i0/N0)
      LUT2:I1->O            2   0.704   0.447  inst_top_camera_monitoring/ov7670_i2c_controller_i0/ov7670_registers_i0/done_cmp_eq00002 (led1_OBUF)
      OBUF:I->O                 3.272          led1_OBUF (led1)
@@ -1303,7 +1323,7 @@ Offset:              12.627ns (Levels of Logic = 8)
 Timing constraint: Default OFFSET OUT AFTER for Clock 'inst_top_camera_monitoring/read_buffer_clk'
   Total number of paths / destination ports: 8 / 8
 -------------------------------------------------------------------------
-Offset:              7.651ns (Levels of Logic = 3)
+Offset:              7.620ns (Levels of Logic = 3)
   Source:            inst_top_camera_monitoring/crbc_i0/read_buffer_i0/U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/s3_noinit.ram/dpram.dp18x18.ram (RAM)
   Destination:       vga_b<1> (PAD)
   Source Clock:      inst_top_camera_monitoring/read_buffer_clk rising
@@ -1312,47 +1332,45 @@ Offset:              7.651ns (Levels of Logic = 3)
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     RAMB16_S18_S18:CLKB->DOB3    1   2.800   0.455  U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/s3_noinit.ram/dpram.dp18x18.ram (doutb<3>)
+     RAMB16_S18_S18:CLKB->DOB3    1   2.800   0.424  U0/xst_blk_mem_generator/gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/s3_noinit.ram/dpram.dp18x18.ram (doutb<3>)
      end scope: 'inst_top_camera_monitoring/crbc_i0/read_buffer_i0'
-     LUT3:I2->O            1   0.704   0.420  inst_top_camera_monitoring/inst_imagegen/rgb_out<1>1 (vga_b_1_OBUF)
+     LUT4:I3->O            1   0.704   0.420  inst_top_camera_monitoring/inst_imagegen/rgb_out<1>1 (vga_b_1_OBUF)
      OBUF:I->O                 3.272          vga_b_1_OBUF (vga_b<1>)
     ----------------------------------------
-    Total                      7.651ns (6.776ns logic, 0.875ns route)
-                                       (88.6% logic, 11.4% route)
+    Total                      7.620ns (6.776ns logic, 0.844ns route)
+                                       (88.9% logic, 11.1% route)
 
 =========================================================================
 Timing constraint: Default path analysis
-  Total number of paths / destination ports: 5 / 3
+  Total number of paths / destination ports: 3 / 2
 -------------------------------------------------------------------------
-Delay:               8.468ns (Levels of Logic = 5)
+Delay:               7.801ns (Levels of Logic = 3)
   Source:            pb (PAD)
-  Destination:       vga_blank (PAD)
+  Destination:       ov7670_reset1 (PAD)
 
-  Data Path: pb to vga_blank
+  Data Path: pb to ov7670_reset1
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     IBUF:I->O           289   1.218   1.343  pb_IBUF (pb_IBUF)
-     MUXF5:S->O            2   0.739   0.451  inst_top_camera_monitoring/vga_timing_i0/blank_i6_f5 (inst_top_camera_monitoring/vga_timing_i0/blank_i6)
-     LUT4:I3->O            1   0.704   0.000  inst_top_camera_monitoring/vga_timing_i0/blank_i131 (inst_top_camera_monitoring/vga_timing_i0/blank_i13)
-     MUXF5:I1->O           1   0.321   0.420  inst_top_camera_monitoring/vga_timing_i0/blank_i13_f5 (vga_blank_OBUF)
-     OBUF:I->O                 3.272          vga_blank_OBUF (vga_blank)
+     IBUF:I->O           284   1.218   1.342  pb_IBUF (pb_IBUF)
+     INV:I->O             43   0.704   1.266  inst_top_camera_monitoring/ov7670_reset11_INV_0 (inst_top_camera_monitoring/crbc_i0/reset_inv)
+     OBUF:I->O                 3.272          ov7670_reset1_OBUF (ov7670_reset1)
     ----------------------------------------
-    Total                      8.468ns (6.254ns logic, 2.214ns route)
-                                       (73.9% logic, 26.1% route)
+    Total                      7.801ns (5.194ns logic, 2.607ns route)
+                                       (66.6% logic, 33.4% route)
 
 =========================================================================
 
 
 Total REAL time to Xst completion: 6.00 secs
-Total CPU time to Xst completion: 6.09 secs
+Total CPU time to Xst completion: 6.03 secs
  
 --> 
 
 
-Total memory usage is 551648 kilobytes
+Total memory usage is 553328 kilobytes
 
 Number of errors   :    0 (   0 filtered)
-Number of warnings :  115 (   0 filtered)
+Number of warnings :  117 (   0 filtered)
 Number of infos    :    6 (   0 filtered)
 
