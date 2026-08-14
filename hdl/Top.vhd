@@ -71,9 +71,12 @@ signal vga_vsync_sig_prev : std_logic := '1';
 signal siodo1, siodi1 : std_logic;
 signal siodo1_n : std_logic;
 
-signal clk0, clk0_fb : std_logic;
+signal clk5, clk5_fb : std_logic;
+signal clk4, clk4_fb : std_logic;
+signal clk3, clk3_fb : std_logic;
+signal clk2, clk2_fb : std_logic;
 signal clk1, clk1_fb : std_logic;
-signal i_clock_ib2 : std_logic;
+signal i_clock_ibg : std_logic;
 signal clk_cam, clk_vga : std_logic;
 --synthesis translate_off
 signal resend : std_logic;
@@ -133,6 +136,7 @@ signal owait1 : std_logic;
 
 
 signal clk_mc, locked_vga : std_logic;
+signal clk_mc1, clk_mc1_w, clk_mc1_r : std_logic;
 
 signal cam_pclk, cam_hs, cam_vs, cam_pwdn : std_logic;
 signal cam_d : std_logic_vector (7 downto 0);
@@ -171,9 +175,9 @@ end generate g0_async_owait;
 
 clk <= clk_i;
 g1_sync_mem_signals : if (c_sync = true) generate
-  p1_synchronise_mem_addr_dq_ctrl : process (clk_mc) is
+  p1_synchronise_mem_addr_dq_ctrl : process (clk_mc1) is
   begin
-    if (rising_edge (clk_mc)) then
+    if (rising_edge (clk_mc1)) then
       if (pb = '1') then
         dq_oo <= (others => '0');
         dq_i  <= (others => '0');
@@ -233,9 +237,9 @@ wrc <=
   wrc_r when p0_r = '1' else
   '0';
 
-p2_control_crbc_write : process (clk_mc) is
+p2_control_crbc_write : process (clk_mc1_w) is
 begin
-  if (rising_edge (clk_mc)) then
+  if (rising_edge (clk_mc1_w)) then
     if (pb = '1') then
       p0_state <= st01;
       p0_w <= '0';
@@ -313,10 +317,10 @@ begin
   end if;
 end process p2_control_crbc_write;
 
-p3_control_crbc_read : process (clk_mc) is
+p3_control_crbc_read : process (clk_mc1_r) is
   variable flag : boolean := false;
 begin
-  if (rising_edge (clk_mc)) then
+  if (rising_edge (clk_mc1_r)) then
     if (pb = '1') then
       wrc_r <= '0';
       vga_vsync_sig_prev <= '0';
@@ -393,7 +397,7 @@ end process p3_control_crbc_read;
 crbc_i0 : entity work.cellular_ram_burst_controller
 port map (
   busy => busy,
-  clk => clk_mc,
+  clk => clk_mc1,
   reset => pb,
   --reset => reset_dcm,
   writes => wrc,
@@ -462,7 +466,7 @@ ov7670_reset1 <= not pb;
 
 inst_ov7670contr1: entity work.ov7670_controller
 port map (
-  clk => clk_mc,
+  clk => clk_mc1,
   reset1 => pb,
   resend => sw(1),
   sw => sw (0),
@@ -516,7 +520,7 @@ vga_timing_i0 : entity work.vga_timing (vga_7slices) -- jc, lsfr_1, lsfr_2, coun
 port map (
   rst => pb,
 --  clk25 => clk_vga,
-  clk25 => clk0_fb,
+  clk25 => clk2_fb,
   hsync => vga_hsync_i,
   vsync => vga_vsync_sig,
   blank => vga_blank,
@@ -592,39 +596,15 @@ begin
   end if;
 end process p3_read_buffer_clk;
 
-ibufg_global_clock50 : ibufg
+ibufg_global_clock : ibufg
 generic map (
   iostandard => "DEFAULT")
 port map (
-  o => i_clock_ib2,
+  o => i_clock_ibg,
   i => i_clock
 );
 
-bufg_cam : bufg
-port map (
-  o => clk0_fb,
-  i => clk0
-);
-
-dcm_sp_vga : dcm_sp
-generic map (
-  clkdv_divide => 4.0,
-  clkfx_multiply => 13, clkfx_divide => 21,
-  clkin_period => 10.0,
-  startup_wait => true
-)
-port map (
-  clk0 => clk0,
-  clkfx => clk_mc,
-  clkdv => clk_vga,
-  clkfb => clk0_fb,
-  clkin => clk1,
-  rst => reset_dcm,
-  locked => locked_vga,
-  psclk => '0', psen => '0', psincdec => '0'
-);
-
-bufg_cam50 : bufg
+bufg_1 : bufg
 port map (
   o => clk1_fb,
   i => clk1
@@ -637,10 +617,100 @@ generic map (
   startup_wait => true
 )
 port map (
-  clk0 => clk1,
+  clk0 => clk1, -- to next dcm
   clkfx => clk_cam,
   clkfb => clk1_fb,
-  clkin => i_clock_ib2,
+  clkin => i_clock_ibg,
+  rst => pb,
+  locked => open,
+  psclk => '0', psen => '0', psincdec => '0'
+);
+
+bufg_2 : bufg
+port map (
+  o => clk2_fb,
+  i => clk2
+);
+
+dcm_sp_vga : dcm_sp
+generic map (
+  clkdv_divide => 4.0,
+  clkfx_multiply => 13, clkfx_divide => 21,
+  clkin_period => 10.0,
+  startup_wait => true
+)
+port map (
+  clk0 => clk2,
+  clkfx => clk_mc,
+  clkdv => clk_vga,
+  clkfb => clk2_fb,
+  clkin => i_clock_ibg, -- from previous dcm
+  rst => reset_dcm,
+  locked => locked_vga,
+  psclk => '0', psen => '0', psincdec => '0'
+);
+
+bufg_3 : bufg
+port map (
+  o => clk3_fb,
+  i => clk3
+);
+
+dcm_sp_mc : dcm_sp
+generic map (
+  clkfx_multiply => 2, clkfx_divide => 4,
+  clkin_period => 10.0,
+  startup_wait => true
+)
+port map (
+  clk0 => clk3,
+  clkfx => clk_mc1,
+  clkfb => clk3_fb,
+  clkin => i_clock_ibg,
+  rst => pb,
+  locked => open,
+  psclk => '0', psen => '0', psincdec => '0'
+);
+
+bufg_4 : bufg
+port map (
+  o => clk4_fb,
+  i => clk4
+);
+
+dcm_sp_mc_w : dcm_sp
+generic map (
+  clkfx_multiply => 2, clkfx_divide => 4,
+  clkin_period => 10.0,
+  startup_wait => true
+)
+port map (
+  clk0 => clk4,
+  clkfx => clk_mc1_w,
+  clkfb => clk4_fb,
+  clkin => i_clock_ibg,
+  rst => pb,
+  locked => open,
+  psclk => '0', psen => '0', psincdec => '0'
+);
+
+bufg_5 : bufg
+port map (
+  o => clk5_fb,
+  i => clk5
+);
+
+dcm_sp_mc_r : dcm_sp
+generic map (
+  clkfx_multiply => 2, clkfx_divide => 4,
+  clkin_period => 10.0,
+  startup_wait => true
+)
+port map (
+  clk0 => clk5,
+  clkfx => clk_mc1_r,
+  clkfb => clk5_fb,
+  clkin => i_clock_ibg,
   rst => pb,
   locked => open,
   psclk => '0', psen => '0', psincdec => '0'

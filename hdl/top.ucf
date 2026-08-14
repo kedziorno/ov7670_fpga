@@ -1,8 +1,7 @@
 PIN "inst_top_camera_monitoring/DCM_SP_vga.CLKDV" TNM_NET = "CLK25";
 NET "ov7670_pclk1" TNM_NET = "CLK24pclk";
 NET "ov7670_xclk1" TNM_NET = "CLK24xclk";
-NET "inst_top_camera_monitoring/clk0_fb" TNM_NET = "CLK50";
-NET "inst_top_camera_monitoring/clk1_fb" TNM_NET = "CLK100";
+NET "inst_top_camera_monitoring/clk1" TNM_NET = "CLK100";
 NET "inst_top_camera_monitoring/read_buffer_clk" TNM_NET = "CLK12_5";
 NET "clk" TNM_NET = "ram_clk";
 
@@ -10,7 +9,6 @@ TIMESPEC TS_ramclk = PERIOD "ram_clk" 10 ns HIGH 50%;
 TIMESPEC TS_CLK25 = PERIOD "CLK25" 40 ns HIGH 50%;
 TIMESPEC TS_CLK24pclk = PERIOD "CLK24pclk" 41.667 ns HIGH 50%;
 TIMESPEC TS_CLK24xclk = PERIOD "CLK24xclk" 41.667 ns HIGH 50%;
-TIMESPEC TS_CLK50 = PERIOD "CLK50" 20 ns HIGH 50%;
 TIMESPEC TS_CLK100 = PERIOD "CLK100" 10 ns HIGH 50%;
 TIMESPEC TS_CLK12_5 = PERIOD "CLK12_5" 80 ns HIGH 50%;
 
@@ -238,3 +236,9 @@ NET "DQ<15>" LOC = "T1"; # Bank = 3, Pin name = IO_L24N_3, Type = I/O, Sch name 
 #NET Dq(*)  OFFSET = IN 10ns VALID 10ns BEFORE "i_clock";
 #NET oe_n  OFFSET = OUT 10ns VALID 10ns BEFORE "i_clock";
 #NET we_n  OFFSET = OUT 10ns VALID 10ns BEFORE "i_clock";
+
+NET "i_clock" CLOCK_DEDICATED_ROUTE = FALSE;
+PIN "inst_top_camera_monitoring/dcm_sp_mc_w.CLKIN" CLOCK_DEDICATED_ROUTE = FALSE;
+PIN "inst_top_camera_monitoring/dcm_sp_mc_r.CLKIN" CLOCK_DEDICATED_ROUTE = FALSE;
+PIN "inst_top_camera_monitoring/dcm_sp_vga.CLKIN" CLOCK_DEDICATED_ROUTE = FALSE;
+PIN "inst_top_camera_monitoring/dcm_sp_cam.CLKIN" CLOCK_DEDICATED_ROUTE = FALSE;
