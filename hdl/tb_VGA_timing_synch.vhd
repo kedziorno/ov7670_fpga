@@ -51,7 +51,7 @@ ARCHITECTURE behavior OF tb_vga_timing IS
 
         );
     END COMPONENT;
-    for all : vga_timing use entity work.vga_timing (lsfr_1);
+    for all : vga_timing use entity work.vga_timing (lsfr_2);
 
    --Inputs
    signal clk25 : std_logic := '0';
