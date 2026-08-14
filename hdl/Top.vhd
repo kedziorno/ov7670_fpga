@@ -474,8 +474,8 @@ generic map (
   c_module_mode => c_module_mode
 )
 port map (
-  clk => clk_vga,
-  reset1 => pb,
+  i_clock => clk_vga,
+  i_reset => pb,
   resend => sw(1),
   sw => sw (0),
   sioc => ov7670_sioc1,
@@ -533,7 +533,7 @@ vga_hsync <= vga_hsync_i;
 vga_vsync <= vga_vsync_sig;
 vga_clock <= clk_vga;
 --vga_timing_i0 : entity work.vga_timing (vga_7slices) -- XXX WIP
-vga_timing_i0 : entity work.vga_timing (lsfr_2) -- jc, lsfr_1, lsfr_2, counter
+vga_timing_i0 : entity work.vga_timing (counter) -- jc, lsfr_1, lsfr_2, counter
 port map (
   rst => pb,
   clk25 => clk_vga,
@@ -652,13 +652,11 @@ port map (
 dcm_sp_vga : dcm_sp
 generic map (
   clkdv_divide => 4.0,
-  clkfx_multiply => 13, clkfx_divide => 21,
   clkin_period => 10.0,
   startup_wait => true
 )
 port map (
   clk0 => clk2,
-  --clkfx => clk_mc,
   clkdv => clk_vga,
   clkfb => clk2_fb,
   clkin => clk1, -- from previous dcm
