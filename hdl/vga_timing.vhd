@@ -559,11 +559,13 @@ end process vsync_gen1;
 --  end if;
 --end process active_area_jc;
 
-blank <= '1' when blankh = '1' xnor blankv = '1' else '0';
-activearea <= '1' when not (blankh = '1' xnor blankv = '1') else '0';
+blank <= blank1;
+blank1 <= '1' when blankh = '1' or blankv = '1' else '0';
+activearea <= '1' when not (blankh = '1' or blankv = '1') else '0';
 
 blankh_jc : process(clk25) begin
-  if rising_edge(clk25) then
+--  if rising_edge(clk25) then
+  if falling_edge(clk25) then
     if (rst = '1') then
       blankh <= '1';
     else
@@ -577,20 +579,21 @@ blankh_jc : process(clk25) begin
 end process blankh_jc;
 
 blankv_jc : process(clk25) begin
-  if rising_edge(clk25) then
+--  if rising_edge(clk25) then
+  if falling_edge(clk25) then
     if (rst = '1') then
       blankv <= '1';
     else
-      if (jc_2(479) = '0') then
+      if (jc_2(480) = '0') then
         blankv <= '1';
-      elsif (jc_2(523) = '0') then
+      elsif (jc_2(0) = '0') then
         blankv <= '0';
       end if;
     end if;
   end if;
 end process blankv_jc;
 
-interrupt <= '1' when jc_1 (640) = '0' else '0';
+interrupt <= '1' when (jc_1 (638) = '0' and blankv = '0') else '0';
 
 end architecture jc;
 
