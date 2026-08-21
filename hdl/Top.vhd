@@ -22,6 +22,7 @@ entity top_camera_monitoring is
     pb         : in std_logic;
     sw         : in std_logic_vector (7 downto 0);
     led1       : out std_logic; -- configuration done
+    last_reset : out std_logic; -- last locked DCM
     -- OV7670 camera input
     ov7670_pclk1  : in  std_logic;
     ov7670_vsync1 : in  std_logic;
@@ -735,6 +736,7 @@ port map (
   locked => locked5,
   psclk => '0', psen => '0', psincdec => '0'
 );
-locked5n <= not locked5n;
+locked5n <= not locked5;
+last_reset <= locked5n;
 
 end architecture structural;
