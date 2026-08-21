@@ -40,7 +40,7 @@ begin
 
   conf_done <= done;
   send <= not done;
-  pwdn <= sw or resend;
+  pwdn <= sw;
   reset <= not resend;
   xclk_out <= xclk_in;
 

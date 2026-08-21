@@ -156,6 +156,11 @@ signal data_out_enable : std_logic_vector (15 downto 0);
 signal data_out_enable_not : std_logic_vector (15 downto 0);
 signal oe_n_i, we_n_i, adv_n_i, ce_n_i, cre_i, clk_i : std_logic;
 
+signal locked1, locked1n : std_logic;
+signal locked2, locked2n : std_logic;
+signal locked3, locked3n : std_logic;
+signal locked4, locked4n : std_logic;
+signal locked5, locked5n : std_logic;
 
 begin
 
@@ -244,7 +249,7 @@ wrc <=
 p2_control_crbc_write : process (clk_mc1_w) is
 begin
   if (rising_edge (clk_mc1_w)) then
-    if (pb = '1') then
+    if (locked4n = '1') then
       p0_state <= st01;
       p0_w <= '0';
       wrc_w <= '0';
@@ -325,7 +330,7 @@ p3_control_crbc_read : process (clk_mc1_r) is
   variable flag : boolean := false;
 begin
   if (rising_edge (clk_mc1_r)) then
-    if (pb = '1') then
+    if (locked5n = '1') then
       wrc_r <= '0';
       vga_vsync_sig_prev <= '0';
       p1_state <= st01;
@@ -402,7 +407,8 @@ crbc_i0 : entity work.cellular_ram_burst_controller
 port map (
   busy => busy,
   clk => clk_mc1,
-  reset => pb,
+--  reset => pb,
+  reset => locked3n,
   --reset => reset_dcm,
   writes => wrc,
   data => data,
@@ -463,11 +469,11 @@ port map (
   output => open
 );
 
-ov7670_xclk1 <= clk_cam;
+--ov7670_xclk1 <= clk_cam;
 --ov7670_xclkv <= clk_cam;
-ov7670_pwdn1 <= cam_pwdn;
+--ov7670_pwdn1 <= cam_pwdn;
 --ov7670_pwdnv <= cam_pwdn;
-ov7670_reset1 <= not pb;
+--ov7670_reset1 <= not (pb or sw (0) or sw (1));
 
 ov7670_i2c_controller_i0 : entity work.ov7670_i2c_controller
 generic map (
@@ -481,10 +487,10 @@ port map (
   sioc => ov7670_sioc1,
   siodo => siodo1,
   conf_done => led1,
-  pwdn => cam_pwdn,
-  reset => open,
-  xclk_in => '0',
-  xclk_out => open
+  pwdn => ov7670_pwdn1,
+  reset => ov7670_reset1,
+  xclk_in => clk_cam,
+  xclk_out => ov7670_xclk1
 );
 
 ov7670_capture_i0 : entity work.ov7670_capture
@@ -537,7 +543,7 @@ vga_timing_i0 : entity work.vga_timing (counter) -- jc, lsfr_1, lsfr_2, counter
 port map (
   rst => pb,
   clk25 => clk_vga,
---  clk25 => clk2_fb,
+--  clk25 => clk1,
   hsync => vga_hsync_i,
   vsync => vga_vsync_sig,
   blank => vga_blank,
@@ -598,7 +604,8 @@ p3_read_buffer_clk : process (clk_vga) is
   variable vga_read : integer range 0 to c_vga_read - 1;
 begin
   if (rising_edge (clk_vga)) then
-    if (locked_vga = '0') then
+--    if (locked_vga = '0') then
+    if (locked2n = '1') then
       read_buffer_clk <= '0';
       vga_read := 0;
     else
@@ -612,14 +619,6 @@ begin
     end if;
   end if;
 end process p3_read_buffer_clk;
-
-ibufg_global_clock : ibufg
-generic map (
-  iostandard => "DEFAULT")
-port map (
-  o => i_clock_ibg,
-  i => i_clock
-);
 
 bufg_1 : bufg
 port map (
@@ -637,11 +636,12 @@ port map (
   clk0 => clk1, -- to next dcm
   clkfx => clk_cam,
   clkfb => clk1_fb,
-  clkin => i_clock_ibg,
+  clkin => i_clock,
   rst => pb,
-  locked => open,
+  locked => locked1,
   psclk => '0', psen => '0', psincdec => '0'
 );
+locked1n <= not locked1;
 
 bufg_2 : bufg
 port map (
@@ -660,10 +660,13 @@ port map (
   clkdv => clk_vga,
   clkfb => clk2_fb,
   clkin => clk1, -- from previous dcm
-  rst => reset_dcm,
-  locked => locked_vga,
+--  rst => reset_dcm,
+--  rst => pb,
+  rst => locked1n,
+  locked => locked2,
   psclk => '0', psen => '0', psincdec => '0'
 );
+locked2n <= not locked2;
 
 bufg_3 : bufg
 port map (
@@ -682,10 +685,11 @@ port map (
   clkfx => clk_mc1,
   clkfb => clk3_fb,
   clkin => clk1, -- from previous dcm
-  rst => pb,
-  locked => open,
+  rst => locked2n,
+  locked => locked3,
   psclk => '0', psen => '0', psincdec => '0'
 );
+locked3n <= not locked3;
 
 bufg_4 : bufg
 port map (
@@ -704,10 +708,11 @@ port map (
   clkfx => clk_mc1_w,
   clkfb => clk4_fb,
   clkin => clk1, -- from previous dcm
-  rst => pb,
-  locked => open,
+  rst => locked3n,
+  locked => locked4,
   psclk => '0', psen => '0', psincdec => '0'
 );
+locked4n <= not locked4;
 
 bufg_5 : bufg
 port map (
@@ -726,9 +731,10 @@ port map (
   clkfx => clk_mc1_r,
   clkfb => clk5_fb,
   clkin => clk1, -- from previous dcm
-  rst => pb,
-  locked => open,
+  rst => locked4n,
+  locked => locked5,
   psclk => '0', psen => '0', psincdec => '0'
 );
+locked5n <= not locked5n;
 
 end architecture structural;
