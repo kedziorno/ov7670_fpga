@@ -31,9 +31,11 @@ entity top is
   );
   port  (
     i_clock    : in std_logic;
-    pb         : in std_logic;
+    pb1        : in std_logic;
+    pb2        : in std_logic;
     sw         : in std_logic_vector (7 downto 0);
     led1       : out std_logic; -- configuration done
+    last_reset : out std_logic; -- last locked DCM
     -- OV7670 camera input
     ov7670_pclk1  : in    std_logic;
     ov7670_vsync1 : in    std_logic;
@@ -76,9 +78,11 @@ architecture behavioral of top is
   );
   port  (
     i_clock    : in std_logic;
-    pb         : in std_logic;
+    pb1        : in std_logic;
+    pb2        : in std_logic;
     sw         : in std_logic_vector (7 downto 0);
     led1       : out std_logic; -- configuration done
+    last_reset : out std_logic; -- last locked DCM
     -- OV7670 camera input
     ov7670_pclk1  : in  std_logic;
     ov7670_vsync1 : in  std_logic;
@@ -122,9 +126,11 @@ begin
   )
   port map (
     i_clock    => i_clock,
-    pb         => pb,
+    pb1        => pb1,
+    pb2        => pb2,
     sw         => sw,
     led1       => led1,
+    last_reset => last_reset,
     -- OV7670 camera input
     ov7670_pclk1  => ov7670_pclk1,
     ov7670_xclk1  => ov7670_xclk1,
