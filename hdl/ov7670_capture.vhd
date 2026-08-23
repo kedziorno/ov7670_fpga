@@ -36,25 +36,23 @@ begin
 
   addr <= address;
   dout <= d_latch;
-  capture_process: process (pclk) is
+  capture_process: process (pclk, reset) is
   begin
-    if (rising_edge (pclk)) then
-      --if (reset = '1') then
-      if (latched_vsync = '1') then -- vsync = '1'
-        address <= (others => '0');
-        d_latch <= (others => '0');
-      else
-        if (latched_href = '1') then
-          d_latch <= d_latch (7 downto 0) & latched_d;
-          if (to_integer (unsigned (address)) = c_one_row_ticks * 1 - 1) then
-            address <= (others => '0');
-          else
-            address <= std_logic_vector (unsigned (address) + 1);
-          end if;
-        end if;
-        if (latched_vsync = '1') then
+    if (reset = '1') then
+--    if (latched_vsync = '1') then -- vsync = '1'
+      address <= (others => '0');
+      d_latch <= (others => '0');
+    elsif (rising_edge (pclk)) then
+      if (latched_href = '1') then
+        d_latch <= d_latch (7 downto 0) & latched_d;
+        if (to_integer (unsigned (address)) = c_one_row_ticks * 1 - 1) then
           address <= (others => '0');
+        else
+          address <= std_logic_vector (unsigned (address) + 1);
         end if;
+      end if;
+      if (latched_vsync = '1') then
+        address <= (others => '0');
       end if;
     end if;
   end process capture_process;
