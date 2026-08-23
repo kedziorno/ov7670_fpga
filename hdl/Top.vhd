@@ -15,6 +15,7 @@ entity top_camera_monitoring is
     constant c_hs_blanking : boolean        := true;
     constant c_pb_bits     : integer        := 23;
     constant c_async_owait : boolean        := true;
+    constant c_main_top    : boolean        := true;
     constant c_zero        : integer        := 0
   );
   port  (
@@ -72,8 +73,7 @@ signal vga_vsync_sig_prev : std_logic := '1';
 
 
 
-signal siodo1, siodi1 : std_logic;
-signal siodo1_n : std_logic;
+signal siodo1 : std_logic;
 
 signal clk5, clk5_fb : std_logic;
 signal clk4, clk4_fb : std_logic;
@@ -83,20 +83,14 @@ signal clk1, clk1_fb : std_logic;
 signal i_clock_ibg : std_logic;
 signal clk_cam, clk_vga : std_logic;
 --synthesis translate_off
-signal resend : std_logic;
+--signal resend : std_logic;
 --synthesis translate_on
-
-signal ov7670_pclk : std_logic;
-signal ov7670_d : std_logic_vector (7 downto 0);
-signal ov7670_hs, ov7670_vs : std_logic;
 
 signal vga_int : std_logic;
 
 signal vga_rgb : std_logic_vector (7 downto 0);
 
 signal reset_dcm_n, reset_dcm : std_logic;
-
-
 
 constant clkfx_multiply_mc : integer := 6;
 constant clkfx_divide_mc : integer := 25;
@@ -135,11 +129,8 @@ signal ov7670_hs_prev : std_logic;
 
 signal owait1 : std_logic;
 
-signal clk_mc, locked_vga : std_logic;
+signal locked_vga : std_logic;
 signal clk_mc1, clk_mc1_w, clk_mc1_r : std_logic;
-
-signal cam_pclk, cam_hs, cam_vs, cam_pwdn : std_logic;
-signal cam_d : std_logic_vector (7 downto 0);
 
 --attribute keep : string;
 --attribute keep of clk_vga : signal is "true";
@@ -159,6 +150,10 @@ signal locked2, reset_vga : std_logic;
 signal locked3, reset_mc : std_logic;
 signal locked4, reset_mc_w : std_logic;
 signal locked5, reset_mc_r : std_logic;
+
+-- XXX camera xclk
+constant c_clk_cam_mul : integer := 2;
+constant c_clk_cam_div : integer := 20;
 
 begin
 
@@ -260,7 +255,7 @@ begin
       ov7670_hs_prev <= latched_hs;
       case (p0_state) is
         when st01 =>
-          if (ov7670_hs_prev = '0' and latched_hs = '1') then
+          if (ov7670_hs_prev = '1' and latched_hs = '0') then
             p0_state <= st02;
           end if;
           if (latched_vs = '1') then
@@ -272,7 +267,7 @@ begin
           if (latched_vs = '1') then
             cntr_wr1 <= (others => '0');
           end if;
-          if (ov7670_hs_prev = '0' and latched_hs = '1') then -- wr when hs fe
+          if (ov7670_hs_prev = '1' and latched_hs = '0') then -- wr when hs fe
             p0_state <= st03;
           end if;
         when st03 =>
@@ -453,23 +448,33 @@ port map (
   t=> '0'
 );
 
-debounce_circuit_i0 : entity work.debounce_circuit
-generic map (
-  c_module_mode => c_module_mode,
-  c_pb_bits_syn => c_pb_bits
-)
-port map (
-  i_clock => i_clock,
-  i_reset => reset_dcm, -- SRL16
-  input => pb1,
-  output => locked_vga
-);
+g1_dbc_ibufg : if (c_main_top = true) generate
+  debounce_circuit_ibg_i0 : entity work.debounce_circuit
+  generic map (
+    c_module_mode => c_module_mode,
+    c_pb_bits_syn => c_pb_bits
+  )
+  port map (
+    i_clock => i_clock_ibg,
+    i_reset => reset_dcm, -- SRL16
+    input => pb1,
+    output => locked_vga
+  );
+end generate g1_dbc_ibufg;
 
---ov7670_xclk1 <= clk_cam;
---ov7670_xclkv <= clk_cam;
---ov7670_pwdn1 <= cam_pwdn;
---ov7670_pwdnv <= cam_pwdn;
---ov7670_reset1 <= not (pb or sw (0) or sw (1));
+g1_dbc_wo_ibufg : if (c_main_top = false) generate
+  debounce_circuit_ibg_i0 : entity work.debounce_circuit
+  generic map (
+    c_module_mode => c_module_mode,
+    c_pb_bits_syn => c_pb_bits
+  )
+  port map (
+    i_clock => i_clock,
+    i_reset => reset_dcm, -- SRL16
+    input => pb1,
+    output => locked_vga
+  );
+end generate g1_dbc_wo_ibufg;
 
 ov7670_i2c_controller_i0 : entity work.ov7670_i2c_controller
 generic map (
@@ -513,7 +518,8 @@ port map (
   --clk25 => clk_vga,
   clk25 => read_buffer_clk,
   --reset => reset_dcm,
-  reset => reset_vga,
+  --reset => reset_vga,
+  reset => reset_mc,
   enable => active1,
   vsync => vga_vsync_sig,
   address => read_buffer_addr
@@ -547,32 +553,50 @@ port map (
   interrupt => vga_int
 );
 
-reset_dcm <= not reset_dcm_n;
-synchro_reset_i0 : srlc16e
-port map (
-  d => '1',
-  ce => '1',
-  clk => i_clock,
-  a0 => '1',
-  a1 => '1',
-  a2 => '1',
-  a3 => '1',
-  q => reset_dcm_n,
-  q15 => open
-);
+g2_sr_ibufg : if (c_main_top = true) generate
+  reset_dcm <= not reset_dcm_n;
+  synchro_reset_i0 : srlc16e
+  port map (
+    d => '1',
+    ce => '1',
+    clk => i_clock_ibg,
+    a0 => '1',
+    a1 => '1',
+    a2 => '1',
+    a3 => '1',
+    q => reset_dcm_n,
+    q15 => open
+  );
+end generate g2_sr_ibufg;
+
+g2_sr_wo_ibufg : if (c_main_top = false) generate
+  reset_dcm <= not reset_dcm_n;
+  synchro_reset_i0 : srlc16e
+  port map (
+    d => '1',
+    ce => '1',
+    clk => i_clock,
+    a0 => '1',
+    a1 => '1',
+    a2 => '1',
+    a3 => '1',
+    q => reset_dcm_n,
+    q15 => open
+  );
+end generate g2_sr_wo_ibufg;
 
 --synthesis translate_off
-p0_assert_1 : process (resend) is
-begin
-  if (resend = '1') then
-    assert (
-      not (clkfx_multiply_mc = 32 and clkfx_divide_mc = 1)
-    ) report
-      "forbidden mc clkfx_multiply " & integer'image (clkfx_multiply_mc) &
-      " clkfx_divide " & integer'image (clkfx_divide_mc)
-      severity failure;
-  end if;
-end process p0_assert_1;
+--p0_assert_1 : process (resend) is
+--begin
+--  if (resend = '1') then
+--    assert (
+--      not (clkfx_multiply_mc = 32 and clkfx_divide_mc = 1)
+--    ) report
+--      "forbidden mc clkfx_multiply " & integer'image (clkfx_multiply_mc) &
+--      " clkfx_divide " & integer'image (clkfx_divide_mc)
+--      severity failure;
+--  end if;
+--end process p0_assert_1;
 --synthesis translate_on
 
 --p2_vga_clk : process (clk1_fb) is
@@ -616,28 +640,57 @@ begin
   end if;
 end process p3_read_buffer_clk;
 
+g0_ibufg_main : if (c_main_top = true) generate
+  ibufg_main2dcm1 : ibufg
+  port map (
+    o => i_clock_ibg,
+    i => i_clock
+  );
+end generate g0_ibufg_main;
+
 bufg_1 : bufg
 port map (
   o => clk1_fb,
   i => clk1
 );
 
-dcm_sp_cam : dcm_sp -- XXX first DCM - camera
-generic map (
-  clkfx_multiply => 2, clkfx_divide => 14,
-  clkin_period => 10.0,
-  startup_wait => true
-)
-port map (
-  clk0 => clk1, -- to next dcm
-  clkfx => clk_cam,
-  clkfb => clk1_fb,
-  clkin => i_clock,
-  rst => locked_vga,
-  locked => locked1,
-  psclk => '0', psen => '0', psincdec => '0'
-);
-reset_cam <= not locked1;
+g0_dcm_ibufg : if (c_main_top = true) generate
+  dcm_sp_cam_ibufg : dcm_sp -- XXX first DCM IBUFG - camera
+  generic map (
+    clkfx_multiply => c_clk_cam_mul, clkfx_divide => c_clk_cam_div,
+    clkin_period => 10.0,
+    startup_wait => true
+  )
+  port map (
+    clk0 => clk1, -- to next dcm
+    clkfx => clk_cam,
+    clkfb => clk1_fb,
+    clkin => i_clock_ibg,
+    rst => locked_vga,
+    locked => locked1,
+    psclk => '0', psen => '0', psincdec => '0'
+  );
+  reset_cam <= not locked1;
+end generate g0_dcm_ibufg;
+
+g0_dcm_wo_ibufg : if (c_main_top = false) generate
+  dcm_sp_cam : dcm_sp -- XXX first DCM - camera
+  generic map (
+    clkfx_multiply => c_clk_cam_mul, clkfx_divide => c_clk_cam_div,
+    clkin_period => 10.0,
+    startup_wait => true
+  )
+  port map (
+    clk0 => clk1, -- to next dcm
+    clkfx => clk_cam,
+    clkfb => clk1_fb,
+    clkin => i_clock,
+    rst => locked_vga,
+    locked => locked1,
+    psclk => '0', psen => '0', psincdec => '0'
+  );
+  reset_cam <= not locked1;
+end generate g0_dcm_wo_ibufg;
 
 bufg_2 : bufg
 port map (
