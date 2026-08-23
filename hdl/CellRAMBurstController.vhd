@@ -399,11 +399,12 @@ begin
           source_addr <= unsigned (data (9 downto 0));
         end if;
         if (state = config0) then
-          cre        <= '0';
-          adv        <= '1';
-          ce         <= '1';
-          oe         <= '1';
-          we_i       <= '1';
+          cre          <= '0';
+          adv          <= '1';
+          ce           <= '1';
+          oe           <= '1';
+          we_i         <= '1';
+          read_counter <= (others => '0'); -- XXX in reset make damaged image
         end if;
         if (state = config1) then
           cre        <= '1';
