@@ -78,7 +78,9 @@ begin
     end if;
   end process;
 
-  process (i_clock) begin
+  process (i_clock) is
+    variable temp : std_logic_vector (5 downto 0);
+  begin
     if (rising_edge (i_clock)) then
       taken_i <= '0';
       if (busy_sr(31) = '0') then
@@ -95,7 +97,8 @@ begin
           end if;
         end if;
       else
-        case (busy_sr (31 downto 29) & busy_sr (2 downto 0)) is
+        temp := busy_sr (31 downto 29) & busy_sr (2 downto 0);
+        case (temp) is
           when "111" & "111" => -- start seq #1
             sioc_i <= '1';
           when "111" & "110" => -- start seq #2
