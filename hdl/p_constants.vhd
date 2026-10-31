@@ -157,7 +157,13 @@ package p_constants is
   constant c_camera_i2c_address : std_logic_vector(7 downto 0) := x"42";
 
   constant number_frames_to_catch            : integer := 2; --28 - very slow; -- XXX number frames
+-- rtl_synthesis off
+-- pragma synthesis_off
+--synthesis translate_off
   shared variable number_frame               : integer := 0;
+-- rtl_synthesis on
+-- pragma synthesis_on
+--synthesis translate_on
 
   constant c_debug                           : boolean := true;
   constant c_bits_color_rgb888               : integer := 24;
